@@ -6,12 +6,12 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
-import net.minecraft.block.Block;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
@@ -19,13 +19,13 @@ import org.spongepowered.asm.mixin.injection.*;
 import java.util.Optional;
 import java.util.Set;
 
-@Mixin(ClientWorld.class)
+@Mixin(ClientLevel.class)
 public class ClientWorldExtender {
     @Unique
-    private static final Set<RegistryKey<Item>> BLOCK_MARKER_ITEM_KEYS = Set.of(ItemKeys.BARRIER, ItemKeys.LIGHT);
+    private static final Set<ResourceKey<Item>> BLOCK_MARKER_ITEM_KEYS = Set.of(ItemKeys.BARRIER, ItemKeys.LIGHT);
 
     @Redirect(
-        method = "getBlockParticle",
+        method = "getMarkerParticleTarget",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Set;contains(Ljava/lang/Object;)Z"
@@ -36,7 +36,7 @@ public class ClientWorldExtender {
     }
 
     @ModifyConstant(
-        method = "getBlockParticle",
+        method = "getMarkerParticleTarget",
         constant = @Constant(
             classValue = BlockItem.class,
             ordinal = 0
@@ -49,7 +49,7 @@ public class ClientWorldExtender {
     }
 
     @ModifyVariable(
-        method = "getBlockParticle",
+        method = "getMarkerParticleTarget",
         at = @At("LOAD"),
         ordinal = 0
     )
@@ -58,10 +58,10 @@ public class ClientWorldExtender {
     }
 
     @Redirect(
-        method = "getBlockParticle",
+        method = "getMarkerParticleTarget",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/BlockItem;getBlock()Lnet/minecraft/block/Block;"
+            target = "Lnet/minecraft/world/item/BlockItem;getBlock()Lnet/minecraft/world/level/block/Block;"
         )
     )
     private Block blockUseItemComponent(BlockItem instance, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {

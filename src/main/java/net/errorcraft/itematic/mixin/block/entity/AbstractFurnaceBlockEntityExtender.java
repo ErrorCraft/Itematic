@@ -4,13 +4,13 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.FuelItemComponent;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.item.FuelRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.FuelValues;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,29 +21,29 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(AbstractFurnaceBlockEntity.class)
 public class AbstractFurnaceBlockEntityExtender {
     @Redirect(
-        method = "getFuelTime",
+        method = "getBurnDuration",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/FuelRegistry;getFuelTicks(Lnet/minecraft/item/ItemStack;)I"
+            target = "Lnet/minecraft/world/level/block/entity/FuelValues;burnDuration(Lnet/minecraft/world/item/ItemStack;)I"
         )
     )
-    private int getFuelTicksUseDataComponent(FuelRegistry instance, ItemStack item) {
+    private int getFuelTicksUseDataComponent(FuelValues instance, ItemStack item) {
         return item.itematic$getBehavior(ItemComponentTypes.FUEL)
             .map(FuelItemComponent::ticks)
             .orElse(0);
     }
 
     @Redirect(
-        method = "craftRecipe",
+        method = "burn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/block/Blocks;WET_SPONGE:Lnet/minecraft/block/Block;",
+                target = "Lnet/minecraft/world/level/block/Blocks;WET_SPONGE:Lnet/minecraft/world/level/block/Block;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -53,16 +53,16 @@ public class AbstractFurnaceBlockEntityExtender {
     }
 
     @Redirect(
-        method = "craftRecipe",
+        method = "burn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BUCKET:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;BUCKET:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -72,21 +72,21 @@ public class AbstractFurnaceBlockEntityExtender {
     }
 
     @Redirect(
-        method = "craftRecipe",
+        method = "burn",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemConvertible item, DynamicRegistryManager registryManager) {
-        return new ItemStack(registryManager.getOrThrow(RegistryKeys.ITEM).getOrThrow(ItemKeys.WATER_BUCKET));
+    private static ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemLike item, RegistryAccess registryManager) {
+        return new ItemStack(registryManager.lookupOrThrow(Registries.ITEM).getOrThrow(ItemKeys.WATER_BUCKET));
     }
 
     @Redirect(
-        method = "canExtract",
+        method = "canTakeItemThroughFace",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         )
     )
@@ -94,16 +94,16 @@ public class AbstractFurnaceBlockEntityExtender {
         return instance.itematic$isOf(ItemKeys.WATER_BUCKET);
     }
     @Redirect(
-        method = "canExtract",
+        method = "canTakeItemThroughFace",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BUCKET:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;BUCKET:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -113,21 +113,21 @@ public class AbstractFurnaceBlockEntityExtender {
     }
 
     @Redirect(
-        method = "isValid",
+        method = "canPlaceItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/FuelRegistry;isFuel(Lnet/minecraft/item/ItemStack;)Z"
+            target = "Lnet/minecraft/world/level/block/entity/FuelValues;isFuel(Lnet/minecraft/world/item/ItemStack;)Z"
         )
     )
-    private boolean isFuelUseItemComponentCheck(FuelRegistry instance, ItemStack item) {
+    private boolean isFuelUseItemComponentCheck(FuelValues instance, ItemStack item) {
         return item.itematic$hasBehavior(ItemComponentTypes.FUEL);
     }
 
     @Redirect(
-        method = "isValid",
+        method = "canPlaceItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isValidIsOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -135,10 +135,10 @@ public class AbstractFurnaceBlockEntityExtender {
     }
 
     @ModifyArg(
-        method = "tick",
+        method = "serverTick",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/collection/DefaultedList;set(ILjava/lang/Object;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/core/NonNullList;set(ILjava/lang/Object;)Ljava/lang/Object;"
         )
     )
     @SuppressWarnings("unchecked")

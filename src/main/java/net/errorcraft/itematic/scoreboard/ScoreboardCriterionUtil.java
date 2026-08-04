@@ -1,24 +1,23 @@
 package net.errorcraft.itematic.scoreboard;
 
 import net.errorcraft.itematic.mixin.scoreboard.ScoreboardCriterionAccessor;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryOps;
-import net.minecraft.scoreboard.ScoreboardCriterion;
-import net.minecraft.stat.StatType;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.stats.StatType;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import java.util.Map;
 import java.util.Optional;
 
 public class ScoreboardCriterionUtil {
-    private static final Map<String, ScoreboardCriterion> CUSTOM_CRITERIA = ScoreboardCriterionAccessor.customCriteria();
+    private static final Map<String, ObjectiveCriteria> CUSTOM_CRITERIA = ScoreboardCriterionAccessor.customCriteria();
 
     private ScoreboardCriterionUtil() {}
 
-    public static Optional<ScoreboardCriterion> byName(String name, RegistryOps<?> ops) {
-        ScoreboardCriterion customCriterion = CUSTOM_CRITERIA.get(name);
+    public static Optional<ObjectiveCriteria> byName(String name, RegistryOps<?> ops) {
+        ObjectiveCriteria customCriterion = CUSTOM_CRITERIA.get(name);
         if (customCriterion != null) {
             return Optional.of(customCriterion);
         }
@@ -28,18 +27,18 @@ public class ScoreboardCriterionUtil {
             return Optional.empty();
         }
 
-        return Registries.STAT_TYPE.getOptionalValue(Identifier.splitOn(name.substring(0, separatorIndex), '.'))
+        return BuiltInRegistries.STAT_TYPE.getOptional(Identifier.bySeparator(name.substring(0, separatorIndex), '.'))
             .flatMap(statType -> getStat(
                 statType,
-                Identifier.splitOn(name.substring(separatorIndex + 1), '.'),
+                Identifier.bySeparator(name.substring(separatorIndex + 1), '.'),
                 ops
             ));
     }
 
-    private static <T> Optional<ScoreboardCriterion> getStat(StatType<T> statType, Identifier id, RegistryOps<?> ops) {
-        RegistryKey<? extends Registry<T>> registryKey = statType.getRegistry().getKey();
-        return ops.getEntryLookup(registryKey)
-            .flatMap(lookup -> lookup.getOptional(RegistryKey.of(registryKey, id)))
+    private static <T> Optional<ObjectiveCriteria> getStat(StatType<T> statType, Identifier id, RegistryOps<?> ops) {
+        ResourceKey<? extends Registry<T>> registryKey = statType.getRegistry().key();
+        return ops.getter(registryKey)
+            .flatMap(lookup -> lookup.get(ResourceKey.create(registryKey, id)))
             .map(statType::itematic$getOrCreateStat);
     }
 }

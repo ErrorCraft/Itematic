@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.mixin.stat;
 
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.StatFormatter;
-import net.minecraft.stat.StatType;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatFormatter;
+import net.minecraft.stats.StatType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
@@ -14,7 +14,7 @@ public interface StatAccessor {
         throw new AssertionError();
     }
 
-    @Invoker("getName")
+    @Invoker("locationToKey")
     static String getName(Identifier id) {
         throw new AssertionError();
     }

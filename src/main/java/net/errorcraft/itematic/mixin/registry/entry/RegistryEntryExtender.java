@@ -1,22 +1,22 @@
 package net.errorcraft.itematic.mixin.registry.entry;
 
 import net.errorcraft.itematic.access.registry.entry.RegistryEntryAccess;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(RegistryEntry.class)
+@Mixin(Holder.class)
 public interface RegistryEntryExtender<T> extends RegistryEntryAccess<T> {
-    @Mixin(RegistryEntry.Reference.class)
+    @Mixin(Holder.Reference.class)
     class ReferenceExtender<T> implements RegistryEntryAccess<T> {
         @Shadow
         @Nullable
         private
-        RegistryKey<T> registryKey;
+        ResourceKey<T> key;
 
         @Unique
         private int rawId;
@@ -32,13 +32,13 @@ public interface RegistryEntryExtender<T> extends RegistryEntryAccess<T> {
         }
 
         @Override
-        public int compareTo(@NotNull RegistryEntry<T> o) {
-            if (this.registryKey == null) {
+        public int compareTo(@NotNull Holder<T> o) {
+            if (this.key == null) {
                 return -1;
             }
-            return o.getKey()
-                .map(RegistryKey::getValue)
-                .map(this.registryKey.getValue()::compareTo)
+            return o.unwrapKey()
+                .map(ResourceKey::identifier)
+                .map(this.key.identifier()::compareTo)
                 .orElse(1);
         }
     }

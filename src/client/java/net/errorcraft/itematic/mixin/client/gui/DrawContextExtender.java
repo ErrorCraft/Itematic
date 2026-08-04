@@ -5,12 +5,12 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.errorcraft.itematic.client.item.bar.ItemBarStyleLoader;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.render.state.GuiRenderState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix3x2fStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,27 +20,27 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(DrawContext.class)
+@Mixin(GuiGraphics.class)
 public abstract class DrawContextExtender {
     @Shadow
-    public abstract void drawGuiTexture(RenderPipeline pipeline, Identifier sprite, int x, int y, int width, int height, int color);
+    public abstract void blitSprite(RenderPipeline pipeline, Identifier sprite, int x, int y, int width, int height, int color);
 
     @Unique
     private ItemBarStyleLoader itemBarStyles;
 
     @Inject(
-        method = "<init>(Lnet/minecraft/client/MinecraftClient;Lorg/joml/Matrix3x2fStack;Lnet/minecraft/client/gui/render/state/GuiRenderState;II)V",
+        method = "<init>(Lnet/minecraft/client/Minecraft;Lorg/joml/Matrix3x2fStack;Lnet/minecraft/client/gui/render/state/GuiRenderState;II)V",
         at = @At("TAIL")
     )
-    private void setItemBarStyles(MinecraftClient client, Matrix3x2fStack matrices, GuiRenderState state, int mouseX, int mouseY, CallbackInfo info) {
+    private void setItemBarStyles(Minecraft client, Matrix3x2fStack matrices, GuiRenderState state, int mouseX, int mouseY, CallbackInfo info) {
         this.itemBarStyles = client.itematic$itemBarStyles();
     }
 
     @ModifyExpressionValue(
-        method = "drawItemBar",
+        method = "renderItemBar",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isItemBarVisible()Z"
+            target = "Lnet/minecraft/world/item/ItemStack;isBarVisible()Z"
         )
     )
     private boolean useDataComponent(boolean original, @Local(argsOnly = true) ItemStack stack) {
@@ -55,10 +55,10 @@ public abstract class DrawContextExtender {
     }
 
     @Inject(
-        method = "drawItemBar",
+        method = "renderItemBar",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItemBarStep()I"
+            target = "Lnet/minecraft/world/item/ItemStack;getBarWidth()I"
         )
     )
     private void renderItemBarFromDataComponent(ItemStack stack, int x, int y, CallbackInfo info) {
@@ -67,7 +67,7 @@ public abstract class DrawContextExtender {
             return;
         }
 
-        this.itemBarStyles.get(itemBarStyleId).ifPresent(itemBarStyle -> this.drawGuiTexture(
+        this.itemBarStyles.get(itemBarStyleId).ifPresent(itemBarStyle -> this.blitSprite(
             RenderPipelines.GUI_TEXTURED,
             itemBarStyle.progressTexture(stack),
             x,
@@ -79,11 +79,11 @@ public abstract class DrawContextExtender {
     }
 
     @Redirect(
-        method = "drawItemBar",
+        method = "renderItemBar",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/DrawContext;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V"
+            target = "Lnet/minecraft/client/gui/GuiGraphics;fill(Lcom/mojang/blaze3d/pipeline/RenderPipeline;IIIII)V"
         )
     )
-    private void doNotRenderOriginalItemBar(DrawContext instance, RenderPipeline pipeline, int x1, int y1, int x2, int y2, int color) {}
+    private void doNotRenderOriginalItemBar(GuiGraphics instance, RenderPipeline pipeline, int x1, int y1, int x2, int y2, int color) {}
 }

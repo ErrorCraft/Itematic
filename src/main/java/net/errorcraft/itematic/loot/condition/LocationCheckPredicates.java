@@ -1,32 +1,31 @@
 package net.errorcraft.itematic.loot.condition;
 
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.loot.condition.LocationCheckLootCondition;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.predicate.entity.LocationPredicate;
-import net.minecraft.util.math.BlockPos;
-
+import net.minecraft.advancements.criterion.LocationPredicate;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.Optional;
 
 public class LocationCheckPredicates {
     private LocationCheckPredicates() {}
 
-    public static LocationCheckLootCondition setPosition(LocationCheckLootCondition predicate, PositionTarget position) {
+    public static LocationCheck setPosition(LocationCheck predicate, PositionTarget position) {
         predicate.itematic$setPosition(position);
         return predicate;
     }
 
-    public static LootCondition.Builder builder(PositionTarget position, LocationPredicate.Builder builder) {
+    public static LootItemCondition.Builder builder(PositionTarget position, LocationPredicate.Builder builder) {
         return () -> {
-            LocationCheckLootCondition predicate = new LocationCheckLootCondition(Optional.of(builder.build()), BlockPos.ORIGIN);
+            LocationCheck predicate = new LocationCheck(Optional.of(builder.build()), BlockPos.ZERO);
             predicate.itematic$setPosition(position);
             return predicate;
         };
     }
 
-    public static LootCondition.Builder builder(PositionTarget position, LocationPredicate.Builder builder, BlockPos offset) {
+    public static LootItemCondition.Builder builder(PositionTarget position, LocationPredicate.Builder builder, BlockPos offset) {
         return () -> {
-            LocationCheckLootCondition predicate = new LocationCheckLootCondition(Optional.of(builder.build()), offset);
+            LocationCheck predicate = new LocationCheck(Optional.of(builder.build()), offset);
             predicate.itematic$setPosition(position);
             return predicate;
         };

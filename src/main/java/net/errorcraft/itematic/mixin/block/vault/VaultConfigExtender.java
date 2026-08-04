@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.block.vault;
 
-import net.minecraft.block.vault.VaultConfig;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.entity.vault.VaultConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -13,10 +13,10 @@ public class VaultConfigExtender {
         method = "<init>()V",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+    private static ItemStack newItemStackReturnEmptyStack(ItemLike item) {
         return ItemStack.EMPTY;
     }
 }

@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.mixin.item;
 
 import it.unimi.dsi.fastutil.objects.ObjectSortedSet;
-import net.minecraft.item.FuelRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.FuelValues;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class FuelRegistryExtender {
-    @Mixin(FuelRegistry.Builder.class)
+    @Mixin(FuelValues.Builder.class)
     public static class BuilderExtender {
         @Redirect(
             method = "remove",
@@ -30,24 +30,24 @@ public class FuelRegistryExtender {
         }
 
         @Redirect(
-            method = "add(Lnet/minecraft/registry/tag/TagKey;I)Lnet/minecraft/item/FuelRegistry$Builder;",
+            method = "add(Lnet/minecraft/tags/TagKey;I)Lnet/minecraft/world/level/block/entity/FuelValues$Builder;",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/registry/RegistryWrapper;getOptional(Lnet/minecraft/registry/tag/TagKey;)Ljava/util/Optional;"
+                target = "Lnet/minecraft/core/HolderLookup;get(Lnet/minecraft/tags/TagKey;)Ljava/util/Optional;"
             )
         )
-        private Optional<RegistryEntryList.Named<Item>> doNotGet(RegistryWrapper<Item> instance, TagKey<Item> tagKey) {
+        private Optional<HolderSet.Named<Item>> doNotGet(HolderLookup<Item> instance, TagKey<Item> tagKey) {
             return Optional.empty();
         }
 
         @Redirect(
-            method = "add(ILnet/minecraft/item/Item;)V",
+            method = "putInternal(ILnet/minecraft/world/item/Item;)V",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/Item;isEnabled(Lnet/minecraft/resource/featuretoggle/FeatureSet;)Z"
+                target = "Lnet/minecraft/world/item/Item;isEnabled(Lnet/minecraft/world/flag/FeatureFlagSet;)Z"
             )
         )
-        private boolean doNotAdd(Item instance, FeatureSet featureSet) {
+        private boolean doNotAdd(Item instance, FeatureFlagSet featureSet) {
             return false;
         }
     }

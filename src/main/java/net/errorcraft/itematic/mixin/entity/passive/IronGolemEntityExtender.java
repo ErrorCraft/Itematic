@@ -2,23 +2,23 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.animal.golem.IronGolem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(IronGolemEntity.class)
+@Mixin(IronGolem.class)
 public abstract class IronGolemEntityExtender extends MobEntityExtender {
-    protected IronGolemEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
+    protected IronGolemEntityExtender(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -26,18 +26,18 @@ public abstract class IronGolemEntityExtender extends MobEntityExtender {
         method = "getAttackDamage",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/IronGolemEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D"
+            target = "Lnet/minecraft/world/entity/animal/golem/IronGolem;getAttributeValue(Lnet/minecraft/core/Holder;)D"
         )
     )
-    private double useCustomAttackDamage(IronGolemEntity instance, RegistryEntry<EntityAttribute> attribute) {
+    private double useCustomAttackDamage(IronGolem instance, Holder<Attribute> attribute) {
         return this.itematic$getAttackDamage();
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForIronIngotUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -45,7 +45,7 @@ public abstract class IronGolemEntityExtender extends MobEntityExtender {
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.IRON_GOLEM_SPAWN_EGG;
     }
 }

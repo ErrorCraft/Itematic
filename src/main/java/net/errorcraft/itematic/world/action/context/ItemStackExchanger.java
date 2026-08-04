@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.world.action.context;
 
-import net.minecraft.block.dispenser.ItemDispenserBehavior;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -30,16 +30,16 @@ public class ItemStackExchanger {
 
     public static ItemStackExchanger forEntity(LivingEntity entity, ItemStack initialStack) {
         return new ItemStackExchanger(
-            stack -> !entity.isInCreativeMode() || !entity.itematic$hasStackInInventory(stack),
-            entity::giveOrDropStack,
+            stack -> !entity.hasInfiniteMaterials() || !entity.itematic$hasStackInInventory(stack),
+            entity::handleExtraItemsCreatedOnUse,
             initialStack
         );
     }
 
-    public static ItemStackExchanger forDispenser(World world, Direction side, Vec3d pos, ItemStack initialStack) {
+    public static ItemStackExchanger forDispenser(Level world, Direction side, Vec3 pos, ItemStack initialStack) {
         return new ItemStackExchanger(
             stack -> true,
-            stack -> ItemDispenserBehavior.spawnItem(world, stack, 6, side, pos),
+            stack -> DefaultDispenseItemBehavior.spawnItem(world, stack, 6, side, pos),
             initialStack
         );
     }

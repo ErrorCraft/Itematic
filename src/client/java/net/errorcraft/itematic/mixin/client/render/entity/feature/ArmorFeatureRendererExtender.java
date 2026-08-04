@@ -1,22 +1,22 @@
 package net.errorcraft.itematic.mixin.client.render.entity.feature;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.client.render.command.OrderedRenderCommandQueue;
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ArmorFeatureRenderer.class)
-public class ArmorFeatureRendererExtender<S extends BipedEntityRenderState> {
+@Mixin(HumanoidArmorLayer.class)
+public class ArmorFeatureRendererExtender<S extends HumanoidRenderState> {
     @Inject(
-        method = "hasModel(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EquipmentSlot;)Z",
+        method = "shouldRender(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)Z",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -27,11 +27,11 @@ public class ArmorFeatureRendererExtender<S extends BipedEntityRenderState> {
     }
 
     @Inject(
-        method = "renderArmor",
+        method = "renderArmorPiece",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void checkPresenceEquipmentBehavior(MatrixStack matrices, OrderedRenderCommandQueue orderedRenderCommandQueue, ItemStack stack, EquipmentSlot slot, int light, S bipedEntityRenderState, CallbackInfo info) {
+    private void checkPresenceEquipmentBehavior(PoseStack matrices, SubmitNodeCollector orderedRenderCommandQueue, ItemStack stack, EquipmentSlot slot, int light, S bipedEntityRenderState, CallbackInfo info) {
         if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
             info.cancel();
         }

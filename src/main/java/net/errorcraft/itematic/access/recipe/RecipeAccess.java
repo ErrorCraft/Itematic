@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.access.recipe;
 
-import net.minecraft.item.Item;
-import net.minecraft.recipe.IngredientPlacement;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 
 import java.util.List;
 
 public interface RecipeAccess {
-    default IngredientPlacement itematic$ingredientPlacement(RegistryEntryLookup<Item> items) {
+    default PlacementInfo itematic$ingredientPlacement(HolderGetter<Item> items) {
         return null;
     }
-    default List<RecipeDisplay> itematic$displays(RegistryEntryLookup<Item> items) {
+    default List<RecipeDisplay> itematic$displays(HolderGetter<Item> items) {
         return null;
     }
 }

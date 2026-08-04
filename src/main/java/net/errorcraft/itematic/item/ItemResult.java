@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item;
 
-import net.minecraft.util.ActionResult;
+import net.minecraft.world.InteractionResult;
 
 public interface ItemResult {
     ItemResult PASS = new Pass();
@@ -8,7 +8,7 @@ public interface ItemResult {
     ItemResult SUCCEED = new Success();
 
     ItemResult max(ItemResult other);
-    ActionResult toActionResult();
+    InteractionResult toActionResult();
     boolean succeeds();
 
     class Pass implements ItemResult {
@@ -20,8 +20,8 @@ public interface ItemResult {
         }
 
         @Override
-        public ActionResult toActionResult() {
-            return ActionResult.PASS;
+        public InteractionResult toActionResult() {
+            return InteractionResult.PASS;
         }
 
         @Override
@@ -43,8 +43,8 @@ public interface ItemResult {
         }
 
         @Override
-        public ActionResult toActionResult() {
-            return ActionResult.CONSUME;
+        public InteractionResult toActionResult() {
+            return InteractionResult.CONSUME;
         }
 
         @Override
@@ -62,8 +62,8 @@ public interface ItemResult {
         }
 
         @Override
-        public ActionResult toActionResult() {
-            return ActionResult.SUCCESS;
+        public InteractionResult toActionResult() {
+            return InteractionResult.SUCCESS;
         }
 
         @Override

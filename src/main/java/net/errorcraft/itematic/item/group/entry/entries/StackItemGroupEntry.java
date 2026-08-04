@@ -6,50 +6,49 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import java.util.Collection;
 import java.util.List;
 
 public final class StackItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     public static final MapCodec<StackItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(entry -> entry.item),
-        ComponentChanges.CODEC.optionalFieldOf("components", ComponentChanges.EMPTY).forGetter(entry -> entry.components)
+        RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(entry -> entry.item),
+        DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(entry -> entry.components)
     )).apply(instance, StackItemGroupEntry::new));
 
-    private final RegistryEntry<Item> item;
-    private final ComponentChanges components;
+    private final Holder<Item> item;
+    private final DataComponentPatch components;
 
-    public StackItemGroupEntry(RegistryEntry<Item> item) {
-        this(item, ComponentChanges.EMPTY);
+    public StackItemGroupEntry(Holder<Item> item) {
+        this(item, DataComponentPatch.EMPTY);
     }
 
-    public StackItemGroupEntry(RegistryEntry<Item> item, ComponentChanges components) {
+    public StackItemGroupEntry(Holder<Item> item, DataComponentPatch components) {
         this.item = item;
         this.components = components;
     }
 
-    public StackItemGroupEntry(ItemGroup.StackVisibility visibility, boolean requiresPermissions, RegistryEntry<Item> item, ComponentChanges components) {
+    public StackItemGroupEntry(CreativeModeTab.TabVisibility visibility, boolean requiresPermissions, Holder<Item> item, DataComponentPatch components) {
         super(visibility, requiresPermissions);
         this.item = item;
         this.components = components;
     }
 
     public static StackItemGroupEntry fromStack(ItemStack stack) {
-        return new StackItemGroupEntry(stack.getRegistryEntry(), stack.getComponentChanges());
+        return new StackItemGroupEntry(stack.getItemHolder(), stack.getComponentsPatch());
     }
 
     public static StackItemGroupEntry fromStack(ItemStack stack, boolean requiresPermissions) {
-        return new StackItemGroupEntry(ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS, requiresPermissions, stack.getRegistryEntry(), stack.getComponentChanges());
+        return new StackItemGroupEntry(CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS, requiresPermissions, stack.getItemHolder(), stack.getComponentsPatch());
     }
 
-    public static Builder builder(RegistryEntry<Item> item) {
+    public static Builder builder(Holder<Item> item) {
         return new Builder(item);
     }
 
@@ -59,7 +58,7 @@ public final class StackItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     }
 
     @Override
-    public Either<RegistryEntry<Item>, ItemGroupEntry> createEither() {
+    public Either<Holder<Item>, ItemGroupEntry> createEither() {
         if (this.isSimple()) {
             return Either.left(this.item);
         }
@@ -68,35 +67,35 @@ public final class StackItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     }
 
     @Override
-    protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
+    protected Collection<ItemStack> createStacks(CreativeModeTab.ItemDisplayParameters context) {
         return List.of(new ItemStack(this.item, 1, this.components));
     }
 
     private boolean isSimple() {
-        return this.visibility() == ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS
+        return this.visibility() == CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS
             && !this.requiresPermissions()
             && this.components.isEmpty();
     }
 
     public static class Builder {
-        private final RegistryEntry<Item> item;
-        private ComponentChanges components;
-        private ItemGroup.StackVisibility visibility = ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS;
+        private final Holder<Item> item;
+        private DataComponentPatch components;
+        private CreativeModeTab.TabVisibility visibility = CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS;
 
-        public Builder(RegistryEntry<Item> item) {
+        public Builder(Holder<Item> item) {
             this.item = item;
         }
 
         public StackItemGroupEntry build() {
-            return new StackItemGroupEntry(this.visibility, false, this.item, this.components == null ? ComponentChanges.EMPTY : this.components);
+            return new StackItemGroupEntry(this.visibility, false, this.item, this.components == null ? DataComponentPatch.EMPTY : this.components);
         }
 
-        public Builder components(ComponentChanges.Builder builder) {
+        public Builder components(DataComponentPatch.Builder builder) {
             this.components = builder.build();
             return this;
         }
 
-        public Builder visibility(ItemGroup.StackVisibility visibility) {
+        public Builder visibility(CreativeModeTab.TabVisibility visibility) {
             this.visibility = visibility;
             return this;
         }

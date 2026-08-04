@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class ItemBarStyleKeys {
     public static final Identifier DAMAGE = of("damage");
@@ -9,6 +9,6 @@ public class ItemBarStyleKeys {
     private ItemBarStyleKeys() {}
 
     private static Identifier of(String name) {
-        return Identifier.ofVanilla(name);
+        return Identifier.withDefaultNamespace(name);
     }
 }

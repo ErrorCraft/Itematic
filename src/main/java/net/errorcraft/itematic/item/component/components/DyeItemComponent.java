@@ -10,13 +10,13 @@ import net.errorcraft.itematic.world.action.actions.ModifySignAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.DyeColor;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemComponent> {
     public static final Codec<DyeItemComponent> CODEC = DyeColor.CODEC.xmap(DyeItemComponent::new, DyeItemComponent::color);
@@ -36,23 +36,23 @@ public record DyeItemComponent(DyeColor color) implements ItemComponent<DyeItemC
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
-        if (!(context.getWorld() instanceof ServerWorld world)) {
+    public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
+        if (!(context.getLevel() instanceof ServerLevel world)) {
             return ItemResult.SUCCEED;
         }
 
-        PlayerEntity player = context.getPlayer();
-        ItemStack stack = context.getStack();
+        Player player = context.getPlayer();
+        ItemStack stack = context.getItemInHand();
         ActionContext actionContext = ActionContext.builder(world)
             .possibleStackExchanger(player, stack)
-            .addOptional(LootContextParameters.THIS_ENTITY, player)
-            .addOptional(LootContextParameters.ORIGIN, player, Entity::getEntityPos)
-            .add(ItematicContextParameters.INTERACTED_POSITION, context.getBlockPos().toCenterPos())
-            .add(LootContextParameters.TOOL, stack)
+            .addOptional(LootContextParams.THIS_ENTITY, player)
+            .addOptional(LootContextParams.ORIGIN, player, Entity::position)
+            .add(ItematicContextParameters.INTERACTED_POSITION, context.getClickedPos().getCenter())
+            .add(LootContextParams.TOOL, stack)
             .build();
         ModifySignAction action = ModifySignAction.dye(PositionTarget.INTERACTED, this.color);
         if (action.execute(actionContext)) {
-            context.getStack().decrementUnlessCreative(1, context.getPlayer());
+            context.getItemInHand().consume(1, context.getPlayer());
             return ItemResult.CONSUME;
         }
 

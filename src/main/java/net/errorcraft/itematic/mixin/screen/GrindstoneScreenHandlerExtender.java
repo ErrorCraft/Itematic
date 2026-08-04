@@ -4,54 +4,54 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.EnchantmentHolderItemComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.screen.GrindstoneScreenHandler;
+import net.minecraft.core.Holder;
+import net.minecraft.world.inventory.GrindstoneMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
-@Mixin(GrindstoneScreenHandler.class)
+@Mixin(GrindstoneMenu.class)
 public class GrindstoneScreenHandlerExtender {
     @Redirect(
-        method = "grind",
+        method = "removeNonCursesFrom",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isOfForEnchantedBookUseItemComponent(ItemStack instance, Item item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTMENT_HOLDER)
+    private boolean isOfForEnchantedBookUseItemComponent(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTMENT_HOLDER)
             .map(EnchantmentHolderItemComponent::grindingTransformsInto);
         optionalItem.ifPresent(transformsInto::set);
         return optionalItem.isPresent();
     }
 
     @Redirect(
-        method = "grind",
+        method = "removeNonCursesFrom",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;withItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack withItemForBookUseItemComponent(ItemStack instance, ItemConvertible item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
+    private ItemStack withItemForBookUseItemComponent(ItemStack instance, ItemLike item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
         return instance.itematic$copyWithItem(transformsInto.get());
     }
 
     @Mixin(targets = {
-        "net/minecraft/screen/GrindstoneScreenHandler$2",
-        "net/minecraft/screen/GrindstoneScreenHandler$3"
+        "net/minecraft/world/inventory/GrindstoneMenu$2",
+        "net/minecraft/world/inventory/GrindstoneMenu$3"
     })
     public static class EnchantedItemSlotExtender {
         @Redirect(
-            method = "canInsert",
+            method = "mayPlace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"
+                target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"
             )
         )
         private boolean isDamageableUseItemComponentCheck(ItemStack instance) {

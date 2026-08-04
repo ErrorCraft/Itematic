@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.access.inventory;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 
 public interface SimpleInventoryAccess {
-    void itematic$removeItem(RegistryKey<Item> item, int count);
+    void itematic$removeItem(ResourceKey<Item> item, int count);
 }

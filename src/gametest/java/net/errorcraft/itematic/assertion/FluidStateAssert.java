@@ -1,44 +1,44 @@
 package net.errorcraft.itematic.assertion;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.test.TestContext;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 
 import java.util.Objects;
 
 public class FluidStateAssert {
-    private final TestContext helper;
+    private final GameTestHelper helper;
     private final FluidState state;
 
-    FluidStateAssert(TestContext helper, FluidState state) {
+    FluidStateAssert(GameTestHelper helper, FluidState state) {
         this.helper = Objects.requireNonNull(helper);
         this.state = Assert.isNotNull(this.helper, state, "fluid state");
     }
 
     public FluidStateAssert is(Fluid fluid) {
-        if (this.state.isOf(fluid)) {
+        if (this.state.is(fluid)) {
             return this;
         }
 
-        throw this.helper.createError(
+        throw this.helper.assertionException(
             "test.error.expected_type",
             "fluid",
-            Registries.FLUID.getId(fluid),
-            Registries.FLUID.getId(this.state.getFluid())
+            BuiltInRegistries.FLUID.getKey(fluid),
+            BuiltInRegistries.FLUID.getKey(this.state.getType())
         );
     }
 
     public FluidStateAssert is(TagKey<Fluid> tag) {
-        if (this.state.isIn(tag)) {
+        if (this.state.is(tag)) {
             return this;
         }
 
-        throw this.helper.createError(
+        throw this.helper.assertionException(
             "test.error.expected_tag",
             "fluid",
-            tag.id()
+            tag.location()
         );
     }
 }

@@ -1,38 +1,38 @@
 package net.errorcraft.itematic.item;
 
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.equipment.ArmorMaterial;
-import net.minecraft.item.equipment.EquipmentType;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.waypoint.Waypoint;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.waypoints.Waypoint;
 
 public class AttributeModifiers {
     private AttributeModifiers() {}
 
-    public static AttributeModifiersComponent armor(ArmorMaterial material, EquipmentType type) {
-        Identifier attributeId = Identifier.ofVanilla("armor." + type.getName());
-        AttributeModifierSlot slot = AttributeModifierSlot.forEquipmentSlot(type.getEquipmentSlot());
-        AttributeModifiersComponent.Builder builder = AttributeModifiersComponent.builder();
+    public static ItemAttributeModifiers armor(ArmorMaterial material, ArmorType type) {
+        Identifier attributeId = Identifier.withDefaultNamespace("armor." + type.getName());
+        EquipmentSlotGroup slot = EquipmentSlotGroup.bySlot(type.getSlot());
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
         builder.add(
-            EntityAttributes.ARMOR,
-            new EntityAttributeModifier(
+            Attributes.ARMOR,
+            new AttributeModifier(
                 attributeId,
                 material.defense().get(type),
-                EntityAttributeModifier.Operation.ADD_VALUE
+                AttributeModifier.Operation.ADD_VALUE
             ),
             slot
         );
         double toughness = material.toughness();
         if (toughness > 0.0d) {
             builder.add(
-                EntityAttributes.ARMOR_TOUGHNESS,
-                new EntityAttributeModifier(
+                Attributes.ARMOR_TOUGHNESS,
+                new AttributeModifier(
                     attributeId,
                     toughness,
-                    EntityAttributeModifier.Operation.ADD_VALUE
+                    AttributeModifier.Operation.ADD_VALUE
                 ),
                 slot
             );
@@ -41,11 +41,11 @@ public class AttributeModifiers {
         double knockbackResistance = material.knockbackResistance();
         if (knockbackResistance > 0.0d) {
             builder.add(
-                EntityAttributes.KNOCKBACK_RESISTANCE,
-                new EntityAttributeModifier(
+                Attributes.KNOCKBACK_RESISTANCE,
+                new AttributeModifier(
                     attributeId,
                     knockbackResistance,
-                    EntityAttributeModifier.Operation.ADD_VALUE
+                    AttributeModifier.Operation.ADD_VALUE
                 ),
                 slot
             );
@@ -54,13 +54,13 @@ public class AttributeModifiers {
         return builder.build();
     }
 
-    public static AttributeModifiersComponent hideFromLocatorBar() {
-        return AttributeModifiersComponent.builder()
+    public static ItemAttributeModifiers hideFromLocatorBar() {
+        return ItemAttributeModifiers.builder()
             .add(
-                EntityAttributes.WAYPOINT_TRANSMIT_RANGE,
-                Waypoint.DISABLE_TRACKING,
-                AttributeModifierSlot.HEAD,
-                AttributeModifiersComponent.Display.getHidden()
+                Attributes.WAYPOINT_TRANSMIT_RANGE,
+                Waypoint.WAYPOINT_TRANSMIT_RANGE_HIDE_MODIFIER,
+                EquipmentSlotGroup.HEAD,
+                ItemAttributeModifiers.Display.hidden()
             )
             .build();
     }

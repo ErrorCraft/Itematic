@@ -3,9 +3,9 @@ package net.errorcraft.itematic.mixin.village;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.access.village.VillagerProfessionAccess;
 import net.errorcraft.itematic.item.ItematicItemTags;
-import net.minecraft.item.Item;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.village.VillagerProfession;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,10 +17,10 @@ public class VillagerProfessionExtender implements VillagerProfessionAccess {
     private TagKey<Item> gatherableItems;
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/village/VillagerProfession;register(Lnet/minecraft/registry/Registry;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/registry/RegistryKey;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sound/SoundEvent;)Lnet/minecraft/village/VillagerProfession;"
+            target = "Lnet/minecraft/world/entity/npc/villager/VillagerProfession;register(Lnet/minecraft/core/Registry;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceKey;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)Lnet/minecraft/world/entity/npc/villager/VillagerProfession;"
         )
     )
     private static VillagerProfession setGatherableItemsTag(VillagerProfession original) {

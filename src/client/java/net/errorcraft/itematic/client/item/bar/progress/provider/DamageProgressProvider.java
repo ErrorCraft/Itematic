@@ -2,8 +2,8 @@ package net.errorcraft.itematic.client.item.bar.progress.provider;
 
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProviderKeys;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 
 public class DamageProgressProvider implements ProgressProvider {
     @Override
@@ -18,6 +18,6 @@ public class DamageProgressProvider implements ProgressProvider {
 
     @Override
     public float get(ItemStack stack) {
-        return (float) stack.getDamage() / stack.getMaxDamage();
+        return (float) stack.getDamageValue() / stack.getMaxDamage();
     }
 }

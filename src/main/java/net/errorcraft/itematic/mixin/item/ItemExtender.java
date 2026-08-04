@@ -24,39 +24,43 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
-import net.minecraft.block.BlockState;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.component.type.ToolComponent;
-import net.minecraft.component.type.WrittenBookContentComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.StackReference;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.item.tooltip.TooltipData;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.DefaultedRegistry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.DefaultedRegistry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.StringUtil;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.item.component.WrittenBookContent;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -73,13 +77,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Shadow
     @Final
     @Mutable
-    private ComponentMap components;
+    private DataComponentMap components;
 
     @Unique
     private ItemDisplay display;
 
     @Unique
-    private AttributeModifiersComponent attributeModifiers;
+    private ItemAttributeModifiers attributeModifiers;
 
     @Unique
     private ItemComponentSet itemComponents;
@@ -91,32 +95,32 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;getEntryCodec()Lcom/mojang/serialization/Codec;"
+            target = "Lnet/minecraft/core/DefaultedRegistry;holderByNameCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<RegistryEntry<Item>> getEntryCodecDoNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
-        return RegistryFixedCodec.of(RegistryKeys.ITEM);
+    private static Codec<Holder<Item>> getEntryCodecDoNotUseStaticItemRegistry(DefaultedRegistry<Item> instance) {
+        return RegistryFixedCodec.create(Registries.ITEM);
     }
 
     @Redirect(
         method = "method_65043",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/entry/RegistryEntry;matches(Lnet/minecraft/registry/entry/RegistryEntry;)Z"
+            target = "Lnet/minecraft/core/Holder;is(Lnet/minecraft/core/Holder;)Z"
         )
     )
-    private static boolean matchesForAirUseRegistryKey(RegistryEntry<Item> instance, RegistryEntry<Item> entry) {
-        return instance.matchesKey(ItemKeys.AIR);
+    private static boolean matchesForAirUseRegistryKey(Holder<Item> instance, Holder<Item> entry) {
+        return instance.is(ItemKeys.AIR);
     }
 
     @Redirect(
         method = "<init>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item$Settings;getTranslationKey()Ljava/lang/String;"
+            target = "Lnet/minecraft/world/item/Item$Properties;effectiveDescriptionId()Ljava/lang/String;"
         )
     )
-    private String getTranslationKeyReturnNull(Item.Settings instance) {
+    private String getTranslationKeyReturnNull(Item.Properties instance) {
         return null;
     }
 
@@ -124,15 +128,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "<init>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item$Settings;getModelId()Lnet/minecraft/util/Identifier;"
+            target = "Lnet/minecraft/world/item/Item$Properties;effectiveModel()Lnet/minecraft/resources/Identifier;"
         )
     )
-    private Identifier getModelIdReturnNull(Item.Settings instance) {
+    private Identifier getModelIdReturnNull(Item.Properties instance) {
         return null;
     }
 
     @Inject(
-        method = "getMaxCount",
+        method = "getDefaultMaxStackSize",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -147,8 +151,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        ItemStack stack = user.getStackInHand(hand);
+    public InteractionResult use(Level world, Player user, InteractionHand hand) {
+        ItemStack stack = user.getItemInHand(hand);
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
         ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
@@ -156,12 +160,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             result = result.max(newResult);
         }
 
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerLevel serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getEntityPos())
-                .add(LootContextParameters.TOOL, stack)
+                .add(LootContextParams.THIS_ENTITY, user)
+                .add(LootContextParams.ORIGIN, user.position())
+                .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextParameters.HAND, hand)
                 .build();
             if (this.itematic$invokeEvent(ItemEvents.USE, context)) {
@@ -169,9 +173,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             }
         }
 
-        ActionResult trueResult = result.toActionResult();
-        if (trueResult instanceof ActionResult.Success success) {
-            return success.withNewHandStack(stackExchanger.result());
+        InteractionResult trueResult = result.toActionResult();
+        if (trueResult instanceof InteractionResult.Success success) {
+            return success.heldItemTransformedTo(stackExchanger.result());
         }
 
         return trueResult;
@@ -182,8 +186,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        ItemStack stack = context.getStack();
+    public InteractionResult useOn(UseOnContext context) {
+        ItemStack stack = context.getItemInHand();
         ItemStackExchanger stackExchanger = context.itematic$stackExchanger();
         ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
@@ -191,15 +195,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             result = result.max(newResult);
         }
 
-        if (context.getWorld() instanceof ServerWorld serverWorld) {
+        if (context.getLevel() instanceof ServerLevel serverWorld) {
             ActionContext actionContext = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .addOptional(LootContextParameters.THIS_ENTITY, context.getPlayer())
-                .addOptional(LootContextParameters.ORIGIN, context.getPlayer(), Entity::getEntityPos)
-                .add(ItematicContextParameters.INTERACTED_POSITION, context.getBlockPos().toCenterPos())
-                .add(LootContextParameters.TOOL, stack)
+                .addOptional(LootContextParams.THIS_ENTITY, context.getPlayer())
+                .addOptional(LootContextParams.ORIGIN, context.getPlayer(), Entity::position)
+                .add(ItematicContextParameters.INTERACTED_POSITION, context.getClickedPos().getCenter())
+                .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextParameters.HAND, context.getHand())
-                .add(ItematicContextParameters.SIDE, context.getSide())
+                .add(ItematicContextParameters.SIDE, context.getClickedFace())
                 .build();
             if (this.itematic$invokeEvent(ItemEvents.USE_ON_BLOCK, actionContext)) {
                 result = result.max(ItemResult.CONSUME);
@@ -207,9 +211,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackExchanger);
-        ActionResult trueResult = result.toActionResult();
-        if (trueResult instanceof ActionResult.Success success) {
-            trueResult = success.withNewHandStack(stackExchanger.result());
+        InteractionResult trueResult = result.toActionResult();
+        if (trueResult instanceof InteractionResult.Success success) {
+            trueResult = success.heldItemTransformedTo(stackExchanger.result());
         }
 
         return trueResult;
@@ -220,7 +224,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
+    public InteractionResult interactLivingEntity(ItemStack stack, Player user, LivingEntity entity, InteractionHand hand) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
         ItemResult result = ItemResult.PASS;
         for (ItemComponent<?> component : this.itemComponents) {
@@ -228,14 +232,14 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             result = result.max(newResult);
         }
 
-        if (user.getEntityWorld() instanceof ServerWorld serverWorld) {
+        if (user.level() instanceof ServerLevel serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getEntityPos())
-                .add(LootContextParameters.TARGET_ENTITY, entity)
-                .add(ItematicContextParameters.INTERACTED_POSITION, entity.getEntityPos())
-                .add(LootContextParameters.TOOL, stack)
+                .add(LootContextParams.THIS_ENTITY, user)
+                .add(LootContextParams.ORIGIN, user.position())
+                .add(LootContextParams.TARGET_ENTITY, entity)
+                .add(ItematicContextParameters.INTERACTED_POSITION, entity.position())
+                .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextParameters.HAND, hand)
                 .build();
             if (this.itematic$invokeEvent(ItemEvents.USE_ON_ENTITY, context)) {
@@ -244,9 +248,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         tryUpdateItemStack(user, hand, stack, stackExchanger);
-        ActionResult trueResult = result.toActionResult();
-        if (trueResult instanceof ActionResult.Success success) {
-            trueResult = success.withNewHandStack(stackExchanger.result());
+        InteractionResult trueResult = result.toActionResult();
+        if (trueResult instanceof InteractionResult.Success success) {
+            trueResult = success.heldItemTransformedTo(stackExchanger.result());
         }
 
         return trueResult;
@@ -257,30 +261,30 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, stack);
         for (ItemComponent<?> component : this.itemComponents) {
             component.postHit(stack, target, attacker, stackExchanger);
         }
 
-        if (attacker.getEntityWorld() instanceof ServerWorld serverWorld) {
+        if (attacker.level() instanceof ServerLevel serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParameters.THIS_ENTITY, attacker)
-                .add(LootContextParameters.ORIGIN, attacker.getEntityPos())
-                .add(LootContextParameters.TARGET_ENTITY, target)
-                .add(ItematicContextParameters.INTERACTED_POSITION, target.getEntityPos())
-                .add(LootContextParameters.TOOL, stack)
+                .add(LootContextParams.THIS_ENTITY, attacker)
+                .add(LootContextParams.ORIGIN, attacker.position())
+                .add(LootContextParams.TARGET_ENTITY, target)
+                .add(ItematicContextParameters.INTERACTED_POSITION, target.position())
+                .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
             this.itematic$invokeEvent(ItemEvents.HIT_ENTITY, context);
         }
 
-        tryUpdateItemStack(attacker, Hand.MAIN_HAND, stack, stackExchanger);
+        tryUpdateItemStack(attacker, InteractionHand.MAIN_HAND, stack, stackExchanger);
     }
 
     @Inject(
-        method = "postDamageEntity",
+        method = "postHurtEnemy",
         at = @At("HEAD")
     )
     private void postDamageEntityUseItemComponent(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfo info) {
@@ -293,26 +297,26 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
+    public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner) {
         boolean result = false;
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(miner, stack);
         for (ItemComponent<?> component : this.itemComponents) {
             result |= component.postMine(stack, world, state, pos, miner, stackExchanger);
         }
 
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerLevel serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParameters.THIS_ENTITY, miner)
-                .add(LootContextParameters.ORIGIN, miner.getEntityPos())
-                .add(ItematicContextParameters.INTERACTED_POSITION, pos.toCenterPos())
-                .add(LootContextParameters.TOOL, stack)
+                .add(LootContextParams.THIS_ENTITY, miner)
+                .add(LootContextParams.ORIGIN, miner.position())
+                .add(ItematicContextParameters.INTERACTED_POSITION, pos.getCenter())
+                .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
             this.itematic$invokeEvent(ItemEvents.BROKE_BLOCK, context);
         }
 
-        tryUpdateItemStack(miner, Hand.MAIN_HAND, stack, stackExchanger);
+        tryUpdateItemStack(miner, InteractionHand.MAIN_HAND, stack, stackExchanger);
         return result;
     }
 
@@ -321,7 +325,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+    public void onUseTick(Level world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         int usedTicks = user.itematic$itemUsedTicks();
         for (ItemComponent<?> component : this.itemComponents) {
             component.using(stack, world, user, usedTicks, remainingUseTicks);
@@ -329,7 +333,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Inject(
-        method = "onItemEntityDestroyed",
+        method = "onDestroyed",
         at = @At("HEAD")
     )
     private void onItemEntityDestroyedUseItemComponent(ItemEntity entity, CallbackInfo info) {
@@ -344,7 +348,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+    public boolean releaseUsing(ItemStack stack, Level world, LivingEntity user, int remainingUseTicks) {
         boolean result = false;
         int usedTicks = user.itematic$itemUsedTicks();
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
@@ -352,46 +356,46 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             result |= component.stopUsing(stack, world, user, usedTicks, remainingUseTicks, stackExchanger);
         }
 
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerLevel serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getEntityPos())
-                .add(LootContextParameters.TOOL, stack)
-                .add(ItematicContextParameters.HAND, user.getActiveHand())
+                .add(LootContextParams.THIS_ENTITY, user)
+                .add(LootContextParams.ORIGIN, user.position())
+                .add(LootContextParams.TOOL, stack)
+                .add(ItematicContextParameters.HAND, user.getUsedItemHand())
                 .build();
             this.itematic$invokeEvent(ItemEvents.STOPPED_USING, context);
         }
 
-        tryUpdateItemStack(user, Hand.MAIN_HAND, stack, stackExchanger);
+        tryUpdateItemStack(user, InteractionHand.MAIN_HAND, stack, stackExchanger);
         return result;
     }
 
     @Inject(
-        method = "finishUsing",
+        method = "finishUsingItem",
         at = @At("HEAD"),
         cancellable = true
     )
-    public void finishUsingUseItemComponent(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
+    public void finishUsingUseItemComponent(ItemStack stack, Level world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
         int usedTicks = user.itematic$itemUsedTicks();
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
         for (ItemComponent<?> component : this.itemComponents) {
             component.finishUsing(world, user, stack, usedTicks, stackExchanger);
         }
 
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerLevel serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getEntityPos())
-                .add(LootContextParameters.TOOL, stack)
-                .add(ItematicContextParameters.HAND, user.getActiveHand())
+                .add(LootContextParams.THIS_ENTITY, user)
+                .add(LootContextParams.ORIGIN, user.position())
+                .add(LootContextParams.TOOL, stack)
+                .add(ItematicContextParameters.HAND, user.getUsedItemHand())
                 .build();
             this.itematic$invokeEvent(ItemEvents.FINISHED_USING, context);
         }
 
         this.itematic$getBehavior(ItemComponentTypes.CONSUMABLE)
-            .ifPresent(c -> c.consume(user, stack, stackExchanger, world, user.getActiveHand()));
+            .ifPresent(c -> c.consume(user, stack, stackExchanger, world, user.getUsedItemHand()));
         info.setReturnValue(stackExchanger.result());
     }
 
@@ -399,8 +403,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "inventoryTick",
         at = @At("HEAD")
     )
-    public void callInventoryTickListeners(ItemStack stack, ServerWorld world, Entity entity, EquipmentSlot slot, CallbackInfo info) {
-        stack.streamAll(InventoryTickListener.class)
+    public void callInventoryTickListeners(ItemStack stack, ServerLevel world, Entity entity, EquipmentSlot slot, CallbackInfo info) {
+        stack.getAllOfType(InventoryTickListener.class)
             .forEach(inventoryTickListener -> inventoryTickListener.itematic$onInventoryTick(world, stack, entity, slot));
     }
 
@@ -409,7 +413,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player) {
+    public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction clickType, Player player) {
         boolean result = false;
         for (ItemComponent<?> component : this.itemComponents) {
             result |= component.clickOnSlot(stack, slot, clickType, player);
@@ -422,7 +426,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference) {
+    public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack otherStack, Slot slot, ClickAction clickType, Player player, SlotAccess cursorStackReference) {
         boolean result = false;
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, otherStack);
         for (ItemComponent<?> component : this.itemComponents) {
@@ -434,7 +438,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @ModifyReturnValue(
-        method = "getBonusAttackDamage",
+        method = "getAttackDamageBonus",
         at = @At("TAIL")
     )
     private float getBonusAttackDamageUseItemComponent(float original, Entity target, float baseAttackDamage, DamageSource damageSource) {
@@ -444,21 +448,21 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Inject(
-        method = "onCraft",
+        method = "onCraftedPostProcess",
         at = @At("HEAD")
     )
-    public void onCraft(ItemStack stack, World world, CallbackInfo info) {
+    public void onCraft(ItemStack stack, Level world, CallbackInfo info) {
         for (ItemComponent<?> component : this.itemComponents) {
             component.onCraft(stack, world);
         }
     }
 
     @Inject(
-        method = "canMine",
+        method = "canDestroyBlock",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void useDebugStickItemComponent(ItemStack stack, BlockState state, World world, BlockPos pos, LivingEntity user, CallbackInfoReturnable<Boolean> info) {
+    private void useDebugStickItemComponent(ItemStack stack, BlockState state, Level world, BlockPos pos, LivingEntity user, CallbackInfoReturnable<Boolean> info) {
         this.itematic$getBehavior(ItemComponentTypes.DEBUG_STICK)
             .ifPresent(debugStick -> {
                 debugStick.use(user, state, world, pos, stack);
@@ -467,24 +471,24 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Redirect(
-        method = "getMiningSpeed",
+        method = "getDestroySpeed",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/ToolComponent;getSpeed(Lnet/minecraft/block/BlockState;)F"
+            target = "Lnet/minecraft/world/item/component/Tool;getMiningSpeed(Lnet/minecraft/world/level/block/state/BlockState;)F"
         )
     )
-    private float getSpeedPassItemStack(ToolComponent instance, BlockState state, ItemStack stack) {
+    private float getSpeedPassItemStack(Tool instance, BlockState state, ItemStack stack) {
         return instance.itematic$getSpeed(stack, state);
     }
 
     @Redirect(
-        method = "isCorrectForDrops",
+        method = "isCorrectToolForDrops",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/ToolComponent;isCorrectForDrops(Lnet/minecraft/block/BlockState;)Z"
+            target = "Lnet/minecraft/world/item/component/Tool;isCorrectForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z"
         )
     )
-    private boolean isCorrectForDropsPassItemStack(ToolComponent instance, BlockState state, ItemStack stack) {
+    private boolean isCorrectForDropsPassItemStack(Tool instance, BlockState state, ItemStack stack) {
         return instance.itematic$isCorrectForDrops(stack, state);
     }
 
@@ -493,24 +497,24 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public boolean canBeNested() {
+    public boolean canFitInsideContainerItems() {
         return this.itematic$getBehavior(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::canBeNested)
             .orElse(true);
     }
 
     @Inject(
-        method = "getUseAction",
+        method = "getUseAnimation",
         at = @At("HEAD"),
         cancellable = true
     )
-    public void getUseActionUseItemComponent(ItemStack stack, CallbackInfoReturnable<UseAction> info) {
+    public void getUseActionUseItemComponent(ItemStack stack, CallbackInfoReturnable<ItemUseAnimation> info) {
         if (!this.itematic$hasBehavior(ItemComponentTypes.USEABLE)) {
-            info.setReturnValue(UseAction.NONE);
+            info.setReturnValue(ItemUseAnimation.NONE);
             return;
         }
 
-        info.setReturnValue(stack.getOrDefault(ItematicDataComponentTypes.USE_ANIMATION, UseAction.NONE));
+        info.setReturnValue(stack.getOrDefault(ItematicDataComponentTypes.USE_ANIMATION, ItemUseAnimation.NONE));
     }
 
     /**
@@ -518,7 +522,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
+    public int getUseDuration(ItemStack stack, LivingEntity user) {
         if (!this.itematic$hasBehavior(ItemComponentTypes.USEABLE)) {
             return 0;
         }
@@ -537,21 +541,21 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      */
     @Overwrite
     @VisibleForTesting
-    public final String getTranslationKey() {
+    public final String getDescriptionId() {
         return this.display.translationKey();
     }
 
     @Inject(
-        method = "getName(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/text/Text;",
+        method = "getName(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/network/chat/Component;",
         at = @At("HEAD"),
         cancellable = true
     )
-    public void getName(ItemStack stack, CallbackInfoReturnable<Text> info) {
+    public void getName(ItemStack stack, CallbackInfoReturnable<Component> info) {
         this.itematic$getBehavior(ItemComponentTypes.POTION_HOLDER)
             .map(c -> c.translationKey(stack, this.display.translationKey()))
             .or(() -> this.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
                 .flatMap(c -> c.translationKey(stack, this.display.translationKey())))
-            .map(Text::translatable)
+            .map(Component::translatable)
             .ifPresent(info::setReturnValue);
     }
 
@@ -560,31 +564,31 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
      * @reason Uses the ItemComponent implementation for data-driven items.
      */
     @Overwrite
-    public Optional<TooltipData> getTooltipData(ItemStack stack) {
+    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         return this.itematic$getBehavior(ItemComponentTypes.ITEM_HOLDER)
             .flatMap(c -> c.tooltipData(stack));
     }
 
     @Inject(
-        method = "getName(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/text/Text;",
+        method = "getName(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/network/chat/Component;",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void checkTextHolderItemComponent(ItemStack stack, CallbackInfoReturnable<Text> info) {
+    private void checkTextHolderItemComponent(ItemStack stack, CallbackInfoReturnable<Component> info) {
         if (!stack.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER)) {
             return;
         }
 
-        WrittenBookContentComponent writtenBookContent = stack.get(DataComponentTypes.WRITTEN_BOOK_CONTENT);
+        WrittenBookContent writtenBookContent = stack.get(DataComponents.WRITTEN_BOOK_CONTENT);
         if (writtenBookContent == null) {
             return;
         }
 
         String title = writtenBookContent.title().raw();
-        if (StringHelper.isBlank(title)) {
+        if (StringUtil.isBlank(title)) {
             return;
         }
-        info.setReturnValue(Text.literal(title));
+        info.setReturnValue(Component.literal(title));
     }
 
     @Override
@@ -598,12 +602,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public AttributeModifiersComponent itematic$attributeModifiers() {
+    public ItemAttributeModifiers itematic$attributeModifiers() {
         return this.attributeModifiers;
     }
 
     @Override
-    public void itematic$setAttributeModifiers(AttributeModifiersComponent attributeModifiers) {
+    public void itematic$setAttributeModifiers(ItemAttributeModifiers attributeModifiers) {
         this.attributeModifiers = attributeModifiers;
     }
 
@@ -657,7 +661,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> builder, TooltipType type) {
+    public void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag type) {
         this.display.tooltip().ifPresent(tooltip -> tooltip.forEach(builder));
         for (ItemComponent<?> component : this.itemComponents) {
             component.appendTooltip(stack, context, builder, type);
@@ -665,19 +669,19 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
-    public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    public boolean itematic$mayStartUsing(Level world, Player user, InteractionHand hand, ItemStack stack) {
         return this.itematic$getBehavior(ItemComponentTypes.FOOD)
             .map(c -> c.mayStartUsing(user, stack))
             .orElse(true);
     }
 
     @Override
-    public boolean canBeEnchantedWith(ItemStack stack, RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
+    public boolean canBeEnchantedWith(ItemStack stack, Holder<Enchantment> enchantment, EnchantingContext context) {
         return true;
     }
 
     @Unique
-    private static void tryUpdateItemStack(LivingEntity target, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    private static void tryUpdateItemStack(LivingEntity target, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (target == null) {
             return;
         }
@@ -687,46 +691,46 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return;
         }
 
-        target.setStackInHand(hand, newStack);
+        target.setItemInHand(hand, newStack);
     }
 
     @Unique
-    private ComponentMap initializeComponents() {
-        ComponentMap.Builder componentsBuilder = ComponentMap.builder()
-            .addAll(DataComponentTypes.DEFAULT_ITEM_COMPONENTS);
+    private DataComponentMap initializeComponents() {
+        DataComponentMap.Builder componentsBuilder = DataComponentMap.builder()
+            .addAll(DataComponents.COMMON_ITEM_COMPONENTS);
         this.display.addComponents(componentsBuilder);
         for (ItemComponent<?> component : this.itemComponents) {
             component.addComponents(componentsBuilder);
         }
 
         if (!this.attributeModifiers.modifiers().isEmpty()) {
-            componentsBuilder.add(DataComponentTypes.ATTRIBUTE_MODIFIERS, this.attributeModifiers);
+            componentsBuilder.set(DataComponents.ATTRIBUTE_MODIFIERS, this.attributeModifiers);
         }
 
         return componentsBuilder.build();
     }
 
-    @Mixin(Item.Settings.class)
+    @Mixin(Item.Properties.class)
     public static class SettingsExtender {
         @Redirect(
-            method = "useRemainder",
+            method = "usingConvertsTo",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private ItemStack newItemStackUseEmptyItemStack(ItemConvertible item) {
+        private ItemStack newItemStackUseEmptyItemStack(ItemLike item) {
             return ItemStack.EMPTY;
         }
 
         @Redirect(
-            method = "getValidatedComponents",
+            method = "buildAndValidateComponents",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/component/ComponentMap$Builder;add(Lnet/minecraft/component/ComponentType;Ljava/lang/Object;)Lnet/minecraft/component/ComponentMap$Builder;"
+                target = "Lnet/minecraft/core/component/DataComponentMap$Builder;set(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Lnet/minecraft/core/component/DataComponentMap$Builder;"
             )
         )
-        private <T> ComponentMap.Builder doNotAddDataComponents(ComponentMap.Builder instance, ComponentType<T> type, @Nullable T value) {
+        private <T> DataComponentMap.Builder doNotAddDataComponents(DataComponentMap.Builder instance, DataComponentType<T> type, @Nullable T value) {
             return instance;
         }
     }

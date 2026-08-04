@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.gametest.structure;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.structure.StructureTemplateManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,10 +18,10 @@ public class StructureTemplateManagerExtender {
     private static final String STRUCTURE_OUTPUT_DIRECTORY = System.getProperty("itematic.gametest.structure-output-directory");
 
     @ModifyExpressionValue(
-        method = "getTemplatePath",
+        method = "createAndValidatePathToGeneratedStructure",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/structure/StructureTemplateManager;generatedPath:Ljava/nio/file/Path;",
+            target = "Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplateManager;generatedDir:Ljava/nio/file/Path;",
             opcode = Opcodes.GETFIELD
         )
     )
@@ -34,7 +34,7 @@ public class StructureTemplateManagerExtender {
     }
 
     @ModifyConstant(
-        method = "getTemplatePath",
+        method = "createAndValidatePathToGeneratedStructure",
         constant = @Constant(
             stringValue = "structures"
         )

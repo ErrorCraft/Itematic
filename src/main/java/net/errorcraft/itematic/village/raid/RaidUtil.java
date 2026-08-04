@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.village.raid;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.block.entity.BannerPattern;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.village.raid.Raid;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.world.entity.raid.Raid;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.BannerPattern;
 
 public class RaidUtil {
     private static ItemStack ominousBanner = null;
@@ -23,12 +23,12 @@ public class RaidUtil {
         return resultingOminousBanner;
     }
 
-    public static void createOminousBanner(WorldAccess world) {
+    public static void createOminousBanner(LevelAccessor world) {
         ominousBanner = world.itematic$createStack(ItemKeys.WHITE_BANNER);
     }
 
-    public static ItemStack getOminousBanner(RegistryEntryLookup<Item> items, RegistryEntryLookup<BannerPattern> bannerPatterns) {
+    public static ItemStack getOminousBanner(HolderGetter<Item> items, HolderGetter<BannerPattern> bannerPatterns) {
         ominousBanner = new ItemStack(items.getOrThrow(ItemKeys.WHITE_BANNER));
-        return Raid.createOminousBanner(bannerPatterns);
+        return Raid.getOminousBannerInstance(bannerPatterns);
     }
 }

@@ -10,8 +10,8 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record PlaceBlockFromItemAction(PositionTarget position, boolean decrementCount) implements Action<PlaceBlockFromItemAction> {
     public static final MapCodec<PlaceBlockFromItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -30,7 +30,7 @@ public record PlaceBlockFromItemAction(PositionTarget position, boolean decremen
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockItemComponent block = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+        BlockItemComponent block = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
             .itematic$getBehavior(ItemComponentTypes.BLOCK)
             .orElse(null);
         if (block == null) {

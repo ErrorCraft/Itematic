@@ -1,21 +1,21 @@
 package net.errorcraft.itematic.mixin.entity.player;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(PlayerInventory.class)
+@Mixin(Inventory.class)
 public class PlayerInventoryExtender {
     @Redirect(
-        method = "insertStack(ILnet/minecraft/item/ItemStack;)Z",
+        method = "add(ILnet/minecraft/world/item/ItemStack;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;getRawId(Lnet/minecraft/item/Item;)I"
+            target = "Lnet/minecraft/world/item/Item;getId(Lnet/minecraft/world/item/Item;)I"
         )
     )
     private int getRawIdReturnZero(Item item) {
@@ -23,14 +23,14 @@ public class PlayerInventoryExtender {
     }
 
     @ModifyArg(
-        method = "insertStack(ILnet/minecraft/item/ItemStack;)Z",
+        method = "add(ILnet/minecraft/world/item/ItemStack;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/crash/CrashReportSection;add(Ljava/lang/String;Ljava/lang/Object;)Lnet/minecraft/util/crash/CrashReportSection;",
+            target = "Lnet/minecraft/CrashReportCategory;setDetail(Ljava/lang/String;Ljava/lang/Object;)Lnet/minecraft/CrashReportCategory;",
             ordinal = 0
         )
     )
     private Object addItemIdToCrashReportUseRegistryKey(Object detail, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$key().getValue();
+        return stack.itematic$key().identifier();
     }
 }

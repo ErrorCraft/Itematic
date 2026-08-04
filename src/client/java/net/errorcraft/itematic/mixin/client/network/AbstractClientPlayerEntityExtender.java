@@ -4,28 +4,28 @@ import com.mojang.authlib.GameProfile;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ZoomItemComponent;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(AbstractClientPlayerEntity.class)
-public abstract class AbstractClientPlayerEntityExtender extends PlayerEntity {
-    public AbstractClientPlayerEntityExtender(World world, GameProfile profile) {
+@Mixin(AbstractClientPlayer.class)
+public abstract class AbstractClientPlayerEntityExtender extends Player {
+    public AbstractClientPlayerEntityExtender(Level world, GameProfile profile) {
         super(world, profile);
     }
 
     @Redirect(
-        method = "getFovMultiplier",
+        method = "getFieldOfViewModifier",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForBowUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -33,7 +33,7 @@ public abstract class AbstractClientPlayerEntityExtender extends PlayerEntity {
     }
 
     @ModifyConstant(
-        method = "getFovMultiplier",
+        method = "getFieldOfViewModifier",
         constant = @Constant(
             floatValue = 0.1f
         )

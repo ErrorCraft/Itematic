@@ -6,14 +6,14 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record DamageItemAction(int amount) implements Action<DamageItemAction> {
     public static final MapCodec<DamageItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codecs.POSITIVE_INT.fieldOf("amount").forGetter(DamageItemAction::amount)
+        ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(DamageItemAction::amount)
     ).apply(instance, DamageItemAction::new));
 
     public static DamageItemAction of(int amount) {
@@ -27,12 +27,12 @@ public record DamageItemAction(int amount) implements Action<DamageItemAction> {
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.get(LootContextParameters.TOOL);
+        ItemStack stack = context.get(LootContextParams.TOOL);
         if (stack == null || stack.isEmpty()) {
             return false;
         }
 
-        if (!stack.isDamageable()) {
+        if (!stack.isDamageableItem()) {
             return false;
         }
 
@@ -45,7 +45,7 @@ public record DamageItemAction(int amount) implements Action<DamageItemAction> {
     }
 
     private static boolean preventDamage(ActionContext context) {
-        return context.get(LootContextParameters.THIS_ENTITY) instanceof LivingEntity entity
-            && entity.isInCreativeMode();
+        return context.get(LootContextParams.THIS_ENTITY) instanceof LivingEntity entity
+            && entity.hasInfiniteMaterials();
     }
 }

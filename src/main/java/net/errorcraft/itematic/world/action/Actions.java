@@ -13,106 +13,105 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.loot.condition.AllOfLootCondition;
-import net.minecraft.loot.condition.InvertedLootCondition;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.particle.SimpleParticleType;
-import net.minecraft.predicate.BlockPredicate;
-import net.minecraft.predicate.StatePredicate;
-import net.minecraft.predicate.entity.LocationPredicate;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.stat.Stats;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.event.GameEvent;
-
+import net.minecraft.advancements.criterion.BlockPredicate;
+import net.minecraft.advancements.criterion.LocationPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.function.UnaryOperator;
 
 public class Actions {
-    public static final RegistryKey<ActionEntry> USE_HOE_ON_BLOCK = of("use_hoe_on_block");
-    public static final RegistryKey<ActionEntry> TILL_DIRT = of("till_dirt");
-    public static final RegistryKey<ActionEntry> TILL_COARSE_DIRT = of("till_coarse_dirt");
-    public static final RegistryKey<ActionEntry> TILL_ROOTED_DIRT = of("till_rooted_dirt");
-    public static final RegistryKey<ActionEntry> USE_SHOVEL_ON_BLOCK = of("use_shovel_on_block");
-    public static final RegistryKey<ActionEntry> FLATTEN_GROUND = of("flatten_ground");
-    public static final RegistryKey<ActionEntry> EXTINGUISH_CAMPFIRE = of("extinguish_campfire");
-    public static final RegistryKey<ActionEntry> LIGHT_BLOCK = of("light_block");
+    public static final ResourceKey<ActionEntry> USE_HOE_ON_BLOCK = of("use_hoe_on_block");
+    public static final ResourceKey<ActionEntry> TILL_DIRT = of("till_dirt");
+    public static final ResourceKey<ActionEntry> TILL_COARSE_DIRT = of("till_coarse_dirt");
+    public static final ResourceKey<ActionEntry> TILL_ROOTED_DIRT = of("till_rooted_dirt");
+    public static final ResourceKey<ActionEntry> USE_SHOVEL_ON_BLOCK = of("use_shovel_on_block");
+    public static final ResourceKey<ActionEntry> FLATTEN_GROUND = of("flatten_ground");
+    public static final ResourceKey<ActionEntry> EXTINGUISH_CAMPFIRE = of("extinguish_campfire");
+    public static final ResourceKey<ActionEntry> LIGHT_BLOCK = of("light_block");
 
     private Actions() {}
 
-    public static void bootstrap(Registerable<ActionEntry> registerable) {
-        RegistryEntryLookup<ActionEntry> actions = registerable.getRegistryLookup(ItematicRegistryKeys.ACTION);
-        RegistryEntryLookup<SoundEvent> soundEvents = registerable.getRegistryLookup(RegistryKeys.SOUND_EVENT);
-        RegistryEntryLookup<Block> blocks = registerable.getRegistryLookup(RegistryKeys.BLOCK);
-        RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
+    public static void bootstrap(BootstrapContext<ActionEntry> registerable) {
+        HolderGetter<ActionEntry> actions = registerable.lookup(ItematicRegistryKeys.ACTION);
+        HolderGetter<SoundEvent> soundEvents = registerable.lookup(Registries.SOUND_EVENT);
+        HolderGetter<Block> blocks = registerable.lookup(Registries.BLOCK);
+        HolderGetter<Item> items = registerable.lookup(Registries.ITEM);
 
         registerable.register(USE_HOE_ON_BLOCK, ActionEntry.of(
             PassingSequenceHandler.builder()
                 .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
-                .add(SwingHandAction.of(LootContext.EntityReference.THIS))
-                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundCategory.BLOCKS))
+                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundSource.BLOCKS))
         ));
         registerable.register(TILL_DIRT, ActionEntry.of(
-            setBlockConditions(blocks, builder -> builder.tag(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND)),
+            setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND)),
             SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockKeys.FARMLAND))
         ));
         registerable.register(TILL_COARSE_DIRT, ActionEntry.of(
-            setBlockConditions(blocks, builder -> builder.blocks(blocks, blocks.getOrThrow(BlockKeys.COARSE_DIRT).value())),
+            setBlockConditions(blocks, builder -> builder.of(blocks, blocks.getOrThrow(BlockKeys.COARSE_DIRT).value())),
             SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockKeys.DIRT))
         ));
         registerable.register(TILL_ROOTED_DIRT, ActionEntry.of(
             LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
-                LocationPredicate.Builder.create()
-                    .block(BlockPredicate.Builder.create()
-                        .blocks(blocks, blocks.getOrThrow(BlockKeys.ROOTED_DIRT).value()))
+                LocationPredicate.Builder.location()
+                    .setBlock(BlockPredicate.Builder.block()
+                        .of(blocks, blocks.getOrThrow(BlockKeys.ROOTED_DIRT).value()))
             ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockKeys.DIRT)))
                 .add(DropItemFromBlockAction.of(PositionTarget.INTERACTED, items.getOrThrow(ItemKeys.HANGING_ROOTS)))
         ));
         registerable.register(USE_SHOVEL_ON_BLOCK, ActionEntry.of(
-            InvertedLootCondition.builder(
+            InvertedLootItemCondition.invert(
                 SideCheckPredicate.builder(Direction.DOWN)
             ),
             PassingSequenceHandler.builder()
                 .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_SHOVEL_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
-                .add(SwingHandAction.of(LootContext.EntityReference.THIS))
+                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
         ));
         registerable.register(FLATTEN_GROUND, ActionEntry.of(
-            setBlockConditions(blocks, builder -> builder.tag(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)),
+            setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockKeys.DIRT_PATH)))
-                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundCategory.BLOCKS))
+                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundSource.BLOCKS))
         ));
         registerable.register(EXTINGUISH_CAMPFIRE, ActionEntry.of(
             LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
-                LocationPredicate.Builder.create()
-                    .block(BlockPredicate.Builder.create()
-                        .tag(blocks, BlockTags.CAMPFIRES)
-                        .state(StatePredicate.Builder.create()
-                            .exactMatch(Properties.LIT, true)))
+                LocationPredicate.Builder.location()
+                    .setBlock(BlockPredicate.Builder.block()
+                        .of(blocks, BlockTags.CAMPFIRES)
+                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                            .hasProperty(BlockStateProperties.LIT, true)))
             ),
             PassingSequenceHandler.builder()
                 .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
-                    .property(Properties.LIT, false)
+                    .property(BlockStateProperties.LIT, false)
                     .build())
-                .add(PlaySoundAction.builder(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.FIRE_EXTINGUISH), SoundCategory.BLOCKS)
+                .add(PlaySoundAction.builder(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.FIRE_EXTINGUISH), SoundSource.BLOCKS)
                     .volume(0.5f)
                     .pitch(1.8f, 3.4f)
                     .build())
@@ -120,10 +119,10 @@ public class Actions {
                     .add(
                         LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
-                            LocationPredicate.Builder.create()
-                                .block(BlockPredicate.Builder.create()
-                                    .state(StatePredicate.Builder.create()
-                                        .exactMatch(Properties.SIGNAL_FIRE, true)))
+                            LocationPredicate.Builder.location()
+                                .setBlock(BlockPredicate.Builder.block()
+                                    .setProperties(StatePropertiesPredicate.Builder.properties()
+                                        .hasProperty(BlockStateProperties.SIGNAL_FIRE, true)))
                         ),
                         campfireParticles(true)
                     )
@@ -134,96 +133,96 @@ public class Actions {
             PassingSequenceHandler.builder()
                 .add(FirstToPassRequirementsSequenceHandler.builder()
                     .add(
-                        AllOfLootCondition.builder(
+                        AllOfCondition.allOf(
                             LocationCheckPredicates.builder(
                                 PositionTarget.INTERACTED,
-                                LocationPredicate.Builder.create()
-                                    .block(BlockPredicate.Builder.create()
-                                        .state(StatePredicate.Builder.create()
-                                            .exactMatch(Properties.LIT, false)))),
-                            InvertedLootCondition.builder(
+                                LocationPredicate.Builder.location()
+                                    .setBlock(BlockPredicate.Builder.block()
+                                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                                            .hasProperty(BlockStateProperties.LIT, false)))),
+                            InvertedLootItemCondition.invert(
                                 LocationCheckPredicates.builder(
                                     PositionTarget.INTERACTED,
-                                    LocationPredicate.Builder.create()
-                                        .block(BlockPredicate.Builder.create()
-                                            .state(StatePredicate.Builder.create()
-                                                .exactMatch(Properties.WATERLOGGED, true)))))
+                                    LocationPredicate.Builder.location()
+                                        .setBlock(BlockPredicate.Builder.block()
+                                            .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                .hasProperty(BlockStateProperties.WATERLOGGED, true)))))
                         ),
                         ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
-                            .property(Properties.LIT, true)
+                            .property(BlockStateProperties.LIT, true)
                             .build()
                     )
                     .add(
                         LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
-                            LocationPredicate.Builder.create()
-                                .block(BlockPredicate.Builder.create()
-                                    .blocks(blocks, blocks.getOrThrow(BlockKeys.TNT).value()))
+                            LocationPredicate.Builder.location()
+                                .setBlock(BlockPredicate.Builder.block()
+                                    .of(blocks, blocks.getOrThrow(BlockKeys.TNT).value()))
                         ),
                         PassingSequenceHandler.builder()
                             .add(PrimeTntAction.of(PositionTarget.INTERACTED))
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundCategory.BLOCKS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundSource.BLOCKS))
                     )
                     .add(PlaceBlockAction.of(blocks.getOrThrow(BlockKeys.FIRE), PositionTarget.INTERACTED)))
-                .addOptional(SwingHandAction.of(LootContext.EntityReference.THIS))
+                .addOptional(SwingHandAction.of(LootContext.EntityTarget.THIS))
         ));
     }
 
-    public static ActionEntry waxSign(RegistryEntryLookup<Block> blocks, boolean wax) {
+    public static ActionEntry waxSign(HolderGetter<Block> blocks, boolean wax) {
         return modifySign(blocks, ModifySignAction.wax(PositionTarget.INTERACTED, wax));
     }
 
-    public static ActionEntry glowSign(RegistryEntryLookup<Block> blocks, boolean glow) {
+    public static ActionEntry glowSign(HolderGetter<Block> blocks, boolean glow) {
         return modifySign(blocks, ModifySignAction.glow(PositionTarget.INTERACTED, glow));
     }
 
-    public static ActionEntry potBlock(RegistryEntryLookup<Block> blocks, RegistryKey<Block> pottedBlock) {
+    public static ActionEntry potBlock(HolderGetter<Block> blocks, ResourceKey<Block> pottedBlock) {
         return ActionEntry.of(
             LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
-                LocationPredicate.Builder.create()
-                    .block(BlockPredicate.Builder.create()
-                        .blocks(blocks, blocks.getOrThrow(BlockKeys.FLOWER_POT).value()))
+                LocationPredicate.Builder.location()
+                    .setBlock(BlockPredicate.Builder.block()
+                        .of(blocks, blocks.getOrThrow(BlockKeys.FLOWER_POT).value()))
             ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(pottedBlock)))
-                .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, PositionTarget.INTERACTED, LootContext.EntityReference.THIS))
-                .add(IncrementStatAction.of(LootContext.EntityReference.THIS, Stats.CUSTOM.getOrCreateStat(Stats.POT_FLOWER)))
+                .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
+                .add(IncrementStatAction.of(LootContext.EntityTarget.THIS, Stats.CUSTOM.get(Stats.POT_FLOWER)))
                 .add(DecrementItemAction.of(1))
-                .add(SwingHandAction.of(LootContext.EntityReference.THIS))
+                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
         );
     }
 
-    private static ActionEntry modifySign(RegistryEntryLookup<Block> blocks, ModifySignAction action) {
+    private static ActionEntry modifySign(HolderGetter<Block> blocks, ModifySignAction action) {
         return ActionEntry.of(
             LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
-                LocationPredicate.Builder.create()
-                    .block(BlockPredicate.Builder.create()
-                        .tag(blocks, BlockTags.SIGNS))
+                LocationPredicate.Builder.location()
+                    .setBlock(BlockPredicate.Builder.block()
+                        .of(blocks, BlockTags.SIGNS))
             ),
             PassingSequenceHandler.builder()
                 .add(action)
                 .add(DecrementItemAction.of(1))
-                .add(SwingHandAction.of(LootContext.EntityReference.THIS))
+                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
         );
     }
 
-    private static LootCondition.Builder setBlockConditions(RegistryEntryLookup<Block> blocks, UnaryOperator<BlockPredicate.Builder> blockPredicateBuilder) {
-        return AllOfLootCondition.builder(
+    private static LootItemCondition.Builder setBlockConditions(HolderGetter<Block> blocks, UnaryOperator<BlockPredicate.Builder> blockPredicateBuilder) {
+        return AllOfCondition.allOf(
             LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
-                LocationPredicate.Builder.create()
-                    .block(blockPredicateBuilder.apply(BlockPredicate.Builder.create()))
+                LocationPredicate.Builder.location()
+                    .setBlock(blockPredicateBuilder.apply(BlockPredicate.Builder.block()))
             ),
-            InvertedLootCondition.builder(
+            InvertedLootItemCondition.invert(
                 SideCheckPredicate.builder(Direction.DOWN)
             ),
             LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
-                LocationPredicate.Builder.create()
-                    .block(BlockPredicate.Builder.create()
-                        .tag(blocks, BlockTags.AIR)),
+                LocationPredicate.Builder.location()
+                    .setBlock(BlockPredicate.Builder.block()
+                        .of(blocks, BlockTags.AIR)),
                 new BlockPos(0, 1, 0)
             )
         );
@@ -253,7 +252,7 @@ public class Actions {
                 .build());
     }
 
-    private static RegistryKey<ActionEntry> of(String name) {
-        return RegistryKey.of(ItematicRegistryKeys.ACTION, Identifier.ofVanilla(name));
+    private static ResourceKey<ActionEntry> of(String name) {
+        return ResourceKey.create(ItematicRegistryKeys.ACTION, Identifier.withDefaultNamespace(name));
     }
 }

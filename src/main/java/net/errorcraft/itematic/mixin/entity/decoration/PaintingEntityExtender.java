@@ -1,43 +1,43 @@
 package net.errorcraft.itematic.mixin.entity.decoration;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.decoration.AbstractDecorationEntity;
-import net.minecraft.entity.decoration.painting.PaintingEntity;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.decoration.painting.Painting;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(PaintingEntity.class)
-public abstract class PaintingEntityExtender extends AbstractDecorationEntity {
-    protected PaintingEntityExtender(EntityType<? extends AbstractDecorationEntity> entityType, World world) {
+@Mixin(Painting.class)
+public abstract class PaintingEntityExtender extends HangingEntity {
+    protected PaintingEntityExtender(EntityType<? extends HangingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "onBreak",
+        method = "dropItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/decoration/painting/PaintingEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/world/entity/decoration/painting/Painting;spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/entity/item/ItemEntity;"
         )
     )
-    private ItemEntity dropItemForPaintingUseRegistryKey(PaintingEntity instance, ServerWorld world, ItemConvertible itemConvertible) {
+    private ItemEntity dropItemForPaintingUseRegistryKey(Painting instance, ServerLevel world, ItemLike itemConvertible) {
         return this.itematic$dropItem(world, ItemKeys.PAINTING);
     }
 
     @Redirect(
-        method = "getPickBlockStack",
+        method = "getPickResult",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForPaintingUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.PAINTING);
+    private ItemStack newItemStackForPaintingUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.PAINTING);
     }
 }

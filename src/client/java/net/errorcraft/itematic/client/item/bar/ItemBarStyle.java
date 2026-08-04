@@ -4,18 +4,17 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.client.item.bar.color.ColorProvider;
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.ColorHelper;
-
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public record ItemBarStyle(ProgressProvider progress, ColorProvider color, List<Identifier> textures) {
     public static final Codec<ItemBarStyle> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ProgressProvider.CODEC.fieldOf("progress").forGetter(ItemBarStyle::progress),
         ColorProvider.CODEC.fieldOf("color").forGetter(ItemBarStyle::color),
-        Codecs.nonEmptyList(Identifier.CODEC.listOf()).fieldOf("textures").forGetter(ItemBarStyle::textures)
+        ExtraCodecs.nonEmptyList(Identifier.CODEC.listOf()).fieldOf("textures").forGetter(ItemBarStyle::textures)
     ).apply(instance, ItemBarStyle::new));
 
     public boolean isVisible(ItemStack stack) {
@@ -38,6 +37,6 @@ public record ItemBarStyle(ProgressProvider progress, ColorProvider color, List<
 
     public int color(ItemStack stack) {
         float progress = this.progress.get(stack);
-        return ColorHelper.fullAlpha(this.color.get(progress));
+        return ARGB.opaque(this.color.get(progress));
     }
 }

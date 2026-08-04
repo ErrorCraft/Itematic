@@ -7,26 +7,25 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FireworksComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.item.FireworkRocketItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.FireworkRocketItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Fireworks;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public class FireworkItemComponent implements ItemComponent<FireworkItemComponent> {
     public static final FireworkItemComponent INSTANCE = new FireworkItemComponent();
     public static final Codec<FireworkItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
-    private static final FireworksComponent DEFAULT_DATA_COMPONENT = new FireworksComponent(1, List.of());
+    private static final Fireworks DEFAULT_DATA_COMPONENT = new Fireworks(1, List.of());
 
     private FireworkItemComponent() {}
 
@@ -41,53 +40,53 @@ public class FireworkItemComponent implements ItemComponent<FireworkItemComponen
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (!user.isGliding()) {
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (!user.isFallFlying()) {
             return ItemResult.PASS;
         }
 
-        if (world.isClient()) {
+        if (world.isClientSide()) {
             return ItemResult.SUCCEED;
         }
 
         FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(world, stack, user);
-        world.spawnEntity(fireworkRocketEntity);
-        stack.decrementUnlessCreative(1, user);
-        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+        world.addFreshEntity(fireworkRocketEntity);
+        stack.consume(1, user);
+        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
         return ItemResult.CONSUME;
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
-        PlayerEntity player = context.getPlayer();
-        if (player != null && player.isGliding()) {
+    public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
+        Player player = context.getPlayer();
+        if (player != null && player.isFallFlying()) {
             return ItemResult.PASS;
         }
 
-        World world = context.getWorld();
-        ItemStack stack = context.getStack();
-        if (world.isClient()) {
+        Level world = context.getLevel();
+        ItemStack stack = context.getItemInHand();
+        if (world.isClientSide()) {
             return ItemResult.SUCCEED;
         }
 
         FireworkRocketEntity entity = createFireworkEntity(world, stack, context);
-        world.spawnEntity(entity);
-        stack.decrement(1);
+        world.addFreshEntity(entity);
+        stack.shrink(1);
         return ItemResult.CONSUME;
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.FIREWORKS, DEFAULT_DATA_COMPONENT);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.FIREWORKS, DEFAULT_DATA_COMPONENT);
     }
 
-    private static FireworkRocketEntity createFireworkEntity(World world, ItemStack stack, ItemUsageContext context) {
-        Direction direction = context.getSide();
-        Vec3d position = context.getHitPos().add(
-            direction.getOffsetX() * FireworkRocketItem.OFFSET_POS_MULTIPLIER,
-            direction.getOffsetY() * FireworkRocketItem.OFFSET_POS_MULTIPLIER,
-            direction.getOffsetZ() * FireworkRocketItem.OFFSET_POS_MULTIPLIER
+    private static FireworkRocketEntity createFireworkEntity(Level world, ItemStack stack, UseOnContext context) {
+        Direction direction = context.getClickedFace();
+        Vec3 position = context.getClickLocation().add(
+            direction.getStepX() * FireworkRocketItem.ROCKET_PLACEMENT_OFFSET,
+            direction.getStepY() * FireworkRocketItem.ROCKET_PLACEMENT_OFFSET,
+            direction.getStepZ() * FireworkRocketItem.ROCKET_PLACEMENT_OFFSET
         );
-        return new FireworkRocketEntity(world, context.getPlayer(), position.getX(), position.getY(), position.getZ(), stack);
+        return new FireworkRocketEntity(world, context.getPlayer(), position.x(), position.y(), position.z(), stack);
     }
 }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.item;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemStackUtil {
     private ItemStackUtil() {}

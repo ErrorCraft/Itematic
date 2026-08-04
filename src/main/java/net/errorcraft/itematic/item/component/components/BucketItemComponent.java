@@ -22,23 +22,27 @@ import net.errorcraft.itematic.world.modification.WorldModification;
 import net.errorcraft.itematic.world.modification.type.DrainFluidWorldModification;
 import net.errorcraft.itematic.world.modification.type.PlaceBlockWorldModification;
 import net.errorcraft.itematic.world.modification.type.PlaceFluidWorldModification;
-import net.minecraft.block.Block;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Bucketable;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.Optional;
 
@@ -48,7 +52,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
         EntitySpawner.CODEC.optionalFieldOf("entity").forGetter(BucketItemComponent::entity)
     ).apply(instance, BucketItemComponent::new));
 
-    public static ItemComponent<?>[] drainFluid(RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] drainFluid(HolderGetter<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(16),
             new BucketItemComponent(
@@ -59,7 +63,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
         };
     }
 
-    public static ItemComponent<?>[] placeFluid(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] placeFluid(Holder<Fluid> fluid, Holder<SoundEvent> emptyingSound, HolderGetter<Item> items, HolderGetter<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
             new BucketItemComponent(
@@ -70,7 +74,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
         };
     }
 
-    public static ItemComponent<?>[] placeFluidWithEntity(RegistryEntry<Fluid> fluid, RegistryEntry<EntityType<?>> entity, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] placeFluidWithEntity(Holder<Fluid> fluid, Holder<EntityType<?>> entity, Holder<SoundEvent> emptyingSound, HolderGetter<Item> items, HolderGetter<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent[] {
             StackableItemComponent.of(1),
             new BucketItemComponent(
@@ -81,7 +85,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
         };
     }
 
-    public static ItemComponent<?>[] placeBlock(RegistryEntry<Block> block, RegistryEntry<SoundEvent> emptyingSound, RegistryEntryLookup<Item> items, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] placeBlock(Holder<Block> block, Holder<SoundEvent> emptyingSound, HolderGetter<Item> items, HolderGetter<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent[] {
             StackableItemComponent.of(1),
             new BucketItemComponent(
@@ -103,7 +107,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, this.modification().fluidHandling());
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
@@ -111,14 +115,14 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
 
         ActionContext context = ActionContext.builder(world)
             .stackExchanger(stackExchanger)
-            .addOptional(LootContextParameters.THIS_ENTITY, user)
-            .addOptional(LootContextParameters.ORIGIN, user, Entity::getEntityPos)
-            .add(ItematicContextParameters.INTERACTED_POSITION, blockHitResult.getBlockPos().toCenterPos())
-            .add(LootContextParameters.TOOL, stack)
+            .addOptional(LootContextParams.THIS_ENTITY, user)
+            .addOptional(LootContextParams.ORIGIN, user, Entity::position)
+            .add(ItematicContextParameters.INTERACTED_POSITION, blockHitResult.getBlockPos().getCenter())
+            .add(LootContextParams.TOOL, stack)
             .add(ItematicContextParameters.HAND, hand)
-            .add(ItematicContextParameters.SIDE, blockHitResult.getSide())
+            .add(ItematicContextParameters.SIDE, blockHitResult.getDirection())
             .build();
-        if (this.use(context, PositionTarget.INTERACTED, !blockHitResult.isInsideBlock())) {
+        if (this.use(context, PositionTarget.INTERACTED, !blockHitResult.isInside())) {
             return ItemResult.CONSUME;
         }
 
@@ -126,9 +130,9 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
+    public void addComponents(DataComponentMap.Builder builder) {
         if (this.entity.isPresent()) {
-            builder.add(DataComponentTypes.BUCKET_ENTITY_DATA, NbtComponent.DEFAULT);
+            builder.set(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY);
         }
     }
 
@@ -139,12 +143,12 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
         }
 
         this.entity.ifPresent(entity -> EntityPlacer.of(entity, BucketItemComponent::initializeBucketEntity)
-            .place(context, PositionTarget.INTERACTED, SpawnReason.BUCKET));
-        ItemStack stack = context.get(LootContextParameters.TOOL);
+            .place(context, PositionTarget.INTERACTED, EntitySpawnReason.BUCKET));
+        ItemStack stack = context.get(LootContextParams.TOOL);
         if (!ItemStackUtil.isNullOrEmpty(stack)) {
-            stack.decrementUnlessCreative(
+            stack.consume(
                 1,
-                context.get(LootContextParameters.THIS_ENTITY, LivingEntity.class)
+                context.get(LootContextParams.THIS_ENTITY, LivingEntity.class)
             );
         }
 
@@ -154,7 +158,7 @@ public record BucketItemComponent(WorldModification modification, Optional<Entit
 
     private static void initializeBucketEntity(Entity entity, ItemStack stack) {
         if (entity instanceof Bucketable bucketable) {
-            bucketable.copyDataFromNbt(stack.getOrDefault(DataComponentTypes.BUCKET_ENTITY_DATA, NbtComponent.DEFAULT).copyNbt());
+            bucketable.loadFromBucketTag(stack.getOrDefault(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY).copyTag());
             bucketable.setFromBucket(true);
         }
     }

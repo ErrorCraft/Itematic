@@ -3,11 +3,11 @@ package net.errorcraft.itematic.item.holder.rule;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.predicate.item.ItemPredicates;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.math.Fraction;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public record ItemHolderRules(List<Rule> rules) {
     public static final Codec<ItemHolderRules> CODEC = Rule.CODEC.listOf().xmap(ItemHolderRules::new, ItemHolderRules::rules);
-    public static final PacketCodec<RegistryByteBuf, ItemHolderRules> PACKET_CODEC = Rule.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(ItemHolderRules::new, ItemHolderRules::rules);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemHolderRules> PACKET_CODEC = Rule.PACKET_CODEC.apply(ByteBufCodecs.list()).map(ItemHolderRules::new, ItemHolderRules::rules);
 
     public static Builder builder() {
         return new Builder();
@@ -28,7 +28,7 @@ public record ItemHolderRules(List<Rule> rules) {
                 return rule.rule.occupancy(stack);
             }
         }
-        return Fraction.getFraction(1, stack.getMaxCount());
+        return Fraction.getFraction(1, stack.getMaxStackSize());
     }
 
     public boolean canOccupy(ItemStack stack) {
@@ -63,8 +63,8 @@ public record ItemHolderRules(List<Rule> rules) {
             ItemPredicate.CODEC.optionalFieldOf("condition").forGetter(Rule::condition),
             ItemHolderRule.CODEC.forGetter(Rule::rule)
         ).apply(instance, Rule::new));
-        public static final PacketCodec<RegistryByteBuf, Rule> PACKET_CODEC = PacketCodec.tuple(
-            ItemPredicates.PACKET_CODEC.collect(PacketCodecs::optional), Rule::condition,
+        public static final StreamCodec<RegistryFriendlyByteBuf, Rule> PACKET_CODEC = StreamCodec.composite(
+            ItemPredicates.PACKET_CODEC.apply(ByteBufCodecs::optional), Rule::condition,
             ItemHolderRule.PACKET_CODEC, Rule::rule,
             Rule::new
         );

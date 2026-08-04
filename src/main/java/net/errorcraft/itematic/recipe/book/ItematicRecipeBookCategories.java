@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.recipe.book;
 
-import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
 
 public class ItematicRecipeBookCategories {
     public static final RecipeBookCategory BREWING_MODIFY = register("brewing_modify");
@@ -13,6 +13,6 @@ public class ItematicRecipeBookCategories {
     public static void init() {}
 
     private static RecipeBookCategory register(String id) {
-        return Registry.register(Registries.RECIPE_BOOK_CATEGORY, id, new RecipeBookCategory());
+        return Registry.register(BuiltInRegistries.RECIPE_BOOK_CATEGORY, id, new RecipeBookCategory());
     }
 }

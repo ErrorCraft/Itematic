@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.spawn.EntitySpawnContext;
 import net.errorcraft.itematic.entity.spawn.rule.EntitySpawnRule;
 import net.errorcraft.itematic.entity.spawn.rule.EntitySpawnRuleType;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 public record AlignYawEntitySpawnRule(int steps) implements EntitySpawnRule<AlignYawEntitySpawnRule> {
     public static final MapCodec<AlignYawEntitySpawnRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -25,7 +25,7 @@ public record AlignYawEntitySpawnRule(int steps) implements EntitySpawnRule<Alig
     @Override
     public boolean apply(EntitySpawnContext context) {
         float stepAngle = this.stepAngle();
-        float angle = MathHelper.floor((MathHelper.wrapDegrees(context.userAngle() - 180.0f) + (stepAngle * 0.5f)) / stepAngle) * stepAngle;
+        float angle = Mth.floor((Mth.wrapDegrees(context.userAngle() - 180.0f) + (stepAngle * 0.5f)) / stepAngle) * stepAngle;
         context.yaw(angle);
         return true;
     }

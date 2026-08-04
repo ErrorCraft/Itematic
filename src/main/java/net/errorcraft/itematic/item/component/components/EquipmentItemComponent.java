@@ -12,99 +12,99 @@ import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.block.Block;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.EquippableComponent;
-import net.minecraft.component.type.FireworkExplosionComponent;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.equipment.ArmorMaterial;
-import net.minecraft.item.equipment.EquipmentAssetKeys;
-import net.minecraft.item.equipment.EquipmentType;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.EntityTypeTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public record EquipmentItemComponent(EquippableComponent equippable) implements ItemComponent<EquipmentItemComponent> {
-    public static final Codec<EquipmentItemComponent> CODEC = EquippableComponent.CODEC.xmap(EquipmentItemComponent::new, EquipmentItemComponent::equippable);
+public record EquipmentItemComponent(Equippable equippable) implements ItemComponent<EquipmentItemComponent> {
+    public static final Codec<EquipmentItemComponent> CODEC = Equippable.CODEC.xmap(EquipmentItemComponent::new, EquipmentItemComponent::equippable);
 
-    public static EquipmentItemComponent of(EquippableComponent equippable) {
+    public static EquipmentItemComponent of(Equippable equippable) {
         return new EquipmentItemComponent(equippable);
     }
 
-    public static EquipmentItemComponent ofHorseArmor(ArmorMaterial material, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<EntityType<?>> entityTypes) {
-        return of(EquippableComponent.builder(EquipmentSlot.BODY)
-            .equipSound(soundEvents.getOrThrow(SoundEventKeys.HORSE_ARMOR))
-            .model(material.assetId())
-            .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_HORSE_ARMOR))
-            .damageOnHurt(false)
-            .canBeSheared(true)
-            .shearingSound(soundEvents.getOrThrow(SoundEventKeys.HORSE_ARMOR_UNEQUIP))
+    public static EquipmentItemComponent ofHorseArmor(ArmorMaterial material, HolderGetter<SoundEvent> soundEvents, HolderGetter<EntityType<?>> entityTypes) {
+        return of(Equippable.builder(EquipmentSlot.BODY)
+            .setEquipSound(soundEvents.getOrThrow(SoundEventKeys.HORSE_ARMOR))
+            .setAsset(material.assetId())
+            .setAllowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_HORSE_ARMOR))
+            .setDamageOnHurt(false)
+            .setCanBeSheared(true)
+            .setShearingSound(soundEvents.getOrThrow(SoundEventKeys.HORSE_ARMOR_UNEQUIP))
             .build()
         );
     }
 
-    public static ItemComponent<?>[] ofHarness(DyeColor color, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<EntityType<?>> entityTypes, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] ofHarness(DyeColor color, HolderGetter<SoundEvent> soundEvents, HolderGetter<EntityType<?>> entityTypes, HolderGetter<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
-            of(EquippableComponent.builder(EquipmentSlot.BODY)
-                .equipSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_EQUIP))
-                .model(EquipmentAssetKeys.HARNESS_FROM_COLOR.get(color))
-                .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
-                .equipOnInteract(true)
-                .canBeSheared(true)
-                .shearingSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_UNEQUIP))
+            of(Equippable.builder(EquipmentSlot.BODY)
+                .setEquipSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_EQUIP))
+                .setAsset(EquipmentAssets.HARNESSES.get(color))
+                .setAllowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
+                .setEquipOnInteract(true)
+                .setCanBeSheared(true)
+                .setShearingSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_UNEQUIP))
                 .build()),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
         };
     }
 
-    public static ItemComponent<?>[] ofNautilusArmor(ArmorMaterial material, RegistryEntryLookup<SoundEvent> soundEvents, RegistryEntryLookup<EntityType<?>> entityTypes, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] ofNautilusArmor(ArmorMaterial material, HolderGetter<SoundEvent> soundEvents, HolderGetter<EntityType<?>> entityTypes, HolderGetter<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
-            of(EquippableComponent.builder(EquipmentSlot.BODY)
-                .equipSound(soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NAUTILUS))
-                .model(material.assetId())
-                .allowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_NAUTILUS_ARMOR))
-                .damageOnHurt(false)
-                .equipOnInteract(true)
-                .canBeSheared(true)
-                .shearingSound(soundEvents.getOrThrow(SoundEventKeys.ARMOR_UNEQUIP_NAUTILUS))
+            of(Equippable.builder(EquipmentSlot.BODY)
+                .setEquipSound(soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NAUTILUS))
+                .setAsset(material.assetId())
+                .setAllowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_NAUTILUS_ARMOR))
+                .setDamageOnHurt(false)
+                .setEquipOnInteract(true)
+                .setCanBeSheared(true)
+                .setShearingSound(soundEvents.getOrThrow(SoundEventKeys.ARMOR_UNEQUIP_NAUTILUS))
                 .build()),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
         };
     }
 
-    public static ItemComponent<?>[] forArmor(ArmorMaterial material, EquipmentType type) {
+    public static ItemComponent<?>[] forArmor(ArmorMaterial material, ArmorType type) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
-            of(EquippableComponent.builder(type.getEquipmentSlot())
-                .swappable(true)
-                .equipSound(material.equipSound())
-                .model(material.assetId())
+            of(Equippable.builder(type.getSlot())
+                .setSwappable(true)
+                .setEquipSound(material.equipSound())
+                .setAsset(material.assetId())
                 .build()),
-            DamageableItemComponent.of(type.getMaxDamage(material.durability())),
+            DamageableItemComponent.of(type.getDurability(material.durability())),
         };
     }
 
-    public static ItemComponent<?>[] forSkull(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, RegistryEntryLookup<DispenseBehavior> dispenseBehaviors) {
+    public static ItemComponent<?>[] forSkull(Holder<Block> attachedBlock, Holder<Block> otherBlock, HolderGetter<DispenseBehavior> dispenseBehaviors) {
         return new ItemComponent<?>[] {
             BlockItemComponent.attachedToSide(attachedBlock, otherBlock, Direction.DOWN),
-            of(EquippableComponent.builder(EquipmentSlot.HEAD)
-                .swappable(false)
+            of(Equippable.builder(EquipmentSlot.HEAD)
+                .setSwappable(false)
                 .build()),
             DispensableItemComponent.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)),
-            FireworkShapeModifierItemComponent.of(FireworkExplosionComponent.Type.CREEPER)
+            FireworkShapeModifierItemComponent.of(FireworkExplosion.Shape.CREEPER)
         };
     }
 
@@ -119,8 +119,8 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        EquippableComponent equippable = stack.get(DataComponentTypes.EQUIPPABLE);
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        Equippable equippable = stack.get(DataComponents.EQUIPPABLE);
         if (equippable == null) {
             return ItemResult.PASS;
         }
@@ -129,31 +129,31 @@ public record EquipmentItemComponent(EquippableComponent equippable) implements 
             return ItemResult.PASS;
         }
 
-        ActionResult result = equippable.equip(stack, user);
-        if (result == ActionResult.FAIL) {
+        InteractionResult result = equippable.swapWithEquipmentSlot(stack, user);
+        if (result == InteractionResult.FAIL) {
             return ItemResult.PASS;
         }
 
-        if (result instanceof ActionResult.Success success) {
-            stackExchanger.exchange(success.getNewHandStack());
+        if (result instanceof InteractionResult.Success success) {
+            stackExchanger.exchange(success.heldItemTransformedTo());
         }
 
-        if (world instanceof ServerWorld serverWorld) {
+        if (world instanceof ServerLevel serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getEntityPos())
-                .add(LootContextParameters.TOOL, stack)
+                .add(LootContextParams.THIS_ENTITY, user)
+                .add(LootContextParams.ORIGIN, user.position())
+                .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextParameters.HAND, hand)
                 .build();
             stack.itematic$invokeEvent(ItemEvents.EQUIP_ITEM, context);
         }
 
-        return result.isAccepted() ? ItemResult.SUCCEED : ItemResult.PASS;
+        return result.consumesAction() ? ItemResult.SUCCEED : ItemResult.PASS;
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.EQUIPPABLE, this.equippable);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.EQUIPPABLE, this.equippable);
     }
 }

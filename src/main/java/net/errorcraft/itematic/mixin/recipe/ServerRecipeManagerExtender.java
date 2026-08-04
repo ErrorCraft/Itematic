@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
-import net.minecraft.item.Item;
-import net.minecraft.recipe.IngredientPlacement;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.ServerRecipeManager;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,42 +20,42 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-@Mixin(ServerRecipeManager.class)
+@Mixin(RecipeManager.class)
 public class ServerRecipeManagerExtender {
     @Shadow
     @Final
-    private RegistryWrapper.WrapperLookup registries;
+    private HolderLookup.Provider registries;
 
     @Unique
-    private static RegistryWrapper.Impl<Item> tempItemLookup;
+    private static HolderLookup.RegistryLookup<Item> tempItemLookup;
 
     @Inject(
-        method = "initialize",
+        method = "finalizeRecipeLoading",
         at = @At("HEAD")
     )
-    private void setTempItemLookup(FeatureSet features, CallbackInfo info) {
-        tempItemLookup = this.registries.getOrThrow(RegistryKeys.ITEM);
+    private void setTempItemLookup(FeatureFlagSet features, CallbackInfo info) {
+        tempItemLookup = this.registries.lookupOrThrow(Registries.ITEM);
     }
 
     @Redirect(
         method = {
             "method_64989",
-            "collectServerRecipes"
+            "unpackRecipeInfo"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Recipe;getIngredientPlacement()Lnet/minecraft/recipe/IngredientPlacement;"
+            target = "Lnet/minecraft/world/item/crafting/Recipe;placementInfo()Lnet/minecraft/world/item/crafting/PlacementInfo;"
         )
     )
-    private static IngredientPlacement getIngredientPlacementUseDynamicRegistry(Recipe<?> instance) {
+    private static PlacementInfo getIngredientPlacementUseDynamicRegistry(Recipe<?> instance) {
         return ((RecipeAccess) instance).itematic$ingredientPlacement(tempItemLookup);
     }
 
     @Redirect(
-        method = "collectServerRecipes",
+        method = "unpackRecipeInfo",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Recipe;getDisplays()Ljava/util/List;"
+            target = "Lnet/minecraft/world/item/crafting/Recipe;display()Ljava/util/List;"
         )
     )
     private static List<RecipeDisplay> getDisplaysUseDynamicRegistry(Recipe<?> instance) {
@@ -63,10 +63,10 @@ public class ServerRecipeManagerExtender {
     }
 
     @Inject(
-        method = "initialize",
+        method = "finalizeRecipeLoading",
         at = @At("RETURN")
     )
-    private void resetTempItemLookup(FeatureSet features, CallbackInfo info) {
+    private void resetTempItemLookup(FeatureFlagSet features, CallbackInfo info) {
         tempItemLookup = null;
     }
 }

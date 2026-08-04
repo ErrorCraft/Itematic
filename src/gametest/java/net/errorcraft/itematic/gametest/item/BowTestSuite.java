@@ -3,42 +3,42 @@ package net.errorcraft.itematic.gametest.item;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameType;
 
 public class BowTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:item.bow.platform")
-    public void usingBowWithMultishotSpawnsMultipleArrows(TestContext context) {
-        ServerWorld world = context.getWorld();
+    public void usingBowWithMultishotSpawnsMultipleArrows(GameTestHelper context) {
+        ServerLevel world = context.getLevel();
         ItemStack bow = world.itematic$createStack(ItemKeys.BOW);
-        bow.addEnchantment(
-            world.getRegistryManager()
-                .getOrThrow(RegistryKeys.ENCHANTMENT)
+        bow.enchant(
+            world.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(Enchantments.MULTISHOT),
             1
         );
         ItemStack ammunition = world.itematic$createStack(ItemKeys.ARROW);
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
+        Player player = context.makeMockPlayer(GameType.SURVIVAL);
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
-        player.setStackInHand(Hand.MAIN_HAND, bow);
-        player.getInventory().insertStack(ammunition);
-        world.spawnEntity(player);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> bow.use(world, player, Hand.MAIN_HAND))
-            .expectMinDurationAndRun(20, () -> {
-                player.stopUsingItem();
-                context.expectEntities(EntityType.ARROW, 3);
+        player.setItemInHand(InteractionHand.MAIN_HAND, bow);
+        player.getInventory().add(ammunition);
+        world.addFreshEntity(player);
+        context.startSequence()
+            .thenExecute(() -> bow.use(world, player, InteractionHand.MAIN_HAND))
+            .thenExecuteAfter(20, () -> {
+                player.releaseUsingItem();
+                context.assertEntitiesPresent(EntityType.ARROW, 3);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 }

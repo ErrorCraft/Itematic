@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import net.minecraft.registry.RegistryOps;
+import net.minecraft.resources.RegistryOps;
 
 import java.util.Optional;
 import java.util.function.BiFunction;

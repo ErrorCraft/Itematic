@@ -6,22 +6,21 @@ import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.registry.RegistryCodecs;
-import net.minecraft.registry.entry.RegistryElementCodec;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.resources.RegistryFileCodec;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.Optional;
 
-public record ActionEntry(Action<?> action, Optional<LootCondition> requirements) {
+public record ActionEntry(Action<?> action, Optional<LootItemCondition> requirements) {
     public static final Codec<ActionEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Action.CODEC.fieldOf("action").forGetter(ActionEntry::action),
-        LootCondition.CODEC.optionalFieldOf("requirements").forGetter(ActionEntry::requirements)
+        LootItemCondition.DIRECT_CODEC.optionalFieldOf("requirements").forGetter(ActionEntry::requirements)
     ).apply(instance, ActionEntry::new));
-    public static final Codec<RegistryEntry<ActionEntry>> REGISTRY_CODEC = RegistryElementCodec.of(ItematicRegistryKeys.ACTION, CODEC);
-    public static final Codec<RegistryEntryList<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.entryList(ItematicRegistryKeys.ACTION, CODEC, true);
+    public static final Codec<Holder<ActionEntry>> REGISTRY_CODEC = RegistryFileCodec.create(ItematicRegistryKeys.ACTION, CODEC);
+    public static final Codec<HolderSet<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.homogeneousList(ItematicRegistryKeys.ACTION, CODEC, true);
 
     public static ActionEntry of(Action<?> action) {
         return new ActionEntry(action, Optional.empty());
@@ -31,11 +30,11 @@ public record ActionEntry(Action<?> action, Optional<LootCondition> requirements
         return new ActionEntry(SequenceAction.of(builder), Optional.empty());
     }
 
-    public static ActionEntry of(LootCondition.Builder requirements, Action<?> action) {
+    public static ActionEntry of(LootItemCondition.Builder requirements, Action<?> action) {
         return new ActionEntry(action, Optional.of(requirements.build()));
     }
 
-    public static ActionEntry of(LootCondition.Builder requirements, SequenceHandler.Builder<?, ?> builder) {
+    public static ActionEntry of(LootItemCondition.Builder requirements, SequenceHandler.Builder<?, ?> builder) {
         return new ActionEntry(SequenceAction.of(builder), Optional.of(requirements.build()));
     }
 
@@ -52,13 +51,13 @@ public record ActionEntry(Action<?> action, Optional<LootCondition> requirements
             return true;
         }
 
-        LootCondition requirements = this.requirements.get();
+        LootItemCondition requirements = this.requirements.get();
         LootContext lootContext = context.lootContext();
         if (lootContext == null) {
             return false;
         }
 
-        lootContext.markActive(LootContext.predicate(requirements));
+        lootContext.pushVisitedElement(LootContext.createVisitedEntry(requirements));
         return requirements.test(lootContext);
     }
 }

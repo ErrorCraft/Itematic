@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.Arrow;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -16,20 +16,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ProjectileUtil.class)
 public class ProjectileUtilExtender {
     @Redirect(
-        method = "createArrowProjectile",
+        method = "getMobArrow",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ArrowItem;createArrow(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/entity/projectile/PersistentProjectileEntity;"
+            target = "Lnet/minecraft/world/item/ArrowItem;createArrow(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/projectile/arrow/AbstractArrow;"
         )
     )
-    private static PersistentProjectileEntity createProjectileUseItemComponent(ArrowItem instance, World world, ItemStack projectile, LivingEntity shooter, ItemStack shotFrom) {
+    private static AbstractArrow createProjectileUseItemComponent(ArrowItem instance, Level world, ItemStack projectile, LivingEntity shooter, ItemStack shotFrom) {
         Entity entity = projectile.itematic$getBehavior(ItemComponentTypes.PROJECTILE)
             .map(projectileBehavior -> projectileBehavior.spawnEntity(world, shooter, projectile, 1.0f, 1.0f))
             .orElse(null);
-        if (entity instanceof PersistentProjectileEntity persistentProjectileEntity) {
+        if (entity instanceof AbstractArrow persistentProjectileEntity) {
             return persistentProjectileEntity;
         }
 
-        return new ArrowEntity(world, shooter, projectile.copyWithCount(1), shotFrom);
+        return new Arrow(world, shooter, projectile.copyWithCount(1), shotFrom);
     }
 }

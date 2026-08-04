@@ -7,9 +7,8 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.modification.WorldModification;
 import net.errorcraft.itematic.world.modification.WorldModificationType;
 import net.errorcraft.itematic.world.modification.WorldModificationTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.RaycastContext;
-
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import java.util.Optional;
 
 public class DrainFluidWorldModification implements WorldModification {
@@ -34,7 +33,7 @@ public class DrainFluidWorldModification implements WorldModification {
     }
 
     @Override
-    public RaycastContext.FluidHandling fluidHandling() {
-        return RaycastContext.FluidHandling.SOURCE_ONLY;
+    public ClipContext.Fluid fluidHandling() {
+        return ClipContext.Fluid.SOURCE_ONLY;
     }
 }

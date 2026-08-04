@@ -1,32 +1,32 @@
 package net.errorcraft.itematic.mixin.gametest;
 
-import net.minecraft.resource.featuretoggle.FeatureFlags;
-import net.minecraft.resource.featuretoggle.FeatureManager;
-import net.minecraft.resource.featuretoggle.FeatureSet;
-import net.minecraft.test.TestServer;
+import net.minecraft.gametest.framework.GameTestServer;
+import net.minecraft.world.flag.FeatureFlagRegistry;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.flag.FeatureFlags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(TestServer.class)
+@Mixin(GameTestServer.class)
 public class TestServerExtender {
     @Redirect(
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/resource/featuretoggle/FeatureManager;getFeatureSet()Lnet/minecraft/resource/featuretoggle/FeatureSet;"
+            target = "Lnet/minecraft/world/flag/FeatureFlagRegistry;allFlags()Lnet/minecraft/world/flag/FeatureFlagSet;"
         )
     )
-    private static FeatureSet doNotUseExperimentalFeatures(FeatureManager instance) {
-        return FeatureFlags.VANILLA_FEATURES;
+    private static FeatureFlagSet doNotUseExperimentalFeatures(FeatureFlagRegistry instance) {
+        return FeatureFlags.VANILLA_SET;
     }
 
     @ModifyArg(
         method = "create",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/server/SaveLoading$DataPacks;<init>(Lnet/minecraft/resource/ResourcePackManager;Lnet/minecraft/resource/DataConfiguration;ZZ)V"
+            target = "Lnet/minecraft/server/WorldLoader$PackConfig;<init>(Lnet/minecraft/server/packs/repository/PackRepository;Lnet/minecraft/world/level/WorldDataConfiguration;ZZ)V"
         ),
         index = 3
     )

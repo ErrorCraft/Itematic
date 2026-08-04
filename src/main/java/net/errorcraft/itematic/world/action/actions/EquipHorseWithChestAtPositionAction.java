@@ -8,13 +8,12 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.animal.equine.AbstractChestedHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 import java.util.List;
 
 public record EquipHorseWithChestAtPositionAction(PositionTarget position) implements Action<EquipHorseWithChestAtPositionAction> {
@@ -33,23 +32,23 @@ public record EquipHorseWithChestAtPositionAction(PositionTarget position) imple
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.get(LootContextParameters.TOOL);
+        ItemStack stack = context.get(LootContextParams.TOOL);
         if (ItemStackUtil.isNullOrEmpty(stack)) {
             return false;
         }
 
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        List<AbstractDonkeyEntity> donkeys = context.world().getEntitiesByClass(
-            AbstractDonkeyEntity.class,
-            new Box(pos),
+        List<AbstractChestedHorse> donkeys = context.world().getEntitiesOfClass(
+            AbstractChestedHorse.class,
+            new AABB(pos),
             donkey -> donkey.isAlive() && !donkey.hasChest()
         );
-        for (AbstractDonkeyEntity donkey : donkeys) {
-            if (donkey.isTame() && donkey.getStackReference(AbstractHorseEntity.field_30414).set(stack.copy())) {
+        for (AbstractChestedHorse donkey : donkeys) {
+            if (donkey.isTamed() && donkey.getSlot(AbstractHorse.CHEST_SLOT_OFFSET).set(stack.copy())) {
                 return true;
             }
         }

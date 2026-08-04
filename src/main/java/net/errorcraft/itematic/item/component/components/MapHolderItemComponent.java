@@ -5,19 +5,19 @@ import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.MapColorComponent;
-import net.minecraft.component.type.MapDecorationsComponent;
-import net.minecraft.item.FilledMapItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MapItem;
+import net.minecraft.world.item.component.MapDecorations;
+import net.minecraft.world.item.component.MapItemColor;
+import net.minecraft.world.level.Level;
 
 public class MapHolderItemComponent implements ItemComponent<MapHolderItemComponent> {
     public static final MapHolderItemComponent INSTANCE = new MapHolderItemComponent();
     public static final Codec<MapHolderItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
-    public static final FilledMapItem DUMMY = new FilledMapItem(new Item.Settings());
+    public static final MapItem DUMMY = new MapItem(new Item.Properties());
 
     private MapHolderItemComponent() {}
 
@@ -32,13 +32,13 @@ public class MapHolderItemComponent implements ItemComponent<MapHolderItemCompon
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.MAP_COLOR, MapColorComponent.DEFAULT);
-        builder.add(DataComponentTypes.MAP_DECORATIONS, MapDecorationsComponent.DEFAULT);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.MAP_COLOR, MapItemColor.DEFAULT);
+        builder.set(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY);
     }
 
     @Override
-    public void onCraft(ItemStack stack, World world) {
-        DUMMY.onCraft(stack, world);
+    public void onCraft(ItemStack stack, Level world) {
+        DUMMY.onCraftedPostProcess(stack, world);
     }
 }

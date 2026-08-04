@@ -4,17 +4,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.predicate.item.ItemPredicates;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.registry.RegistryCodecs;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntryList;
-
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,9 +22,9 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
         Rule.CODEC.listOf().fieldOf("rules").forGetter(WeaponAttackDamageDataComponent::rules),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("default_damage").forGetter(WeaponAttackDamageDataComponent::defaultDamage)
     ).apply(instance, WeaponAttackDamageDataComponent::new));
-    public static final PacketCodec<RegistryByteBuf, WeaponAttackDamageDataComponent> PACKET_CODEC = PacketCodec.tuple(
-        Rule.PACKET_CODEC.collect(PacketCodecs.toList()), WeaponAttackDamageDataComponent::rules,
-        PacketCodecs.DOUBLE, WeaponAttackDamageDataComponent::defaultDamage,
+    public static final StreamCodec<RegistryFriendlyByteBuf, WeaponAttackDamageDataComponent> PACKET_CODEC = StreamCodec.composite(
+        Rule.PACKET_CODEC.apply(ByteBufCodecs.list()), WeaponAttackDamageDataComponent::rules,
+        ByteBufCodecs.DOUBLE, WeaponAttackDamageDataComponent::defaultDamage,
         WeaponAttackDamageDataComponent::new
     );
 
@@ -49,24 +48,24 @@ public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDa
         return true;
     }
 
-    public record Rule(Optional<RegistryEntryList<EntityType<?>>> entities, Optional<ItemPredicate> item, Optional<Double> damage, Optional<Boolean> addBase) {
+    public record Rule(Optional<HolderSet<EntityType<?>>> entities, Optional<ItemPredicate> item, Optional<Double> damage, Optional<Boolean> addBase) {
         public static final Codec<Rule> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            RegistryCodecs.entryList(RegistryKeys.ENTITY_TYPE).optionalFieldOf("entities").forGetter(Rule::entities),
+            RegistryCodecs.homogeneousList(Registries.ENTITY_TYPE).optionalFieldOf("entities").forGetter(Rule::entities),
             ItemPredicate.CODEC.optionalFieldOf("item").forGetter(Rule::item),
             ItematicCodecs.NON_NEGATIVE_DOUBLE.optionalFieldOf("damage").forGetter(Rule::damage),
             Codec.BOOL.optionalFieldOf("add_base").forGetter(Rule::addBase)
         ).apply(instance, Rule::new));
-        public static final PacketCodec<RegistryByteBuf, Rule> PACKET_CODEC = PacketCodec.tuple(
-            PacketCodecs.registryEntryList(RegistryKeys.ENTITY_TYPE).collect(PacketCodecs::optional), Rule::entities,
-            ItemPredicates.PACKET_CODEC.collect(PacketCodecs::optional), Rule::item,
-            PacketCodecs.DOUBLE.collect(PacketCodecs::optional), Rule::damage,
-            PacketCodecs.BOOLEAN.collect(PacketCodecs::optional), Rule::addBase,
+        public static final StreamCodec<RegistryFriendlyByteBuf, Rule> PACKET_CODEC = StreamCodec.composite(
+            ByteBufCodecs.holderSet(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional), Rule::entities,
+            ItemPredicates.PACKET_CODEC.apply(ByteBufCodecs::optional), Rule::item,
+            ByteBufCodecs.DOUBLE.apply(ByteBufCodecs::optional), Rule::damage,
+            ByteBufCodecs.BOOL.apply(ByteBufCodecs::optional), Rule::addBase,
             Rule::new
         );
 
         @SuppressWarnings("deprecation")
         public boolean matches(ItemStack stack, Entity entity) {
-            if (this.entities.isPresent() && !this.entities.get().contains(entity.getType().getRegistryEntry())) {
+            if (this.entities.isPresent() && !this.entities.get().contains(entity.getType().builtInRegistryHolder())) {
                 return false;
             }
             return this.item.map(item -> item.test(stack))

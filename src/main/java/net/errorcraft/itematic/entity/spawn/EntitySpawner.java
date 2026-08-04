@@ -9,28 +9,28 @@ import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.mixin.entity.EntityAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.MergedComponentMap;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.TypedEntityData;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.PatchedDataComponentMap;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.TypedEntityData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -38,20 +38,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<ConditionedEntitySpawnRule> spawnRules, ComponentChanges components, Optional<RegistryEntry<SoundEvent>> spawnSound, boolean allowItemData) {
+public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntitySpawnRule> spawnRules, DataComponentPatch components, Optional<Holder<SoundEvent>> spawnSound, boolean allowItemData) {
     public static final Codec<EntitySpawner> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Registries.ENTITY_TYPE.getEntryCodec().fieldOf("entity").forGetter(EntitySpawner::entity),
+        BuiltInRegistries.ENTITY_TYPE.holderByNameCodec().fieldOf("entity").forGetter(EntitySpawner::entity),
         ConditionedEntitySpawnRule.CODEC.listOf().optionalFieldOf("spawn_rules", List.of()).forGetter(EntitySpawner::spawnRules),
-        ComponentChanges.CODEC.optionalFieldOf("components", ComponentChanges.EMPTY).forGetter(EntitySpawner::components),
-        SoundEvent.ENTRY_CODEC.optionalFieldOf("spawn_sound").forGetter(EntitySpawner::spawnSound),
+        DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(EntitySpawner::components),
+        SoundEvent.CODEC.optionalFieldOf("spawn_sound").forGetter(EntitySpawner::spawnSound),
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntitySpawner::allowItemData)
     ).apply(instance, EntitySpawner::new));
 
-    public static EntitySpawner of(RegistryEntry<EntityType<?>> entity) {
+    public static EntitySpawner of(Holder<EntityType<?>> entity) {
         return EntitySpawner.builder(entity).build();
     }
 
-    public static Builder builder(RegistryEntry<EntityType<?>> entity) {
+    public static Builder builder(Holder<EntityType<?>> entity) {
         return new Builder(entity);
     }
 
@@ -60,15 +60,15 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
             return this.entity.value();
         }
 
-        TypedEntityData<EntityType<?>> entityData = stack.get(DataComponentTypes.ENTITY_DATA);
+        TypedEntityData<EntityType<?>> entityData = stack.get(DataComponents.ENTITY_DATA);
         if (entityData != null) {
-            return entityData.getType();
+            return entityData.type();
         }
 
         return this.entity.value();
     }
 
-    public Entity spawn(ActionContext context, Vec3d initialPos, SpawnReason spawnReason, EntitySpawnCallback spawnCallback, boolean invertY) {
+    public Entity spawn(ActionContext context, Vec3 initialPos, EntitySpawnReason spawnReason, EntitySpawnCallback spawnCallback, boolean invertY) {
         EntitySpawnContext spawnContext = this.createSpawnContext(context, initialPos);
         if (spawnContext == null) {
             return null;
@@ -84,12 +84,12 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         return this.spawn(spawnContext, spawnActionContext, spawnReason, spawnCallback, invertY);
     }
 
-    private EntitySpawnContext createSpawnContext(ActionContext context, Vec3d initialPos) {
-        if (!(context.world() instanceof ServerWorld world)) {
+    private EntitySpawnContext createSpawnContext(ActionContext context, Vec3 initialPos) {
+        if (!(context.world() instanceof ServerLevel world)) {
             return null;
         }
 
-        EntityType<?> type = this.entityType(context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY));
+        EntityType<?> type = this.entityType(context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY));
         if (!type.isAllowedInPeaceful() && world.getDifficulty() == Difficulty.PEACEFUL) {
             return null;
         }
@@ -97,7 +97,7 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         return new EntitySpawnContext(
             world,
             type,
-            context.get(LootContextParameters.THIS_ENTITY),
+            context.get(LootContextParams.THIS_ENTITY),
             initialPos
         );
     }
@@ -113,27 +113,27 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         return true;
     }
 
-    private Entity spawn(EntitySpawnContext spawnContext, ActionContext spawnActionContext, SpawnReason spawnReason, EntitySpawnCallback spawnCallback, boolean invertY) {
+    private Entity spawn(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, EntitySpawnCallback spawnCallback, boolean invertY) {
         Entity entity = this.createEntity(spawnContext, spawnActionContext, spawnReason, spawnCallback, invertY);
         if (entity == null) {
             return null;
         }
 
-        ServerWorld world = spawnContext.world();
-        world.spawnEntityAndPassengers(entity);
+        ServerLevel world = spawnContext.world();
+        world.addFreshEntityWithPassengers(entity);
         ActionContext spawnedActionContext = spawnActionContext.extend()
             .add(ItematicContextParameters.SPAWNED_ENTITY, entity)
-            .add(ItematicContextParameters.SPAWNED_POSITION, entity.getEntityPos())
+            .add(ItematicContextParameters.SPAWNED_POSITION, entity.position())
             .build();
         this.spawned(entity, world, spawnedActionContext);
         return entity;
     }
 
-    private Entity createEntity(EntitySpawnContext spawnContext, ActionContext spawnActionContext, SpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
+    private Entity createEntity(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
         Entity entity = spawnContext.entityType().itematic$create(
             spawnActionContext,
             spawnReason,
-            BlockPos.ofFloored(spawnContext.spawnPosition()),
+            BlockPos.containing(spawnContext.spawnPosition()),
             EntitySpawnCallback.combine(
                 this::applyComponents,
                 spawnCallback
@@ -145,8 +145,8 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
             return null;
         }
 
-        Vec3d spawnPosition = spawnContext.spawnPosition();
-        entity.refreshPositionAndAngles(
+        Vec3 spawnPosition = spawnContext.spawnPosition();
+        entity.snapTo(
             spawnPosition,
             spawnContext.yaw(),
             0.0f
@@ -154,38 +154,38 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
         return entity;
     }
 
-    private void spawned(Entity entity, World world, ActionContext spawnedContext) {
+    private void spawned(Entity entity, Level world, ActionContext spawnedContext) {
         this.spawnSound.ifPresent(spawnSound -> world.itematic$playSound(
             null,
-            entity.getEntityPos(),
+            entity.position(),
             spawnSound.value(),
-            SoundCategory.BLOCKS,
+            SoundSource.BLOCKS,
             0.75f,
             0.8f
         ));
-        world.emitGameEvent(
-            spawnedContext.get(LootContextParameters.THIS_ENTITY),
+        world.gameEvent(
+            spawnedContext.get(LootContextParams.THIS_ENTITY),
             GameEvent.ENTITY_PLACE,
-            entity.getEntityPos()
+            entity.position()
         );
-        spawnedContext.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+        spawnedContext.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
             .itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, spawnedContext);
     }
 
     private void applyComponents(Entity entity, ItemStack stack) {
         ((EntityAccessor) entity).itematic$copyComponentsFrom(
-            MergedComponentMap.create(ComponentMap.EMPTY, this.components)
+            PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, this.components)
         );
     }
 
     public static class Builder {
-        private final RegistryEntry<EntityType<?>> entity;
+        private final Holder<EntityType<?>> entity;
         private final List<ConditionedEntitySpawnRule> spawnRules = new ArrayList<>();
-        private ComponentChanges components = ComponentChanges.EMPTY;
-        private RegistryEntry<SoundEvent> spawnSound;
+        private DataComponentPatch components = DataComponentPatch.EMPTY;
+        private Holder<SoundEvent> spawnSound;
         private boolean allowItemData;
 
-        private Builder(RegistryEntry<EntityType<?>> entity) {
+        private Builder(Holder<EntityType<?>> entity) {
             this.entity = entity;
         }
 
@@ -204,17 +204,17 @@ public record EntitySpawner(RegistryEntry<EntityType<?>> entity, List<Conditione
             return this;
         }
 
-        public Builder spawnRule(EntitySpawnRule<?> rule, LootCondition.Builder condition) {
+        public Builder spawnRule(EntitySpawnRule<?> rule, LootItemCondition.Builder condition) {
             this.spawnRules.add(ConditionedEntitySpawnRule.of(rule, condition.build()));
             return this;
         }
 
-        public Builder components(ComponentChanges components) {
+        public Builder components(DataComponentPatch components) {
             this.components = components;
             return this;
         }
 
-        public Builder spawnSound(RegistryEntry<SoundEvent> spawnSound) {
+        public Builder spawnSound(Holder<SoundEvent> spawnSound) {
             this.spawnSound = spawnSound;
             return this;
         }

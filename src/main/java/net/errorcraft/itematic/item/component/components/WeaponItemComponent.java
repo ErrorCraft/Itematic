@@ -17,38 +17,37 @@ import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.component.ComponentHolder;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.AttackRangeComponent;
-import net.minecraft.component.type.SwingAnimationComponent;
-import net.minecraft.component.type.WeaponComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.entry.LazyRegistryEntryReference;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Hand;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.world.World;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentHolder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.EitherHolder;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.AttackRange;
+import net.minecraft.world.item.component.SwingAnimation;
+import net.minecraft.world.item.component.Weapon;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import java.util.List;
 import java.util.Optional;
 
-public record WeaponItemComponent(int itemDamagePerAttack, ComponentMap types, Optional<RegistryEntry<DamageType>> damageType, Optional<SwingAnimationComponent> swingAnimation, WeaponAttackDamageDataComponent attackDamage, double attackSpeed, Optional<AttackRangeComponent> attackRange, Optional<Float> minimumAttackCharge) implements ItemComponent<WeaponItemComponent>, ComponentHolder {
+public record WeaponItemComponent(int itemDamagePerAttack, DataComponentMap types, Optional<Holder<DamageType>> damageType, Optional<SwingAnimation> swingAnimation, WeaponAttackDamageDataComponent attackDamage, double attackSpeed, Optional<AttackRange> attackRange, Optional<Float> minimumAttackCharge) implements ItemComponent<WeaponItemComponent>, DataComponentHolder {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.NON_NEGATIVE_INT.optionalFieldOf("item_damage_per_attack", 1).forGetter(WeaponItemComponent::itemDamagePerAttack),
-        MeleeWeaponComponents.CODEC.optionalFieldOf("types", ComponentMap.EMPTY).forGetter(WeaponItemComponent::types),
-        DamageType.ENTRY_CODEC.optionalFieldOf("damage_type").forGetter(WeaponItemComponent::damageType),
-        SwingAnimationComponent.CODEC.optionalFieldOf("swing_animation").forGetter(WeaponItemComponent::swingAnimation),
+        ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("item_damage_per_attack", 1).forGetter(WeaponItemComponent::itemDamagePerAttack),
+        MeleeWeaponComponents.CODEC.optionalFieldOf("types", DataComponentMap.EMPTY).forGetter(WeaponItemComponent::types),
+        DamageType.CODEC.optionalFieldOf("damage_type").forGetter(WeaponItemComponent::damageType),
+        SwingAnimation.CODEC.optionalFieldOf("swing_animation").forGetter(WeaponItemComponent::swingAnimation),
         WeaponAttackDamageDataComponent.CODEC.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("attack_speed").forGetter(WeaponItemComponent::attackSpeed),
-        AttackRangeComponent.CODEC.optionalFieldOf("attack_range").forGetter(WeaponItemComponent::attackRange),
-        Codecs.rangedInclusiveFloat(0.0f, 1.0f).optionalFieldOf("minimum_attack_charge").forGetter(WeaponItemComponent::minimumAttackCharge)
+        AttackRange.CODEC.optionalFieldOf("attack_range").forGetter(WeaponItemComponent::attackRange),
+        ExtraCodecs.floatRange(0.0f, 1.0f).optionalFieldOf("minimum_attack_charge").forGetter(WeaponItemComponent::minimumAttackCharge)
     ).apply(instance, WeaponItemComponent::new));
 
     public static Builder builder(int itemDamagePerAttack, double attackDamage, double attackSpeed) {
@@ -72,27 +71,27 @@ public record WeaponItemComponent(int itemDamagePerAttack, ComponentMap types, O
             smashing.hit(stack, target, attacker);
         }
 
-        Hand usedHand = attacker.getActiveHand();
-        ActionContext context = ActionContext.builder(attacker.getEntityWorld())
+        InteractionHand usedHand = attacker.getUsedItemHand();
+        ActionContext context = ActionContext.builder(attacker.level())
             .stackExchanger(stackExchanger)
-            .add(LootContextParameters.THIS_ENTITY, attacker)
-            .add(LootContextParameters.ATTACKING_ENTITY, attacker)
-            .add(LootContextParameters.ORIGIN, attacker.getEntityPos())
-            .add(LootContextParameters.TARGET_ENTITY, target)
-            .add(ItematicContextParameters.INTERACTED_POSITION, target.getEntityPos())
-            .add(LootContextParameters.TOOL, stack)
+            .add(LootContextParams.THIS_ENTITY, attacker)
+            .add(LootContextParams.ATTACKING_ENTITY, attacker)
+            .add(LootContextParams.ORIGIN, attacker.position())
+            .add(LootContextParams.TARGET_ENTITY, target)
+            .add(ItematicContextParameters.INTERACTED_POSITION, target.position())
+            .add(LootContextParams.TOOL, stack)
             .add(ItematicContextParameters.HAND, usedHand)
-            .add(ItematicContextParameters.EQUIPMENT_SLOT, usedHand.getEquipmentSlot())
+            .add(ItematicContextParameters.EQUIPMENT_SLOT, usedHand.asEquipmentSlot())
             .build();
         stack.itematic$invokeEvent(ItemEvents.USE_WEAPON, context);
-        WeaponComponent weapon = stack.get(DataComponentTypes.WEAPON);
+        Weapon weapon = stack.get(DataComponents.WEAPON);
         if (weapon != null) {
             stack.itematic$damage(weapon.itemDamagePerAttack(), context);
         }
     }
 
     @Override
-    public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+    public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
         KineticMeleeWeapon kinetic = this.types.get(MeleeWeaponComponents.KINETIC);
         if (kinetic != null) {
             kinetic.hold(stack, world, user, usedTicks);
@@ -100,24 +99,24 @@ public record WeaponItemComponent(int itemDamagePerAttack, ComponentMap types, O
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
+    public void addComponents(DataComponentMap.Builder builder) {
         DisablesBlockingMeleeWeapon disablesBlocking = this.types.get(MeleeWeaponComponents.DISABLES_BLOCKING);
-        builder.add(DataComponentTypes.WEAPON, new WeaponComponent(
+        builder.set(DataComponents.WEAPON, new Weapon(
             this.itemDamagePerAttack,
             disablesBlocking != null ? disablesBlocking.seconds() : 0.0f
         ));
-        builder.add(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE, this.attackDamage);
-        builder.add(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, this.attackSpeed);
-        this.streamAll(MeleeWeaponWithDataComponents.class)
+        builder.set(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE, this.attackDamage);
+        builder.set(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, this.attackSpeed);
+        this.getAllOfType(MeleeWeaponWithDataComponents.class)
             .forEach(meleeWeapon -> meleeWeapon.addComponents(builder));
-        this.damageType.ifPresent(damageType -> builder.add(DataComponentTypes.DAMAGE_TYPE, new LazyRegistryEntryReference<>(damageType)));
-        this.swingAnimation.ifPresent(swingAnimation -> builder.add(DataComponentTypes.SWING_ANIMATION, swingAnimation));
-        this.attackRange.ifPresent(attackRange -> builder.add(DataComponentTypes.ATTACK_RANGE, attackRange));
-        this.minimumAttackCharge.ifPresent(minimumAttackCharge -> builder.add(DataComponentTypes.MINIMUM_ATTACK_CHARGE, minimumAttackCharge));
+        this.damageType.ifPresent(damageType -> builder.set(DataComponents.DAMAGE_TYPE, new EitherHolder<>(damageType)));
+        this.swingAnimation.ifPresent(swingAnimation -> builder.set(DataComponents.SWING_ANIMATION, swingAnimation));
+        this.attackRange.ifPresent(attackRange -> builder.set(DataComponents.ATTACK_RANGE, attackRange));
+        this.minimumAttackCharge.ifPresent(minimumAttackCharge -> builder.set(DataComponents.MINIMUM_ATTACK_CHARGE, minimumAttackCharge));
     }
 
     @Override
-    public ComponentMap getComponents() {
+    public DataComponentMap getComponents() {
         return this.types;
     }
 
@@ -148,12 +147,12 @@ public record WeaponItemComponent(int itemDamagePerAttack, ComponentMap types, O
 
     public static class Builder {
         private final int itemDamagePerAttack;
-        private final ComponentMap.Builder types = ComponentMap.builder();
-        private RegistryEntry<DamageType> damageType;
-        private SwingAnimationComponent swingAnimation;
+        private final DataComponentMap.Builder types = DataComponentMap.builder();
+        private Holder<DamageType> damageType;
+        private SwingAnimation swingAnimation;
         private final double attackDamage;
         private final double attackSpeed;
-        private AttackRangeComponent attackRange;
+        private AttackRange attackRange;
         private Float minimumAttackCharge;
 
         private Builder(int itemDamagePerAttack, double attackDamage, double attackSpeed) {
@@ -175,22 +174,22 @@ public record WeaponItemComponent(int itemDamagePerAttack, ComponentMap types, O
             );
         }
 
-        public <T> Builder type(ComponentType<T> type, T value) {
-            this.types.add(type, value);
+        public <T> Builder type(DataComponentType<T> type, T value) {
+            this.types.set(type, value);
             return this;
         }
 
-        public Builder damageType(RegistryEntry<DamageType> damageType) {
+        public Builder damageType(Holder<DamageType> damageType) {
             this.damageType = damageType;
             return this;
         }
 
-        public Builder swingAnimation(SwingAnimationComponent swingAnimation) {
+        public Builder swingAnimation(SwingAnimation swingAnimation) {
             this.swingAnimation = swingAnimation;
             return this;
         }
 
-        public Builder attackRange(AttackRangeComponent attackRange) {
+        public Builder attackRange(AttackRange attackRange) {
             this.attackRange = attackRange;
             return this;
         }

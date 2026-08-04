@@ -5,21 +5,20 @@ import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.serialization.SetMapCodec;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.block.BlockState;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.text.Text;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -30,44 +29,44 @@ public interface ItemComponent<T extends ItemComponent<T>> {
     ItemComponentType<T> type();
     Codec<T> codec();
 
-    default ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    default ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         return ItemResult.PASS;
     }
 
-    default ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+    default ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
         return ItemResult.PASS;
     }
 
-    default ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    default ItemResult useOnEntity(Player user, LivingEntity target, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         return ItemResult.PASS;
     }
 
     default void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackExchanger stackExchanger) {
     }
 
-    default boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
+    default boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
         return false;
     }
 
-    default void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {}
+    default void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {}
 
-    default boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
+    default boolean stopUsing(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         return false;
     }
 
-    default void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {}
+    default void finishUsing(Level world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {}
 
-    default boolean clickOnSlot(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity user) {
+    default boolean clickOnSlot(ItemStack stack, Slot slot, ClickAction clickType, Player user) {
         return false;
     }
 
-    default boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickType clickType, PlayerEntity user, ItemStackExchanger stackExchanger) {
+    default boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickAction clickType, Player user, ItemStackExchanger stackExchanger) {
         return false;
     }
 
-    default void onCraft(ItemStack stack, World world) {}
+    default void onCraft(ItemStack stack, Level world) {}
 
-    default void addComponents(ComponentMap.Builder builder) {}
+    default void addComponents(DataComponentMap.Builder builder) {}
 
-    default void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> builder, TooltipType type) {}
+    default void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag type) {}
 }

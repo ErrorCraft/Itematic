@@ -7,13 +7,13 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.EndPortalFrameBlock;
-import net.minecraft.block.pattern.BlockPattern;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EndPortalFrameBlock;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.state.pattern.BlockPattern;
 
 public record LightEndPortalAction(PositionTarget position) implements Action<LightEndPortalAction> {
     public static final MapCodec<LightEndPortalAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -32,26 +32,26 @@ public record LightEndPortalAction(PositionTarget position) implements Action<Li
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        World world = context.world();
-        BlockPattern.Result result = EndPortalFrameBlock.getCompletedFramePattern()
-            .searchAround(world, pos);
+        Level world = context.world();
+        BlockPattern.BlockPatternMatch result = EndPortalFrameBlock.getOrCreatePortalShape()
+            .find(world, pos);
         if (result == null) {
             return false;
         }
 
-        BlockPos endPortalStartPos = result.getFrontTopLeft().add(-PORTAL_SIZE, 0, -PORTAL_SIZE);
+        BlockPos endPortalStartPos = result.getFrontTopLeft().offset(-PORTAL_SIZE, 0, -PORTAL_SIZE);
         for (int x = 0; x < PORTAL_SIZE; x++) {
             for (int z = 0; z < PORTAL_SIZE; z++) {
-                world.setBlockState(endPortalStartPos.add(x, 0, z), Blocks.END_PORTAL.getDefaultState(), Block.NOTIFY_LISTENERS);
+                world.setBlock(endPortalStartPos.offset(x, 0, z), Blocks.END_PORTAL.defaultBlockState(), Block.UPDATE_CLIENTS);
             }
         }
 
-        world.syncGlobalEvent(WorldEvents.END_PORTAL_OPENED, endPortalStartPos.add(1, 0, 1), 0);
+        world.globalLevelEvent(LevelEvent.SOUND_END_PORTAL_SPAWN, endPortalStartPos.offset(1, 0, 1), 0);
         return true;
     }
 }

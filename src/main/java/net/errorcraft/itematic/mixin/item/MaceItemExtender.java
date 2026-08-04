@@ -6,12 +6,12 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.SmashingWeaponDataComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.MaceItem;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MaceItem;
+import net.minecraft.world.level.Level;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,7 +29,7 @@ public class MaceItemExtender {
     private static SmashingWeaponDataComponent usedStackSmashingWeaponDataComponent;
 
     @Inject(
-        method = "postHit",
+        method = "hurtEnemy",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -44,10 +44,10 @@ public class MaceItemExtender {
     }
 
     @WrapOperation(
-        method = "postHit",
+        method = "hurtEnemy",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/MaceItem;shouldDealAdditionalDamage(Lnet/minecraft/entity/LivingEntity;)Z"
+            target = "Lnet/minecraft/world/item/MaceItem;canSmashAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"
         )
     )
     private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, Operation<Boolean> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
@@ -55,7 +55,7 @@ public class MaceItemExtender {
     }
 
     @ModifyConstant(
-        method = "postHit",
+        method = "hurtEnemy",
         constant = @Constant(
             doubleValue = 5.0d
         )
@@ -65,10 +65,10 @@ public class MaceItemExtender {
     }
 
     @WrapOperation(
-        method = "postHit",
+        method = "hurtEnemy",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/sound/SoundEvents;ITEM_MACE_SMASH_GROUND_HEAVY:Lnet/minecraft/sound/SoundEvent;",
+            target = "Lnet/minecraft/sounds/SoundEvents;MACE_SMASH_GROUND_HEAVY:Lnet/minecraft/sounds/SoundEvent;",
             opcode = Opcodes.GETSTATIC
         )
     )
@@ -80,10 +80,10 @@ public class MaceItemExtender {
     }
 
     @WrapOperation(
-        method = "postHit",
+        method = "hurtEnemy",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/sound/SoundEvents;ITEM_MACE_SMASH_GROUND:Lnet/minecraft/sound/SoundEvent;",
+            target = "Lnet/minecraft/sounds/SoundEvents;MACE_SMASH_GROUND:Lnet/minecraft/sounds/SoundEvent;",
             opcode = Opcodes.GETSTATIC
         )
     )
@@ -95,10 +95,10 @@ public class MaceItemExtender {
     }
 
     @WrapOperation(
-        method = "postHit",
+        method = "hurtEnemy",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/sound/SoundEvents;ITEM_MACE_SMASH_AIR:Lnet/minecraft/sound/SoundEvent;",
+            target = "Lnet/minecraft/sounds/SoundEvents;MACE_SMASH_AIR:Lnet/minecraft/sounds/SoundEvent;",
             opcode = Opcodes.GETSTATIC
         )
     )
@@ -110,23 +110,23 @@ public class MaceItemExtender {
     }
 
     @WrapOperation(
-        method = "postHit",
+        method = "hurtEnemy",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/MaceItem;knockbackNearbyEntities(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/Entity;)V"
+            target = "Lnet/minecraft/world/item/MaceItem;knockback(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V"
         )
     )
-    private void temporarilyStoreUsedStack(World world, Entity attacker, Entity attacked, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
+    private void temporarilyStoreUsedStack(Level world, Entity attacker, Entity attacked, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
         usedStackSmashingWeaponDataComponent = smashingWeapon.get();
         original.call(world, attacker, attacker);
         usedStackSmashingWeaponDataComponent = null;
     }
 
     @WrapOperation(
-        method = "postDamageEntity",
+        method = "postHurtEnemy",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/MaceItem;shouldDealAdditionalDamage(Lnet/minecraft/entity/LivingEntity;)Z"
+            target = "Lnet/minecraft/world/item/MaceItem;canSmashAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"
         )
     )
     private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, Operation<Boolean> original, ItemStack stack) {
@@ -139,14 +139,14 @@ public class MaceItemExtender {
     }
 
     @WrapOperation(
-        method = "getBonusAttackDamage",
+        method = "getAttackDamageBonus",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/MaceItem;shouldDealAdditionalDamage(Lnet/minecraft/entity/LivingEntity;)Z"
+            target = "Lnet/minecraft/world/item/MaceItem;canSmashAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"
         )
     )
     private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, Operation<Boolean> original) {
-        SmashingWeaponDataComponent smashingWeapon = Objects.requireNonNull(attacker.getWeaponStack())
+        SmashingWeaponDataComponent smashingWeapon = Objects.requireNonNull(attacker.getWeaponItem())
             .get(ItematicDataComponentTypes.SMASHING_WEAPON);
         if (smashingWeapon == null) {
             return false;
@@ -158,7 +158,7 @@ public class MaceItemExtender {
     @ModifyConstant(
         method = {
             "method_58409",
-            "getKnockback"
+            "getKnockbackPower"
         },
         constant = @Constant(
             doubleValue = 0.699999988079071d
@@ -169,7 +169,7 @@ public class MaceItemExtender {
     }
 
     @ModifyConstant(
-        method = "getKnockback",
+        method = "getKnockbackPower",
         constant = @Constant(
             doubleValue = 5.0d
         )

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.client.item.bar.color;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class ColorProviderTypeKeys {
     public static final Identifier CONSTANT = of("constant");
@@ -10,6 +10,6 @@ public class ColorProviderTypeKeys {
     private ColorProviderTypeKeys() {}
 
     private static Identifier of(String id) {
-        return Identifier.ofVanilla(id);
+        return Identifier.withDefaultNamespace(id);
     }
 }

@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.item.group.entry.provider;
 
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 
 public class ItemGroupEntryProviderTags {
     public static final TagKey<ItemGroupEntryProvider> BUILDING_BLOCKS = of("building_blocks");
@@ -20,6 +20,6 @@ public class ItemGroupEntryProviderTags {
     private ItemGroupEntryProviderTags() {}
 
     private static TagKey<ItemGroupEntryProvider> of(String id) {
-        return TagKey.of(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, Identifier.ofVanilla(id));
+        return TagKey.create(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, Identifier.withDefaultNamespace(id));
     }
 }

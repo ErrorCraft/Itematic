@@ -13,29 +13,29 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.type.DeathProtectionComponent;
-import net.minecraft.component.type.EquippableComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.StatType;
-import net.minecraft.util.Hand;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatType;
 import net.minecraft.util.Unit;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DeathProtection;
+import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -52,41 +52,41 @@ import java.util.function.Predicate;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityExtender extends Entity implements LivingEntityAccess {
     @Shadow
-    protected ItemStack activeItemStack;
+    protected ItemStack useItem;
 
     @Shadow
-    protected int itemUseTimeLeft;
+    protected int useItemRemaining;
 
     @Shadow
     public abstract boolean isHolding(Predicate<ItemStack> predicate);
 
     @Shadow
-    public abstract void setCurrentHand(Hand hand);
+    public abstract void startUsingItem(InteractionHand hand);
 
     @Shadow
-    public abstract ItemStack getStackInHand(Hand hand);
+    public abstract ItemStack getItemInHand(InteractionHand hand);
 
     @Shadow
     public abstract boolean isUsingItem();
 
     @Shadow
-    public abstract AttributeContainer getAttributes();
+    public abstract AttributeMap getAttributes();
 
     @Shadow
-    public abstract double getAttributeBaseValue(RegistryEntry<EntityAttribute> attribute);
+    public abstract double getAttributeBaseValue(Holder<Attribute> attribute);
 
     @Shadow
-    public abstract Hand getActiveHand();
+    public abstract InteractionHand getUsedItemHand();
 
     @Unique
     private int itemUsedTicks;
 
-    public LivingEntityExtender(EntityType<?> type, World world) {
+    public LivingEntityExtender(EntityType<?> type, Level world) {
         super(type, world);
     }
 
     @Inject(
-        method = "getPreferredEquipmentSlot",
+        method = "getEquipmentSlotForItem",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -97,10 +97,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Inject(
-        method = "onEquipStack",
+        method = "onEquipItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
         ),
         cancellable = true
     )
@@ -111,7 +111,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Inject(
-        method = "getProjectileType",
+        method = "getProjectile",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -122,16 +122,16 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "getAttackDistanceScalingFactor",
+        method = "getVisibilityPercent",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;SKELETON_SKULL:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;SKELETON_SKULL:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -141,16 +141,16 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "getAttackDistanceScalingFactor",
+        method = "getVisibilityPercent",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;ZOMBIE_HEAD:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;ZOMBIE_HEAD:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -160,16 +160,16 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "getAttackDistanceScalingFactor",
+        method = "getVisibilityPercent",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CREEPER_HEAD:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;CREEPER_HEAD:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -179,20 +179,20 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "getAttackDistanceScalingFactor",
+        method = "getVisibilityPercent",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;PIGLIN_HEAD:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;PIGLIN_HEAD:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             ),
             to = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CREEPER_HEAD:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;CREEPER_HEAD:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -202,82 +202,82 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "tryUseDeathProtector",
+        method = "checkTotemDeathProtection",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
         )
     )
     @SuppressWarnings("unchecked")
-    private <T> T getDeathProtectionDataComponentUseEventListenerCheck(ItemStack instance, ComponentType<T> type) {
+    private <T> T getDeathProtectionDataComponentUseEventListenerCheck(ItemStack instance, DataComponentType<T> type) {
         if (instance.itematic$hasEventListener(ItemEvents.BEFORE_DEATH_HOLDER)) {
-            return (T) DeathProtectionComponent.TOTEM_OF_UNDYING;
+            return (T) DeathProtection.TOTEM_OF_UNDYING;
         }
 
         return null;
     }
 
     @Redirect(
-        method = "tryUseDeathProtector",
+        method = "checkTotemDeathProtection",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+            target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(ordinal = 0) ItemStack stack) {
-        return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
+        return instance.itematic$getOrCreateStat(stack.getItemHolder());
     }
 
     @Redirect(
-        method = "tryUseDeathProtector",
+        method = "checkTotemDeathProtection",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/DeathProtectionComponent;applyDeathEffects(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/LivingEntity;)V"
+            target = "Lnet/minecraft/world/item/component/DeathProtection;applyEffects(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V"
         )
     )
-    private void invokeBeforeDeathHolderEvent(DeathProtectionComponent instance, ItemStack stack, LivingEntity entity) {
-        if (!(entity.getEntityWorld() instanceof ServerWorld serverWorld)) {
+    private void invokeBeforeDeathHolderEvent(DeathProtection instance, ItemStack stack, LivingEntity entity) {
+        if (!(entity.level() instanceof ServerLevel serverWorld)) {
             return;
         }
 
         ActionContext context = ActionContext.builder(serverWorld)
             .stackExchanger(entity, stack)
-            .add(LootContextParameters.THIS_ENTITY, entity)
-            .add(LootContextParameters.ORIGIN, entity.getEntityPos())
-            .add(LootContextParameters.TOOL, stack)
+            .add(LootContextParams.THIS_ENTITY, entity)
+            .add(LootContextParams.ORIGIN, entity.position())
+            .add(LootContextParams.TOOL, stack)
             .build();
         stack.itematic$invokeEvent(ItemEvents.BEFORE_DEATH_HOLDER, context);
     }
 
     @Inject(
-        method = "setCurrentHand",
+        method = "startUsingItem",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            target = "Lnet/minecraft/world/entity/LivingEntity;useItemRemaining:I",
             opcode = Opcodes.PUTFIELD
         )
     )
-    private void resetUseTime(Hand hand, CallbackInfo info) {
+    private void resetUseTime(InteractionHand hand, CallbackInfo info) {
         this.itemUsedTicks = 0;
     }
 
     @Inject(
-        method = "onTrackedDataSet",
+        method = "onSyncedDataUpdated(Lnet/minecraft/network/syncher/EntityDataAccessor;)V",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            target = "Lnet/minecraft/world/entity/LivingEntity;useItemRemaining:I",
             opcode = Opcodes.PUTFIELD
         )
     )
-    private void resetUseTime(TrackedData<?> data, CallbackInfo info) {
+    private void resetUseTime(EntityDataAccessor<?> data, CallbackInfo info) {
         this.itemUsedTicks = 0;
     }
 
     @Inject(
-        method = "clearActiveItem",
+        method = "stopUsingItem",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            target = "Lnet/minecraft/world/entity/LivingEntity;useItemRemaining:I",
             opcode = Opcodes.PUTFIELD
         )
     )
@@ -294,10 +294,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Inject(
-        method = "tickItemStackUsage",
+        method = "updateUsingItem",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            target = "Lnet/minecraft/world/entity/LivingEntity;useItemRemaining:I",
             opcode = Opcodes.GETFIELD
         )
     )
@@ -306,10 +306,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @ModifyExpressionValue(
-        method = "tickItemStackUsage",
+        method = "updateUsingItem",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/entity/LivingEntity;itemUseTimeLeft:I",
+            target = "Lnet/minecraft/world/entity/LivingEntity;useItemRemaining:I",
             opcode = Opcodes.GETFIELD
         )
     )
@@ -327,29 +327,29 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void shouldSpawnParticles(ItemStack stack, int count, CallbackInfo info) {
-        if (!this.activeItemStack.itematic$getBehavior(ItemComponentTypes.CONSUMABLE).map(ConsumableItemComponent::hasConsumeParticles).orElse(false)) {
+        if (!this.useItem.itematic$getBehavior(ItemComponentTypes.CONSUMABLE).map(ConsumableItemComponent::hasConsumeParticles).orElse(false)) {
             info.cancel();
         }
     }
 
     @Redirect(
-        method = "canGlideWith",
+        method = "canGlideUsing",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private static boolean containsGliderUseItemComponent(ItemStack instance, ComponentType<Unit> type) {
+    private static boolean containsGliderUseItemComponent(ItemStack instance, DataComponentType<Unit> type) {
         return instance.itematic$getBehavior(ItemComponentTypes.GLIDER)
             .map(glider -> glider.canUse(instance))
             .orElse(false);
     }
 
     @Redirect(
-        method = "canGlideWith",
+        method = "canGlideUsing",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;willBreakNextUse()Z"
+            target = "Lnet/minecraft/world/item/ItemStack;nextDamageWillBreak()Z"
         )
     )
     private static boolean doNotCheckBreakOnUse(ItemStack instance) {
@@ -357,10 +357,10 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Inject(
-        method = "canEquipFromDispenser",
+        method = "canEquipWithDispenser",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
         ),
         cancellable = true
     )
@@ -371,24 +371,24 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "canEquipFromDispenser",
+        method = "canEquipWithDispenser",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/EquippableComponent;dispensable()Z"
+            target = "Lnet/minecraft/world/item/equipment/Equippable;dispensable()Z"
         )
     )
-    private boolean dispensableAlwaysTrue(EquippableComponent instance) {
+    private boolean dispensableAlwaysTrue(Equippable instance) {
         return true;
     }
 
     @WrapOperation(
-        method = "canEquip",
+        method = "isEquippableInSlot",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
         )
     )
-    private Object checkPresenceEquipmentBehavior(ItemStack instance, ComponentType<EquippableComponent> type, Operation<Object> original) {
+    private Object checkPresenceEquipmentBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
         if (!instance.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
             return null;
         }
@@ -397,18 +397,18 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Redirect(
-        method = "onKilledBy",
+        method = "createWitherRose",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForWitherRoseUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.WITHER_ROSE);
+    private ItemStack newItemStackForWitherRoseUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.WITHER_ROSE);
     }
 
     @ModifyReturnValue(
-        method = "getItemUseTimeLeft",
+        method = "getUseItemRemainingTicks",
         at = @At("RETURN")
     )
     private int useMaxValueWhenUseDurationIsIndefinite(int original) {
@@ -420,7 +420,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @ModifyReturnValue(
-        method = "getItemUseTime()I",
+        method = "getTicksUsingItem()I",
         at = @At(
             value = "RETURN",
             ordinal = 0
@@ -431,18 +431,18 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Override
-    public boolean itematic$isHolding(RegistryKey<Item> key) {
+    public boolean itematic$isHolding(ResourceKey<Item> key) {
         return this.isHolding(stack -> stack.itematic$isOf(key));
     }
 
     @Override
-    public void itematic$startUsingHand(Hand hand, int ticks) {
-        ItemStack stack = this.getStackInHand(hand);
+    public void itematic$startUsingHand(InteractionHand hand, int ticks) {
+        ItemStack stack = this.getItemInHand(hand);
         if (stack.isEmpty() || this.isUsingItem()) {
             return;
         }
-        this.setCurrentHand(hand);
-        this.itemUseTimeLeft = ticks;
+        this.startUsingItem(hand);
+        this.useItemRemaining = ticks;
     }
 
     @Override
@@ -452,20 +452,20 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Override
     public double itematic$getAttackDamage() {
-        Hand usedHand = this.getActiveHand();
-        Double baseAttackDamage = this.getBaseAttackDamage(this.getStackInHand(usedHand));
-        return this.getAttributes().itematic$getValue(EntityAttributes.ATTACK_DAMAGE, baseAttackDamage);
+        InteractionHand usedHand = this.getUsedItemHand();
+        Double baseAttackDamage = this.getBaseAttackDamage(this.getItemInHand(usedHand));
+        return this.getAttributes().itematic$getValue(Attributes.ATTACK_DAMAGE, baseAttackDamage);
     }
 
     @Override
     public double itematic$getBaseAttackDamage() {
-        Hand usedHand = this.getActiveHand();
-        Double baseAttackDamage = this.getBaseAttackDamage(this.getStackInHand(usedHand));
+        InteractionHand usedHand = this.getUsedItemHand();
+        Double baseAttackDamage = this.getBaseAttackDamage(this.getItemInHand(usedHand));
         if (baseAttackDamage != null) {
             return baseAttackDamage;
         }
 
-        return this.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE);
+        return this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
     }
 
     @Unique
@@ -481,7 +481,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
         double damage = weaponAttackDamage.getDamage(stack, this);
         if (weaponAttackDamage.shouldAddBase(stack, this)) {
-            return damage + this.getAttributeBaseValue(EntityAttributes.ATTACK_DAMAGE);
+            return damage + this.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
         }
 
         return damage;

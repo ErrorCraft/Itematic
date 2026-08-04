@@ -8,15 +8,15 @@ import net.errorcraft.itematic.item.holder.rule.ItemHolderRule;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.math.Fraction;
 
 public record FractionItemHolderRule(Fraction fraction) implements ItemHolderRule {
     public static final MapCodec<FractionItemHolderRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ItemHolderItemComponent.CAPACITY_CODEC.fieldOf("fraction").forGetter(FractionItemHolderRule::fraction)
     ).apply(instance, FractionItemHolderRule::new));
-    public static final PacketCodec<ByteBuf, FractionItemHolderRule> PACKET_CODEC = PacketCodecUtil.FRACTION.xmap(FractionItemHolderRule::new, FractionItemHolderRule::fraction);
+    public static final StreamCodec<ByteBuf, FractionItemHolderRule> PACKET_CODEC = PacketCodecUtil.FRACTION.map(FractionItemHolderRule::new, FractionItemHolderRule::fraction);
 
     public static FractionItemHolderRule of(Fraction fraction) {
         return new FractionItemHolderRule(fraction);

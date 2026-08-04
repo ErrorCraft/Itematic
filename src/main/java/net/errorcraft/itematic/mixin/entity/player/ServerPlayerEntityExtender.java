@@ -2,41 +2,41 @@ package net.errorcraft.itematic.mixin.entity.player;
 
 import com.mojang.authlib.GameProfile;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.StatType;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatType;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityExtender extends PlayerEntity {
-    public ServerPlayerEntityExtender(World world, GameProfile profile) {
+@Mixin(ServerPlayer.class)
+public abstract class ServerPlayerEntityExtender extends Player {
+    public ServerPlayerEntityExtender(Level world, GameProfile profile) {
         super(world, profile);
     }
 
     @Inject(
-        method = "useBook",
+        method = "openItemGui",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void checkPresenceTextHolderBehavior(ItemStack book, Hand hand, CallbackInfo info) {
+    private void checkPresenceTextHolderBehavior(ItemStack book, InteractionHand hand, CallbackInfo info) {
         if (!book.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER)) {
             info.cancel();
         }
     }
 
     @Inject(
-        method = "increaseStat",
+        method = "awardStat",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -47,28 +47,28 @@ public abstract class ServerPlayerEntityExtender extends PlayerEntity {
     }
 
     @Redirect(
-        method = "dropItem",
+        method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+            target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, ItemStack stack) {
-        return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
+        return instance.itematic$getOrCreateStat(stack.getItemHolder());
     }
 
     @Redirect(
-        method = "sendEquipmentBreakStatus",
+        method = "onEquippedItemBroken",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+            target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key) {
-        RegistryEntry<Item> itemEntry = this.getEntityWorld()
-            .getRegistryManager()
-            .getOrThrow(RegistryKeys.ITEM)
-            .getEntry((Item) key);
+        Holder<Item> itemEntry = this.level()
+            .registryAccess()
+            .lookupOrThrow(Registries.ITEM)
+            .wrapAsHolder((Item) key);
         return instance.itematic$getOrCreateStat(itemEntry);
     }
 }

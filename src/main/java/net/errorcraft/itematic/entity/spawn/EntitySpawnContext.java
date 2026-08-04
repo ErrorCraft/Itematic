@@ -1,27 +1,27 @@
 package net.errorcraft.itematic.entity.spawn;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class EntitySpawnContext {
-    private final ServerWorld world;
+    private final ServerLevel world;
     private final EntityType<?> entityType;
     @Nullable
     private final Entity user;
-    private Vec3d spawnPosition;
+    private Vec3 spawnPosition;
     private float yaw = 0.0f;
 
-    public EntitySpawnContext(ServerWorld world, EntityType<?> entityType, @Nullable Entity user, Vec3d spawnPosition) {
+    public EntitySpawnContext(ServerLevel world, EntityType<?> entityType, @Nullable Entity user, Vec3 spawnPosition) {
         this.world = world;
         this.entityType = entityType;
         this.user = user;
         this.spawnPosition = spawnPosition;
     }
 
-    public ServerWorld world() {
+    public ServerLevel world() {
         return this.world;
     }
 
@@ -29,11 +29,11 @@ public class EntitySpawnContext {
         return this.entityType;
     }
 
-    public Vec3d spawnPosition() {
+    public Vec3 spawnPosition() {
         return this.spawnPosition;
     }
 
-    public void spawnPosition(Vec3d spawnPosition) {
+    public void spawnPosition(Vec3 spawnPosition) {
         this.spawnPosition = spawnPosition;
     }
 
@@ -42,7 +42,7 @@ public class EntitySpawnContext {
             return 0.0f;
         }
 
-        return this.user.getYaw();
+        return this.user.getYRot();
     }
 
     public float yaw() {

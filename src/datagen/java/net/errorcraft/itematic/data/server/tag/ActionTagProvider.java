@@ -6,17 +6,16 @@ import net.errorcraft.itematic.world.action.ActionTags;
 import net.errorcraft.itematic.world.action.Actions;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.registry.RegistryWrapper;
-
+import net.minecraft.core.HolderLookup;
 import java.util.concurrent.CompletableFuture;
 
 public class ActionTagProvider extends FabricTagProvider<ActionEntry> {
-    public ActionTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public ActionTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, ItematicRegistryKeys.ACTION, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup lookup) {
+    protected void addTags(HolderLookup.Provider lookup) {
         this.builder(ActionTags.USE_HOE_ON_BLOCK)
             .add(Actions.TILL_DIRT)
             .add(Actions.TILL_COARSE_DIRT)

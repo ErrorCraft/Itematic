@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.block.entity.LecternBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +31,7 @@ public class LecternBlockEntityExtender {
         at = @At("HEAD"),
         cancellable = true
     )
-    private void checkPresenceTextHolderBehavior(ItemStack book, PlayerEntity player, CallbackInfoReturnable<ItemStack> info) {
+    private void checkPresenceTextHolderBehavior(ItemStack book, Player player, CallbackInfoReturnable<ItemStack> info) {
         if (!book.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER)) {
             info.setReturnValue(book);
         }

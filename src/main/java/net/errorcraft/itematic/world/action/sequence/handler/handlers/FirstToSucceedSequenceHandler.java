@@ -6,17 +6,16 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public record FirstToSucceedSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler<FirstToSucceedSequenceHandler> {
+public record FirstToSucceedSequenceHandler(HolderSet<ActionEntry> entries) implements SequenceHandler<FirstToSucceedSequenceHandler> {
     public static final Codec<FirstToSucceedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(FirstToSucceedSequenceHandler::new, FirstToSucceedSequenceHandler::entries);
 
-    public static Builder builder() {
-        return new Builder();
+    public static net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToSucceedSequenceHandler.Builder builder() {
+        return new net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToSucceedSequenceHandler.Builder();
     }
 
     @Override
@@ -26,7 +25,7 @@ public record FirstToSucceedSequenceHandler(RegistryEntryList<ActionEntry> entri
 
     @Override
     public boolean handle(ActionContext context) {
-        for (RegistryEntry<ActionEntry> entry : this.entries) {
+        for (Holder<ActionEntry> entry : this.entries) {
             if (entry.value().execute(context).orElse(false)) {
                 return true;
             }
@@ -36,20 +35,20 @@ public record FirstToSucceedSequenceHandler(RegistryEntryList<ActionEntry> entri
     }
 
     @Override
-    public Iterable<RegistryEntry<ActionEntry>> iterateEntries() {
+    public Iterable<Holder<ActionEntry>> iterateEntries() {
         return this.entries;
     }
 
     public static class Builder implements SequenceHandler.Builder<FirstToSucceedSequenceHandler, FirstToSucceedSequenceHandler.Builder> {
-        private final List<RegistryEntry<ActionEntry>> entries = new ArrayList<>();
+        private final List<Holder<ActionEntry>> entries = new ArrayList<>();
 
         @Override
         public FirstToSucceedSequenceHandler build() {
-            return new FirstToSucceedSequenceHandler(RegistryEntryList.of(this.entries));
+            return new FirstToSucceedSequenceHandler(HolderSet.direct(this.entries));
         }
 
         @Override
-        public FirstToSucceedSequenceHandler.Builder add(RegistryEntry<ActionEntry> entry) {
+        public FirstToSucceedSequenceHandler.Builder add(Holder<ActionEntry> entry) {
             this.entries.add(entry);
             return this;
         }

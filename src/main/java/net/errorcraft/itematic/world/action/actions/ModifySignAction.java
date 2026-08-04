@@ -8,13 +8,12 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
 
 public record ModifySignAction(PositionTarget position, Optional<DyeColor> color, Optional<Boolean> glow, Optional<Boolean> wax) implements Action<ModifySignAction> {
@@ -44,35 +43,35 @@ public record ModifySignAction(PositionTarget position, Optional<DyeColor> color
 
     @Override
     public boolean execute(ActionContext context) {
-        Vec3d pos = context.get(this.position.contextParam());
+        Vec3 pos = context.get(this.position.contextParam());
         if (pos == null) {
             return false;
         }
 
-        BlockPos blockPos = BlockPos.ofFloored(pos);
+        BlockPos blockPos = BlockPos.containing(pos);
         if (!(context.world().getBlockEntity(blockPos) instanceof SignBlockEntity blockEntity)) {
             return false;
         }
 
-        if (context.get(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity player) {
+        if (context.get(LootContextParams.THIS_ENTITY) instanceof Player player) {
             return this.modify(blockEntity, player);
         }
 
         return false;
     }
 
-    private boolean modify(SignBlockEntity blockEntity, PlayerEntity player) {
+    private boolean modify(SignBlockEntity blockEntity, Player player) {
         if (blockEntity.isWaxed()) {
             return false;
         }
 
-        boolean front = blockEntity.isPlayerFacingFront(player);
+        boolean front = blockEntity.isFacingFrontText(player);
         boolean result = false;
-        result |= this.glow.map(glow -> blockEntity.changeText(text -> text.withGlowing(glow), front))
+        result |= this.glow.map(glow -> blockEntity.updateText(text -> text.setHasGlowingText(glow), front))
             .orElse(false);
         result |= this.wax.map(blockEntity::setWaxed)
             .orElse(false);
-        result |= this.color.map(color -> blockEntity.changeText(text -> text.withColor(color), front))
+        result |= this.color.map(color -> blockEntity.updateText(text -> text.setColor(color), front))
             .orElse(false);
         return result;
     }

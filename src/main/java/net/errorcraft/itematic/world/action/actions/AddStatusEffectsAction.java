@@ -6,20 +6,19 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.loot.context.LootContext;
-
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.storage.loot.LootContext;
 import java.util.List;
 
-public record AddStatusEffectsAction(List<StatusEffectInstance> effects, LootContext.EntityReference entity) implements Action<AddStatusEffectsAction> {
+public record AddStatusEffectsAction(List<MobEffectInstance> effects, LootContext.EntityTarget entity) implements Action<AddStatusEffectsAction> {
     public static final MapCodec<AddStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        StatusEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(AddStatusEffectsAction::effects),
-        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(AddStatusEffectsAction::entity)
+        MobEffectInstance.CODEC.listOf().fieldOf("effects").forGetter(AddStatusEffectsAction::effects),
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(AddStatusEffectsAction::entity)
     ).apply(instance, AddStatusEffectsAction::new));
 
-    public static AddStatusEffectsAction of(StatusEffectInstance... effects) {
-        return new AddStatusEffectsAction(List.of(effects), LootContext.EntityReference.THIS);
+    public static AddStatusEffectsAction of(MobEffectInstance... effects) {
+        return new AddStatusEffectsAction(List.of(effects), LootContext.EntityTarget.THIS);
     }
 
     @Override
@@ -38,8 +37,8 @@ public record AddStatusEffectsAction(List<StatusEffectInstance> effects, LootCon
 
     private boolean addStatusEffects(LivingEntity target) {
         boolean addedStatusEffects = false;
-        for (StatusEffectInstance effect : this.effects) {
-            addedStatusEffects |= target.addStatusEffect(effect);
+        for (MobEffectInstance effect : this.effects) {
+            addedStatusEffects |= target.addEffect(effect);
         }
 
         return addedStatusEffects;

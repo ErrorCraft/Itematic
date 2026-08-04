@@ -2,12 +2,12 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.FireworkRocketRecipe;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.FireworkRocketRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,10 +17,10 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(FireworkRocketRecipe.class)
 public class FireworkRocketRecipeExtender {
     @Redirect(
-        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z",
+            target = "Lnet/minecraft/world/item/crafting/Ingredient;test(Lnet/minecraft/world/item/ItemStack;)Z",
             ordinal = 0
         )
     )
@@ -30,18 +30,18 @@ public class FireworkRocketRecipeExtender {
 
     @Redirect(
         method = {
-            "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
-            "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;"
+            "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
+            "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z",
+            target = "Lnet/minecraft/world/item/crafting/Ingredient;test(Lnet/minecraft/world/item/ItemStack;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/recipe/FireworkRocketRecipe;DURATION_MODIFIER:Lnet/minecraft/recipe/Ingredient;",
+                target = "Lnet/minecraft/world/item/crafting/FireworkRocketRecipe;GUNPOWDER_INGREDIENT:Lnet/minecraft/world/item/crafting/Ingredient;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -52,18 +52,18 @@ public class FireworkRocketRecipeExtender {
 
     @Redirect(
         method = {
-            "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
-            "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;"
+            "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
+            "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/Ingredient;test(Lnet/minecraft/item/ItemStack;)Z",
+            target = "Lnet/minecraft/world/item/crafting/Ingredient;test(Lnet/minecraft/world/item/ItemStack;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/recipe/FireworkRocketRecipe;FIREWORK_STAR:Lnet/minecraft/recipe/Ingredient;",
+                target = "Lnet/minecraft/world/item/crafting/FireworkRocketRecipe;STAR_INGREDIENT:Lnet/minecraft/world/item/crafting/Ingredient;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -73,15 +73,15 @@ public class FireworkRocketRecipeExtender {
     }
 
     @Redirect(
-        method = "craft(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/registry/RegistryWrapper$WrapperLookup;)Lnet/minecraft/item/ItemStack;",
+        method = "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemConvertible item, int count, @Local(argsOnly = true) RegistryWrapper.WrapperLookup lookup) {
-        return lookup.getOrThrow(RegistryKeys.ITEM)
-            .getOptional(ItemKeys.FIREWORK_ROCKET)
+    private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemLike item, int count, @Local(argsOnly = true) HolderLookup.Provider lookup) {
+        return lookup.lookupOrThrow(Registries.ITEM)
+            .get(ItemKeys.FIREWORK_ROCKET)
             .map(entry -> new ItemStack(entry, count))
             .orElse(ItemStack.EMPTY);
     }

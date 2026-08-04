@@ -9,33 +9,33 @@ import net.errorcraft.itematic.item.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.mixin.item.RangedWeaponItemAccessor;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.OptionalInt;
 
-public record DirectShooterMethod(RegistryEntry<SoundEvent> shootSound) implements ShooterMethod {
-    private static final RegistryEntry<SoundEvent> DEFAULT_SHOOT_SOUND = Registries.SOUND_EVENT.getEntry(SoundEvents.ENTITY_ARROW_SHOOT);
+public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements ShooterMethod {
+    private static final Holder<SoundEvent> DEFAULT_SHOOT_SOUND = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.ARROW_SHOOT);
     public static final MapCodec<DirectShooterMethod> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        SoundEvent.ENTRY_CODEC.optionalFieldOf("shoot_sound", DEFAULT_SHOOT_SOUND).forGetter(DirectShooterMethod::shootSound)
+        SoundEvent.CODEC.optionalFieldOf("shoot_sound", DEFAULT_SHOOT_SOUND).forGetter(DirectShooterMethod::shootSound)
     ).apply(instance, DirectShooterMethod::new));
-    private static final BowItem DUMMY = new BowItem(new Item.Settings());
+    private static final BowItem DUMMY = new BowItem(new Item.Properties());
 
     public static DirectShooterMethod of() {
         return new DirectShooterMethod(DEFAULT_SHOOT_SOUND);
@@ -47,20 +47,20 @@ public record DirectShooterMethod(RegistryEntry<SoundEvent> shootSound) implemen
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(ItematicDataComponentTypes.SHOOTER_SHOOT_SOUND, this.shootSound);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(ItematicDataComponentTypes.SHOOTER_SHOOT_SOUND, this.shootSound);
     }
 
     @Override
-    public boolean tryShoot(ShooterItemComponent component, ItemStack stack, World world, LivingEntity user, Hand hand) {
+    public boolean tryShoot(ShooterItemComponent component, ItemStack stack, Level world, LivingEntity user, InteractionHand hand) {
         return false;
     }
 
     @Override
-    public void hold(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {}
+    public void hold(ShooterItemComponent shooter, ItemStack stack, Level world, LivingEntity user, int usedTicks) {}
 
     @Override
-    public boolean stop(ShooterItemComponent shooter, ItemStack stack, World world, LivingEntity user, int usedTicks) {
+    public boolean stop(ShooterItemComponent shooter, ItemStack stack, Level world, LivingEntity user, int usedTicks) {
         ItemStack ammunition = user.itematic$getAmmunition(stack);
         if (ammunition.isEmpty()) {
             return false;
@@ -72,24 +72,24 @@ public record DirectShooterMethod(RegistryEntry<SoundEvent> shootSound) implemen
         }
 
         List<ItemStack> projectiles = RangedWeaponItemAccessor.load(stack, ammunition, user);
-        if (world instanceof ServerWorld serverWorld && !projectiles.isEmpty()) {
-            shooter.shoot(serverWorld, user, user.getActiveHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
+        if (world instanceof ServerLevel serverWorld && !projectiles.isEmpty()) {
+            shooter.shoot(serverWorld, user, user.getUsedItemHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
         }
 
-        RegistryEntry<SoundEvent> shootSound = stack.get(ItematicDataComponentTypes.SHOOTER_SHOOT_SOUND);
+        Holder<SoundEvent> shootSound = stack.get(ItematicDataComponentTypes.SHOOTER_SHOOT_SOUND);
         if (shootSound != null) {
-            world.playSound(null, user.getX(), user.getY(), user.getZ(), shootSound.value(), SoundCategory.PLAYERS, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
+            world.playSound(null, user.getX(), user.getY(), user.getZ(), shootSound.value(), SoundSource.PLAYERS, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
         }
 
-        if (user instanceof PlayerEntity playerEntity) {
-            playerEntity.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+        if (user instanceof Player playerEntity) {
+            playerEntity.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
         }
 
         return true;
     }
 
     @Override
-    public void initializeProjectile(LivingEntity user, ProjectileEntity projectile, int index, float power, float uncertainty, float angle, boolean critical, @Nullable LivingEntity target) {
+    public void initializeProjectile(LivingEntity user, Projectile projectile, int index, float power, float uncertainty, float angle, boolean critical, @Nullable LivingEntity target) {
         ShooterMethod.super.initializeProjectile(user, projectile, index, power, uncertainty, angle, critical, target);
         ((RangedWeaponItemAccessor) DUMMY).shoot(user, projectile, index, power, uncertainty, angle, target);
     }
@@ -105,6 +105,6 @@ public record DirectShooterMethod(RegistryEntry<SoundEvent> shootSound) implemen
     }
 
     private float pullProgress(int usedTicks) {
-        return BowItem.getPullProgress(usedTicks);
+        return BowItem.getPowerForTime(usedTicks);
     }
 }

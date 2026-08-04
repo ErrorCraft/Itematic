@@ -8,14 +8,13 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 import java.util.List;
 
 public record EquipEntityAtPositionAction(PositionTarget position) implements Action<EquipEntityAtPositionAction> {
@@ -34,20 +33,20 @@ public record EquipEntityAtPositionAction(PositionTarget position) implements Ac
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack equipment = context.get(LootContextParameters.TOOL);
+        ItemStack equipment = context.get(LootContextParams.TOOL);
         if (ItemStackUtil.isNullOrEmpty(equipment)) {
             return false;
         }
 
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        List<LivingEntity> entities = context.world().getEntitiesByClass(
+        List<LivingEntity> entities = context.world().getEntitiesOfClass(
             LivingEntity.class,
-            new Box(pos),
-            entity -> entity.canEquipFromDispenser(equipment)
+            new AABB(pos),
+            entity -> entity.canEquipWithDispenser(equipment)
         );
         if (entities.isEmpty()) {
             return false;
@@ -58,11 +57,11 @@ public record EquipEntityAtPositionAction(PositionTarget position) implements Ac
     }
 
     private static void equip(LivingEntity target, ItemStack equipment) {
-        EquipmentSlot slot = target.getPreferredEquipmentSlot(equipment);
-        target.equipStack(slot, equipment);
-        if (target instanceof MobEntity mobTarget) {
-            mobTarget.setEquipmentDropChance(slot, 2.0f);
-            mobTarget.setPersistent();
+        EquipmentSlot slot = target.getEquipmentSlotForItem(equipment);
+        target.setItemSlot(slot, equipment);
+        if (target instanceof Mob mobTarget) {
+            mobTarget.setDropChance(slot, 2.0f);
+            mobTarget.setPersistenceRequired();
         }
     }
 }

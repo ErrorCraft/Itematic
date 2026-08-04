@@ -4,15 +4,15 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.block.AbstractBlockAccess;
 import net.errorcraft.itematic.block.entity.SherdsUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.block.DecoratedPotBlock;
-import net.minecraft.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.block.entity.Sherds;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.DecoratedPotBlock;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
+import net.minecraft.world.level.block.entity.PotDecorations;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -26,12 +26,12 @@ public class DecoratedPotBlockExtender implements AbstractBlockAccess {
         method = "method_49815",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/entity/Sherds;toList()Ljava/util/List;"
+            target = "Lnet/minecraft/world/level/block/entity/PotDecorations;ordered()Ljava/util/List;"
         )
     )
     @SuppressWarnings("DataFlowIssue")
-    private static List<RegistryEntry<Item>> streamSherdsUseRegistryEntry(Sherds instance, DecoratedPotBlockEntity blockEntity) {
-        return instance.itematic$entries(blockEntity.getWorld().getRegistryManager());
+    private static List<Holder<Item>> streamSherdsUseRegistryEntry(PotDecorations instance, DecoratedPotBlockEntity blockEntity) {
+        return instance.itematic$entries(blockEntity.getLevel().registryAccess());
     }
 
     @Redirect(
@@ -49,27 +49,27 @@ public class DecoratedPotBlockExtender implements AbstractBlockAccess {
         method = "method_49815",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;getDefaultStack()Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/Item;getDefaultInstance()Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackUseRegistryEntry(Item instance, @Local Iterator<RegistryEntry<Item>> iterator) {
+    private static ItemStack newItemStackUseRegistryEntry(Item instance, @Local Iterator<Holder<Item>> iterator) {
         return new ItemStack(iterator.next());
     }
 
     @Redirect(
-        method = "getPickStack",
+        method = "getCloneItemStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/entity/DecoratedPotBlockEntity;getStackWith(Lnet/minecraft/block/entity/Sherds;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/level/block/entity/DecoratedPotBlockEntity;createDecoratedPotItem(Lnet/minecraft/world/level/block/entity/PotDecorations;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack getStackWithUseCreateStack(Sherds sherds, WorldView world) {
+    private ItemStack getStackWithUseCreateStack(PotDecorations sherds, LevelReader world) {
         ItemStack stack = world.itematic$createStack(ItemKeys.DECORATED_POT);
         return SherdsUtil.addSherdsToStack(stack, sherds);
     }
 
     @Override
-    public void itematic$addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.POT_DECORATIONS, Sherds.DEFAULT);
+    public void itematic$addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.POT_DECORATIONS, PotDecorations.EMPTY);
     }
 }

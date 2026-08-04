@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.access.stat;
 
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
 
 public interface StatAccess<T> {
-    default RegistryEntry<T> itematic$entry() {
+    default Holder<T> itematic$entry() {
         return null;
     }
-    default void itematic$setEntry(RegistryEntry<T> entry) {}
+    default void itematic$setEntry(Holder<T> entry) {}
 }

@@ -1,31 +1,31 @@
 package net.errorcraft.itematic.mixin.inventory;
 
 import net.errorcraft.itematic.access.inventory.SimpleInventoryAccess;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(SimpleInventory.class)
+@Mixin(SimpleContainer.class)
 public abstract class SimpleInventoryExtender implements SimpleInventoryAccess {
     @Shadow
     @Final
     private int size;
 
     @Shadow
-    public abstract ItemStack getStack(int slot);
+    public abstract ItemStack getItem(int slot);
 
     @Shadow
-    public abstract void markDirty();
+    public abstract void setChanged();
 
     @Override
-    public void itematic$removeItem(RegistryKey<Item> item, int count) {
+    public void itematic$removeItem(ResourceKey<Item> item, int count) {
         int countLeft = count;
         for (int i = this.size - 1; i >= 0; i--) {
-            ItemStack heldStack = this.getStack(i);
+            ItemStack heldStack = this.getItem(i);
             if (!heldStack.itematic$isOf(item)) {
                 continue;
             }
@@ -35,7 +35,7 @@ public abstract class SimpleInventoryExtender implements SimpleInventoryAccess {
             }
         }
         if (countLeft < count) {
-            this.markDirty();
+            this.setChanged();
         }
     }
 }

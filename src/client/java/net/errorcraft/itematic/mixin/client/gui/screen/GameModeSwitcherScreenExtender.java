@@ -3,16 +3,16 @@ package net.errorcraft.itematic.mixin.client.gui.screen;
 
 import net.errorcraft.itematic.access.client.gui.screen.GameModeSwitcherScreenAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.GameModeSwitcherScreen;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.debug.GameModeSwitcherScreen;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,46 +21,46 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 public class GameModeSwitcherScreenExtender {
-    @Mixin(GameModeSwitcherScreen.ButtonWidget.class)
+    @Mixin(GameModeSwitcherScreen.GameModeSlot.class)
     public static class ButtonWidgetExtender {
         @Redirect(
             method = "renderWidget",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/screen/GameModeSwitcherScreen$GameModeSelection;renderIcon(Lnet/minecraft/client/gui/DrawContext;II)V"
+                target = "Lnet/minecraft/client/gui/screens/debug/GameModeSwitcherScreen$GameModeIcon;drawIcon(Lnet/minecraft/client/gui/GuiGraphics;II)V"
             )
         )
-        private void renderIconUseRegistryEntry(GameModeSwitcherScreen.GameModeSelection instance, DrawContext context, int x, int y) {
-            World world = MinecraftClient.getInstance().world;
+        private void renderIconUseRegistryEntry(GameModeSwitcherScreen.GameModeIcon instance, GuiGraphics context, int x, int y) {
+            Level world = Minecraft.getInstance().level;
             if (world == null) {
                 return;
             }
 
-            ItemStack stack = instance.itematic$icon(world.getRegistryManager().getOrThrow(RegistryKeys.ITEM));
-            context.drawItem(stack, x, y);
+            ItemStack stack = instance.itematic$icon(world.registryAccess().lookupOrThrow(Registries.ITEM));
+            context.renderItem(stack, x, y);
         }
     }
 
-    @Mixin(GameModeSwitcherScreen.GameModeSelection.class)
+    @Mixin(GameModeSwitcherScreen.GameModeIcon.class)
     public static class GameModeSelectionExtender implements GameModeSwitcherScreenAccess.GameModeSelectionAccess {
         @Shadow
         @Final
-        public static GameModeSwitcherScreen.GameModeSelection CREATIVE;
+        public static GameModeSwitcherScreen.GameModeIcon CREATIVE;
 
         @Shadow
         @Final
-        public static GameModeSwitcherScreen.GameModeSelection SURVIVAL;
+        public static GameModeSwitcherScreen.GameModeIcon SURVIVAL;
 
         @Shadow
         @Final
-        public static GameModeSwitcherScreen.GameModeSelection ADVENTURE;
+        public static GameModeSwitcherScreen.GameModeIcon ADVENTURE;
 
         @Shadow
         @Final
-        public static GameModeSwitcherScreen.GameModeSelection SPECTATOR;
+        public static GameModeSwitcherScreen.GameModeIcon SPECTATOR;
 
         @Unique
-        private RegistryKey<Item> icon;
+        private ResourceKey<Item> icon;
 
         static {
             CREATIVE.itematic$setIcon(ItemKeys.GRASS_BLOCK);
@@ -73,10 +73,10 @@ public class GameModeSwitcherScreenExtender {
             method = "<clinit>",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+        private static ItemStack newItemStackReturnEmptyStack(ItemLike item) {
             return ItemStack.EMPTY;
         }
 
@@ -86,13 +86,13 @@ public class GameModeSwitcherScreenExtender {
                 return ItemStack.EMPTY;
             }
 
-            return registry.getOptional(this.icon)
+            return registry.get(this.icon)
                 .map(ItemStack::new)
                 .orElse(ItemStack.EMPTY);
         }
 
         @Override
-        public void itematic$setIcon(RegistryKey<Item> icon) {
+        public void itematic$setIcon(ResourceKey<Item> icon) {
             this.icon = icon;
         }
     }

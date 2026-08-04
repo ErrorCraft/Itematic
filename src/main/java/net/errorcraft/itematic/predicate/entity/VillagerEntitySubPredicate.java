@@ -2,34 +2,34 @@ package net.errorcraft.itematic.predicate.entity;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.entity.Entity;
-import net.minecraft.predicate.entity.EntitySubPredicate;
-import net.minecraft.registry.RegistryCodecs;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.village.VillagerDataContainer;
-import net.minecraft.village.VillagerType;
+import net.minecraft.advancements.criterion.EntitySubPredicate;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.npc.villager.VillagerDataHolder;
+import net.minecraft.world.entity.npc.villager.VillagerType;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public record VillagerEntitySubPredicate(RegistryEntryList<VillagerType> variant) implements EntitySubPredicate {
+public record VillagerEntitySubPredicate(HolderSet<VillagerType> variant) implements EntitySubPredicate {
     public static final MapCodec<VillagerEntitySubPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryCodecs.entryList(RegistryKeys.VILLAGER_TYPE).fieldOf("variant").forGetter(VillagerEntitySubPredicate::variant)
+        RegistryCodecs.homogeneousList(Registries.VILLAGER_TYPE).fieldOf("variant").forGetter(VillagerEntitySubPredicate::variant)
     ).apply(instance, VillagerEntitySubPredicate::new));
 
-    public static VillagerEntitySubPredicate of(RegistryEntryList<VillagerType> variant) {
+    public static VillagerEntitySubPredicate of(HolderSet<VillagerType> variant) {
         return new VillagerEntitySubPredicate(variant);
     }
 
     @Override
-    public MapCodec<? extends EntitySubPredicate> getCodec() {
+    public MapCodec<? extends EntitySubPredicate> codec() {
         return CODEC;
     }
 
     @Override
-    public boolean test(Entity entity, ServerWorld world, @Nullable Vec3d pos) {
-        if (entity instanceof VillagerDataContainer villagerDataContainer) {
+    public boolean matches(Entity entity, ServerLevel world, @Nullable Vec3 pos) {
+        if (entity instanceof VillagerDataHolder villagerDataContainer) {
             return this.variant.contains(villagerDataContainer.getVillagerData().type());
         }
 

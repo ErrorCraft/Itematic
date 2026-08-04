@@ -1,38 +1,37 @@
 package net.errorcraft.itematic.registry;
 
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RecursionValidator {
-    private final Set<RegistryEntry.Reference<ActionEntry>> foundEntries = new LinkedHashSet<>();
+    private final Set<Holder.Reference<ActionEntry>> foundEntries = new LinkedHashSet<>();
 
-    public RecursionValidator(RegistryEntry.Reference<ActionEntry> initialEntry) {
+    public RecursionValidator(Holder.Reference<ActionEntry> initialEntry) {
         this.foundEntries.add(initialEntry);
     }
 
-    public void add(RegistryEntry.Reference<ActionEntry> entry) {
+    public void add(Holder.Reference<ActionEntry> entry) {
         if (!this.foundEntries.add(entry)) {
             throw new IllegalStateException("Recursive action found: " + this.sequence(entry));
         }
     }
 
-    public void remove(RegistryEntry.Reference<ActionEntry> entry) {
+    public void remove(Holder.Reference<ActionEntry> entry) {
         if (!this.foundEntries.remove(entry)) {
-            throw new IllegalStateException("Action " + entry.registryKey().getValue() + " is not present in sequence: " + this.sequence(entry));
+            throw new IllegalStateException("Action " + entry.key().identifier() + " is not present in sequence: " + this.sequence(entry));
         }
     }
 
-    private String sequence(RegistryEntry.Reference<ActionEntry> towardsEntry) {
+    private String sequence(Holder.Reference<ActionEntry> towardsEntry) {
         return Stream.concat(this.foundEntries.stream(), Stream.of(towardsEntry))
-            .map(RegistryEntry.Reference::registryKey)
-            .map(RegistryKey::getValue)
+            .map(Holder.Reference::key)
+            .map(ResourceKey::identifier)
             .map(Identifier::toString)
             .collect(Collectors.joining(" -> "));
     }

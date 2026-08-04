@@ -2,7 +2,7 @@ package net.errorcraft.itematic.item.component;
 
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
 
 public class ItemComponentTypes {
     public static final ItemComponentType<UseableItemComponent> USEABLE = register("useable", new ItemComponentType<>(UseableItemComponent.CODEC));

@@ -2,16 +2,16 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.AbstractCookingRecipe;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.SingleStackRecipe;
-import net.minecraft.recipe.display.FurnaceRecipeDisplay;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.recipe.display.SlotDisplay;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SingleItemRecipe;
+import net.minecraft.world.item.crafting.display.FurnaceRecipeDisplay;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.List;
 
 @Mixin(AbstractCookingRecipe.class)
-public abstract class AbstractCookingRecipeExtender extends SingleStackRecipe implements RecipeAccess {
+public abstract class AbstractCookingRecipeExtender extends SingleItemRecipe implements RecipeAccess {
     @Shadow
     @Final
     private float experience;
@@ -34,12 +34,12 @@ public abstract class AbstractCookingRecipeExtender extends SingleStackRecipe im
     }
 
     @Override
-    public List<RecipeDisplay> itematic$displays(RegistryEntryLookup<Item> items) {
+    public List<RecipeDisplay> itematic$displays(HolderGetter<Item> items) {
         return List.of(
             new FurnaceRecipeDisplay(
-                this.ingredient().toDisplay(),
-                SlotDisplay.AnyFuelSlotDisplay.INSTANCE,
-                new SlotDisplay.StackSlotDisplay(this.result()),
+                this.input().display(),
+                SlotDisplay.AnyFuel.INSTANCE,
+                new SlotDisplay.ItemStackSlotDisplay(this.result()),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(this.cookerItemKey())),
                 this.cookingTime,
                 this.experience
@@ -48,7 +48,7 @@ public abstract class AbstractCookingRecipeExtender extends SingleStackRecipe im
     }
 
     @Unique
-    protected RegistryKey<Item> cookerItemKey() {
+    protected ResourceKey<Item> cookerItemKey() {
         return ItemKeys.FURNACE;
     }
 }

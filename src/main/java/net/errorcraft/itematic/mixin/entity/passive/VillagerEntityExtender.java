@@ -6,18 +6,18 @@ import net.errorcraft.itematic.entity.passive.VillagerEntityUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.village.VillagerData;
-import net.minecraft.world.World;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.villager.VillagerData;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,17 +29,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-@Mixin(VillagerEntity.class)
+@Mixin(Villager.class)
 public abstract class VillagerEntityExtender extends MerchantEntityExtender {
     @Shadow
     public abstract VillagerData getVillagerData();
 
-    protected VillagerEntityExtender(EntityType<? extends PassiveEntity> entityType, World world) {
+    protected VillagerEntityExtender(EntityType<? extends AgeableMob> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "canGather",
+        method = "wantsToPickUp",
         at = @At(
             value = "INVOKE",
             target = "Lcom/google/common/collect/ImmutableSet;contains(Ljava/lang/Object;)Z",
@@ -52,25 +52,25 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
             return false;
         }
 
-        return stack.isIn(tag);
+        return stack.is(tag);
     }
 
     @Redirect(
-        method = "levelUp",
+        method = "increaseMerchantCareer",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/VillagerEntity;fillRecipes(Lnet/minecraft/server/world/ServerWorld;)V"
+            target = "Lnet/minecraft/world/entity/npc/villager/Villager;updateTrades(Lnet/minecraft/server/level/ServerLevel;)V"
         )
     )
-    private void fillRecipesUseDynamicRegistry(VillagerEntity instance, ServerWorld world) {
+    private void fillRecipesUseDynamicRegistry(Villager instance, ServerLevel world) {
         this.fillRecipesFromContext(world);
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForVillagerSpawnEggUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -78,7 +78,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
     }
 
     @Redirect(
-        method = "consumeAvailableFood",
+        method = "eatUntilFull",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"
@@ -90,7 +90,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
     }
 
     @Redirect(
-        method = "getAvailableFood",
+        method = "countFoodPointsInInventory",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Set;stream()Ljava/util/stream/Stream;"
@@ -100,7 +100,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         return VillagerEntityUtil.ITEM_FOOD_POINTS.entrySet()
             .stream()
             .map(entry -> {
-                Item item = this.getEntityWorld().itematic$getItem(entry.getKey()).value();
+                Item item = this.level().itematic$getItem(entry.getKey()).value();
                 return new AbstractMap.SimpleImmutableEntry<>(item, entry.getValue());
             });
     }
@@ -112,14 +112,14 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
             return;
         }
 
-        Registry<Trade> trades = context.getWorld()
-            .getRegistryManager()
-            .getOrThrow(ItematicRegistryKeys.TRADE);
+        Registry<Trade> trades = context.getLevel()
+            .registryAccess()
+            .lookupOrThrow(ItematicRegistryKeys.TRADE);
         this.fillRecipesFromPool(trades.getOrThrow(tag), 2, context);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.VILLAGER_SPAWN_EGG;
     }
 }

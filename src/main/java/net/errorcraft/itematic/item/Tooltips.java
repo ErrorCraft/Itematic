@@ -2,43 +2,43 @@ package net.errorcraft.itematic.item;
 
 import net.errorcraft.itematic.mixin.item.SmithingTemplateItemAccessor;
 import net.errorcraft.itematic.util.Util;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 
 public class Tooltips {
     private Tooltips() {}
 
-    public static Text description(RegistryKey<Item> item) {
-        return Text.translatable(Util.descriptionKey("item", item.getValue(), "desc"))
-            .formatted(Formatting.GRAY);
+    public static Component description(ResourceKey<Item> item) {
+        return Component.translatable(Util.descriptionKey("item", item.identifier(), "desc"))
+            .withStyle(ChatFormatting.GRAY);
     }
 
-    public static Text[] smithingUpgrade(Identifier upgradeName) {
+    public static Component[] smithingUpgrade(Identifier upgradeName) {
         return smithing(
-            Text.translatable(Util.descriptionKey("smithing_template", upgradeName, "applies_to")),
-            Text.translatable(Util.descriptionKey("smithing_template", upgradeName, "ingredients"))
+            Component.translatable(Util.descriptionKey("smithing_template", upgradeName, "applies_to")),
+            Component.translatable(Util.descriptionKey("smithing_template", upgradeName, "ingredients"))
         );
     }
 
-    public static Text[] smithingTrimPattern() {
+    public static Component[] smithingTrimPattern() {
         return smithing(
             SmithingTemplateItemAccessor.trimPatternAppliesToLabel(),
             SmithingTemplateItemAccessor.trimPatternIngredients()
         );
     }
 
-    private static Text[] smithing(Text appliesTo, Text ingredients) {
-        return new Text[] {
+    private static Component[] smithing(Component appliesTo, Component ingredients) {
+        return new Component[] {
             SmithingTemplateItemAccessor.smithingTemplateTitle(),
-            ScreenTexts.EMPTY,
+            CommonComponents.EMPTY,
             SmithingTemplateItemAccessor.appliesToTitle(),
-            ScreenTexts.space().append(appliesTo),
+            CommonComponents.space().append(appliesTo),
             SmithingTemplateItemAccessor.ingredientsTitle(),
-            ScreenTexts.space().append(ingredients)
+            CommonComponents.space().append(ingredients)
         };
     }
 }

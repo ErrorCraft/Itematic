@@ -5,17 +5,17 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 
-public record EnchantmentHolderItemComponent(RegistryEntry<Item> grindingTransformsInto) implements ItemComponent<EnchantmentHolderItemComponent> {
+public record EnchantmentHolderItemComponent(Holder<Item> grindingTransformsInto) implements ItemComponent<EnchantmentHolderItemComponent> {
     public static final Codec<EnchantmentHolderItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("grinding_transforms_into").forGetter(EnchantmentHolderItemComponent::grindingTransformsInto)
+        RegistryFixedCodec.create(Registries.ITEM).fieldOf("grinding_transforms_into").forGetter(EnchantmentHolderItemComponent::grindingTransformsInto)
     ).apply(instance, EnchantmentHolderItemComponent::new));
 
     @Override
@@ -29,11 +29,11 @@ public record EnchantmentHolderItemComponent(RegistryEntry<Item> grindingTransfo
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
     }
 
-    public static EnchantmentHolderItemComponent of(RegistryEntry<Item> grindingTransformsInto) {
+    public static EnchantmentHolderItemComponent of(Holder<Item> grindingTransformsInto) {
         return new EnchantmentHolderItemComponent(grindingTransformsInto);
     }
 }

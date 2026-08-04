@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.client.item.bar.progress;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class ProgressProviderKeys {
     public static final Identifier DAMAGE = of("damage");
@@ -9,6 +9,6 @@ public class ProgressProviderKeys {
     private ProgressProviderKeys() {}
 
     private static Identifier of(String id) {
-        return Identifier.ofVanilla(id);
+        return Identifier.withDefaultNamespace(id);
     }
 }

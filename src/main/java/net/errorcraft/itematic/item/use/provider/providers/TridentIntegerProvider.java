@@ -7,17 +7,16 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.codec.PacketCodec;
-
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import java.util.OptionalInt;
 
 public class TridentIntegerProvider implements IntegerProvider {
     public static final TridentIntegerProvider INSTANCE = new TridentIntegerProvider();
     public static final MapCodec<TridentIntegerProvider> CODEC = MapCodec.unit(INSTANCE);
-    public static final PacketCodec<ByteBuf, TridentIntegerProvider> PACKET_CODEC = PacketCodec.unit(INSTANCE);
+    public static final StreamCodec<ByteBuf, TridentIntegerProvider> PACKET_CODEC = StreamCodec.unit(INSTANCE);
 
     private TridentIntegerProvider() {}
 
@@ -36,7 +35,7 @@ public class TridentIntegerProvider implements IntegerProvider {
     }
 
     private static boolean mayStartUsing(ItemStack stack, LivingEntity user) {
-        if (EnchantmentHelper.getTridentSpinAttackStrength(stack, user) > 0.0f && !user.isTouchingWaterOrRain()) {
+        if (EnchantmentHelper.getTridentSpinAttackStrength(stack, user) > 0.0f && !user.isInWaterOrRain()) {
             return false;
         }
 

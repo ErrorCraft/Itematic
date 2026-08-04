@@ -1,23 +1,23 @@
 package net.errorcraft.itematic.mixin.component.type;
 
-import net.minecraft.component.type.PiercingWeaponComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.item.component.PiercingWeapon;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(PiercingWeaponComponent.class)
+@Mixin(PiercingWeapon.class)
 public class PiercingWeaponComponentExtender {
     @Redirect(
-        method = "stab",
+        method = "attack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D"
+            target = "Lnet/minecraft/world/entity/LivingEntity;getAttributeValue(Lnet/minecraft/core/Holder;)D"
         )
     )
-    private double useCustomAttackDamage(LivingEntity instance, RegistryEntry<EntityAttribute> attribute) {
+    private double useCustomAttackDamage(LivingEntity instance, Holder<Attribute> attribute) {
         return instance.itematic$getAttackDamage();
     }
 }

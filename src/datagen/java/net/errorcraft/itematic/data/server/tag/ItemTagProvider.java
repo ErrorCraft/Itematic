@@ -4,20 +4,19 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.ItemTags;
-
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import java.util.concurrent.CompletableFuture;
 
 public class ItemTagProvider extends FabricTagProvider<Item> {
-    public ItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
-        super(output, RegistryKeys.ITEM, registriesFuture);
+    public ItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, Registries.ITEM, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup lookup) {
+    protected void addTags(HolderLookup.Provider lookup) {
         this.builder(ItematicItemTags.BOW_AMMUNITION)
             .forceAddTag(ItemTags.ARROWS);
         this.builder(ItematicItemTags.CROSSBOW_AMMUNITION)

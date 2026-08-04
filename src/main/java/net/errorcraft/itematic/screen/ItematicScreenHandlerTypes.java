@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.screen;
 
 import net.errorcraft.itematic.mixin.screen.ScreenHandlerTypeAccessor;
-import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.world.inventory.MenuType;
 
 public class ItematicScreenHandlerTypes {
-    public static final ScreenHandlerType<BrewingStandMenuDelegate> BREWING_STAND = ScreenHandlerTypeAccessor.register("brewing_stand", BrewingStandMenuDelegate::new);
+    public static final MenuType<BrewingStandMenuDelegate> BREWING_STAND = ScreenHandlerTypeAccessor.register("brewing_stand", BrewingStandMenuDelegate::new);
 
     private ItematicScreenHandlerTypes() {}
 

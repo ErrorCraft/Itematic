@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.mixin.registry;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryLoader;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryDataLoader;
+import net.minecraft.resources.ResourceKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 public interface RegistryLoaderAccessor {
-    @Mixin(RegistryLoader.Entry.class)
+    @Mixin(RegistryDataLoader.RegistryData.class)
     interface EntryAccessor {
         @Invoker("<init>")
-        static <T> RegistryLoader.Entry<T> create(RegistryKey<? extends Registry<T>> registryKey, Codec<T> codec) {
+        static <T> RegistryDataLoader.RegistryData<T> create(ResourceKey<? extends Registry<T>> registryKey, Codec<T> codec) {
             throw new AssertionError();
         }
     }

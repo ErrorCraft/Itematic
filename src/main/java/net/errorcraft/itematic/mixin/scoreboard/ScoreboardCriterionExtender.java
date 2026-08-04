@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.PrimitiveCodec;
 import net.errorcraft.itematic.access.scoreboard.ScoreboardCriterionAccess;
 import net.errorcraft.itematic.scoreboard.ScoreboardCriterionUtil;
 import net.errorcraft.itematic.serialization.RegistryMapperCodec;
-import net.minecraft.scoreboard.ScoreboardCriterion;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.Function;
 
-@Mixin(ScoreboardCriterion.class)
+@Mixin(ObjectiveCriteria.class)
 public class ScoreboardCriterionExtender implements ScoreboardCriterionAccess {
     @Shadow
     @Final
@@ -31,11 +31,11 @@ public class ScoreboardCriterionExtender implements ScoreboardCriterionAccess {
             remap = false
         )
     )
-    private static Codec<ScoreboardCriterion> useDynamicRegistry(PrimitiveCodec<String> instance, Function<String, DataResult<ScoreboardCriterion>> to, Function<ScoreboardCriterion, String> from) {
+    private static Codec<ObjectiveCriteria> useDynamicRegistry(PrimitiveCodec<String> instance, Function<String, DataResult<ObjectiveCriteria>> to, Function<ObjectiveCriteria, String> from) {
         return RegistryMapperCodec.of(
             instance,
             ScoreboardCriterionUtil::byName,
-            ScoreboardCriterion::getName
+            ObjectiveCriteria::getName
         );
     }
 

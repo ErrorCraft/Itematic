@@ -1,38 +1,38 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.AbstractSkeletonEntity;
-import net.minecraft.entity.mob.WitherSkeletonEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(WitherSkeletonEntity.class)
+@Mixin(WitherSkeleton.class)
 public abstract class WitherSkeletonEntityExtender extends MobEntityExtender {
-    protected WitherSkeletonEntityExtender(EntityType<? extends AbstractSkeletonEntity> entityType, World world) {
+    protected WitherSkeletonEntityExtender(EntityType<? extends AbstractSkeleton> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForStoneSwordUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.STONE_SWORD);
+    private ItemStack newItemStackForStoneSwordUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.STONE_SWORD);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.WITHER_SKELETON_SPAWN_EGG;
     }
 }

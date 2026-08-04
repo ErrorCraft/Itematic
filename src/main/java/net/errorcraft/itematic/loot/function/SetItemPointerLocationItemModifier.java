@@ -3,22 +3,21 @@ package net.errorcraft.itematic.loot.function;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.LodestoneTrackerComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.function.ConditionalLootFunction;
-import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.LodestoneTracker;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.Optional;
 
-public class SetItemPointerLocationItemModifier extends ConditionalLootFunction {
-    public static final MapCodec<SetItemPointerLocationItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addConditionsField(instance).and(
+public class SetItemPointerLocationItemModifier extends LootItemConditionalFunction {
+    public static final MapCodec<SetItemPointerLocationItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(
         PositionTarget.CODEC.fieldOf("position").forGetter(split -> split.position)
     ).apply(instance, SetItemPointerLocationItemModifier::new));
 
@@ -28,33 +27,33 @@ public class SetItemPointerLocationItemModifier extends ConditionalLootFunction 
         this(List.of(), position);
     }
 
-    public SetItemPointerLocationItemModifier(List<LootCondition> conditions, PositionTarget position) {
+    public SetItemPointerLocationItemModifier(List<LootItemCondition> conditions, PositionTarget position) {
         super(conditions);
         this.position = position;
     }
 
-    public static Builder<?> builder(PositionTarget position) {
-        return builder(conditions -> new SetItemPointerLocationItemModifier(conditions, position));
+    public static net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction.Builder<?> builder(PositionTarget position) {
+        return simpleBuilder(conditions -> new SetItemPointerLocationItemModifier(conditions, position));
     }
 
     @Override
-    public LootFunctionType<SetItemPointerLocationItemModifier> getType() {
+    public LootItemFunctionType<SetItemPointerLocationItemModifier> getType() {
         return ItematicItemModifierTypes.SET_ITEM_POINTER_LOCATION;
     }
 
     @Override
-    protected ItemStack process(ItemStack stack, LootContext context) {
-        Vec3d pos = context.get(this.position.contextParam());
+    protected ItemStack run(ItemStack stack, LootContext context) {
+        Vec3 pos = context.getOptionalParameter(this.position.contextParam());
         if (pos == null) {
             return stack;
         }
 
         stack.set(
-            DataComponentTypes.LODESTONE_TRACKER,
-            new LodestoneTrackerComponent(
-                Optional.of(GlobalPos.create(
-                    context.getWorld().getRegistryKey(),
-                    BlockPos.ofFloored(pos)
+            DataComponents.LODESTONE_TRACKER,
+            new LodestoneTracker(
+                Optional.of(GlobalPos.of(
+                    context.getLevel().dimension(),
+                    BlockPos.containing(pos)
                 )),
                 true
             )

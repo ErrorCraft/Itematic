@@ -3,13 +3,13 @@ package net.errorcraft.itematic.mixin.entity.ai.brain.task;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.inventory.SimpleInventoryAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.ai.brain.task.FarmerWorkTask;
-import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.ai.behavior.WorkAtComposter;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,36 +18,36 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
-@Mixin(FarmerWorkTask.class)
+@Mixin(WorkAtComposter.class)
 public class FarmerWorkTaskExtender {
     @Unique
-    private static final List<RegistryKey<Item>> COMPOSTABLE_KEYS = List.of(ItemKeys.WHEAT_SEEDS, ItemKeys.BEETROOT_SEEDS);
+    private static final List<ResourceKey<Item>> COMPOSTABLE_KEYS = List.of(ItemKeys.WHEAT_SEEDS, ItemKeys.BEETROOT_SEEDS);
 
     @Redirect(
-        method = "craftAndDropBread",
+        method = "makeBread",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/inventory/SimpleInventory;removeItem(Lnet/minecraft/item/Item;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/SimpleContainer;removeItemType(Lnet/minecraft/world/item/Item;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack removeItemUseRegistryKey(SimpleInventory instance, Item item, int count) {
+    private ItemStack removeItemUseRegistryKey(SimpleContainer instance, Item item, int count) {
         ((SimpleInventoryAccess) instance).itematic$removeItem(ItemKeys.WHEAT, count);
         return ItemStack.EMPTY;
     }
 
     @Redirect(
-        method = "craftAndDropBread",
+        method = "makeBread",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForBreadUseCreateStack(ItemConvertible item, int count, @Local(argsOnly = true) VillagerEntity villager) {
-        return villager.getEntityWorld().itematic$createStack(ItemKeys.BREAD, count);
+    private ItemStack newItemStackForBreadUseCreateStack(ItemLike item, int count, @Local(argsOnly = true) Villager villager) {
+        return villager.level().itematic$createStack(ItemKeys.BREAD, count);
     }
 
     @Redirect(
-        method = "compostSeeds",
+        method = "compostItems",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/List;indexOf(Ljava/lang/Object;)I"
@@ -58,14 +58,14 @@ public class FarmerWorkTaskExtender {
     }
 
     @Redirect(
-        method = "craftAndDropBread",
+        method = "makeBread",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/item/Items;WHEAT:Lnet/minecraft/item/Item;",
+            target = "Lnet/minecraft/world/item/Items;WHEAT:Lnet/minecraft/world/item/Item;",
             opcode = Opcodes.GETSTATIC
         )
     )
-    private Item getWheatUseDynamicRegistry(@Local(argsOnly = true) VillagerEntity entity) {
-        return entity.getEntityWorld().itematic$getItem(ItemKeys.WHEAT).value();
+    private Item getWheatUseDynamicRegistry(@Local(argsOnly = true) Villager entity) {
+        return entity.level().itematic$getItem(ItemKeys.WHEAT).value();
     }
 }

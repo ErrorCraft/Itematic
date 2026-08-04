@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin;
 
-import net.minecraft.Bootstrap;
+import net.minecraft.server.Bootstrap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -8,19 +8,19 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Bootstrap.class)
 public class BootstrapExtender {
     @Redirect(
-        method = "initialize",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/ComposterBlock;registerDefaultCompostableItems()V"
+            target = "Lnet/minecraft/world/level/block/ComposterBlock;bootStrap()V"
         )
     )
     private static void doNotRegisterCompostableItems() {}
 
     @Redirect(
-        method = "initialize",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/dispenser/DispenserBehavior;registerDefaults()V"
+            target = "Lnet/minecraft/core/dispenser/DispenseItemBehavior;bootStrap()V"
         )
     )
     private static void doNotRegisterDispenserBehaviors() {}

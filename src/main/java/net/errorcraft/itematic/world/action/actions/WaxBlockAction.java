@@ -7,14 +7,14 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.HoneycombItem;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.HoneycombItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record WaxBlockAction(PositionTarget position) implements Action<WaxBlockAction> {
     public static final MapCodec<WaxBlockAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -32,18 +32,18 @@ public record WaxBlockAction(PositionTarget position) implements Action<WaxBlock
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        World world = context.world();
-        return HoneycombItem.getWaxedState(world.getBlockState(pos))
+        Level world = context.world();
+        return HoneycombItem.getWaxed(world.getBlockState(pos))
             .map(state -> {
-                Entity entity = context.get(LootContextParameters.THIS_ENTITY);
-                world.setBlockState(pos, state, Block.NOTIFY_ALL_AND_REDRAW);
-                world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(entity, state));
-                world.syncWorldEvent(WorldEvents.BLOCK_WAXED, pos, 0);
+                Entity entity = context.get(LootContextParams.THIS_ENTITY);
+                world.setBlock(pos, state, Block.UPDATE_ALL_IMMEDIATE);
+                world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, state));
+                world.levelEvent(LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
                 return true;
             })
             .orElse(false);

@@ -2,35 +2,35 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.text.Text;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public record MinecartEntityInitializer<T extends AbstractMinecartEntity>(EntityType<T> type) implements EntityInitializer<T> {
+public record MinecartEntityInitializer<T extends AbstractMinecart>(EntityType<T> type) implements EntityInitializer<T> {
     @Override
-    public T create(ActionContext context, SpawnReason reason) {
-        World world = context.world();
+    public T create(ActionContext context, EntitySpawnReason reason) {
+        Level world = context.world();
         T entity = this.type.create(world, reason);
         if (entity == null) {
             return null;
         }
 
-        if (AbstractMinecartEntity.areMinecartImprovementsEnabled(world)) {
-            for (Entity otherEntity : world.getOtherEntities(null, entity.getBoundingBox())) {
-                if (otherEntity instanceof AbstractMinecartEntity) {
+        if (AbstractMinecart.useExperimentalMovement(world)) {
+            for (Entity otherEntity : world.getEntities(null, entity.getBoundingBox())) {
+                if (otherEntity instanceof AbstractMinecart) {
                     return null;
                 }
             }
         }
 
-        Text customName = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
-            .get(DataComponentTypes.CUSTOM_NAME);
+        Component customName = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
+            .get(DataComponents.CUSTOM_NAME);
         if (customName != null) {
             entity.setCustomName(customName);
         }

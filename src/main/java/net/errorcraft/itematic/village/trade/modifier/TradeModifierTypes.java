@@ -4,8 +4,8 @@ import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.EnchantWithLevelsTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.ItemFromTypeTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.SingleEnchantmentTradeModifier;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 public class TradeModifierTypes {
     public static final TradeModifierType<EnchantWithLevelsTradeModifier> ENCHANT_WITH_LEVELS = register(TradeModifierTypeKeys.ENCHANT_WITH_LEVELS, new TradeModifierType<>(EnchantWithLevelsTradeModifier.CODEC));
@@ -16,7 +16,7 @@ public class TradeModifierTypes {
 
     public static void init() {}
 
-    private static <T extends TradeModifier<T>> TradeModifierType<T> register(RegistryKey<TradeModifierType<?>> id, TradeModifierType<T> type) {
+    private static <T extends TradeModifier<T>> TradeModifierType<T> register(ResourceKey<TradeModifierType<?>> id, TradeModifierType<T> type) {
         return Registry.register(ItematicRegistries.TRADE_MODIFIER_TYPE, id, type);
     }
 }

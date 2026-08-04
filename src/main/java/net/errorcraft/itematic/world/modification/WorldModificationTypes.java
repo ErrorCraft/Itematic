@@ -4,7 +4,7 @@ import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.world.modification.type.DrainFluidWorldModification;
 import net.errorcraft.itematic.world.modification.type.PlaceBlockWorldModification;
 import net.errorcraft.itematic.world.modification.type.PlaceFluidWorldModification;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
 
 public class WorldModificationTypes {
     public static final WorldModificationType<DrainFluidWorldModification> DRAIN_FLUID = register("drain_fluid", new WorldModificationType<>(DrainFluidWorldModification.CODEC));

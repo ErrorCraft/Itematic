@@ -7,32 +7,31 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.world.World;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import java.util.Optional;
 
 public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, RecipeAccess {
     public static final int DEFAULT_BREWING_TIME = 400;
     private final String group;
-    private final RegistryEntry<T> base;
+    private final Holder<T> base;
     private final Ingredient reagent;
-    private final RegistryEntry<T> result;
+    private final Holder<T> result;
     private final int brewingTime;
 
-    protected BrewingRecipe(String group, RegistryEntry<T> base, Ingredient reagent, RegistryEntry<T> result, int brewingTime) {
+    protected BrewingRecipe(String group, Holder<T> base, Ingredient reagent, Holder<T> result, int brewingTime) {
         this.group = group;
         this.base = base;
         this.reagent = reagent;
@@ -40,41 +39,41 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
         this.brewingTime = brewingTime;
     }
 
-    protected static <T, R extends BrewingRecipe<T>> MapCodec<R> createCodec(RegistryKey<Registry<T>> registry, Function5<String, RegistryEntry<T>, Ingredient, RegistryEntry<T>, Integer, R> creator) {
-        Codec<RegistryEntry<T>> entryCodec = RegistryFixedCodec.of(registry);
+    protected static <T, R extends BrewingRecipe<T>> MapCodec<R> createCodec(ResourceKey<Registry<T>> registry, Function5<String, Holder<T>, Ingredient, Holder<T>, Integer, R> creator) {
+        Codec<Holder<T>> entryCodec = RegistryFixedCodec.create(registry);
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.optionalFieldOf("group", "").forGetter(R::getGroup),
+            Codec.STRING.optionalFieldOf("group", "").forGetter(R::group),
             entryCodec.fieldOf("base").forGetter(R::base),
             Ingredient.CODEC.fieldOf("reagent").forGetter(R::reagent),
             entryCodec.fieldOf("result").forGetter(R::result),
-            Codecs.POSITIVE_INT.optionalFieldOf("brewing_time", DEFAULT_BREWING_TIME).forGetter(R::brewingTime)
+            ExtraCodecs.POSITIVE_INT.optionalFieldOf("brewing_time", DEFAULT_BREWING_TIME).forGetter(R::brewingTime)
         ).apply(instance, creator));
     }
 
-    protected static <T, R extends BrewingRecipe<T>> PacketCodec<RegistryByteBuf, R> createPacketCodec(RegistryKey<Registry<T>> registry, Function5<String, RegistryEntry<T>, Ingredient, RegistryEntry<T>, Integer, R> creator) {
-        PacketCodec<RegistryByteBuf, RegistryEntry<T>> entryPacketCodec = PacketCodecs.registryEntry(registry);
-        return PacketCodec.tuple(
-            PacketCodecs.STRING, R::getGroup,
+    protected static <T, R extends BrewingRecipe<T>> StreamCodec<RegistryFriendlyByteBuf, R> createPacketCodec(ResourceKey<Registry<T>> registry, Function5<String, Holder<T>, Ingredient, Holder<T>, Integer, R> creator) {
+        StreamCodec<RegistryFriendlyByteBuf, Holder<T>> entryPacketCodec = ByteBufCodecs.holderRegistry(registry);
+        return StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8, R::group,
             entryPacketCodec, R::base,
-            Ingredient.PACKET_CODEC, R::reagent,
+            Ingredient.CONTENTS_STREAM_CODEC, R::reagent,
             entryPacketCodec, R::result,
-            PacketCodecs.VAR_INT, R::brewingTime,
+            ByteBufCodecs.VAR_INT, R::brewingTime,
             creator
         );
     }
 
     @Override
-    public boolean matches(BrewingRecipeInput input, World world) {
+    public boolean matches(BrewingRecipeInput input, Level world) {
         return this.reagent.test(input.reagent()) && this.matches(input.base());
     }
 
     @Override
-    public ItemStack craft(BrewingRecipeInput input, RegistryWrapper.WrapperLookup registries) {
-        return this.craft(input.base());
+    public ItemStack assemble(BrewingRecipeInput input, HolderLookup.Provider registries) {
+        return this.assemble(input.base());
     }
 
     @Override
-    public String getGroup() {
+    public String group() {
         return this.group;
     }
 
@@ -87,7 +86,7 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
         return this.reagent.itematic$remainder().map(ItemStack::copy);
     }
 
-    protected RegistryEntry<T> base() {
+    protected Holder<T> base() {
         return this.base;
     }
 
@@ -95,7 +94,7 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
         return this.reagent;
     }
 
-    protected RegistryEntry<T> result() {
+    protected Holder<T> result() {
         return this.result;
     }
 
@@ -104,5 +103,5 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
     }
 
     protected abstract boolean matches(ItemStack base);
-    protected abstract ItemStack craft(ItemStack base);
+    protected abstract ItemStack assemble(ItemStack base);
 }

@@ -4,23 +4,22 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvider;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.util.dynamic.Codecs;
-
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import java.util.OptionalInt;
 
 public interface IntegerProvider {
-    Codec<IntegerProvider> ELEMENT_CODEC = ItematicRegistries.INTEGER_PROVIDER_TYPE.getCodec().dispatch("type", IntegerProvider::type, IntegerProviderType::codec);;
+    Codec<IntegerProvider> ELEMENT_CODEC = ItematicRegistries.INTEGER_PROVIDER_TYPE.byNameCodec().dispatch("type", IntegerProvider::type, IntegerProviderType::codec);;
     Codec<IntegerProvider> CODEC = Codec.withAlternative(
         ELEMENT_CODEC,
-        Codecs.POSITIVE_INT,
+        ExtraCodecs.POSITIVE_INT,
         ConstantIntegerProvider::new
     );
-    PacketCodec<RegistryByteBuf, IntegerProvider> PACKET_CODEC = PacketCodecs.registryValue(ItematicRegistryKeys.INTEGER_PROVIDER_TYPE)
+    StreamCodec<RegistryFriendlyByteBuf, IntegerProvider> PACKET_CODEC = ByteBufCodecs.registry(ItematicRegistryKeys.INTEGER_PROVIDER_TYPE)
         .dispatch(IntegerProvider::type, IntegerProviderType::packetCodec);
 
     IntegerProviderType<?> type();

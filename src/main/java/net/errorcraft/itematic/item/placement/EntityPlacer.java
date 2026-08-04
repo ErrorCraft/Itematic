@@ -5,13 +5,13 @@ import net.errorcraft.itematic.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -30,13 +30,13 @@ public class EntityPlacer {
         return new EntityPlacer(entity, spawnCallback);
     }
 
-    public Entity place(ActionContext context, PositionTarget position, SpawnReason spawnReason) {
-        World world = context.world();
-        if (world.isClient()) {
+    public Entity place(ActionContext context, PositionTarget position, EntitySpawnReason spawnReason) {
+        Level world = context.world();
+        if (world.isClientSide()) {
             return null;
         }
 
-        BlockPos pos = context.get(position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return null;
         }
@@ -45,10 +45,10 @@ public class EntityPlacer {
         Direction side = context.get(ItematicContextParameters.SIDE);
         BlockPos truePos = state.getCollisionShape(world, pos).isEmpty() || side == null
             ? pos
-            : pos.offset(side);
+            : pos.relative(side);
         return this.spawner.spawn(
             context,
-            Vec3d.ofBottomCenter(truePos),
+            Vec3.atBottomCenterOf(truePos),
             spawnReason,
             this.spawnCallback,
             !Objects.equals(pos, truePos) && side == Direction.UP

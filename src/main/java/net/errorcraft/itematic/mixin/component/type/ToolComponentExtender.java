@@ -8,17 +8,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.component.type.ToolComponentAccess;
-import net.errorcraft.itematic.access.component.type.ToolComponentRuleAccess;
 import net.errorcraft.itematic.component.type.ToolComponentRuleExtraFields;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.component.type.ToolComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.core.HolderSet;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,11 +32,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Mixin(ToolComponent.class)
+@Mixin(Tool.class)
 public class ToolComponentExtender implements ToolComponentAccess {
     @Shadow
     @Final
-    private List<ToolComponent.Rule> rules;
+    private List<Tool.Rule> rules;
 
     @Shadow
     @Final
@@ -45,7 +44,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
 
     @Override
     public float itematic$getSpeed(ItemStack stack, BlockState state) {
-        for (ToolComponent.Rule rule : this.rules) {
+        for (Tool.Rule rule : this.rules) {
             if (rule.speed().isPresent() && rule.itematic$matches(stack, state)) {
                 return rule.speed().get();
             }
@@ -56,7 +55,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
 
     @Override
     public boolean itematic$isCorrectForDrops(ItemStack stack, BlockState state) {
-        for (ToolComponent.Rule rule : this.rules) {
+        for (Tool.Rule rule : this.rules) {
             if (rule.correctForDrops().isPresent() && rule.itematic$matches(stack, state)) {
                 return rule.correctForDrops().get();
             }
@@ -65,11 +64,11 @@ public class ToolComponentExtender implements ToolComponentAccess {
         return false;
     }
 
-    @Mixin(ToolComponent.Rule.class)
-    public static class RuleExtender implements ToolComponentRuleAccess {
+    @Mixin(Tool.Rule.class)
+    public static class RuleExtender implements RuleAccess {
         @Shadow
         @Final
-        RegistryEntryList<Block> blocks;
+        HolderSet<Block> blocks;
 
         @Unique
         private ToolComponentRuleExtraFields extraFields = new ToolComponentRuleExtraFields(Optional.empty());
@@ -82,7 +81,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
                 remap = false
             )
         )
-        private static MapCodec<Optional<RegistryEntryList<Block>>> fieldOfBlocksMakeFieldOptional(Codec<RegistryEntryList<Block>> instance, String name) {
+        private static MapCodec<Optional<HolderSet<Block>>> fieldOfBlocksMakeFieldOptional(Codec<HolderSet<Block>> instance, String name) {
             return instance.optionalFieldOf(name);
         }
 
@@ -101,7 +100,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
                 )
             )
         )
-        private static Function<ToolComponent.Rule, Optional<RegistryEntryList<Block>>> forGetterBlocksFieldReturnOptional(Function<ToolComponent.Rule, RegistryEntryList<Block>> getter) {
+        private static Function<Tool.Rule, Optional<HolderSet<Block>>> forGetterBlocksFieldReturnOptional(Function<Tool.Rule, HolderSet<Block>> getter) {
             return tool -> Optional.ofNullable(getter.apply(tool));
         }
 
@@ -109,7 +108,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
             method = "method_58430",
             at = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/util/dynamic/Codecs;POSITIVE_FLOAT:Lcom/mojang/serialization/Codec;",
+                target = "Lnet/minecraft/util/ExtraCodecs;POSITIVE_FLOAT:Lcom/mojang/serialization/Codec;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -125,7 +124,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
                 remap = false
             )
         )
-        private static Function3<Optional<RegistryEntryList<Block>>, Optional<Float>, Optional<Boolean>, ToolComponent.Rule> applyCodecUseOptional(Function3<RegistryEntryList<Block>, Optional<Float>, Optional<Boolean>, ToolComponent.Rule> instance) {
+        private static Function3<Optional<HolderSet<Block>>, Optional<Float>, Optional<Boolean>, Tool.Rule> applyCodecUseOptional(Function3<HolderSet<Block>, Optional<Float>, Optional<Boolean>, Tool.Rule> instance) {
             return RuleExtender::create;
         }
 
@@ -133,10 +132,10 @@ public class ToolComponentExtender implements ToolComponentAccess {
             method = "<clinit>",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/network/codec/PacketCodec;tuple(Lnet/minecraft/network/codec/PacketCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/PacketCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/PacketCodec;Ljava/util/function/Function;Lcom/mojang/datafixers/util/Function3;)Lnet/minecraft/network/codec/PacketCodec;"
+                target = "Lnet/minecraft/network/codec/StreamCodec;composite(Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lcom/mojang/datafixers/util/Function3;)Lnet/minecraft/network/codec/StreamCodec;"
             )
         )
-        private static Function3<Optional<RegistryEntryList<Block>>, Optional<Float>, Optional<Boolean>, ToolComponent.Rule> applyPacketCodecUseOptional(Function3<RegistryEntryList<Block>, Optional<Float>, Optional<Boolean>, ToolComponent.Rule> to) {
+        private static Function3<Optional<HolderSet<Block>>, Optional<Float>, Optional<Boolean>, Tool.Rule> applyPacketCodecUseOptional(Function3<HolderSet<Block>, Optional<Float>, Optional<Boolean>, Tool.Rule> to) {
             return RuleExtender::create;
         }
 
@@ -144,23 +143,23 @@ public class ToolComponentExtender implements ToolComponentAccess {
             method = "<clinit>",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/network/codec/PacketCodecs;registryEntryList(Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/network/codec/PacketCodec;"
+                target = "Lnet/minecraft/network/codec/ByteBufCodecs;holderSet(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/network/codec/StreamCodec;"
             )
         )
-        private static PacketCodec<RegistryByteBuf, Optional<RegistryEntryList<Block>>> makeBlocksFieldOptional(PacketCodec<RegistryByteBuf, RegistryEntryList<Block>> original) {
-            return original.collect(PacketCodecs::optional);
+        private static StreamCodec<RegistryFriendlyByteBuf, Optional<HolderSet<Block>>> makeBlocksFieldOptional(StreamCodec<RegistryFriendlyByteBuf, HolderSet<Block>> original) {
+            return original.apply(ByteBufCodecs::optional);
         }
 
         @ModifyArg(
             method = "<clinit>",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/network/codec/PacketCodec;tuple(Lnet/minecraft/network/codec/PacketCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/PacketCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/PacketCodec;Ljava/util/function/Function;Lcom/mojang/datafixers/util/Function3;)Lnet/minecraft/network/codec/PacketCodec;",
+                target = "Lnet/minecraft/network/codec/StreamCodec;composite(Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lcom/mojang/datafixers/util/Function3;)Lnet/minecraft/network/codec/StreamCodec;",
                 ordinal = 0
             ),
             index = 1
         )
-        private static Function<ToolComponent.Rule, Optional<RegistryEntryList<Block>>> getBlocksReturnOptional(Function<ToolComponent.Rule, RegistryEntryList<Block>> from1) {
+        private static Function<Tool.Rule, Optional<HolderSet<Block>>> getBlocksReturnOptional(Function<Tool.Rule, HolderSet<Block>> from1) {
             return rule -> Optional.ofNullable(from1.apply(rule));
         }
 
@@ -172,8 +171,8 @@ public class ToolComponentExtender implements ToolComponentAccess {
                 remap = false
             )
         )
-        private static Codec<ToolComponent.Rule> createCodecAddExtraFields(Function<RecordCodecBuilder.Instance<ToolComponent.Rule>, ? extends App<RecordCodecBuilder.Mu<ToolComponent.Rule>, ToolComponent.Rule>> builder) {
-            MapCodec<ToolComponent.Rule> mapCodec = RecordCodecBuilder.mapCodec(builder);
+        private static Codec<Tool.Rule> createCodecAddExtraFields(Function<RecordCodecBuilder.Instance<Tool.Rule>, ? extends App<RecordCodecBuilder.Mu<Tool.Rule>, Tool.Rule>> builder) {
+            MapCodec<Tool.Rule> mapCodec = RecordCodecBuilder.mapCodec(builder);
             return mapCodec.dependent(ToolComponentRuleExtraFields.CODEC, rule -> Pair.of(
                 ((RuleExtender)(Object) rule).extraFields,
                 ToolComponentRuleExtraFields.CODEC
@@ -187,11 +186,11 @@ public class ToolComponentExtender implements ToolComponentAccess {
             method = "<clinit>",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/network/codec/PacketCodec;tuple(Lnet/minecraft/network/codec/PacketCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/PacketCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/PacketCodec;Ljava/util/function/Function;Lcom/mojang/datafixers/util/Function3;)Lnet/minecraft/network/codec/PacketCodec;"
+                target = "Lnet/minecraft/network/codec/StreamCodec;composite(Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lcom/mojang/datafixers/util/Function3;)Lnet/minecraft/network/codec/StreamCodec;"
             )
         )
-        private static PacketCodec<RegistryByteBuf, ToolComponent.Rule> createPacketCodecAddExtraFields(PacketCodec<RegistryByteBuf, ToolComponent.Rule> original) {
-            return PacketCodec.tuple(
+        private static StreamCodec<RegistryFriendlyByteBuf, Tool.Rule> createPacketCodecAddExtraFields(StreamCodec<RegistryFriendlyByteBuf, Tool.Rule> original) {
+            return StreamCodec.composite(
                 original, Function.identity(),
                 ToolComponentRuleExtraFields.PACKET_CODEC, rule -> ((RuleExtender)(Object) rule).extraFields,
                 (rule, extraFields) -> {
@@ -203,7 +202,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
 
         @Override
         public boolean itematic$matches(ItemStack stack, BlockState state) {
-            if (this.blocks != null && !state.isIn(this.blocks)) {
+            if (this.blocks != null && !state.is(this.blocks)) {
                 return false;
             }
 
@@ -213,8 +212,8 @@ public class ToolComponentExtender implements ToolComponentAccess {
         }
 
         @Unique
-        private static ToolComponent.Rule create(Optional<RegistryEntryList<Block>> blocks, Optional<Float> speed, Optional<Boolean> correctForDrops) {
-            return new ToolComponent.Rule(blocks.orElse(null), speed, correctForDrops);
+        private static Tool.Rule create(Optional<HolderSet<Block>> blocks, Optional<Float> speed, Optional<Boolean> correctForDrops) {
+            return new Tool.Rule(blocks.orElse(null), speed, correctForDrops);
         }
     }
 }

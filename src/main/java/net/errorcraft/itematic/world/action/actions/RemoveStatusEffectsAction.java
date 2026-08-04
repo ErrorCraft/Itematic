@@ -6,23 +6,23 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.registry.RegistryCodecs;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.storage.loot.LootContext;
 
-public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects, LootContext.EntityReference entity) implements Action<RemoveStatusEffectsAction> {
+public record RemoveStatusEffectsAction(HolderSet<MobEffect> effects, LootContext.EntityTarget entity) implements Action<RemoveStatusEffectsAction> {
     public static final MapCodec<RemoveStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryCodecs.entryList(RegistryKeys.STATUS_EFFECT).fieldOf("effects").forGetter(RemoveStatusEffectsAction::effects),
-        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(RemoveStatusEffectsAction::entity)
+        RegistryCodecs.homogeneousList(Registries.MOB_EFFECT).fieldOf("effects").forGetter(RemoveStatusEffectsAction::effects),
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(RemoveStatusEffectsAction::entity)
     ).apply(instance, RemoveStatusEffectsAction::new));
 
     @SafeVarargs
-    public static RemoveStatusEffectsAction of(LootContext.EntityReference entity, RegistryEntry<StatusEffect>... effects) {
-        return new RemoveStatusEffectsAction(RegistryEntryList.of(effects), entity);
+    public static RemoveStatusEffectsAction of(LootContext.EntityTarget entity, Holder<MobEffect>... effects) {
+        return new RemoveStatusEffectsAction(HolderSet.direct(effects), entity);
     }
 
     @Override
@@ -41,8 +41,8 @@ public record RemoveStatusEffectsAction(RegistryEntryList<StatusEffect> effects,
 
     private boolean removeStatusEffects(LivingEntity target) {
         boolean removedStatusEffects = false;
-        for (RegistryEntry<StatusEffect> effect : this.effects) {
-            removedStatusEffects |= target.removeStatusEffect(effect);
+        for (Holder<MobEffect> effect : this.effects) {
+            removedStatusEffects |= target.removeEffect(effect);
         }
 
         return removedStatusEffects;

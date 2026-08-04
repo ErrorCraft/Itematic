@@ -1,20 +1,20 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(FireworkRocketEntity.class)
-public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
-    public FireworkRocketEntityExtender(EntityType<? extends ProjectileEntity> entityType, World world) {
+public abstract class FireworkRocketEntityExtender extends Projectile {
+    public FireworkRocketEntityExtender(EntityType<? extends Projectile> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -22,24 +22,24 @@ public abstract class FireworkRocketEntityExtender extends ProjectileEntity {
         method = "tick",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;getHandPosOffset(Lnet/minecraft/item/Item;)Lnet/minecraft/util/math/Vec3d;"
+            target = "Lnet/minecraft/world/entity/LivingEntity;getHandHoldingItemAngle(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/phys/Vec3;"
         )
     )
     private Item getHandPosOffsetUseRegistryEntry(Item item) {
-        return this.getEntityWorld().itematic$getItem(ItemKeys.FIREWORK_ROCKET).value();
+        return this.level().itematic$getItem(ItemKeys.FIREWORK_ROCKET).value();
     }
 
     @Redirect(
         method = {
-            "initDataTracker",
-            "readCustomData"
+            "defineSynchedData",
+            "readAdditionalSaveData"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/projectile/FireworkRocketEntity;getDefaultStack()Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/entity/projectile/FireworkRocketEntity;getDefaultItem()Lnet/minecraft/world/item/ItemStack;"
         )
     )
     private ItemStack newItemStackForFireworkRocketUseCreateStack() {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
+        return this.level().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
     }
 }

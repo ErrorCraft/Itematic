@@ -7,12 +7,8 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BannerPatternHolderItemComponent;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
-import net.minecraft.item.BannerItem;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.LoomScreenHandler;
-import net.minecraft.util.DyeColor;
+import net.minecraft.world.inventory.LoomMenu;
+import net.minecraft.world.item.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -21,13 +17,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
-@Mixin(LoomScreenHandler.class)
+@Mixin(LoomMenu.class)
 public class LoomScreenHandlerExtender {
     @ModifyExpressionValue(
-        method = "quickMove",
+        method = "quickMoveStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
     private boolean containsProvidersBannerPatternsDataComponentAlsoCheckItemBehaviorComponent(boolean original, @Local(ordinal = 1) ItemStack slotStack) {
@@ -35,7 +31,7 @@ public class LoomScreenHandlerExtender {
     }
 
     @ModifyConstant(
-        method = "quickMove",
+        method = "quickMoveStack",
         constant = @Constant(
             classValue = DyeItem.class,
             ordinal = 0
@@ -48,10 +44,10 @@ public class LoomScreenHandlerExtender {
     }
 
     @Redirect(
-        method = "updateOutputSlot",
+        method = "setupResultSlot",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
+            target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"
         )
     )
     private Item getItemUseNull(ItemStack instance) {
@@ -59,20 +55,20 @@ public class LoomScreenHandlerExtender {
     }
 
     @Redirect(
-        method = "updateOutputSlot",
+        method = "setupResultSlot",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/DyeItem;getColor()Lnet/minecraft/util/DyeColor;"
+            target = "Lnet/minecraft/world/item/DyeItem;getDyeColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
     private DyeColor getColorUseItemComponent(DyeItem instance, @Share("dye") LocalRef<DyeItemComponent> dye) {
         return dye.get().color();
     }
 
-    @Mixin(targets = "net/minecraft/screen/LoomScreenHandler$3")
+    @Mixin(targets = "net/minecraft/world/inventory/LoomMenu$3")
     public static class BannerSlotExtender {
         @ModifyConstant(
-            method = "canInsert",
+            method = "mayPlace",
             constant = @Constant(
                 classValue = BannerItem.class,
                 ordinal = 0
@@ -85,10 +81,10 @@ public class LoomScreenHandlerExtender {
         }
     }
 
-    @Mixin(targets = "net/minecraft/screen/LoomScreenHandler$4")
+    @Mixin(targets = "net/minecraft/world/inventory/LoomMenu$4")
     public static class DyeSlotExtender {
         @ModifyConstant(
-            method = "canInsert",
+            method = "mayPlace",
             constant = @Constant(
                 classValue = DyeItem.class,
                 ordinal = 0
@@ -99,13 +95,13 @@ public class LoomScreenHandlerExtender {
         }
     }
 
-    @Mixin(targets = "net/minecraft/screen/LoomScreenHandler$5")
+    @Mixin(targets = "net/minecraft/world/inventory/LoomMenu$5")
     public static class BannerPatternSlotExtender {
         @ModifyExpressionValue(
-            method = "canInsert",
+            method = "mayPlace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
+                target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
             )
         )
         private boolean containsProvidersBannerPatternsDataComponentAlsoCheckItemBehaviorComponent(boolean original, ItemStack stack) {

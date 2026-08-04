@@ -8,33 +8,33 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
-import net.minecraft.entity.CrossbowUser;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.CrossbowAttackMob;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 
 import java.util.Optional;
 
-@Mixin(CrossbowUser.class)
+@Mixin(CrossbowAttackMob.class)
 public interface CrossbowUserExtender {
     @Redirect(
-        method = "shoot(Lnet/minecraft/entity/LivingEntity;F)V",
+        method = "performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/projectile/ProjectileUtil;getHandPossiblyHolding(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/Item;)Lnet/minecraft/util/Hand;"
+            target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getWeaponHoldingHand(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/InteractionHand;"
         )
     )
-    private Hand getHandPossiblyHoldingForCrossbowUseRegistryKey(LivingEntity entity, Item item) {
+    private InteractionHand getHandPossiblyHoldingForCrossbowUseRegistryKey(LivingEntity entity, Item item) {
         return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.CROSSBOW);
     }
 
     @ModifyConstant(
-        method = "shoot",
+        method = "performCrossbowAttack",
         constant = @Constant(
             classValue = CrossbowItem.class,
             ordinal = 0
@@ -47,7 +47,7 @@ public interface CrossbowUserExtender {
     }
 
     @ModifyVariable(
-        method = "shoot",
+        method = "performCrossbowAttack",
         at = @At("LOAD"),
         ordinal = 0
     )
@@ -56,13 +56,13 @@ public interface CrossbowUserExtender {
     }
 
     @Redirect(
-        method = "shoot",
+        method = "performCrossbowAttack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/CrossbowItem;shootAll(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;FFLnet/minecraft/entity/LivingEntity;)V"
+            target = "Lnet/minecraft/world/item/CrossbowItem;performShooting(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;FFLnet/minecraft/world/entity/LivingEntity;)V"
         )
     )
-    private void shootAllUseItemComponent(CrossbowItem instance, World world, LivingEntity shooter, Hand hand, ItemStack stack, float speed, float divergence, LivingEntity livingEntity, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
+    private void shootAllUseItemComponent(CrossbowItem instance, Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack, float speed, float divergence, LivingEntity livingEntity, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
         if (shooterItemComponent.get().method() instanceof ChargeableShooterMethod chargeableShooterMethod) {
             chargeableShooterMethod.shoot(shooterItemComponent.get(), world, shooter, hand, stack, speed, divergence, livingEntity);
         }

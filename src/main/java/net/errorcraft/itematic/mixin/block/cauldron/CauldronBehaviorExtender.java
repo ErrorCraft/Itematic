@@ -9,56 +9,56 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
 import net.errorcraft.itematic.item.component.components.DyeableItemComponent;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
-import net.minecraft.block.Block;
-import net.minecraft.block.cauldron.CauldronBehavior;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.StatType;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatType;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(CauldronBehavior.class)
+@Mixin(CauldronInteraction.class)
 public interface CauldronBehaviorExtender {
     @Redirect(
-        method = "cleanShulkerBox",
+        method = "shulkerBoxInteraction",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/Block;getBlockFromItem(Lnet/minecraft/item/Item;)Lnet/minecraft/block/Block;"
+            target = "Lnet/minecraft/world/level/block/Block;byItem(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/level/block/Block;"
         )
     )
     private static Block getBlockFromItemUseItemComponent(Item item) {
         return item.itematic$getBehavior(ItemComponentTypes.BLOCK)
             .map(BlockItemComponent::block)
             .map(BlockPicker::defaultBlock)
-            .map(RegistryEntry::value)
+            .map(Holder::value)
             .orElse(null);
     }
 
     @Redirect(
-        method = "cleanShulkerBox",
+        method = "shulkerBoxInteraction",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack copyComponentsToNewStackForShulkerBoxUseRegistryEntry(ItemStack instance, ItemConvertible itemConvertible, int count, @Local(argsOnly = true) World world) {
+    private static ItemStack copyComponentsToNewStackForShulkerBoxUseRegistryEntry(ItemStack instance, ItemLike itemConvertible, int count, @Local(argsOnly = true) Level world) {
         return instance.itematic$copyComponentsToNewStack(world.itematic$getItem(ItemKeys.SHULKER_BOX), count);
     }
 
     @Redirect(
-        method = "cleanArmor",
+        method = "dyedItemIteration",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
     private static boolean isInForDyeableItemUseItemComponentCheck(ItemStack instance, TagKey<Item> tag, @Share("dyeableItemComponent") LocalRef<DyeableItemComponent> dyeableItemComponent) {
@@ -72,10 +72,10 @@ public interface CauldronBehaviorExtender {
         },
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
+    private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
         return world.itematic$createStack(ItemKeys.GLASS_BOTTLE);
     }
 
@@ -83,10 +83,10 @@ public interface CauldronBehaviorExtender {
         method = "method_32220",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPotionUseCreateStack(Item item, RegistryEntry<Potion> potion, @Local(argsOnly = true) World world) {
+    private static ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion, @Local(argsOnly = true) Level world) {
         return PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), potion);
     }
 
@@ -94,10 +94,10 @@ public interface CauldronBehaviorExtender {
         method = "method_32221",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
+    private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
         return world.itematic$createStack(ItemKeys.WATER_BUCKET);
     }
 
@@ -105,10 +105,10 @@ public interface CauldronBehaviorExtender {
         method = "method_32218",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
+    private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
         return world.itematic$createStack(ItemKeys.LAVA_BUCKET);
     }
 
@@ -116,26 +116,26 @@ public interface CauldronBehaviorExtender {
         method = "method_32698",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
+    private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
         return world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET);
     }
 
     @Redirect(
-        method = "fillCauldron",
+        method = "emptyBucket",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForBucketUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
+    private static ItemStack newItemStackForBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
         return world.itematic$createStack(ItemKeys.BUCKET);
     }
 
     @ModifyArg(
-        method = "registerBucketBehavior",
+        method = "addDefaultInteractions",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -148,7 +148,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBucketBehavior",
+        method = "addDefaultInteractions",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -157,7 +157,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;WATER_BUCKET:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;WATER_BUCKET:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -167,7 +167,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBucketBehavior",
+        method = "addDefaultInteractions",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -176,7 +176,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;POWDER_SNOW_BUCKET:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;POWDER_SNOW_BUCKET:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -186,7 +186,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -195,7 +195,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;POTION:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -205,7 +205,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -214,7 +214,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;POTION:Lnet/minecraft/world/item/Item;",
                 ordinal = 1
             )
         ),
@@ -225,7 +225,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -234,7 +234,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BUCKET:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;BUCKET:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -244,7 +244,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -253,7 +253,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/block/cauldron/CauldronBehavior;LAVA_CAULDRON_BEHAVIOR:Lnet/minecraft/block/cauldron/CauldronBehavior$CauldronBehaviorMap;"
+                target = "Lnet/minecraft/core/cauldron/CauldronInteraction;LAVA:Lnet/minecraft/core/cauldron/CauldronInteraction$InteractionMap;"
             )
         ),
         index = 0
@@ -263,7 +263,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -272,7 +272,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/block/cauldron/CauldronBehavior;POWDER_SNOW_CAULDRON_BEHAVIOR:Lnet/minecraft/block/cauldron/CauldronBehavior$CauldronBehaviorMap;"
+                target = "Lnet/minecraft/core/cauldron/CauldronInteraction;POWDER_SNOW:Lnet/minecraft/core/cauldron/CauldronInteraction$InteractionMap;"
             )
         ),
         index = 0
@@ -282,7 +282,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -291,7 +291,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;GLASS_BOTTLE:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;GLASS_BOTTLE:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -301,7 +301,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -310,7 +310,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LEATHER_BOOTS:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LEATHER_BOOTS:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -320,7 +320,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -329,7 +329,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LEATHER_LEGGINGS:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LEATHER_LEGGINGS:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -339,7 +339,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -348,7 +348,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LEATHER_CHESTPLATE:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LEATHER_CHESTPLATE:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -358,7 +358,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -367,7 +367,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LEATHER_HELMET:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LEATHER_HELMET:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -377,7 +377,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -386,7 +386,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LEATHER_HORSE_ARMOR:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LEATHER_HORSE_ARMOR:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -396,7 +396,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -405,7 +405,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;WOLF_ARMOR:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;WOLF_ARMOR:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -415,7 +415,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -424,7 +424,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;WHITE_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;WHITE_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -434,7 +434,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -443,7 +443,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;GRAY_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;GRAY_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -453,7 +453,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -462,7 +462,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BLACK_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;BLACK_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -472,7 +472,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -481,7 +481,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BLUE_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;BLUE_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -491,7 +491,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -500,7 +500,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BROWN_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;BROWN_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -510,7 +510,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -519,7 +519,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CYAN_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;CYAN_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -529,7 +529,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -538,7 +538,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;GREEN_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;GREEN_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -548,7 +548,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -557,7 +557,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LIGHT_BLUE_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LIGHT_BLUE_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -567,7 +567,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -576,7 +576,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LIGHT_GRAY_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LIGHT_GRAY_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -586,7 +586,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -595,7 +595,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LIME_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LIME_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -605,7 +605,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -614,7 +614,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;MAGENTA_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;MAGENTA_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -624,7 +624,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -633,7 +633,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;ORANGE_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;ORANGE_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -643,7 +643,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -652,7 +652,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;PINK_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;PINK_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -662,7 +662,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -671,7 +671,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;PURPLE_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;PURPLE_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -681,7 +681,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -690,7 +690,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;RED_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;RED_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -700,7 +700,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -709,7 +709,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;YELLOW_BANNER:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;YELLOW_BANNER:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -719,7 +719,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -728,7 +728,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;WHITE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;WHITE_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -738,7 +738,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -747,7 +747,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;GRAY_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;GRAY_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -757,7 +757,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -766,7 +766,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BLACK_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;BLACK_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -776,7 +776,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -785,7 +785,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BLUE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;BLUE_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -795,7 +795,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -804,7 +804,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BROWN_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;BROWN_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -814,7 +814,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -823,7 +823,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CYAN_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;CYAN_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -833,7 +833,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -842,7 +842,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;GREEN_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;GREEN_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -852,7 +852,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -861,7 +861,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LIGHT_BLUE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LIGHT_BLUE_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -871,7 +871,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -880,7 +880,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LIGHT_GRAY_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LIGHT_GRAY_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -890,7 +890,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -899,7 +899,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;LIME_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;LIME_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -909,7 +909,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -918,7 +918,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;MAGENTA_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;MAGENTA_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -928,7 +928,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -937,7 +937,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;ORANGE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;ORANGE_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -947,7 +947,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -956,7 +956,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;PINK_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;PINK_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -966,7 +966,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -975,7 +975,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;PURPLE_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;PURPLE_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -985,7 +985,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -994,7 +994,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;RED_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;RED_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -1004,7 +1004,7 @@ public interface CauldronBehaviorExtender {
     }
 
     @ModifyArg(
-        method = "registerBehavior",
+        method = "bootStrap",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
@@ -1013,7 +1013,7 @@ public interface CauldronBehaviorExtender {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;YELLOW_SHULKER_BOX:Lnet/minecraft/item/Item;"
+                target = "Lnet/minecraft/world/item/Items;YELLOW_SHULKER_BOX:Lnet/minecraft/world/item/Item;"
             )
         ),
         index = 0
@@ -1027,15 +1027,15 @@ public interface CauldronBehaviorExtender {
             "method_32219",
             "method_32220",
             "method_32222",
-            "emptyCauldron",
-            "fillCauldron"
+            "fillBucket",
+            "emptyBucket"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+            target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
     private static <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(argsOnly = true, ordinal = 0) ItemStack stack) {
-        return instance.itematic$getOrCreateStat(stack.getRegistryEntry());
+        return instance.itematic$getOrCreateStat(stack.getItemHolder());
     }
 }

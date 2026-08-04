@@ -6,17 +6,16 @@ import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProviderT
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.registry.RegistryWrapper;
-
+import net.minecraft.core.HolderLookup;
 import java.util.concurrent.CompletableFuture;
 
 public class ItemGroupEntryProviderTagProvider extends FabricTagProvider<ItemGroupEntryProvider> {
-    public ItemGroupEntryProviderTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public ItemGroupEntryProviderTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup lookup) {
+    protected void addTags(HolderLookup.Provider lookup) {
         this.builder(ItemGroupEntryProviderTags.BUILDING_BLOCKS)
             .add(ItemGroupEntryProviderKeys.BUILDING_BLOCKS);
         this.builder(ItemGroupEntryProviderTags.COLORED_BLOCKS)

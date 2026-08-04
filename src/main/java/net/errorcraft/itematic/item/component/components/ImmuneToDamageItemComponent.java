@@ -5,16 +5,16 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DamageResistantComponent;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.item.component.DamageResistant;
 
 public record ImmuneToDamageItemComponent(TagKey<DamageType> damage) implements ItemComponent<ImmuneToDamageItemComponent> {
     public static final Codec<ImmuneToDamageItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        TagKey.unprefixedCodec(RegistryKeys.DAMAGE_TYPE).fieldOf("damage").forGetter(ImmuneToDamageItemComponent::damage)
+        TagKey.codec(Registries.DAMAGE_TYPE).fieldOf("damage").forGetter(ImmuneToDamageItemComponent::damage)
     ).apply(instance, ImmuneToDamageItemComponent::new));
 
     public static ImmuneToDamageItemComponent of(TagKey<DamageType> damage) {
@@ -32,7 +32,7 @@ public record ImmuneToDamageItemComponent(TagKey<DamageType> damage) implements 
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.DAMAGE_RESISTANT, new DamageResistantComponent(this.damage));
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.DAMAGE_RESISTANT, new DamageResistant(this.damage));
     }
 }

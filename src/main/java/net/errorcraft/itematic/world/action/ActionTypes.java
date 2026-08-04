@@ -2,8 +2,8 @@ package net.errorcraft.itematic.world.action;
 
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.world.action.actions.*;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 public class ActionTypes {
     public static final ActionType<ModifyItemAction> MODIFY_ITEM = register(ActionTypeKeys.MODIFY_ITEM, new ActionType<>(ModifyItemAction.CODEC));
@@ -53,7 +53,7 @@ public class ActionTypes {
 
     public static void init() {}
 
-    private static <T extends Action<T>> ActionType<T> register(RegistryKey<ActionType<?>> id, ActionType<T> actionType) {
+    private static <T extends Action<T>> ActionType<T> register(ResourceKey<ActionType<?>> id, ActionType<T> actionType) {
         return Registry.register(ItematicRegistries.ACTION_TYPE, id, actionType);
     }
 }

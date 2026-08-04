@@ -6,12 +6,11 @@ import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
 import net.errorcraft.itematic.predicate.item.ItemPredicates;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.predicate.item.ItemPredicate;
-
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import java.util.OptionalInt;
 
 public record ConditionIntegerProvider(IntegerProvider amount, ItemPredicate condition) implements IntegerProvider {
@@ -19,7 +18,7 @@ public record ConditionIntegerProvider(IntegerProvider amount, ItemPredicate con
         IntegerProvider.CODEC.fieldOf("amount").forGetter(ConditionIntegerProvider::amount),
         ItemPredicate.CODEC.fieldOf("condition").forGetter(ConditionIntegerProvider::condition)
     ).apply(instance, ConditionIntegerProvider::new));
-    public static final PacketCodec<RegistryByteBuf, ConditionIntegerProvider> PACKET_CODEC = PacketCodec.tuple(
+    public static final StreamCodec<RegistryFriendlyByteBuf, ConditionIntegerProvider> PACKET_CODEC = StreamCodec.composite(
         IntegerProvider.PACKET_CODEC, ConditionIntegerProvider::amount,
         ItemPredicates.PACKET_CODEC, ConditionIntegerProvider::condition,
         ConditionIntegerProvider::new

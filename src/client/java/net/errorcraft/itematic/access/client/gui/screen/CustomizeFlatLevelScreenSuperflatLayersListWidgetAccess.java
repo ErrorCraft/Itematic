@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.access.client.gui.screen;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.Item;
 
 public interface CustomizeFlatLevelScreenSuperflatLayersListWidgetAccess {
-    RegistryWrapper.Impl<Item> itematic$itemLookup();
+    HolderLookup.RegistryLookup<Item> itematic$itemLookup();
 }

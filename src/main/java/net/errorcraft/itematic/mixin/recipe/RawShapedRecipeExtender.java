@@ -2,11 +2,11 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.IngredientAccess;
 import net.errorcraft.itematic.access.recipe.RawShapedRecipeAccess;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RawShapedRecipe;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(RawShapedRecipe.class)
+@Mixin(ShapedRecipePattern.class)
 public abstract class RawShapedRecipeExtender implements RawShapedRecipeAccess {
     @Shadow
     @Final
@@ -33,12 +33,12 @@ public abstract class RawShapedRecipeExtender implements RawShapedRecipeAccess {
     private boolean symmetrical;
 
     @Shadow
-    protected abstract boolean matches(CraftingRecipeInput input, boolean mirrored);
+    protected abstract boolean matches(CraftingInput input, boolean mirrored);
 
     @Override
-    public DefaultedList<ItemStack> itematic$remainder(CraftingRecipeInput input) {
+    public NonNullList<ItemStack> itematic$remainder(CraftingInput input) {
         boolean actuallyMirrored = !this.symmetrical && this.matches(input, true);
-        DefaultedList<ItemStack> remainders = DefaultedList.ofSize(input.size(), ItemStack.EMPTY);
+        NonNullList<ItemStack> remainders = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
                 int index = actuallyMirrored ?

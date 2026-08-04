@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.fluid;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.material.Fluid;
 
 public class FluidKeys {
-    public static final RegistryKey<Fluid> WATER = of("water");
-    public static final RegistryKey<Fluid> LAVA = of("lava");
+    public static final ResourceKey<Fluid> WATER = of("water");
+    public static final ResourceKey<Fluid> LAVA = of("lava");
 
     private FluidKeys() {}
 
-    private static RegistryKey<Fluid> of(String id) {
-        return RegistryKey.of(RegistryKeys.FLUID, Identifier.ofVanilla(id));
+    private static ResourceKey<Fluid> of(String id) {
+        return ResourceKey.create(Registries.FLUID, Identifier.withDefaultNamespace(id));
     }
 }

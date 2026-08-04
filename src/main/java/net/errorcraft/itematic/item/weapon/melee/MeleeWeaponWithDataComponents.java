@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.item.weapon.melee;
 
-import net.minecraft.component.ComponentMap;
+import net.minecraft.core.component.DataComponentMap;
 
 public interface MeleeWeaponWithDataComponents {
-    void addComponents(ComponentMap.Builder builder);
+    void addComponents(DataComponentMap.Builder builder);
 }

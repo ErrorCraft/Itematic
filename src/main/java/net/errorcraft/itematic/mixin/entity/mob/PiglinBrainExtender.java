@@ -1,21 +1,21 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.PiglinBrain;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(PiglinBrain.class)
+@Mixin(PiglinAi.class)
 public class PiglinBrainExtender {
     @Redirect(
-        method = { "loot", "canGather" },
+        method = { "pickUpItem", "wantsToPickup" },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private static boolean isOfForGoldNuggetUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -23,10 +23,10 @@ public class PiglinBrainExtender {
     }
 
     @Redirect(
-        method = "acceptsForBarter",
+        method = "isBarterCurrency",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private static boolean isOfForGoldIngotUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -34,10 +34,10 @@ public class PiglinBrainExtender {
     }
 
     @Redirect(
-        method = "isHoldingCrossbow",
+        method = "hasCrossbow",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;isHolding(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/entity/LivingEntity;isHolding(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private static boolean isHoldingForCrossbowUseRegistryKeyCheck(LivingEntity instance, Item item) {

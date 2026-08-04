@@ -25,8 +25,8 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.errorcraft.itematic.world.modification.WorldModificationType;
 import net.errorcraft.itematic.world.modification.WorldModificationTypes;
-import net.minecraft.component.ComponentType;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 
 public class ItematicRegistries {
     public static final Registry<ItemComponentType<?>> ITEM_COMPONENT_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.ITEM_COMPONENT_TYPE, r -> ItemComponentTypes.USEABLE);
@@ -41,7 +41,7 @@ public class ItematicRegistries {
     public static final Registry<ShooterMethodType<?>> SHOOTER_METHOD_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.SHOOTER_METHOD_TYPE, r -> ShooterMethodTypes.DIRECT);
     public static final Registry<WorldModificationType<?>> WORLD_MODIFICATION_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.WORLD_MODIFICATION_TYPE, r -> WorldModificationTypes.DRAIN_FLUID);
     public static final Registry<EntitySpawnRuleType<?>> ENTITY_SPAWN_RULE_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.ENTITY_SPAWN_RULE_TYPE, r -> EntitySpawnRuleType.DISCARD);
-    public static final Registry<ComponentType<?>> MELEE_WEAPON_COMPONENT_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.MELEE_WEAPON_COMPONENT_TYPE, r -> MeleeWeaponComponents.SMASHING);
+    public static final Registry<DataComponentType<?>> MELEE_WEAPON_COMPONENT_TYPE = RegistriesAccessor.create(ItematicRegistryKeys.MELEE_WEAPON_COMPONENT_TYPE, r -> MeleeWeaponComponents.SMASHING);
 
     private ItematicRegistries() {}
 }

@@ -2,12 +2,12 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.MapExtendingRecipe;
-import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.MapExtendingRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,23 +22,23 @@ public class MapExtendingRecipeExtender {
         method = "<init>",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForMapReturnEmptyStack(ItemConvertible item) {
+    private static ItemStack newItemStackForMapReturnEmptyStack(ItemLike item) {
         return ItemStack.EMPTY;
     }
 
     @Redirect(
-        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/recipe/ShapedRecipe;matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z"
+            target = "Lnet/minecraft/world/item/crafting/ShapedRecipe;matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z"
         )
     )
-    private boolean matchesUseRegistryKeyCheck(ShapedRecipe instance, CraftingRecipeInput input, World world) {
-        for (int i = 0; i < input.getStackCount(); i++) {
-            ItemStack stack = input.getStackInSlot(i);
+    private boolean matchesUseRegistryKeyCheck(ShapedRecipe instance, CraftingInput input, Level world) {
+        for (int i = 0; i < input.ingredientCount(); i++) {
+            ItemStack stack = input.getItem(i);
             if (!isValid(stack, i)) {
                 return false;
             }

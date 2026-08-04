@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.access.world;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public interface WorldAccess {
-    default void itematic$playSound(@Nullable PlayerEntity source, Vec3d pos, SoundEvent sound, SoundCategory category, float volume, float pitch) {}
+    default void itematic$playSound(@Nullable Player source, Vec3 pos, SoundEvent sound, SoundSource category, float volume, float pitch) {}
 }

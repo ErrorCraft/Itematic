@@ -1,22 +1,22 @@
 package net.errorcraft.itematic.mixin.entity.projectile.thrown;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.projectile.thrown.LingeringPotionEntity;
-import net.minecraft.entity.projectile.thrown.ThrownEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownLingeringPotion;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(LingeringPotionEntity.class)
+@Mixin(ThrownLingeringPotion.class)
 public abstract class LingeringPotionEntityExtender extends ThrownItemEntityExtender {
-    protected LingeringPotionEntityExtender(EntityType<? extends ThrownEntity> entityType, World world) {
+    protected LingeringPotionEntityExtender(EntityType<? extends ThrowableProjectile> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected RegistryKey<Item> getDefaultItemKey() {
+    protected ResourceKey<Item> getDefaultItemKey() {
         return ItemKeys.LINGERING_POTION;
     }
 }

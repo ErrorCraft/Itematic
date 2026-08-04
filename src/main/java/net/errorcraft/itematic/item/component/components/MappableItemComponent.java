@@ -8,26 +8,26 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.item.FilledMapItemAccessor;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.MapIdComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.maps.MapId;
 
-public record MappableItemComponent(RegistryEntry<Item> transformsInto) implements ItemComponent<MappableItemComponent> {
+public record MappableItemComponent(Holder<Item> transformsInto) implements ItemComponent<MappableItemComponent> {
     public static final Codec<MappableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(MappableItemComponent::transformsInto)
+        RegistryFixedCodec.create(Registries.ITEM).fieldOf("transforms_into").forGetter(MappableItemComponent::transformsInto)
     ).apply(instance, MappableItemComponent::new));
 
-    public static MappableItemComponent of(RegistryEntry<Item> transformsInto) {
+    public static MappableItemComponent of(Holder<Item> transformsInto) {
         return new MappableItemComponent(transformsInto);
     }
 
@@ -42,23 +42,23 @@ public record MappableItemComponent(RegistryEntry<Item> transformsInto) implemen
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (!(world instanceof ServerWorld serverWorld)) {
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (!(world instanceof ServerLevel serverWorld)) {
             return ItemResult.SUCCEED;
         }
 
-        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
-        world.playSoundFromEntity(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundCategory(), 1.0f, 1.0f);
+        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+        world.playSound(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundSource(), 1.0f, 1.0f);
         ItemStack resultStack = this.createStack(serverWorld, user.getBlockX(), user.getBlockZ(), 0, true, false);
-        stack.decrementUnlessCreative(1, user);
+        stack.consume(1, user);
         stackExchanger.exchange(resultStack);
         return ItemResult.CONSUME;
     }
 
-    public ItemStack createStack(ServerWorld world, int x, int z, int scale, boolean showIcons, boolean unlimitedTracking) {
+    public ItemStack createStack(ServerLevel world, int x, int z, int scale, boolean showIcons, boolean unlimitedTracking) {
         ItemStack resultStack = new ItemStack(this.transformsInto);
-        MapIdComponent mapId = FilledMapItemAccessor.allocateMapId(world, x, z, scale, showIcons, unlimitedTracking, world.getRegistryKey());
-        resultStack.set(DataComponentTypes.MAP_ID, mapId);
+        MapId mapId = FilledMapItemAccessor.allocateMapId(world, x, z, scale, showIcons, unlimitedTracking, world.dimension());
+        resultStack.set(DataComponents.MAP_ID, mapId);
         return resultStack;
     }
 }

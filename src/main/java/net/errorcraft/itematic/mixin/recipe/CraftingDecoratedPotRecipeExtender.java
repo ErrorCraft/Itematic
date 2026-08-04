@@ -4,14 +4,14 @@ import net.errorcraft.itematic.block.entity.SherdsUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.block.entity.SherdsAccessor;
-import net.minecraft.block.entity.Sherds;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.CraftingDecoratedPotRecipe;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.DecoratedPotRecipe;
+import net.minecraft.world.level.block.entity.PotDecorations;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,13 +19,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
-@Mixin(CraftingDecoratedPotRecipe.class)
+@Mixin(DecoratedPotRecipe.class)
 public class CraftingDecoratedPotRecipeExtender {
     @Redirect(
-        method = "matches(Lnet/minecraft/recipe/input/CraftingRecipeInput;Lnet/minecraft/world/World;)Z",
+        method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
     private boolean isInForDecoratedPotIngredientsUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
@@ -37,20 +37,20 @@ public class CraftingDecoratedPotRecipeExtender {
      * @reason Uses a registry entry for data-driven items.
      */
     @Overwrite
-    public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        ItemStack stack = lookup.getOrThrow(RegistryKeys.ITEM)
-            .getOptional(ItemKeys.DECORATED_POT)
+    public ItemStack assemble(CraftingInput input, HolderLookup.Provider lookup) {
+        ItemStack stack = lookup.lookupOrThrow(Registries.ITEM)
+            .get(ItemKeys.DECORATED_POT)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);
         if (stack.isEmpty()) {
             return stack;
         }
 
-        Sherds sherds = SherdsAccessor.create(
-            Optional.of(input.getStackInSlot(1).getRegistryEntry()),
-            Optional.of(input.getStackInSlot(3).getRegistryEntry()),
-            Optional.of(input.getStackInSlot(5).getRegistryEntry()),
-            Optional.of(input.getStackInSlot(7).getRegistryEntry())
+        PotDecorations sherds = SherdsAccessor.create(
+            Optional.of(input.getItem(1).getItemHolder()),
+            Optional.of(input.getItem(3).getItemHolder()),
+            Optional.of(input.getItem(5).getItemHolder()),
+            Optional.of(input.getItem(7).getItemHolder())
         );
         return SherdsUtil.addSherdsToStack(stack, sherds);
     }

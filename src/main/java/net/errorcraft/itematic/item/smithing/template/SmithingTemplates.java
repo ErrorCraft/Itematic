@@ -3,7 +3,7 @@ package net.errorcraft.itematic.item.smithing.template;
 import net.errorcraft.itematic.item.smithing.template.templates.ItemUpgradeSmithingTemplate;
 import net.errorcraft.itematic.item.smithing.template.templates.TrimPatternSmithingTemplate;
 import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
 
 public class SmithingTemplates {
     public static final SmithingTemplate TRIM_PATTERN = register("trim_pattern", new TrimPatternSmithingTemplate());

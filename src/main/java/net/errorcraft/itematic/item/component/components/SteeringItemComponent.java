@@ -9,29 +9,29 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemSteerable;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ItemSteerable;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int damagePerUse) implements ItemComponent<SteeringItemComponent> {
+public record SteeringItemComponent(Holder<EntityType<?>> target, int damagePerUse) implements ItemComponent<SteeringItemComponent> {
     public static final Codec<SteeringItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ENTITY_TYPE).fieldOf("target").forGetter(SteeringItemComponent::target),
-        Codecs.NON_NEGATIVE_INT.optionalFieldOf("damage_per_use", 1).forGetter(SteeringItemComponent::damagePerUse)
+        RegistryFixedCodec.create(Registries.ENTITY_TYPE).fieldOf("target").forGetter(SteeringItemComponent::target),
+        ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("damage_per_use", 1).forGetter(SteeringItemComponent::damagePerUse)
     ).apply(instance, SteeringItemComponent::new));
 
-    public static SteeringItemComponent of(RegistryEntry<EntityType<?>> target, int damage) {
+    public static SteeringItemComponent of(Holder<EntityType<?>> target, int damage) {
         return new SteeringItemComponent(target, damage);
     }
 
@@ -46,29 +46,29 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (world.isClient()) {
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (world.isClientSide()) {
             return ItemResult.PASS;
         }
 
-        ActionContext context = ActionContext.builder((ServerWorld) world)
+        ActionContext context = ActionContext.builder((ServerLevel) world)
             .stackExchanger(stackExchanger)
-            .add(LootContextParameters.THIS_ENTITY, user)
-            .add(LootContextParameters.ORIGIN, user.getEntityPos())
-            .add(LootContextParameters.TOOL, stack)
+            .add(LootContextParams.THIS_ENTITY, user)
+            .add(LootContextParams.ORIGIN, user.position())
+            .add(LootContextParams.TOOL, stack)
             .add(ItematicContextParameters.HAND, hand)
             .build();
         if (this.apply(user, stack, context)) {
             return ItemResult.SUCCEED;
         }
 
-        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
         return ItemResult.PASS;
     }
 
-    private boolean apply(PlayerEntity user, ItemStack stack, ActionContext context) {
-        Entity vehicle = user.getControllingVehicle();
-        if (!user.hasVehicle() || !(vehicle instanceof ItemSteerable itemSteerable)) {
+    private boolean apply(Player user, ItemStack stack, ActionContext context) {
+        Entity vehicle = user.getControlledVehicle();
+        if (!user.isPassenger() || !(vehicle instanceof ItemSteerable itemSteerable)) {
             return false;
         }
 
@@ -76,7 +76,7 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
             return false;
         }
 
-        if (!itemSteerable.consumeOnAStickItem()) {
+        if (!itemSteerable.boost()) {
             return false;
         }
 
@@ -85,8 +85,8 @@ public record SteeringItemComponent(RegistryEntry<EntityType<?>> target, int dam
     }
 
     private boolean matchesEntityType(Entity vehicle) {
-        return Registries.ENTITY_TYPE.getKey(vehicle.getType())
-            .map(this.target::matchesKey)
+        return BuiltInRegistries.ENTITY_TYPE.getResourceKey(vehicle.getType())
+            .map(this.target::is)
             .orElse(false);
     }
 }

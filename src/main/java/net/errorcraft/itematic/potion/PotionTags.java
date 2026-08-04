@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.potion;
 
-import net.minecraft.potion.Potion;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.alchemy.Potion;
 
 public class PotionTags {
     public static final TagKey<Potion> TRADEABLE = of("tradeable");
@@ -11,6 +11,6 @@ public class PotionTags {
     private PotionTags() {}
 
     private static TagKey<Potion> of(String id) {
-        return TagKey.of(RegistryKeys.POTION, Identifier.ofVanilla(id));
+        return TagKey.create(Registries.POTION, Identifier.withDefaultNamespace(id));
     }
 }

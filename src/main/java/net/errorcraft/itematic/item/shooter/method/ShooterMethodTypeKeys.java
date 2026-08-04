@@ -1,16 +1,16 @@
 package net.errorcraft.itematic.item.shooter.method;
 
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 
 public class ShooterMethodTypeKeys {
-    public static final RegistryKey<ShooterMethodType<?>> DIRECT = of("direct");
-    public static final RegistryKey<ShooterMethodType<?>> CHARGEABLE = of("chargeable");
+    public static final ResourceKey<ShooterMethodType<?>> DIRECT = of("direct");
+    public static final ResourceKey<ShooterMethodType<?>> CHARGEABLE = of("chargeable");
 
     private ShooterMethodTypeKeys() {}
 
-    private static RegistryKey<ShooterMethodType<?>> of(String id) {
-        return RegistryKey.of(ItematicRegistryKeys.SHOOTER_METHOD_TYPE, Identifier.ofVanilla(id));
+    private static ResourceKey<ShooterMethodType<?>> of(String id) {
+        return ResourceKey.create(ItematicRegistryKeys.SHOOTER_METHOD_TYPE, Identifier.withDefaultNamespace(id));
     }
 }

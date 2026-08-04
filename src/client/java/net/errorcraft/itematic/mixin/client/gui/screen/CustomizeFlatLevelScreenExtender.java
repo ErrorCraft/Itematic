@@ -2,11 +2,11 @@ package net.errorcraft.itematic.mixin.client.gui.screen;
 
 import net.errorcraft.itematic.access.client.gui.screen.CustomizeFlatLevelScreenAccess;
 import net.errorcraft.itematic.access.client.gui.screen.CustomizeFlatLevelScreenSuperflatLayersListWidgetAccess;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.world.CustomizeFlatLevelScreen;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.client.gui.screens.CreateFlatWorldScreen;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,48 +15,48 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(CustomizeFlatLevelScreen.class)
+@Mixin(CreateFlatWorldScreen.class)
 public class CustomizeFlatLevelScreenExtender implements CustomizeFlatLevelScreenAccess {
     @Unique
-    private RegistryWrapper.Impl<Item> itemLookup;
+    private HolderLookup.RegistryLookup<Item> itemLookup;
 
     @Override
-    public RegistryWrapper.Impl<Item> itematic$itemLookup() {
+    public HolderLookup.RegistryLookup<Item> itematic$itemLookup() {
         return this.itemLookup;
     }
 
     @Override
-    public void itematic$setItemLookup(RegistryWrapper.Impl<Item> itemLookup) {
+    public void itematic$setItemLookup(HolderLookup.RegistryLookup<Item> itemLookup) {
         this.itemLookup = itemLookup;
     }
 
-    @Mixin(CustomizeFlatLevelScreen.SuperflatLayersListWidget.class)
+    @Mixin(CreateFlatWorldScreen.DetailsList.class)
     public static class SuperflatLayersListWidgetExtender implements CustomizeFlatLevelScreenSuperflatLayersListWidgetAccess {
         @Shadow
         @Final
-        CustomizeFlatLevelScreen field_18738;
+        CreateFlatWorldScreen field_18738;
 
         @Override
-        public RegistryWrapper.Impl<Item> itematic$itemLookup() {
+        public HolderLookup.RegistryLookup<Item> itematic$itemLookup() {
             return ((CustomizeFlatLevelScreenAccess) this.field_18738).itematic$itemLookup();
         }
 
-        @Mixin(targets = "net/minecraft/client/gui/screen/world/CustomizeFlatLevelScreen$SuperflatLayersListWidget$SuperflatLayerEntry")
+        @Mixin(targets = "net/minecraft/client/gui/screens/CreateFlatWorldScreen$DetailsList$LayerEntry")
         public static class SuperflatLayerEntryExtender {
             @Shadow
             @Final
-            CustomizeFlatLevelScreen.SuperflatLayersListWidget field_18739;
+            CreateFlatWorldScreen.DetailsList field_18739;
 
             @Redirect(
-                method = "render",
+                method = "renderContent",
                 at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/screen/world/CustomizeFlatLevelScreen$SuperflatLayersListWidget$SuperflatLayerEntry;createItemStackFor(Lnet/minecraft/block/BlockState;)Lnet/minecraft/item/ItemStack;"
+                    target = "Lnet/minecraft/client/gui/screens/CreateFlatWorldScreen$DetailsList$LayerEntry;getDisplayItem(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/item/ItemStack;"
                 )
             )
             private ItemStack createItemStackUseRegistryEntry(@Coerce Object instance, BlockState state) {
-                RegistryWrapper.Impl<Item> itemLookup = ((CustomizeFlatLevelScreenSuperflatLayersListWidgetAccess) this.field_18739).itematic$itemLookup();
-                return itemLookup.getOptional(state.getBlock().itematic$asItemKey())
+                HolderLookup.RegistryLookup<Item> itemLookup = ((CustomizeFlatLevelScreenSuperflatLayersListWidgetAccess) this.field_18739).itematic$itemLookup();
+                return itemLookup.get(state.getBlock().itematic$asItemKey())
                     .map(ItemStack::new)
                     .orElse(ItemStack.EMPTY);
             }

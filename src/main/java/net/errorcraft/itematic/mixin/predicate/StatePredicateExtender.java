@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.predicate;
 
 import com.google.common.collect.ImmutableList;
 import net.errorcraft.itematic.access.predicate.StatePredicateAccess;
-import net.minecraft.predicate.StatePredicate;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.state.properties.Property;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -12,21 +12,21 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Optional;
 
 public class StatePredicateExtender {
-    @Mixin(StatePredicate.Builder.class)
+    @Mixin(StatePropertiesPredicate.Builder.class)
     public static class BuilderExtender implements StatePredicateAccess.BuilderAccess {
         @Shadow
         @Final
-        private ImmutableList.Builder<StatePredicate.Condition> conditions;
+        private ImmutableList.Builder<StatePropertiesPredicate.PropertyMatcher> matchers;
 
         @Override
-        public <T extends Comparable<T> & StringIdentifiable> StatePredicate.Builder itematic$range(Property<T> property, T min, T max) {
-            this.conditions.add(
-                new StatePredicate.Condition(
+        public <T extends Comparable<T> & StringRepresentable> StatePropertiesPredicate.Builder itematic$range(Property<T> property, T min, T max) {
+            this.matchers.add(
+                new StatePropertiesPredicate.PropertyMatcher(
                     property.getName(),
-                    new StatePredicate.RangedValueMatcher(Optional.of(min.asString()), Optional.of(max.asString()))
+                    new StatePropertiesPredicate.RangedMatcher(Optional.of(min.getSerializedName()), Optional.of(max.getSerializedName()))
                 )
             );
-            return (StatePredicate.Builder)(Object) this;
+            return (StatePropertiesPredicate.Builder)(Object) this;
         }
     }
 }

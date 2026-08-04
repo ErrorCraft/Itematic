@@ -2,47 +2,47 @@ package net.errorcraft.itematic.loot.function;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.function.ConditionalLootFunction;
-import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.loot.provider.number.LootNumberProvider;
-import net.minecraft.loot.provider.number.LootNumberProviderTypes;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 import java.util.List;
 
-public class SplitItemModifier extends ConditionalLootFunction {
-    public static final MapCodec<SplitItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> addConditionsField(instance).and(
-        LootNumberProviderTypes.CODEC.fieldOf("count").forGetter(split -> split.count)
+public class SplitItemModifier extends LootItemConditionalFunction {
+    public static final MapCodec<SplitItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(
+        NumberProviders.CODEC.fieldOf("count").forGetter(split -> split.count)
     ).apply(instance, SplitItemModifier::new));
 
-    private final LootNumberProvider count;
+    private final NumberProvider count;
 
-    public SplitItemModifier(LootNumberProvider count) {
+    public SplitItemModifier(NumberProvider count) {
         this(List.of(), count);
     }
 
-    public SplitItemModifier(List<LootCondition> conditions, LootNumberProvider count) {
+    public SplitItemModifier(List<LootItemCondition> conditions, NumberProvider count) {
         super(conditions);
         this.count = count;
     }
 
-    public static Builder<?> builder(int count) {
-        return builder(conditions -> new SplitItemModifier(conditions, ConstantLootNumberProvider.create(count)));
+    public static net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction.Builder<?> builder(int count) {
+        return simpleBuilder(conditions -> new SplitItemModifier(conditions, ConstantValue.exactly(count)));
     }
 
     @Override
-    public LootFunctionType<SplitItemModifier> getType() {
+    public LootItemFunctionType<SplitItemModifier> getType() {
         return ItematicItemModifierTypes.SPLIT;
     }
 
     @Override
-    protected ItemStack process(ItemStack stack, LootContext context) {
-        LivingEntity holder = context.get(LootContextParameters.THIS_ENTITY) instanceof LivingEntity target ? target : null;
-        return stack.itematic$copyOrSplit(holder, this.count.nextInt(context));
+    protected ItemStack run(ItemStack stack, LootContext context) {
+        LivingEntity holder = context.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof LivingEntity target ? target : null;
+        return stack.itematic$copyOrSplit(holder, this.count.getInt(context));
     }
 }

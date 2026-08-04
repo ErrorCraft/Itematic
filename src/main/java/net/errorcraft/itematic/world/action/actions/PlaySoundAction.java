@@ -9,33 +9,32 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.Entity;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-
+import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
 
-public record PlaySoundAction(PositionTarget position, RegistryEntry<SoundEvent> sound, Optional<SoundCategory> category, Range.FloatRange volume, Range.FloatRange pitch, boolean fromEntity) implements Action<PlaySoundAction> {
+public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound, Optional<SoundSource> category, Range.FloatRange volume, Range.FloatRange pitch, boolean fromEntity) implements Action<PlaySoundAction> {
     public static final MapCodec<PlaySoundAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(PlaySoundAction::position),
-        SoundEvent.ENTRY_CODEC.fieldOf("sound").forGetter(PlaySoundAction::sound),
-        StringIdentifiable.createCodec(SoundCategory::values).optionalFieldOf("category").forGetter(PlaySoundAction::category),
+        SoundEvent.CODEC.fieldOf("sound").forGetter(PlaySoundAction::sound),
+        StringRepresentable.fromEnum(SoundSource::values).optionalFieldOf("category").forGetter(PlaySoundAction::category),
         Range.FLOAT_CODEC.fieldOf("volume").forGetter(PlaySoundAction::volume),
         Range.FLOAT_CODEC.fieldOf("pitch").forGetter(PlaySoundAction::pitch),
         Codec.BOOL.optionalFieldOf("from_entity", false).forGetter(PlaySoundAction::fromEntity)
     ).apply(instance, PlaySoundAction::new));
 
-    public static Builder builder(PositionTarget position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
+    public static Builder builder(PositionTarget position, Holder<SoundEvent> sound, SoundSource category) {
         return new Builder(position, sound, category);
     }
 
-    public static PlaySoundAction of(PositionTarget position, RegistryEntry<SoundEvent> sound) {
+    public static PlaySoundAction of(PositionTarget position, Holder<SoundEvent> sound) {
         return new PlaySoundAction(
             position,
             sound,
@@ -46,7 +45,7 @@ public record PlaySoundAction(PositionTarget position, RegistryEntry<SoundEvent>
         );
     }
 
-    public static PlaySoundAction of(PositionTarget position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
+    public static PlaySoundAction of(PositionTarget position, Holder<SoundEvent> sound, SoundSource category) {
         return new PlaySoundAction(
             position,
             sound,
@@ -64,49 +63,49 @@ public record PlaySoundAction(PositionTarget position, RegistryEntry<SoundEvent>
 
     @Override
     public boolean execute(ActionContext context) {
-        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
-        SoundCategory category = this.category(entity);
+        Entity entity = context.get(LootContextParams.THIS_ENTITY);
+        SoundSource category = this.category(entity);
         if (category == null) {
             return false;
         }
 
-        World world = context.world();
-        Random random = world.getRandom();
+        Level world = context.world();
+        RandomSource random = world.getRandom();
         float volume = this.volume.get(random);
         float pitch = this.pitch.get(random);
         long seed = random.nextLong();
         if (this.fromEntity && entity != null) {
-            world.playSoundFromEntity(null, entity, this.sound, category, volume, pitch, seed);
+            world.playSeededSound(null, entity, this.sound, category, volume, pitch, seed);
             return true;
         }
 
-        Vec3d pos = context.get(this.position.contextParam());
+        Vec3 pos = context.get(this.position.contextParam());
         if (pos == null) {
             return false;
         }
 
-        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), this.sound, category, volume, pitch, seed);
+        world.playSeededSound(null, pos.x(), pos.y(), pos.z(), this.sound, category, volume, pitch, seed);
         return true;
     }
 
-    private SoundCategory category(Entity entity) {
+    private SoundSource category(Entity entity) {
         return this.category.orElseGet(() -> {
             if (entity == null) {
                 return null;
             }
 
-            return entity.getSoundCategory();
+            return entity.getSoundSource();
         });
     }
 
     public static class Builder {
         private final PositionTarget position;
-        private final RegistryEntry<SoundEvent> sound;
-        private final SoundCategory category;
+        private final Holder<SoundEvent> sound;
+        private final SoundSource category;
         private Range.FloatRange volume = Range.FloatRange.of(1.0f);
         private Range.FloatRange pitch = Range.FloatRange.of(1.0f);
 
-        private Builder(PositionTarget position, RegistryEntry<SoundEvent> sound, SoundCategory category) {
+        private Builder(PositionTarget position, Holder<SoundEvent> sound, SoundSource category) {
             this.position = position;
             this.sound = sound;
             this.category = category;

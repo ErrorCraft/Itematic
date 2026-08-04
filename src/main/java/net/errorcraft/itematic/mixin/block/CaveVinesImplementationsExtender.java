@@ -1,25 +1,25 @@
 package net.errorcraft.itematic.mixin.block;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.block.CaveVinesBodyBlock;
-import net.minecraft.block.CaveVinesHeadBlock;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.CaveVinesBlock;
+import net.minecraft.world.level.block.CaveVinesPlantBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin({ CaveVinesBodyBlock.class, CaveVinesHeadBlock.class })
+@Mixin({ CaveVinesPlantBlock.class, CaveVinesBlock.class })
 public class CaveVinesImplementationsExtender {
     @Redirect(
-        method = "getPickStack",
+        method = "getCloneItemStack",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForGlowBerriesUseCreateStack(ItemConvertible item, WorldView world) {
+    private ItemStack newItemStackForGlowBerriesUseCreateStack(ItemLike item, LevelReader world) {
         return world.itematic$createStack(ItemKeys.GLOW_BERRIES);
     }
 }

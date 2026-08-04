@@ -2,58 +2,58 @@ package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.IllusionerEntity;
-import net.minecraft.entity.mob.SpellcastingIllagerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.illager.Illusioner;
+import net.minecraft.world.entity.monster.illager.SpellcasterIllager;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(IllusionerEntity.class)
-public abstract class IllusionerEntityExtender extends SpellcastingIllagerEntity {
-    protected IllusionerEntityExtender(EntityType<? extends SpellcastingIllagerEntity> entityType, World world) {
+@Mixin(Illusioner.class)
+public abstract class IllusionerEntityExtender extends SpellcasterIllager {
+    protected IllusionerEntityExtender(EntityType<? extends SpellcasterIllager> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "initialize",
+        method = "finalizeSpawn",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForBowUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.BOW);
+    private ItemStack newItemStackForBowUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.BOW);
     }
 
     @Redirect(
-        method = "shootAt",
+        method = "performRangedAttack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/projectile/ProjectileUtil;getHandPossiblyHolding(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/Item;)Lnet/minecraft/util/Hand;"
+            target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getWeaponHoldingHand(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/InteractionHand;"
         )
     )
-    private Hand getHandPossiblyHoldingForBowUseRegistryKey(LivingEntity entity, Item item) {
+    private InteractionHand getHandPossiblyHoldingForBowUseRegistryKey(LivingEntity entity, Item item) {
         return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.BOW);
     }
 
     @Redirect(
-        method = "shootAt",
+        method = "performRangedAttack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/projectile/ProjectileEntity;spawnWithVelocity(Lnet/minecraft/entity/projectile/ProjectileEntity;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;DDDFF)Lnet/minecraft/entity/projectile/ProjectileEntity;"
+            target = "Lnet/minecraft/world/entity/projectile/Projectile;spawnProjectileUsingShoot(Lnet/minecraft/world/entity/projectile/Projectile;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;DDDFF)Lnet/minecraft/world/entity/projectile/Projectile;"
         )
     )
-    private <T extends ProjectileEntity> T onlySetSpeed(T projectile, ServerWorld world, ItemStack projectileStack, double velocityX, double velocityY, double velocityZ, float power, float divergence) {
-        projectile.setVelocity(velocityX, velocityY, velocityZ, power, divergence);
+    private <T extends Projectile> T onlySetSpeed(T projectile, ServerLevel world, ItemStack projectileStack, double velocityX, double velocityY, double velocityZ, float power, float divergence) {
+        projectile.shoot(velocityX, velocityY, velocityZ, power, divergence);
         return projectile;
     }
 }

@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.access.fluid;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 
 public interface FluidAccess {
-    default RegistryKey<Item> itematic$getBucketItemKey() {
+    default ResourceKey<Item> itematic$getBucketItemKey() {
         return null;
     }
 }

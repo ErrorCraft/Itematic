@@ -8,14 +8,14 @@ import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.ItemListDataComponent;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -24,20 +24,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.Predicate;
 
-@Mixin(HostileEntity.class)
-public class HostileEntityExtender extends PathAwareEntity implements LivingEntityAccess {
-    protected HostileEntityExtender(EntityType<? extends PathAwareEntity> entityType, World world) {
+@Mixin(Monster.class)
+public class HostileEntityExtender extends PathfinderMob implements LivingEntityAccess {
+    protected HostileEntityExtender(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
     }
 
     @ModifyConstant(
-        method = "getProjectileType",
+        method = "getProjectile",
         constant = @Constant(
-            classValue = RangedWeaponItem.class,
+            classValue = ProjectileWeaponItem.class,
             ordinal = 0
         )
     )
-    private boolean instanceOfRangedWeaponItemUseItemComponent(Object reference, Class<RangedWeaponItem> clazz, @Local(argsOnly = true) ItemStack itemStack, @Share("heldAmmunitionDataComponent") LocalRef<ItemListDataComponent> heldAmmunitionDataComponentReference) {
+    private boolean instanceOfRangedWeaponItemUseItemComponent(Object reference, Class<ProjectileWeaponItem> clazz, @Local(argsOnly = true) ItemStack itemStack, @Share("heldAmmunitionDataComponent") LocalRef<ItemListDataComponent> heldAmmunitionDataComponentReference) {
         if (!itemStack.itematic$hasBehavior(ItemComponentTypes.SHOOTER)) {
             return false;
         }
@@ -50,10 +50,10 @@ public class HostileEntityExtender extends PathAwareEntity implements LivingEnti
     }
 
     @Redirect(
-        method = "getProjectileType",
+        method = "getProjectile",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;",
+            target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;",
             ordinal = 1
         )
     )
@@ -62,35 +62,35 @@ public class HostileEntityExtender extends PathAwareEntity implements LivingEnti
     }
 
     @Redirect(
-        method = "getProjectileType",
+        method = "getProjectile",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/RangedWeaponItem;getHeldProjectiles()Ljava/util/function/Predicate;"
+            target = "Lnet/minecraft/world/item/ProjectileWeaponItem;getSupportedHeldProjectiles()Ljava/util/function/Predicate;"
         )
     )
-    private Predicate<ItemStack> getHeldProjectilesUseItemComponent(RangedWeaponItem instance, @Share("heldAmmunitionDataComponent") LocalRef<ItemListDataComponent> heldAmmunitionDataComponent) {
+    private Predicate<ItemStack> getHeldProjectilesUseItemComponent(ProjectileWeaponItem instance, @Share("heldAmmunitionDataComponent") LocalRef<ItemListDataComponent> heldAmmunitionDataComponent) {
         return heldAmmunitionDataComponent.get()::isValidFor;
     }
 
     @Redirect(
-        method = "getProjectileType",
+        method = "getProjectile",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForArrowUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.ARROW);
+    private ItemStack newItemStackForArrowUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.ARROW);
     }
 
     @Override
     public ItemStack itematic$getAmmunition(ItemStack stack) {
         ItemListDataComponent heldAmmunition = stack.getOrDefault(ItematicDataComponentTypes.SHOOTER_HELD_AMMUNITION, ItemListDataComponent.DEFAULT);
-        ItemStack heldStack = RangedWeaponItem.getHeldProjectile(this, heldAmmunition::isValidFor);
+        ItemStack heldStack = ProjectileWeaponItem.getHeldProjectile(this, heldAmmunition::isValidFor);
         if (!heldStack.isEmpty()) {
             return heldStack;
         }
 
-        return this.getEntityWorld().itematic$createStack(ItemKeys.ARROW);
+        return this.level().itematic$createStack(ItemKeys.ARROW);
     }
 }

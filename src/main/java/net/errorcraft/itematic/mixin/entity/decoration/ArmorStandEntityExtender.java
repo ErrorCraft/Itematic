@@ -1,42 +1,42 @@
 package net.errorcraft.itematic.mixin.entity.decoration;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ArmorStandEntity.class)
+@Mixin(ArmorStand.class)
 public abstract class ArmorStandEntityExtender extends LivingEntity {
-    protected ArmorStandEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
+    protected ArmorStandEntityExtender(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
         method = {
-            "breakAndDropItem",
-            "getPickBlockStack"
+            "brokenByPlayer",
+            "getPickResult"
         },
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForArmorStandUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.ARMOR_STAND);
+    private ItemStack newItemStackForArmorStandUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.ARMOR_STAND);
     }
 
     @Redirect(
         method = "interactAt",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForNameTagUseRegistryKeyCheck(ItemStack instance, Item item) {

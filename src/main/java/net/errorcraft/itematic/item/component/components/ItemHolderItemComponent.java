@@ -16,49 +16,49 @@ import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BundleContentsComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.item.tooltip.BundleTooltipData;
-import net.minecraft.item.tooltip.TooltipData;
-import net.minecraft.predicate.component.ComponentsPredicate;
-import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.ClickType;
-import net.minecraft.world.World;
+import net.minecraft.advancements.criterion.DataComponentMatchers;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.tooltip.BundleTooltip;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.math.Fraction;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) implements ItemComponent<ItemHolderItemComponent> {
+public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, Holder<SoundEvent> insertItemSound, Holder<SoundEvent> removeItemSound, Holder<SoundEvent> emptySound) implements ItemComponent<ItemHolderItemComponent> {
     public static final Codec<Fraction> CAPACITY_CODEC = ItematicCodecs.positiveFraction(100);
     public static final Codec<ItemHolderItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         CAPACITY_CODEC.fieldOf("capacity").forGetter(ItemHolderItemComponent::capacity),
         ItemHolderRules.CODEC.fieldOf("rules").forGetter(ItemHolderItemComponent::rules),
-        SoundEvent.ENTRY_CODEC.fieldOf("insert_item_sound").forGetter(ItemHolderItemComponent::insertItemSound),
-        SoundEvent.ENTRY_CODEC.fieldOf("remove_item_sound").forGetter(ItemHolderItemComponent::removeItemSound),
-        SoundEvent.ENTRY_CODEC.fieldOf("empty_sound").forGetter(ItemHolderItemComponent::emptySound)
+        SoundEvent.CODEC.fieldOf("insert_item_sound").forGetter(ItemHolderItemComponent::insertItemSound),
+        SoundEvent.CODEC.fieldOf("remove_item_sound").forGetter(ItemHolderItemComponent::removeItemSound),
+        SoundEvent.CODEC.fieldOf("empty_sound").forGetter(ItemHolderItemComponent::emptySound)
     ).apply(instance, ItemHolderItemComponent::new));
     private static final int TICKS_AFTER_FIRST_THROW = BundleItemAccessor.ticksAfterFirstThrow();
     private static final int TICKS_BETWEEN_THROWS = BundleItemAccessor.ticksBetweenThrows();
 
-    public static ItemHolderItemComponent of(int capacity, ItemHolderRules rules, RegistryEntry<SoundEvent> insertItemSound, RegistryEntry<SoundEvent> removeItemSound, RegistryEntry<SoundEvent> emptySound) {
+    public static ItemHolderItemComponent of(int capacity, ItemHolderRules rules, Holder<SoundEvent> insertItemSound, Holder<SoundEvent> removeItemSound, Holder<SoundEvent> emptySound) {
         return new ItemHolderItemComponent(Fraction.getFraction(capacity, 1), rules, insertItemSound, removeItemSound, emptySound);
     }
 
-    public static ItemComponent<?>[] of(RegistryEntryLookup<Item> items, RegistryEntryLookup<SoundEvent> soundEvents) {
+    public static ItemComponent<?>[] of(HolderGetter<Item> items, HolderGetter<SoundEvent> soundEvents) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
             UseableItemComponent.builder()
@@ -67,15 +67,15 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
             of(
                 1,
                 ItemHolderRules.builder()
-                    .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.create()
+                    .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.item()
                         .itematic$items(items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
                         .build())
-                    .rule(OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsComponentAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.create()
+                    .rule(OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsComponentAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.item()
                         .itematic$behavior(ItemComponentTypes.ITEM_HOLDER)
                         .build())
-                    .rule(FractionItemHolderRule.of(Fraction.ONE), ItemPredicate.Builder.create()
-                        .components(ComponentsPredicate.Builder.create()
-                            .has(DataComponentTypes.BEES)
+                    .rule(FractionItemHolderRule.of(Fraction.ONE), ItemPredicate.Builder.item()
+                        .withComponents(DataComponentMatchers.Builder.components()
+                            .any(DataComponents.BEES)
                             .build())
                         .build())
                     .build(),
@@ -97,8 +97,8 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
     }
 
     @Override
-    public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
-        if (world.isClient() || !(user instanceof PlayerEntity player)) {
+    public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+        if (world.isClientSide() || !(user instanceof Player player)) {
             return;
         }
 
@@ -108,33 +108,33 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
     }
 
     @Override
-    public boolean clickOnSlot(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity user) {
-        if (clickType != ClickType.RIGHT) {
+    public boolean clickOnSlot(ItemStack stack, Slot slot, ClickAction clickType, Player user) {
+        if (clickType != ClickAction.SECONDARY) {
             return false;
         }
 
-        BundleContentsComponent.Builder newBuilder = this.createBuilder(stack);
+        BundleContents.Mutable newBuilder = this.createBuilder(stack);
         if (newBuilder == null) {
             return false;
         }
 
-        if (slot.getStack().isEmpty()) {
-            this.remove(user, newBuilder, removedStack -> this.add(newBuilder, slot.insertStack(removedStack), user));
+        if (slot.getItem().isEmpty()) {
+            this.remove(user, newBuilder, removedStack -> this.add(newBuilder, slot.safeInsert(removedStack), user));
         } else {
             this.add(newBuilder, slot, user);
         }
 
-        stack.set(DataComponentTypes.BUNDLE_CONTENTS, newBuilder.build());
+        stack.set(DataComponents.BUNDLE_CONTENTS, newBuilder.toImmutable());
         return true;
     }
 
     @Override
-    public boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickType clickType, PlayerEntity user, ItemStackExchanger stackExchanger) {
-        if (clickType != ClickType.RIGHT || !slot.canTakePartial(user)) {
+    public boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickAction clickType, Player user, ItemStackExchanger stackExchanger) {
+        if (clickType != ClickAction.SECONDARY || !slot.allowModification(user)) {
             return false;
         }
 
-        BundleContentsComponent.Builder newBuilder = this.createBuilder(stack);
+        BundleContents.Mutable newBuilder = this.createBuilder(stack);
         if (newBuilder == null) {
             return false;
         }
@@ -145,19 +145,19 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
             this.add(newBuilder, cursorStack, user);
         }
 
-        stack.set(DataComponentTypes.BUNDLE_CONTENTS, newBuilder.build());
+        stack.set(DataComponents.BUNDLE_CONTENTS, newBuilder.toImmutable());
         return true;
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT);
-        builder.add(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY, this.capacity);
-        builder.add(ItematicDataComponentTypes.ITEM_HOLDER_RULES, this.rules);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
+        builder.set(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY, this.capacity);
+        builder.set(ItematicDataComponentTypes.ITEM_HOLDER_RULES, this.rules);
     }
 
-    public Optional<TooltipData> tooltipData(ItemStack stack) {
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
+    public Optional<TooltipComponent> tooltipData(ItemStack stack) {
+        BundleContents bundleContents = stack.get(DataComponents.BUNDLE_CONTENTS);
         if (bundleContents == null) {
             return Optional.empty();
         }
@@ -167,13 +167,13 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
             return Optional.empty();
         }
 
-        BundleTooltipData data = new BundleTooltipData(bundleContents);
+        BundleTooltip data = new BundleTooltip(bundleContents);
         data.itematic$setCapacity(capacity);
         return Optional.of(data);
     }
 
     public Fraction occupancy(ItemStack stack) {
-        BundleContentsComponent bundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
+        BundleContents bundleContents = stack.get(DataComponents.BUNDLE_CONTENTS);
         if (bundleContents == null) {
             return null;
         }
@@ -192,14 +192,14 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
     }
 
     public void onDestroyed(ItemEntity item) {
-        BundleContentsComponent bundleContents = item.getStack().get(DataComponentTypes.BUNDLE_CONTENTS);
+        BundleContents bundleContents = item.getItem().get(DataComponents.BUNDLE_CONTENTS);
         if (bundleContents != null) {
-            ItemUsage.spawnItemContents(item, bundleContents.iterateCopy());
+            ItemUtils.onContainerDestroyed(item, bundleContents.itemsCopy());
         }
     }
 
-    public BundleContentsComponent.Builder createBuilder(ItemStack stack) {
-        BundleContentsComponent existingBundleContents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
+    public BundleContents.Mutable createBuilder(ItemStack stack) {
+        BundleContents existingBundleContents = stack.get(DataComponents.BUNDLE_CONTENTS);
         if (existingBundleContents == null) {
             return null;
         }
@@ -207,7 +207,7 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
         return this.createBuilder(stack, existingBundleContents);
     }
 
-    public BundleContentsComponent.Builder createBuilder(ItemStack stack, BundleContentsComponent existingBundleContents) {
+    public BundleContents.Mutable createBuilder(ItemStack stack, BundleContents existingBundleContents) {
         Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
         if (capacity == null) {
             return null;
@@ -218,54 +218,54 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
             return null;
         }
 
-        BundleContentsComponent.Builder newBuilder = new BundleContentsComponent.Builder(existingBundleContents);
+        BundleContents.Mutable newBuilder = new BundleContents.Mutable(existingBundleContents);
         newBuilder.itematic$setExtraFields(existingBundleContents, capacity, rules);
         return newBuilder;
     }
 
-    private void add(BundleContentsComponent.Builder bundleContentsBuilder, ItemStack stack, PlayerEntity user) {
-        int addedCount = bundleContentsBuilder.add(stack);
+    private void add(BundleContents.Mutable bundleContentsBuilder, ItemStack stack, Player user) {
+        int addedCount = bundleContentsBuilder.tryInsert(stack);
         if (addedCount > 0) {
             this.playInsertItemSound(user);
         }
     }
 
-    private void add(BundleContentsComponent.Builder bundleContentsBuilder, Slot slot, PlayerEntity user) {
-        int addedCount = bundleContentsBuilder.add(slot, user);
+    private void add(BundleContents.Mutable bundleContentsBuilder, Slot slot, Player user) {
+        int addedCount = bundleContentsBuilder.tryTransfer(slot, user);
         if (addedCount > 0) {
             this.playInsertItemSound(user);
         }
     }
 
-    private void remove(Entity user, BundleContentsComponent.Builder bundleContentsBuilder, Consumer<ItemStack> onRemoved) {
-        ItemStack removedStack = bundleContentsBuilder.removeSelected();
+    private void remove(Entity user, BundleContents.Mutable bundleContentsBuilder, Consumer<ItemStack> onRemoved) {
+        ItemStack removedStack = bundleContentsBuilder.removeOne();
         if (removedStack == null) {
             return;
         }
 
-        user.playSound(this.removeItemSound.value(), 0.8f, 0.8f + user.getEntityWorld().getRandom().nextFloat() * 0.4f);
+        user.playSound(this.removeItemSound.value(), 0.8f, 0.8f + user.level().getRandom().nextFloat() * 0.4f);
         onRemoved.accept(removedStack);
     }
 
-    private void removeAndDrop(ItemStack stack, PlayerEntity player) {
-        BundleContentsComponent.Builder newBuilder = this.createBuilder(stack);
+    private void removeAndDrop(ItemStack stack, Player player) {
+        BundleContents.Mutable newBuilder = this.createBuilder(stack);
         if (newBuilder == null) {
             return;
         }
 
-        ItemStack removedStack = newBuilder.removeSelected();
+        ItemStack removedStack = newBuilder.removeOne();
         if (removedStack == null) {
             return;
         }
 
-        player.dropItem(removedStack, true);
-        player.playSound(this.emptySound.value(), 0.8f, 0.8f + player.getEntityWorld().getRandom().nextFloat() * 0.4f);
-        player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+        player.drop(removedStack, true);
+        player.playSound(this.emptySound.value(), 0.8f, 0.8f + player.level().getRandom().nextFloat() * 0.4f);
+        player.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
 
-        stack.set(DataComponentTypes.BUNDLE_CONTENTS, newBuilder.build());
+        stack.set(DataComponents.BUNDLE_CONTENTS, newBuilder.toImmutable());
     }
 
-    private void playInsertItemSound(PlayerEntity user) {
-        user.playSound(this.insertItemSound.value(), 0.8f, 0.8f + user.getEntityWorld().getRandom().nextFloat() * 0.4f);
+    private void playInsertItemSound(Player user) {
+        user.playSound(this.insertItemSound.value(), 0.8f, 0.8f + user.level().getRandom().nextFloat() * 0.4f);
     }
 }

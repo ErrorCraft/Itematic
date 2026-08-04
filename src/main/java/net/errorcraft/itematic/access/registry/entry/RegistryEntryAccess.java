@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.access.registry.entry;
 
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
 import org.jetbrains.annotations.NotNull;
 
-public interface RegistryEntryAccess<T> extends Comparable<RegistryEntry<T>> {
+public interface RegistryEntryAccess<T> extends Comparable<Holder<T>> {
     @Override
-    default int compareTo(@NotNull RegistryEntry<T> o) {
+    default int compareTo(@NotNull Holder<T> o) {
         return 0;
     }
 

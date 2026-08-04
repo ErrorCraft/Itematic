@@ -1,23 +1,23 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.AbstractSkeletonEntity;
-import net.minecraft.entity.mob.SkeletonEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(SkeletonEntity.class)
+@Mixin(Skeleton.class)
 public abstract class SkeletonEntityExtender extends MobEntityExtender {
-    protected SkeletonEntityExtender(EntityType<? extends AbstractSkeletonEntity> entityType, World world) {
+    protected SkeletonEntityExtender(EntityType<? extends AbstractSkeleton> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.SKELETON_SPAWN_EGG;
     }
 }

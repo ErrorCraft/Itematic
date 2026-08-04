@@ -3,14 +3,14 @@ package net.errorcraft.itematic.mixin.client.recipebook;
 import net.errorcraft.itematic.access.client.recipebook.RecipeBookWidgetTabAccess;
 import net.errorcraft.itematic.item.ItemAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
-import net.minecraft.client.recipebook.RecipeBookType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
+import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,53 +21,53 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Optional;
 
 public class RecipeBookWidgetExtender {
-    @Mixin(RecipeBookWidget.Tab.class)
+    @Mixin(RecipeBookComponent.TabInfo.class)
     public static class TabExtender implements RecipeBookWidgetTabAccess {
         @Unique
-        private RegistryKey<Item> primaryIconItem;
+        private ResourceKey<Item> primaryIconItem;
         @Unique
-        private Optional<RegistryKey<Item>> secondaryIconItem;
+        private Optional<ResourceKey<Item>> secondaryIconItem;
 
         @Redirect(
             method = {
-                "<init>(Lnet/minecraft/client/recipebook/RecipeBookType;)V",
-                "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookCategory;)V",
-                "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookCategory;)V"
+                "<init>(Lnet/minecraft/client/gui/screens/recipebook/SearchRecipeBookCategory;)V",
+                "<init>(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/crafting/RecipeBookCategory;)V",
+                "<init>(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/crafting/RecipeBookCategory;)V"
             },
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private static ItemStack newItemStackUseEmptyItemStack(ItemConvertible item) {
+        private static ItemStack newItemStackUseEmptyItemStack(ItemLike item) {
             return ItemStack.EMPTY;
         }
 
         @Inject(
-            method = "<init>(Lnet/minecraft/client/recipebook/RecipeBookType;)V",
+            method = "<init>(Lnet/minecraft/client/gui/screens/recipebook/SearchRecipeBookCategory;)V",
             at = @At("TAIL")
         )
-        private void setIcons(RecipeBookType type, CallbackInfo info) {
+        private void setIcons(SearchRecipeBookCategory type, CallbackInfo info) {
             this.primaryIconItem = ItemKeys.COMPASS;
             this.secondaryIconItem = Optional.empty();
         }
 
         @Inject(
-            method = "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookCategory;)V",
+            method = "<init>(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/crafting/RecipeBookCategory;)V",
             at = @At("TAIL")
         )
         private void setIcons(Item primaryIcon, RecipeBookCategory category, CallbackInfo info) {
-            this.primaryIconItem = Registries.ITEM.getKey(primaryIcon).orElseThrow();
+            this.primaryIconItem = BuiltInRegistries.ITEM.getResourceKey(primaryIcon).orElseThrow();
             this.secondaryIconItem = Optional.empty();
         }
 
         @Inject(
-            method = "<init>(Lnet/minecraft/item/Item;Lnet/minecraft/item/Item;Lnet/minecraft/recipe/book/RecipeBookCategory;)V",
+            method = "<init>(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/crafting/RecipeBookCategory;)V",
             at = @At("TAIL")
         )
         private void setIcons(Item primaryIcon, Item secondaryIcon, RecipeBookCategory category, CallbackInfo info) {
-            this.primaryIconItem = Registries.ITEM.getKey(primaryIcon).orElseThrow();
-            this.secondaryIconItem = Optional.of(Registries.ITEM.getKey(secondaryIcon).orElseThrow());
+            this.primaryIconItem = BuiltInRegistries.ITEM.getResourceKey(primaryIcon).orElseThrow();
+            this.secondaryIconItem = Optional.of(BuiltInRegistries.ITEM.getResourceKey(secondaryIcon).orElseThrow());
         }
 
         @Override

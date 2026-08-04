@@ -1,16 +1,16 @@
 package net.errorcraft.itematic.mixin.network.packet;
 
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.PacketType;
-import net.minecraft.network.packet.PlayPackets;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.PacketType;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.GamePacketTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(PlayPackets.class)
+@Mixin(GamePacketTypes.class)
 public interface PlayPacketsAccessor {
-    @Invoker("s2c")
-    static <T extends Packet<ClientPlayPacketListener>> PacketType<T> s2c(String id) {
+    @Invoker("createClientbound")
+    static <T extends Packet<ClientGamePacketListener>> PacketType<T> s2c(String id) {
         throw new AssertionError();
     }
 }

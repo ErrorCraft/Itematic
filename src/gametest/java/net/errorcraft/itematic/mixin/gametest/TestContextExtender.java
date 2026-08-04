@@ -2,43 +2,43 @@ package net.errorcraft.itematic.mixin.gametest;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.errorcraft.itematic.access.gametest.GameTestStateAccess;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.test.GameTestState;
-import net.minecraft.test.TestContext;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.gametest.framework.GameTestInfo;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(TestContext.class)
+@Mixin(GameTestHelper.class)
 public abstract class TestContextExtender {
     @Shadow
     @Final
-    private GameTestState test;
+    private GameTestInfo testInfo;
 
     @Shadow
-    public abstract Vec3d getAbsolute(Vec3d pos);
+    public abstract Vec3 absoluteVec(Vec3 pos);
 
     @ModifyReturnValue(
-        method = "createMockPlayer",
+        method = "makeMockPlayer",
         at = @At("TAIL")
     )
-    private PlayerEntity setPlayerData(PlayerEntity original, GameMode gameMode) {
-        original.setPosition(this.getAbsolute(Vec3d.ZERO));
-        gameMode.setAbilities(original.getAbilities());
+    private Player setPlayerData(Player original, GameType gameMode) {
+        original.setPos(this.absoluteVec(Vec3.ZERO));
+        gameMode.updatePlayerAbilities(original.getAbilities());
         return original;
     }
 
     @ModifyReturnValue(
-        method = "createMockCreativeServerPlayerInWorld",
+        method = "makeMockServerPlayerInLevel",
         at = @At("TAIL")
     )
-    private ServerPlayerEntity removePlayerWhenFinished(ServerPlayerEntity original) {
-        ((GameTestStateAccess) this.test).itematic$whenFinished(() -> original.networkHandler.disconnect(Text.empty()));
+    private ServerPlayer removePlayerWhenFinished(ServerPlayer original) {
+        ((GameTestStateAccess) this.testInfo).itematic$whenFinished(() -> original.connection.disconnect(Component.empty()));
         return original;
     }
 }

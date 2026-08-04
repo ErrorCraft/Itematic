@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.access.component.type;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 
 public interface ChargedProjectilesComponentAccess {
-    default boolean itematic$contains(RegistryKey<Item> item) {
+    default boolean itematic$contains(ResourceKey<Item> item) {
         return false;
     }
 }

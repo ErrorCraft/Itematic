@@ -8,18 +8,17 @@ import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.predicate.component.ComponentMapPredicate;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.EnchantmentTags;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.village.TradedItem;
-
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponentExactPredicate;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.trading.ItemCost;
+import net.minecraft.world.level.storage.loot.LootContext;
 import java.util.Optional;
 
 public record EnchantWithLevelsTradeModifier(int index, Range.IntegerRange level, boolean treasure) implements TradeModifier<EnchantWithLevelsTradeModifier> {
@@ -39,14 +38,14 @@ public record EnchantWithLevelsTradeModifier(int index, Range.IntegerRange level
     }
 
     @Override
-    public Optional<TradedItem> apply(Trade.Input wants, ItemStack gives, LootContext context) {
-        Random random = context.getRandom();
+    public Optional<ItemCost> apply(Trade.Input wants, ItemStack gives, LootContext context) {
+        RandomSource random = context.getRandom();
         int level = Math.max(1, this.level.get(random));
-        DynamicRegistryManager registryManager = context.getWorld().getRegistryManager();
-        Optional<RegistryEntryList.Named<Enchantment>> enchantments = registryManager.getOrThrow(RegistryKeys.ENCHANTMENT)
-            .getOptional(EnchantmentTags.ON_TRADED_EQUIPMENT);
-        ItemStack givesActual = EnchantmentHelper.enchant(random, gives, level, registryManager, enchantments);
+        RegistryAccess registryManager = context.getLevel().registryAccess();
+        Optional<HolderSet.Named<Enchantment>> enchantments = registryManager.lookupOrThrow(Registries.ENCHANTMENT)
+            .get(EnchantmentTags.ON_TRADED_EQUIPMENT);
+        ItemStack givesActual = EnchantmentHelper.enchantItem(random, gives, level, registryManager, enchantments);
         wants.getStack(this.index).itematic$tryIncrement(level);
-        return Optional.of(new TradedItem(givesActual.getRegistryEntry(), givesActual.getCount(), ComponentMapPredicate.of(givesActual.getComponents())));
+        return Optional.of(new ItemCost(givesActual.getItemHolder(), givesActual.getCount(), DataComponentExactPredicate.allOf(givesActual.getComponents())));
     }
 }

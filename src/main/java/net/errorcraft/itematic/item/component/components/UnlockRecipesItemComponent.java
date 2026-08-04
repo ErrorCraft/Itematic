@@ -7,21 +7,20 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.KnowledgeBookItem;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.KnowledgeBookItem;
+import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class UnlockRecipesItemComponent implements ItemComponent<UnlockRecipesItemComponent> {
     public static final UnlockRecipesItemComponent INSTANCE = new UnlockRecipesItemComponent();
     public static final Codec<UnlockRecipesItemComponent> CODEC = MapCodec.unitCodec(INSTANCE);
-    private static final KnowledgeBookItem DUMMY = new KnowledgeBookItem(new Item.Settings());
+    private static final KnowledgeBookItem DUMMY = new KnowledgeBookItem(new Item.Properties());
 
     private UnlockRecipesItemComponent() {}
 
@@ -36,12 +35,12 @@ public class UnlockRecipesItemComponent implements ItemComponent<UnlockRecipesIt
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        return DUMMY.use(world, user, hand).isAccepted() ? ItemResult.SUCCEED : ItemResult.PASS;
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        return DUMMY.use(world, user, hand).consumesAction() ? ItemResult.SUCCEED : ItemResult.PASS;
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.RECIPES, List.of());
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.RECIPES, List.of());
     }
 }

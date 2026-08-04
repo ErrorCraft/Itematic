@@ -1,16 +1,16 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(BlockItem.class)
 public interface BlockItemAccessor {
-    @Invoker("copyComponentsToBlockEntity")
-    static void copyComponentsToBlockEntity(World world, BlockPos pos, ItemStack stack) {
+    @Invoker("updateBlockEntityComponents")
+    static void copyComponentsToBlockEntity(Level world, BlockPos pos, ItemStack stack) {
         throw new AssertionError();
     }
 }

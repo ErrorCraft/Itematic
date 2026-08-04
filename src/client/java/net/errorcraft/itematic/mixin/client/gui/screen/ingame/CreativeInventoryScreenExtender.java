@@ -5,19 +5,19 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.DefaultedRegistry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.core.DefaultedRegistry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,60 +26,60 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.stream.Stream;
 
-@Mixin(CreativeInventoryScreen.class)
-public abstract class CreativeInventoryScreenExtender extends HandledScreen<CreativeInventoryScreen.CreativeScreenHandler> {
-    public CreativeInventoryScreenExtender(CreativeInventoryScreen.CreativeScreenHandler handler, PlayerInventory inventory, Text title) {
+@Mixin(CreativeModeInventoryScreen.class)
+public abstract class CreativeInventoryScreenExtender extends AbstractContainerScreen<CreativeModeInventoryScreen.ItemPickerMenu> {
+    public CreativeInventoryScreenExtender(CreativeModeInventoryScreen.ItemPickerMenu handler, Inventory inventory, Component title) {
         super(handler, inventory, title);
     }
 
-    @Definition(id = "getCreativeHotbarStorage", method = "Lnet/minecraft/client/MinecraftClient;getCreativeHotbarStorage()Lnet/minecraft/client/option/HotbarStorage;")
+    @Definition(id = "getCreativeHotbarStorage", method = "Lnet/minecraft/client/Minecraft;getHotbarManager()Lnet/minecraft/client/HotbarManager;")
     @Expression("? = ?.getCreativeHotbarStorage()")
     @Inject(
-        method = "setSelectedTab",
+        method = "selectTab",
         at = @At(
             value = "MIXINEXTRAS:EXPRESSION",
             shift = At.Shift.AFTER
         )
     )
     @SuppressWarnings("ConstantConditions")
-    private void storePaperRegistryEntry(ItemGroup group, CallbackInfo info, @Share("paper") LocalRef<RegistryEntry<Item>> paper) {
-        paper.set(this.client.world.itematic$getItem(ItemKeys.PAPER));
+    private void storePaperRegistryEntry(CreativeModeTab group, CallbackInfo info, @Share("paper") LocalRef<Holder<Item>> paper) {
+        paper.set(this.minecraft.level.itematic$getItem(ItemKeys.PAPER));
     }
 
     @Redirect(
-        method = "setSelectedTab",
+        method = "selectTab",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForPaperUseRegistryEntry(ItemConvertible item, @Share("paper") LocalRef<RegistryEntry<Item>> paper) {
+    private ItemStack newItemStackForPaperUseRegistryEntry(ItemLike item, @Share("paper") LocalRef<Holder<Item>> paper) {
         return new ItemStack(paper.get());
     }
 
     @Redirect(
-        method = "renderTabIcon",
+        method = "renderTabButton",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup;getIcon()Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/CreativeModeTab;getIconItem()Lnet/minecraft/world/item/ItemStack;"
         )
     )
     @SuppressWarnings("ConstantConditions")
-    private ItemStack getIconUseDynamicRegistry(ItemGroup instance, DrawContext context) {
-        return instance.itematic$icon(this.client.world.itematic$getItemAccess());
+    private ItemStack getIconUseDynamicRegistry(CreativeModeTab instance, GuiGraphics context) {
+        return instance.itematic$icon(this.minecraft.level.itematic$getItemAccess());
     }
 
     @Redirect(
-        method = "searchForTags",
+        method = "updateVisibleTags",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;streamTags()Ljava/util/stream/Stream;"
+            target = "Lnet/minecraft/core/DefaultedRegistry;getTags()Ljava/util/stream/Stream;"
         )
     )
     @SuppressWarnings("ConstantConditions")
-    private Stream<RegistryEntryList.Named<Item>> streamTagsUseDynamicRegistry(DefaultedRegistry<Item> instance) {
-        return this.client.world.getRegistryManager()
-            .getOrThrow(RegistryKeys.ITEM)
-            .streamTags();
+    private Stream<HolderSet.Named<Item>> streamTagsUseDynamicRegistry(DefaultedRegistry<Item> instance) {
+        return this.minecraft.level.registryAccess()
+            .lookupOrThrow(Registries.ITEM)
+            .getTags();
     }
 }

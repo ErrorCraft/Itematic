@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -14,23 +14,23 @@ import java.util.stream.Stream;
 public class ItemAccess {
     private final Registry<Item> registry;
 
-    public ItemAccess(DynamicRegistryManager registryManager) {
-        this.registry = registryManager.getOrThrow(RegistryKeys.ITEM);
+    public ItemAccess(RegistryAccess registryManager) {
+        this.registry = registryManager.lookupOrThrow(Registries.ITEM);
     }
 
-    public RegistryEntry.Reference<Item> getEntry(RegistryKey<Item> key) {
+    public Holder.Reference<Item> getEntry(ResourceKey<Item> key) {
         return this.registry.getOrThrow(key);
     }
 
-    public Optional<RegistryEntry.Reference<Item>> getOptionalEntry(RegistryKey<Item> key) {
-        return this.registry.getOptional(key);
+    public Optional<Holder.Reference<Item>> getOptionalEntry(ResourceKey<Item> key) {
+        return this.registry.get(key);
     }
 
-    public Stream<RegistryEntry.Reference<Item>> streamEntries() {
-        return this.registry.streamEntries();
+    public Stream<Holder.Reference<Item>> streamEntries() {
+        return this.registry.listElements();
     }
 
-    public Iterable<RegistryEntry<Item>> iterateEntries(TagKey<Item> tag) {
-        return this.registry.iterateEntries(tag);
+    public Iterable<Holder<Item>> iterateEntries(TagKey<Item> tag) {
+        return this.registry.getTagOrEmpty(tag);
     }
 }

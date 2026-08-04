@@ -11,31 +11,27 @@ import net.errorcraft.itematic.item.weapon.melee.component.KineticMeleeWeapon;
 import net.errorcraft.itematic.item.weapon.melee.component.PiercingMeleeWeapon;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.minecraft.SharedConstants;
-import net.minecraft.block.Block;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.*;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.SwingAnimationType;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.*;
+import net.minecraft.world.level.block.Block;
 
 import java.util.Optional;
 
-public record DamageableItemComponent(int durability, Optional<RegistryEntry<SoundEvent>> breakSound, boolean preserveItem) implements ItemComponent<DamageableItemComponent> {
+public record DamageableItemComponent(int durability, Optional<Holder<SoundEvent>> breakSound, boolean preserveItem) implements ItemComponent<DamageableItemComponent> {
     public static final Codec<DamageableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.POSITIVE_INT.fieldOf("durability").forGetter(DamageableItemComponent::durability),
-        SoundEvent.ENTRY_CODEC.optionalFieldOf("break_sound").forGetter(DamageableItemComponent::breakSound),
+        ExtraCodecs.POSITIVE_INT.fieldOf("durability").forGetter(DamageableItemComponent::durability),
+        SoundEvent.CODEC.optionalFieldOf("break_sound").forGetter(DamageableItemComponent::breakSound),
         Codec.BOOL.optionalFieldOf("preserve_item", false).forGetter(DamageableItemComponent::preserveItem)
     ).apply(instance, DamageableItemComponent::new));
 
@@ -43,7 +39,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
         return new DamageableItemComponent(durability, Optional.empty(), false);
     }
 
-    public static DamageableItemComponent of(int durability, RegistryEntry<SoundEvent> breakSound) {
+    public static DamageableItemComponent of(int durability, Holder<SoundEvent> breakSound) {
         return new DamageableItemComponent(durability, Optional.of(breakSound), false);
     }
 
@@ -51,14 +47,14 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
         return new DamageableItemComponent(durability, Optional.empty(), true);
     }
 
-    public static ItemComponent<?>[] sword(RegistryEntryLookup<Block> blocks, ToolMaterial material, RegistryEntryList<Item> repairItems) {
+    public static ItemComponent<?>[] sword(HolderGetter<Block> blocks, ToolMaterial material, HolderSet<Item> repairItems) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
             DamageableItemComponent.of(material.durability()),
             ToolItemComponent.builder(2)
                 .preventCreativeDestruction()
-                .rule(ToolComponent.Rule.ofAlwaysDropping(RegistryEntryList.of(blocks.getOrThrow(BlockKeys.COBWEB)), 15.0f))
-                .rule(ToolComponent.Rule.of(blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f))
+                .rule(Tool.Rule.minesAndDrops(HolderSet.direct(blocks.getOrThrow(BlockKeys.COBWEB)), 15.0f))
+                .rule(Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f))
                 .build(),
             WeaponItemComponent.builder(1, 4.0d + material.attackDamageBonus(), 0.4d)
                 .build(),
@@ -67,14 +63,14 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
         };
     }
 
-    public static ItemComponent<?>[] spear(ToolMaterial material, RegistryEntryLookup<DamageType> damageTypes, float attackDuration, float damageMultiplier, float delay, float dismountTime, float dismountSpeedThreshold, float knockbackTime, float knockbackSpeedThreshold, float damageTime, float damageSpeedThreshold, RegistryEntryList<Item> repairItems, RegistryEntryLookup<SoundEvent> soundEvents) {
+    public static ItemComponent<?>[] spear(ToolMaterial material, HolderGetter<DamageType> damageTypes, float attackDuration, float damageMultiplier, float delay, float dismountTime, float dismountSpeedThreshold, float knockbackTime, float knockbackSpeedThreshold, float damageTime, float damageSpeedThreshold, HolderSet<Item> repairItems, HolderGetter<SoundEvent> soundEvents) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
             DamageableItemComponent.of(material.durability()),
             UseableItemComponent.builder()
                 .useIndefinitely()
-                .animation(UseAction.SPEAR)
-                .effects(new UseEffectsComponent(
+                .animation(ItemUseAnimation.SPEAR)
+                .effects(new UseEffects(
                     true,
                     false,
                     1.0f
@@ -83,18 +79,18 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
             WeaponItemComponent.builder(1, material.attackDamageBonus(), 1 / (4 * attackDuration))
                 .type(
                     MeleeWeaponComponents.KINETIC,
-                    KineticMeleeWeapon.of(new KineticWeaponComponent(
+                    KineticMeleeWeapon.of(new KineticWeapon(
                         10,
                         (int)(delay * SharedConstants.TICKS_PER_SECOND),
-                        KineticWeaponComponent.Condition.ofMinSpeed(
+                        KineticWeapon.Condition.ofAttackerSpeed(
                             (int)(dismountTime * SharedConstants.TICKS_PER_SECOND),
                             dismountSpeedThreshold
                         ),
-                        KineticWeaponComponent.Condition.ofMinSpeed(
+                        KineticWeapon.Condition.ofAttackerSpeed(
                             (int)(knockbackTime * SharedConstants.TICKS_PER_SECOND),
                             knockbackSpeedThreshold
                         ),
-                        KineticWeaponComponent.Condition.ofMinRelativeSpeed(
+                        KineticWeapon.Condition.ofRelativeSpeed(
                             (int)(damageTime * SharedConstants.TICKS_PER_SECOND),
                             damageSpeedThreshold
                         ),
@@ -112,7 +108,7 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                 )
                 .type(
                     MeleeWeaponComponents.PIERCING,
-                    PiercingMeleeWeapon.of(new PiercingWeaponComponent(
+                    PiercingMeleeWeapon.of(new PiercingWeapon(
                         true,
                         false,
                         Optional.of(material == ToolMaterial.WOOD
@@ -126,11 +122,11 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
                     ))
                 )
                 .damageType(damageTypes.getOrThrow(DamageTypes.SPEAR))
-                .swingAnimation(new SwingAnimationComponent(
+                .swingAnimation(new SwingAnimation(
                     SwingAnimationType.STAB,
                     (int)(attackDuration * SharedConstants.TICKS_PER_SECOND)
                 ))
-                .attackRange(new AttackRangeComponent(
+                .attackRange(new AttackRange(
                     2.0f,
                     4.5f,
                     2.0f,
@@ -145,23 +141,23 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
         };
     }
 
-    public static ItemComponent<?>[] shovel(RegistryEntryLookup<Block> blocks, ToolMaterial material, RegistryEntryList<Item> repairItems) {
-        return tool(blocks, material, 0.0f, 2.5d, 0.25d, BlockTags.SHOVEL_MINEABLE, repairItems);
+    public static ItemComponent<?>[] shovel(HolderGetter<Block> blocks, ToolMaterial material, HolderSet<Item> repairItems) {
+        return tool(blocks, material, 0.0f, 2.5d, 0.25d, BlockTags.MINEABLE_WITH_SHOVEL, repairItems);
     }
 
-    public static ItemComponent<?>[] pickaxe(RegistryEntryLookup<Block> blocks, ToolMaterial material, RegistryEntryList<Item> repairItems) {
-        return tool(blocks, material, 0.0f, 2.0d, 0.3d, BlockTags.PICKAXE_MINEABLE, repairItems);
+    public static ItemComponent<?>[] pickaxe(HolderGetter<Block> blocks, ToolMaterial material, HolderSet<Item> repairItems) {
+        return tool(blocks, material, 0.0f, 2.0d, 0.3d, BlockTags.MINEABLE_WITH_PICKAXE, repairItems);
     }
 
-    public static ItemComponent<?>[] axe(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, RegistryEntryList<Item> repairItems) {
-        return tool(blocks, material, 5.0f, attackDamage, attackSpeed, BlockTags.AXE_MINEABLE, repairItems);
+    public static ItemComponent<?>[] axe(HolderGetter<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, HolderSet<Item> repairItems) {
+        return tool(blocks, material, 5.0f, attackDamage, attackSpeed, BlockTags.MINEABLE_WITH_AXE, repairItems);
     }
 
-    public static ItemComponent<?>[] hoe(RegistryEntryLookup<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, RegistryEntryList<Item> repairItems) {
-        return tool(blocks, material, 0.0f, attackDamage, attackSpeed, BlockTags.HOE_MINEABLE, repairItems);
+    public static ItemComponent<?>[] hoe(HolderGetter<Block> blocks, ToolMaterial material, double attackDamage, double attackSpeed, HolderSet<Item> repairItems) {
+        return tool(blocks, material, 0.0f, attackDamage, attackSpeed, BlockTags.MINEABLE_WITH_HOE, repairItems);
     }
 
-    private static ItemComponent<?>[] tool(RegistryEntryLookup<Block> blocks, ToolMaterial material, float disableBlockingForSeconds, double baseAttackDamage, double attackSpeed, TagKey<Block> mineableBlocks, RegistryEntryList<Item> repairItems) {
+    private static ItemComponent<?>[] tool(HolderGetter<Block> blocks, ToolMaterial material, float disableBlockingForSeconds, double baseAttackDamage, double attackSpeed, TagKey<Block> mineableBlocks, HolderSet<Item> repairItems) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
             DamageableItemComponent.of(material.durability()),
@@ -185,10 +181,10 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.MAX_DAMAGE, this.durability);
-        builder.add(DataComponentTypes.DAMAGE, 0);
-        this.breakSound.ifPresent(breakSound -> builder.add(DataComponentTypes.BREAK_SOUND, breakSound));
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.MAX_DAMAGE, this.durability);
+        builder.set(DataComponents.DAMAGE, 0);
+        this.breakSound.ifPresent(breakSound -> builder.set(DataComponents.BREAK_SOUND, breakSound));
     }
 
     public int maximumDamage(ItemStack stack) {
@@ -196,6 +192,6 @@ public record DamageableItemComponent(int durability, Optional<RegistryEntry<Sou
     }
 
     public boolean isUsable(ItemStack stack) {
-        return stack.getDamage() < this.maximumDamage(stack);
+        return stack.getDamageValue() < this.maximumDamage(stack);
     }
 }

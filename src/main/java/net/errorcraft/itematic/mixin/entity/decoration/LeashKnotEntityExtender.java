@@ -1,30 +1,30 @@
 package net.errorcraft.itematic.mixin.entity.decoration;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.BlockAttachedEntity;
-import net.minecraft.entity.decoration.LeashKnotEntity;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.BlockAttachedEntity;
+import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(LeashKnotEntity.class)
+@Mixin(LeashFenceKnotEntity.class)
 public abstract class LeashKnotEntityExtender extends BlockAttachedEntity {
-    protected LeashKnotEntityExtender(EntityType<? extends BlockAttachedEntity> entityType, World world) {
+    protected LeashKnotEntityExtender(EntityType<? extends BlockAttachedEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "getPickBlockStack",
+        method = "getPickResult",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForLeadUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.LEAD);
+    private ItemStack newItemStackForLeadUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.LEAD);
     }
 }

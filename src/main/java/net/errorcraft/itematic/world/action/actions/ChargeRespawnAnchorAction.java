@@ -7,12 +7,12 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.RespawnAnchorBlock;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RespawnAnchorBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record ChargeRespawnAnchorAction(PositionTarget position) implements Action<ChargeRespawnAnchorAction> {
     public static final MapCodec<ChargeRespawnAnchorAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -30,22 +30,22 @@ public record ChargeRespawnAnchorAction(PositionTarget position) implements Acti
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        World world = context.world();
+        Level world = context.world();
         BlockState state = world.getBlockState(pos);
-        if (!state.isOf(Blocks.RESPAWN_ANCHOR)) {
+        if (!state.is(Blocks.RESPAWN_ANCHOR)) {
             return false;
         }
 
-        if (state.get(RespawnAnchorBlock.CHARGES) == RespawnAnchorBlock.MAX_CHARGES) {
+        if (state.getValue(RespawnAnchorBlock.CHARGE) == RespawnAnchorBlock.MAX_CHARGES) {
             return false;
         }
 
-        RespawnAnchorBlock.charge(context.get(LootContextParameters.THIS_ENTITY), world, pos, state);
+        RespawnAnchorBlock.charge(context.get(LootContextParams.THIS_ENTITY), world, pos, state);
         return true;
     }
 }

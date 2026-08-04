@@ -1,38 +1,38 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.mob.SlimeEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(SlimeEntity.class)
+@Mixin(Slime.class)
 public abstract class SlimeEntityExtender extends MobEntityExtender {
-    protected SlimeEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
+    protected SlimeEntityExtender(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "getDamageAmount",
+        method = "getAttackDamage",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/SlimeEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D"
+            target = "Lnet/minecraft/world/entity/monster/Slime;getAttributeValue(Lnet/minecraft/core/Holder;)D"
         )
     )
-    private double useCustomAttackDamage(SlimeEntity instance, RegistryEntry<EntityAttribute> attribute) {
+    private double useCustomAttackDamage(Slime instance, Holder<Attribute> attribute) {
         return this.itematic$getAttackDamage();
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.SLIME_SPAWN_EGG;
     }
 }

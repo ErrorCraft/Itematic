@@ -13,25 +13,24 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.predicate.NumberRange;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-
+import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import java.util.Optional;
 
-public record ThrowableItemComponent(float speed, float angleOffset, Optional<NumberRange.IntRange> drawDuration) implements ItemComponent<ThrowableItemComponent> {
+public record ThrowableItemComponent(float speed, float angleOffset, Optional<MinMaxBounds.Ints> drawDuration) implements ItemComponent<ThrowableItemComponent> {
     public static final Codec<ThrowableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ItematicCodecs.NON_NEGATIVE_FLOAT.fieldOf("speed").forGetter(ThrowableItemComponent::speed),
         Codec.FLOAT.fieldOf("angle_offset").forGetter(ThrowableItemComponent::angleOffset),
-        NumberRange.IntRange.CODEC.optionalFieldOf("draw_duration").forGetter(ThrowableItemComponent::drawDuration)
+        MinMaxBounds.Ints.CODEC.optionalFieldOf("draw_duration").forGetter(ThrowableItemComponent::drawDuration)
     ).apply(instance, ThrowableItemComponent::new));
 
     public static ThrowableItemComponent of() {
@@ -50,9 +49,9 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
                 .useFor(TridentIntegerProvider.INSTANCE)
-                .animation(UseAction.TRIDENT)
+                .animation(ItemUseAnimation.TRIDENT)
                 .build(),
-            new ThrowableItemComponent(speed, angleOffset, Optional.of(NumberRange.IntRange.atLeast(minDrawDuration)))
+            new ThrowableItemComponent(speed, angleOffset, Optional.of(MinMaxBounds.Ints.atLeast(minDrawDuration)))
         };
     }
 
@@ -67,7 +66,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.drawDuration.isPresent()) {
             return ItemResult.PASS;
         }
@@ -77,11 +76,11 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
     }
 
     @Override
-    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
-        if (this.drawDuration.filter(drawDuration -> drawDuration.test(usedTicks)).isPresent()) {
+    public boolean stopUsing(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
+        if (this.drawDuration.filter(drawDuration -> drawDuration.matches(usedTicks)).isPresent()) {
             this.createEntity(world, user, stack, stackExchanger);
-            if (user instanceof PlayerEntity player) {
-                player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+            if (user instanceof Player player) {
+                player.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
             }
 
             return true;
@@ -90,20 +89,20 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
         return false;
     }
 
-    private void createEntity(World world, LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (world instanceof ServerWorld serverWorld) {
+    private void createEntity(Level world, LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (world instanceof ServerLevel serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParameters.TOOL, stack)
-                .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getEntityPos())
-                .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePos().add(0.0d, -0.1d, 0.0d))
+                .add(LootContextParams.TOOL, stack)
+                .add(LootContextParams.THIS_ENTITY, user)
+                .add(LootContextParams.ORIGIN, user.position())
+                .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePosition().add(0.0d, -0.1d, 0.0d))
                 .build();
             this.createEntity(context, serverWorld, stack);
         }
     }
 
-    private void createEntity(ActionContext context, ServerWorld world, ItemStack stack) {
+    private void createEntity(ActionContext context, ServerLevel world, ItemStack stack) {
         ProjectileItemComponent projectile = stack.itematic$getBehavior(ItemComponentTypes.PROJECTILE).orElse(null);
         if (projectile == null) {
             return;
@@ -122,7 +121,7 @@ public record ThrowableItemComponent(float speed, float angleOffset, Optional<Nu
 
         ActionContext spawnedContext = context.extend()
             .add(ItematicContextParameters.SPAWNED_ENTITY, projectileEntity)
-            .add(ItematicContextParameters.SPAWNED_POSITION, projectileEntity.getEntityPos())
+            .add(ItematicContextParameters.SPAWNED_POSITION, projectileEntity.position())
             .build();
         stack.itematic$invokeEvent(ItemEvents.THROW_PROJECTILE, spawnedContext);
     }

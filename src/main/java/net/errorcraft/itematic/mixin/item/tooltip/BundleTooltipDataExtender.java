@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.mixin.item.tooltip;
 
 import net.errorcraft.itematic.access.item.tooltip.BundleTooltipDataAccess;
-import net.minecraft.item.tooltip.BundleTooltipData;
+import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import org.apache.commons.lang3.math.Fraction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(BundleTooltipData.class)
+@Mixin(BundleTooltip.class)
 public class BundleTooltipDataExtender implements BundleTooltipDataAccess {
     @Unique
     private Fraction capacity;

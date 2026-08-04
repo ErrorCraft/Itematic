@@ -3,18 +3,18 @@ package net.errorcraft.itematic.gametest.item.component;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 
 public class ImmuneToDamageItemComponentTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest
-    public void explodingNetherStarKeepsItemAlive(TestContext context) {
-        ServerWorld world = context.getWorld();
+    public void explodingNetherStarKeepsItemAlive(GameTestHelper context) {
+        ServerLevel world = context.getLevel();
         ItemEntity netherStar = new ItemEntity(
             world,
             0.0d,
@@ -23,13 +23,13 @@ public class ImmuneToDamageItemComponentTestSuite {
             world.itematic$createStack(ItemKeys.NETHER_STAR)
         );
         TestUtil.spawnEntity(context, netherStar, SPAWN_POSITION);
-        netherStar.damage(world, world.getDamageSources().explosion(null), Float.MAX_VALUE);
-        context.addFinalTask(() -> context.expectEntity(EntityType.ITEM));
+        netherStar.hurtServer(world, world.damageSources().explosion(null), Float.MAX_VALUE);
+        context.succeedIf(() -> context.assertEntityPresent(EntityType.ITEM));
     }
 
     @GameTest
-    public void explodingStickDestroysItem(TestContext context) {
-        ServerWorld world = context.getWorld();
+    public void explodingStickDestroysItem(GameTestHelper context) {
+        ServerLevel world = context.getLevel();
         ItemEntity stick = new ItemEntity(
             world,
             0.0d,
@@ -38,13 +38,13 @@ public class ImmuneToDamageItemComponentTestSuite {
             world.itematic$createStack(ItemKeys.STICK)
         );
         TestUtil.spawnEntity(context, stick, SPAWN_POSITION);
-        stick.damage(world, world.getDamageSources().explosion(null), Float.MAX_VALUE);
-        context.addFinalTask(() -> context.dontExpectEntity(EntityType.ITEM));
+        stick.hurtServer(world, world.damageSources().explosion(null), Float.MAX_VALUE);
+        context.succeedIf(() -> context.assertEntityNotPresent(EntityType.ITEM));
     }
 
     @GameTest
-    public void settingNetheriteIngotOnFireKeepsItemAlive(TestContext context) {
-        ServerWorld world = context.getWorld();
+    public void settingNetheriteIngotOnFireKeepsItemAlive(GameTestHelper context) {
+        ServerLevel world = context.getLevel();
         ItemEntity netheriteIngot = new ItemEntity(
             world,
             0.0d,
@@ -53,13 +53,13 @@ public class ImmuneToDamageItemComponentTestSuite {
             world.itematic$createStack(ItemKeys.NETHERITE_INGOT)
         );
         TestUtil.spawnEntity(context, netheriteIngot, SPAWN_POSITION);
-        netheriteIngot.damage(world, world.getDamageSources().inFire(), Float.MAX_VALUE);
-        context.addFinalTask(() -> context.expectEntity(EntityType.ITEM));
+        netheriteIngot.hurtServer(world, world.damageSources().inFire(), Float.MAX_VALUE);
+        context.succeedIf(() -> context.assertEntityPresent(EntityType.ITEM));
     }
 
     @GameTest
-    public void settingStickOnFireDestroysItem(TestContext context) {
-        ServerWorld world = context.getWorld();
+    public void settingStickOnFireDestroysItem(GameTestHelper context) {
+        ServerLevel world = context.getLevel();
         ItemEntity stick = new ItemEntity(
             world,
             0.0d,
@@ -68,7 +68,7 @@ public class ImmuneToDamageItemComponentTestSuite {
             world.itematic$createStack(ItemKeys.STICK)
         );
         TestUtil.spawnEntity(context, stick, SPAWN_POSITION);
-        stick.damage(world, world.getDamageSources().inFire(), Float.MAX_VALUE);
-        context.addFinalTask(() -> context.dontExpectEntity(EntityType.ITEM));
+        stick.hurtServer(world, world.damageSources().inFire(), Float.MAX_VALUE);
+        context.succeedIf(() -> context.assertEntityNotPresent(EntityType.ITEM));
     }
 }

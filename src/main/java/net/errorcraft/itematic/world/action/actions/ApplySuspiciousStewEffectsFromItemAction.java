@@ -7,20 +7,20 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.SuspiciousStewEffectsComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SuspiciousStewEffects;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public record ApplySuspiciousStewEffectsFromItemAction(LootContext.EntityReference entity) implements Action<ApplySuspiciousStewEffectsFromItemAction> {
+public record ApplySuspiciousStewEffectsFromItemAction(LootContext.EntityTarget entity) implements Action<ApplySuspiciousStewEffectsFromItemAction> {
     public static final MapCodec<ApplySuspiciousStewEffectsFromItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(ApplySuspiciousStewEffectsFromItemAction::entity)
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(ApplySuspiciousStewEffectsFromItemAction::entity)
     ).apply(instance, ApplySuspiciousStewEffectsFromItemAction::new));
 
-    public static ApplySuspiciousStewEffectsFromItemAction of(LootContext.EntityReference entity) {
+    public static ApplySuspiciousStewEffectsFromItemAction of(LootContext.EntityTarget entity) {
         return new ApplySuspiciousStewEffectsFromItemAction(entity);
     }
 
@@ -31,12 +31,12 @@ public record ApplySuspiciousStewEffectsFromItemAction(LootContext.EntityReferen
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.get(LootContextParameters.TOOL);
+        ItemStack stack = context.get(LootContextParams.TOOL);
         if (ItemStackUtil.isNullOrEmpty(stack)) {
             return false;
         }
 
-        SuspiciousStewEffectsComponent suspiciousStewEffects = stack.get(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS);
+        SuspiciousStewEffects suspiciousStewEffects = stack.get(DataComponents.SUSPICIOUS_STEW_EFFECTS);
         if (suspiciousStewEffects == null) {
             return false;
         }
@@ -46,8 +46,8 @@ public record ApplySuspiciousStewEffectsFromItemAction(LootContext.EntityReferen
             return false;
         }
 
-        for (SuspiciousStewEffectsComponent.StewEffect effect : suspiciousStewEffects.effects()) {
-            livingEntity.addStatusEffect(effect.createStatusEffectInstance());
+        for (SuspiciousStewEffects.Entry effect : suspiciousStewEffects.effects()) {
+            livingEntity.addEffect(effect.createEffectInstance());
         }
 
         return true;

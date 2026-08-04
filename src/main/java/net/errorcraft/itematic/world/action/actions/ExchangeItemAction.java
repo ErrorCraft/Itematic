@@ -7,10 +7,10 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public record ExchangeItemAction(ItemStack item, boolean decrementCount) implements Action<ExchangeItemAction> {
     public static final MapCodec<ExchangeItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -18,15 +18,15 @@ public record ExchangeItemAction(ItemStack item, boolean decrementCount) impleme
         Codec.BOOL.optionalFieldOf("decrement_count", true).forGetter(ExchangeItemAction::decrementCount)
     ).apply(instance, ExchangeItemAction::new));
 
-    public static ExchangeItemAction of(RegistryEntry<Item> item) {
+    public static ExchangeItemAction of(Holder<Item> item) {
         return new ExchangeItemAction(new ItemStack(item), true);
     }
 
-    public static ExchangeItemAction ofNoDecrement(RegistryEntry<Item> item) {
+    public static ExchangeItemAction ofNoDecrement(Holder<Item> item) {
         return new ExchangeItemAction(new ItemStack(item), false);
     }
 
-    public static ExchangeItemAction of(RegistryEntry<Item> item, ComponentChanges components) {
+    public static ExchangeItemAction of(Holder<Item> item, DataComponentPatch components) {
         return new ExchangeItemAction(new ItemStack(item, 1, components), true);
     }
 
@@ -38,7 +38,7 @@ public record ExchangeItemAction(ItemStack item, boolean decrementCount) impleme
     @Override
     public boolean execute(ActionContext context) {
         if (this.decrementCount) {
-            context.resultStack().decrement(1);
+            context.resultStack().shrink(1);
         }
 
         context.exchangeStack(this.item.copy());

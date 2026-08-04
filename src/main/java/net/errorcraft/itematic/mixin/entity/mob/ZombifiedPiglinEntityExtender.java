@@ -4,30 +4,30 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.mob.ZombifiedPiglinEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ZombifiedPiglinEntity.class)
+@Mixin(ZombifiedPiglin.class)
 public abstract class ZombifiedPiglinEntityExtender extends MobEntityExtender {
-    public ZombifiedPiglinEntityExtender(EntityType<? extends ZombieEntity> entityType, World world) {
+    public ZombifiedPiglinEntityExtender(EntityType<? extends Zombie> entityType, Level world) {
         super(entityType, world);
     }
 
     @ModifyExpressionValue(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/math/random/Random;nextInt(I)I"
+            target = "Lnet/minecraft/util/RandomSource;nextInt(I)I"
         )
     )
     private int storeSpearChance(int original, @Share("spearChance") LocalIntRef spearChance) {
@@ -36,21 +36,21 @@ public abstract class ZombifiedPiglinEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForGoldenWeaponUseCreateStack(ItemConvertible item, @Share("spearChance") LocalIntRef spearChance) {
-        return this.getEntityWorld().itematic$createStack(spearChance.get() == 0
+    private ItemStack newItemStackForGoldenWeaponUseCreateStack(ItemLike item, @Share("spearChance") LocalIntRef spearChance) {
+        return this.level().itematic$createStack(spearChance.get() == 0
             ? ItemKeys.GOLDEN_SPEAR
             : ItemKeys.GOLDEN_SWORD
         );
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG;
     }
 }

@@ -8,22 +8,21 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.modification.WorldModification;
 import net.errorcraft.itematic.world.modification.WorldModificationType;
 import net.errorcraft.itematic.world.modification.WorldModificationTypes;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.RaycastContext;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.material.Fluid;
 import java.util.Optional;
 
-public record PlaceFluidWorldModification(RegistryEntry<Fluid> fluid, RegistryEntry<SoundEvent> placeSound, RegistryEntry<Item> transformsInto) implements WorldModification {
+public record PlaceFluidWorldModification(Holder<Fluid> fluid, Holder<SoundEvent> placeSound, Holder<Item> transformsInto) implements WorldModification {
     public static final MapCodec<PlaceFluidWorldModification> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.FLUID).fieldOf("fluid").forGetter(PlaceFluidWorldModification::fluid),
-        SoundEvent.ENTRY_CODEC.fieldOf("place_sound").forGetter(PlaceFluidWorldModification::placeSound),
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(PlaceFluidWorldModification::transformsInto)
+        RegistryFixedCodec.create(Registries.FLUID).fieldOf("fluid").forGetter(PlaceFluidWorldModification::fluid),
+        SoundEvent.CODEC.fieldOf("place_sound").forGetter(PlaceFluidWorldModification::placeSound),
+        RegistryFixedCodec.create(Registries.ITEM).fieldOf("transforms_into").forGetter(PlaceFluidWorldModification::transformsInto)
     ).apply(instance, PlaceFluidWorldModification::new));
 
     @Override
@@ -48,7 +47,7 @@ public record PlaceFluidWorldModification(RegistryEntry<Fluid> fluid, RegistryEn
     }
 
     @Override
-    public RaycastContext.FluidHandling fluidHandling() {
-        return RaycastContext.FluidHandling.NONE;
+    public ClipContext.Fluid fluidHandling() {
+        return ClipContext.Fluid.NONE;
     }
 }

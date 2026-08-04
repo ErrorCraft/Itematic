@@ -1,21 +1,21 @@
 package net.errorcraft.itematic.mixin.client.gui.tooltip;
 
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.client.gui.tooltip.BundleTooltipSubmenuHandler;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.client.gui.BundleMouseActions;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(BundleTooltipSubmenuHandler.class)
+@Mixin(BundleMouseActions.class)
 public class BundleTooltipSubmenuHandlerExtender {
     @Redirect(
-        method = "isApplicableTo",
+        method = "matches",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
     private boolean isInForBundlesUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {

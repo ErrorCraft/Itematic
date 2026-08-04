@@ -4,39 +4,38 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.InstrumentComponent;
-import net.minecraft.item.Instrument;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.registry.tag.TagKey;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Instrument;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.InstrumentComponent;
 import java.util.Collection;
 
 public class InstrumentItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     public static final MapCodec<InstrumentItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(entry -> entry.item),
-        TagKey.unprefixedCodec(RegistryKeys.INSTRUMENT).fieldOf("tag").forGetter(entry -> entry.tag)
+        RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(entry -> entry.item),
+        TagKey.codec(Registries.INSTRUMENT).fieldOf("tag").forGetter(entry -> entry.tag)
     )).apply(instance, InstrumentItemGroupEntry::new));
 
-    private final RegistryEntry<Item> item;
+    private final Holder<Item> item;
     private final TagKey<Instrument> tag;
 
-    public InstrumentItemGroupEntry(RegistryEntry<Item> item, TagKey<Instrument> tag) {
-        this(ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS, false, item, tag);
+    public InstrumentItemGroupEntry(Holder<Item> item, TagKey<Instrument> tag) {
+        this(CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS, false, item, tag);
     }
 
-    public InstrumentItemGroupEntry(ItemGroup.StackVisibility visibility, boolean requiresPermissions, RegistryEntry<Item> item, TagKey<Instrument> tag) {
+    public InstrumentItemGroupEntry(CreativeModeTab.TabVisibility visibility, boolean requiresPermissions, Holder<Item> item, TagKey<Instrument> tag) {
         super(visibility, requiresPermissions);
         this.item = item;
         this.tag = tag;
     }
 
-    public static InstrumentItemGroupEntry of(RegistryEntry<Item> item, TagKey<Instrument> tag) {
+    public static InstrumentItemGroupEntry of(Holder<Item> item, TagKey<Instrument> tag) {
         return new InstrumentItemGroupEntry(item, tag);
     }
 
@@ -46,14 +45,14 @@ public class InstrumentItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     }
 
     @Override
-    protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
-        return context.lookup()
-            .getOrThrow(RegistryKeys.INSTRUMENT)
+    protected Collection<ItemStack> createStacks(CreativeModeTab.ItemDisplayParameters context) {
+        return context.holders()
+            .lookupOrThrow(Registries.INSTRUMENT)
             .getOrThrow(this.tag)
             .stream()
             .map(instrument -> {
                 ItemStack stack = new ItemStack(this.item);
-                stack.set(DataComponentTypes.INSTRUMENT, new InstrumentComponent(instrument));
+                stack.set(DataComponents.INSTRUMENT, new InstrumentComponent(instrument));
                 return stack;
             })
             .toList();

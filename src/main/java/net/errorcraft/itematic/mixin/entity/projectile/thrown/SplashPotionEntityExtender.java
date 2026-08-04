@@ -1,22 +1,22 @@
 package net.errorcraft.itematic.mixin.entity.projectile.thrown;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.projectile.thrown.SplashPotionEntity;
-import net.minecraft.entity.projectile.thrown.ThrownEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownSplashPotion;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(SplashPotionEntity.class)
+@Mixin(ThrownSplashPotion.class)
 public abstract class SplashPotionEntityExtender extends ThrownItemEntityExtender {
-    protected SplashPotionEntityExtender(EntityType<? extends ThrownEntity> entityType, World world) {
+    protected SplashPotionEntityExtender(EntityType<? extends ThrowableProjectile> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected RegistryKey<Item> getDefaultItemKey() {
+    protected ResourceKey<Item> getDefaultItemKey() {
         return ItemKeys.SPLASH_POTION;
     }
 }

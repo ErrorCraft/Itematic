@@ -3,35 +3,34 @@ package net.errorcraft.itematic.util;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.ComponentType;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameMode;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -39,68 +38,68 @@ import java.util.function.Consumer;
 public class TestUtil {
     private TestUtil() {}
 
-    public static ItemStack createItemStackWithSlightDamage(ServerWorld world, RegistryKey<Item> item) {
+    public static ItemStack createItemStackWithSlightDamage(ServerLevel world, ResourceKey<Item> item) {
         ItemStack stack = world.itematic$createStack(item);
-        if (!stack.isDamageable()) {
-            throw new AssertionError("Item " + item.getValue() + " is not damageable");
+        if (!stack.isDamageableItem()) {
+            throw new AssertionError("Item " + item.identifier() + " is not damageable");
         }
 
-        stack.setDamage(1);
+        stack.setDamageValue(1);
         return stack;
     }
 
-    public static ItemStack createItemStackWithEnchantment(ServerWorld world, RegistryKey<Item> item, RegistryKey<Enchantment> enchantment) {
+    public static ItemStack createItemStackWithEnchantment(ServerLevel world, ResourceKey<Item> item, ResourceKey<Enchantment> enchantment) {
         ItemStack stack = world.itematic$createStack(item);
-        RegistryEntry<Enchantment> enchantmentEntry = world.getRegistryManager()
-            .getOrThrow(RegistryKeys.ENCHANTMENT)
+        Holder<Enchantment> enchantmentEntry = world.registryAccess()
+            .lookupOrThrow(Registries.ENCHANTMENT)
             .getOrThrow(enchantment);
-        stack.addEnchantment(enchantmentEntry, 1);
+        stack.enchant(enchantmentEntry, 1);
         return stack;
     }
 
-    public static <T extends ItemComponent<T>> T getItemBehavior(TestContext helper, ItemStack stack, ItemComponentType<T> type) {
+    public static <T extends ItemComponent<T>> T getItemBehavior(GameTestHelper helper, ItemStack stack, ItemComponentType<T> type) {
         return stack.itematic$getBehavior(type)
-            .orElseThrow(() -> helper.createError(
+            .orElseThrow(() -> helper.assertionException(
                 "test.error.item.expected_item_behavior",
                 ItematicRegistries.ITEM_COMPONENT_TYPE.getId(type)
             ));
     }
 
-    public static <T> T getDataComponent(TestContext helper, ItemStack stack, ComponentType<T> type) {
+    public static <T> T getDataComponent(GameTestHelper helper, ItemStack stack, DataComponentType<T> type) {
         T component = stack.get(type);
         if (component != null) {
             return component;
         }
 
-        throw helper.createError(
+        throw helper.assertionException(
             "test.error.item_stack.expected_data_component",
             "item stack",
             type
         );
     }
 
-    public static <T extends BlockEntity> T getBlockEntity(TestContext context, BlockPos pos, BlockEntityType<T> type) {
-        return context.getWorld().getBlockEntity(context.getAbsolutePos(pos), type)
-            .orElseThrow(() -> context.createError(
+    public static <T extends BlockEntity> T getBlockEntity(GameTestHelper context, BlockPos pos, BlockEntityType<T> type) {
+        return context.getLevel().getBlockEntity(context.absolutePos(pos), type)
+            .orElseThrow(() -> context.assertionException(
                 pos,
                 "test.error.block_entity.expected_block_entity_type",
-                Registries.BLOCK_ENTITY_TYPE.getId(type)
+                BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(type)
             ));
     }
 
-    public static <E extends Entity> E getSingleEntity(TestContext context, EntityType<E> type) {
+    public static <E extends Entity> E getSingleEntity(GameTestHelper context, EntityType<E> type) {
         List<E> entities = context.getEntities(type);
         if (entities.isEmpty()) {
-            throw context.createError(
+            throw context.assertionException(
                 "test.error.expected_entity",
-                type.getName()
+                type.getDescription()
             );
         }
 
         if (entities.size() > 1) {
-            throw context.createError(
+            throw context.assertionException(
                 "test.error.entity.too_many_entities",
-                type.getUntranslatedName(),
+                type.toShortString(),
                 entities.size()
             );
         }
@@ -108,12 +107,12 @@ public class TestUtil {
         return entities.getFirst();
     }
 
-    public static <E extends Entity> E getSingleEntityAt(TestContext context, EntityType<E> type, BlockPos pos) {
+    public static <E extends Entity> E getSingleEntityAt(GameTestHelper context, EntityType<E> type, BlockPos pos) {
         List<E> entities = getEntitiesAt(context, type, pos);
         if (entities.isEmpty()) {
-            throw context.createError(
+            throw context.assertionException(
                 "test.error.expected_entity_around",
-                type.getName(),
+                type.getDescription(),
                 pos.getX(),
                 pos.getY(),
                 pos.getZ()
@@ -121,9 +120,9 @@ public class TestUtil {
         }
 
         if (entities.size() > 1) {
-            throw context.createError(
+            throw context.assertionException(
                 "test.error.too_many_entities",
-                type.getUntranslatedName(),
+                type.toShortString(),
                 pos.getX(),
                 pos.getY(),
                 pos.getZ(),
@@ -134,26 +133,26 @@ public class TestUtil {
         return entities.getFirst();
     }
 
-    public static <E extends Entity> List<E> getEntitiesAt(TestContext context, EntityType<E> type, BlockPos pos) {
-        return context.getWorld().getEntitiesByType(type, new Box(context.getAbsolutePos(pos)), Entity::isAlive);
+    public static <E extends Entity> List<E> getEntitiesAt(GameTestHelper context, EntityType<E> type, BlockPos pos) {
+        return context.getLevel().getEntities(type, new AABB(context.absolutePos(pos)), Entity::isAlive);
     }
 
-    public static PlayerEntity createMockPlayer(TestContext context, GameMode gameMode, BlockPos pos) {
-        PlayerEntity player = context.createMockPlayer(gameMode);
+    public static Player createMockPlayer(GameTestHelper context, GameType gameMode, BlockPos pos) {
+        Player player = context.makeMockPlayer(gameMode);
         setEntityPos(context, player, pos);
         return player;
     }
 
-    public static <T extends Entity> T createEntity(TestContext context, EntityType<T> type, Consumer<T> initializer) {
-        return createEntityAt(context, type, BlockPos.ORIGIN, initializer);
+    public static <T extends Entity> T createEntity(GameTestHelper context, EntityType<T> type, Consumer<T> initializer) {
+        return createEntityAt(context, type, BlockPos.ZERO, initializer);
     }
 
-    public static <T extends Entity> T createEntityAt(TestContext context, EntityType<T> type, BlockPos pos, Consumer<T> initializer) {
-        T entity = type.create(context.getWorld(), SpawnReason.COMMAND);
+    public static <T extends Entity> T createEntityAt(GameTestHelper context, EntityType<T> type, BlockPos pos, Consumer<T> initializer) {
+        T entity = type.create(context.getLevel(), EntitySpawnReason.COMMAND);
         if (entity == null) {
-            throw context.createError(
+            throw context.assertionException(
                 "test.error.entity_type.cannot_create_entity",
-                type.getName()
+                type.getDescription()
             );
         }
 
@@ -162,49 +161,49 @@ public class TestUtil {
         return entity;
     }
 
-    public static <T extends Entity> void spawnEntity(TestContext context, T entity, BlockPos pos) {
-        spawnEntity(context, entity, Vec3d.ofBottomCenter(pos));
+    public static <T extends Entity> void spawnEntity(GameTestHelper context, T entity, BlockPos pos) {
+        spawnEntity(context, entity, Vec3.atBottomCenterOf(pos));
     }
 
-    public static <T extends Entity> void spawnEntity(TestContext context, T entity, Vec3d pos) {
-        Vec3d absolutePos = context.getAbsolute(pos);
-        entity.refreshPositionAfterTeleport(absolutePos);
-        context.getWorld().spawnEntity(entity);
+    public static <T extends Entity> void spawnEntity(GameTestHelper context, T entity, Vec3 pos) {
+        Vec3 absolutePos = context.absoluteVec(pos);
+        entity.snapTo(absolutePos);
+        context.getLevel().addFreshEntity(entity);
     }
 
-    public static void setEntityPos(TestContext context, Entity entity, BlockPos pos) {
-        BlockPos absolutePos = context.getAbsolutePos(pos);
-        entity.setPosition(Vec3d.ofBottomCenter(absolutePos));
+    public static void setEntityPos(GameTestHelper context, Entity entity, BlockPos pos) {
+        BlockPos absolutePos = context.absolutePos(pos);
+        entity.setPos(Vec3.atBottomCenterOf(absolutePos));
     }
 
-    public static Optional<ItemStack> useStackOnBlockInside(TestContext context, PlayerEntity player, ItemStack stack, BlockPos pos, Direction direction) {
-        BlockPos absolutePos = context.getAbsolutePos(pos);
-        ActionResult result = stack.useOnBlock(
-            new ItemUsageContext(
+    public static Optional<ItemStack> useStackOnBlockInside(GameTestHelper context, Player player, ItemStack stack, BlockPos pos, Direction direction) {
+        BlockPos absolutePos = context.absolutePos(pos);
+        InteractionResult result = stack.useOn(
+            new UseOnContext(
                 player,
-                Hand.MAIN_HAND,
+                InteractionHand.MAIN_HAND,
                 new BlockHitResult(
-                    Vec3d.ofCenter(absolutePos),
+                    Vec3.atCenterOf(absolutePos),
                     direction,
                     absolutePos,
                     false
                 )
             )
         );
-        if (result instanceof ActionResult.Success success) {
-            return Optional.ofNullable(success.getNewHandStack());
+        if (result instanceof InteractionResult.Success success) {
+            return Optional.ofNullable(success.heldItemTransformedTo());
         }
 
         return Optional.empty();
     }
 
-    public static void useBlock(TestContext context, BlockPos pos, PlayerEntity player, Direction direction) {
-        BlockPos absolutePos = context.getAbsolutePos(pos);
+    public static void useBlock(GameTestHelper context, BlockPos pos, Player player, Direction direction) {
+        BlockPos absolutePos = context.absolutePos(pos);
         context.useBlock(
             pos,
             player,
             new BlockHitResult(
-                Vec3d.ofCenter(absolutePos),
+                Vec3.atCenterOf(absolutePos),
                 direction,
                 absolutePos,
                 false
@@ -213,32 +212,32 @@ public class TestUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends ScreenHandler> T getMenuFromBlock(TestContext context, BlockPos pos, PlayerEntity player, ScreenHandlerType<T> type) {
-        BlockPos absolutePos = context.getAbsolutePos(pos);
-        NamedScreenHandlerFactory factory = context.getBlockState(pos).createScreenHandlerFactory(context.getWorld(), absolutePos);
+    public static <T extends AbstractContainerMenu> T getMenuFromBlock(GameTestHelper context, BlockPos pos, Player player, MenuType<T> type) {
+        BlockPos absolutePos = context.absolutePos(pos);
+        MenuProvider factory = context.getBlockState(pos).getMenuProvider(context.getLevel(), absolutePos);
         if (factory == null) {
-            throw context.createError(pos, "test.error.menu.does_not_provide_menu");
+            throw context.assertionException(pos, "test.error.menu.does_not_provide_menu");
         }
 
-        ScreenHandler menu = factory.createMenu(-1, player.getInventory(), player);
+        AbstractContainerMenu menu = factory.createMenu(-1, player.getInventory(), player);
         if (menu == null) {
-            throw context.createError(pos, "test.error.menu.does_not_create_menu");
+            throw context.assertionException(pos, "test.error.menu.does_not_create_menu");
         }
 
         try {
-            ScreenHandlerType<?> actualType = menu.getType();
+            MenuType<?> actualType = menu.getType();
             if (type == actualType) {
                 return (T) menu;
             }
 
-            throw context.createError(
+            throw context.assertionException(
                 pos,
                 "test.error.menu.has_incorrect_menu_type",
-                Registries.SCREEN_HANDLER.getId(actualType),
-                Registries.SCREEN_HANDLER.getId(type)
+                BuiltInRegistries.MENU.getKey(actualType),
+                BuiltInRegistries.MENU.getKey(type)
             );
         } catch (UnsupportedOperationException ignored) {
-            throw context.createError(pos, "test.error.menu.does_not_create_menu_by_type");
+            throw context.assertionException(pos, "test.error.menu.does_not_create_menu_by_type");
         }
     }
 }

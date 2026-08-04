@@ -3,10 +3,10 @@ package net.errorcraft.itematic.mixin.component.type;
 import com.mojang.datafixers.kinds.App;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.component.type.ConsumableComponent;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.Consumable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import java.util.List;
 import java.util.function.Function;
 
-@Mixin(ConsumableComponent.class)
+@Mixin(Consumable.class)
 public class ConsumableComponentExtender {
     @ModifyArg(
         method = "<clinit>",
@@ -24,10 +24,10 @@ public class ConsumableComponentExtender {
             remap = false
         )
     )
-    private static Function<RecordCodecBuilder.Instance<ConsumableComponent>, ? extends App<RecordCodecBuilder.Mu<ConsumableComponent>, ConsumableComponent>> createDoNotUseAllFields(Function<RecordCodecBuilder.Instance<ConsumableComponent>, ? extends App<RecordCodecBuilder.Mu<ConsumableComponent>, ConsumableComponent>> builder) {
+    private static Function<RecordCodecBuilder.Instance<Consumable>, ? extends App<RecordCodecBuilder.Mu<Consumable>, Consumable>> createDoNotUseAllFields(Function<RecordCodecBuilder.Instance<Consumable>, ? extends App<RecordCodecBuilder.Mu<Consumable>, Consumable>> builder) {
         return instance -> instance.group(
-            SoundEvent.ENTRY_CODEC.optionalFieldOf("sound", SoundEvents.ENTITY_GENERIC_EAT).forGetter(ConsumableComponent::sound),
-            Codec.BOOL.optionalFieldOf("has_consume_particles", true).forGetter(ConsumableComponent::hasConsumeParticles)
-        ).apply(instance, (sound, hasConsumeParticles) -> new ConsumableComponent(0.0f, UseAction.NONE, sound, hasConsumeParticles, List.of()));
+            SoundEvent.CODEC.optionalFieldOf("sound", SoundEvents.GENERIC_EAT).forGetter(Consumable::sound),
+            Codec.BOOL.optionalFieldOf("has_consume_particles", true).forGetter(Consumable::hasConsumeParticles)
+        ).apply(instance, (sound, hasConsumeParticles) -> new Consumable(0.0f, ItemUseAnimation.NONE, sound, hasConsumeParticles, List.of()));
     }
 }

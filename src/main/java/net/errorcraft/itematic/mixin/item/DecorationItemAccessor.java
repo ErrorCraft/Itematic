@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.mixin.item;
 
-import net.minecraft.item.DecorationItem;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.HangingEntityItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(DecorationItem.class)
+@Mixin(HangingEntityItem.class)
 public interface DecorationItemAccessor {
-    @Accessor("RANDOM_TEXT")
-    static Text randomText() {
+    @Accessor("TOOLTIP_RANDOM_VARIANT")
+    static Component randomText() {
         throw new AssertionError();
     }
 }

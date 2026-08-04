@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.mixin.entity.ai.brain.task;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.ai.brain.MemoryModuleState;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.CelebrateRaidWinTask;
-import net.minecraft.entity.ai.brain.task.MultiTickTask;
-import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.ai.behavior.CelebrateVillagersSurvivedRaid;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,45 +18,45 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
-@Mixin(CelebrateRaidWinTask.class)
-public class CelebrateRaidWinTaskExtender extends MultiTickTask<VillagerEntity> {
+@Mixin(CelebrateVillagersSurvivedRaid.class)
+public class CelebrateRaidWinTaskExtender extends Behavior<Villager> {
     @Unique
-    private ServerWorld world;
+    private ServerLevel world;
 
-    public CelebrateRaidWinTaskExtender(Map<MemoryModuleType<?>, MemoryModuleState> requiredMemoryState) {
+    public CelebrateRaidWinTaskExtender(Map<MemoryModuleType<?>, MemoryStatus> requiredMemoryState) {
         super(requiredMemoryState);
     }
     
     @Inject(
-        method = "keepRunning(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;J)V",
+        method = "tick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/npc/villager/Villager;J)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/ai/brain/task/CelebrateRaidWinTask;createFirework(Lnet/minecraft/util/DyeColor;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/entity/ai/behavior/CelebrateVillagersSurvivedRaid;getFirework(Lnet/minecraft/world/item/DyeColor;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private void storeServerWorld(ServerWorld serverWorld, VillagerEntity villagerEntity, long l, CallbackInfo info) {
+    private void storeServerWorld(ServerLevel serverWorld, Villager villagerEntity, long l, CallbackInfo info) {
         this.world = serverWorld;
     }
 
     @Inject(
-        method = "keepRunning(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;J)V",
+        method = "tick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/npc/villager/Villager;J)V",
         at = @At(
             value = "INVOKE_ASSIGN",
-            target = "Lnet/minecraft/entity/ai/brain/task/CelebrateRaidWinTask;createFirework(Lnet/minecraft/util/DyeColor;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/entity/ai/behavior/CelebrateVillagersSurvivedRaid;getFirework(Lnet/minecraft/world/item/DyeColor;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private void resetServerWorld(ServerWorld serverWorld, VillagerEntity villagerEntity, long l, CallbackInfo info) {
+    private void resetServerWorld(ServerLevel serverWorld, Villager villagerEntity, long l, CallbackInfo info) {
         this.world = null;
     }
 
     @Redirect(
-        method = "createFirework",
+        method = "getFirework",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireworkRocketUseCreateStack(ItemConvertible item) {
+    private ItemStack newItemStackForFireworkRocketUseCreateStack(ItemLike item) {
         return this.world.itematic$createStack(ItemKeys.FIREWORK_ROCKET);
     }
 }

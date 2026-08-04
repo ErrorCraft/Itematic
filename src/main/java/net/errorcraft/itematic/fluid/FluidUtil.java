@@ -3,12 +3,12 @@ package net.errorcraft.itematic.fluid;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.Nullable;
 
 public class FluidUtil {
@@ -16,7 +16,7 @@ public class FluidUtil {
 
     @Nullable
     public static BlockPos getPlacementPosition(ActionContext context, PositionTarget position) {
-        BlockPos pos = context.get(position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return null;
         }
@@ -29,21 +29,21 @@ public class FluidUtil {
     }
 
     private static boolean canPlaceAt(ActionContext context, BlockPos pos) {
-        Entity placer = context.get(LootContextParameters.THIS_ENTITY);
+        Entity placer = context.get(LootContextParams.THIS_ENTITY);
         if (placer == null) {
             return true;
         }
 
-        if (!context.world().canEntityModifyAt(placer, pos)) {
+        if (!context.world().mayInteract(placer, pos)) {
             return false;
         }
 
         Direction direction = context.getOrDefault(ItematicContextParameters.SIDE, Direction.UP);
-        return !(placer instanceof PlayerEntity player) ||
-            player.canPlaceOn(
-                pos.offset(direction),
+        return !(placer instanceof Player player) ||
+            player.mayUseItemAt(
+                pos.relative(direction),
                 direction,
-                context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+                context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
             );
     }
 }

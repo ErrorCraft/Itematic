@@ -3,18 +3,14 @@ package net.errorcraft.itematic.mixin.recipe;
 import net.errorcraft.itematic.access.recipe.RawShapedRecipeAccess;
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RawShapedRecipe;
-import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.recipe.display.ShapedCraftingRecipeDisplay;
-import net.minecraft.recipe.display.SlotDisplay;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,29 +21,29 @@ import java.util.List;
 public abstract class ShapedRecipeExtender implements CraftingRecipe, RecipeAccess {
     @Shadow
     @Final
-    RawShapedRecipe raw;
+    ShapedRecipePattern pattern;
 
     @Shadow
     @Final
     ItemStack result;
 
     @Override
-    public DefaultedList<ItemStack> getRecipeRemainders(CraftingRecipeInput input) {
-        return ((RawShapedRecipeAccess)(Object) this.raw).itematic$remainder(input);
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
+        return ((RawShapedRecipeAccess)(Object) this.pattern).itematic$remainder(input);
     }
 
     @Override
-    public List<RecipeDisplay> itematic$displays(RegistryEntryLookup<Item> items) {
+    public List<RecipeDisplay> itematic$displays(HolderGetter<Item> items) {
         return List.of(
             new ShapedCraftingRecipeDisplay(
-                this.raw.getWidth(),
-                this.raw.getHeight(),
-                this.raw.getIngredients()
+                this.pattern.width(),
+                this.pattern.height(),
+                this.pattern.ingredients()
                     .stream()
-                    .map(ingredient -> ingredient.map(Ingredient::toDisplay)
-                        .orElse(SlotDisplay.EmptySlotDisplay.INSTANCE))
+                    .map(ingredient -> ingredient.map(Ingredient::display)
+                        .orElse(SlotDisplay.Empty.INSTANCE))
                     .toList(),
-                new SlotDisplay.StackSlotDisplay(this.result),
+                new SlotDisplay.ItemStackSlotDisplay(this.result),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.CRAFTING_TABLE))
             )
         );

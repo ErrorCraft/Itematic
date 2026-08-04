@@ -1,31 +1,31 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.block.FluidBlock;
-import net.minecraft.fluid.FlowableFluid;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(FluidBlock.class)
+@Mixin(LiquidBlock.class)
 public class FluidBlockExtender {
     @Shadow
     @Final
-    protected FlowableFluid fluid;
+    protected FlowingFluid fluid;
 
     @Redirect(
-        method = "tryDrainFluid",
+        method = "pickupBlock",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackUseCreateStack(ItemConvertible item, @Local(argsOnly = true) WorldAccess world) {
+    private ItemStack newItemStackUseCreateStack(ItemLike item, @Local(argsOnly = true) LevelAccessor world) {
         return world.itematic$createStack(this.fluid.itematic$getBucketItemKey());
     }
 }

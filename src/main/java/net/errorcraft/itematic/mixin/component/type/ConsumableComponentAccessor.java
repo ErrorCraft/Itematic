@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.mixin.component.type;
 
-import net.minecraft.component.type.ConsumableComponent;
+import net.minecraft.world.item.component.Consumable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(ConsumableComponent.class)
+@Mixin(Consumable.class)
 public interface ConsumableComponentAccessor {
-    @Accessor("PARTICLES_AND_SOUND_TICK_THRESHOLD")
+    @Accessor("CONSUME_EFFECTS_START_FRACTION")
     static float consumeEffectsThreshold() {
         throw new AssertionError();
     }

@@ -1,41 +1,41 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.IllagerEntity;
-import net.minecraft.entity.mob.VindicatorEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.illager.AbstractIllager;
+import net.minecraft.world.entity.monster.illager.Vindicator;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(VindicatorEntity.class)
+@Mixin(Vindicator.class)
 public abstract class VindicatorEntityExtender extends MobEntityExtender {
-    protected VindicatorEntityExtender(EntityType<? extends IllagerEntity> entityType, World world) {
+    protected VindicatorEntityExtender(EntityType<? extends AbstractIllager> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
         method = {
-            "initEquipment",
-            "addBonusForWave"
+            "populateDefaultEquipmentSlots",
+            "applyRaidBuffs"
         },
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForIronAxeUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_AXE);
+    private ItemStack newItemStackForIronAxeUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.IRON_AXE);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.VINDICATOR_SPAWN_EGG;
     }
 }

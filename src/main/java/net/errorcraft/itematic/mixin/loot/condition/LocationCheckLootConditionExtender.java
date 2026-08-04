@@ -6,9 +6,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.loot.condition.LocationCheckLootConditionAccess;
 import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.loot.condition.LocationCheckLootCondition;
-import net.minecraft.util.context.ContextParameter;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.context.ContextKey;
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import java.util.function.Function;
 
-@Mixin(LocationCheckLootCondition.class)
+@Mixin(LocationCheck.class)
 public class LocationCheckLootConditionExtender implements LocationCheckLootConditionAccess {
     @Unique
     private PositionTarget position = PositionTarget.ORIGIN;
@@ -30,21 +30,21 @@ public class LocationCheckLootConditionExtender implements LocationCheckLootCond
             remap = false
         )
     )
-    private static MapCodec<LocationCheckLootCondition> addExtraMapCodecFields(MapCodec<LocationCheckLootCondition> original) {
+    private static MapCodec<LocationCheck> addExtraMapCodecFields(MapCodec<LocationCheck> original) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
             original.forGetter(Function.identity()),
-            PositionTarget.CODEC.optionalFieldOf("position", PositionTarget.ORIGIN).forGetter(LocationCheckLootCondition::itematic$position)
+            PositionTarget.CODEC.optionalFieldOf("position", PositionTarget.ORIGIN).forGetter(LocationCheck::itematic$position)
         ).apply(instance, LocationCheckPredicates::setPosition));
     }
 
     @ModifyArg(
-        method = "test(Lnet/minecraft/loot/context/LootContext;)Z",
+        method = "test(Lnet/minecraft/world/level/storage/loot/LootContext;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/loot/context/LootContext;get(Lnet/minecraft/util/context/ContextParameter;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/level/storage/loot/LootContext;getOptionalParameter(Lnet/minecraft/util/context/ContextKey;)Ljava/lang/Object;"
         )
     )
-    private ContextParameter<? extends Vec3d> usePositionTarget(ContextParameter<Vec3d> parameter) {
+    private ContextKey<? extends Vec3> usePositionTarget(ContextKey<Vec3> parameter) {
         return this.position.contextParam();
     }
 

@@ -4,27 +4,26 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.group.entry.entries.StackItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.entries.TagItemGroupEntry;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.StringIdentifiable;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import java.util.function.Function;
 
 public interface ItemGroupEntry {
-    Codec<ItemGroupEntry> ENTRY_CODEC = StringIdentifiable.createCodec(ItemGroupEntryType::values).dispatch(ItemGroupEntry::type, ItemGroupEntryType::codec);
-    Codec<ItemGroupEntry> CODEC = Codec.either(RegistryFixedCodec.of(RegistryKeys.ITEM), ENTRY_CODEC).xmap(either -> either.map(StackItemGroupEntry::new, Function.identity()), ItemGroupEntry::createEither);
+    Codec<ItemGroupEntry> ENTRY_CODEC = StringRepresentable.fromEnum(ItemGroupEntryType::values).dispatch(ItemGroupEntry::type, ItemGroupEntryType::codec);
+    Codec<ItemGroupEntry> CODEC = Codec.either(RegistryFixedCodec.create(Registries.ITEM), ENTRY_CODEC).xmap(either -> either.map(StackItemGroupEntry::new, Function.identity()), ItemGroupEntry::createEither);
 
-    static ItemGroupEntry simple(RegistryEntry<Item> item) {
+    static ItemGroupEntry simple(Holder<Item> item) {
         return new StackItemGroupEntry(item);
     }
 
-    static ItemGroupEntry requiresPermissions(RegistryEntry<Item> item) {
-        return new StackItemGroupEntry(ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS, true, item, ComponentChanges.EMPTY);
+    static ItemGroupEntry requiresPermissions(Holder<Item> item) {
+        return new StackItemGroupEntry(CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS, true, item, DataComponentPatch.EMPTY);
     }
 
     static ItemGroupEntry tag(TagKey<Item> tag) {
@@ -32,6 +31,6 @@ public interface ItemGroupEntry {
     }
 
     ItemGroupEntryType type();
-    void addStacks(ItemGroup.DisplayContext context, ItemGroup.Entries entries);
-    Either<RegistryEntry<Item>, ItemGroupEntry> createEither();
+    void addStacks(CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries);
+    Either<Holder<Item>, ItemGroupEntry> createEither();
 }

@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -28,7 +28,7 @@ public abstract class Range<T extends Comparable<T>> {
     }
 
     @NotNull
-    public abstract T get(Random random);
+    public abstract T get(RandomSource random);
 
     @NotNull
     public T min() {
@@ -90,7 +90,7 @@ public abstract class Range<T extends Comparable<T>> {
         }
 
         @Override
-        public @NotNull Integer get(Random random) {
+        public @NotNull Integer get(RandomSource random) {
             if (this.min.equals(this.max)) {
                 return this.min;
             }
@@ -116,7 +116,7 @@ public abstract class Range<T extends Comparable<T>> {
         }
 
         @Override
-        public @NotNull Float get(Random random) {
+        public @NotNull Float get(RandomSource random) {
             if (this.min.equals(this.max)) {
                 return this.min;
             }
@@ -138,7 +138,7 @@ public abstract class Range<T extends Comparable<T>> {
         }
 
         @Override
-        public @NotNull Double get(Random random) {
+        public @NotNull Double get(RandomSource random) {
             if (this.min.equals(this.max)) {
                 return this.min;
             }

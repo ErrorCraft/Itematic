@@ -4,15 +4,14 @@ import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.passive.SnifferEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.animal.sniffer.Sniffer;
+import net.minecraft.world.entity.player.Player;
 import java.util.Optional;
 
 public class SnifferEntityTestSuite {
@@ -20,13 +19,13 @@ public class SnifferEntityTestSuite {
 
     @GameTest(structure = "itematic:entity.platform")
     @SuppressWarnings("removal")
-    public void holdingTorchflowerSeedsTemptsSniffer(TestContext context) {
-        SnifferEntity sniffer = context.spawnEntity(EntityType.SNIFFER, SPAWN_POSITION);
-        ServerPlayerEntity player = context.createMockCreativeServerPlayerInWorld();
-        player.setStackInHand(Hand.MAIN_HAND, context.getWorld().itematic$createStack(ItemKeys.TORCHFLOWER_SEEDS));
+    public void holdingTorchflowerSeedsTemptsSniffer(GameTestHelper context) {
+        Sniffer sniffer = context.spawn(EntityType.SNIFFER, SPAWN_POSITION);
+        ServerPlayer player = context.makeMockServerPlayerInLevel();
+        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemKeys.TORCHFLOWER_SEEDS));
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
-        context.addInstantFinalTask(() -> {
-            Optional<PlayerEntity> temptingPlayer = sniffer.getBrain().getOptionalRegisteredMemory(MemoryModuleType.TEMPTING_PLAYER);
+        context.succeedWhen(() -> {
+            Optional<Player> temptingPlayer = sniffer.getBrain().getMemory(MemoryModuleType.TEMPTING_PLAYER);
             Assert.isTrue(context, temptingPlayer.isPresent(), () -> "Sniffer was not tempted by a Player");
             Assert.areEqual(context, temptingPlayer.get(), player, "Sniffer was not tempted by the expected Player");
         });

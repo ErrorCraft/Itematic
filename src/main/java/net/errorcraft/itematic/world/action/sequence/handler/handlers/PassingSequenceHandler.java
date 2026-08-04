@@ -9,16 +9,15 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
-import net.minecraft.registry.entry.RegistryEntry;
-
+import net.minecraft.core.Holder;
 import java.util.ArrayList;
 import java.util.List;
 
 public record PassingSequenceHandler(List<Entry> entries) implements SequenceHandler<PassingSequenceHandler> {
     public static final Codec<PassingSequenceHandler> CODEC = Entry.CODEC.listOf().xmap(PassingSequenceHandler::new, PassingSequenceHandler::entries);
 
-    public static Builder builder() {
-        return new Builder();
+    public static net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler.Builder builder() {
+        return new net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler.Builder();
     }
 
     @Override
@@ -38,11 +37,11 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
     }
 
     @Override
-    public Iterable<RegistryEntry<ActionEntry>> iterateEntries() {
+    public Iterable<Holder<ActionEntry>> iterateEntries() {
         return () -> this.entries.stream().map(Entry::action).iterator();
     }
 
-    public static class Builder implements SequenceHandler.Builder<PassingSequenceHandler, Builder> {
+    public static class Builder implements SequenceHandler.Builder<PassingSequenceHandler, net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler.Builder> {
         private final List<Entry> entries = new ArrayList<>();
 
         @Override
@@ -51,22 +50,22 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
         }
 
         @Override
-        public Builder add(RegistryEntry<ActionEntry> entry) {
+        public net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler.Builder add(Holder<ActionEntry> entry) {
             this.entries.add(Entry.required(entry));
             return this;
         }
 
-        public Builder addOptional(Action<?> action) {
-            return this.addOptional(RegistryEntry.of(ActionEntry.of(action)));
+        public net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler.Builder addOptional(Action<?> action) {
+            return this.addOptional(Holder.direct(ActionEntry.of(action)));
         }
 
-        public Builder addOptional(RegistryEntry<ActionEntry> entry) {
+        public net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler.Builder addOptional(Holder<ActionEntry> entry) {
             this.entries.add(Entry.optional(entry));
             return this;
         }
     }
 
-    public record Entry(RegistryEntry<ActionEntry> action, boolean optional) {
+    public record Entry(Holder<ActionEntry> action, boolean optional) {
         public static final Codec<Entry> ELEMENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ActionEntry.REGISTRY_CODEC.fieldOf("entry").forGetter(Entry::action),
             Codec.BOOL.optionalFieldOf("optional", false).forGetter(Entry::optional)
@@ -82,11 +81,11 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
             return this.optional;
         }
 
-        public static Entry required(RegistryEntry<ActionEntry> action) {
+        public static Entry required(Holder<ActionEntry> action) {
             return new Entry(action, false);
         }
 
-        public static Entry optional(RegistryEntry<ActionEntry> action) {
+        public static Entry optional(Holder<ActionEntry> action) {
             return new Entry(action, true);
         }
     }

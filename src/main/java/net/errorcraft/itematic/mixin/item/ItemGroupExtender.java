@@ -6,14 +6,14 @@ import net.errorcraft.itematic.access.item.ItemGroupAccess;
 import net.errorcraft.itematic.item.ItemAccess;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,32 +25,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Locale;
 
-@Mixin(ItemGroup.class)
+@Mixin(CreativeModeTab.class)
 public class ItemGroupExtender implements ItemGroupAccess {
     @Shadow
     @Final
-    private ItemGroup.Type type;
+    private CreativeModeTab.Type type;
 
     @Unique
-    private RegistryKey<Item> iconKey;
+    private ResourceKey<Item> iconKey;
     @Unique
     private TagKey<ItemGroupEntryProvider> entryProviderTag;
 
     @WrapWithCondition(
-        method = "updateEntries",
+        method = "buildContents",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$EntryCollector;accept(Lnet/minecraft/item/ItemGroup$DisplayContext;Lnet/minecraft/item/ItemGroup$Entries;)V"
+            target = "Lnet/minecraft/world/item/CreativeModeTab$DisplayItemsGenerator;accept(Lnet/minecraft/world/item/CreativeModeTab$ItemDisplayParameters;Lnet/minecraft/world/item/CreativeModeTab$Output;)V"
         )
     )
-    private boolean collectEntries(ItemGroup.EntryCollector instance, ItemGroup.DisplayContext context, ItemGroup.Entries entries) {
-        if (this.type != ItemGroup.Type.CATEGORY) {
+    private boolean collectEntries(CreativeModeTab.DisplayItemsGenerator instance, CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries) {
+        if (this.type != CreativeModeTab.Type.CATEGORY) {
             return true;
         }
 
-        context.lookup()
-            .getOrThrow(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER)
-            .getOptional(this.entryProviderTag)
+        context.holders()
+            .lookupOrThrow(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER)
+            .get(this.entryProviderTag)
             .ifPresent(entryList -> collectEntries(entryList, context, entries));
         return false;
     }
@@ -61,7 +61,7 @@ public class ItemGroupExtender implements ItemGroupAccess {
     }
 
     @Override
-    public void itematic$setIconKey(RegistryKey<Item> iconKey) {
+    public void itematic$setIconKey(ResourceKey<Item> iconKey) {
         this.iconKey = iconKey;
     }
 
@@ -71,14 +71,14 @@ public class ItemGroupExtender implements ItemGroupAccess {
     }
 
     @Unique
-    private static void collectEntries(RegistryEntryList.Named<ItemGroupEntryProvider> entryList, ItemGroup.DisplayContext context, ItemGroup.Entries entries) {
-        for (RegistryEntry<ItemGroupEntryProvider> entry : entryList) {
+    private static void collectEntries(HolderSet.Named<ItemGroupEntryProvider> entryList, CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries) {
+        for (Holder<ItemGroupEntryProvider> entry : entryList) {
             entry.value().collectEntries(context, entries);
         }
     }
 
-    @Mixin(ItemGroup.StackVisibility.class)
-    public static class StackVisibilityExtender implements StringIdentifiable {
+    @Mixin(CreativeModeTab.TabVisibility.class)
+    public static class StackVisibilityExtender implements StringRepresentable {
         @Unique
         private String name;
 
@@ -91,22 +91,22 @@ public class ItemGroupExtender implements ItemGroupAccess {
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.name;
         }
     }
 
-    @Mixin(targets = "net/minecraft/item/ItemGroup$EntriesImpl")
+    @Mixin(targets = "net/minecraft/world/item/CreativeModeTab$ItemDisplayBuilder")
     public static class EntriesImplExtender {
         @Shadow
         @Final
-        private ItemGroup group;
+        private CreativeModeTab tab;
 
         @Unique
         private static final Logger LOGGER = LogUtils.getLogger();
 
         @Inject(
-            method = "add",
+            method = "accept",
             at = @At(
                 value = "NEW",
                 target = "(Ljava/lang/String;)Ljava/lang/IllegalStateException;",
@@ -114,8 +114,8 @@ public class ItemGroupExtender implements ItemGroupAccess {
             ),
             cancellable = true
         )
-        private void logDuplicateEntryMessageAndCancelToPreventException(ItemStack stack, ItemGroup.StackVisibility visibility, CallbackInfo info) {
-            LOGGER.warn("Accidentally adding the same item stack twice {} to a Creative Mode Tab: {}", stack.toHoverableText().getString(), this.group.getDisplayName().getString());
+        private void logDuplicateEntryMessageAndCancelToPreventException(ItemStack stack, CreativeModeTab.TabVisibility visibility, CallbackInfo info) {
+            LOGGER.warn("Accidentally adding the same item stack twice {} to a Creative Mode Tab: {}", stack.getDisplayName().getString(), this.tab.getDisplayName().getString());
             info.cancel();
         }
     }

@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.assertion;
 
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.util.Mth;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
 public class DoublesAssert {
-    private final TestContext helper;
+    private final GameTestHelper helper;
     private final double value;
     private final String name;
 
-    DoublesAssert(TestContext helper, double value, String name) {
+    DoublesAssert(GameTestHelper helper, double value, String name) {
         this.helper = Objects.requireNonNull(helper);
         this.value = value;
         this.name = Objects.requireNonNull(name);
@@ -19,12 +19,12 @@ public class DoublesAssert {
 
     public DoublesAssert congruent(double modulus, Consumer<DoublesAssert> congruentAssertion) {
         if (modulus == 0.0d) {
-            throw this.helper.createError("test.error.invalid_modulus");
+            throw this.helper.assertionException("test.error.invalid_modulus");
         }
 
         congruentAssertion.accept(Assert.doubles(
             this.helper,
-            MathHelper.floorMod(this.value, modulus),
+            Mth.positiveModulo(this.value, modulus),
             this.name + " (congruent to " + modulus + ")"
         ));
         return this;
@@ -35,7 +35,7 @@ public class DoublesAssert {
             return this;
         }
 
-        throw this.helper.createError(
+        throw this.helper.assertionException(
             "test.error.value_not_equal",
             this.name,
             expected,

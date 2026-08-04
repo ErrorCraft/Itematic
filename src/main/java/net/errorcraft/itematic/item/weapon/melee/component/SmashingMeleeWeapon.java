@@ -4,40 +4,40 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.component.type.SmashingWeaponDataComponent;
 import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponWithDataComponents;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.MaceItem;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MaceItem;
 
 public record SmashingMeleeWeapon(SmashingWeaponDataComponent smashingWeapon) implements MeleeWeaponWithDataComponents {
     public static final Codec<SmashingMeleeWeapon> CODEC = SmashingWeaponDataComponent.CODEC.xmap(
         SmashingMeleeWeapon::new,
         SmashingMeleeWeapon::smashingWeapon
     );
-    private static final MaceItem DUMMY = new MaceItem(new Item.Settings());
+    private static final MaceItem DUMMY = new MaceItem(new Item.Properties());
 
     public static SmashingMeleeWeapon of(SmashingWeaponDataComponent smashingWeapon) {
         return new SmashingMeleeWeapon(smashingWeapon);
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(ItematicDataComponentTypes.SMASHING_WEAPON, this.smashingWeapon);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(ItematicDataComponentTypes.SMASHING_WEAPON, this.smashingWeapon);
     }
 
     public void hit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        DUMMY.postHit(stack, target, attacker);
+        DUMMY.hurtEnemy(stack, target, attacker);
     }
 
     public float bonusAttackDamage(Entity target, float baseAttackDamage, DamageSource damageSource) {
-        return DUMMY.getBonusAttackDamage(target, baseAttackDamage, damageSource);
+        return DUMMY.getAttackDamageBonus(target, baseAttackDamage, damageSource);
     }
 
     public void postDamageEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        DUMMY.postDamageEntity(stack, target, attacker);
+        DUMMY.postHurtEnemy(stack, target, attacker);
     }
 
     public DamageSource damageSource(ItemStack stack, LivingEntity attacker) {

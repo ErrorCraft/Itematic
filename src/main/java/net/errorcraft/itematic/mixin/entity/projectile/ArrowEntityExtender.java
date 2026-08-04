@@ -1,33 +1,33 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.Arrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ArrowEntity.class)
-public abstract class ArrowEntityExtender extends PersistentProjectileEntity {
-    protected ArrowEntityExtender(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+@Mixin(Arrow.class)
+public abstract class ArrowEntityExtender extends AbstractArrow {
+    protected ArrowEntityExtender(EntityType<? extends AbstractArrow> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
         method = {
-            "getDefaultItemStack",
+            "getDefaultPickupItem",
             "tick"
         },
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForArrowUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.ARROW);
+    private ItemStack newItemStackForArrowUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.ARROW);
     }
 }

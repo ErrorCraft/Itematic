@@ -6,7 +6,7 @@ import net.errorcraft.itematic.entity.spawn.rule.type.DiscardEntitySpawnRule;
 import net.errorcraft.itematic.entity.spawn.rule.type.FitsInVolumeEntitySpawnRule;
 import net.errorcraft.itematic.entity.spawn.rule.type.OffsetSpawnPositionEntitySpawnRule;
 import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
 
 public record EntitySpawnRuleType<T extends EntitySpawnRule<T>>(MapCodec<T> codec) {
     public static final EntitySpawnRuleType<DiscardEntitySpawnRule> DISCARD = register("discard", new EntitySpawnRuleType<>(DiscardEntitySpawnRule.CODEC));

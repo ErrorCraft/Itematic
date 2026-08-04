@@ -2,34 +2,34 @@ package net.errorcraft.itematic.world.action.context;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootEntityValueSource;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.context.ContextParameter;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.context.ContextKey;
+import net.minecraft.world.level.storage.loot.LootContextArg;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 
-public enum PositionTarget implements StringIdentifiable, LootEntityValueSource.ContextBased<Vec3d> {
-    ORIGIN("origin", LootContextParameters.ORIGIN),
+public enum PositionTarget implements StringRepresentable, LootContextArg.SimpleGetter<Vec3> {
+    ORIGIN("origin", LootContextParams.ORIGIN),
     INTERACTED("interacted", ItematicContextParameters.INTERACTED_POSITION),
     SPAWNED("spawned", ItematicContextParameters.SPAWNED_POSITION);
 
-    public static final Codec<PositionTarget> CODEC = StringIdentifiable.createCodec(PositionTarget::values);
+    public static final Codec<PositionTarget> CODEC = StringRepresentable.fromEnum(PositionTarget::values);
 
     private final String name;
-    private final ContextParameter<Vec3d> parameter;
+    private final ContextKey<Vec3> parameter;
 
-    PositionTarget(String name, ContextParameter<Vec3d> parameter) {
+    PositionTarget(String name, ContextKey<Vec3> parameter) {
         this.name = name;
         this.parameter = parameter;
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.name;
     }
 
     @Override
-    public ContextParameter<? extends Vec3d> contextParam() {
+    public ContextKey<? extends Vec3> contextParam() {
         return this.parameter;
     }
 }

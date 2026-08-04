@@ -4,15 +4,15 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,17 +20,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(ZombieEntity.class)
+@Mixin(Zombie.class)
 public abstract class ZombieEntityExtender extends MobEntityExtender {
-    protected ZombieEntityExtender(EntityType<? extends HostileEntity> entityType, World world) {
+    protected ZombieEntityExtender(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
     @ModifyExpressionValue(
-        method = "initialize",
+        method = "finalizeSpawn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/math/random/Random;nextFloat()F",
+            target = "Lnet/minecraft/util/RandomSource;nextFloat()F",
             ordinal = 0
         ),
         slice = @Slice(
@@ -46,13 +46,13 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "initialize",
+        method = "finalizeSpawn",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseCreateStack(ItemConvertible item, ServerWorldAccess world, @Share("jackOLanternChance") LocalFloatRef jackOLanternChance) {
+    private ItemStack newItemStackUseCreateStack(ItemLike item, ServerLevelAccessor world, @Share("jackOLanternChance") LocalFloatRef jackOLanternChance) {
         if (jackOLanternChance.get() < 0.1f) {
             return world.itematic$createStack(ItemKeys.JACK_O_LANTERN);
         }
@@ -60,10 +60,10 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "canGather",
+        method = "wantsToPickUp",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForGlowInkSacUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -71,57 +71,57 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForIronSwordUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SWORD);
+    private ItemStack newItemStackForIronSwordUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.IRON_SWORD);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;IRON_SWORD:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;IRON_SWORD:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForIronSpearUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SPEAR);
+    private ItemStack newItemStackForIronSpearUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.IRON_SPEAR);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;IRON_SPEAR:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;IRON_SPEAR:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForIronShovelUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.IRON_SHOVEL);
+    private ItemStack newItemStackForIronShovelUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.IRON_SHOVEL);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.ZOMBIE_SPAWN_EGG;
     }
 }

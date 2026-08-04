@@ -6,10 +6,9 @@ import net.errorcraft.itematic.component.type.GliderDataComponent;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.item.ItemPredicate;
-
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.world.item.ItemStack;
 import java.util.Optional;
 
 public record GliderItemComponent(GliderDataComponent glider) implements ItemComponent<GliderItemComponent> {
@@ -30,8 +29,8 @@ public record GliderItemComponent(GliderDataComponent glider) implements ItemCom
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(ItematicDataComponentTypes.GLIDER, this.glider);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(ItematicDataComponentTypes.GLIDER, this.glider);
     }
 
     public boolean canUse(ItemStack stack) {

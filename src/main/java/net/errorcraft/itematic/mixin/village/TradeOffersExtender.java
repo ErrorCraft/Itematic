@@ -1,108 +1,108 @@
 package net.errorcraft.itematic.mixin.village;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.village.TradeOffers;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(TradeOffers.class)
+@Mixin(VillagerTrades.class)
 public class TradeOffersExtender {
     @Redirect(
         method = "method_16929",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+    private static ItemStack newItemStackReturnEmptyStack(ItemLike item) {
         return ItemStack.EMPTY;
     }
 
     @Redirect(
-        method = "createPotionStack",
+        method = "potion",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack createStackForPotionReturnEmptyStack(Item item, RegistryEntry<Potion> potion) {
+    private static ItemStack createStackForPotionReturnEmptyStack(Item item, Holder<Potion> potion) {
         return ItemStack.EMPTY;
     }
 
-    @Mixin(TradeOffers.SellItemFactory.class)
+    @Mixin(VillagerTrades.ItemsForEmeralds.class)
     public static class SellItemFactoryExtender {
         @Redirect(
             method = {
-                "<init>(Lnet/minecraft/block/Block;IIII)V",
-                "<init>(Lnet/minecraft/item/Item;III)V",
-                "<init>(Lnet/minecraft/item/Item;IIII)V",
-                "<init>(Lnet/minecraft/item/Item;IIIIF)V",
-                "<init>(Lnet/minecraft/item/Item;IIIIFLnet/minecraft/registry/RegistryKey;)V"
+                "<init>(Lnet/minecraft/world/level/block/Block;IIII)V",
+                "<init>(Lnet/minecraft/world/item/Item;III)V",
+                "<init>(Lnet/minecraft/world/item/Item;IIII)V",
+                "<init>(Lnet/minecraft/world/item/Item;IIIIF)V",
+                "<init>(Lnet/minecraft/world/item/Item;IIIIFLnet/minecraft/resources/ResourceKey;)V"
             },
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+        private static ItemStack newItemStackReturnEmptyStack(ItemLike item) {
             return ItemStack.EMPTY;
         }
     }
 
-    @Mixin(TradeOffers.ProcessItemFactory.class)
+    @Mixin(VillagerTrades.ItemsAndEmeraldsToItems.class)
     public static class ProcessItemFactoryExtender {
         @Redirect(
-            method = "<init>(Lnet/minecraft/item/ItemConvertible;IILnet/minecraft/item/Item;IIIF)V",
+            method = "<init>(Lnet/minecraft/world/level/ItemLike;IILnet/minecraft/world/item/Item;IIIF)V",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+        private static ItemStack newItemStackReturnEmptyStack(ItemLike item) {
             return ItemStack.EMPTY;
         }
 
         @Redirect(
-            method = "<init>(Lnet/minecraft/item/ItemConvertible;IILnet/minecraft/item/ItemConvertible;IIIFLnet/minecraft/registry/RegistryKey;)V",
+            method = "<init>(Lnet/minecraft/world/level/ItemLike;IILnet/minecraft/world/level/ItemLike;IIIFLnet/minecraft/resources/ResourceKey;)V",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+                target = "(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private static ItemStack newItemStackReturnEmptyStack(ItemConvertible item, int count) {
+        private static ItemStack newItemStackReturnEmptyStack(ItemLike item, int count) {
             return ItemStack.EMPTY;
         }
     }
 
-    @Mixin(TradeOffers.SellEnchantedToolFactory.class)
+    @Mixin(VillagerTrades.EnchantedItemForEmeralds.class)
     public static class SellEnchantedToolFactoryExtender {
         @Redirect(
-            method = "<init>(Lnet/minecraft/item/Item;IIIF)V",
+            method = "<init>(Lnet/minecraft/world/item/Item;IIIF)V",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+        private ItemStack newItemStackReturnEmptyStack(ItemLike item) {
             return ItemStack.EMPTY;
         }
     }
 
-    @Mixin(TradeOffers.SellPotionHoldingItemFactory.class)
+    @Mixin(VillagerTrades.TippedArrowForItemsAndEmeralds.class)
     public static class SellPotionHoldingItemFactoryExtender {
         @Redirect(
             method = "<init>",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private ItemStack newItemStackReturnEmptyStack(ItemConvertible item) {
+        private ItemStack newItemStackReturnEmptyStack(ItemLike item) {
             return ItemStack.EMPTY;
         }
     }

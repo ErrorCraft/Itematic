@@ -4,31 +4,31 @@ import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameType;
 
 public class CrossbowTestSuite {
     @GameTest(maxTicks = 100)
-    public void usingCrossbowWithInfinityChargesArrowFromInventoryButDoesNotConsumeTheArrow(TestContext context) {
-        ServerWorld world = context.getWorld();
+    public void usingCrossbowWithInfinityChargesArrowFromInventoryButDoesNotConsumeTheArrow(GameTestHelper context) {
+        ServerLevel world = context.getLevel();
         ItemStack crossbow = TestUtil.createItemStackWithEnchantment(world, ItemKeys.CROSSBOW, Enchantments.INFINITY);
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, crossbow);
-        player.getInventory().insertStack(world.itematic$createStack(ItemKeys.ARROW));
-        world.spawnEntity(player);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> crossbow.use(world, player, Hand.MAIN_HAND))
-            .expectMinDurationAndRun(crossbow.getMaxUseTime(player), () -> {
-                player.stopUsingItem();
-                Assert.itemStack(context, player.getStackInHand(Hand.MAIN_HAND))
+        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
+        player.getInventory().add(world.itematic$createStack(ItemKeys.ARROW));
+        world.addFreshEntity(player);
+        context.startSequence()
+            .thenExecute(() -> crossbow.use(world, player, InteractionHand.MAIN_HAND))
+            .thenExecuteAfter(crossbow.getUseDuration(player), () -> {
+                player.releaseUsingItem();
+                Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .hasComponent(
-                        DataComponentTypes.CHARGED_PROJECTILES,
+                        DataComponents.CHARGED_PROJECTILES,
                         component -> Assert.isTrue(
                             context,
                             component.itematic$contains(ItemKeys.ARROW),
@@ -41,6 +41,6 @@ public class CrossbowTestSuite {
                     () -> "Expected Player to have an Arrow in their inventory"
                 );
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 }

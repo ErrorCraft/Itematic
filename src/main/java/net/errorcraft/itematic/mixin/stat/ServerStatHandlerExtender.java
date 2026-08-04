@@ -3,15 +3,15 @@ package net.errorcraft.itematic.mixin.stat;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.stat.ServerStatHandler;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.StatHandler;
-import net.minecraft.stat.StatType;
+import net.minecraft.stats.ServerStatsCounter;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatType;
+import net.minecraft.stats.StatsCounter;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -24,24 +24,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.nio.file.Path;
 import java.util.function.Function;
 
-@Mixin(ServerStatHandler.class)
-public class ServerStatHandlerExtender extends StatHandler {
+@Mixin(ServerStatsCounter.class)
+public class ServerStatHandlerExtender extends StatsCounter {
     @Unique
-    private RegistryWrapper.WrapperLookup registries;
+    private HolderLookup.Provider registries;
 
     @Redirect(
-        method = "createCodec",
+        method = "createTypedStatsCodec",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/Registry;getCodec()Lcom/mojang/serialization/Codec;"
+            target = "Lnet/minecraft/core/Registry;byNameCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static <T> Codec<RegistryEntry<T>> getCodecUseRegistryEntry(Registry<T> instance) {
-        return RegistryFixedCodec.of(instance.getKey());
+    private static <T> Codec<Holder<T>> getCodecUseRegistryEntry(Registry<T> instance) {
+        return RegistryFixedCodec.create(instance.key());
     }
 
     @ModifyArg(
-        method = "createCodec",
+        method = "createTypedStatsCodec",
         at = @At(
             value = "INVOKE",
             target = "Lcom/mojang/serialization/Codec;flatComapMap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
@@ -49,7 +49,7 @@ public class ServerStatHandlerExtender extends StatHandler {
         ),
         index = 0
     )
-    private static <T> Function<RegistryEntry<T>, Stat<?>> flatComapMapToUseRegistryEntry(Function<T, Stat<?>> to, @Local(argsOnly = true) StatType<T> statType) {
+    private static <T> Function<Holder<T>, Stat<?>> flatComapMapToUseRegistryEntry(Function<T, Stat<?>> to, @Local(argsOnly = true) StatType<T> statType) {
         return statType::itematic$getOrCreateStat;
     }
 
@@ -70,13 +70,13 @@ public class ServerStatHandlerExtender extends StatHandler {
         method = "<init>",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/stat/ServerStatHandler;path:Ljava/nio/file/Path;",
+            target = "Lnet/minecraft/stats/ServerStatsCounter;file:Ljava/nio/file/Path;",
             opcode = Opcodes.PUTFIELD,
             shift = At.Shift.AFTER
         )
     )
     private void setRegistries(MinecraftServer server, Path path, CallbackInfo info) {
-        this.registries = server.getRegistryManager();
+        this.registries = server.registryAccess();
     }
 
     @ModifyArg(
@@ -88,11 +88,11 @@ public class ServerStatHandlerExtender extends StatHandler {
         )
     )
     private <T> DynamicOps<T> useRegistryOps(DynamicOps<T> ops) {
-        return this.registries.getOps(ops);
+        return this.registries.createSerializationContext(ops);
     }
 
     @ModifyArg(
-        method = "asString",
+        method = "toJson",
         at = @At(
             value = "INVOKE",
             target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;",
@@ -100,6 +100,6 @@ public class ServerStatHandlerExtender extends StatHandler {
         )
     )
     private <T> DynamicOps<T> encodeStartUseRegistryOps(DynamicOps<T> ops) {
-        return this.registries.getOps(ops);
+        return this.registries.createSerializationContext(ops);
     }
 }

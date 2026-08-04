@@ -7,15 +7,15 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record DecrementItemAction(int amount, boolean ignoreGameMode) implements Action<DecrementItemAction> {
     public static final MapCodec<DecrementItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codecs.POSITIVE_INT.fieldOf("amount").forGetter(DecrementItemAction::amount),
+        ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(DecrementItemAction::amount),
         Codec.BOOL.optionalFieldOf("ignore_game_mode", false).forGetter(DecrementItemAction::ignoreGameMode)
     ).apply(instance, DecrementItemAction::new));
 
@@ -30,16 +30,16 @@ public record DecrementItemAction(int amount, boolean ignoreGameMode) implements
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.get(LootContextParameters.TOOL);
+        ItemStack stack = context.get(LootContextParams.TOOL);
         if (stack == null || stack.isEmpty()) {
             return false;
         }
 
         if (this.ignoreGameMode) {
-            stack.decrement(this.amount);
+            stack.shrink(this.amount);
         } else {
-            Entity entity = context.get(LootContextParameters.THIS_ENTITY);
-            stack.decrementUnlessCreative(
+            Entity entity = context.get(LootContextParams.THIS_ENTITY);
+            stack.consume(
                 this.amount,
                 entity instanceof LivingEntity livingEntity ? livingEntity : null
             );

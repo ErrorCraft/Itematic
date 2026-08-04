@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.item.event;
 
 import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 public class ItemEvents {
     public static final ItemEvent USE = register(ItemEventKeys.USE);
@@ -28,7 +28,7 @@ public class ItemEvents {
 
     public static void init() {}
 
-    private static ItemEvent register(RegistryKey<ItemEvent> id) {
+    private static ItemEvent register(ResourceKey<ItemEvent> id) {
         return Registry.register(ItematicRegistries.ITEM_EVENT, id, new ItemEvent(id));
     }
 }

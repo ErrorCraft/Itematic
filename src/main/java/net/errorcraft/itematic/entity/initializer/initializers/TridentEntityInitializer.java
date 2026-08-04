@@ -2,24 +2,24 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public class TridentEntityInitializer implements EntityInitializer<TridentEntity> {
+public class TridentEntityInitializer implements EntityInitializer<ThrownTrident> {
     public static final TridentEntityInitializer INSTANCE = new TridentEntityInitializer();
 
     @Override
-    public TridentEntity create(ActionContext context, SpawnReason reason) {
-        ItemStack stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
-        LivingEntity user = context.get(LootContextParameters.THIS_ENTITY, LivingEntity.class);
+    public ThrownTrident create(ActionContext context, EntitySpawnReason reason) {
+        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        LivingEntity user = context.get(LootContextParams.THIS_ENTITY, LivingEntity.class);
         float spinAttackStrength = user != null ?
             EnchantmentHelper.getTridentSpinAttackStrength(stack, user) :
             0.0f;
@@ -28,17 +28,17 @@ public class TridentEntityInitializer implements EntityInitializer<TridentEntity
         }
 
         stack.itematic$damage(1, context);
-        TridentEntity entity = this.create(context.world(), user, stack);
-        stack.decrementUnlessCreative(1, context.get(LootContextParameters.THIS_ENTITY, PlayerEntity.class));
-        entity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
+        ThrownTrident entity = this.create(context.world(), user, stack);
+        stack.consume(1, context.get(LootContextParams.THIS_ENTITY, Player.class));
+        entity.pickup = AbstractArrow.Pickup.ALLOWED;
         return entity;
     }
 
-    private TridentEntity create(World world, LivingEntity possibleUser, ItemStack stack) {
+    private ThrownTrident create(Level world, LivingEntity possibleUser, ItemStack stack) {
         if (possibleUser != null) {
-            return new TridentEntity(world, possibleUser, stack);
+            return new ThrownTrident(world, possibleUser, stack);
         }
 
-        return new TridentEntity(EntityType.TRIDENT, world);
+        return new ThrownTrident(EntityType.TRIDENT, world);
     }
 }

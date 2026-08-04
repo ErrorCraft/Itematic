@@ -2,9 +2,9 @@ package net.errorcraft.itematic.item.group.entry;
 
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.group.entry.entries.*;
-import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.StringRepresentable;
 
-public enum ItemGroupEntryType implements StringIdentifiable {
+public enum ItemGroupEntryType implements StringRepresentable {
     STACK("stack", StackItemGroupEntry.CODEC),
     TAG("tag", TagItemGroupEntry.CODEC),
     PAINTING_VARIANT("painting_variant", PaintingVariantItemGroupEntry.CODEC),
@@ -22,7 +22,7 @@ public enum ItemGroupEntryType implements StringIdentifiable {
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.name;
     }
 

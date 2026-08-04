@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.recipe.book;
 
-import net.minecraft.recipe.book.RecipeBookType;
+import net.minecraft.world.inventory.RecipeBookType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 

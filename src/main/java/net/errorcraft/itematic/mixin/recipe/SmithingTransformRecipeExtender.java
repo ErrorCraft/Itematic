@@ -2,14 +2,14 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.item.Item;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.SmithingTransformRecipe;
-import net.minecraft.recipe.TransmuteRecipeResult;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.recipe.display.SlotDisplay;
-import net.minecraft.recipe.display.SmithingRecipeDisplay;
-import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SmithingTransformRecipe;
+import net.minecraft.world.item.crafting.TransmuteResult;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.item.crafting.display.SmithingRecipeDisplay;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,16 +33,16 @@ public class SmithingTransformRecipeExtender implements RecipeAccess {
 
     @Shadow
     @Final
-    TransmuteRecipeResult result;
+    TransmuteResult result;
 
     @Override
-    public List<RecipeDisplay> itematic$displays(RegistryEntryLookup<Item> items) {
+    public List<RecipeDisplay> itematic$displays(HolderGetter<Item> items) {
         return List.of(
             new SmithingRecipeDisplay(
-                Ingredient.toDisplay(this.template),
-                this.base.toDisplay(),
-                Ingredient.toDisplay(this.addition),
-                this.result.createSlotDisplay(),
+                Ingredient.optionalIngredientToDisplay(this.template),
+                this.base.display(),
+                Ingredient.optionalIngredientToDisplay(this.addition),
+                this.result.display(),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.SMITHING_TABLE))
             )
         );

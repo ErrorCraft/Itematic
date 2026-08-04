@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.access.registry.entry;
 
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
 public interface RegistryEntryListAccess<T> {
-    default List<RegistryEntry<T>> itematic$getRandom(Random random, int count) {
+    default List<Holder<T>> itematic$getRandom(RandomSource random, int count) {
         return List.of();
     }
 }

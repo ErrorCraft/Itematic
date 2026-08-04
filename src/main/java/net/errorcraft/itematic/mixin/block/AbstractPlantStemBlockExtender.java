@@ -1,24 +1,24 @@
 package net.errorcraft.itematic.mixin.block;
 
 import net.errorcraft.itematic.access.block.AbstractPlantStemBlockAccess;
-import net.minecraft.block.AbstractPlantStemBlock;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(AbstractPlantStemBlock.class)
+@Mixin(GrowingPlantHeadBlock.class)
 public class AbstractPlantStemBlockExtender implements AbstractPlantStemBlockAccess {
     @Unique
-    private RegistryKey<Item> stemItemKey;
+    private ResourceKey<Item> stemItemKey;
 
     @Override
-    public RegistryKey<Item> itematic$stemItemKey() {
+    public ResourceKey<Item> itematic$stemItemKey() {
         return this.stemItemKey;
     }
 
     @Override
-    public void itematic$setStemItemKey(RegistryKey<Item> stemItemKey) {
+    public void itematic$setStemItemKey(ResourceKey<Item> stemItemKey) {
         this.stemItemKey = stemItemKey;
     }
 }

@@ -4,10 +4,10 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.type.FireworkExplosionComponent;
+import net.minecraft.world.item.component.FireworkExplosion;
 
-public record FireworkShapeModifierItemComponent(FireworkExplosionComponent.Type shape) implements ItemComponent<FireworkShapeModifierItemComponent> {
-    public static final Codec<FireworkShapeModifierItemComponent> CODEC = FireworkExplosionComponent.Type.CODEC.xmap(FireworkShapeModifierItemComponent::new, FireworkShapeModifierItemComponent::shape);
+public record FireworkShapeModifierItemComponent(FireworkExplosion.Shape shape) implements ItemComponent<FireworkShapeModifierItemComponent> {
+    public static final Codec<FireworkShapeModifierItemComponent> CODEC = FireworkExplosion.Shape.CODEC.xmap(FireworkShapeModifierItemComponent::new, FireworkShapeModifierItemComponent::shape);
 
     @Override
     public ItemComponentType<FireworkShapeModifierItemComponent> type() {
@@ -19,7 +19,7 @@ public record FireworkShapeModifierItemComponent(FireworkExplosionComponent.Type
         return CODEC;
     }
 
-    public static FireworkShapeModifierItemComponent of(FireworkExplosionComponent.Type shape) {
+    public static FireworkShapeModifierItemComponent of(FireworkExplosion.Shape shape) {
         return new FireworkShapeModifierItemComponent(shape);
     }
 }

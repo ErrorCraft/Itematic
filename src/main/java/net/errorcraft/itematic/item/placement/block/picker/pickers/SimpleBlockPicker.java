@@ -5,17 +5,17 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPickerTypes;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public record SimpleBlockPicker(RegistryEntry<Block> block) implements BlockPicker<SimpleBlockPicker> {
+public record SimpleBlockPicker(Holder<Block> block) implements BlockPicker<SimpleBlockPicker> {
     public static final MapCodec<SimpleBlockPicker> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.BLOCK).fieldOf("block").forGetter(SimpleBlockPicker::block)
+        RegistryFixedCodec.create(Registries.BLOCK).fieldOf("block").forGetter(SimpleBlockPicker::block)
     ).apply(instance, SimpleBlockPicker::new));
 
     @Override
@@ -24,12 +24,12 @@ public record SimpleBlockPicker(RegistryEntry<Block> block) implements BlockPick
     }
 
     @Override
-    public RegistryEntry<Block> defaultBlock() {
+    public Holder<Block> defaultBlock() {
         return this.block;
     }
 
     @Override
-    public @Nullable BlockState placementState(ItemPlacementContext context) {
-        return this.block.value().getPlacementState(context);
+    public @Nullable BlockState placementState(BlockPlaceContext context) {
+        return this.block.value().getStateForPlacement(context);
     }
 }

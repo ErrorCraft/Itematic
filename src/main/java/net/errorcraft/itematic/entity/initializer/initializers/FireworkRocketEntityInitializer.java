@@ -3,11 +3,11 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 
 public class FireworkRocketEntityInitializer implements EntityInitializer<FireworkRocketEntity> {
     public static final FireworkRocketEntityInitializer INSTANCE = new FireworkRocketEntityInitializer();
@@ -15,18 +15,18 @@ public class FireworkRocketEntityInitializer implements EntityInitializer<Firewo
     private FireworkRocketEntityInitializer() {}
 
     @Override
-    public FireworkRocketEntity create(ActionContext context, SpawnReason reason) {
-        Vec3d pos = context.get(ItematicContextParameters.INTERACTED_POSITION);
+    public FireworkRocketEntity create(ActionContext context, EntitySpawnReason reason) {
+        Vec3 pos = context.get(ItematicContextParameters.INTERACTED_POSITION);
         if (pos == null) {
             return null;
         }
 
         return new FireworkRocketEntity(
             context.world(),
-            pos.getX(),
-            pos.getY(),
-            pos.getZ(),
-            context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY).copyWithCount(1)
+            pos.x(),
+            pos.y(),
+            pos.z(),
+            context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY).copyWithCount(1)
         );
     }
 }

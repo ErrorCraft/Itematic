@@ -2,14 +2,14 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.FoxEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.fox.Fox;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,41 +18,41 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(FoxEntity.class)
+@Mixin(Fox.class)
 public abstract class FoxEntityExtender extends MobEntityExtender {
-    protected FoxEntityExtender(EntityType<? extends AnimalEntity> entityType, World world) {
+    protected FoxEntityExtender(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForEmeraldUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.EMERALD);
+    private ItemStack newItemStackForEmeraldUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.EMERALD);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 1
         )
     )
-    private ItemStack newItemStackForEggUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.EGG);
+    private ItemStack newItemStackForEggUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.EGG);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -62,15 +62,15 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
             )
         )
     )
-    private ItemStack newItemStackForRabbitFootUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.RABBIT_FOOT);
+    private ItemStack newItemStackForRabbitFootUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.RABBIT_FOOT);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 1
         ),
         slice = @Slice(
@@ -80,15 +80,15 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
             )
         )
     )
-    private ItemStack newItemStackForRabbitHideUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.RABBIT_HIDE);
+    private ItemStack newItemStackForRabbitHideUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.RABBIT_HIDE);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -98,15 +98,15 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
             )
         )
     )
-    private ItemStack newItemStackForWheatUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.WHEAT);
+    private ItemStack newItemStackForWheatUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.WHEAT);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -116,15 +116,15 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
             )
         )
     )
-    private ItemStack newItemStackForLeatherUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.LEATHER);
+    private ItemStack newItemStackForLeatherUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.LEATHER);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 1
         ),
         slice = @Slice(
@@ -134,49 +134,49 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
             )
         )
     )
-    private ItemStack newItemStackForFeatherUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.FEATHER);
+    private ItemStack newItemStackForFeatherUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.FEATHER);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.FOX_SPAWN_EGG;
     }
 
-    @Mixin(FoxEntity.EatBerriesGoal.class)
+    @Mixin(Fox.FoxEatBerriesGoal.class)
     public static class EatBerriesGoalExtender {
         @Shadow
         @Final
-        FoxEntity field_17975;
+        Fox field_17975;
 
         @Redirect(
             method = "pickSweetBerries",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
                 ordinal = 0
             )
         )
-        private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item) {
-            return this.field_17975.getEntityWorld().itematic$createStack(ItemKeys.SWEET_BERRIES);
+        private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item) {
+            return this.field_17975.level().itematic$createStack(ItemKeys.SWEET_BERRIES);
         }
 
         @Redirect(
             method = "pickSweetBerries",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;",
+                target = "(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;",
                 ordinal = 0
             ),
             slice = @Slice(
                 from = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/entity/passive/FoxEntity;equipStack(Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/item/ItemStack;)V"
+                    target = "Lnet/minecraft/world/entity/animal/fox/Fox;setItemSlot(Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V"
                 )
             )
         )
-        private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemConvertible item, int count) {
-            return this.field_17975.getEntityWorld().itematic$createStack(ItemKeys.SWEET_BERRIES, count);
+        private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item, int count) {
+            return this.field_17975.level().itematic$createStack(ItemKeys.SWEET_BERRIES, count);
         }
     }
 }

@@ -8,12 +8,12 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.rule.GameRules;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.gamerules.GameRules;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record PrimeTntAction(PositionTarget position) implements Action<PrimeTntAction> {
     public static final MapCodec<PrimeTntAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -31,23 +31,23 @@ public record PrimeTntAction(PositionTarget position) implements Action<PrimeTnt
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.world() instanceof ServerWorld world)) {
+        if (!(context.world() instanceof ServerLevel world)) {
             return false;
         }
 
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        PlayerEntity player = context.get(LootContextParameters.THIS_ENTITY, PlayerEntity.class);
+        Player player = context.get(LootContextParams.THIS_ENTITY, Player.class);
         if (TntBlockAccessor.primeTnt(world, pos, player)) {
             world.removeBlock(pos, false);
             return true;
         }
 
-        if (player != null && !world.getGameRules().getValue(GameRules.TNT_EXPLODES)) {
-            player.sendMessage(Text.translatable("block.minecraft.tnt.disabled"), true);
+        if (player != null && !world.getGameRules().get(GameRules.TNT_EXPLODES)) {
+            player.displayClientMessage(Component.translatable("block.minecraft.tnt.disabled"), true);
         }
 
         return false;

@@ -1,26 +1,26 @@
 package net.errorcraft.itematic.network.packet.s2c.play;
 
 import net.errorcraft.itematic.network.packet.ItematicPlayPackets;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.PacketType;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.PacketType;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 
-public record TwirlS2CPacket(float spinAttackStrength) implements Packet<ClientPlayPacketListener> {
-    public static final PacketCodec<RegistryByteBuf, TwirlS2CPacket> CODEC = PacketCodec.tuple(
-        PacketCodecs.FLOAT, TwirlS2CPacket::spinAttackStrength,
+public record TwirlS2CPacket(float spinAttackStrength) implements Packet<ClientGamePacketListener> {
+    public static final StreamCodec<RegistryFriendlyByteBuf, TwirlS2CPacket> CODEC = StreamCodec.composite(
+        ByteBufCodecs.FLOAT, TwirlS2CPacket::spinAttackStrength,
         TwirlS2CPacket::new
     );
 
     @Override
-    public PacketType<? extends Packet<ClientPlayPacketListener>> getPacketType() {
+    public PacketType<? extends Packet<ClientGamePacketListener>> type() {
         return ItematicPlayPackets.TWIRL;
     }
 
     @Override
-    public void apply(ClientPlayPacketListener listener) {
+    public void handle(ClientGamePacketListener listener) {
         listener.itematic$onTwirl(this);
     }
 }

@@ -6,12 +6,12 @@ import com.mojang.serialization.JsonOps;
 import net.errorcraft.itematic.access.command.argument.ScoreboardCriterionArgumentTypeAccess;
 import net.errorcraft.itematic.scoreboard.ScoreboardCriterionUtil;
 import net.errorcraft.itematic.stat.StatUtil;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.ScoreboardCriterionArgumentType;
-import net.minecraft.registry.RegistryOps;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.scoreboard.ScoreboardCriterion;
-import net.minecraft.stat.StatType;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.stats.StatType;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,38 +21,38 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import java.util.Iterator;
 import java.util.Optional;
 
-@Mixin(ScoreboardCriterionArgumentType.class)
+@Mixin(ObjectiveCriteriaArgument.class)
 public class ScoreboardCriterionArgumentTypeExtender implements ScoreboardCriterionArgumentTypeAccess {
     @Unique
-    private CommandRegistryAccess registryAccess;
+    private CommandBuildContext registryAccess;
 
     @Redirect(
-        method = "parse(Lcom/mojang/brigadier/StringReader;)Lnet/minecraft/scoreboard/ScoreboardCriterion;",
+        method = "parse(Lcom/mojang/brigadier/StringReader;)Lnet/minecraft/world/scores/criteria/ObjectiveCriteria;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/scoreboard/ScoreboardCriterion;getOrCreateStatCriterion(Ljava/lang/String;)Ljava/util/Optional;"
+            target = "Lnet/minecraft/world/scores/criteria/ObjectiveCriteria;byName(Ljava/lang/String;)Ljava/util/Optional;"
         )
     )
-    private Optional<ScoreboardCriterion> useDynamicRegistry(String name) {
-        return ScoreboardCriterionUtil.byName(name, RegistryOps.of(JsonOps.INSTANCE, this.registryAccess));
+    private Optional<ObjectiveCriteria> useDynamicRegistry(String name) {
+        return ScoreboardCriterionUtil.byName(name, RegistryOps.create(JsonOps.INSTANCE, this.registryAccess));
     }
 
     @ModifyExpressionValue(
         method = "listSuggestions",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/Registry;iterator()Ljava/util/Iterator;"
+            target = "Lnet/minecraft/core/Registry;iterator()Ljava/util/Iterator;"
         ),
         slice = @Slice(
             from = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/stat/StatType;getRegistry()Lnet/minecraft/registry/Registry;"
+                target = "Lnet/minecraft/stats/StatType;getRegistry()Lnet/minecraft/core/Registry;"
             )
         )
     )
-    private <T> Iterator<RegistryEntry.Reference<T>> getRegistryUseDynamicRegistry(Iterator<T> original, @Local StatType<T> type) {
-        return this.registryAccess.getOrThrow(type.getRegistry().getKey())
-            .streamEntries()
+    private <T> Iterator<Holder.Reference<T>> getRegistryUseDynamicRegistry(Iterator<T> original, @Local StatType<T> type) {
+        return this.registryAccess.lookupOrThrow(type.getRegistry().key())
+            .listElements()
             .iterator();
     }
 
@@ -60,16 +60,16 @@ public class ScoreboardCriterionArgumentTypeExtender implements ScoreboardCriter
         method = "listSuggestions",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/command/argument/ScoreboardCriterionArgumentType;getStatName(Lnet/minecraft/stat/StatType;Ljava/lang/Object;)Ljava/lang/String;"
+            target = "Lnet/minecraft/commands/arguments/ObjectiveCriteriaArgument;getName(Lnet/minecraft/stats/StatType;Ljava/lang/Object;)Ljava/lang/String;"
         )
     )
     @SuppressWarnings("unchecked")
-    private <T> String getStatNameUseRegistryEntry(ScoreboardCriterionArgumentType instance, StatType<T> stat, Object value) {
-        return StatUtil.statName(stat, (RegistryEntry.Reference<T>) value);
+    private <T> String getStatNameUseRegistryEntry(ObjectiveCriteriaArgument instance, StatType<T> stat, Object value) {
+        return StatUtil.statName(stat, (Holder.Reference<T>) value);
     }
 
     @Override
-    public void itematic$setRegistryAccess(CommandRegistryAccess registryAccess) {
+    public void itematic$setRegistryAccess(CommandBuildContext registryAccess) {
         this.registryAccess = registryAccess;
     }
 }

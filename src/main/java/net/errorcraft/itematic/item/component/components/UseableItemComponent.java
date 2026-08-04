@@ -13,30 +13,29 @@ import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvid
 import net.errorcraft.itematic.item.use.provider.providers.IndefiniteIntegerProvider;
 import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.UseEffectsComponent;
-import net.minecraft.component.type.UseRemainderComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Hand;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.world.World;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.UseEffects;
+import net.minecraft.world.item.component.UseRemainder;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, UseAction animation, Optional<ItemStack> remainder, UseEffectsComponent effects, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
+public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, ItemUseAnimation animation, Optional<ItemStack> remainder, UseEffects effects, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
     public static final Codec<UseableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UseDurationDataComponent.CODEC.optionalFieldOf("ticks").forGetter(UseableItemComponent::ticks),
-        UseAction.CODEC.optionalFieldOf("animation", UseAction.NONE).forGetter(UseableItemComponent::animation),
+        ItemUseAnimation.CODEC.optionalFieldOf("animation", ItemUseAnimation.NONE).forGetter(UseableItemComponent::animation),
         ItemStack.CODEC.optionalFieldOf("remainder").forGetter(UseableItemComponent::remainder),
-        UseEffectsComponent.CODEC.optionalFieldOf("effects", UseEffectsComponent.DEFAULT).forGetter(UseableItemComponent::effects),
+        UseEffects.CODEC.optionalFieldOf("effects", UseEffects.DEFAULT).forGetter(UseableItemComponent::effects),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemComponent::passes)
     ).apply(instance, UseableItemComponent::new));
 
@@ -55,7 +54,7 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.NORMAL)) {
             return ItemResult.PASS;
         }
@@ -64,36 +63,36 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+    public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.BLOCK)) {
             return ItemResult.PASS;
         }
 
-        return tryStartUsing(context.getWorld(), context.getPlayer(), context.getHand(), context.getStack());
+        return tryStartUsing(context.getLevel(), context.getPlayer(), context.getHand(), context.getItemInHand());
     }
 
     @Override
-    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult useOnEntity(Player user, LivingEntity target, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.ENTITY)) {
             return ItemResult.PASS;
         }
 
-        return tryStartUsing(user.getEntityWorld(), user, hand, stack);
+        return tryStartUsing(user.level(), user, hand, stack);
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        this.ticks.ifPresent(ticks -> builder.add(ItematicDataComponentTypes.USE_DURATION, ticks));
-        builder.add(ItematicDataComponentTypes.USE_ANIMATION, this.animation);
-        this.remainder.ifPresent(remainder -> builder.add(DataComponentTypes.USE_REMAINDER, new UseRemainderComponent(remainder)));
-        builder.add(DataComponentTypes.USE_EFFECTS, this.effects);
+    public void addComponents(DataComponentMap.Builder builder) {
+        this.ticks.ifPresent(ticks -> builder.set(ItematicDataComponentTypes.USE_DURATION, ticks));
+        builder.set(ItematicDataComponentTypes.USE_ANIMATION, this.animation);
+        this.remainder.ifPresent(remainder -> builder.set(DataComponents.USE_REMAINDER, new UseRemainder(remainder)));
+        builder.set(DataComponents.USE_EFFECTS, this.effects);
     }
 
     private boolean isUnuseable(Pass pass) {
         return !this.passes.contains(pass);
     }
 
-    private static ItemResult tryStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    private static ItemResult tryStartUsing(Level world, Player user, InteractionHand hand, ItemStack stack) {
         if (!stack.itematic$mayStartUsing(world, user, hand, stack)) {
             return ItemResult.PASS;
         }
@@ -112,10 +111,10 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
 
     public static class Builder {
         private IntegerProvider ticks;
-        private UseAction animation = UseAction.NONE;
-        private RegistryEntry<Item> remainder;
+        private ItemUseAnimation animation = ItemUseAnimation.NONE;
+        private Holder<Item> remainder;
         private Set<Pass> passes = Pass.DEFAULT_PASSES;
-        private UseEffectsComponent effects = UseEffectsComponent.DEFAULT;
+        private UseEffects effects = UseEffects.DEFAULT;
 
         private Builder() {}
 
@@ -144,17 +143,17 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
             return this;
         }
 
-        public Builder animation(UseAction animation) {
+        public Builder animation(ItemUseAnimation animation) {
             this.animation = animation;
             return this;
         }
 
-        public Builder remainder(RegistryEntry<Item> remainder) {
+        public Builder remainder(Holder<Item> remainder) {
             this.remainder = remainder;
             return this;
         }
 
-        public Builder effects(UseEffectsComponent effects) {
+        public Builder effects(UseEffects effects) {
             this.effects = effects;
             return this;
         }
@@ -165,12 +164,12 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
         }
     }
 
-    public enum Pass implements StringIdentifiable {
+    public enum Pass implements StringRepresentable {
         NORMAL("normal"),
         BLOCK("block"),
         ENTITY("entity");
         public static final Set<Pass> DEFAULT_PASSES = Set.of(NORMAL);
-        public static final Codec<Pass> CODEC = StringIdentifiable.createCodec(Pass::values);
+        public static final Codec<Pass> CODEC = StringRepresentable.fromEnum(Pass::values);
 
         private final String name;
 
@@ -179,7 +178,7 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Use
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.name;
         }
     }

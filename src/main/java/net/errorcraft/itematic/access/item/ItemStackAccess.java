@@ -4,24 +4,24 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.component.MergedComponentMap;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.PatchedDataComponentMap;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public interface ItemStackAccess {
-    default RegistryKey<Item> itematic$key() {
+    default ResourceKey<Item> itematic$key() {
         return null;
     }
-    default void itematic$setComponents(MergedComponentMap components) {}
+    default void itematic$setComponents(PatchedDataComponentMap components) {}
     default void itematic$tryIncrement(int count) {}
     default int itematic$tryDecrement(int amount) {
         return 0;
@@ -29,16 +29,16 @@ public interface ItemStackAccess {
     default ItemStack itematic$copyOrSplit(@Nullable LivingEntity holder, int amount) {
         return ItemStack.EMPTY;
     }
-    default ItemStack itematic$copyWithItem(RegistryEntry<Item> item) {
+    default ItemStack itematic$copyWithItem(Holder<Item> item) {
         return ItemStack.EMPTY;
     }
-    default ItemStack itematic$copyComponentsToNewStack(RegistryEntry<Item> item, int count) {
+    default ItemStack itematic$copyComponentsToNewStack(Holder<Item> item, int count) {
         return ItemStack.EMPTY;
     }
-    default ItemStack itematic$copyComponentsToNewStackIgnoreEmpty(RegistryEntry<Item> item, int count) {
+    default ItemStack itematic$copyComponentsToNewStackIgnoreEmpty(Holder<Item> item, int count) {
         return ItemStack.EMPTY;
     }
-    default boolean itematic$isOf(RegistryKey<Item> key) {
+    default boolean itematic$isOf(ResourceKey<Item> key) {
         return false;
     }
     default void itematic$damage(int amount, ActionContext context) {}
@@ -54,7 +54,7 @@ public interface ItemStackAccess {
     default boolean itematic$hasEventListener(ItemEvent event) {
         return false;
     }
-    default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    default boolean itematic$mayStartUsing(Level world, Player user, InteractionHand hand, ItemStack stack) {
         return false;
     }
     default double itematic$attackSpeedMultiplier() {

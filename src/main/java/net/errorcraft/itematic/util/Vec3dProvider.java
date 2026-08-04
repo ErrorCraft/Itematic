@@ -1,16 +1,15 @@
 package net.errorcraft.itematic.util;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-
+import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public class Vec3dProvider {
     public static final Vec3dProvider ZERO = of(0.0d, 0.0d, 0.0d);
     public static final Codec<Vec3dProvider> CODEC = Range.DOUBLE_CODEC.listOf()
-        .comapFlatMap(pos -> Util.decodeFixedLengthList(pos, 3).map(Vec3dProvider::new), provider -> provider.pos);
+        .comapFlatMap(pos -> Util.fixedSize(pos, 3).map(Vec3dProvider::new), provider -> provider.pos);
 
     private final List<Range.DoubleRange> pos;
 
@@ -22,8 +21,8 @@ public class Vec3dProvider {
         this(List.of(x, y, z));
     }
 
-    public Vec3d get(Random random) {
-        return new Vec3d(
+    public Vec3 get(RandomSource random) {
+        return new Vec3(
             this.pos.get(0).get(random),
             this.pos.get(1).get(random),
             this.pos.get(2).get(random)
@@ -38,11 +37,11 @@ public class Vec3dProvider {
         );
     }
 
-    public static Vec3dProvider of(Vec3d pos) {
+    public static Vec3dProvider of(Vec3 pos) {
         return new Vec3dProvider(
-            Range.DoubleRange.of(pos.getX()),
-            Range.DoubleRange.of(pos.getY()),
-            Range.DoubleRange.of(pos.getZ())
+            Range.DoubleRange.of(pos.x()),
+            Range.DoubleRange.of(pos.y()),
+            Range.DoubleRange.of(pos.z())
         );
     }
 

@@ -1,30 +1,30 @@
 package net.errorcraft.itematic.mixin.loot.function;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.function.SetItemLootFunction;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.storage.loot.functions.SetItemFunction;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(SetItemLootFunction.class)
+@Mixin(SetItemFunction.class)
 public class SetItemLootFunctionExtender {
     @Shadow
     @Final
-    private RegistryEntry<Item> item;
+    private Holder<Item> item;
 
     @Redirect(
-        method = "process",
+        method = "run",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;withItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack withItemUseRegistryEntry(ItemStack instance, ItemConvertible item) {
+    private ItemStack withItemUseRegistryEntry(ItemStack instance, ItemLike item) {
         return instance.itematic$copyWithItem(this.item);
     }
 }

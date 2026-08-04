@@ -1,30 +1,30 @@
 package net.errorcraft.itematic.mixin.entity.vehicle;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.entity.vehicle.SpawnerMinecartEntity;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.minecart.MinecartSpawner;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(SpawnerMinecartEntity.class)
-public abstract class SpawnerMinecartEntityExtender extends AbstractMinecartEntity {
-    protected SpawnerMinecartEntityExtender(EntityType<?> entityType, World world) {
+@Mixin(MinecartSpawner.class)
+public abstract class SpawnerMinecartEntityExtender extends AbstractMinecart {
+    protected SpawnerMinecartEntityExtender(EntityType<?> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "getPickBlockStack",
+        method = "getPickResult",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForMinecartUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.MINECART);
+    private ItemStack newItemStackForMinecartUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.MINECART);
     }
 }

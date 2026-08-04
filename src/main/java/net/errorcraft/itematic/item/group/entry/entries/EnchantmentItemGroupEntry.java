@@ -5,22 +5,21 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import java.util.stream.IntStream;
 
-public record EnchantmentItemGroupEntry(RegistryEntry<Item> item) implements ItemGroupEntry {
+public record EnchantmentItemGroupEntry(Holder<Item> item) implements ItemGroupEntry {
     public static final MapCodec<EnchantmentItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(EnchantmentItemGroupEntry::item)
+        RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(EnchantmentItemGroupEntry::item)
     ).apply(instance, EnchantmentItemGroupEntry::new));
 
-    public static EnchantmentItemGroupEntry of(RegistryEntry<Item> item) {
+    public static EnchantmentItemGroupEntry of(Holder<Item> item) {
         return new EnchantmentItemGroupEntry(item);
     }
 
@@ -30,10 +29,10 @@ public record EnchantmentItemGroupEntry(RegistryEntry<Item> item) implements Ite
     }
 
     @Override
-    public void addStacks(ItemGroup.DisplayContext context, ItemGroup.Entries entries) {
-        context.lookup().getOrThrow(RegistryKeys.ENCHANTMENT).streamEntries()
+    public void addStacks(CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries) {
+        context.holders().lookupOrThrow(Registries.ENCHANTMENT).listElements()
             .forEach(enchantment -> IntStream.rangeClosed(enchantment.value().getMinLevel(), enchantment.value().getMaxLevel())
-                .forEach(level -> entries.add(
+                .forEach(level -> entries.accept(
                     this.createStack(enchantment, level),
                     visibility(enchantment, level)
                 ))
@@ -41,21 +40,21 @@ public record EnchantmentItemGroupEntry(RegistryEntry<Item> item) implements Ite
     }
 
     @Override
-    public Either<RegistryEntry<Item>, ItemGroupEntry> createEither() {
+    public Either<Holder<Item>, ItemGroupEntry> createEither() {
         return Either.right(this);
     }
 
-    private ItemStack createStack(RegistryEntry<Enchantment> enchantment, int level) {
+    private ItemStack createStack(Holder<Enchantment> enchantment, int level) {
         ItemStack stack = new ItemStack(this.item);
-        stack.addEnchantment(enchantment, level);
+        stack.enchant(enchantment, level);
         return stack;
     }
 
-    private static ItemGroup.StackVisibility visibility(RegistryEntry<Enchantment> enchantment, int level) {
+    private static CreativeModeTab.TabVisibility visibility(Holder<Enchantment> enchantment, int level) {
         if (enchantment.value().getMaxLevel() == level) {
-            return ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS;
+            return CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS;
         }
 
-        return ItemGroup.StackVisibility.SEARCH_TAB_ONLY;
+        return CreativeModeTab.TabVisibility.SEARCH_TAB_ONLY;
     }
 }

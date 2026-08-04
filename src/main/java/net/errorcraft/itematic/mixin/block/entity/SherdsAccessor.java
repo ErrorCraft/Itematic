@@ -1,23 +1,23 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
-import net.minecraft.block.entity.Sherds;
-import net.minecraft.item.Item;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.PotDecorations;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(Sherds.class)
+@Mixin(PotDecorations.class)
 public interface SherdsAccessor {
     @Invoker("<init>")
-    static Sherds create(List<Optional<RegistryEntry<Item>>> sherds) {
+    static PotDecorations create(List<Optional<Holder<Item>>> sherds) {
         throw new AssertionError();
     }
 
     @Invoker("<init>")
-    static Sherds create(Optional<RegistryEntry<Item>> back, Optional<RegistryEntry<Item>> left, Optional<RegistryEntry<Item>> right, Optional<RegistryEntry<Item>> front) {
+    static PotDecorations create(Optional<Holder<Item>> back, Optional<Holder<Item>> left, Optional<Holder<Item>> right, Optional<Holder<Item>> front) {
         throw new AssertionError();
     }
 }

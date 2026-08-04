@@ -8,12 +8,12 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record InvokeItemEventAction(ItemEvent event) implements Action<InvokeItemEventAction> {
     public static final MapCodec<InvokeItemEventAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItematicRegistries.ITEM_EVENT.getCodec().fieldOf("event").forGetter(InvokeItemEventAction::event)
+        ItematicRegistries.ITEM_EVENT.byNameCodec().fieldOf("event").forGetter(InvokeItemEventAction::event)
     ).apply(instance, InvokeItemEventAction::new));
 
     public static InvokeItemEventAction of(ItemEvent event) {
@@ -27,7 +27,7 @@ public record InvokeItemEventAction(ItemEvent event) implements Action<InvokeIte
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+        return context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
             .itematic$invokeEvent(this.event, context);
     }
 }

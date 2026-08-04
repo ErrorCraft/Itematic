@@ -5,34 +5,33 @@ import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.item.group.entry.entries.*;
 import net.errorcraft.itematic.village.raid.RaidUtil;
-import net.minecraft.block.LightBlock;
-import net.minecraft.block.TestBlock;
-import net.minecraft.block.entity.BannerPattern;
-import net.minecraft.block.enums.TestBlockMode;
-import net.minecraft.component.ComponentChanges;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FireworksComponent;
-import net.minecraft.component.type.OminousBottleAmplifierComponent;
-import net.minecraft.item.FireworkRocketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.InstrumentTags;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.PaintingVariantTags;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.tags.InstrumentTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.PaintingVariantTags;
+import net.minecraft.world.item.FireworkRocketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Fireworks;
+import net.minecraft.world.item.component.OminousBottleAmplifier;
+import net.minecraft.world.level.block.LightBlock;
+import net.minecraft.world.level.block.TestBlock;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.state.properties.TestBlockMode;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemGroupEntryProviders {
     private ItemGroupEntryProviders() {}
 
-    public static void bootstrap(Registerable<ItemGroupEntryProvider> registerable) {
-        RegistryEntryLookup<Item> items = registerable.getRegistryLookup(RegistryKeys.ITEM);
-        RegistryEntryLookup<BannerPattern> bannerPatterns = registerable.getRegistryLookup(RegistryKeys.BANNER_PATTERN);
+    public static void bootstrap(BootstrapContext<ItemGroupEntryProvider> registerable) {
+        HolderGetter<Item> items = registerable.lookup(Registries.ITEM);
+        HolderGetter<BannerPattern> bannerPatterns = registerable.lookup(Registries.BANNER_PATTERN);
 
         registerable.register(ItemGroupEntryProviderKeys.BUILDING_BLOCKS, ItemGroupEntryProvider.builder()
             .add(ItematicItemTags.WOODEN_BUILDING_BLOCKS)
@@ -490,12 +489,12 @@ public class ItemGroupEntryProviders {
         );
     }
 
-    private static ItemGroupEntry[] flightDuration(RegistryEntry<Item> item) {
+    private static ItemGroupEntry[] flightDuration(Holder<Item> item) {
         List<ItemGroupEntry> entries = new ArrayList<>();
-        for (byte flight : FireworkRocketItem.FLIGHT_VALUES) {
+        for (byte flight : FireworkRocketItem.CRAFTABLE_DURATIONS) {
             entries.add(StackItemGroupEntry.builder(item)
-                .components(ComponentChanges.builder()
-                    .add(DataComponentTypes.FIREWORKS, new FireworksComponent(flight, List.of())))
+                .components(DataComponentPatch.builder()
+                    .set(DataComponents.FIREWORKS, new Fireworks(flight, List.of())))
                 .build()
             );
         }
@@ -503,11 +502,11 @@ public class ItemGroupEntryProviders {
         return entries.toArray(ItemGroupEntry[]::new);
     }
 
-    private static ItemGroupEntry[] testBlocks(RegistryEntry<Item> item) {
+    private static ItemGroupEntry[] testBlocks(Holder<Item> item) {
         List<ItemGroupEntry> entries = new ArrayList<>(TestBlockMode.values().length);
         for (TestBlockMode mode : TestBlockMode.values()) {
             entries.add(StackItemGroupEntry.fromStack(
-                TestBlock.applyBlockStateToStack(
+                TestBlock.setModeOnStack(
                     new ItemStack(item),
                     mode
                 ),
@@ -518,11 +517,11 @@ public class ItemGroupEntryProviders {
         return entries.toArray(ItemGroupEntry[]::new);
     }
 
-    private static ItemGroupEntry[] lightBlocks(RegistryEntry<Item> item) {
-        List<ItemGroupEntry> entries = new ArrayList<>(LightBlock.field_33722);
-        for (int level = LightBlock.field_33722; level >= 0; --level) {
+    private static ItemGroupEntry[] lightBlocks(Holder<Item> item) {
+        List<ItemGroupEntry> entries = new ArrayList<>(LightBlock.MAX_LEVEL);
+        for (int level = LightBlock.MAX_LEVEL; level >= 0; --level) {
             entries.add(StackItemGroupEntry.fromStack(
-                LightBlock.addNbtForLevel(
+                LightBlock.setLightOnStack(
                     new ItemStack(item),
                     level
                 ),
@@ -533,11 +532,11 @@ public class ItemGroupEntryProviders {
         return entries.toArray(ItemGroupEntry[]::new);
     }
 
-    private static ItemGroupEntry[] ominousBottles(RegistryEntry<Item> item) {
-        List<ItemGroupEntry> entries = new ArrayList<>(OminousBottleAmplifierComponent.MAX_VALUE - OminousBottleAmplifierComponent.MIN_VALUE + 1);
-        for (int amplifier = OminousBottleAmplifierComponent.MIN_VALUE; amplifier <= OminousBottleAmplifierComponent.MAX_VALUE; amplifier++) {
+    private static ItemGroupEntry[] ominousBottles(Holder<Item> item) {
+        List<ItemGroupEntry> entries = new ArrayList<>(OminousBottleAmplifier.MAX_AMPLIFIER - OminousBottleAmplifier.MIN_AMPLIFIER + 1);
+        for (int amplifier = OminousBottleAmplifier.MIN_AMPLIFIER; amplifier <= OminousBottleAmplifier.MAX_AMPLIFIER; amplifier++) {
             ItemStack stack = new ItemStack(item);
-            stack.set(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER, new OminousBottleAmplifierComponent(amplifier));
+            stack.set(DataComponents.OMINOUS_BOTTLE_AMPLIFIER, new OminousBottleAmplifier(amplifier));
             entries.add(StackItemGroupEntry.fromStack(stack));
         }
 

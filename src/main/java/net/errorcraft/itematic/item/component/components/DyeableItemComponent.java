@@ -5,8 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 
 public record DyeableItemComponent(int defaultColor) implements ItemComponent<DyeableItemComponent> {
     public static final Codec<DyeableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -24,11 +24,11 @@ public record DyeableItemComponent(int defaultColor) implements ItemComponent<Dy
     }
 
     public int getColor(ItemStack stack) {
-        return DyedColorComponent.getColor(stack, this.defaultColor);
+        return DyedItemColor.getOrDefault(stack, this.defaultColor);
     }
 
     public static DyeableItemComponent of() {
-        return of(DyedColorComponent.DEFAULT_COLOR);
+        return of(DyedItemColor.LEATHER_COLOR);
     }
 
     public static DyeableItemComponent of(int defaultColor) {

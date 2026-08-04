@@ -9,8 +9,8 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record ShootProjectileFromItemAction(PositionTarget position, float power, float uncertainty) implements Action<ShootProjectileFromItemAction> {
     public static final MapCodec<ShootProjectileFromItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -30,7 +30,7 @@ public record ShootProjectileFromItemAction(PositionTarget position, float power
 
     @Override
     public boolean execute(ActionContext context) {
-        return context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
+        return context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
             .itematic$getBehavior(ItemComponentTypes.PROJECTILE)
             .map(projectile -> projectile.spawnEntity(
                 context,

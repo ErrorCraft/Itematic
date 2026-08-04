@@ -5,14 +5,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.entity.spawn.EntitySpawnContext;
 import net.errorcraft.itematic.entity.spawn.rule.EntitySpawnRule;
 import net.errorcraft.itematic.entity.spawn.rule.EntitySpawnRuleType;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
-public record OffsetSpawnPositionEntitySpawnRule(Vec3d offset) implements EntitySpawnRule<OffsetSpawnPositionEntitySpawnRule> {
+public record OffsetSpawnPositionEntitySpawnRule(Vec3 offset) implements EntitySpawnRule<OffsetSpawnPositionEntitySpawnRule> {
     public static final MapCodec<OffsetSpawnPositionEntitySpawnRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Vec3d.CODEC.fieldOf("offset").forGetter(OffsetSpawnPositionEntitySpawnRule::offset)
+        Vec3.CODEC.fieldOf("offset").forGetter(OffsetSpawnPositionEntitySpawnRule::offset)
     ).apply(instance, OffsetSpawnPositionEntitySpawnRule::new));
 
-    public static OffsetSpawnPositionEntitySpawnRule of(Vec3d offset) {
+    public static OffsetSpawnPositionEntitySpawnRule of(Vec3 offset) {
         return new OffsetSpawnPositionEntitySpawnRule(offset);
     }
 

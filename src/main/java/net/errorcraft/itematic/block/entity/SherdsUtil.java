@@ -1,28 +1,28 @@
 package net.errorcraft.itematic.block.entity;
 
-import net.minecraft.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.block.entity.Sherds;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
+import net.minecraft.world.level.block.entity.PotDecorations;
 
 public class SherdsUtil {
     private SherdsUtil() {}
 
-    public static ItemStack addSherdsToStack(ItemStack stack, Sherds sherds) {
-        stack.set(DataComponentTypes.POT_DECORATIONS, sherds);
+    public static ItemStack addSherdsToStack(ItemStack stack, PotDecorations sherds) {
+        stack.set(DataComponents.POT_DECORATIONS, sherds);
         return stack;
     }
 
-    public static Sherds fromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup) {
-        if (nbt == null || !nbt.contains(DecoratedPotBlockEntity.SHERDS_NBT_KEY)) {
-            return Sherds.DEFAULT;
+    public static PotDecorations fromNbt(CompoundTag nbt, HolderLookup.Provider lookup) {
+        if (nbt == null || !nbt.contains(DecoratedPotBlockEntity.TAG_SHERDS)) {
+            return PotDecorations.EMPTY;
         }
 
-        return Sherds.CODEC.parse(lookup.getOps(NbtOps.INSTANCE), nbt.get(DecoratedPotBlockEntity.SHERDS_NBT_KEY))
+        return PotDecorations.CODEC.parse(lookup.createSerializationContext(NbtOps.INSTANCE), nbt.get(DecoratedPotBlockEntity.TAG_SHERDS))
             .result()
-            .orElse(Sherds.DEFAULT);
+            .orElse(PotDecorations.EMPTY);
     }
 }

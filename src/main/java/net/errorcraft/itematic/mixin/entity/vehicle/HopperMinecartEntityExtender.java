@@ -1,36 +1,36 @@
 package net.errorcraft.itematic.mixin.entity.vehicle;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.vehicle.HopperMinecartEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.minecart.MinecartHopper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(HopperMinecartEntity.class)
+@Mixin(MinecartHopper.class)
 public abstract class HopperMinecartEntityExtender extends VehicleEntityExtender {
-    public HopperMinecartEntityExtender(EntityType<?> type, World world) {
+    public HopperMinecartEntityExtender(EntityType<?> type, Level world) {
         super(type, world);
     }
 
     @Redirect(
-        method = "getPickBlockStack",
+        method = "getPickResult",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForHopperMinecartUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.HOPPER_MINECART);
+    private ItemStack newItemStackForHopperMinecartUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.HOPPER_MINECART);
     }
 
     @Override
-    protected RegistryKey<Item> asItemKey() {
+    protected ResourceKey<Item> asItemKey() {
         return ItemKeys.HOPPER_MINECART;
     }
 }

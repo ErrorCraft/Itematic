@@ -2,38 +2,38 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.FishEntity;
-import net.minecraft.entity.passive.PufferfishEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.fish.AbstractFish;
+import net.minecraft.world.entity.animal.fish.Pufferfish;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(PufferfishEntity.class)
+@Mixin(Pufferfish.class)
 public abstract class PufferfishEntityExtender extends MobEntityExtender {
-    public PufferfishEntityExtender(EntityType<? extends FishEntity> entityType, World world) {
+    public PufferfishEntityExtender(EntityType<? extends AbstractFish> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "getBucketItem",
+        method = "getBucketItemStack",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForPufferfishBucketUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.PUFFERFISH_BUCKET);
+    private ItemStack newItemStackForPufferfishBucketUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.PUFFERFISH_BUCKET);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.PUFFERFISH_SPAWN_EGG;
     }
 }

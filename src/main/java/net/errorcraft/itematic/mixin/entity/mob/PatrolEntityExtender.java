@@ -1,26 +1,26 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.village.raid.RaidUtil;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.mob.PatrolEntity;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.monster.PatrollingMonster;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(PatrolEntity.class)
+@Mixin(PatrollingMonster.class)
 public class PatrolEntityExtender {
     @Inject(
-        method = "initialize",
+        method = "finalizeSpawn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/village/raid/Raid;createOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/entity/raid/Raid;getOminousBannerInstance(Lnet/minecraft/core/HolderGetter;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private void createOminousBannerSetDataDrivenItemStack(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> info) {
+    private void createOminousBannerSetDataDrivenItemStack(ServerLevelAccessor world, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> info) {
         RaidUtil.createOminousBanner(world);
     }
 }

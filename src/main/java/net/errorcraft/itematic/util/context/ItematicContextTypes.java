@@ -1,13 +1,13 @@
 package net.errorcraft.itematic.util.context;
 
 import net.errorcraft.itematic.mixin.loot.context.LootContextTypesAccessor;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.context.ContextType;
+import net.minecraft.util.context.ContextKeySet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public class ItematicContextTypes {
-    public static final ContextType TRADE = LootContextTypesAccessor.register("trade", builder ->
-        builder.require(LootContextParameters.THIS_ENTITY)
-            .require(LootContextParameters.ORIGIN)
+    public static final ContextKeySet TRADE = LootContextTypesAccessor.register("trade", builder ->
+        builder.required(LootContextParams.THIS_ENTITY)
+            .required(LootContextParams.ORIGIN)
     );
 
     private ItematicContextTypes() {}

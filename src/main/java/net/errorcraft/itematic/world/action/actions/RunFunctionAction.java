@@ -7,21 +7,21 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.command.ReturnValueConsumer;
-import net.minecraft.loot.context.LootContext;
+import net.minecraft.commands.CommandResultCallback;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.functions.CommandFunction;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.function.CommandFunction;
-import net.minecraft.server.function.CommandFunctionManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.ServerFunctionManager;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.Optional;
 
-public record RunFunctionAction(Identifier function, Optional<LootContext.EntityReference> entity, Optional<PositionTarget> position) implements Action<RunFunctionAction> {
+public record RunFunctionAction(Identifier function, Optional<LootContext.EntityTarget> entity, Optional<PositionTarget> position) implements Action<RunFunctionAction> {
     public static final MapCodec<RunFunctionAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Identifier.CODEC.fieldOf("function").forGetter(RunFunctionAction::function),
-        LootContext.EntityReference.CODEC.optionalFieldOf("entity").forGetter(RunFunctionAction::entity),
+        LootContext.EntityTarget.CODEC.optionalFieldOf("entity").forGetter(RunFunctionAction::entity),
         PositionTarget.CODEC.optionalFieldOf("position").forGetter(RunFunctionAction::position)
     ).apply(instance, RunFunctionAction::new));
 
@@ -37,15 +37,15 @@ public record RunFunctionAction(Identifier function, Optional<LootContext.Entity
             return false;
         }
 
-        CommandFunctionManager functionManager = server.getCommandFunctionManager();
-        Optional<CommandFunction<ServerCommandSource>> function = functionManager.getFunction(this.function);
+        ServerFunctionManager functionManager = server.getFunctions();
+        Optional<CommandFunction<CommandSourceStack>> function = functionManager.get(this.function);
         if (function.isEmpty()) {
             return false;
         }
 
         MutableBoolean success = new MutableBoolean();
-        ServerCommandSource source = context.commandSource(functionManager, this.entity, this.position)
-            .mergeReturnValueConsumers((successful, returnValue) -> success.setValue(successful), ReturnValueConsumer::chain);
+        CommandSourceStack source = context.commandSource(functionManager, this.entity, this.position)
+            .withCallback((successful, returnValue) -> success.setValue(successful), CommandResultCallback::chain);
         functionManager.execute(function.get(), source);
         return success.booleanValue();
     }

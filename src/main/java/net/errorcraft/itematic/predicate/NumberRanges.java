@@ -2,12 +2,12 @@ package net.errorcraft.itematic.predicate;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.mixin.predicate.NumberRangeAccessor;
-import net.minecraft.predicate.NumberRange;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 
 public class NumberRanges {
     private NumberRanges() {}
 
-    public record FloatRange(Bounds<Float> bounds) implements NumberRange<Float> {
+    public record FloatRange(Bounds<Float> bounds) implements MinMaxBounds<Float> {
         public static final Codec<FloatRange> CODEC = NumberRangeAccessor.BoundsAccessor.createCodec(Codec.FLOAT)
             .xmap(FloatRange::new, FloatRange::bounds);
 

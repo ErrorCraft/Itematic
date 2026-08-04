@@ -1,15 +1,15 @@
 package net.errorcraft.itematic.mixin.scoreboard;
 
-import net.minecraft.scoreboard.ScoreboardCriterion;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(ScoreboardCriterion.class)
+@Mixin(ObjectiveCriteria.class)
 public interface ScoreboardCriterionAccessor {
-    @Accessor("CRITERIA")
-    static Map<String, ScoreboardCriterion> customCriteria() {
+    @Accessor("CRITERIA_CACHE")
+    static Map<String, ObjectiveCriteria> customCriteria() {
         throw new AssertionError();
     }
 }

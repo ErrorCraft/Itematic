@@ -15,39 +15,39 @@ import net.errorcraft.itematic.item.use.provider.providers.ShooterIntegerProvide
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.RegistryCodecs;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.world.World;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, RegistryEntryList<Item> ammunition, int range, ShooterMethod method, ItemDamageRulesDataComponent itemDamage) implements ItemComponent<ShooterItemComponent> {
+public record ShooterItemComponent(HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRulesDataComponent itemDamage) implements ItemComponent<ShooterItemComponent> {
     public static final Codec<ShooterItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryCodecs.entryList(RegistryKeys.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
-        RegistryCodecs.entryList(RegistryKeys.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
-        Codecs.POSITIVE_INT.fieldOf("range").forGetter(ShooterItemComponent::range),
+        RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
+        RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
+        ExtraCodecs.POSITIVE_INT.fieldOf("range").forGetter(ShooterItemComponent::range),
         ShooterMethod.CODEC.fieldOf("method").forGetter(ShooterItemComponent::method),
         ItemDamageRulesDataComponent.CODEC.fieldOf("item_damage").forGetter(ShooterItemComponent::itemDamage)
     ).apply(instance, ShooterItemComponent::new));
 
-    public static ItemComponent<?>[] of(UseAction animation, RegistryEntryList<Item> heldAmmunition, RegistryEntryList<Item> ammunition, int range, ShooterMethod method, ItemDamageRulesDataComponent.Rule... rules) {
+    public static ItemComponent<?>[] of(ItemUseAnimation animation, HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRulesDataComponent.Rule... rules) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
                 .useFor(ShooterIntegerProvider.INSTANCE)
@@ -74,7 +74,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.method.tryShoot(this, stack, world, user, hand)) {
             return ItemResult.CONSUME;
         }
@@ -83,20 +83,20 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
     }
 
     @Override
-    public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+    public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
         this.method.hold(this, stack, world, user, usedTicks);
     }
 
     @Override
-    public boolean stopUsing(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
+    public boolean stopUsing(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         return this.method.stop(this, stack, world, user, usedTicks);
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(ItematicDataComponentTypes.SHOOTER_AMMUNITION, new ItemListDataComponent(this.ammunition));
-        builder.add(ItematicDataComponentTypes.SHOOTER_HELD_AMMUNITION, new ItemListDataComponent(this.heldAmmunition));
-        builder.add(ItematicDataComponentTypes.SHOOTER_DAMAGE_RULES, this.itemDamage);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(ItematicDataComponentTypes.SHOOTER_AMMUNITION, new ItemListDataComponent(this.ammunition));
+        builder.set(ItematicDataComponentTypes.SHOOTER_HELD_AMMUNITION, new ItemListDataComponent(this.heldAmmunition));
+        builder.set(ItematicDataComponentTypes.SHOOTER_DAMAGE_RULES, this.itemDamage);
         this.method.addComponents(builder);
     }
 
@@ -104,8 +104,8 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         return this.method.type() == type;
     }
 
-    public void shoot(ServerWorld world, LivingEntity shooter, Hand hand, ItemStack shooterStack, List<ItemStack> projectiles, float power, float divergence, boolean critical, @Nullable LivingEntity target) {
-        float maxAngle = EnchantmentHelper.getProjectileSpread(world, shooterStack, shooter, 0.0f);
+    public void shoot(ServerLevel world, LivingEntity shooter, InteractionHand hand, ItemStack shooterStack, List<ItemStack> projectiles, float power, float divergence, boolean critical, @Nullable LivingEntity target) {
+        float maxAngle = EnchantmentHelper.processProjectileSpread(world, shooterStack, shooter, 0.0f);
         float angleStep = projectiles.size() == 1 ?
             0.0f :
             2.0f * maxAngle / (projectiles.size() - 1);
@@ -128,7 +128,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         return this.method.useDuration(stack, user);
     }
 
-    private void damageItem(ItemStack stack, ServerWorld world, Hand hand, LivingEntity shooter) {
+    private void damageItem(ItemStack stack, ServerLevel world, InteractionHand hand, LivingEntity shooter) {
         ItemDamageRulesDataComponent rules = stack.get(ItematicDataComponentTypes.SHOOTER_DAMAGE_RULES);
         if (rules == null) {
             return;
@@ -141,15 +141,15 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
 
         ActionContext context = ActionContext.builder(world)
             .stackExchanger(shooter, stack)
-            .add(LootContextParameters.THIS_ENTITY, shooter)
-            .add(LootContextParameters.ORIGIN, shooter.getEntityPos())
-            .add(LootContextParameters.TOOL, stack)
+            .add(LootContextParams.THIS_ENTITY, shooter)
+            .add(LootContextParams.ORIGIN, shooter.position())
+            .add(LootContextParams.TOOL, stack)
             .add(ItematicContextParameters.HAND, hand)
             .build();
         stack.itematic$damage(damage, context);
     }
 
-    private void createProjectile(ItemStack projectile, ServerWorld world, LivingEntity shooter, float power, float divergence, float angle, int index, boolean critical, @Nullable LivingEntity target) {
+    private void createProjectile(ItemStack projectile, ServerLevel world, LivingEntity shooter, float power, float divergence, float angle, int index, boolean critical, @Nullable LivingEntity target) {
         Optional<Entity> optionalEntity = projectile.itematic$getBehavior(ItemComponentTypes.PROJECTILE)
             .map(projectileComponent -> projectileComponent.spawnEntity(world, shooter, projectile, 0.0f, power));
         if (optionalEntity.isEmpty()) {
@@ -157,7 +157,7 @@ public record ShooterItemComponent(RegistryEntryList<Item> heldAmmunition, Regis
         }
 
         Entity entity = optionalEntity.get();
-        if (entity instanceof ProjectileEntity projectileEntity) {
+        if (entity instanceof Projectile projectileEntity) {
             this.method.initializeProjectile(shooter, projectileEntity, index, power, divergence, angle, critical, target);
         }
     }

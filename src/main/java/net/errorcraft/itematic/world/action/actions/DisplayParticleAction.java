@@ -10,25 +10,25 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.Vec3;
 
-public record DisplayParticleAction(PositionTarget position, ParticleEffect particle, int count, Vec3dProvider offset, Vec3dProvider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
+public record DisplayParticleAction(PositionTarget position, ParticleOptions particle, int count, Vec3dProvider offset, Vec3dProvider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
     public static final MapCodec<DisplayParticleAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(DisplayParticleAction::position),
-        ParticleTypes.TYPE_CODEC.fieldOf("particle").forGetter(DisplayParticleAction::particle),
-        Codecs.NON_NEGATIVE_INT.fieldOf("count").forGetter(DisplayParticleAction::count),
+        ParticleTypes.CODEC.fieldOf("particle").forGetter(DisplayParticleAction::particle),
+        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("count").forGetter(DisplayParticleAction::count),
         Vec3dProvider.CODEC.optionalFieldOf("offset", Vec3dProvider.ZERO).forGetter(DisplayParticleAction::offset),
         Vec3dProvider.CODEC.fieldOf("delta").forGetter(DisplayParticleAction::delta),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("speed").forGetter(DisplayParticleAction::speed),
         Codec.BOOL.optionalFieldOf("force", false).forGetter(DisplayParticleAction::force)
     ).apply(instance, DisplayParticleAction::new));
 
-    public static Builder builder(PositionTarget position, ParticleEffect particle) {
+    public static Builder builder(PositionTarget position, ParticleOptions particle) {
         return new Builder(position, particle);
     }
 
@@ -39,35 +39,35 @@ public record DisplayParticleAction(PositionTarget position, ParticleEffect part
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.world() instanceof ServerWorld world)) {
+        if (!(context.world() instanceof ServerLevel world)) {
             return false;
         }
 
-        Random random = world.getRandom();
-        Vec3d pos = this.position(context, random);
+        RandomSource random = world.getRandom();
+        Vec3 pos = this.position(context, random);
         if (pos == null) {
             return false;
         }
 
-        Vec3d delta = this.delta.get(random);
-        int amountOfPlayersShown = world.spawnParticles(
+        Vec3 delta = this.delta.get(random);
+        int amountOfPlayersShown = world.sendParticles(
             this.particle,
             this.force,
             false,
-            pos.getX(),
-            pos.getY(),
-            pos.getZ(),
+            pos.x(),
+            pos.y(),
+            pos.z(),
             this.count,
-            delta.getX(),
-            delta.getY(),
-            delta.getZ(),
+            delta.x(),
+            delta.y(),
+            delta.z(),
             this.speed
         );
         return amountOfPlayersShown > 0;
     }
 
-    private Vec3d position(ActionContext context, Random random) {
-        Vec3d pos = context.get(this.position.contextParam());
+    private Vec3 position(ActionContext context, RandomSource random) {
+        Vec3 pos = context.get(this.position.contextParam());
         if (pos == null) {
             return null;
         }
@@ -77,14 +77,14 @@ public record DisplayParticleAction(PositionTarget position, ParticleEffect part
 
     public static class Builder {
         private final PositionTarget position;
-        private final ParticleEffect particle;
+        private final ParticleOptions particle;
         private int count = 0;
         private Vec3dProvider offset = Vec3dProvider.ZERO;
         private Vec3dProvider delta = Vec3dProvider.ZERO;
         private double speed = 0.0d;
         private boolean force = false;
 
-        private Builder(PositionTarget position, ParticleEffect particle) {
+        private Builder(PositionTarget position, ParticleOptions particle) {
             this.position = position;
             this.particle = particle;
         }

@@ -8,13 +8,13 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.item.FilledMapItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.map.MapState;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MapItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record MarkBannerOnItemAction(PositionTarget position) implements Action<MarkBannerOnItemAction> {
     public static final MapCodec<MarkBannerOnItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -32,22 +32,22 @@ public record MarkBannerOnItemAction(PositionTarget position) implements Action<
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        World world = context.world();
-        if (!world.getBlockState(pos).isIn(BlockTags.BANNERS)) {
+        Level world = context.world();
+        if (!world.getBlockState(pos).is(BlockTags.BANNERS)) {
             return false;
         }
 
-        ItemStack stack = context.get(LootContextParameters.TOOL);
+        ItemStack stack = context.get(LootContextParams.TOOL);
         if (ItemStackUtil.isNullOrEmpty(stack)) {
             return false;
         }
 
-        MapState state = FilledMapItem.getMapState(stack, world);
-        return state == null || state.addBanner(world, pos);
+        MapItemSavedData state = MapItem.getSavedData(stack, world);
+        return state == null || state.toggleBanner(world, pos);
     }
 }

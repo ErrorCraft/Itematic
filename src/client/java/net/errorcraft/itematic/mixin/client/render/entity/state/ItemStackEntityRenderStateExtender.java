@@ -1,22 +1,22 @@
 package net.errorcraft.itematic.mixin.client.render.entity.state;
 
-import net.minecraft.client.render.entity.state.ItemStackEntityRenderState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.entity.state.ItemClusterRenderState;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ItemStackEntityRenderState.class)
+@Mixin(ItemClusterRenderState.class)
 public class ItemStackEntityRenderStateExtender {
     @Redirect(
-        method = "getSeed",
+        method = "getSeedForItemStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;getRawId(Lnet/minecraft/item/Item;)I"
+            target = "Lnet/minecraft/world/item/Item;getId(Lnet/minecraft/world/item/Item;)I"
         )
     )
     private static int getRawIdUseRegistryEntry(Item item, ItemStack stack) {
-        return stack.getRegistryEntry().itematic$rawId();
+        return stack.getItemHolder().itematic$rawId();
     }
 }

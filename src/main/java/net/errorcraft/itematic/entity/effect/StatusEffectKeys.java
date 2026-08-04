@@ -1,26 +1,26 @@
 package net.errorcraft.itematic.entity.effect;
 
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.effect.MobEffect;
 
 public class StatusEffectKeys {
-    public static final RegistryKey<StatusEffect> ABSORPTION = of("absorption");
-    public static final RegistryKey<StatusEffect> BLINDNESS = of("blindness");
-    public static final RegistryKey<StatusEffect> FIRE_RESISTANCE = of("fire_resistance");
-    public static final RegistryKey<StatusEffect> HUNGER = of("hunger");
-    public static final RegistryKey<StatusEffect> JUMP_BOOST = of("jump_boost");
-    public static final RegistryKey<StatusEffect> NAUSEA = of("nausea");
-    public static final RegistryKey<StatusEffect> NIGHT_VISION = of("night_vision");
-    public static final RegistryKey<StatusEffect> POISON = of("poison");
-    public static final RegistryKey<StatusEffect> REGENERATION = of("regeneration");
-    public static final RegistryKey<StatusEffect> RESISTANCE = of("resistance");
-    public static final RegistryKey<StatusEffect> SATURATION = of("saturation");
-    public static final RegistryKey<StatusEffect> WEAKNESS = of("weakness");
-    public static final RegistryKey<StatusEffect> WITHER = of("wither");
+    public static final ResourceKey<MobEffect> ABSORPTION = of("absorption");
+    public static final ResourceKey<MobEffect> BLINDNESS = of("blindness");
+    public static final ResourceKey<MobEffect> FIRE_RESISTANCE = of("fire_resistance");
+    public static final ResourceKey<MobEffect> HUNGER = of("hunger");
+    public static final ResourceKey<MobEffect> JUMP_BOOST = of("jump_boost");
+    public static final ResourceKey<MobEffect> NAUSEA = of("nausea");
+    public static final ResourceKey<MobEffect> NIGHT_VISION = of("night_vision");
+    public static final ResourceKey<MobEffect> POISON = of("poison");
+    public static final ResourceKey<MobEffect> REGENERATION = of("regeneration");
+    public static final ResourceKey<MobEffect> RESISTANCE = of("resistance");
+    public static final ResourceKey<MobEffect> SATURATION = of("saturation");
+    public static final ResourceKey<MobEffect> WEAKNESS = of("weakness");
+    public static final ResourceKey<MobEffect> WITHER = of("wither");
 
-    private static RegistryKey<StatusEffect> of(String id) {
-        return RegistryKey.of(RegistryKeys.STATUS_EFFECT, Identifier.ofVanilla(id));
+    private static ResourceKey<MobEffect> of(String id) {
+        return ResourceKey.create(Registries.MOB_EFFECT, Identifier.withDefaultNamespace(id));
     }
 }

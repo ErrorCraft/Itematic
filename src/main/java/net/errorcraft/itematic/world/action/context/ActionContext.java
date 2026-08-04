@@ -2,25 +2,25 @@ package net.errorcraft.itematic.world.action.context;
 
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.AutomaticItemPlacementContext;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootWorldContext;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.function.CommandFunctionManager;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.context.ContextParameter;
-import net.minecraft.util.context.ContextParameterMap;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.ServerFunctionManager;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.context.ContextKey;
+import net.minecraft.util.context.ContextMap;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.DirectionalPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,17 +29,17 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class ActionContext {
-    private final World world;
-    private final ContextParameterMap parameters;
+    private final Level world;
+    private final ContextMap parameters;
     private final ItemStackExchanger stackExchanger;
 
-    private ActionContext(World world, ContextParameterMap parameters, ItemStackExchanger stackExchanger) {
+    private ActionContext(Level world, ContextMap parameters, ItemStackExchanger stackExchanger) {
         this.world = world;
         this.parameters = parameters;
         this.stackExchanger = stackExchanger;
     }
 
-    public static Builder builder(World world) {
+    public static Builder builder(Level world) {
         return new Builder(world);
     }
 
@@ -47,17 +47,17 @@ public class ActionContext {
         return new Builder(this);
     }
 
-    public World world() {
+    public Level world() {
         return this.world;
     }
 
     @Nullable
-    public <T> T get(ContextParameter<T> parameter) {
-        return this.parameters.getNullable(parameter);
+    public <T> T get(ContextKey<T> parameter) {
+        return this.parameters.getOptional(parameter);
     }
 
     @Nullable
-    public <T, U extends T> U get(ContextParameter<T> parameter, Class<U> clazz) {
+    public <T, U extends T> U get(ContextKey<T> parameter, Class<U> clazz) {
         T value = this.get(parameter);
         if (clazz.isInstance(value)) {
             return clazz.cast(value);
@@ -67,7 +67,7 @@ public class ActionContext {
     }
 
     @Nullable
-    public <T, U> U get(ContextParameter<T> parameter, Function<@NotNull T, U> mapper) {
+    public <T, U> U get(ContextKey<T> parameter, Function<@NotNull T, U> mapper) {
         T value = this.get(parameter);
         if (value == null) {
             return null;
@@ -76,7 +76,7 @@ public class ActionContext {
         return mapper.apply(value);
     }
 
-    public <T> T getOrDefault(ContextParameter<T> parameter, T defaultValue) {
+    public <T> T getOrDefault(ContextKey<T> parameter, T defaultValue) {
         return this.parameters.getOrDefault(parameter, defaultValue);
     }
 
@@ -90,22 +90,22 @@ public class ActionContext {
 
     @Nullable
     public LootContext lootContext() {
-        if (!(this.world instanceof ServerWorld serverWorld)) {
+        if (!(this.world instanceof ServerLevel serverWorld)) {
             return null;
         }
 
-        LootWorldContext context = new LootWorldContext(
+        LootParams context = new LootParams(
             serverWorld,
             this.parameters,
             Map.of(),
             0.0f
         );
-        return new LootContext.Builder(context).build(Optional.empty());
+        return new LootContext.Builder(context).create(Optional.empty());
     }
 
-    public ServerCommandSource commandSource(CommandFunctionManager functionManager, Optional<LootContext.EntityReference> entity, Optional<PositionTarget> position) {
-        ServerCommandSource source = functionManager.getScheduledCommandSource();
-        source = entity.map(LootContext.EntityReference::contextParam)
+    public CommandSourceStack commandSource(ServerFunctionManager functionManager, Optional<LootContext.EntityTarget> entity, Optional<PositionTarget> position) {
+        CommandSourceStack source = functionManager.getGameLoopSender();
+        source = entity.map(LootContext.EntityTarget::contextParam)
             .map(this::get)
             .map(source::withEntity)
             .orElse(source);
@@ -117,8 +117,8 @@ public class ActionContext {
     }
 
     @Nullable
-    public ItemPlacementContext blockPlaceContext(PositionTarget position, BlockPicker<?> block) {
-        Vec3d pos = this.get(position.contextParam());
+    public BlockPlaceContext blockPlaceContext(PositionTarget position, BlockPicker<?> block) {
+        Vec3 pos = this.get(position.contextParam());
         if (pos == null) {
             return null;
         }
@@ -128,19 +128,19 @@ public class ActionContext {
             return null;
         }
 
-        ItemPlacementContext placeContext = this.blockPlaceContext(pos, side);
+        BlockPlaceContext placeContext = this.blockPlaceContext(pos, side);
         return block.placementContext(placeContext);
     }
 
-    private ItemPlacementContext blockPlaceContext(Vec3d pos, Direction side) {
-        BlockPos blockPos = BlockPos.ofFloored(pos);
-        Entity entity = this.get(LootContextParameters.THIS_ENTITY);
+    private BlockPlaceContext blockPlaceContext(Vec3 pos, Direction side) {
+        BlockPos blockPos = BlockPos.containing(pos);
+        Entity entity = this.get(LootContextParams.THIS_ENTITY);
         if (entity != null) {
-            return new ItemPlacementContext(
+            return new BlockPlaceContext(
                 this.world,
-                entity instanceof PlayerEntity player ? player : null,
+                entity instanceof Player player ? player : null,
                 this.get(ItematicContextParameters.HAND),
-                this.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
+                this.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY),
                 new BlockHitResult(
                     pos,
                     side,
@@ -150,22 +150,22 @@ public class ActionContext {
             );
         }
 
-        Direction useSide = this.world.isAir(blockPos.down()) ? side : Direction.UP;
-        return new AutomaticItemPlacementContext(
+        Direction useSide = this.world.isEmptyBlock(blockPos.below()) ? side : Direction.UP;
+        return new DirectionalPlaceContext(
             this.world,
             blockPos,
             side,
-            this.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY),
+            this.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY),
             useSide
         );
     }
 
     public static class Builder {
-        private final World world;
+        private final Level world;
         private ItemStackExchanger stackExchanger = ItemStackExchanger.EMPTY;
-        private final ContextParameterMap.Builder parameters = new ContextParameterMap.Builder();
+        private final ContextMap.Builder parameters = new ContextMap.Builder();
 
-        private Builder(World world) {
+        private Builder(Level world) {
             this.world = world;
         }
 
@@ -201,22 +201,22 @@ public class ActionContext {
             return this;
         }
 
-        public Builder stackExchanger(Direction side, Vec3d pos, ItemStack initialStack) {
+        public Builder stackExchanger(Direction side, Vec3 pos, ItemStack initialStack) {
             this.stackExchanger = ItemStackExchanger.forDispenser(this.world, side, pos, initialStack);
             return this;
         }
 
-        public <T> Builder add(ContextParameter<T> parameter, T value) {
-            this.parameters.add(parameter, value);
+        public <T> Builder add(ContextKey<T> parameter, T value) {
+            this.parameters.withParameter(parameter, value);
             return this;
         }
 
-        public <T> Builder addOptional(ContextParameter<T> parameter, @Nullable T value) {
-            this.parameters.addNullable(parameter, value);
+        public <T> Builder addOptional(ContextKey<T> parameter, @Nullable T value) {
+            this.parameters.withOptionalParameter(parameter, value);
             return this;
         }
 
-        public <T, U> Builder addOptional(ContextParameter<T> parameter, @Nullable U value, Function<@NotNull U, T> mapper) {
+        public <T, U> Builder addOptional(ContextKey<T> parameter, @Nullable U value, Function<@NotNull U, T> mapper) {
             if (value == null) {
                 return this;
             }

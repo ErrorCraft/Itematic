@@ -4,9 +4,9 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CrossbowItem.class)
 public class CrossbowItemExtender {
     @Inject(
-        method = "loadProjectiles",
+        method = "tryLoadProjectiles",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -25,10 +25,10 @@ public class CrossbowItemExtender {
     }
 
     @Redirect(
-        method = "loadProjectiles",
+        method = "tryLoadProjectiles",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;getProjectileType(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/entity/LivingEntity;getProjectile(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
     private static ItemStack getAmmunitionUseItemComponent(LivingEntity instance, ItemStack stack) {
@@ -40,7 +40,7 @@ public class CrossbowItemExtender {
     }
 
     @Inject(
-        method = "getPullTime",
+        method = "getChargeDuration",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -55,7 +55,7 @@ public class CrossbowItemExtender {
     }
 
     @ModifyConstant(
-        method = "getPullTime",
+        method = "getChargeDuration",
         constant = @Constant(
             floatValue = 1.25f
         )

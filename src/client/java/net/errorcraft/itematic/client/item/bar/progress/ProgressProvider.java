@@ -4,9 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.client.item.bar.progress.provider.DamageProgressProvider;
 import net.errorcraft.itematic.client.item.bar.progress.provider.ItemHolderOccupancyProgressProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 

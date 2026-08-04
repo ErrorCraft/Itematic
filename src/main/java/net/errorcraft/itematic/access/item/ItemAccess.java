@@ -7,15 +7,14 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.item.event.ItemEventMap;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.level.Level;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -24,10 +23,10 @@ public interface ItemAccess {
         return null;
     }
     default void itematic$setDisplay(ItemDisplay display) {}
-    default AttributeModifiersComponent itematic$attributeModifiers() {
+    default ItemAttributeModifiers itematic$attributeModifiers() {
         return null;
     }
-    default void itematic$setAttributeModifiers(AttributeModifiersComponent attributeModifiers) {}
+    default void itematic$setAttributeModifiers(ItemAttributeModifiers attributeModifiers) {}
     default ItemComponentSet itematic$behavior() {
         return null;
     }
@@ -48,8 +47,8 @@ public interface ItemAccess {
     default boolean itematic$hasEventListener(ItemEvent event) {
         return false;
     }
-    default void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Text> tooltip, TooltipType type) {}
-    default boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    default void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> tooltip, TooltipFlag type) {}
+    default boolean itematic$mayStartUsing(Level world, Player user, InteractionHand hand, ItemStack stack) {
         return true;
     }
 }

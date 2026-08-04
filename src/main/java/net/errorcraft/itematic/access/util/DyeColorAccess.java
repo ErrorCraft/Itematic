@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.access.util;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 
 public interface DyeColorAccess {
-    default RegistryKey<Item> itematic$itemKey() {
+    default ResourceKey<Item> itematic$itemKey() {
         return null;
     }
-    default void itematic$setItemKey(RegistryKey<Item> item) {}
+    default void itematic$setItemKey(ResourceKey<Item> item) {}
 }

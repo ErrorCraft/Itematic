@@ -2,11 +2,11 @@ package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.CampfireCookingRecipe;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CampfireCookingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(CampfireCookingRecipe.class)
@@ -16,7 +16,7 @@ public abstract class CampfireCookingRecipeExtender extends AbstractCookingRecip
     }
 
     @Override
-    protected RegistryKey<Item> cookerItemKey() {
+    protected ResourceKey<Item> cookerItemKey() {
         return ItemKeys.CAMPFIRE;
     }
 }

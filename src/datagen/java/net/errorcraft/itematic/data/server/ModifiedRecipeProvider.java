@@ -5,17 +5,17 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
-import net.minecraft.data.DataOutput;
-import net.minecraft.data.recipe.CraftingRecipeJsonBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.*;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +24,15 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
-    public ModifiedRecipeProvider(FabricDataOutput dataOutput, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
-        super(dataOutput, registriesFuture, DataOutput.OutputType.DATA_PACK, "recipe", Recipe.CODEC);
+    public ModifiedRecipeProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(dataOutput, registriesFuture, PackOutput.Target.DATA_PACK, "recipe", Recipe.CODEC);
     }
 
     @Override
-    protected void configure(BiConsumer<Identifier, Recipe<?>> provider, RegistryWrapper.WrapperLookup lookup) {
-        RegistryWrapper.Impl<Item> items = lookup.getOrThrow(RegistryKeys.ITEM);
+    protected void configure(BiConsumer<Identifier, Recipe<?>> provider, HolderLookup.Provider lookup) {
+        HolderLookup.RegistryLookup<Item> items = lookup.lookupOrThrow(Registries.ITEM);
         provider.accept(
-            Identifier.ofVanilla("honey_block"),
+            Identifier.withDefaultNamespace("honey_block"),
             shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(ItemKeys.HONEY_BLOCK))
                 .input('#', items.getOrThrow(ItemKeys.HONEY_BOTTLE), items.getOrThrow(ItemKeys.GLASS_BOTTLE))
                 .pattern("##")
@@ -40,13 +40,13 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
                 .build()
         );
         provider.accept(
-            Identifier.ofVanilla("sugar_from_honey_bottle"),
+            Identifier.withDefaultNamespace("sugar_from_honey_bottle"),
             shapelessRecipe(RecipeCategory.MISC, items.getOrThrow(ItemKeys.SUGAR), 3)
                 .input(items.getOrThrow(ItemKeys.HONEY_BOTTLE), 1, items.getOrThrow(ItemKeys.GLASS_BOTTLE))
                 .build()
         );
         provider.accept(
-            Identifier.ofVanilla("cake"),
+            Identifier.withDefaultNamespace("cake"),
             shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(ItemKeys.CAKE))
                 .input('A', items.getOrThrow(ItemKeys.MILK_BUCKET), items.getOrThrow(ItemKeys.BUCKET))
                 .input('B', items.getOrThrow(ItemKeys.SUGAR))
@@ -64,11 +64,11 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
         return "Modified Recipes";
     }
 
-    private static ShapelessRecipeBuilder shapelessRecipe(RecipeCategory category, RegistryEntry<Item> result, int count) {
+    private static ShapelessRecipeBuilder shapelessRecipe(RecipeCategory category, Holder<Item> result, int count) {
         return new ShapelessRecipeBuilder(new ItemStack(result, count), category);
     }
 
-    private static ShapedRecipeBuilder shapedRecipe(RecipeCategory category, RegistryEntry<Item> result) {
+    private static ShapedRecipeBuilder shapedRecipe(RecipeCategory category, Holder<Item> result) {
         return new ShapedRecipeBuilder(new ItemStack(result), category);
     }
 
@@ -85,15 +85,15 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
         public ShapelessRecipe build() {
             return new ShapelessRecipe(
                 "",
-                CraftingRecipeJsonBuilder.toCraftingCategory(this.category),
+                RecipeBuilder.determineBookCategory(this.category),
                 this.result,
                 this.inputs
             );
         }
 
-        public ShapelessRecipeBuilder input(RegistryEntry<Item> input, int count, RegistryEntry<Item> remainder) {
+        public ShapelessRecipeBuilder input(Holder<Item> input, int count, Holder<Item> remainder) {
             for (int i = 0; i < count; i++) {
-                Ingredient ingredient = Ingredient.ofTag(RegistryEntryList.of(input));
+                Ingredient ingredient = Ingredient.of(HolderSet.direct(input));
                 ingredient.itematic$setRemainder(Optional.of(new ItemStack(remainder)));
                 this.inputs.add(ingredient);
             }
@@ -116,20 +116,20 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
         public ShapedRecipe build() {
             return new ShapedRecipe(
                 "",
-                CraftingRecipeJsonBuilder.toCraftingCategory(this.category),
-                RawShapedRecipe.create(this.inputs, this.pattern),
+                RecipeBuilder.determineBookCategory(this.category),
+                ShapedRecipePattern.of(this.inputs, this.pattern),
                 this.result,
                 true
             );
         }
 
-        public ShapedRecipeBuilder input(char key, RegistryEntry<Item> input) {
-            this.inputs.put(key, Ingredient.ofTag(RegistryEntryList.of(input)));
+        public ShapedRecipeBuilder input(char key, Holder<Item> input) {
+            this.inputs.put(key, Ingredient.of(HolderSet.direct(input)));
             return this;
         }
 
-        public ShapedRecipeBuilder input(char key, RegistryEntry<Item> input, RegistryEntry<Item> remainder) {
-            Ingredient ingredient = Ingredient.ofTag(RegistryEntryList.of(input));
+        public ShapedRecipeBuilder input(char key, Holder<Item> input, Holder<Item> remainder) {
+            Ingredient ingredient = Ingredient.of(HolderSet.direct(input));
             ingredient.itematic$setRemainder(Optional.of(new ItemStack(remainder)));
             this.inputs.put(key, ingredient);
             return this;

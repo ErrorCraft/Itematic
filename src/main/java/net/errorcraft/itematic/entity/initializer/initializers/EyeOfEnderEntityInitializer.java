@@ -3,27 +3,27 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EyeOfEnderEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.tag.StructureTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.StructureTags;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.projectile.EyeOfEnder;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 
-public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnderEntity> {
+public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder> {
     public static final EyeOfEnderEntityInitializer INSTANCE = new EyeOfEnderEntityInitializer();
 
     private EyeOfEnderEntityInitializer() {}
 
     @Override
-    public EyeOfEnderEntity create(ActionContext context, SpawnReason reason) {
-        if (!(context.world() instanceof ServerWorld world)) {
+    public EyeOfEnder create(ActionContext context, EntitySpawnReason reason) {
+        if (!(context.world() instanceof ServerLevel world)) {
             return null;
         }
 
@@ -32,7 +32,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
             return null;
         }
 
-        BlockPos strongholdPos = world.locateStructure(
+        BlockPos strongholdPos = world.findNearestMapStructure(
             StructureTags.EYE_OF_ENDER_LOCATED,
             blockPos,
             100,
@@ -42,42 +42,42 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
             return null;
         }
 
-        Vec3d pos = this.getPosition(context);
-        EyeOfEnderEntity entity = this.createEntity(world, pos, context.get(LootContextParameters.TOOL), strongholdPos);
-        Entity user = context.get(LootContextParameters.THIS_ENTITY);
-        world.emitGameEvent(GameEvent.PROJECTILE_SHOOT, pos, GameEvent.Emitter.of(user));
-        if (user instanceof ServerPlayerEntity serverPlayer) {
-            Criteria.USED_ENDER_EYE.trigger(serverPlayer, strongholdPos);
+        Vec3 pos = this.getPosition(context);
+        EyeOfEnder entity = this.createEntity(world, pos, context.get(LootContextParams.TOOL), strongholdPos);
+        Entity user = context.get(LootContextParams.THIS_ENTITY);
+        world.gameEvent(GameEvent.PROJECTILE_SHOOT, pos, GameEvent.Context.of(user));
+        if (user instanceof ServerPlayer serverPlayer) {
+            CriteriaTriggers.USED_ENDER_EYE.trigger(serverPlayer, strongholdPos);
         }
 
         return entity;
     }
 
     private BlockPos getBlockPos(ActionContext context) {
-        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
+        Entity entity = context.get(LootContextParams.THIS_ENTITY);
         if (entity != null) {
-            return entity.getBlockPos();
+            return entity.blockPosition();
         }
 
-        return context.get(ItematicContextParameters.INTERACTED_POSITION, BlockPos::ofFloored);
+        return context.get(ItematicContextParameters.INTERACTED_POSITION, BlockPos::containing);
     }
 
-    private Vec3d getPosition(ActionContext context) {
-        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
+    private Vec3 getPosition(ActionContext context) {
+        Entity entity = context.get(LootContextParams.THIS_ENTITY);
         if (entity != null) {
-            return new Vec3d(entity.getX(), entity.getBodyY(0.5d), entity.getZ());
+            return new Vec3(entity.getX(), entity.getY(0.5d), entity.getZ());
         }
 
         return context.get(ItematicContextParameters.INTERACTED_POSITION);
     }
 
-    private EyeOfEnderEntity createEntity(ServerWorld world, Vec3d pos, ItemStack stack, BlockPos strongholdPos) {
-        EyeOfEnderEntity entity = new EyeOfEnderEntity(world, pos.getX(), pos.getY(), pos.getZ());
+    private EyeOfEnder createEntity(ServerLevel world, Vec3 pos, ItemStack stack, BlockPos strongholdPos) {
+        EyeOfEnder entity = new EyeOfEnder(world, pos.x(), pos.y(), pos.z());
         if (stack != null) {
             entity.setItem(stack);
         }
 
-        entity.initTargetPos(Vec3d.of(strongholdPos));
+        entity.signalTo(Vec3.atLowerCornerOf(strongholdPos));
         return entity;
     }
 }

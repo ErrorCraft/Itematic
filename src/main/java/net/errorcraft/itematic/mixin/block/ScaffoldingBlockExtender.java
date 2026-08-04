@@ -4,19 +4,19 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.block.AbstractBlockAccess;
 import net.errorcraft.itematic.item.ItemAccess;
 import net.errorcraft.itematic.item.UnplaceableItemPlacementContext;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ScaffoldingBlock;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ScaffoldingBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,23 +28,23 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public class ScaffoldingBlockExtender extends Block implements AbstractBlockAccess {
     @Shadow
     @Final
-    public static int MAX_DISTANCE;
+    public static int STABILITY_MAX_DISTANCE;
 
-    public ScaffoldingBlockExtender(Settings settings) {
+    public ScaffoldingBlockExtender(Properties settings) {
         super(settings);
     }
 
     @ModifyArg(
-        method = "getOutlineShape",
+        method = "getShape",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/ShapeContext;isHolding(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/phys/shapes/CollisionContext;isHoldingItem(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private Item getLightUseDynamicRegistry(Item item, @Local(argsOnly = true) BlockState state, @Local(argsOnly = true) BlockView world) {
+    private Item getLightUseDynamicRegistry(Item item, @Local(argsOnly = true) BlockState state, @Local(argsOnly = true) BlockGetter world) {
         if (world instanceof ItemAccess itemAccess) {
             return itemAccess.getOptionalEntry(state.getBlock().itematic$asItemKey())
-                .map(RegistryEntry::value)
+                .map(Holder::value)
                 .orElse(null);
         }
 
@@ -52,14 +52,14 @@ public class ScaffoldingBlockExtender extends Block implements AbstractBlockAcce
     }
 
     @Override
-    public ItemPlacementContext itematic$placementContext(ItemPlacementContext context) {
-        World world = context.getWorld();
-        BlockPos pos = context.getBlockPos();
-        if (world.getBlockState(pos).isOf(this)) {
+    public BlockPlaceContext itematic$placementContext(BlockPlaceContext context) {
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        if (world.getBlockState(pos).is(this)) {
             return this.scaffoldingPlacementContext(context, world, pos);
         }
 
-        if (ScaffoldingBlock.calculateDistance(world, pos) == MAX_DISTANCE) {
+        if (ScaffoldingBlock.getDistance(world, pos) == STABILITY_MAX_DISTANCE) {
             return UnplaceableItemPlacementContext.of(context);
         }
 
@@ -67,17 +67,17 @@ public class ScaffoldingBlockExtender extends Block implements AbstractBlockAcce
     }
 
     @Unique
-    private ItemPlacementContext scaffoldingPlacementContext(ItemPlacementContext context, World world, BlockPos blockPos) {
+    private BlockPlaceContext scaffoldingPlacementContext(BlockPlaceContext context, Level world, BlockPos blockPos) {
         Direction direction = this.scaffoldingDirection(context);
-        BlockPos.Mutable mutable = blockPos.mutableCopy().move(direction);
+        BlockPos.MutableBlockPos mutable = blockPos.mutable().move(direction);
         int distance = 0;
-        while (distance < MAX_DISTANCE) {
+        while (distance < STABILITY_MAX_DISTANCE) {
             if (this.tooHigh(context, world, mutable)) {
                 break;
             }
 
             BlockState state = world.getBlockState(mutable);
-            if (!state.isOf(this)) {
+            if (!state.is(this)) {
                 return this.offsetPlacementContext(context, state, mutable, direction);
             }
 
@@ -91,36 +91,36 @@ public class ScaffoldingBlockExtender extends Block implements AbstractBlockAcce
     }
 
     @Unique
-    private Direction scaffoldingDirection(ItemPlacementContext context) {
-        if (context.shouldCancelInteraction()) {
-            return context.hitsInsideBlock() ? context.getSide().getOpposite() : context.getSide();
+    private Direction scaffoldingDirection(BlockPlaceContext context) {
+        if (context.isSecondaryUseActive()) {
+            return context.isInside() ? context.getClickedFace().getOpposite() : context.getClickedFace();
         }
 
-        if (context.getSide() == Direction.UP) {
-            return context.getHorizontalPlayerFacing();
+        if (context.getClickedFace() == Direction.UP) {
+            return context.getHorizontalDirection();
         }
 
         return Direction.UP;
     }
 
     @Unique
-    private boolean tooHigh(ItemPlacementContext context, World world, BlockPos pos) {
-        if (world.isClient() || world.isInBuildLimit(pos)) {
+    private boolean tooHigh(BlockPlaceContext context, Level world, BlockPos pos) {
+        if (world.isClientSide() || world.isInWorldBounds(pos)) {
             return false;
         }
 
-        int topY = world.getTopYInclusive();
-        if (context.getPlayer() instanceof ServerPlayerEntity player && pos.getY() >= topY) {
-            player.sendMessageToClient(Text.translatable("build.tooHigh", topY - 1).formatted(Formatting.RED), true);
+        int topY = world.getMaxY();
+        if (context.getPlayer() instanceof ServerPlayer player && pos.getY() >= topY) {
+            player.sendSystemMessage(Component.translatable("build.tooHigh", topY - 1).withStyle(ChatFormatting.RED), true);
         }
 
         return true;
     }
 
     @Unique
-    private ItemPlacementContext offsetPlacementContext(ItemPlacementContext context, BlockState state, BlockPos pos, Direction direction) {
-        if (state.canReplace(context)) {
-            return ItemPlacementContext.offset(context, pos, direction);
+    private BlockPlaceContext offsetPlacementContext(BlockPlaceContext context, BlockState state, BlockPos pos, Direction direction) {
+        if (state.canBeReplaced(context)) {
+            return BlockPlaceContext.at(context, pos, direction);
         }
 
         return UnplaceableItemPlacementContext.of(context);

@@ -1,20 +1,20 @@
 package net.errorcraft.itematic.mixin.util.context;
 
-import net.minecraft.util.context.ContextParameter;
-import net.minecraft.util.context.ContextParameterMap;
+import net.minecraft.util.context.ContextKey;
+import net.minecraft.util.context.ContextMap;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Map;
 
-@Mixin(ContextParameterMap.class)
+@Mixin(ContextMap.class)
 public interface ContextParameterMapAccessor {
     @Invoker("<init>")
-    static ContextParameterMap create(Map<ContextParameter<?>, ?> map) {
+    static ContextMap create(Map<ContextKey<?>, ?> map) {
         throw new AssertionError();
     }
 
-    @Accessor("map")
-    Map<ContextParameter<?>, Object> itematic$parameters();
+    @Accessor("params")
+    Map<ContextKey<?>, Object> itematic$parameters();
 }

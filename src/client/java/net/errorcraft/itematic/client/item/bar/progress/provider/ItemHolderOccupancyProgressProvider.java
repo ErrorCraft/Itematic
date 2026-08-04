@@ -3,8 +3,8 @@ package net.errorcraft.itematic.client.item.bar.progress.provider;
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProviderKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.math.Fraction;
 
 import java.util.Optional;

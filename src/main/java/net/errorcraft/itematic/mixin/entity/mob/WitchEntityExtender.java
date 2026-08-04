@@ -2,31 +2,31 @@ package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.WitchEntity;
-import net.minecraft.entity.raid.RaiderEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.raid.Raider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(WitchEntity.class)
+@Mixin(Witch.class)
 public abstract class WitchEntityExtender extends MobEntityExtender {
-    protected WitchEntityExtender(EntityType<? extends RaiderEntity> entityType, World world) {
+    protected WitchEntityExtender(EntityType<? extends Raider> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "tickMovement",
+        method = "aiStep",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForPotionUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -34,29 +34,29 @@ public abstract class WitchEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "tickMovement",
+        method = "aiStep",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
-        return PotionContentsComponentUtil.setPotion(this.getEntityWorld().itematic$createStack(ItemKeys.POTION), potion);
+    private ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion) {
+        return PotionContentsComponentUtil.setPotion(this.level().itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(
-        method = "shootAt",
+        method = "performRangedAttack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForSplashPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
-        return PotionContentsComponentUtil.setPotion(this.getEntityWorld().itematic$createStack(ItemKeys.SPLASH_POTION), potion);
+    private ItemStack newItemStackForSplashPotionUseCreateStack(Item item, Holder<Potion> potion) {
+        return PotionContentsComponentUtil.setPotion(this.level().itematic$createStack(ItemKeys.SPLASH_POTION), potion);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.WITCH_SPAWN_EGG;
     }
 }

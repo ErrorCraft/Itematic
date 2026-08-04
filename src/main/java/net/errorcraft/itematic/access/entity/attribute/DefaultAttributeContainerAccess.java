@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.access.entity.attribute;
 
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 
 public interface DefaultAttributeContainerAccess {
-    default double itematic$getValue(RegistryEntry<EntityAttribute> attribute, double base) {
+    default double itematic$getValue(Holder<Attribute> attribute, double base) {
         return 0.0d;
     }
 }

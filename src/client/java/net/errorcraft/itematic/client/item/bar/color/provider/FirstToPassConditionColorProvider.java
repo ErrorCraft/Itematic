@@ -7,13 +7,12 @@ import net.errorcraft.itematic.client.item.bar.color.ColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.ColorProviderType;
 import net.errorcraft.itematic.client.item.bar.color.ColorProviderTypes;
 import net.errorcraft.itematic.predicate.NumberRanges;
-import net.minecraft.util.dynamic.Codecs;
-
+import net.minecraft.util.ExtraCodecs;
 import java.util.List;
 
 public record FirstToPassConditionColorProvider(List<Entry> entries, ColorProvider fallback) implements ColorProvider {
     public static final MapCodec<FirstToPassConditionColorProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codecs.nonEmptyList(Entry.CODEC.listOf()).fieldOf("entries").forGetter(FirstToPassConditionColorProvider::entries),
+        ExtraCodecs.nonEmptyList(Entry.CODEC.listOf()).fieldOf("entries").forGetter(FirstToPassConditionColorProvider::entries),
         ColorProvider.CODEC.fieldOf("fallback").forGetter(FirstToPassConditionColorProvider::fallback)
     ).apply(instance, FirstToPassConditionColorProvider::new));
 

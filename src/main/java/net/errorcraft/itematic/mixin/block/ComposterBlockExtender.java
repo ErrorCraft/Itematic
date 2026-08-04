@@ -5,12 +5,12 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.CompostableItemComponent;
-import net.minecraft.block.ComposterBlock;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.ComposterBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -18,87 +18,87 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ComposterBlock.class)
 public class ComposterBlockExtender {
     @Redirect(
-        method = "onUseWithItem",
+        method = "useItemOn",
         at = @At(
             value = "INVOKE",
             target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;containsKey(Ljava/lang/Object;)Z",
             remap = false
         )
     )
-    private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemConvertible> instance, Object o, ItemStack stack) {
+    private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemLike> instance, Object o, ItemStack stack) {
         return stack.itematic$hasBehavior(ItemComponentTypes.COMPOSTABLE);
     }
 
     @Redirect(
-        method = "compost",
+        method = "insertItem",
         at = @At(
             value = "INVOKE",
             target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;containsKey(Ljava/lang/Object;)Z",
             remap = false
         )
     )
-    private static boolean containsKeyUseItemComponentCheckStatic(Object2FloatMap<ItemConvertible> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
+    private static boolean containsKeyUseItemComponentCheckStatic(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
         return stack.itematic$hasBehavior(ItemComponentTypes.COMPOSTABLE);
     }
 
     @Redirect(
-        method = "addToComposter",
+        method = "addItem",
         at = @At(
             value = "INVOKE",
             target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;getFloat(Ljava/lang/Object;)F",
             remap = false
         )
     )
-    private static float getFloatUseItemComponent(Object2FloatMap<ItemConvertible> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
+    private static float getFloatUseItemComponent(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
         return stack.itematic$getBehavior(ItemComponentTypes.COMPOSTABLE)
             .map(CompostableItemComponent::levelIncreaseChance)
             .orElse(0.0f);
     }
 
     @Redirect(
-        method = "emptyFullComposter",
+        method = "extractProduce",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForBoneMealUseCreateStack(ItemConvertible item, @Local(argsOnly = true) World world) {
+    private static ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
         return world.itematic$createStack(ItemKeys.BONE_MEAL);
     }
 
     @Redirect(
-        method = "getInventory",
+        method = "getContainer",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForBoneMealUseCreateStack(ItemConvertible item, @Local(argsOnly = true) WorldAccess world) {
+    private ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, @Local(argsOnly = true) LevelAccessor world) {
         return world.itematic$createStack(ItemKeys.BONE_MEAL);
     }
 
-    @Mixin(targets = "net/minecraft/block/ComposterBlock$ComposterInventory")
+    @Mixin(targets = "net/minecraft/world/level/block/ComposterBlock$InputContainer")
     public static class ComposterInventoryExtender {
         @Redirect(
-            method = "canInsert",
+            method = "canPlaceItemThroughFace",
             at = @At(
                 value = "INVOKE",
                 target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;containsKey(Ljava/lang/Object;)Z",
                 remap = false
             )
         )
-        private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemConvertible> instance, Object o, int slot, ItemStack stack) {
+        private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemLike> instance, Object o, int slot, ItemStack stack) {
             return stack.itematic$hasBehavior(ItemComponentTypes.COMPOSTABLE);
         }
     }
 
-    @Mixin(targets = "net/minecraft/block/ComposterBlock$FullComposterInventory")
+    @Mixin(targets = "net/minecraft/world/level/block/ComposterBlock$OutputContainer")
     public static class FullComposterInventoryExtender {
         @Redirect(
-            method = "canExtract",
+            method = "canTakeItemThroughFace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
             )
         )
         private boolean isOfForBoneMealUseRegistryKeyCheck(ItemStack instance, Item item) {

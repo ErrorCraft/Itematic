@@ -8,14 +8,14 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.AbstractPiglinEntity;
-import net.minecraft.entity.mob.PiglinEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,29 +23,29 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(PiglinEntity.class)
+@Mixin(Piglin.class)
 public abstract class PiglinEntityExtender extends MobEntityExtender {
-    public PiglinEntityExtender(EntityType<? extends AbstractPiglinEntity> entityType, World world) {
+    public PiglinEntityExtender(EntityType<? extends AbstractPiglin> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "makeInitialWeapon",
+        method = "createSpawnWeapon",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForCrossbowUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.CROSSBOW);
+    private ItemStack newItemStackForCrossbowUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.CROSSBOW);
     }
 
     @ModifyExpressionValue(
-        method = "makeInitialWeapon",
+        method = "createSpawnWeapon",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/math/random/Random;nextInt(I)I"
+            target = "Lnet/minecraft/util/RandomSource;nextInt(I)I"
         )
     )
     private int storeSpearChance(int original, @Share("spearChance") LocalIntRef spearChance) {
@@ -54,39 +54,39 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "makeInitialWeapon",
+        method = "createSpawnWeapon",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CROSSBOW:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;CROSSBOW:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForGoldenWeaponUseCreateStack(ItemConvertible item, @Share("spearChance") LocalIntRef spearChance) {
-        return this.getEntityWorld().itematic$createStack(spearChance.get() == 0
+    private ItemStack newItemStackForGoldenWeaponUseCreateStack(ItemLike item, @Share("spearChance") LocalIntRef spearChance) {
+        return this.level().itematic$createStack(spearChance.get() == 0
             ? ItemKeys.GOLDEN_SPEAR
             : ItemKeys.GOLDEN_SWORD
         );
     }
 
     @Redirect(
-        method = "getActivity",
+        method = "getArmPose",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/PiglinEntity;isHolding(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/entity/monster/piglin/Piglin;isHolding(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isHoldingForCrossbowUseRegistryKeyCheck(PiglinEntity instance, Item item) {
+    private boolean isHoldingForCrossbowUseRegistryKeyCheck(Piglin instance, Item item) {
         return instance.itematic$isHolding(ItemKeys.CROSSBOW);
     }
 
     @ModifyReturnValue(
-        method = "canUseRangedWeapon",
+        method = "canUseNonMeleeWeapon",
         at = @At("TAIL")
     )
     private boolean useItemBehaviorComponent(boolean original, ItemStack stack) {
@@ -97,15 +97,15 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
         }
 
         return stack.itematic$getBehavior(ItemComponentTypes.WEAPON)
-            .map(weapon -> weapon.contains(MeleeWeaponComponents.KINETIC))
+            .map(weapon -> weapon.has(MeleeWeaponComponents.KINETIC))
             .orElse(false);
     }
 
     @Redirect(
-        method = "equipToOffHand",
+        method = "holdInOffHand",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForGoldIngotUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -113,83 +113,83 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/EquipmentSlot;HEAD:Lnet/minecraft/entity/EquipmentSlot;",
+                target = "Lnet/minecraft/world/entity/EquipmentSlot;HEAD:Lnet/minecraft/world/entity/EquipmentSlot;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForGoldenHelmetUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_HELMET);
+    private ItemStack newItemStackForGoldenHelmetUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.GOLDEN_HELMET);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/EquipmentSlot;CHEST:Lnet/minecraft/entity/EquipmentSlot;",
+                target = "Lnet/minecraft/world/entity/EquipmentSlot;CHEST:Lnet/minecraft/world/entity/EquipmentSlot;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForGoldenChestplateUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_CHESTPLATE);
+    private ItemStack newItemStackForGoldenChestplateUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.GOLDEN_CHESTPLATE);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/EquipmentSlot;LEGS:Lnet/minecraft/entity/EquipmentSlot;",
+                target = "Lnet/minecraft/world/entity/EquipmentSlot;LEGS:Lnet/minecraft/world/entity/EquipmentSlot;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForGoldenLeggingsUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_LEGGINGS);
+    private ItemStack newItemStackForGoldenLeggingsUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.GOLDEN_LEGGINGS);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/EquipmentSlot;FEET:Lnet/minecraft/entity/EquipmentSlot;",
+                target = "Lnet/minecraft/world/entity/EquipmentSlot;FEET:Lnet/minecraft/world/entity/EquipmentSlot;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForGoldenBootsUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_BOOTS);
+    private ItemStack newItemStackForGoldenBootsUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.GOLDEN_BOOTS);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.PIGLIN_SPAWN_EGG;
     }
 }

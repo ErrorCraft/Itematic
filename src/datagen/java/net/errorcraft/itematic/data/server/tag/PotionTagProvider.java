@@ -3,34 +3,33 @@ package net.errorcraft.itematic.data.server.tag;
 import net.errorcraft.itematic.potion.PotionTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.potion.Potion;
-import net.minecraft.recipe.BrewingRecipeRegistry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.resource.featuretoggle.FeatureFlags;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionBrewing;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class PotionTagProvider extends FabricTagProvider<Potion> {
-    public PotionTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
-        super(output, RegistryKeys.POTION, registriesFuture);
+    public PotionTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, Registries.POTION, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup lookup) {
-        RegistryWrapper.Impl<Potion> potions = lookup.getOrThrow(RegistryKeys.POTION);
-        BrewingRecipeRegistry brewingRecipeRegistry = BrewingRecipeRegistry.create(FeatureFlags.VANILLA_FEATURES);
+    protected void addTags(HolderLookup.Provider lookup) {
+        HolderLookup.RegistryLookup<Potion> potions = lookup.lookupOrThrow(Registries.POTION);
+        PotionBrewing brewingRecipeRegistry = PotionBrewing.bootstrap(FeatureFlags.VANILLA_SET);
         this.builder(PotionTags.TRADEABLE)
-            .add(getAll(potions, potion -> !potion.value().getEffects().isEmpty() && brewingRecipeRegistry.isBrewable(potion)));
+            .addAll(getAll(potions, potion -> !potion.value().getEffects().isEmpty() && brewingRecipeRegistry.isBrewablePotion(potion)));
     }
 
-    private static Stream<RegistryKey<Potion>> getAll(RegistryWrapper.Impl<Potion> registry, Predicate<RegistryEntry<Potion>> predicate) {
-        return registry.streamEntries()
+    private static Stream<ResourceKey<Potion>> getAll(HolderLookup.RegistryLookup<Potion> registry, Predicate<Holder<Potion>> predicate) {
+        return registry.listElements()
             .filter(predicate)
-            .map(RegistryEntry.Reference::registryKey);
+            .map(Holder.Reference::key);
     }
 }

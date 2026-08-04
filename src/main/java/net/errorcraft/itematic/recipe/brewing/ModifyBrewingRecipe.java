@@ -9,44 +9,40 @@ import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
 import net.errorcraft.itematic.recipe.display.BrewingRecipeDisplay;
 import net.errorcraft.itematic.recipe.display.slot.PotionSlotDisplay;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.PotionContentsComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.potion.Potion;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.IngredientPlacement;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.recipe.display.SlotDisplay;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 
 import java.util.List;
 import java.util.Optional;
 
 public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
-    public ModifyBrewingRecipe(String group, RegistryEntry<Potion> base, Ingredient reagent, RegistryEntry<Potion> result, int brewingTime) {
+    public ModifyBrewingRecipe(String group, Holder<Potion> base, Ingredient reagent, Holder<Potion> result, int brewingTime) {
         super(group, base, reagent, result, brewingTime);
     }
 
-    public ModifyBrewingRecipe(RegistryEntry<Potion> base, Ingredient reagent, RegistryEntry<Potion> result) {
+    public ModifyBrewingRecipe(Holder<Potion> base, Ingredient reagent, Holder<Potion> result) {
         super("", base, reagent, result, DEFAULT_BREWING_TIME);
     }
 
     @Override
     protected boolean matches(ItemStack base) {
-        return base.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT)
-            .matches(this.base());
+        return base.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
+            .is(this.base());
     }
 
     @Override
-    protected ItemStack craft(ItemStack base) {
+    protected ItemStack assemble(ItemStack base) {
         return PotionContentsComponentUtil.setPotion(base.copyWithCount(1), this.result());
     }
 
@@ -56,29 +52,29 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
     }
 
     @Override
-    public IngredientPlacement getIngredientPlacement() {
-        return IngredientPlacement.NONE;
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
     }
 
     @Override
-    public IngredientPlacement itematic$ingredientPlacement(RegistryEntryLookup<Item> items) {
-        return IngredientPlacement.forMultipleSlots(List.of(
-            items.getOptional(ItematicItemTags.BREWING_INPUTS).map(Ingredient::ofTag),
+    public PlacementInfo itematic$ingredientPlacement(HolderGetter<Item> items) {
+        return PlacementInfo.createFromOptionals(List.of(
+            items.get(ItematicItemTags.BREWING_INPUTS).map(Ingredient::of),
             Optional.of(this.reagent())
         ));
     }
 
     @Override
-    public RecipeBookCategory getRecipeBookCategory() {
+    public RecipeBookCategory recipeBookCategory() {
         return ItematicRecipeBookCategories.BREWING_MODIFY;
     }
 
     @Override
-    public List<RecipeDisplay> itematic$displays(RegistryEntryLookup<Item> items) {
+    public List<RecipeDisplay> itematic$displays(HolderGetter<Item> items) {
         return List.of(
             new BrewingRecipeDisplay(
                 new PotionSlotDisplay(this.base()),
-                this.reagent().toDisplay(),
+                this.reagent().display(),
                 new PotionSlotDisplay(this.result()),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.BREWING_STAND))
             )
@@ -87,11 +83,11 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
 
     public static class Serializer implements RecipeSerializer<ModifyBrewingRecipe> {
         private static final MapCodec<ModifyBrewingRecipe> CODEC = createCodec(
-            RegistryKeys.POTION,
+            Registries.POTION,
             ModifyBrewingRecipe::new
         );
-        private static final PacketCodec<RegistryByteBuf, ModifyBrewingRecipe> PACKET_CODEC = createPacketCodec(
-            RegistryKeys.POTION,
+        private static final StreamCodec<RegistryFriendlyByteBuf, ModifyBrewingRecipe> PACKET_CODEC = createPacketCodec(
+            Registries.POTION,
             ModifyBrewingRecipe::new
         );
 
@@ -101,7 +97,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, ModifyBrewingRecipe> packetCodec() {
+        public StreamCodec<RegistryFriendlyByteBuf, ModifyBrewingRecipe> streamCodec() {
             return PACKET_CODEC;
         }
     }

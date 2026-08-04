@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.item;
 
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemUsageContext;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 
-public class UnplaceableItemPlacementContext extends ItemPlacementContext {
-    private UnplaceableItemPlacementContext(ItemUsageContext context) {
+public class UnplaceableItemPlacementContext extends BlockPlaceContext {
+    private UnplaceableItemPlacementContext(UseOnContext context) {
         super(context);
     }
 
@@ -13,7 +13,7 @@ public class UnplaceableItemPlacementContext extends ItemPlacementContext {
         return false;
     }
 
-    public static UnplaceableItemPlacementContext of(ItemUsageContext context) {
+    public static UnplaceableItemPlacementContext of(UseOnContext context) {
         return new UnplaceableItemPlacementContext(context);
     }
 }

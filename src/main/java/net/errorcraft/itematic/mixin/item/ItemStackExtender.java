@@ -20,36 +20,40 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
-import net.minecraft.component.*;
-import net.minecraft.component.type.KineticWeaponComponent;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.component.type.WeaponComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.StackReference;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.DefaultedRegistry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.StatType;
-import net.minecraft.text.Text;
-import net.minecraft.util.*;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.core.DefaultedRegistry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatType;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.KineticWeapon;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.component.Weapon;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -67,7 +71,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackExtender implements ComponentHolder, ItemStackAccess, FabricItemStack {
+public abstract class ItemStackExtender implements DataComponentHolder, ItemStackAccess, FabricItemStack {
     @Shadow
     @Final
     private static Logger LOGGER;
@@ -82,7 +86,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Shadow
     @Final
     @Mutable
-    MergedComponentMap components;
+    PatchedDataComponentMap components;
 
     @Shadow
     public abstract boolean isEmpty();
@@ -91,19 +95,19 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     public abstract ItemStack split(int amount);
 
     @Shadow
-    public abstract void damage(int amount, ServerWorld world, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback);
+    public abstract void hurtAndBreak(int amount, ServerLevel world, @Nullable ServerPlayer player, Consumer<Item> breakCallback);
 
     @Shadow
-    public abstract int getDamage();
+    public abstract int getDamageValue();
 
     @Shadow
-    public abstract void setDamage(int damage);
+    public abstract void setDamageValue(int damage);
 
     @Shadow
-    public abstract void decrement(int amount);
+    public abstract void shrink(int amount);
 
     @Shadow
-    public abstract int getMaxCount();
+    public abstract int getMaxStackSize();
 
     @Shadow
     public abstract ItemStack copyWithCount(int count);
@@ -115,102 +119,102 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     private final Set<ItemEvent> activeEvents = new HashSet<>();
 
     @Unique
-    private RegistryEntry<Item> entry;
+    private Holder<Item> entry;
 
     @Unique
     private ActionContext context;
 
     @Inject(
-        method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V",
+        method = "<init>(Lnet/minecraft/core/Holder;)V",
         at = @At("TAIL")
     )
-    private void registryEntryConstructorSetFields(RegistryEntry<Item> entry, CallbackInfo info) {
+    private void registryEntryConstructorSetFields(Holder<Item> entry, CallbackInfo info) {
         this.setFields(entry);
     }
 
     @Inject(
-        method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V",
+        method = "<init>(Lnet/minecraft/core/Holder;I)V",
         at = @At("TAIL")
     )
-    private void registryEntryConstructorSetFields(RegistryEntry<Item> entry, int count, CallbackInfo info) {
+    private void registryEntryConstructorSetFields(Holder<Item> entry, int count, CallbackInfo info) {
         this.setFields(entry);
     }
 
     @Inject(
-        method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V",
+        method = "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V",
         at = @At("TAIL")
     )
-    private void componentChangesConstructorSetFields(RegistryEntry<Item> item, int count, ComponentChanges changes, CallbackInfo info) {
+    private void componentChangesConstructorSetFields(Holder<Item> item, int count, DataComponentPatch changes, CallbackInfo info) {
         this.setFields(item, changes);
     }
 
     @Redirect(
         method = {
-            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;)V",
-            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;I)V",
-            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V"
+            "<init>(Lnet/minecraft/core/Holder;)V",
+            "<init>(Lnet/minecraft/core/Holder;I)V",
+            "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/entry/RegistryEntry;value()Ljava/lang/Object;"
+            target = "Lnet/minecraft/core/Holder;value()Ljava/lang/Object;"
         )
     )
-    private static <T> T registryEntryValueReturnNullToPreventUnboundRegistryEntryIssues(RegistryEntry<T> instance) {
+    private static <T> T registryEntryValueReturnNullToPreventUnboundRegistryEntryIssues(Holder<T> instance) {
         return null;
     }
 
     @Redirect(
-        method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V",
+        method = "<init>(Lnet/minecraft/world/level/ItemLike;I)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemConvertible;asItem()Lnet/minecraft/item/Item;"
+            target = "Lnet/minecraft/world/level/ItemLike;asItem()Lnet/minecraft/world/item/Item;"
         )
     )
-    private static Item asItemReturnNullToPreventNullPointerExceptionStatic(ItemConvertible instance) {
+    private static Item asItemReturnNullToPreventNullPointerExceptionStatic(ItemLike instance) {
         return null;
     }
 
     @Redirect(
-        method = "<init>(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/MergedComponentMap;)V",
+        method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemConvertible;asItem()Lnet/minecraft/item/Item;"
+            target = "Lnet/minecraft/world/level/ItemLike;asItem()Lnet/minecraft/world/item/Item;"
         )
     )
-    private Item asItemReturnNullToPreventNullPointerException(ItemConvertible instance) {
+    private Item asItemReturnNullToPreventNullPointerException(ItemLike instance) {
         return null;
     }
 
     @Redirect(
         method = {
-            "<init>(Lnet/minecraft/item/ItemConvertible;I)V",
-            "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V"
+            "<init>(Lnet/minecraft/world/level/ItemLike;I)V",
+            "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;getComponents()Lnet/minecraft/component/ComponentMap;"
+            target = "Lnet/minecraft/world/item/Item;components()Lnet/minecraft/core/component/DataComponentMap;"
         )
     )
-    private static ComponentMap getComponentsReturnNullToPreventNullPointerException(Item instance) {
+    private static DataComponentMap getComponentsReturnNullToPreventNullPointerException(Item instance) {
         return null;
     }
 
     @Redirect(
-        method = "<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V",
+        method = "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/MergedComponentMap;create(Lnet/minecraft/component/ComponentMap;Lnet/minecraft/component/ComponentChanges;)Lnet/minecraft/component/MergedComponentMap;"
+            target = "Lnet/minecraft/core/component/PatchedDataComponentMap;fromPatch(Lnet/minecraft/core/component/DataComponentMap;Lnet/minecraft/core/component/DataComponentPatch;)Lnet/minecraft/core/component/PatchedDataComponentMap;"
         )
     )
-    private static MergedComponentMap createComponentMapReturnNullToPreventNullPointerException(ComponentMap baseComponents, ComponentChanges changes) {
+    private static PatchedDataComponentMap createComponentMapReturnNullToPreventNullPointerException(DataComponentMap baseComponents, DataComponentPatch changes) {
         return null;
     }
 
     @Inject(
-        method = "<init>(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/MergedComponentMap;)V",
+        method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V",
         at = @At("TAIL")
     )
-    private void checkItemValue(ItemConvertible item, int count, MergedComponentMap components, CallbackInfo info) {
+    private void checkItemValue(ItemLike item, int count, PatchedDataComponentMap components, CallbackInfo info) {
         if (item != null) {
             LOGGER.warn(Util.stackTraceMessage("Tried to create an item stack from an item or item-like value directly. This is no longer supported and should be modified to use a holder instead."));
         }
@@ -219,20 +223,20 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     @Inject(
         method = {
             "use",
-            "useOnBlock",
-            "useOnEntity"
+            "useOn",
+            "interactLivingEntity"
         },
         at = @At("HEAD"),
         cancellable = true
     )
-    public void checkEmptyStackActionResult(CallbackInfoReturnable<ActionResult> info) {
+    public void checkEmptyStackActionResult(CallbackInfoReturnable<InteractionResult> info) {
         if (this.isEmpty()) {
-            info.setReturnValue(ActionResult.PASS);
+            info.setReturnValue(InteractionResult.PASS);
         }
     }
 
     @Inject(
-        method = "postHit",
+        method = "hurtEnemy",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -243,7 +247,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "canMine",
+        method = "canDestroyBlock",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -255,10 +259,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Inject(
         method = {
-            "usageTick",
-            "onStoppedUsing",
-            "postMine",
-            "onCraftByPlayer"
+            "onUseTick",
+            "releaseUsing",
+            "mineBlock",
+            "onCraftedBy"
         },
         at = @At("HEAD"),
         cancellable = true
@@ -274,7 +278,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
      * @reason Uses a registry entry on the item stack instead of an intrusive registry entry.
      */
     @Overwrite
-    public RegistryEntry<Item> getRegistryEntry() {
+    public Holder<Item> getItemHolder() {
         return this.entry;
     }
 
@@ -282,18 +286,18 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         method = "getItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"
+            target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"
         )
     )
     private boolean isEmptyCheckUnboundRegistryEntry(boolean original) {
-        return original || !this.entry.hasKeyAndValue();
+        return original || !this.entry.isBound();
     }
 
     @Redirect(
         method = "getItem",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/item/ItemStack;item:Lnet/minecraft/item/Item;",
+            target = "Lnet/minecraft/world/item/ItemStack;item:Lnet/minecraft/world/item/Item;",
             opcode = Opcodes.GETFIELD
         )
     )
@@ -302,31 +306,31 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Redirect(
-        method = "copy()Lnet/minecraft/item/ItemStack;",
+        method = "copy()Lnet/minecraft/world/item/ItemStack;",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;ILnet/minecraft/component/MergedComponentMap;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count, MergedComponentMap components) {
+    private ItemStack newItemStackUseRegistryEntry(ItemLike item, int count, PatchedDataComponentMap components) {
         ItemStack copy = new ItemStack(this.entry, count);
         copy.itematic$setComponents(components);
         return copy;
     }
 
     @ModifyArg(
-        method = "copyComponentsToNewStackIgnoreEmpty",
+        method = "transmuteCopyIgnoreEmpty",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;<init>(Lnet/minecraft/registry/entry/RegistryEntry;ILnet/minecraft/component/ComponentChanges;)V"
+            target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V"
         )
     )
-    private RegistryEntry<Item> getEntryUseField(RegistryEntry<Item> item) {
+    private Holder<Item> getEntryUseField(Holder<Item> item) {
         return this.entry;
     }
 
     @Inject(
-        method = "getMaxCount",
+        method = "getMaxStackSize",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -352,12 +356,12 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
      * @reason Uses a null check instead of a default air item.
      */
     @Overwrite
-    public Stream<TagKey<Item>> streamTags() {
+    public Stream<TagKey<Item>> getTags() {
         if (this.entry == null) {
             return Stream.empty();
         }
 
-        return this.entry.streamTags();
+        return this.entry.tags();
     }
 
     @ModifyReturnValue(
@@ -374,7 +378,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         method = "isStackable",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"
+            target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"
         )
     )
     private boolean isDamageableReturnFalse(ItemStack instance) {
@@ -386,12 +390,12 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
      * @reason Uses an empty check instead of a default air item.
      */
     @Overwrite
-    public boolean isIn(TagKey<Item> tag) {
+    public boolean is(TagKey<Item> tag) {
         if (this.isEmpty()) {
             return false;
         }
 
-        return this.entry.isIn(tag);
+        return this.entry.is(tag);
     }
 
     /**
@@ -399,7 +403,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
      * @reason Uses an empty check instead of a default air item.
      */
     @Overwrite
-    public boolean itemMatches(Predicate<RegistryEntry<Item>> predicate) {
+    public boolean is(Predicate<Holder<Item>> predicate) {
         if (this.isEmpty()) {
             return false;
         }
@@ -412,7 +416,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
      * @reason Uses an empty check instead of a default air item.
      */
     @Overwrite
-    public boolean itemMatches(RegistryEntry<Item> itemEntry) {
+    public boolean is(Holder<Item> itemEntry) {
         if (this.isEmpty()) {
             return false;
         }
@@ -421,36 +425,36 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "isIn(Lnet/minecraft/registry/entry/RegistryEntryList;)Z",
+        method = "is(Lnet/minecraft/core/HolderSet;)Z",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void checkNullRegistryEntry(RegistryEntryList<Item> registryEntryList, CallbackInfoReturnable<Boolean> info) {
+    private void checkNullRegistryEntry(HolderSet<Item> registryEntryList, CallbackInfoReturnable<Boolean> info) {
         if (this.entry == null) {
             info.setReturnValue(false);
         }
     }
 
     @Redirect(
-        method = "usageTick",
+        method = "onUseTick",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/component/DataComponentTypes;KINETIC_WEAPON:Lnet/minecraft/component/ComponentType;",
+                target = "Lnet/minecraft/core/component/DataComponents;KINETIC_WEAPON:Lnet/minecraft/core/component/DataComponentType;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private Object getKineticWeaponReturnNull(ItemStack instance, ComponentType<KineticWeaponComponent> componentType) {
+    private Object getKineticWeaponReturnNull(ItemStack instance, DataComponentType<KineticWeapon> componentType) {
         return null;
     }
 
     @Inject(
-        method = "canRepairWith",
+        method = "isValidRepairItem",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -464,7 +468,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         method = "isEnchantable",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
     public boolean containsEnchantableDataComponentAlsoCheckItemBehaviorComponent(boolean original) {
@@ -473,8 +477,8 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Inject(
         method = {
-            "areItemsEqual",
-            "areItemsAndComponentsEqual"
+            "isSameItem",
+            "isSameItemSameComponents"
         },
         at = @At("HEAD"),
         cancellable = true
@@ -487,20 +491,20 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Redirect(
         method = {
-            "areItemsEqual",
-            "areItemsAndComponentsEqual"
+            "isSameItem",
+            "isSameItemSameComponents"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private static boolean isOfUseRegistryEntryCheck(ItemStack instance, Item item, ItemStack left, ItemStack right) {
-        return instance.itemMatches(right.getRegistryEntry());
+        return instance.is(right.getItemHolder());
     }
 
     @Inject(
-        method = "isUsedOnRelease",
+        method = "useOnRelease",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -512,7 +516,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "hasGlint",
+        method = "hasFoil",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -527,89 +531,89 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         at = @At("HEAD"),
         cancellable = true
     )
-    private void checkEmptyStack(CallbackInfoReturnable<Text> info) {
+    private void checkEmptyStack(CallbackInfoReturnable<Component> info) {
         if (this.isEmpty()) {
-            info.setReturnValue(Text.empty());
+            info.setReturnValue(Component.empty());
         }
     }
 
     @Inject(
-        method = "appendTooltip",
+        method = "addDetailsToTooltip",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;appendTooltip(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/Item$TooltipContext;Lnet/minecraft/component/type/TooltipDisplayComponent;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V"
+            target = "Lnet/minecraft/world/item/Item;appendHoverText(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/Item$TooltipContext;Lnet/minecraft/world/item/component/TooltipDisplay;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;)V"
         )
     )
-    private void addTooltipFromItem(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player, TooltipType type, Consumer<Text> textConsumer, CallbackInfo info) {
+    private void addTooltipFromItem(Item.TooltipContext context, TooltipDisplay displayComponent, Player player, TooltipFlag type, Consumer<Component> textConsumer, CallbackInfo info) {
         if (this.entry != null) {
             this.entry.value().itematic$addTooltip((ItemStack) (Object) this, context, textConsumer, type);
         }
     }
 
     @Redirect(
-        method = "appendTooltip",
+        method = "addDetailsToTooltip",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;getId(Ljava/lang/Object;)Lnet/minecraft/util/Identifier;"
+            target = "Lnet/minecraft/core/DefaultedRegistry;getKey(Ljava/lang/Object;)Lnet/minecraft/resources/Identifier;"
         )
     )
     @NotNull
     private <T> Identifier getIdUseRegistryEntry(DefaultedRegistry<T> instance, T t) {
-        return this.itematic$key().getValue();
+        return this.itematic$key().identifier();
     }
 
     @Inject(
-        method = "onStackClicked",
+        method = "overrideStackedOnOther",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void onStackClickedUseRegistryEntryNullCheck(Slot slot, ClickType clickType, PlayerEntity player, CallbackInfoReturnable<Boolean> info) {
+    private void onStackClickedUseRegistryEntryNullCheck(Slot slot, ClickAction clickType, Player player, CallbackInfoReturnable<Boolean> info) {
         if (this.isEmpty()) {
             info.setReturnValue(false);
         }
     }
 
     @Inject(
-        method = "onClicked",
+        method = "overrideOtherStackedOnMe",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void onClickedUseRegistryEntryNullCheck(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference, CallbackInfoReturnable<Boolean> info) {
+    private void onClickedUseRegistryEntryNullCheck(ItemStack stack, Slot slot, ClickAction clickType, Player player, SlotAccess cursorStackReference, CallbackInfoReturnable<Boolean> info) {
         if (this.isEmpty()) {
             info.setReturnValue(false);
         }
     }
 
     @Redirect(
-        method = "postDamageEntity",
+        method = "postHurtEnemy",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
         )
     )
-    private Object getWeaponDataComponentReturnNull(ItemStack instance, ComponentType<WeaponComponent> type) {
+    private Object getWeaponDataComponentReturnNull(ItemStack instance, DataComponentType<Weapon> type) {
         return null;
     }
 
     @ModifyReturnValue(
-        method = "calculateDamage",
+        method = "processDurabilityChange",
         at = @At("RETURN")
     )
     private int limitDamageApplied(int original) {
         return this.itematic$getBehavior(ItemComponentTypes.DAMAGEABLE)
-            .map(c -> Math.min(c.maximumDamage((ItemStack) (Object) this) - this.getDamage(), original))
+            .map(c -> Math.min(c.maximumDamage((ItemStack) (Object) this) - this.getDamageValue(), original))
             .orElse(original);
     }
 
     @Inject(
-        method = "onDurabilityChange",
+        method = "applyDamage",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;setDamage(I)V",
+            target = "Lnet/minecraft/world/item/ItemStack;setDamageValue(I)V",
             shift = At.Shift.AFTER
         )
     )
-    private void invokeDamageItemEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
+    private void invokeDamageItemEvent(int damage, @Nullable ServerPlayer player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -618,13 +622,13 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "onDurabilityChange",
+        method = "applyDamage",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
         )
     )
-    private void invokeBreakItemEvent(int damage, @Nullable ServerPlayerEntity player, Consumer<Item> breakCallback, CallbackInfo info) {
+    private void invokeBreakItemEvent(int damage, @Nullable ServerPlayer player, Consumer<Item> breakCallback, CallbackInfo info) {
         if (this.context == null) {
             return;
         }
@@ -634,14 +638,14 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
 
     @Redirect(
         method = {
-            "useOnBlock",
-            "postHit",
-            "postMine",
-            "onCraftByPlayer"
+            "useOn",
+            "hurtEnemy",
+            "mineBlock",
+            "onCraftedBy"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/stat/StatType;getOrCreateStat(Ljava/lang/Object;)Lnet/minecraft/stat/Stat;"
+            target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key) {
@@ -652,10 +656,10 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         method = "use",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/ActionResult$Success;withNewHandStack(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/util/ActionResult$Success;"
+            target = "Lnet/minecraft/world/InteractionResult$Success;heldItemTransformedTo(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/InteractionResult$Success;"
         )
     )
-    private ActionResult.Success doNotModifyResultingItemStackIfNotUseable(ActionResult.Success instance, ItemStack newHandStack, Operation<ActionResult.Success> original) {
+    private InteractionResult.Success doNotModifyResultingItemStackIfNotUseable(InteractionResult.Success instance, ItemStack newHandStack, Operation<InteractionResult.Success> original) {
         if (!this.itematic$hasBehavior(ItemComponentTypes.USEABLE)) {
             return instance;
         }
@@ -664,7 +668,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Inject(
-        method = "applyRemainderAndCooldown",
+        method = "applyAfterUseComponentSideEffects",
         at = @At("HEAD"),
         cancellable = true
     )
@@ -678,7 +682,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
         method = "method_75224",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;getDamageSource(Lnet/minecraft/entity/LivingEntity;)Lnet/minecraft/entity/damage/DamageSource;"
+            target = "Lnet/minecraft/world/item/Item;getItemDamageSource(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/damagesource/DamageSource;"
         )
     )
     @SuppressWarnings("ConstantValue")
@@ -694,37 +698,37 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
      */
     @Overwrite
     public String toString() {
-        return this.count + " " + this.itematic$key().getValue().toString();
+        return this.count + " " + this.itematic$key().identifier().toString();
     }
 
     @Inject(
-        method = "hashCode",
+        method = "hashItemAndComponents",
         at = @At("HEAD"),
         cancellable = true
     )
     private static void checkEmptyStack(ItemStack stack, CallbackInfoReturnable<Integer> info) {
-        if (stack != null && (stack.isEmpty() || !stack.getRegistryEntry().hasKeyAndValue())) {
+        if (stack != null && (stack.isEmpty() || !stack.getItemHolder().isBound())) {
             info.setReturnValue(0);
         }
     }
 
     @Override
-    public boolean canBeEnchantedWith(RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
+    public boolean canBeEnchantedWith(Holder<Enchantment> enchantment, EnchantingContext context) {
         // Use the original implementation again
-        return enchantment.value().isAcceptableItem((ItemStack) (Object) this);
+        return enchantment.value().canEnchant((ItemStack) (Object) this);
     }
 
     @Override
-    public RegistryKey<Item> itematic$key() {
+    public ResourceKey<Item> itematic$key() {
         if (this.entry == null) {
             return ItemKeys.AIR;
         }
 
-        return this.entry.getKey().orElse(ItemKeys.AIR);
+        return this.entry.unwrapKey().orElse(ItemKeys.AIR);
     }
 
     @Override
-    public void itematic$setComponents(MergedComponentMap components) {
+    public void itematic$setComponents(PatchedDataComponentMap components) {
         this.components = components;
     }
 
@@ -734,19 +738,19 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
             return;
         }
 
-        this.count = MathHelper.clamp(this.count + count, 0, this.getMaxCount());
+        this.count = Mth.clamp(this.count + count, 0, this.getMaxStackSize());
     }
 
     @Override
     public int itematic$tryDecrement(int amount) {
         int actualAmount = Math.min(amount, this.getCount());
-        this.decrement(actualAmount);
+        this.shrink(actualAmount);
         return actualAmount;
     }
 
     @Override
     public ItemStack itematic$copyOrSplit(@Nullable LivingEntity holder, int amount) {
-        if (holder != null && holder.isInCreativeMode()) {
+        if (holder != null && holder.hasInfiniteMaterials()) {
             return this.copyWithCount(amount);
         }
 
@@ -754,12 +758,12 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public ItemStack itematic$copyWithItem(RegistryEntry<Item> item) {
+    public ItemStack itematic$copyWithItem(Holder<Item> item) {
         return this.itematic$copyComponentsToNewStack(item, this.count);
     }
 
     @Override
-    public ItemStack itematic$copyComponentsToNewStack(RegistryEntry<Item> item, int count) {
+    public ItemStack itematic$copyComponentsToNewStack(Holder<Item> item, int count) {
         if (this.isEmpty()) {
             return EMPTY;
         }
@@ -768,27 +772,27 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public ItemStack itematic$copyComponentsToNewStackIgnoreEmpty(RegistryEntry<Item> item, int count) {
-        return new ItemStack(item, count, this.components.getChanges());
+    public ItemStack itematic$copyComponentsToNewStackIgnoreEmpty(Holder<Item> item, int count) {
+        return new ItemStack(item, count, this.components.asPatch());
     }
 
     @Override
-    public boolean itematic$isOf(RegistryKey<Item> key) {
-        return this.entry != null && this.entry.hasKeyAndValue() && this.entry.matchesKey(key);
+    public boolean itematic$isOf(ResourceKey<Item> key) {
+        return this.entry != null && this.entry.isBound() && this.entry.is(key);
     }
 
     @Override
     public void itematic$damage(int amount, ActionContext context) {
-        if (!(context.world() instanceof ServerWorld world)) {
+        if (!(context.world() instanceof ServerLevel world)) {
             return;
         }
 
         this.context = context;
-        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
-        this.damage(
+        Entity entity = context.get(LootContextParams.THIS_ENTITY);
+        this.hurtAndBreak(
             amount,
             world,
-            entity instanceof ServerPlayerEntity player ? player : null,
+            entity instanceof ServerPlayer player ? player : null,
             item -> this.onItemBroken(item, entity, context)
         );
         this.context = null;
@@ -834,7 +838,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Override
-    public boolean itematic$mayStartUsing(World world, PlayerEntity user, Hand hand, ItemStack stack) {
+    public boolean itematic$mayStartUsing(Level world, Player user, InteractionHand hand, ItemStack stack) {
         if (this.entry == null) {
             return false;
         }
@@ -852,22 +856,22 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     }
 
     @Unique
-    private void setFields(RegistryEntry<Item> entry) {
+    private void setFields(Holder<Item> entry) {
         this.entry = entry;
-        if (entry.hasKeyAndValue()) {
-            this.components = new MergedComponentMap(entry.value().getComponents());
+        if (entry.isBound()) {
+            this.components = new PatchedDataComponentMap(entry.value().components());
         } else {
-            this.components = new MergedComponentMap(ComponentMap.EMPTY);
+            this.components = new PatchedDataComponentMap(DataComponentMap.EMPTY);
         }
     }
 
     @Unique
-    private void setFields(RegistryEntry<Item> entry, ComponentChanges changes) {
+    private void setFields(Holder<Item> entry, DataComponentPatch changes) {
         this.entry = entry;
-        if (entry.hasKeyAndValue()) {
-            this.components = MergedComponentMap.create(entry.value().getComponents(), changes);
+        if (entry.isBound()) {
+            this.components = PatchedDataComponentMap.fromPatch(entry.value().components(), changes);
         } else {
-            this.components = MergedComponentMap.create(ComponentMap.EMPTY, changes);
+            this.components = PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, changes);
         }
     }
 
@@ -875,7 +879,7 @@ public abstract class ItemStackExtender implements ComponentHolder, ItemStackAcc
     private void onItemBroken(Item item, Entity entity, ActionContext context) {
         EquipmentSlot slot = context.get(ItematicContextParameters.EQUIPMENT_SLOT);
         if (slot != null && entity instanceof LivingEntity livingEntity) {
-            livingEntity.sendEquipmentBreakStatus(item, slot);
+            livingEntity.onEquippedItemBroken(item, slot);
         }
 
         this.itematic$invokeEvent(ItemEvents.BREAK_ITEM, context);

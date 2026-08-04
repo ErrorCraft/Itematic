@@ -1,21 +1,21 @@
 package net.errorcraft.itematic.mixin.block.dispenser;
 
-import net.minecraft.block.dispenser.ShearsDispenserBehavior;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.dispenser.ShearsDispenseItemBehavior;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(ShearsDispenserBehavior.class)
+@Mixin(ShearsDispenseItemBehavior.class)
 public interface ShearsDispenserBehaviorAccessor {
-    @Invoker("tryShearBlock")
-    static boolean tryShearBlock(ServerWorld world, ItemStack itemStack, BlockPos blockPos) {
+    @Invoker("tryShearBeehive")
+    static boolean tryShearBlock(ServerLevel world, ItemStack itemStack, BlockPos blockPos) {
         throw new AssertionError();
     }
 
     @Invoker("tryShearEntity")
-    static boolean tryShearEntity(ServerWorld world, BlockPos pos, ItemStack shears) {
+    static boolean tryShearEntity(ServerLevel world, BlockPos pos, ItemStack shears) {
         throw new AssertionError();
     }
 }

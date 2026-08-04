@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.village.trade;
 
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 
 public class TradeTags {
     public static final TagKey<Trade> FARMER_NOVICE = of("farmer_novice");
@@ -77,6 +77,6 @@ public class TradeTags {
     private TradeTags() {}
 
     private static TagKey<Trade> of(String id) {
-        return TagKey.of(ItematicRegistryKeys.TRADE, Identifier.ofVanilla(id));
+        return TagKey.create(ItematicRegistryKeys.TRADE, Identifier.withDefaultNamespace(id));
     }
 }

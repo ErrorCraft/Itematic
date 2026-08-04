@@ -6,18 +6,18 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.entity.passive.VillagerEntityUtil;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.task.GatherItemsVillagerTask;
-import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.village.VillagerProfession;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.behavior.TradeWithVillager;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -30,20 +30,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mixin(GatherItemsVillagerTask.class)
+@Mixin(TradeWithVillager.class)
 public class GatherItemsVillagerTaskExtender {
     @Unique
     private Map<Item, Integer> itemFoodPointsCache;
 
     @Redirect(
-        method = "keepRunning(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;J)V",
+        method = "tick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/npc/villager/Villager;J)V",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/entity/passive/VillagerEntity;ITEM_FOOD_VALUES:Ljava/util/Map;",
+            target = "Lnet/minecraft/world/entity/npc/villager/Villager;FOOD_POINTS:Ljava/util/Map;",
             opcode = Opcodes.GETSTATIC
         )
     )
-    private Map<Item, Integer> getItemFoodPointsUseRegistryKey(ServerWorld serverWorld) {
+    private Map<Item, Integer> getItemFoodPointsUseRegistryKey(ServerLevel serverWorld) {
         if (this.itemFoodPointsCache == null) {
             this.itemFoodPointsCache = VillagerEntityUtil.ITEM_FOOD_POINTS.entrySet()
                 .stream()
@@ -57,58 +57,58 @@ public class GatherItemsVillagerTaskExtender {
     }
 
     @Redirect(
-        method = "getGatherableItems",
+        method = "figureOutWhatIAmWillingToTrade",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/village/VillagerProfession;gatherableItems()Lcom/google/common/collect/ImmutableSet;"
+            target = "Lnet/minecraft/world/entity/npc/villager/VillagerProfession;requestedItems()Lcom/google/common/collect/ImmutableSet;"
         )
     )
-    private static ImmutableSet<Item> gatherableItemsUseDynamicRegistry(VillagerProfession instance, VillagerEntity entity) {
+    private static ImmutableSet<Item> gatherableItemsUseDynamicRegistry(VillagerProfession instance, Villager entity) {
         TagKey<Item> tag = instance.itematic$gatherableItems();
         if (tag == null) {
             return ImmutableSet.of();
         }
 
-        return entity.getRegistryManager()
-            .getOrThrow(RegistryKeys.ITEM)
-            .getOptional(tag)
+        return entity.registryAccess()
+            .lookupOrThrow(Registries.ITEM)
+            .get(tag)
             .stream()
-            .flatMap(RegistryEntryList::stream)
-            .map(RegistryEntry::value)
+            .flatMap(HolderSet::stream)
+            .map(Holder::value)
             .collect(ImmutableSet.toImmutableSet());
     }
 
     @Redirect(
-        method = "keepRunning(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;J)V",
+        method = "tick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/npc/villager/Villager;J)V",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/item/Items;WHEAT:Lnet/minecraft/item/Item;",
+            target = "Lnet/minecraft/world/item/Items;WHEAT:Lnet/minecraft/world/item/Item;",
             opcode = Opcodes.GETSTATIC
         )
     )
-    private Item keepRunningGetWheatUseDynamicRegistry(ServerWorld serverWorld) {
+    private Item keepRunningGetWheatUseDynamicRegistry(ServerLevel serverWorld) {
         return serverWorld.itematic$getItem(ItemKeys.WHEAT).value();
     }
 
     @Inject(
-        method = "giveHalfOfStack",
+        method = "throwHalfStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
+            target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"
         )
     )
-    private static void storeInventoryStackRegistryEntry(VillagerEntity villager, Set<Item> validItems, LivingEntity target, CallbackInfo info, @Local(ordinal = 1) ItemStack inventoryStack, @Share("registryEntry") LocalRef<RegistryEntry<Item>> foundItem) {
-        foundItem.set(inventoryStack.getRegistryEntry());
+    private static void storeInventoryStackRegistryEntry(Villager villager, Set<Item> validItems, LivingEntity target, CallbackInfo info, @Local(ordinal = 1) ItemStack inventoryStack, @Share("registryEntry") LocalRef<Holder<Item>> foundItem) {
+        foundItem.set(inventoryStack.getItemHolder());
     }
 
     @Redirect(
-        method = "giveHalfOfStack",
+        method = "throwHalfStack",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackUseRegistryEntry(ItemConvertible item, int count, @Share("registryEntry") LocalRef<RegistryEntry<Item>> foundItem) {
+    private static ItemStack newItemStackUseRegistryEntry(ItemLike item, int count, @Share("registryEntry") LocalRef<Holder<Item>> foundItem) {
         if (foundItem.get() == null) {
             return ItemStack.EMPTY;
         }

@@ -5,7 +5,7 @@ import net.errorcraft.itematic.entity.spawn.EntitySpawnContext;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 
 public interface EntitySpawnRule<T extends EntitySpawnRule<T>> {
-    MapCodec<EntitySpawnRule<?>> CODEC = ItematicRegistries.ENTITY_SPAWN_RULE_TYPE.getCodec().dispatchMap(EntitySpawnRule::type, EntitySpawnRuleType::codec);
+    MapCodec<EntitySpawnRule<?>> CODEC = ItematicRegistries.ENTITY_SPAWN_RULE_TYPE.byNameCodec().dispatchMap(EntitySpawnRule::type, EntitySpawnRuleType::codec);
 
     EntitySpawnRuleType<T> type();
     boolean apply(EntitySpawnContext context);

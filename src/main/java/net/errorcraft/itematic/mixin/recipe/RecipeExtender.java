@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
-import net.minecraft.item.Item;
-import net.minecraft.recipe.IngredientPlacement;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -14,18 +14,18 @@ import java.util.List;
 @Mixin(Recipe.class)
 public interface RecipeExtender extends RecipeAccess {
     @Shadow
-    IngredientPlacement getIngredientPlacement();
+    PlacementInfo placementInfo();
 
     @Shadow
-    List<RecipeDisplay> getDisplays();
+    List<RecipeDisplay> display();
 
     @Override
-    default IngredientPlacement itematic$ingredientPlacement(RegistryEntryLookup<Item> items) {
-        return this.getIngredientPlacement();
+    default PlacementInfo itematic$ingredientPlacement(HolderGetter<Item> items) {
+        return this.placementInfo();
     }
 
     @Override
-    default List<RecipeDisplay> itematic$displays(RegistryEntryLookup<Item> items) {
-        return this.getDisplays();
+    default List<RecipeDisplay> itematic$displays(HolderGetter<Item> items) {
+        return this.display();
     }
 }

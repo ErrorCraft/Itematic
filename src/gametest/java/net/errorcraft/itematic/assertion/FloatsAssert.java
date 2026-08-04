@@ -1,15 +1,15 @@
 package net.errorcraft.itematic.assertion;
 
-import net.minecraft.test.TestContext;
+import net.minecraft.gametest.framework.GameTestHelper;
 
 import java.util.Objects;
 
 public class FloatsAssert {
-    private final TestContext helper;
+    private final GameTestHelper helper;
     private final float value;
     private final String name;
 
-    FloatsAssert(TestContext helper, float value, String name) {
+    FloatsAssert(GameTestHelper helper, float value, String name) {
         this.helper = Objects.requireNonNull(helper);
         this.value = value;
         this.name = Objects.requireNonNull(name);
@@ -20,7 +20,7 @@ public class FloatsAssert {
             return this;
         }
 
-        throw this.helper.createError(
+        throw this.helper.assertionException(
             "test.error.value_not_equal",
             this.name,
             expected,
@@ -33,7 +33,7 @@ public class FloatsAssert {
             return this;
         }
 
-        throw this.helper.createError(
+        throw this.helper.assertionException(
             "test.error.expected_value_greater_than",
             this.name,
             expected,

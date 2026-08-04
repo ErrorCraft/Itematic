@@ -1,21 +1,21 @@
 package net.errorcraft.itematic.mixin.item;
 
-import net.minecraft.entity.decoration.painting.PaintingVariant;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.decoration.painting.PaintingVariant;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Comparator;
 
-@Mixin(ItemGroups.class)
+@Mixin(CreativeModeTabs.class)
 public interface ItemGroupsAccessor {
-    @Accessor("PAINTING_VARIANT_COMPARATOR")
-    static Comparator<RegistryEntry<PaintingVariant>> paintingVariantComparator() {
+    @Accessor("PAINTING_COMPARATOR")
+    static Comparator<Holder<PaintingVariant>> paintingVariantComparator() {
         throw new AssertionError();
     }
 
-    @Accessor("displayContext")
-    static void setDisplayContext(ItemGroup.DisplayContext displayContext) {}
+    @Accessor("CACHED_PARAMETERS")
+    static void setDisplayContext(CreativeModeTab.ItemDisplayParameters displayContext) {}
 }

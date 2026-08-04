@@ -2,7 +2,7 @@ package net.errorcraft.itematic.util;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class BlockPosUtil {
     public static final Codec<BlockPos> MAP_CODEC = RecordCodecBuilder.create(instance -> instance.group(

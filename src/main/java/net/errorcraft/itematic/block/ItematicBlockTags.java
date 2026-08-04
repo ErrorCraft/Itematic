@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
 
 public class ItematicBlockTags {
     public static final TagKey<Block> END_CRYSTAL_SPAWNABLE_ON = of("end_crystal_spawnable_on");
@@ -13,6 +13,6 @@ public class ItematicBlockTags {
     private ItematicBlockTags() {}
 
     private static TagKey<Block> of(String id) {
-        return TagKey.of(RegistryKeys.BLOCK, Identifier.ofVanilla(id));
+        return TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace(id));
     }
 }

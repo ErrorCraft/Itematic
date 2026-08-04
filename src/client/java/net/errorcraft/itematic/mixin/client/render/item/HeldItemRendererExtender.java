@@ -5,11 +5,11 @@ import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.item.HeldItemRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,26 +19,26 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-@Mixin(HeldItemRenderer.class)
+@Mixin(ItemInHandRenderer.class)
 public class HeldItemRendererExtender {
     @Redirect(
         method = {
-            "getHandRenderType",
-            "getUsingItemHandRenderType"
+            "evaluateWhichHandsToRender",
+            "selectionUsingItemWhileHoldingBowLike"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BOW:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;BOW:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             ),
             to = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CROSSBOW:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;CROSSBOW:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -51,21 +51,21 @@ public class HeldItemRendererExtender {
     }
 
     @Redirect(
-        method = "renderFirstPersonItem",
+        method = "renderArmWithItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CROSSBOW:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;CROSSBOW:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private boolean isOfForCrossbowUseItemComponent(ItemStack instance, Item item, AbstractClientPlayerEntity player, @Share("useDuration") LocalIntRef useDuration) {
+    private boolean isOfForCrossbowUseItemComponent(ItemStack instance, Item item, AbstractClientPlayer player, @Share("useDuration") LocalIntRef useDuration) {
         Optional<ShooterItemComponent> optionalShooter = instance.itematic$getBehavior(ItemComponentTypes.SHOOTER);
         if (optionalShooter.isEmpty()) {
             return false;
@@ -85,22 +85,22 @@ public class HeldItemRendererExtender {
     }
 
     @Redirect(
-        method = "renderFirstPersonItem",
+        method = "renderArmWithItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I",
+            target = "Lnet/minecraft/client/player/AbstractClientPlayer;getUseItemRemainingTicks()I",
             ordinal = 0
         )
     )
-    private int useDifferenceForCrossbow(AbstractClientPlayerEntity instance, @Share("useDuration") LocalIntRef useDuration) {
+    private int useDifferenceForCrossbow(AbstractClientPlayer instance, @Share("useDuration") LocalIntRef useDuration) {
         return useDuration.get() - instance.itematic$itemUsedTicks();
     }
 
     @Redirect(
-        method = "renderFirstPersonItem",
+        method = "renderArmWithItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getMaxUseTime(Lnet/minecraft/entity/LivingEntity;)I"
+            target = "Lnet/minecraft/world/item/ItemStack;getUseDuration(Lnet/minecraft/world/entity/LivingEntity;)I"
         )
     )
     private int getMaxUseTimeReturnZero(ItemStack instance, LivingEntity livingEntity) {
@@ -108,74 +108,74 @@ public class HeldItemRendererExtender {
     }
 
     @Redirect(
-        method = "renderFirstPersonItem",
+        method = "renderArmWithItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I",
+            target = "Lnet/minecraft/client/player/AbstractClientPlayer;getUseItemRemainingTicks()I",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getActiveHand()Lnet/minecraft/util/Hand;",
+                target = "Lnet/minecraft/client/player/AbstractClientPlayer;getUsedItemHand()Lnet/minecraft/world/InteractionHand;",
                 ordinal = 0
             )
         )
     )
-    private int getUseTimeLeftForCrossbowUseNegatedUsedTicks(AbstractClientPlayerEntity instance) {
+    private int getUseTimeLeftForCrossbowUseNegatedUsedTicks(AbstractClientPlayer instance) {
         return -instance.itematic$itemUsedTicks();
     }
 
     @Redirect(
-        method = "renderFirstPersonItem",
+        method = "renderArmWithItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I",
+            target = "Lnet/minecraft/client/player/AbstractClientPlayer;getUseItemRemainingTicks()I",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/client/render/item/HeldItemRenderer;renderItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemDisplayContext;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/command/OrderedRenderCommandQueue;I)V",
+                target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V",
                 ordinal = 0
             )
         )
     )
-    private int getUseTimeLeftForUseAnimationCheckUseUsedTicks(AbstractClientPlayerEntity instance) {
+    private int getUseTimeLeftForUseAnimationCheckUseUsedTicks(AbstractClientPlayer instance) {
         return instance.itematic$itemUsedTicks();
     }
 
     @Redirect(
-        method = "renderFirstPersonItem",
+        method = "renderArmWithItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;getItemUseTimeLeft()I"
+            target = "Lnet/minecraft/client/player/AbstractClientPlayer;getUseItemRemainingTicks()I"
         ),
         slice = @Slice(
             from = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/client/render/item/HeldItemRenderer;applyEatOrDrinkTransformation(Lnet/minecraft/client/util/math/MatrixStack;FLnet/minecraft/util/Arm;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/PlayerEntity;)V"
+                target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;applyEatTransform(Lcom/mojang/blaze3d/vertex/PoseStack;FLnet/minecraft/world/entity/HumanoidArm;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;)V"
             )
         )
     )
-    private int getUseTimeLeftForBowAndSpearUseNegatedUsedTicks(AbstractClientPlayerEntity instance) {
+    private int getUseTimeLeftForBowAndSpearUseNegatedUsedTicks(AbstractClientPlayer instance) {
         return -instance.itematic$itemUsedTicks();
     }
 
     @Redirect(
         method = {
-            "getHandRenderType",
-            "getUsingItemHandRenderType",
+            "evaluateWhichHandsToRender",
+            "selectionUsingItemWhileHoldingBowLike",
             "isChargedCrossbow"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;CROSSBOW:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;CROSSBOW:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )

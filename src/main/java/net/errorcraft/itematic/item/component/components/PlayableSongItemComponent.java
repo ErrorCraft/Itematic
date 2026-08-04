@@ -4,17 +4,17 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.block.jukebox.JukeboxSong;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.JukeboxPlayableComponent;
-import net.minecraft.registry.entry.LazyRegistryEntryReference;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.EitherHolder;
+import net.minecraft.world.item.JukeboxPlayable;
+import net.minecraft.world.item.JukeboxSong;
 
-public record PlayableSongItemComponent(RegistryEntry<JukeboxSong> song) implements ItemComponent<PlayableSongItemComponent> {
-    public static final Codec<PlayableSongItemComponent> CODEC = JukeboxSong.ENTRY_CODEC.xmap(PlayableSongItemComponent::new, PlayableSongItemComponent::song);
+public record PlayableSongItemComponent(Holder<JukeboxSong> song) implements ItemComponent<PlayableSongItemComponent> {
+    public static final Codec<PlayableSongItemComponent> CODEC = JukeboxSong.CODEC.xmap(PlayableSongItemComponent::new, PlayableSongItemComponent::song);
 
-    public static ItemComponent<?>[] of(RegistryEntry<JukeboxSong> song) {
+    public static ItemComponent<?>[] of(Holder<JukeboxSong> song) {
         return new ItemComponent<?>[] {
             StackableItemComponent.of(1),
             new PlayableSongItemComponent(song)
@@ -32,7 +32,7 @@ public record PlayableSongItemComponent(RegistryEntry<JukeboxSong> song) impleme
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.JUKEBOX_PLAYABLE, new JukeboxPlayableComponent(new LazyRegistryEntryReference<>(this.song)));
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.JUKEBOX_PLAYABLE, new JukeboxPlayable(new EitherHolder<>(this.song)));
     }
 }

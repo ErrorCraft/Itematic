@@ -4,23 +4,23 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.MappableItemComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.function.ExplorationMapLootFunction;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
-@Mixin(ExplorationMapLootFunction.class)
+@Mixin(ExplorationMapFunction.class)
 public class ExplorationMapLootFunctionExtender {
     @Redirect(
-        method = "process",
+        method = "run",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForMapUseItemComponentCheck(ItemStack instance, Item item, @Share("mappableItemComponent") LocalRef<MappableItemComponent> mappableItemComponent) {
@@ -30,13 +30,13 @@ public class ExplorationMapLootFunctionExtender {
     }
 
     @Redirect(
-        method = "process",
+        method = "run",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/FilledMapItem;createMap(Lnet/minecraft/server/world/ServerWorld;IIBZZ)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/MapItem;create(Lnet/minecraft/server/level/ServerLevel;IIBZZ)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack createMapUseItemComponent(ServerWorld world, int x, int z, byte scale, boolean showIcons, boolean unlimitedTracking, @Share("mappableItemComponent") LocalRef<MappableItemComponent> mappableItemComponent) {
+    private ItemStack createMapUseItemComponent(ServerLevel world, int x, int z, byte scale, boolean showIcons, boolean unlimitedTracking, @Share("mappableItemComponent") LocalRef<MappableItemComponent> mappableItemComponent) {
         return mappableItemComponent.get().createStack(world, x, z, scale, showIcons, unlimitedTracking);
     }
 }

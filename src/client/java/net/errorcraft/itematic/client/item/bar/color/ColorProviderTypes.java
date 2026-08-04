@@ -6,8 +6,7 @@ import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.client.item.bar.color.provider.ConstantColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.provider.FirstToPassConditionColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.provider.HueShiftColorProvider;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.Identifier;
 import java.util.HashMap;
 import java.util.Map;
 

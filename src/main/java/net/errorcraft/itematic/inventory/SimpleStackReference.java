@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.inventory;
 
-import net.minecraft.inventory.StackReference;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.item.ItemStack;
 
-public class SimpleStackReference implements StackReference {
+public class SimpleStackReference implements SlotAccess {
     private ItemStack stack;
 
     private SimpleStackReference(ItemStack stack) {

@@ -4,18 +4,22 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.block.entity.SherdsAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.block.entity.Sherds;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.DefaultedRegistry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.PotDecorations;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,41 +33,41 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-@Mixin(Sherds.class)
+@Mixin(PotDecorations.class)
 public abstract class SherdsExtender implements SherdsAccess {
     @Shadow
     @Final
-    public static Sherds DEFAULT;
+    public static PotDecorations EMPTY;
 
     @Shadow
     @Final
-    public static Codec<Sherds> CODEC;
+    public static Codec<PotDecorations> CODEC;
 
     @Shadow
     @Final
-    private Optional<RegistryEntry<Item>> back;
+    private Optional<Holder<Item>> back;
 
     @Shadow
     @Final
-    private Optional<RegistryEntry<Item>> left;
+    private Optional<Holder<Item>> left;
 
     @Shadow
     @Final
-    private Optional<RegistryEntry<Item>> right;
+    private Optional<Holder<Item>> right;
 
     @Shadow
     @Final
-    private Optional<RegistryEntry<Item>> front;
+    private Optional<Holder<Item>> front;
 
     @Redirect(
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/registry/DefaultedRegistry;getCodec()Lcom/mojang/serialization/Codec;"
+            target = "Lnet/minecraft/core/DefaultedRegistry;byNameCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<Optional<RegistryEntry<Item>>> getCodecUseRegistryFixedCodec(DefaultedRegistry<Item> instance) {
-        return Codecs.optional(RegistryFixedCodec.of(RegistryKeys.ITEM));
+    private static Codec<Optional<Holder<Item>>> getCodecUseRegistryFixedCodec(DefaultedRegistry<Item> instance) {
+        return ExtraCodecs.optionalEmptyMap(RegistryFixedCodec.create(Registries.ITEM));
     }
 
     @ModifyArg(
@@ -75,7 +79,7 @@ public abstract class SherdsExtender implements SherdsAccess {
         ),
         index = 0
     )
-    private static Function<List<Optional<RegistryEntry<Item>>>, Sherds> xmapToSherdsUseRegistryEntry(Function<List<Item>, Sherds> to) {
+    private static Function<List<Optional<Holder<Item>>>, PotDecorations> xmapToSherdsUseRegistryEntry(Function<List<Item>, PotDecorations> to) {
         return SherdsAccessor::create;
     }
 
@@ -88,30 +92,30 @@ public abstract class SherdsExtender implements SherdsAccess {
         ),
         index = 1
     )
-    private static Function<Sherds, List<Optional<RegistryEntry<Item>>>> xmapFromSherdsUseRegistryEntry(Function<Sherds, List<Item>> from) {
-        return Sherds::itematic$optionalEntries;
+    private static Function<PotDecorations, List<Optional<Holder<Item>>>> xmapFromSherdsUseRegistryEntry(Function<PotDecorations, List<Item>> from) {
+        return PotDecorations::itematic$optionalEntries;
     }
 
     @Redirect(
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/network/codec/PacketCodecs;registryValue(Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/network/codec/PacketCodec;"
+            target = "Lnet/minecraft/network/codec/ByteBufCodecs;registry(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/network/codec/StreamCodec;"
         )
     )
-    private static PacketCodec<RegistryByteBuf, Optional<RegistryEntry<Item>>> createPacketCodecUseRegistryEntry(RegistryKey<Registry<Item>> registry) {
-        return PacketCodecs.optional(PacketCodecs.registryEntry(registry));
+    private static StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<Item>>> createPacketCodecUseRegistryEntry(ResourceKey<Registry<Item>> registry) {
+        return ByteBufCodecs.optional(ByteBufCodecs.holderRegistry(registry));
     }
 
     @ModifyArg(
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/network/codec/PacketCodec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/network/codec/PacketCodec;"
+            target = "Lnet/minecraft/network/codec/StreamCodec;map(Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/network/codec/StreamCodec;"
         ),
         index = 0
     )
-    private static Function<List<Optional<RegistryEntry<Item>>>, Sherds> xmapToSherdsForPacketCodecUseRegistryEntry(Function<List<Item>, Sherds> to) {
+    private static Function<List<Optional<Holder<Item>>>, PotDecorations> xmapToSherdsForPacketCodecUseRegistryEntry(Function<List<Item>, PotDecorations> to) {
         return SherdsAccessor::create;
     }
 
@@ -119,12 +123,12 @@ public abstract class SherdsExtender implements SherdsAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/network/codec/PacketCodec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/network/codec/PacketCodec;"
+            target = "Lnet/minecraft/network/codec/StreamCodec;map(Ljava/util/function/Function;Ljava/util/function/Function;)Lnet/minecraft/network/codec/StreamCodec;"
         ),
         index = 1
     )
-    private static Function<Sherds, List<Optional<RegistryEntry<Item>>>> xmapFromSherdsForPacketCodecUseRegistryEntry(Function<Sherds, List<Item>> from) {
-        return Sherds::itematic$optionalEntries;
+    private static Function<PotDecorations, List<Optional<Holder<Item>>>> xmapFromSherdsForPacketCodecUseRegistryEntry(Function<PotDecorations, List<Item>> from) {
+        return PotDecorations::itematic$optionalEntries;
     }
 
     @ModifyReturnValue(
@@ -136,12 +140,12 @@ public abstract class SherdsExtender implements SherdsAccess {
         },
         at = @At("TAIL")
     )
-    private Optional<Item> mapToItem(Optional<RegistryEntry<Item>> original) {
-        return original.map(RegistryEntry::value);
+    private Optional<Item> mapToItem(Optional<Holder<Item>> original) {
+        return original.map(Holder::value);
     }
 
     @Redirect(
-        method = "getSherd",
+        method = "getItem",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/List;get(I)Ljava/lang/Object;"
@@ -152,39 +156,39 @@ public abstract class SherdsExtender implements SherdsAccess {
     }
 
     @Redirect(
-        method = "getSherd",
+        method = "getItem",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Optional;of(Ljava/lang/Object;)Ljava/util/Optional;"
         )
     )
-    private static <T> Optional<RegistryEntry<Item>> optionalUseValueFromList(T value, List<Optional<RegistryEntry<Item>>> sherds, int index) {
+    private static <T> Optional<Holder<Item>> optionalUseValueFromList(T value, List<Optional<Holder<Item>>> sherds, int index) {
         return sherds.get(index);
     }
 
     @Redirect(
-        method = "appendTooltip",
+        method = "addToTooltip",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/entity/Sherds;appendSherdTooltip(Ljava/util/function/Consumer;Ljava/util/Optional;)V"
+            target = "Lnet/minecraft/world/level/block/entity/PotDecorations;addSideDetailsToTooltip(Ljava/util/function/Consumer;Ljava/util/Optional;)V"
         )
     )
-    private void appendSherdTooltipUseRegistryEntry(Consumer<Text> textConsumer, Optional<RegistryEntry<Item>> sherd) {
+    private void appendSherdTooltipUseRegistryEntry(Consumer<Component> textConsumer, Optional<Holder<Item>> sherd) {
         sherd.map(ItemStack::new)
-            .map(ItemStack::getName)
-            .map(Text::copyContentOnly)
-            .map(text -> text.formatted(Formatting.GRAY))
+            .map(ItemStack::getHoverName)
+            .map(Component::plainCopy)
+            .map(text -> text.withStyle(ChatFormatting.GRAY))
             .ifPresent(textConsumer);
     }
 
     @Override
-    public List<Optional<RegistryEntry<Item>>> itematic$optionalEntries() {
+    public List<Optional<Holder<Item>>> itematic$optionalEntries() {
         return List.of(this.back, this.left, this.right, this.front);
     }
 
     @Override
-    public List<RegistryEntry<Item>> itematic$entries(RegistryWrapper.WrapperLookup lookup) {
-        RegistryWrapper.Impl<Item> items = lookup.getOrThrow(RegistryKeys.ITEM);
+    public List<Holder<Item>> itematic$entries(HolderLookup.Provider lookup) {
+        HolderLookup.RegistryLookup<Item> items = lookup.lookupOrThrow(Registries.ITEM);
         return Stream.of(this.back, this.left, this.right, this.front)
             .map(optional -> optional.orElse(items.getOrThrow(ItemKeys.BRICK)))
             .toList();

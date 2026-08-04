@@ -8,8 +8,8 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record UseBucketAction(PositionTarget position) implements Action<UseBucketAction> {
     public static final MapCodec<UseBucketAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -27,7 +27,7 @@ public record UseBucketAction(PositionTarget position) implements Action<UseBuck
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
+        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
         return stack.itematic$getBehavior(ItemComponentTypes.BUCKET)
             .map(bucket -> bucket.use(context, this.position, false))
             .orElse(false);

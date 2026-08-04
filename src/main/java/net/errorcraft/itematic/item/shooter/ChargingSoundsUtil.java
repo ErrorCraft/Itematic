@@ -1,20 +1,20 @@
 package net.errorcraft.itematic.item.shooter;
 
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.CrossbowItem;
 
 import java.util.Optional;
 
 public class ChargingSoundsUtil {
-    public static final CrossbowItem.LoadingSounds EMPTY = new CrossbowItem.LoadingSounds(Optional.empty(), Optional.empty(), Optional.empty());
-    public static final PacketCodec<RegistryByteBuf, CrossbowItem.LoadingSounds> PACKET_CODEC = PacketCodec.tuple(
-        SoundEvent.ENTRY_PACKET_CODEC.collect(PacketCodecs::optional), CrossbowItem.LoadingSounds::start,
-        SoundEvent.ENTRY_PACKET_CODEC.collect(PacketCodecs::optional), CrossbowItem.LoadingSounds::mid,
-        SoundEvent.ENTRY_PACKET_CODEC.collect(PacketCodecs::optional), CrossbowItem.LoadingSounds::end,
-        CrossbowItem.LoadingSounds::new
+    public static final CrossbowItem.ChargingSounds EMPTY = new CrossbowItem.ChargingSounds(Optional.empty(), Optional.empty(), Optional.empty());
+    public static final StreamCodec<RegistryFriendlyByteBuf, CrossbowItem.ChargingSounds> PACKET_CODEC = StreamCodec.composite(
+        SoundEvent.STREAM_CODEC.apply(ByteBufCodecs::optional), CrossbowItem.ChargingSounds::start,
+        SoundEvent.STREAM_CODEC.apply(ByteBufCodecs::optional), CrossbowItem.ChargingSounds::mid,
+        SoundEvent.STREAM_CODEC.apply(ByteBufCodecs::optional), CrossbowItem.ChargingSounds::end,
+        CrossbowItem.ChargingSounds::new
     );
 
     private ChargingSoundsUtil() {}

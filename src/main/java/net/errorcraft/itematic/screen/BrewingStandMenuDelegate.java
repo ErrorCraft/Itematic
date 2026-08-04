@@ -3,44 +3,40 @@ package net.errorcraft.itematic.screen;
 import net.errorcraft.itematic.mixin.screen.BrewingStandScreenHandlerAccessor;
 import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.InputSlotFiller;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.RecipeFinder;
-import net.minecraft.recipe.RecipeInputProvider;
-import net.minecraft.recipe.book.RecipeBookType;
-import net.minecraft.screen.*;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.screen.sync.ItemStackHash;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.HashedStack;
+import net.minecraft.recipebook.ServerPlaceRecipe;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.StackedItemContents;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.List;
 import java.util.OptionalInt;
 
-public class BrewingStandMenuDelegate extends AbstractRecipeScreenHandler {
+public class BrewingStandMenuDelegate extends RecipeBookMenu {
     public static final int FIRST_INPUT_SLOT = BrewingStandScreenHandlerAccessor.inputSlotStart();
     public static final int INGREDIENT_SLOT = BrewingStandScreenHandlerAccessor.ingredientSlot();
 
-    private final BrewingStandScreenHandler delegate;
-    private final Inventory inventory;
+    private final BrewingStandMenu delegate;
+    private final Container inventory;
 
-    public BrewingStandMenuDelegate(int syncId, PlayerInventory inventory) {
-        this(new BrewingStandScreenHandler(syncId, inventory));
+    public BrewingStandMenuDelegate(int syncId, Inventory inventory) {
+        this(new BrewingStandMenu(syncId, inventory));
     }
 
-    public BrewingStandMenuDelegate(BrewingStandScreenHandler delegate) {
-        super(delegate.getType(), delegate.syncId);
+    public BrewingStandMenuDelegate(BrewingStandMenu delegate) {
+        super(delegate.getType(), delegate.containerId);
         this.delegate = delegate;
         this.inventory = ((BrewingStandScreenHandlerAccessor) delegate).itematic$inventory();
         delegate.slots.forEach(this::addSlot);
     }
 
-    public BrewingStandScreenHandler delegate() {
+    public BrewingStandMenu delegate() {
         return this.delegate;
     }
 
@@ -54,12 +50,12 @@ public class BrewingStandMenuDelegate extends AbstractRecipeScreenHandler {
 
     @Override
     @SuppressWarnings("unchecked")
-    public PostFillAction fillInputSlots(boolean craftAll, boolean creative, RecipeEntry<?> recipe, ServerWorld world, PlayerInventory inventory) {
+    public PostPlaceAction handlePlacement(boolean craftAll, boolean creative, RecipeHolder<?> recipe, ServerLevel world, Inventory inventory) {
         final List<Slot> slots = List.of(
             this.getSlot(FIRST_INPUT_SLOT),
             this.getSlot(INGREDIENT_SLOT)
         );
-        return InputSlotFiller.fill(
+        return ServerPlaceRecipe.placeRecipe(
             new BrewingRecipeHandler(slots, world),
             1,
             2,
@@ -69,87 +65,87 @@ public class BrewingStandMenuDelegate extends AbstractRecipeScreenHandler {
             ),
             slots,
             inventory,
-            (RecipeEntry<BrewingRecipe<?>>) recipe,
+            (RecipeHolder<BrewingRecipe<?>>) recipe,
             craftAll,
             creative
         );
     }
 
     @Override
-    public void populateRecipeFinder(RecipeFinder finder) {
-        if (this.inventory instanceof RecipeInputProvider recipeInputProvider) {
-            recipeInputProvider.provideRecipeInputs(finder);
+    public void fillCraftSlotsStackedContents(StackedItemContents finder) {
+        if (this.inventory instanceof StackedContentsCompatible recipeInputProvider) {
+            recipeInputProvider.fillStackedContents(finder);
         }
     }
 
     @Override
-    public RecipeBookType getCategory() {
+    public RecipeBookType getRecipeBookType() {
         return RecipeBookType.ITEMATIC_BREWING;
     }
 
     @Override
-    public boolean canUse(PlayerEntity player) {
-        return this.delegate.canUse(player);
+    public boolean stillValid(Player player) {
+        return this.delegate.stillValid(player);
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
-        return this.delegate.quickMove(player, slot);
+    public ItemStack quickMoveStack(Player player, int slot) {
+        return this.delegate.quickMoveStack(player, slot);
     }
 
     @Override
-    public void addListener(ScreenHandlerListener listener) {
-        this.delegate.addListener(listener);
+    public void addSlotListener(ContainerListener listener) {
+        this.delegate.addSlotListener(listener);
     }
 
     @Override
-    public void updateSyncHandler(ScreenHandlerSyncHandler handler) {
-        this.delegate.updateSyncHandler(handler);
+    public void setSynchronizer(ContainerSynchronizer handler) {
+        this.delegate.setSynchronizer(handler);
     }
 
     @Override
-    public void syncState() {
-        this.delegate.syncState();
+    public void sendAllDataToRemote() {
+        this.delegate.sendAllDataToRemote();
     }
 
     @Override
-    public void removeListener(ScreenHandlerListener listener) {
-        this.delegate.removeListener(listener);
+    public void removeSlotListener(ContainerListener listener) {
+        this.delegate.removeSlotListener(listener);
     }
 
     @Override
-    public DefaultedList<ItemStack> getStacks() {
-        return this.delegate.getStacks();
+    public NonNullList<ItemStack> getItems() {
+        return this.delegate.getItems();
     }
 
     @Override
-    public void sendContentUpdates() {
-        this.delegate.sendContentUpdates();
+    public void broadcastChanges() {
+        this.delegate.broadcastChanges();
     }
 
     @Override
-    public void updateToClient() {
-        this.delegate.updateToClient();
+    public void broadcastFullState() {
+        this.delegate.broadcastFullState();
     }
 
     @Override
-    public void setReceivedStack(int slot, ItemStack stack) {
-        this.delegate.setReceivedStack(slot, stack);
+    public void setRemoteSlot(int slot, ItemStack stack) {
+        this.delegate.setRemoteSlot(slot, stack);
     }
 
     @Override
-    public void setReceivedHash(int slot, ItemStackHash hash) {
-        this.delegate.setReceivedHash(slot, hash);
+    public void setRemoteSlotUnsafe(int slot, HashedStack hash) {
+        this.delegate.setRemoteSlotUnsafe(slot, hash);
     }
 
     @Override
-    public void setReceivedCursorHash(ItemStackHash cursorStackHash) {
-        this.delegate.setReceivedCursorHash(cursorStackHash);
+    public void setRemoteCarried(HashedStack cursorStackHash) {
+        this.delegate.setRemoteCarried(cursorStackHash);
     }
 
     @Override
-    public boolean onButtonClick(PlayerEntity player, int id) {
-        return this.delegate.onButtonClick(player, id);
+    public boolean clickMenuButton(Player player, int id) {
+        return this.delegate.clickMenuButton(player, id);
     }
 
     @Override
@@ -158,104 +154,104 @@ public class BrewingStandMenuDelegate extends AbstractRecipeScreenHandler {
     }
 
     @Override
-    public void selectBundleStack(int slot, int selectedStack) {
-        this.delegate.selectBundleStack(slot, selectedStack);
+    public void setSelectedBundleItemIndex(int slot, int selectedStack) {
+        this.delegate.setSelectedBundleItemIndex(slot, selectedStack);
     }
 
     @Override
-    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-        this.delegate.onSlotClick(slotIndex, button, actionType, player);
+    public void clicked(int slotIndex, int button, ClickType actionType, Player player) {
+        this.delegate.clicked(slotIndex, button, actionType, player);
     }
 
     @Override
-    public void onClosed(PlayerEntity player) {
-        this.delegate.onClosed(player);
+    public void removed(Player player) {
+        this.delegate.removed(player);
     }
 
     @Override
-    public void onContentChanged(Inventory inventory) {
-        this.delegate.onContentChanged(inventory);
+    public void slotsChanged(Container inventory) {
+        this.delegate.slotsChanged(inventory);
     }
 
     @Override
-    public void setStackInSlot(int slot, int revision, ItemStack stack) {
-        this.delegate.setStackInSlot(slot, revision, stack);
+    public void setItem(int slot, int revision, ItemStack stack) {
+        this.delegate.setItem(slot, revision, stack);
     }
 
     @Override
-    public void updateSlotStacks(int revision, List<ItemStack> stacks, ItemStack cursorStack) {
-        this.delegate.updateSlotStacks(revision, stacks, cursorStack);
+    public void initializeContents(int revision, List<ItemStack> stacks, ItemStack cursorStack) {
+        this.delegate.initializeContents(revision, stacks, cursorStack);
     }
 
     @Override
-    public void setProperty(int id, int value) {
-        this.delegate.setProperty(id, value);
+    public void setData(int id, int value) {
+        this.delegate.setData(id, value);
     }
 
     @Override
-    public void setCursorStack(ItemStack stack) {
-        this.delegate.setCursorStack(stack);
+    public void setCarried(ItemStack stack) {
+        this.delegate.setCarried(stack);
     }
 
     @Override
-    public ItemStack getCursorStack() {
-        return this.delegate.getCursorStack();
+    public ItemStack getCarried() {
+        return this.delegate.getCarried();
     }
 
     @Override
-    public void disableSyncing() {
-        this.delegate.disableSyncing();
+    public void suppressRemoteUpdates() {
+        this.delegate.suppressRemoteUpdates();
     }
 
     @Override
-    public void enableSyncing() {
-        this.delegate.enableSyncing();
+    public void resumeRemoteUpdates() {
+        this.delegate.resumeRemoteUpdates();
     }
 
     @Override
-    public void copySharedSlots(ScreenHandler handler) {
-        this.delegate.copySharedSlots(handler);
+    public void transferState(AbstractContainerMenu handler) {
+        this.delegate.transferState(handler);
     }
 
     @Override
-    public OptionalInt getSlotIndex(Inventory inventory, int index) {
-        return this.delegate.getSlotIndex(inventory, index);
+    public OptionalInt findSlot(Container inventory, int index) {
+        return this.delegate.findSlot(inventory, index);
     }
 
     @Override
-    public int getRevision() {
-        return this.delegate.getRevision();
+    public int getStateId() {
+        return this.delegate.getStateId();
     }
 
     @Override
-    public int nextRevision() {
-        return this.delegate.nextRevision();
+    public int incrementStateId() {
+        return this.delegate.incrementStateId();
     }
 
-    private class BrewingRecipeHandler implements InputSlotFiller.Handler<BrewingRecipe<?>> {
+    private class BrewingRecipeHandler implements ServerPlaceRecipe.CraftingMenuAccess<BrewingRecipe<?>> {
         private final List<Slot> slots;
-        private final ServerWorld world;
+        private final ServerLevel world;
 
-        private BrewingRecipeHandler(List<Slot> slots, ServerWorld world) {
+        private BrewingRecipeHandler(List<Slot> slots, ServerLevel world) {
             this.slots = slots;
             this.world = world;
         }
 
         @Override
-        public void populateRecipeFinder(RecipeFinder finder) {
-            BrewingStandMenuDelegate.this.populateRecipeFinder(finder);
+        public void fillCraftSlotsStackedContents(StackedItemContents finder) {
+            BrewingStandMenuDelegate.this.fillCraftSlotsStackedContents(finder);
         }
 
         @Override
-        public void clear() {
-            this.slots.forEach(slot -> slot.setStackNoCallbacks(ItemStack.EMPTY));
+        public void clearCraftingContent() {
+            this.slots.forEach(slot -> slot.set(ItemStack.EMPTY));
         }
 
         @Override
-        public boolean matches(RecipeEntry<BrewingRecipe<?>> entry) {
+        public boolean recipeMatches(RecipeHolder<BrewingRecipe<?>> entry) {
             BrewingRecipeInput input = new BrewingRecipeInput(
-                BrewingStandMenuDelegate.this.inventory.getStack(FIRST_INPUT_SLOT),
-                BrewingStandMenuDelegate.this.inventory.getStack(INGREDIENT_SLOT)
+                BrewingStandMenuDelegate.this.inventory.getItem(FIRST_INPUT_SLOT),
+                BrewingStandMenuDelegate.this.inventory.getItem(INGREDIENT_SLOT)
             );
             return entry.value().matches(input, this.world);
         }

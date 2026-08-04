@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.access.recipe.book;
 
-import net.minecraft.recipe.book.RecipeBookOptions;
+import net.minecraft.stats.RecipeBookSettings;
 
 public interface RecipeBookOptionsAccess {
-    default RecipeBookOptions.CategoryOption itematic$brewing() {
+    default RecipeBookSettings.TypeSettings itematic$brewing() {
         return null;
     }
-    default void itematic$setBrewing(RecipeBookOptions.CategoryOption brewing) {}
+    default void itematic$setBrewing(RecipeBookSettings.TypeSettings brewing) {}
 }

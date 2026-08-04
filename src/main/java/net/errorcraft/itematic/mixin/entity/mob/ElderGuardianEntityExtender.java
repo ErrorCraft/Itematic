@@ -1,23 +1,23 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.ElderGuardianEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.ElderGuardian;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(ElderGuardianEntity.class)
+@Mixin(ElderGuardian.class)
 public abstract class ElderGuardianEntityExtender extends MobEntityExtender {
-    protected ElderGuardianEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
+    protected ElderGuardianEntityExtender(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.ELDER_GUARDIAN_SPAWN_EGG;
     }
 }

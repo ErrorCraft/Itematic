@@ -8,28 +8,27 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.function.AndLootFunction;
-import net.minecraft.loot.function.LootFunction;
-import net.minecraft.loot.function.LootFunctionTypes;
-
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
+import net.minecraft.world.level.storage.loot.functions.SequenceFunction;
 import java.util.stream.Stream;
 
-public record ModifyItemAction(LootContext.ItemStackReference stack, LootFunction itemModifier) implements Action<ModifyItemAction> {
+public record ModifyItemAction(LootContext.ItemStackTarget stack, LootItemFunction itemModifier) implements Action<ModifyItemAction> {
     public static final MapCodec<ModifyItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItemStackTargetUtil.CODEC.optionalFieldOf("stack", LootContext.ItemStackReference.TOOL).forGetter(ModifyItemAction::stack),
-        LootFunctionTypes.CODEC.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier)
+        ItemStackTargetUtil.CODEC.optionalFieldOf("stack", LootContext.ItemStackTarget.TOOL).forGetter(ModifyItemAction::stack),
+        LootItemFunctions.ROOT_CODEC.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier)
     ).apply(instance, ModifyItemAction::new));
 
-    public static ModifyItemAction of(LootContext.ItemStackReference stack, LootFunction.Builder itemModifier) {
+    public static ModifyItemAction of(LootContext.ItemStackTarget stack, LootItemFunction.Builder itemModifier) {
         return new ModifyItemAction(stack, itemModifier.build());
     }
 
-    public static ModifyItemAction of(LootContext.ItemStackReference stack, LootFunction.Builder... itemModifiers) {
-        AndLootFunction itemModifier = AndLootFunction.create(
+    public static ModifyItemAction of(LootContext.ItemStackTarget stack, LootItemFunction.Builder... itemModifiers) {
+        SequenceFunction itemModifier = SequenceFunction.of(
             Stream.of(itemModifiers)
-                .map(LootFunction.Builder::build)
+                .map(LootItemFunction.Builder::build)
                 .toList()
         );
         return new ModifyItemAction(stack, itemModifier);
@@ -52,7 +51,7 @@ public record ModifyItemAction(LootContext.ItemStackReference stack, LootFunctio
             return false;
         }
 
-        lootContext.markActive(LootContext.itemModifier(this.itemModifier));
+        lootContext.pushVisitedElement(LootContext.createVisitedEntry(this.itemModifier));
         ItemStack resultStack = this.itemModifier.apply(stack, lootContext);
         if (resultStack != stack) {
             context.exchangeStack(resultStack);

@@ -7,11 +7,11 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 
 public record PreventUseWhenUsedOnTargetItemComponent(boolean block, boolean entity) implements ItemComponent<PreventUseWhenUsedOnTargetItemComponent> {
     public static final Codec<PreventUseWhenUsedOnTargetItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -34,12 +34,12 @@ public record PreventUseWhenUsedOnTargetItemComponent(boolean block, boolean ent
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+    public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
         return this.block ? ItemResult.CONSUME : ItemResult.PASS;
     }
 
     @Override
-    public ItemResult useOnEntity(PlayerEntity user, LivingEntity target, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult useOnEntity(Player user, LivingEntity target, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         return this.entity ? ItemResult.CONSUME : ItemResult.PASS;
     }
 }

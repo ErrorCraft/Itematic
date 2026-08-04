@@ -1,26 +1,26 @@
 package net.errorcraft.itematic.component.type;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.registry.RegistryCodecs;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
-public record ItemListDataComponent(RegistryEntryList<Item> items) {
-    public static final Codec<ItemListDataComponent> CODEC = RegistryCodecs.entryList(RegistryKeys.ITEM)
+public record ItemListDataComponent(HolderSet<Item> items) {
+    public static final Codec<ItemListDataComponent> CODEC = RegistryCodecs.homogeneousList(Registries.ITEM)
         .xmap(ItemListDataComponent::new, ItemListDataComponent::items);
-    public static final PacketCodec<RegistryByteBuf, ItemListDataComponent> PACKET_CODEC = PacketCodecs.registryEntryList(RegistryKeys.ITEM)
-        .xmap(ItemListDataComponent::new, ItemListDataComponent::items);
-    public static final ItemListDataComponent DEFAULT = new ItemListDataComponent(RegistryEntryList.empty());
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemListDataComponent> PACKET_CODEC = ByteBufCodecs.holderSet(Registries.ITEM)
+        .map(ItemListDataComponent::new, ItemListDataComponent::items);
+    public static final ItemListDataComponent DEFAULT = new ItemListDataComponent(HolderSet.empty());
 
     public boolean isValidFor(ItemStack stack) {
         if (stack.isEmpty()) {
             return false;
         }
-        return this.items.contains(stack.getRegistryEntry());
+        return this.items.contains(stack.getItemHolder());
     }
 }

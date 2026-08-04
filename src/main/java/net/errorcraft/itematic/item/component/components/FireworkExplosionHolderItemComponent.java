@@ -5,9 +5,9 @@ import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FireworkExplosionComponent;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.FireworkExplosion;
 
 public class FireworkExplosionHolderItemComponent implements ItemComponent<FireworkExplosionHolderItemComponent> {
     public static final FireworkExplosionHolderItemComponent INSTANCE = new FireworkExplosionHolderItemComponent();
@@ -26,7 +26,7 @@ public class FireworkExplosionHolderItemComponent implements ItemComponent<Firew
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.FIREWORK_EXPLOSION, FireworkExplosionComponent.DEFAULT);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.FIREWORK_EXPLOSION, FireworkExplosion.DEFAULT);
     }
 }

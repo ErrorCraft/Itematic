@@ -1,29 +1,29 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.CreeperEntity;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(CreeperEntity.class)
+@Mixin(Creeper.class)
 public abstract class CreeperEntityExtender extends MobEntityExtender {
-    protected CreeperEntityExtender(EntityType<? extends HostileEntity> entityType, World world) {
+    protected CreeperEntityExtender(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForFireChargeUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -31,7 +31,7 @@ public abstract class CreeperEntityExtender extends MobEntityExtender {
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.CREEPER_SPAWN_EGG;
     }
 }

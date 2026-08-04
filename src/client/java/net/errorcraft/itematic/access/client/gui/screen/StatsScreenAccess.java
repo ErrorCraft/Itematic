@@ -1,20 +1,20 @@
 package net.errorcraft.itematic.access.client.gui.screen;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.stat.StatHandler;
+import net.minecraft.core.Holder;
+import net.minecraft.stats.StatsCounter;
+import net.minecraft.world.item.Item;
 
 public interface StatsScreenAccess {
-    default StatHandler itematic$statHandler() {
+    default StatsCounter itematic$statHandler() {
         return null;
     }
 
     interface ItemStatsListWidgetAccess {
         interface StatEntryAccess {
-            default RegistryEntry<Item> itematic$registryEntry() {
+            default Holder<Item> itematic$registryEntry() {
                 return null;
             }
-            default void itematic$setRegistryEntry(RegistryEntry<Item> entry) {}
+            default void itematic$setRegistryEntry(Holder<Item> entry) {}
         }
     }
 }

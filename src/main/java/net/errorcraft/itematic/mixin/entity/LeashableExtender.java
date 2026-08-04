@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.entity;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.Leashable;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Leashable;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -14,15 +14,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public interface LeashableExtender {
     @Redirect(
         method = {
-            "resolveLeashData",
-            "detachLeash(Lnet/minecraft/entity/Entity;ZZ)V"
+            "restoreLeashFromSave",
+            "dropLeash(Lnet/minecraft/world/entity/Entity;ZZ)V"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/Entity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;"
+            target = "Lnet/minecraft/world/entity/Entity;spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/entity/item/ItemEntity;"
         )
     )
-    private static ItemEntity dropItemForLeadUseRegistryKey(Entity instance, ServerWorld world, ItemConvertible item) {
+    private static ItemEntity dropItemForLeadUseRegistryKey(Entity instance, ServerLevel world, ItemLike item) {
         return instance.itematic$dropItem(world, ItemKeys.LEAD);
     }
 }

@@ -4,17 +4,17 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public interface BlockPicker<T extends BlockPicker<T>> {
-    Codec<BlockPicker<?>> ELEMENT_CODEC = ItematicRegistries.BLOCK_PICKER_TYPE.getCodec().dispatch("type", BlockPicker::type, BlockPickerType::codec);
-    Codec<BlockPicker<?>> CODEC = Codec.lazyInitialized(() -> Codec.either(ELEMENT_CODEC, RegistryFixedCodec.of(RegistryKeys.BLOCK)).xmap(either -> either.map(modifier -> modifier, SimpleBlockPicker::new), modifier -> {
+    Codec<BlockPicker<?>> ELEMENT_CODEC = ItematicRegistries.BLOCK_PICKER_TYPE.byNameCodec().dispatch("type", BlockPicker::type, BlockPickerType::codec);
+    Codec<BlockPicker<?>> CODEC = Codec.lazyInitialized(() -> Codec.either(ELEMENT_CODEC, RegistryFixedCodec.create(Registries.BLOCK)).xmap(either -> either.map(modifier -> modifier, SimpleBlockPicker::new), modifier -> {
         if (modifier instanceof SimpleBlockPicker simpleModifier) {
             return Either.right(simpleModifier.block());
         }
@@ -22,10 +22,10 @@ public interface BlockPicker<T extends BlockPicker<T>> {
     }));
 
     BlockPickerType<T> type();
-    RegistryEntry<Block> defaultBlock();
+    Holder<Block> defaultBlock();
     @Nullable
-    BlockState placementState(ItemPlacementContext context);
-    default ItemPlacementContext placementContext(ItemPlacementContext context) {
+    BlockState placementState(BlockPlaceContext context);
+    default BlockPlaceContext placementContext(BlockPlaceContext context) {
         return this.defaultBlock().value().itematic$placementContext(context);
     }
 }

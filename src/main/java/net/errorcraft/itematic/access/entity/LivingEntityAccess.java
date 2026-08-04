@@ -1,21 +1,21 @@
 package net.errorcraft.itematic.access.entity;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Hand;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public interface LivingEntityAccess {
     default boolean itematic$hasStackInInventory(ItemStack stack) {
         return false;
     }
-    default boolean itematic$isHolding(RegistryKey<Item> key) {
+    default boolean itematic$isHolding(ResourceKey<Item> key) {
         return false;
     }
     default ItemStack itematic$getAmmunition(ItemStack stack) {
         return ItemStack.EMPTY;
     }
-    default void itematic$startUsingHand(Hand hand, int ticks) {}
+    default void itematic$startUsingHand(InteractionHand hand, int ticks) {}
     default int itematic$itemUsedTicks() {
         return 0;
     }

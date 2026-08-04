@@ -1,16 +1,16 @@
 package net.errorcraft.itematic.mixin.enchantment;
 
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(EnchantmentHelper.class)
 public interface EnchantmentHelperAccessor {
-    @Invoker("getEnchantmentsComponentType")
-    static ComponentType<ItemEnchantmentsComponent> getComponentType(ItemStack stack) {
+    @Invoker("getComponentType")
+    static DataComponentType<ItemEnchantments> getComponentType(ItemStack stack) {
         throw new AssertionError();
     }
 }

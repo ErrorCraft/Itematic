@@ -7,14 +7,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.predicate.EntityPredicateAccess;
-import net.errorcraft.itematic.access.predicate.EntityPredicateBuilderAccess;
 import net.errorcraft.itematic.predicate.EntityPredicateExtraFields;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.predicate.NumberRange;
-import net.minecraft.predicate.entity.EntityPredicate;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -49,15 +48,15 @@ public class EntityPredicateExtender implements EntityPredicateAccess {
     }
 
     @Inject(
-        method = "test(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/Entity;)Z",
+        method = "matches(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/entity/Entity;)Z",
         at = @At("TAIL"),
         cancellable = true
     )
-    private void checkForExtraFields(ServerWorld world, Vec3d pos, Entity entity, CallbackInfoReturnable<Boolean> info) {
-        if (this.extraFields.usedItemTicks().isPresent() && entity instanceof LivingEntity livingEntity && !this.extraFields.usedItemTicks().get().test(livingEntity.itematic$itemUsedTicks())) {
+    private void checkForExtraFields(ServerLevel world, Vec3 pos, Entity entity, CallbackInfoReturnable<Boolean> info) {
+        if (this.extraFields.usedItemTicks().isPresent() && entity instanceof LivingEntity livingEntity && !this.extraFields.usedItemTicks().get().matches(livingEntity.itematic$itemUsedTicks())) {
             info.setReturnValue(false);
         }
-        if (this.extraFields.inWaterOrRain().isPresent() && entity.isTouchingWaterOrRain() != this.extraFields.inWaterOrRain().get()) {
+        if (this.extraFields.inWaterOrRain().isPresent() && entity.isInWaterOrRain() != this.extraFields.inWaterOrRain().get()) {
             info.setReturnValue(false);
         }
     }
@@ -73,9 +72,9 @@ public class EntityPredicateExtender implements EntityPredicateAccess {
     }
 
     @Mixin(EntityPredicate.Builder.class)
-    public static class BuilderExtender implements EntityPredicateBuilderAccess {
+    public static class BuilderExtender implements BuilderAccess {
         @Unique
-        private NumberRange.IntRange itemUsedTicks;
+        private MinMaxBounds.Ints itemUsedTicks;
         @Unique
         private Boolean inWaterOrRain;
 
@@ -91,7 +90,7 @@ public class EntityPredicateExtender implements EntityPredicateAccess {
 
         @Override
         public EntityPredicate.Builder itematic$usedItemAtLeast(int ticks) {
-            this.itemUsedTicks = NumberRange.IntRange.atLeast(ticks);
+            this.itemUsedTicks = MinMaxBounds.Ints.atLeast(ticks);
             return (EntityPredicate.Builder)(Object) this;
         }
 

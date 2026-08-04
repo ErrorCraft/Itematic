@@ -4,27 +4,27 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.IllagerEntity;
-import net.minecraft.entity.mob.PillagerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.illager.AbstractIllager;
+import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(PillagerEntity.class)
+@Mixin(Pillager.class)
 public abstract class PillagerEntityExtender extends MobEntityExtender {
-    protected PillagerEntityExtender(EntityType<? extends IllagerEntity> entityType, World world) {
+    protected PillagerEntityExtender(EntityType<? extends AbstractIllager> entityType, Level world) {
         super(entityType, world);
     }
 
     @ModifyReturnValue(
-        method = "canUseRangedWeapon",
+        method = "canUseNonMeleeWeapon",
         at = @At("TAIL")
     )
     private boolean useItemBehaviorComponent(boolean original, ItemStack stack) {
@@ -34,10 +34,10 @@ public abstract class PillagerEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "isRaidCaptain",
+        method = "wantsItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForWhiteBannerUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -45,35 +45,35 @@ public abstract class PillagerEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "getState",
+        method = "getArmPose",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/PillagerEntity;isHolding(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/entity/monster/illager/Pillager;isHolding(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isHoldingForCrossbowUseRegistryKeyCheck(PillagerEntity instance, Item item) {
+    private boolean isHoldingForCrossbowUseRegistryKeyCheck(Pillager instance, Item item) {
         return instance.itematic$isHolding(ItemKeys.CROSSBOW);
     }
 
     @Redirect(
         method = {
-            "initEquipment",
-            "addBonusForWave"
+            "populateDefaultEquipmentSlots",
+            "applyRaidBuffs"
         },
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForCrossbowUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.CROSSBOW);
+    private ItemStack newItemStackForCrossbowUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.CROSSBOW);
     }
 
     @Redirect(
-        method = "enchantMainHandItem",
+        method = "enchantSpawnedWeapon",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -81,7 +81,7 @@ public abstract class PillagerEntityExtender extends MobEntityExtender {
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.PILLAGER_SPAWN_EGG;
     }
 }

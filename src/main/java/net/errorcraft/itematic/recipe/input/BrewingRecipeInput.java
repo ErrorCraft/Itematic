@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.recipe.input;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.input.RecipeInput;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeInput;
 
 public record BrewingRecipeInput(ItemStack base, ItemStack reagent) implements RecipeInput {
     @Override
-    public ItemStack getStackInSlot(int slot) {
+    public ItemStack getItem(int slot) {
         return switch (slot) {
             case 0 -> this.base;
             case 1 -> this.reagent;

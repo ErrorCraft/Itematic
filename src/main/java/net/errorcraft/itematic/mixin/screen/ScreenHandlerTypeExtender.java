@@ -1,20 +1,20 @@
 package net.errorcraft.itematic.mixin.screen;
 
 import net.errorcraft.itematic.screen.ItematicScreenHandlerTypes;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(ScreenHandlerType.class)
+@Mixin(MenuType.class)
 public class ScreenHandlerTypeExtender {
     @Redirect(
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/screen/ScreenHandlerType;register(Ljava/lang/String;Lnet/minecraft/screen/ScreenHandlerType$Factory;)Lnet/minecraft/screen/ScreenHandlerType;",
+            target = "Lnet/minecraft/world/inventory/MenuType;register(Ljava/lang/String;Lnet/minecraft/world/inventory/MenuType$MenuSupplier;)Lnet/minecraft/world/inventory/MenuType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -25,7 +25,7 @@ public class ScreenHandlerTypeExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private static <T extends ScreenHandler> ScreenHandlerType<T> useCustomGliderDataComponent(String id, ScreenHandlerType.Factory<T> factory) {
-        return (ScreenHandlerType<T>) ItematicScreenHandlerTypes.BREWING_STAND;
+    private static <T extends AbstractContainerMenu> MenuType<T> useCustomGliderDataComponent(String id, MenuType.MenuSupplier<T> factory) {
+        return (MenuType<T>) ItematicScreenHandlerTypes.BREWING_STAND;
     }
 }

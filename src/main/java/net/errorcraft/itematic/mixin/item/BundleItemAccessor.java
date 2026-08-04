@@ -1,32 +1,32 @@
 package net.errorcraft.itematic.mixin.item;
 
-import net.minecraft.item.BundleItem;
+import net.minecraft.world.item.BundleItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(BundleItem.class)
 public interface BundleItemAccessor {
-    @Accessor("ITEM_BAR_COLOR")
+    @Accessor("BAR_COLOR")
     static int itemBarColor() {
         throw new AssertionError();
     }
 
-    @Accessor("FULL_ITEM_BAR_COLOR")
+    @Accessor("FULL_BAR_COLOR")
     static int fullItemBarColor() {
         throw new AssertionError();
     }
 
-    @Accessor("field_54109")
+    @Accessor("TICKS_AFTER_FIRST_THROW")
     static int ticksAfterFirstThrow() {
         throw new AssertionError();
     }
 
-    @Accessor("field_54110")
+    @Accessor("TICKS_BETWEEN_THROWS")
     static int ticksBetweenThrows() {
         throw new AssertionError();
     }
 
-    @Accessor("MAX_USE_TIME")
+    @Accessor("TICKS_MAX_THROW_DURATION")
     static int useDuration() {
         throw new AssertionError();
     }

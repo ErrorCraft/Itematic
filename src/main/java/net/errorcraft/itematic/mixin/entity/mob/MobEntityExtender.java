@@ -9,22 +9,22 @@ import net.errorcraft.itematic.access.entity.mob.MobEntityAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.SpawnEggItemComponent;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,13 +36,13 @@ import org.spongepowered.asm.mixin.injection.*;
 import java.util.Map;
 import java.util.Optional;
 
-@Mixin(MobEntity.class)
+@Mixin(Mob.class)
 public abstract class MobEntityExtender extends LivingEntity implements MobEntityAccess {
     @Shadow
     public abstract void setBaby(boolean baby);
 
     @Unique
-    private static final Int2ObjectMap<Map<EquipmentSlot, RegistryKey<Item>>> LEVEL_TO_EQUIPMENT = Util.make(new Int2ObjectOpenHashMap<>(), map -> {
+    private static final Int2ObjectMap<Map<EquipmentSlot, ResourceKey<Item>>> LEVEL_TO_EQUIPMENT = Util.make(new Int2ObjectOpenHashMap<>(), map -> {
         map.defaultReturnValue(Map.of());
         map.put(0, Map.of(
             EquipmentSlot.HEAD, ItemKeys.LEATHER_HELMET,
@@ -82,15 +82,15 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
         ));
     });
 
-    protected MobEntityExtender(EntityType<? extends LivingEntity> entityType, World world) {
+    protected MobEntityExtender(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "interactWithItem",
+        method = "checkAndHandleImportantInteractions",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
+            target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"
         )
     )
     private Item getItemReturnNull(ItemStack instance) {
@@ -98,7 +98,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     }
 
     @ModifyConstant(
-        method = "interactWithItem",
+        method = "checkAndHandleImportantInteractions",
         constant = @Constant(
             classValue = SpawnEggItem.class,
             ordinal = 0
@@ -111,21 +111,21 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     }
 
     @Redirect(
-        method = "interactWithItem",
+        method = "checkAndHandleImportantInteractions",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/SpawnEggItem;spawnBaby(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/mob/MobEntity;Lnet/minecraft/entity/EntityType;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/item/ItemStack;)Ljava/util/Optional;"
+            target = "Lnet/minecraft/world/item/SpawnEggItem;spawnOffspringFromSpawnEgg(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"
         )
     )
-    private Optional<MobEntity> spawnBabyUseItemComponent(SpawnEggItem instance, PlayerEntity user, MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world, Vec3d pos, ItemStack stack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
+    private Optional<Mob> spawnBabyUseItemComponent(SpawnEggItem instance, Player user, Mob entity, EntityType<? extends Mob> entityType, ServerLevel world, Vec3 pos, ItemStack stack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
         return spawnEggItemComponent.get().spawnBaby(user, entity, entityType, world, pos, stack);
     }
 
     @Redirect(
-        method = "interactWithItem",
+        method = "checkAndHandleImportantInteractions",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         )
     )
@@ -134,15 +134,15 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/MobEntity;getEquipmentForSlot(Lnet/minecraft/entity/EquipmentSlot;I)Lnet/minecraft/item/Item;"
+            target = "Lnet/minecraft/world/entity/Mob;getEquipmentForSlot(Lnet/minecraft/world/entity/EquipmentSlot;I)Lnet/minecraft/world/item/Item;"
         )
     )
-    private Item getEquipmentForSlotUseRegistryKey(EquipmentSlot equipmentSlot, int equipmentLevel, @Share("item") LocalRef<RegistryEntry<Item>> item) {
-        RegistryKey<Item> key = LEVEL_TO_EQUIPMENT.get(equipmentLevel).get(equipmentSlot);
-        Optional<RegistryEntry.Reference<Item>> optionalEntry = this.getEntityWorld().itematic$getItemAccess().getOptionalEntry(key);
+    private Item getEquipmentForSlotUseRegistryKey(EquipmentSlot equipmentSlot, int equipmentLevel, @Share("item") LocalRef<Holder<Item>> item) {
+        ResourceKey<Item> key = LEVEL_TO_EQUIPMENT.get(equipmentLevel).get(equipmentSlot);
+        Optional<Holder.Reference<Item>> optionalEntry = this.level().itematic$getItemAccess().getOptionalEntry(key);
         if (optionalEntry.isEmpty()) {
             return null;
         }
@@ -152,32 +152,32 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseRegistryEntry(ItemConvertible item, @Share("item") LocalRef<RegistryEntry<Item>> itemEntry) {
+    private ItemStack newItemStackUseRegistryEntry(ItemLike item, @Share("item") LocalRef<Holder<Item>> itemEntry) {
         return new ItemStack(itemEntry.get());
     }
 
     @Redirect(
-        method = "tryAttack",
+        method = "doHurtTarget",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/mob/MobEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D",
+            target = "Lnet/minecraft/world/entity/Mob;getAttributeValue(Lnet/minecraft/core/Holder;)D",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/entity/attribute/EntityAttributes;ATTACK_DAMAGE:Lnet/minecraft/registry/entry/RegistryEntry;",
+                target = "Lnet/minecraft/world/entity/ai/attributes/Attributes;ATTACK_DAMAGE:Lnet/minecraft/core/Holder;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private double useCustomAttackDamage(MobEntity instance, RegistryEntry<EntityAttribute> attribute) {
+    private double useCustomAttackDamage(Mob instance, Holder<Attribute> attribute) {
         return this.itematic$getAttackDamage();
     }
 
@@ -187,18 +187,18 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
      */
     @Overwrite
     @Nullable
-    public ItemStack getPickBlockStack() {
-        RegistryKey<Item> key = this.pickBlockKey();
+    public ItemStack getPickResult() {
+        ResourceKey<Item> key = this.pickBlockKey();
         if (key == null) {
             return null;
         }
 
-        return this.getEntityWorld().itematic$createStack(key);
+        return this.level().itematic$createStack(key);
     }
 
     @Unique
     @Nullable
-    protected RegistryKey<Item> pickBlockKey() {
+    protected ResourceKey<Item> pickBlockKey() {
         return null;
     }
 

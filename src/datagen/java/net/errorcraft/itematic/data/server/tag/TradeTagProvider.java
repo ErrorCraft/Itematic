@@ -6,17 +6,16 @@ import net.errorcraft.itematic.village.trade.TradeTags;
 import net.errorcraft.itematic.village.trade.Trades;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.registry.RegistryWrapper;
-
+import net.minecraft.core.HolderLookup;
 import java.util.concurrent.CompletableFuture;
 
 public class TradeTagProvider extends FabricTagProvider<Trade> {
-    public TradeTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+    public TradeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, ItematicRegistryKeys.TRADE, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup lookup) {
+    protected void addTags(HolderLookup.Provider lookup) {
         this.builder(TradeTags.FARMER_NOVICE)
             .add(Trades.BUY_WHEAT)
             .add(Trades.BUY_POTATO)

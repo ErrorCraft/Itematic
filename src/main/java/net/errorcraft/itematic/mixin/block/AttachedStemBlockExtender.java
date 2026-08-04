@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.minecraft.block.AttachedStemBlock;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.WorldView;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.AttachedStemBlock;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,16 +16,16 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class AttachedStemBlockExtender {
     @Shadow
     @Final
-    private RegistryKey<Item> pickBlockItem;
+    private ResourceKey<Item> seed;
 
     @Redirect(
-        method = "getPickStack",
+        method = "getCloneItemStack",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseCreateStack(ItemConvertible item, WorldView world) {
-        return world.itematic$createStack(this.pickBlockItem);
+    private ItemStack newItemStackUseCreateStack(ItemLike item, LevelReader world) {
+        return world.itematic$createStack(this.seed);
     }
 }

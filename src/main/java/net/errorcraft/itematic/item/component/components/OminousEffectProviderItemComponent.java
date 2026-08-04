@@ -6,11 +6,11 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.OminousBottleAmplifierComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.OminousBottleAmplifier;
+import net.minecraft.world.level.Level;
 
 public class OminousEffectProviderItemComponent implements ItemComponent<OminousEffectProviderItemComponent> {
     public static final OminousEffectProviderItemComponent INSTANCE = new OminousEffectProviderItemComponent();
@@ -29,8 +29,8 @@ public class OminousEffectProviderItemComponent implements ItemComponent<Ominous
     }
 
     @Override
-    public void finishUsing(World world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
-        OminousBottleAmplifierComponent ominousAmplifier = stack.get(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER);
+    public void finishUsing(Level world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
+        OminousBottleAmplifier ominousAmplifier = stack.get(DataComponents.OMINOUS_BOTTLE_AMPLIFIER);
         if (ominousAmplifier != null) {
             ominousAmplifier.onConsume(world, user, stack, null);
         }

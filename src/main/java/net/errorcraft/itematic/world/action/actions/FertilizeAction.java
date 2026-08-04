@@ -8,12 +8,12 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.item.BoneMealItem;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.phys.Vec3;
 
 public record FertilizeAction(PositionTarget position) implements Action<FertilizeAction> {
     public static final MapCodec<FertilizeAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -31,14 +31,14 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
 
     @Override
     public boolean execute(ActionContext context) {
-        Vec3d pos = context.get(this.position.contextParam());
+        Vec3 pos = context.get(this.position.contextParam());
         if (pos == null) {
             return false;
         }
 
-        BlockPos blockPos = BlockPos.ofFloored(pos);
-        World world = context.world();
-        if (BoneMealItem.useOnFertilizable(null, world, blockPos)) {
+        BlockPos blockPos = BlockPos.containing(pos);
+        Level world = context.world();
+        if (BoneMealItem.growCrop(null, world, blockPos)) {
             fertilized(world, blockPos);
             return true;
         }
@@ -48,8 +48,8 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
             return false;
         }
 
-        BlockPos offsetBlockPos = blockPos.offset(side);
-        if (world.getBlockState(blockPos).isSideSolidFullSquare(world, blockPos, side) && BoneMealItem.useOnGround(null, world, offsetBlockPos, side)) {
+        BlockPos offsetBlockPos = blockPos.relative(side);
+        if (world.getBlockState(blockPos).isFaceSturdy(world, blockPos, side) && BoneMealItem.growWaterPlant(null, world, offsetBlockPos, side)) {
             fertilized(world, offsetBlockPos);
             return true;
         }
@@ -57,7 +57,7 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
         return false;
     }
 
-    private static void fertilized(World world, BlockPos pos) {
-        world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, pos, 15);
+    private static void fertilized(Level world, BlockPos pos) {
+        world.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 15);
     }
 }

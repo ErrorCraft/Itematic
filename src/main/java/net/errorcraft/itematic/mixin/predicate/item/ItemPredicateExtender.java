@@ -10,10 +10,10 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.predicate.item.ItemPredicates;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.serialization.SetCodec;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.core.HolderSet;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -46,7 +46,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
     }
 
     @ModifyReturnValue(
-        method = "test(Lnet/minecraft/item/ItemStack;)Z",
+        method = "test(Lnet/minecraft/world/item/ItemStack;)Z",
         at = @At("TAIL")
     )
     private boolean testBehavior(boolean original, ItemStack stack) {
@@ -76,7 +76,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
     @Mixin(ItemPredicate.Builder.class)
     public static class BuilderExtender implements ItemPredicateAccess.BuilderAccess {
         @Shadow
-        private Optional<RegistryEntryList<Item>> item;
+        private Optional<HolderSet<Item>> items;
 
         @Unique
         private final Set<ItemComponentType<?>> behavior = new HashSet<>();
@@ -91,8 +91,8 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         }
 
         @Override
-        public ItemPredicate.Builder itematic$items(RegistryEntryList<Item> items) {
-            this.item = Optional.of(items);
+        public ItemPredicate.Builder itematic$items(HolderSet<Item> items) {
+            this.items = Optional.of(items);
             return (ItemPredicate.Builder)(Object) this;
         }
 

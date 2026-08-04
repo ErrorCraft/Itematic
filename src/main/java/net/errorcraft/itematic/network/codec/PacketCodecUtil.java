@@ -2,12 +2,12 @@ package net.errorcraft.itematic.network.codec;
 
 import com.mojang.datafixers.util.Function4;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import org.apache.commons.lang3.math.Fraction;
 
 import java.util.HashSet;
@@ -15,21 +15,21 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class PacketCodecUtil {
-    public static final PacketCodec<ByteBuf, Fraction> FRACTION = PacketCodec.tuple(
-        PacketCodecs.VAR_INT, Fraction::getNumerator,
-        PacketCodecs.VAR_INT, Fraction::getDenominator,
+    public static final StreamCodec<ByteBuf, Fraction> FRACTION = StreamCodec.composite(
+        ByteBufCodecs.VAR_INT, Fraction::getNumerator,
+        ByteBufCodecs.VAR_INT, Fraction::getDenominator,
         Fraction::getFraction
     );
 
     private PacketCodecUtil() {}
 
-    public static <B, C, T1, T2, T3, T4> PacketCodec<B, C> tuple(
-        final PacketCodec<? super B, T1> codec1, final Function<C, T1> from1,
-        final PacketCodec<? super B, T2> codec2, final Function<C, T2> from2,
-        final PacketCodec<? super B, T3> codec3, final Function<C, T3> from3,
-        final PacketCodec<? super B, T4> codec4, final Function<C, T4> from4,
+    public static <B, C, T1, T2, T3, T4> StreamCodec<B, C> tuple(
+        final StreamCodec<? super B, T1> codec1, final Function<C, T1> from1,
+        final StreamCodec<? super B, T2> codec2, final Function<C, T2> from2,
+        final StreamCodec<? super B, T3> codec3, final Function<C, T3> from3,
+        final StreamCodec<? super B, T4> codec4, final Function<C, T4> from4,
         final Function4<T1, T2, T3, T4, C> to) {
-        return new PacketCodec<>() {
+        return new StreamCodec<>() {
 
             @Override
             public C decode(B buf) {
@@ -50,11 +50,11 @@ public class PacketCodecUtil {
         };
     }
 
-    public static <T> PacketCodec<ByteBuf, TagKey<T>> tag(RegistryKey<? extends Registry<T>> registry) {
-        return Identifier.PACKET_CODEC.xmap(id -> TagKey.of(registry, id), TagKey::id);
+    public static <T> StreamCodec<ByteBuf, TagKey<T>> tag(ResourceKey<? extends Registry<T>> registry) {
+        return Identifier.STREAM_CODEC.map(id -> TagKey.create(registry, id), TagKey::location);
     }
 
-    public static <B extends ByteBuf, T> PacketCodec<B, Set<T>> set(PacketCodec<B, T> packetCodec) {
-        return PacketCodecs.collection(HashSet::new, packetCodec);
+    public static <B extends ByteBuf, T> StreamCodec<B, Set<T>> set(StreamCodec<B, T> packetCodec) {
+        return ByteBufCodecs.collection(HashSet::new, packetCodec);
     }
 }

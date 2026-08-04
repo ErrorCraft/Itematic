@@ -9,21 +9,20 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.modification.WorldModification;
 import net.errorcraft.itematic.world.modification.WorldModificationType;
 import net.errorcraft.itematic.world.modification.WorldModificationTypes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.RaycastContext;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import java.util.Optional;
 
-public record PlaceBlockWorldModification(BlockPicker<?> block, RegistryEntry<SoundEvent> placeSound, RegistryEntry<Item> transformsInto) implements WorldModification {
+public record PlaceBlockWorldModification(BlockPicker<?> block, Holder<SoundEvent> placeSound, Holder<Item> transformsInto) implements WorldModification {
     public static final MapCodec<PlaceBlockWorldModification> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         BlockPicker.CODEC.fieldOf("block").forGetter(PlaceBlockWorldModification::block),
-        SoundEvent.ENTRY_CODEC.fieldOf("place_sound").forGetter(PlaceBlockWorldModification::placeSound),
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("transforms_into").forGetter(PlaceBlockWorldModification::transformsInto)
+        SoundEvent.CODEC.fieldOf("place_sound").forGetter(PlaceBlockWorldModification::placeSound),
+        RegistryFixedCodec.create(Registries.ITEM).fieldOf("transforms_into").forGetter(PlaceBlockWorldModification::transformsInto)
     ).apply(instance, PlaceBlockWorldModification::new));
 
     @Override
@@ -49,7 +48,7 @@ public record PlaceBlockWorldModification(BlockPicker<?> block, RegistryEntry<So
     }
 
     @Override
-    public RaycastContext.FluidHandling fluidHandling() {
-        return RaycastContext.FluidHandling.NONE;
+    public ClipContext.Fluid fluidHandling() {
+        return ClipContext.Fluid.NONE;
     }
 }

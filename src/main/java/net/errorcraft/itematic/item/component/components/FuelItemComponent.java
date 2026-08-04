@@ -5,16 +5,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.dynamic.Codecs;
-
+import net.minecraft.core.Holder;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import java.util.Optional;
 
 public record FuelItemComponent(int ticks, Optional<ItemStack> remainder) implements ItemComponent<FuelItemComponent> {
     public static final Codec<FuelItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codecs.POSITIVE_INT.fieldOf("ticks").forGetter(FuelItemComponent::ticks),
+        ExtraCodecs.POSITIVE_INT.fieldOf("ticks").forGetter(FuelItemComponent::ticks),
         ItemStack.CODEC.optionalFieldOf("remainder").forGetter(FuelItemComponent::remainder)
     ).apply(instance, FuelItemComponent::new));
 
@@ -22,7 +21,7 @@ public record FuelItemComponent(int ticks, Optional<ItemStack> remainder) implem
         return new FuelItemComponent(ticks, Optional.empty());
     }
 
-    public static FuelItemComponent of(int ticks, RegistryEntry<Item> remainder) {
+    public static FuelItemComponent of(int ticks, Holder<Item> remainder) {
         return new FuelItemComponent(ticks, Optional.of(new ItemStack(remainder)));
     }
 

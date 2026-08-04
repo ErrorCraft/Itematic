@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.ingame;
 
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(HandledScreen.class)
+@Mixin(AbstractContainerScreen.class)
 public interface HandledScreenAccessor {
-    @Accessor("x")
+    @Accessor("leftPos")
     void itematic$setX(int x);
 }

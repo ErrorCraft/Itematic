@@ -8,22 +8,21 @@ import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.SharedConstants;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.UseCooldownComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.world.World;
-
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.UseCooldown;
+import net.minecraft.world.level.Level;
 import java.util.Optional;
 
 public record CooldownItemComponent(Optional<Identifier> group, int ticks) implements ItemComponent<CooldownItemComponent> {
     public static final Codec<CooldownItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Identifier.CODEC.optionalFieldOf("group").forGetter(CooldownItemComponent::group),
-        Codecs.POSITIVE_INT.fieldOf("ticks").forGetter(CooldownItemComponent::ticks)
+        ExtraCodecs.POSITIVE_INT.fieldOf("ticks").forGetter(CooldownItemComponent::ticks)
     ).apply(instance, CooldownItemComponent::new));
 
     public static CooldownItemComponent of(int ticks) {
@@ -41,17 +40,17 @@ public record CooldownItemComponent(Optional<Identifier> group, int ticks) imple
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        UseCooldownComponent useCooldown = stack.get(DataComponentTypes.USE_COOLDOWN);
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        UseCooldown useCooldown = stack.get(DataComponents.USE_COOLDOWN);
         if (useCooldown != null) {
-            useCooldown.set(stack, user);
+            useCooldown.apply(stack, user);
         }
 
         return ItemResult.PASS;
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.USE_COOLDOWN, new UseCooldownComponent((float) this.ticks / SharedConstants.TICKS_PER_SECOND, this.group));
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.USE_COOLDOWN, new UseCooldown((float) this.ticks / SharedConstants.TICKS_PER_SECOND, this.group));
     }
 }

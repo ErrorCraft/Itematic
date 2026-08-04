@@ -7,12 +7,12 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BeehiveBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record TakeHoneyAction(PositionTarget position) implements Action<TakeHoneyAction> {
     public static final MapCodec<TakeHoneyAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -30,17 +30,17 @@ public record TakeHoneyAction(PositionTarget position) implements Action<TakeHon
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
         BlockState state = context.world().getBlockState(pos);
-        if (!state.contains(BeehiveBlock.HONEY_LEVEL)) {
+        if (!state.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
             return false;
         }
 
-        if (state.get(BeehiveBlock.HONEY_LEVEL) < BeehiveBlock.FULL_HONEY_LEVEL) {
+        if (state.getValue(BeehiveBlock.HONEY_LEVEL) < BeehiveBlock.MAX_HONEY_LEVELS) {
             return false;
         }
 
@@ -48,12 +48,12 @@ public record TakeHoneyAction(PositionTarget position) implements Action<TakeHon
             return false;
         }
 
-        beehiveBlock.takeHoney(
+        beehiveBlock.releaseBeesAndResetHoneyLevel(
             context.world(),
             state,
             pos,
-            context.get(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity player ? player : null,
-            BeehiveBlockEntity.BeeState.BEE_RELEASED
+            context.get(LootContextParams.THIS_ENTITY) instanceof Player player ? player : null,
+            BeehiveBlockEntity.BeeReleaseStatus.BEE_RELEASED
         );
         return true;
     }

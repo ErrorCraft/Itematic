@@ -4,12 +4,12 @@ import net.errorcraft.itematic.access.util.DyeColorAccess;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.DyeItemComponent;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.Item;
-import net.minecraft.recipe.input.CraftingRecipeInput;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.DyeColor;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.CraftingInput;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -91,7 +91,7 @@ public class DyeColorExtender implements DyeColorAccess {
     public static DyeColor BLACK;
 
     @Unique
-    private RegistryKey<Item> itemKey;
+    private ResourceKey<Item> itemKey;
 
     static {
         WHITE.itematic$setItemKey(ItemKeys.WHITE_DYE);
@@ -113,14 +113,14 @@ public class DyeColorExtender implements DyeColorAccess {
     }
 
     @Redirect(
-        method = "mixColors",
+        method = "getMixedColor",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/util/DyeColor;createColorMixingRecipeInput(Lnet/minecraft/util/DyeColor;Lnet/minecraft/util/DyeColor;)Lnet/minecraft/recipe/input/CraftingRecipeInput;"
+            target = "Lnet/minecraft/world/item/DyeColor;makeCraftColorInput(Lnet/minecraft/world/item/DyeColor;Lnet/minecraft/world/item/DyeColor;)Lnet/minecraft/world/item/crafting/CraftingInput;"
         )
     )
-    private static CraftingRecipeInput newItemStackForRecipeInputUseCreateStack(DyeColor firstColor, DyeColor secondColor, ServerWorld world) {
-        return CraftingRecipeInput.create(
+    private static CraftingInput newItemStackForRecipeInputUseCreateStack(DyeColor firstColor, DyeColor secondColor, ServerLevel world) {
+        return CraftingInput.of(
             2,
             1,
             List.of(
@@ -131,7 +131,7 @@ public class DyeColorExtender implements DyeColorAccess {
     }
 
     @Redirect(
-        method = "mixColors",
+        method = "getMixedColor",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Optional;filter(Ljava/util/function/Predicate;)Ljava/util/Optional;"
@@ -142,7 +142,7 @@ public class DyeColorExtender implements DyeColorAccess {
     }
 
     @Redirect(
-        method = "mixColors",
+        method = "getMixedColor",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;",
@@ -160,7 +160,7 @@ public class DyeColorExtender implements DyeColorAccess {
     }
 
     @ModifyArg(
-        method = "mixColors",
+        method = "getMixedColor",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;",
@@ -178,12 +178,12 @@ public class DyeColorExtender implements DyeColorAccess {
     }
 
     @Override
-    public RegistryKey<Item> itematic$itemKey() {
+    public ResourceKey<Item> itematic$itemKey() {
         return this.itemKey;
     }
 
     @Override
-    public void itematic$setItemKey(RegistryKey<Item> item) {
+    public void itematic$setItemKey(ResourceKey<Item> item) {
         this.itemKey = item;
     }
 }

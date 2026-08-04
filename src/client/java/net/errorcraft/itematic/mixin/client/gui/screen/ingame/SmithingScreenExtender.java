@@ -8,17 +8,17 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.SmithingTemplateProviderItemComponent;
 import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
-import net.minecraft.client.gui.screen.ingame.ForgingScreen;
-import net.minecraft.client.gui.screen.ingame.SmithingScreen;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.type.EquippableComponent;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SmithingTemplateItem;
-import net.minecraft.screen.SmithingScreenHandler;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.screens.inventory.ItemCombinerScreen;
+import net.minecraft.client.gui.screens.inventory.SmithingScreen;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.SmithingMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SmithingTemplateItem;
+import net.minecraft.world.item.equipment.Equippable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,28 +28,28 @@ import java.util.Optional;
 import java.util.function.Function;
 
 @Mixin(SmithingScreen.class)
-public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScreenHandler> {
-    public SmithingScreenExtender(SmithingScreenHandler handler, PlayerInventory playerInventory, Text title, Identifier texture) {
+public abstract class SmithingScreenExtender extends ItemCombinerScreen<SmithingMenu> {
+    public SmithingScreenExtender(SmithingMenu handler, Inventory playerInventory, Component title, Identifier texture) {
         super(handler, playerInventory, title, texture);
     }
 
     @Inject(
-        method = "handledScreenTick",
+        method = "containerTick",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/screen/ingame/SmithingScreen;getSmithingTemplate()Ljava/util/Optional;"
+            target = "Lnet/minecraft/client/gui/screens/inventory/SmithingScreen;getTemplateItem()Ljava/util/Optional;"
         )
     )
     private void storeSmithingTemplate(CallbackInfo info, @Share("smithingTemplate") LocalRef<Optional<SmithingTemplate>> smithingTemplate) {
-        smithingTemplate.set(this.handler.getSlot(0)
-            .getStack()
+        smithingTemplate.set(this.menu.getSlot(0)
+            .getItem()
             .itematic$getBehavior(ItemComponentTypes.SMITHING_TEMPLATE_PROVIDER)
             .map(SmithingTemplateProviderItemComponent::template)
         );
     }
 
     @Redirect(
-        method = "handledScreenTick",
+        method = "containerTick",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;",
@@ -61,7 +61,7 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
     }
 
     @Redirect(
-        method = "handledScreenTick",
+        method = "containerTick",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;",
@@ -73,13 +73,13 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
     }
 
     @WrapOperation(
-        method = "equipArmorStand",
+        method = "updateArmorStandPreview",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
         )
     )
-    private Object checkPresenceEquipmentBehavior(ItemStack instance, ComponentType<EquippableComponent> type, Operation<Object> original) {
+    private Object checkPresenceEquipmentBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
         if (!instance.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
             return null;
         }
@@ -88,7 +88,7 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
     }
 
     @ModifyConstant(
-        method = "renderSlotTooltip",
+        method = "renderOnboardingTooltips",
         constant = @Constant(
             classValue = SmithingTemplateItem.class,
             ordinal = 0
@@ -102,7 +102,7 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
     }
 
     @ModifyVariable(
-        method = "renderSlotTooltip",
+        method = "renderOnboardingTooltips",
         at = @At("LOAD"),
         ordinal = 0
     )
@@ -111,24 +111,24 @@ public abstract class SmithingScreenExtender extends ForgingScreen<SmithingScree
     }
 
     @Redirect(
-        method = "renderSlotTooltip",
+        method = "renderOnboardingTooltips",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/SmithingTemplateItem;getBaseSlotDescription()Lnet/minecraft/text/Text;"
+            target = "Lnet/minecraft/world/item/SmithingTemplateItem;getBaseSlotDescription()Lnet/minecraft/network/chat/Component;"
         )
     )
-    private Text getBaseSlotDescriptionUseSmithingTemplate(SmithingTemplateItem instance, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplate) {
+    private Component getBaseSlotDescriptionUseSmithingTemplate(SmithingTemplateItem instance, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplate) {
         return smithingTemplate.get().baseSlotDescription();
     }
 
     @Redirect(
-        method = "renderSlotTooltip",
+        method = "renderOnboardingTooltips",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/SmithingTemplateItem;getAdditionsSlotDescription()Lnet/minecraft/text/Text;"
+            target = "Lnet/minecraft/world/item/SmithingTemplateItem;getAdditionSlotDescription()Lnet/minecraft/network/chat/Component;"
         )
     )
-    private Text getAdditionsSlotDescriptionUseSmithingTemplate(SmithingTemplateItem instance, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplate) {
+    private Component getAdditionsSlotDescriptionUseSmithingTemplate(SmithingTemplateItem instance, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplate) {
         return smithingTemplate.get().additionsSlotDescription();
     }
 }

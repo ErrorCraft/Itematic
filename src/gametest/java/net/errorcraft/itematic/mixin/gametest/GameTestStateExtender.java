@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.gametest;
 
 import net.errorcraft.itematic.access.gametest.GameTestStateAccess;
-import net.minecraft.test.GameTestState;
+import net.minecraft.gametest.framework.GameTestInfo;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -12,16 +12,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(GameTestState.class)
+@Mixin(GameTestInfo.class)
 public class GameTestStateExtender implements GameTestStateAccess {
     @Unique
     private final List<Runnable> whenFinished = new ArrayList<>();
 
     @Inject(
-        method = "complete",
+        method = "finish",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/test/GameTestState;completed:Z",
+            target = "Lnet/minecraft/gametest/framework/GameTestInfo;done:Z",
             opcode = Opcodes.PUTFIELD,
             shift = At.Shift.AFTER
         )

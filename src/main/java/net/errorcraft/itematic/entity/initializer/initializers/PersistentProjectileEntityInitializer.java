@@ -3,24 +3,24 @@ package net.errorcraft.itematic.entity.initializer.initializers;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public record PersistentProjectileEntityInitializer<T extends PersistentProjectileEntity>(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) implements EntityInitializer<T> {
-    public static <T extends PersistentProjectileEntity> EntityInitializer<T> of(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) {
+public record PersistentProjectileEntityInitializer<T extends AbstractArrow>(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) implements EntityInitializer<T> {
+    public static <T extends AbstractArrow> EntityInitializer<T> of(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) {
         return new PersistentProjectileEntityInitializer<>(ownerCreator, simpleCreator);
     }
 
     @Override
-    public T create(ActionContext context, SpawnReason reason) {
-        if (context.get(LootContextParameters.THIS_ENTITY) instanceof LivingEntity entity) {
-            ItemStack shooter = entity.getActiveItem();
+    public T create(ActionContext context, EntitySpawnReason reason) {
+        if (context.get(LootContextParams.THIS_ENTITY) instanceof LivingEntity entity) {
+            ItemStack shooter = entity.getUseItem();
             if (shooter.isEmpty()) {
                 shooter = null;
             }
@@ -28,35 +28,35 @@ public record PersistentProjectileEntityInitializer<T extends PersistentProjecti
             return this.ownerCreator.create(
                 context.world(),
                 entity,
-                context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY).copyWithCount(1),
+                context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY).copyWithCount(1),
                 shooter
             );
         }
 
-        Vec3d pos = context.get(ItematicContextParameters.INTERACTED_POSITION);
+        Vec3 pos = context.get(ItematicContextParameters.INTERACTED_POSITION);
         if (pos == null) {
             return null;
         }
 
         T entity = this.simpleCreator.create(
             context.world(),
-            pos.getX(),
-            pos.getY(),
-            pos.getZ(),
-            context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY).copyWithCount(1),
+            pos.x(),
+            pos.y(),
+            pos.z(),
+            context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY).copyWithCount(1),
             null
         );
-        entity.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
+        entity.pickup = AbstractArrow.Pickup.ALLOWED;
         return entity;
     }
 
     @FunctionalInterface
-    public interface OwnerCreator<T extends PersistentProjectileEntity> {
-        T create(World world, LivingEntity owner, ItemStack ammunition, @Nullable ItemStack weapon);
+    public interface OwnerCreator<T extends AbstractArrow> {
+        T create(Level world, LivingEntity owner, ItemStack ammunition, @Nullable ItemStack weapon);
     }
 
     @FunctionalInterface
-    public interface SimpleCreator<T extends PersistentProjectileEntity> {
-        T create(World world, double x, double y, double z, ItemStack ammunition, @Nullable ItemStack weapon);
+    public interface SimpleCreator<T extends AbstractArrow> {
+        T create(Level world, double x, double y, double z, ItemStack ammunition, @Nullable ItemStack weapon);
     }
 }

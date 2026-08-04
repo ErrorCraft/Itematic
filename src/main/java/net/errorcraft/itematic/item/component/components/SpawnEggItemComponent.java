@@ -5,17 +5,16 @@ import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
 
 public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponent> {
@@ -34,7 +33,7 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
         return CODEC;
     }
 
-    public Optional<MobEntity> spawnBaby(PlayerEntity user, MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world, Vec3d pos, ItemStack stack) {
+    public Optional<Mob> spawnBaby(Player user, Mob entity, EntityType<? extends Mob> entityType, ServerLevel world, Vec3 pos, ItemStack stack) {
         Optional<EntityItemComponent> entityBehavior = stack.itematic$getBehavior(ItemComponentTypes.ENTITY);
         if (entityBehavior.isEmpty()) {
             return Optional.empty();
@@ -44,7 +43,7 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
             return Optional.empty();
         }
 
-        MobEntity child = this.createEntity(entity, entityType, world);
+        Mob child = this.createEntity(entity, entityType, world);
         if (child == null) {
             return Optional.empty();
         }
@@ -53,22 +52,22 @@ public class SpawnEggItemComponent implements ItemComponent<SpawnEggItemComponen
             return Optional.empty();
         }
 
-        child.refreshPositionAfterTeleport(pos);
-        Text customName = stack.get(DataComponentTypes.CUSTOM_NAME);
+        child.snapTo(pos);
+        Component customName = stack.get(DataComponents.CUSTOM_NAME);
         if (customName != null) {
             child.setCustomName(customName);
         }
 
-        world.spawnEntityAndPassengers(child);
-        stack.decrementUnlessCreative(1, user);
+        world.addFreshEntityWithPassengers(child);
+        stack.consume(1, user);
         return Optional.of(child);
     }
 
-    private MobEntity createEntity(MobEntity entity, EntityType<? extends MobEntity> entityType, ServerWorld world) {
-        if (entity instanceof PassiveEntity passiveEntity) {
-            return passiveEntity.createChild(world, passiveEntity);
+    private Mob createEntity(Mob entity, EntityType<? extends Mob> entityType, ServerLevel world) {
+        if (entity instanceof AgeableMob passiveEntity) {
+            return passiveEntity.getBreedOffspring(world, passiveEntity);
         }
 
-        return entityType.create(world, SpawnReason.SPAWN_ITEM_USE);
+        return entityType.create(world, EntitySpawnReason.SPAWN_ITEM_USE);
     }
 }

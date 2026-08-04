@@ -1,31 +1,31 @@
 package net.errorcraft.itematic.mixin.screen;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.CartographyTableScreenHandler;
+import net.minecraft.world.inventory.CartographyTableMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(CartographyTableScreenHandler.class)
+@Mixin(CartographyTableMenu.class)
 public class CartographyTableScreenHandlerExtender {
     @Redirect(
         method = {
             "method_17382",
-            "quickMove"
+            "quickMoveStack"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;GLASS_PANE:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;GLASS_PANE:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -37,17 +37,17 @@ public class CartographyTableScreenHandlerExtender {
     @Redirect(
         method = {
             "method_17382",
-            "quickMove"
+            "quickMoveStack"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;PAPER:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;PAPER:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -59,17 +59,17 @@ public class CartographyTableScreenHandlerExtender {
     @Redirect(
         method = {
             "method_17382",
-            "quickMove"
+            "quickMoveStack"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;MAP:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;MAP:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -78,13 +78,13 @@ public class CartographyTableScreenHandlerExtender {
         return instance.itematic$isOf(ItemKeys.MAP);
     }
 
-    @Mixin(targets = "net/minecraft/screen/CartographyTableScreenHandler$4")
+    @Mixin(targets = "net/minecraft/world/inventory/CartographyTableMenu$4")
     public static class AdditionSlotExtender {
         @Redirect(
-            method = "canInsert",
+            method = "mayPlace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
                 ordinal = 0
             )
         )
@@ -93,16 +93,16 @@ public class CartographyTableScreenHandlerExtender {
         }
 
         @Redirect(
-            method = "canInsert",
+            method = "mayPlace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
                 ordinal = 0
             ),
             slice = @Slice(
                 from = @At(
                     value = "FIELD",
-                    target = "Lnet/minecraft/item/Items;GLASS_PANE:Lnet/minecraft/item/Item;",
+                    target = "Lnet/minecraft/world/item/Items;GLASS_PANE:Lnet/minecraft/world/item/Item;",
                     opcode = Opcodes.GETSTATIC
                 )
             )
@@ -112,16 +112,16 @@ public class CartographyTableScreenHandlerExtender {
         }
 
         @Redirect(
-            method = "canInsert",
+            method = "mayPlace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
                 ordinal = 0
             ),
             slice = @Slice(
                 from = @At(
                     value = "FIELD",
-                    target = "Lnet/minecraft/item/Items;MAP:Lnet/minecraft/item/Item;",
+                    target = "Lnet/minecraft/world/item/Items;MAP:Lnet/minecraft/world/item/Item;",
                     opcode = Opcodes.GETSTATIC
                 )
             )

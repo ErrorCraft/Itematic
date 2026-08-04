@@ -11,45 +11,44 @@ import net.errorcraft.itematic.mixin.component.type.ConsumableComponentAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ConsumableComponent;
-import net.minecraft.component.type.FoodComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) implements ItemComponent<ConsumableItemComponent> {
+public record ConsumableItemComponent(boolean hasConsumeParticles, Holder<SoundEvent> sound) implements ItemComponent<ConsumableItemComponent> {
     public static final Codec<ConsumableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.BOOL.optionalFieldOf("has_consume_particles", true).forGetter(ConsumableItemComponent::hasConsumeParticles),
-        SoundEvent.ENTRY_CODEC.optionalFieldOf("sound", SoundEvents.ENTITY_GENERIC_EAT).forGetter(ConsumableItemComponent::sound)
+        SoundEvent.CODEC.optionalFieldOf("sound", SoundEvents.GENERIC_EAT).forGetter(ConsumableItemComponent::sound)
     ).apply(instance, ConsumableItemComponent::new));
     private static final float CONSUME_EFFECTS_THRESHOLD = ConsumableComponentAccessor.consumeEffectsThreshold();
 
-    public static ConsumableItemComponent of(boolean hasConsumeParticles, RegistryEntry<SoundEvent> sound) {
+    public static ConsumableItemComponent of(boolean hasConsumeParticles, Holder<SoundEvent> sound) {
         return new ConsumableItemComponent(hasConsumeParticles, sound);
     }
 
-    public static Builder builder(ConsumableComponent consumable) {
-        return new Builder(consumable.getConsumeTicks())
-            .useAnimation(consumable.useAction())
+    public static Builder builder(Consumable consumable) {
+        return new Builder(consumable.consumeTicks())
+            .useAnimation(consumable.animation())
             .consumeSound(consumable.sound())
             .hasConsumeParticles(consumable.hasConsumeParticles());
     }
@@ -65,42 +64,42 @@ public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry
     }
 
     @Override
-    public void using(ItemStack stack, World world, LivingEntity user, int usedTicks, int remainingUseTicks) {
-        ConsumableComponent consumable = stack.get(DataComponentTypes.CONSUMABLE);
+    public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+        Consumable consumable = stack.get(DataComponents.CONSUMABLE);
         if (consumable != null && shouldSpawnParticlesAndPlaySounds(usedTicks, remainingUseTicks)) {
-            consumable.spawnParticlesAndPlaySound(user.getRandom(), user, stack, 5);
+            consumable.emitParticlesAndSounds(user.getRandom(), user, stack, 5);
         }
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.CONSUMABLE, new ConsumableComponent(0.0f, UseAction.NONE, this.sound, this.hasConsumeParticles, List.of()));
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.CONSUMABLE, new Consumable(0.0f, ItemUseAnimation.NONE, this.sound, this.hasConsumeParticles, List.of()));
     }
 
-    public void consume(LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger, World world, Hand hand) {
-        if (world instanceof ServerWorld serverWorld) {
+    public void consume(LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger, Level world, InteractionHand hand) {
+        if (world instanceof ServerLevel serverWorld) {
             ActionContext context = ActionContext.builder(serverWorld)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParameters.THIS_ENTITY, user)
-                .add(LootContextParameters.ORIGIN, user.getEntityPos())
-                .add(LootContextParameters.TOOL, stack)
+                .add(LootContextParams.THIS_ENTITY, user)
+                .add(LootContextParams.ORIGIN, user.position())
+                .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextParameters.HAND, hand)
                 .build();
             stack.itematic$invokeEvent(ItemEvents.CONSUME_ITEM, context);
         }
 
-        stack.decrementUnlessCreative(1, user);
-        if (user instanceof PlayerEntity player) {
+        stack.consume(1, user);
+        if (user instanceof Player player) {
             this.consumeForPlayer(player, stack);
         }
     }
 
-    private void consumeForPlayer(PlayerEntity player, ItemStack stack) {
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            Criteria.CONSUME_ITEM.trigger(serverPlayer, stack);
+    private void consumeForPlayer(Player player, ItemStack stack) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
         }
 
-        player.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+        player.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
     }
 
     private static boolean shouldSpawnParticlesAndPlaySounds(int usedTicks, int remainingUseTicks) {
@@ -110,11 +109,11 @@ public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry
 
     public static class Builder {
         private final int useDuration;
-        private UseAction useAnimation;
+        private ItemUseAnimation useAnimation;
         private FoodItemComponent food;
-        private RegistryEntry<Item> remainder;
+        private Holder<Item> remainder;
         private boolean hasConsumeParticles = true;
-        private RegistryEntry<SoundEvent> consumeSound = SoundEvents.ENTITY_GENERIC_EAT;
+        private Holder<SoundEvent> consumeSound = SoundEvents.GENERIC_EAT;
 
         private Builder(int useDuration) {
             this.useDuration = useDuration;
@@ -136,17 +135,17 @@ public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry
             return behavior.toArray(ItemComponent<?>[]::new);
         }
 
-        public Builder food(FoodComponent food) {
+        public Builder food(FoodProperties food) {
             this.food = FoodItemComponent.of(food);
             return this;
         }
 
-        public Builder useAnimation(UseAction animation) {
+        public Builder useAnimation(ItemUseAnimation animation) {
             this.useAnimation = animation;
             return this;
         }
 
-        public Builder remainder(RegistryEntry<Item> resultItem) {
+        public Builder remainder(Holder<Item> resultItem) {
             this.remainder = Objects.requireNonNull(resultItem);
             return this;
         }
@@ -156,7 +155,7 @@ public record ConsumableItemComponent(boolean hasConsumeParticles, RegistryEntry
             return this;
         }
 
-        public Builder consumeSound(RegistryEntry<SoundEvent> consumeSound) {
+        public Builder consumeSound(Holder<SoundEvent> consumeSound) {
             this.consumeSound = Objects.requireNonNull(consumeSound);
             return this;
         }

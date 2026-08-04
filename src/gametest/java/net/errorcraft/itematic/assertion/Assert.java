@@ -1,19 +1,18 @@
 package net.errorcraft.itematic.assertion;
 
 import net.errorcraft.itematic.util.TestUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.test.TestContext;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -21,19 +20,19 @@ import java.util.function.Supplier;
 public class Assert {
     private Assert() {}
 
-    public static void isTrue(TestContext helper, boolean condition, Supplier<String> message) {
+    public static void isTrue(GameTestHelper helper, boolean condition, Supplier<String> message) {
         if (!condition) {
-            throw helper.createError(Text.literal(message.get()));
+            throw helper.assertionException(Component.literal(message.get()));
         }
     }
 
-    public static void isFalse(TestContext helper, boolean condition, Supplier<String> message) {
+    public static void isFalse(GameTestHelper helper, boolean condition, Supplier<String> message) {
         isTrue(helper, !condition, message);
     }
 
-    public static <T> T isNotNull(TestContext helper, T object, String name) {
+    public static <T> T isNotNull(GameTestHelper helper, T object, String name) {
         if (object == null) {
-            throw helper.createError(
+            throw helper.assertionException(
                 "test.error.expected_not_null",
                 name
             );
@@ -42,12 +41,12 @@ public class Assert {
         return object;
     }
 
-    public static <T> void areEqual(TestContext helper, T value, T expected, String type) {
+    public static <T> void areEqual(GameTestHelper helper, T value, T expected, String type) {
         if (Objects.equals(value, expected)) {
             return;
         }
 
-        throw helper.createError(
+        throw helper.assertionException(
             "test.error.expected_type",
             type,
             value,
@@ -55,62 +54,62 @@ public class Assert {
         );
     }
 
-    public static <T, U extends T> void isInstance(TestContext helper, T value, Class<U> expectedClass, Supplier<String> message, Consumer<U> assertion) {
+    public static <T, U extends T> void isInstance(GameTestHelper helper, T value, Class<U> expectedClass, Supplier<String> message, Consumer<U> assertion) {
         if (expectedClass.isInstance(value)) {
             assertion.accept(expectedClass.cast(value));
             return;
         }
 
-        throw helper.createError(Text.literal(message.get()));
+        throw helper.assertionException(Component.literal(message.get()));
     }
 
-    public static IntsAssert ints(TestContext helper, int value, String name) {
+    public static IntsAssert ints(GameTestHelper helper, int value, String name) {
         return new IntsAssert(helper, value, name);
     }
 
-    public static FloatsAssert floats(TestContext helper, float value, String name) {
+    public static FloatsAssert floats(GameTestHelper helper, float value, String name) {
         return new FloatsAssert(helper, value, name);
     }
 
-    public static DoublesAssert doubles(TestContext helper, double value, String name) {
+    public static DoublesAssert doubles(GameTestHelper helper, double value, String name) {
         return new DoublesAssert(helper, value, name);
     }
 
-    public static BlockStateAssert blockState(TestContext helper, BlockPos pos) {
-        BlockState state = helper.getWorld().getBlockState(helper.getAbsolutePos(pos));
+    public static BlockStateAssert blockState(GameTestHelper helper, BlockPos pos) {
+        BlockState state = helper.getLevel().getBlockState(helper.absolutePos(pos));
         return new BlockStateAssert(helper, state);
     }
 
-    public static <T extends BlockEntity> void blockEntity(TestContext helper, BlockPos pos, BlockEntityType<T> type, Consumer<T> assertion) {
+    public static <T extends BlockEntity> void blockEntity(GameTestHelper helper, BlockPos pos, BlockEntityType<T> type, Consumer<T> assertion) {
         assertion.accept(TestUtil.getBlockEntity(helper, pos, type));
     }
 
-    public static FluidStateAssert fluidState(TestContext helper, BlockPos pos) {
-        FluidState state = helper.getWorld().getFluidState(helper.getAbsolutePos(pos));
+    public static FluidStateAssert fluidState(GameTestHelper helper, BlockPos pos) {
+        FluidState state = helper.getLevel().getFluidState(helper.absolutePos(pos));
         return new FluidStateAssert(helper, state);
     }
 
-    public static <E extends Entity> EntityTypeAssert<E> entityType(TestContext helper, EntityType<E> type) {
+    public static <E extends Entity> EntityTypeAssert<E> entityType(GameTestHelper helper, EntityType<E> type) {
         return new EntityTypeAssert<>(helper, type);
     }
 
-    public static <E extends Entity> EntityAssert<E> entity(TestContext helper, E entity) {
+    public static <E extends Entity> EntityAssert<E> entity(GameTestHelper helper, E entity) {
         return new EntityAssert<>(helper, entity);
     }
 
-    public static <E extends LivingEntity> LivingEntityAssert<E> livingEntity(TestContext helper, E entity) {
+    public static <E extends LivingEntity> LivingEntityAssert<E> livingEntity(GameTestHelper helper, E entity) {
         return new LivingEntityAssert<>(helper, entity);
     }
 
-    public static ItemEntityAssert itemEntity(TestContext helper, ItemEntity entity) {
+    public static ItemEntityAssert itemEntity(GameTestHelper helper, ItemEntity entity) {
         return new ItemEntityAssert(helper, entity);
     }
 
-    public static ItemStackAssert itemStack(TestContext helper, ItemStack stack) {
+    public static ItemStackAssert itemStack(GameTestHelper helper, ItemStack stack) {
         return new ItemStackAssert(helper, stack);
     }
 
-    public static ItemStackAssert itemStack(TestContext helper, ItemStack stack, String name) {
+    public static ItemStackAssert itemStack(GameTestHelper helper, ItemStack stack, String name) {
         return new ItemStackAssert(helper, stack, name);
     }
 }

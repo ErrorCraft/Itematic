@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.block;
 
-import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import org.jetbrains.annotations.Nullable;
 
 public class ShapeContexts {
     private ShapeContexts() {}
 
-    public static ShapeContext ofNullable(@Nullable Entity entity) {
+    public static CollisionContext ofNullable(@Nullable Entity entity) {
         if (entity == null) {
-            return ShapeContext.absent();
+            return CollisionContext.empty();
         }
 
-        return ShapeContext.of(entity);
+        return CollisionContext.of(entity);
     }
 }

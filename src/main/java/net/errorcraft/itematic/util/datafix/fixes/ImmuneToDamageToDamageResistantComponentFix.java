@@ -2,11 +2,11 @@ package net.errorcraft.itematic.util.datafix.fixes;
 
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.serialization.Dynamic;
-import net.minecraft.datafixer.fix.ComponentFix;
+import net.minecraft.util.datafix.fixes.DataComponentRemainderFix;
 
 import java.util.Optional;
 
-public class ImmuneToDamageToDamageResistantComponentFix extends ComponentFix {
+public class ImmuneToDamageToDamageResistantComponentFix extends DataComponentRemainderFix {
     public ImmuneToDamageToDamageResistantComponentFix(Schema outputSchema) {
         super(outputSchema, "ImmuneToDamageToDamageResistantComponentFix", "minecraft:immune_to_damage", "minecraft:damage_resistant");
     }

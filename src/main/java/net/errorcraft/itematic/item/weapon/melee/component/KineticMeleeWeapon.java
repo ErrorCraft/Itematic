@@ -2,38 +2,38 @@ package net.errorcraft.itematic.item.weapon.melee.component;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponWithDataComponents;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.KineticWeaponComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.KineticWeapon;
+import net.minecraft.world.level.Level;
 
-public record KineticMeleeWeapon(KineticWeaponComponent kineticWeapon) implements MeleeWeaponWithDataComponents {
-    public static final Codec<KineticMeleeWeapon> CODEC = KineticWeaponComponent.CODEC.xmap(
+public record KineticMeleeWeapon(KineticWeapon kineticWeapon) implements MeleeWeaponWithDataComponents {
+    public static final Codec<KineticMeleeWeapon> CODEC = KineticWeapon.CODEC.xmap(
         KineticMeleeWeapon::new,
         KineticMeleeWeapon::kineticWeapon
     );
 
-    public static KineticMeleeWeapon of(KineticWeaponComponent kineticWeapon) {
+    public static KineticMeleeWeapon of(KineticWeapon kineticWeapon) {
         return new KineticMeleeWeapon(kineticWeapon);
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.KINETIC_WEAPON, this.kineticWeapon);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.KINETIC_WEAPON, this.kineticWeapon);
     }
 
-    public void hold(ItemStack stack, World world, LivingEntity user, int usedTicks) {
-        if (world.isClient()) {
+    public void hold(ItemStack stack, Level world, LivingEntity user, int usedTicks) {
+        if (world.isClientSide()) {
             return;
         }
 
-        KineticWeaponComponent kineticWeapon = stack.get(DataComponentTypes.KINETIC_WEAPON);
+        KineticWeapon kineticWeapon = stack.get(DataComponents.KINETIC_WEAPON);
         if (kineticWeapon == null) {
             return;
         }
 
-        kineticWeapon.usageTick(stack, usedTicks, user, user.getActiveHand().getEquipmentSlot());
+        kineticWeapon.damageEntities(stack, usedTicks, user, user.getUsedItemHand().asEquipmentSlot());
     }
 }

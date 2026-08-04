@@ -3,882 +3,930 @@ package net.errorcraft.itematic.gametest.entity;
 import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.mob.*;
-import net.minecraft.entity.passive.*;
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.entity.vehicle.ChestBoatEntity;
-import net.minecraft.entity.vehicle.ChestRaftEntity;
-import net.minecraft.entity.vehicle.RaftEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.entity.animal.armadillo.Armadillo;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.animal.bee.Bee;
+import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.animal.chicken.Chicken;
+import net.minecraft.world.entity.animal.cow.Cow;
+import net.minecraft.world.entity.animal.cow.MushroomCow;
+import net.minecraft.world.entity.animal.dolphin.Dolphin;
+import net.minecraft.world.entity.animal.equine.*;
+import net.minecraft.world.entity.animal.feline.Cat;
+import net.minecraft.world.entity.animal.feline.Ocelot;
+import net.minecraft.world.entity.animal.fish.Cod;
+import net.minecraft.world.entity.animal.fish.Pufferfish;
+import net.minecraft.world.entity.animal.fish.Salmon;
+import net.minecraft.world.entity.animal.fish.TropicalFish;
+import net.minecraft.world.entity.animal.fox.Fox;
+import net.minecraft.world.entity.animal.frog.Frog;
+import net.minecraft.world.entity.animal.frog.Tadpole;
+import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.animal.golem.IronGolem;
+import net.minecraft.world.entity.animal.golem.SnowGolem;
+import net.minecraft.world.entity.animal.panda.Panda;
+import net.minecraft.world.entity.animal.parrot.Parrot;
+import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.entity.animal.polarbear.PolarBear;
+import net.minecraft.world.entity.animal.rabbit.Rabbit;
+import net.minecraft.world.entity.animal.sheep.Sheep;
+import net.minecraft.world.entity.animal.sniffer.Sniffer;
+import net.minecraft.world.entity.animal.squid.GlowSquid;
+import net.minecraft.world.entity.animal.squid.Squid;
+import net.minecraft.world.entity.animal.turtle.Turtle;
+import net.minecraft.world.entity.animal.wolf.Wolf;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.entity.monster.illager.Evoker;
+import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.monster.illager.Vindicator;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
+import net.minecraft.world.entity.monster.skeleton.Stray;
+import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
+import net.minecraft.world.entity.monster.spider.CaveSpider;
+import net.minecraft.world.entity.monster.spider.Spider;
+import net.minecraft.world.entity.monster.warden.Warden;
+import net.minecraft.world.entity.monster.zombie.*;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
+import net.minecraft.world.entity.vehicle.boat.Boat;
+import net.minecraft.world.entity.vehicle.boat.ChestBoat;
+import net.minecraft.world.entity.vehicle.boat.ChestRaft;
+import net.minecraft.world.entity.vehicle.boat.Raft;
+import net.minecraft.world.item.ItemStack;
 
 public class PickEntityTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnArmadilloGivesArmadilloSpawnEggItemStack(TestContext context) {
-        ArmadilloEntity armadillo = context.spawnEntity(EntityType.ARMADILLO, SPAWN_POSITION);
-        ItemStack stack = armadillo.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnArmadilloGivesArmadilloSpawnEggItemStack(GameTestHelper context) {
+        Armadillo armadillo = context.spawn(EntityType.ARMADILLO, SPAWN_POSITION);
+        ItemStack stack = armadillo.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ARMADILLO_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnAllayGivesAllaySpawnEggItemStack(TestContext context) {
-        AllayEntity allay = context.spawnEntity(EntityType.ALLAY, SPAWN_POSITION);
-        ItemStack stack = allay.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnAllayGivesAllaySpawnEggItemStack(GameTestHelper context) {
+        Allay allay = context.spawn(EntityType.ALLAY, SPAWN_POSITION);
+        ItemStack stack = allay.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ALLAY_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnAxolotlGivesAxolotlSpawnEggItemStack(TestContext context) {
-        AxolotlEntity axolotl = context.spawnEntity(EntityType.AXOLOTL, SPAWN_POSITION);
-        ItemStack stack = axolotl.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnAxolotlGivesAxolotlSpawnEggItemStack(GameTestHelper context) {
+        Axolotl axolotl = context.spawn(EntityType.AXOLOTL, SPAWN_POSITION);
+        ItemStack stack = axolotl.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.AXOLOTL_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnBatGivesBatSpawnEggItemStack(TestContext context) {
-        BatEntity bat = context.spawnEntity(EntityType.BAT, SPAWN_POSITION);
-        ItemStack stack = bat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnBatGivesBatSpawnEggItemStack(GameTestHelper context) {
+        Bat bat = context.spawn(EntityType.BAT, SPAWN_POSITION);
+        ItemStack stack = bat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.BAT_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnBeeGivesBeeSpawnEggItemStack(TestContext context) {
-        BeeEntity bee = context.spawnEntity(EntityType.BEE, SPAWN_POSITION);
-        ItemStack stack = bee.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnBeeGivesBeeSpawnEggItemStack(GameTestHelper context) {
+        Bee bee = context.spawn(EntityType.BEE, SPAWN_POSITION);
+        ItemStack stack = bee.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.BEE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnBlazeGivesBlazeSpawnEggItemStack(TestContext context) {
-        BlazeEntity blaze = context.spawnEntity(EntityType.BLAZE, SPAWN_POSITION);
-        ItemStack stack = blaze.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnBlazeGivesBlazeSpawnEggItemStack(GameTestHelper context) {
+        Blaze blaze = context.spawn(EntityType.BLAZE, SPAWN_POSITION);
+        ItemStack stack = blaze.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.BLAZE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnCatGivesCatSpawnEggItemStack(TestContext context) {
-        CatEntity cat = context.spawnEntity(EntityType.CAT, SPAWN_POSITION);
-        ItemStack stack = cat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnCatGivesCatSpawnEggItemStack(GameTestHelper context) {
+        Cat cat = context.spawn(EntityType.CAT, SPAWN_POSITION);
+        ItemStack stack = cat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.CAT_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnCamelGivesCamelSpawnEggItemStack(TestContext context) {
-        CamelEntity camel = context.spawnEntity(EntityType.CAMEL, SPAWN_POSITION);
-        ItemStack stack = camel.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnCamelGivesCamelSpawnEggItemStack(GameTestHelper context) {
+        Camel camel = context.spawn(EntityType.CAMEL, SPAWN_POSITION);
+        ItemStack stack = camel.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.CAMEL_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnCaveSpiderGivesCaveSpiderSpawnEggItemStack(TestContext context) {
-        CaveSpiderEntity caveSpider = context.spawnEntity(EntityType.CAVE_SPIDER, SPAWN_POSITION);
-        ItemStack stack = caveSpider.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnCaveSpiderGivesCaveSpiderSpawnEggItemStack(GameTestHelper context) {
+        CaveSpider caveSpider = context.spawn(EntityType.CAVE_SPIDER, SPAWN_POSITION);
+        ItemStack stack = caveSpider.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.CAVE_SPIDER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnChickenGivesChickenSpawnEggItemStack(TestContext context) {
-        ChickenEntity chicken = context.spawnEntity(EntityType.CHICKEN, SPAWN_POSITION);
-        ItemStack stack = chicken.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnChickenGivesChickenSpawnEggItemStack(GameTestHelper context) {
+        Chicken chicken = context.spawn(EntityType.CHICKEN, SPAWN_POSITION);
+        ItemStack stack = chicken.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.CHICKEN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnCodGivesCodSpawnEggItemStack(TestContext context) {
-        CodEntity cod = context.spawnEntity(EntityType.COD, SPAWN_POSITION);
-        ItemStack stack = cod.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnCodGivesCodSpawnEggItemStack(GameTestHelper context) {
+        Cod cod = context.spawn(EntityType.COD, SPAWN_POSITION);
+        ItemStack stack = cod.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.COD_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnCowGivesCowSpawnEggItemStack(TestContext context) {
-        CowEntity cow = context.spawnEntity(EntityType.COW, SPAWN_POSITION);
-        ItemStack stack = cow.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnCowGivesCowSpawnEggItemStack(GameTestHelper context) {
+        Cow cow = context.spawn(EntityType.COW, SPAWN_POSITION);
+        ItemStack stack = cow.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.COW_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnCreeperGivesCreeperSpawnEggItemStack(TestContext context) {
-        CreeperEntity creeper = context.spawnEntity(EntityType.CREEPER, SPAWN_POSITION);
-        ItemStack stack = creeper.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnCreeperGivesCreeperSpawnEggItemStack(GameTestHelper context) {
+        Creeper creeper = context.spawn(EntityType.CREEPER, SPAWN_POSITION);
+        ItemStack stack = creeper.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.CREEPER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnDolphinGivesDolphinSpawnEggItemStack(TestContext context) {
-        DolphinEntity dolphin = context.spawnEntity(EntityType.DOLPHIN, SPAWN_POSITION);
-        ItemStack stack = dolphin.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnDolphinGivesDolphinSpawnEggItemStack(GameTestHelper context) {
+        Dolphin dolphin = context.spawn(EntityType.DOLPHIN, SPAWN_POSITION);
+        ItemStack stack = dolphin.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.DOLPHIN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnDonkeyGivesDonkeySpawnEggItemStack(TestContext context) {
-        DonkeyEntity donkey = context.spawnEntity(EntityType.DONKEY, SPAWN_POSITION);
-        ItemStack stack = donkey.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnDonkeyGivesDonkeySpawnEggItemStack(GameTestHelper context) {
+        Donkey donkey = context.spawn(EntityType.DONKEY, SPAWN_POSITION);
+        ItemStack stack = donkey.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.DONKEY_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnDrownedGivesDrownedSpawnEggItemStack(TestContext context) {
-        DrownedEntity drowned = context.spawnEntity(EntityType.DROWNED, SPAWN_POSITION);
-        ItemStack stack = drowned.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnDrownedGivesDrownedSpawnEggItemStack(GameTestHelper context) {
+        Drowned drowned = context.spawn(EntityType.DROWNED, SPAWN_POSITION);
+        ItemStack stack = drowned.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.DROWNED_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnElderGuardianGivesElderGuardianSpawnEggItemStack(TestContext context) {
-        ElderGuardianEntity elderGuardian = context.spawnEntity(EntityType.ELDER_GUARDIAN, SPAWN_POSITION);
-        ItemStack stack = elderGuardian.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnElderGuardianGivesElderGuardianSpawnEggItemStack(GameTestHelper context) {
+        ElderGuardian elderGuardian = context.spawn(EntityType.ELDER_GUARDIAN, SPAWN_POSITION);
+        ItemStack stack = elderGuardian.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnEnderDragonGivesEnderDragonSpawnEggItemStack(TestContext context) {
-        EnderDragonEntity enderDragon = context.spawnEntity(EntityType.ENDER_DRAGON, SPAWN_POSITION);
-        ItemStack stack = enderDragon.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnEnderDragonGivesEnderDragonSpawnEggItemStack(GameTestHelper context) {
+        EnderDragon enderDragon = context.spawn(EntityType.ENDER_DRAGON, SPAWN_POSITION);
+        ItemStack stack = enderDragon.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ENDER_DRAGON_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnEndermanGivesEndermanSpawnEggItemStack(TestContext context) {
-        EndermanEntity enderman = context.spawnEntity(EntityType.ENDERMAN, SPAWN_POSITION);
-        ItemStack stack = enderman.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnEndermanGivesEndermanSpawnEggItemStack(GameTestHelper context) {
+        EnderMan enderman = context.spawn(EntityType.ENDERMAN, SPAWN_POSITION);
+        ItemStack stack = enderman.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ENDERMAN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnEndermiteGivesEndermiteSpawnEggItemStack(TestContext context) {
-        EndermiteEntity endermite = context.spawnEntity(EntityType.ENDERMITE, SPAWN_POSITION);
-        ItemStack stack = endermite.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnEndermiteGivesEndermiteSpawnEggItemStack(GameTestHelper context) {
+        Endermite endermite = context.spawn(EntityType.ENDERMITE, SPAWN_POSITION);
+        ItemStack stack = endermite.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ENDERMITE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnEvokerGivesEvokerSpawnEggItemStack(TestContext context) {
-        EvokerEntity evoker = context.spawnEntity(EntityType.EVOKER, SPAWN_POSITION);
-        ItemStack stack = evoker.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnEvokerGivesEvokerSpawnEggItemStack(GameTestHelper context) {
+        Evoker evoker = context.spawn(EntityType.EVOKER, SPAWN_POSITION);
+        ItemStack stack = evoker.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.EVOKER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnFoxGivesFoxSpawnEggItemStack(TestContext context) {
-        FoxEntity fox = context.spawnEntity(EntityType.FOX, SPAWN_POSITION);
-        ItemStack stack = fox.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnFoxGivesFoxSpawnEggItemStack(GameTestHelper context) {
+        Fox fox = context.spawn(EntityType.FOX, SPAWN_POSITION);
+        ItemStack stack = fox.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.FOX_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnFrogGivesFrogSpawnEggItemStack(TestContext context) {
-        FrogEntity frog = context.spawnEntity(EntityType.FROG, SPAWN_POSITION);
-        ItemStack stack = frog.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnFrogGivesFrogSpawnEggItemStack(GameTestHelper context) {
+        Frog frog = context.spawn(EntityType.FROG, SPAWN_POSITION);
+        ItemStack stack = frog.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.FROG_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnGhastGivesGhastSpawnEggItemStack(TestContext context) {
-        GhastEntity ghast = context.spawnEntity(EntityType.GHAST, SPAWN_POSITION);
-        ItemStack stack = ghast.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnGhastGivesGhastSpawnEggItemStack(GameTestHelper context) {
+        Ghast ghast = context.spawn(EntityType.GHAST, SPAWN_POSITION);
+        ItemStack stack = ghast.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.GHAST_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnGlowSquidGivesGlowSquidSpawnEggItemStack(TestContext context) {
-        GlowSquidEntity glowSquid = context.spawnEntity(EntityType.GLOW_SQUID, SPAWN_POSITION);
-        ItemStack stack = glowSquid.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnGlowSquidGivesGlowSquidSpawnEggItemStack(GameTestHelper context) {
+        GlowSquid glowSquid = context.spawn(EntityType.GLOW_SQUID, SPAWN_POSITION);
+        ItemStack stack = glowSquid.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.GLOW_SQUID_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnGoatGivesGoatSpawnEggItemStack(TestContext context) {
-        GoatEntity goat = context.spawnEntity(EntityType.GOAT, SPAWN_POSITION);
-        ItemStack stack = goat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnGoatGivesGoatSpawnEggItemStack(GameTestHelper context) {
+        Goat goat = context.spawn(EntityType.GOAT, SPAWN_POSITION);
+        ItemStack stack = goat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.GOAT_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnGuardianGivesGuardianSpawnEggItemStack(TestContext context) {
-        GuardianEntity guardian = context.spawnEntity(EntityType.GUARDIAN, SPAWN_POSITION);
-        ItemStack stack = guardian.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnGuardianGivesGuardianSpawnEggItemStack(GameTestHelper context) {
+        Guardian guardian = context.spawn(EntityType.GUARDIAN, SPAWN_POSITION);
+        ItemStack stack = guardian.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.GUARDIAN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnHoglinGivesHoglinSpawnEggItemStack(TestContext context) {
-        HoglinEntity hoglin = context.spawnEntity(EntityType.HOGLIN, SPAWN_POSITION);
-        ItemStack stack = hoglin.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnHoglinGivesHoglinSpawnEggItemStack(GameTestHelper context) {
+        Hoglin hoglin = context.spawn(EntityType.HOGLIN, SPAWN_POSITION);
+        ItemStack stack = hoglin.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.HOGLIN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnHorseGivesHorseSpawnEggItemStack(TestContext context) {
-        HorseEntity horse = context.spawnEntity(EntityType.HORSE, SPAWN_POSITION);
-        ItemStack stack = horse.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnHorseGivesHorseSpawnEggItemStack(GameTestHelper context) {
+        Horse horse = context.spawn(EntityType.HORSE, SPAWN_POSITION);
+        ItemStack stack = horse.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.HORSE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnHuskGivesHuskSpawnEggItemStack(TestContext context) {
-        HuskEntity husk = context.spawnEntity(EntityType.HUSK, SPAWN_POSITION);
-        ItemStack stack = husk.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnHuskGivesHuskSpawnEggItemStack(GameTestHelper context) {
+        Husk husk = context.spawn(EntityType.HUSK, SPAWN_POSITION);
+        ItemStack stack = husk.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.HUSK_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnIronGolemGivesIronGolemSpawnEggItemStack(TestContext context) {
-        IronGolemEntity ironGolem = context.spawnEntity(EntityType.IRON_GOLEM, SPAWN_POSITION);
-        ItemStack stack = ironGolem.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnIronGolemGivesIronGolemSpawnEggItemStack(GameTestHelper context) {
+        IronGolem ironGolem = context.spawn(EntityType.IRON_GOLEM, SPAWN_POSITION);
+        ItemStack stack = ironGolem.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.IRON_GOLEM_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnLlamaGivesLlamaSpawnEggItemStack(TestContext context) {
-        LlamaEntity llama = context.spawnEntity(EntityType.LLAMA, SPAWN_POSITION);
-        ItemStack stack = llama.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnLlamaGivesLlamaSpawnEggItemStack(GameTestHelper context) {
+        Llama llama = context.spawn(EntityType.LLAMA, SPAWN_POSITION);
+        ItemStack stack = llama.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.LLAMA_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnMagmaCubeGivesMagmaCubeSpawnEggItemStack(TestContext context) {
-        MagmaCubeEntity magmaCube = context.spawnEntity(EntityType.MAGMA_CUBE, SPAWN_POSITION);
-        ItemStack stack = magmaCube.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnMagmaCubeGivesMagmaCubeSpawnEggItemStack(GameTestHelper context) {
+        MagmaCube magmaCube = context.spawn(EntityType.MAGMA_CUBE, SPAWN_POSITION);
+        ItemStack stack = magmaCube.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.MAGMA_CUBE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnMooshroomGivesMooshroomSpawnEggItemStack(TestContext context) {
-        MooshroomEntity mooshroom = context.spawnEntity(EntityType.MOOSHROOM, SPAWN_POSITION);
-        ItemStack stack = mooshroom.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnMooshroomGivesMooshroomSpawnEggItemStack(GameTestHelper context) {
+        MushroomCow mooshroom = context.spawn(EntityType.MOOSHROOM, SPAWN_POSITION);
+        ItemStack stack = mooshroom.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.MOOSHROOM_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnMuleGivesMuleSpawnEggItemStack(TestContext context) {
-        MuleEntity mule = context.spawnEntity(EntityType.MULE, SPAWN_POSITION);
-        ItemStack stack = mule.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnMuleGivesMuleSpawnEggItemStack(GameTestHelper context) {
+        Mule mule = context.spawn(EntityType.MULE, SPAWN_POSITION);
+        ItemStack stack = mule.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.MULE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnOcelotGivesOcelotSpawnEggItemStack(TestContext context) {
-        OcelotEntity ocelot = context.spawnEntity(EntityType.OCELOT, SPAWN_POSITION);
-        ItemStack stack = ocelot.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnOcelotGivesOcelotSpawnEggItemStack(GameTestHelper context) {
+        Ocelot ocelot = context.spawn(EntityType.OCELOT, SPAWN_POSITION);
+        ItemStack stack = ocelot.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.OCELOT_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnPandaGivesPandaSpawnEggItemStack(TestContext context) {
-        PandaEntity panda = context.spawnEntity(EntityType.PANDA, SPAWN_POSITION);
-        ItemStack stack = panda.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnPandaGivesPandaSpawnEggItemStack(GameTestHelper context) {
+        Panda panda = context.spawn(EntityType.PANDA, SPAWN_POSITION);
+        ItemStack stack = panda.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.PANDA_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnParrotGivesParrotSpawnEggItemStack(TestContext context) {
-        ParrotEntity parrot = context.spawnEntity(EntityType.PARROT, SPAWN_POSITION);
-        ItemStack stack = parrot.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnParrotGivesParrotSpawnEggItemStack(GameTestHelper context) {
+        Parrot parrot = context.spawn(EntityType.PARROT, SPAWN_POSITION);
+        ItemStack stack = parrot.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.PARROT_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnPhantomGivesPhantomSpawnEggItemStack(TestContext context) {
-        PhantomEntity phantom = context.spawnEntity(EntityType.PHANTOM, SPAWN_POSITION);
-        ItemStack stack = phantom.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnPhantomGivesPhantomSpawnEggItemStack(GameTestHelper context) {
+        Phantom phantom = context.spawn(EntityType.PHANTOM, SPAWN_POSITION);
+        ItemStack stack = phantom.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.PHANTOM_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnPigGivesPigSpawnEggItemStack(TestContext context) {
-        PigEntity pig = context.spawnEntity(EntityType.PIG, SPAWN_POSITION);
-        ItemStack stack = pig.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnPigGivesPigSpawnEggItemStack(GameTestHelper context) {
+        Pig pig = context.spawn(EntityType.PIG, SPAWN_POSITION);
+        ItemStack stack = pig.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.PIG_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnPiglinGivesPiglinSpawnEggItemStack(TestContext context) {
-        PiglinEntity piglin = context.spawnEntity(EntityType.PIGLIN, SPAWN_POSITION);
-        ItemStack stack = piglin.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnPiglinGivesPiglinSpawnEggItemStack(GameTestHelper context) {
+        Piglin piglin = context.spawn(EntityType.PIGLIN, SPAWN_POSITION);
+        ItemStack stack = piglin.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.PIGLIN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnPiglinBruteGivesPiglinBruteSpawnEggItemStack(TestContext context) {
-        PiglinBruteEntity piglinBrute = context.spawnEntity(EntityType.PIGLIN_BRUTE, SPAWN_POSITION);
-        ItemStack stack = piglinBrute.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnPiglinBruteGivesPiglinBruteSpawnEggItemStack(GameTestHelper context) {
+        PiglinBrute piglinBrute = context.spawn(EntityType.PIGLIN_BRUTE, SPAWN_POSITION);
+        ItemStack stack = piglinBrute.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnPillagerGivesPillagerSpawnEggItemStack(TestContext context) {
-        PillagerEntity pillager = context.spawnEntity(EntityType.PILLAGER, SPAWN_POSITION);
-        ItemStack stack = pillager.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnPillagerGivesPillagerSpawnEggItemStack(GameTestHelper context) {
+        Pillager pillager = context.spawn(EntityType.PILLAGER, SPAWN_POSITION);
+        ItemStack stack = pillager.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.PILLAGER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnPolarBearGivesPolarBearSpawnEggItemStack(TestContext context) {
-        PolarBearEntity polarBear = context.spawnEntity(EntityType.POLAR_BEAR, SPAWN_POSITION);
-        ItemStack stack = polarBear.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnPolarBearGivesPolarBearSpawnEggItemStack(GameTestHelper context) {
+        PolarBear polarBear = context.spawn(EntityType.POLAR_BEAR, SPAWN_POSITION);
+        ItemStack stack = polarBear.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.POLAR_BEAR_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnPufferfishGivesPufferfishSpawnEggItemStack(TestContext context) {
-        PufferfishEntity pufferfish = context.spawnEntity(EntityType.PUFFERFISH, SPAWN_POSITION);
-        ItemStack stack = pufferfish.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnPufferfishGivesPufferfishSpawnEggItemStack(GameTestHelper context) {
+        Pufferfish pufferfish = context.spawn(EntityType.PUFFERFISH, SPAWN_POSITION);
+        ItemStack stack = pufferfish.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.PUFFERFISH_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnRabbitGivesRabbitSpawnEggItemStack(TestContext context) {
-        RabbitEntity rabbit = context.spawnEntity(EntityType.RABBIT, SPAWN_POSITION);
-        ItemStack stack = rabbit.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnRabbitGivesRabbitSpawnEggItemStack(GameTestHelper context) {
+        Rabbit rabbit = context.spawn(EntityType.RABBIT, SPAWN_POSITION);
+        ItemStack stack = rabbit.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.RABBIT_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnRavagerGivesRavagerSpawnEggItemStack(TestContext context) {
-        RavagerEntity ravager = context.spawnEntity(EntityType.RAVAGER, SPAWN_POSITION);
-        ItemStack stack = ravager.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnRavagerGivesRavagerSpawnEggItemStack(GameTestHelper context) {
+        Ravager ravager = context.spawn(EntityType.RAVAGER, SPAWN_POSITION);
+        ItemStack stack = ravager.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.RAVAGER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSalmonGivesSalmonSpawnEggItemStack(TestContext context) {
-        SalmonEntity salmon = context.spawnEntity(EntityType.SALMON, SPAWN_POSITION);
-        ItemStack stack = salmon.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSalmonGivesSalmonSpawnEggItemStack(GameTestHelper context) {
+        Salmon salmon = context.spawn(EntityType.SALMON, SPAWN_POSITION);
+        ItemStack stack = salmon.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SALMON_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSheepGivesSheepSpawnEggItemStack(TestContext context) {
-        SheepEntity sheep = context.spawnEntity(EntityType.SHEEP, SPAWN_POSITION);
-        ItemStack stack = sheep.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSheepGivesSheepSpawnEggItemStack(GameTestHelper context) {
+        Sheep sheep = context.spawn(EntityType.SHEEP, SPAWN_POSITION);
+        ItemStack stack = sheep.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SHEEP_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnShulkerGivesShulkerSpawnEggItemStack(TestContext context) {
-        ShulkerEntity shulker = context.spawnEntity(EntityType.SHULKER, SPAWN_POSITION);
-        ItemStack stack = shulker.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnShulkerGivesShulkerSpawnEggItemStack(GameTestHelper context) {
+        Shulker shulker = context.spawn(EntityType.SHULKER, SPAWN_POSITION);
+        ItemStack stack = shulker.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SHULKER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSilverfishGivesSilverfishSpawnEggItemStack(TestContext context) {
-        SilverfishEntity silverfish = context.spawnEntity(EntityType.SILVERFISH, SPAWN_POSITION);
-        ItemStack stack = silverfish.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSilverfishGivesSilverfishSpawnEggItemStack(GameTestHelper context) {
+        Silverfish silverfish = context.spawn(EntityType.SILVERFISH, SPAWN_POSITION);
+        ItemStack stack = silverfish.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SILVERFISH_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSkeletonGivesSkeletonSpawnEggItemStack(TestContext context) {
-        SkeletonEntity skeleton = context.spawnEntity(EntityType.SKELETON, SPAWN_POSITION);
-        ItemStack stack = skeleton.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSkeletonGivesSkeletonSpawnEggItemStack(GameTestHelper context) {
+        Skeleton skeleton = context.spawn(EntityType.SKELETON, SPAWN_POSITION);
+        ItemStack stack = skeleton.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SKELETON_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSkeletonHorseGivesSkeletonHorseSpawnEggItemStack(TestContext context) {
-        SkeletonHorseEntity skeletonHorse = context.spawnEntity(EntityType.SKELETON_HORSE, SPAWN_POSITION);
-        ItemStack stack = skeletonHorse.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSkeletonHorseGivesSkeletonHorseSpawnEggItemStack(GameTestHelper context) {
+        SkeletonHorse skeletonHorse = context.spawn(EntityType.SKELETON_HORSE, SPAWN_POSITION);
+        ItemStack stack = skeletonHorse.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SKELETON_HORSE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSlimeGivesSlimeSpawnEggItemStack(TestContext context) {
-        SlimeEntity slime = context.spawnEntity(EntityType.SLIME, SPAWN_POSITION);
-        ItemStack stack = slime.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSlimeGivesSlimeSpawnEggItemStack(GameTestHelper context) {
+        Slime slime = context.spawn(EntityType.SLIME, SPAWN_POSITION);
+        ItemStack stack = slime.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SLIME_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSnifferGivesSnifferSpawnEggItemStack(TestContext context) {
-        SnifferEntity sniffer = context.spawnEntity(EntityType.SNIFFER, SPAWN_POSITION);
-        ItemStack stack = sniffer.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSnifferGivesSnifferSpawnEggItemStack(GameTestHelper context) {
+        Sniffer sniffer = context.spawn(EntityType.SNIFFER, SPAWN_POSITION);
+        ItemStack stack = sniffer.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SNIFFER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSnowGolemGivesSnowGolemSpawnEggItemStack(TestContext context) {
-        SnowGolemEntity snowGolem = context.spawnEntity(EntityType.SNOW_GOLEM, SPAWN_POSITION);
-        ItemStack stack = snowGolem.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSnowGolemGivesSnowGolemSpawnEggItemStack(GameTestHelper context) {
+        SnowGolem snowGolem = context.spawn(EntityType.SNOW_GOLEM, SPAWN_POSITION);
+        ItemStack stack = snowGolem.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SNOW_GOLEM_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSpiderGivesSpiderSpawnEggItemStack(TestContext context) {
-        SpiderEntity spider = context.spawnEntity(EntityType.SPIDER, SPAWN_POSITION);
-        ItemStack stack = spider.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSpiderGivesSpiderSpawnEggItemStack(GameTestHelper context) {
+        Spider spider = context.spawn(EntityType.SPIDER, SPAWN_POSITION);
+        ItemStack stack = spider.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SPIDER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSquidGivesSquidSpawnEggItemStack(TestContext context) {
-        SquidEntity squid = context.spawnEntity(EntityType.SQUID, SPAWN_POSITION);
-        ItemStack stack = squid.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSquidGivesSquidSpawnEggItemStack(GameTestHelper context) {
+        Squid squid = context.spawn(EntityType.SQUID, SPAWN_POSITION);
+        ItemStack stack = squid.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SQUID_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnStrayGivesStraySpawnEggItemStack(TestContext context) {
-        StrayEntity stray = context.spawnEntity(EntityType.STRAY, SPAWN_POSITION);
-        ItemStack stack = stray.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnStrayGivesStraySpawnEggItemStack(GameTestHelper context) {
+        Stray stray = context.spawn(EntityType.STRAY, SPAWN_POSITION);
+        ItemStack stack = stray.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.STRAY_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnStriderGivesStriderSpawnEggItemStack(TestContext context) {
-        StriderEntity strider = context.spawnEntity(EntityType.STRIDER, SPAWN_POSITION);
-        ItemStack stack = strider.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnStriderGivesStriderSpawnEggItemStack(GameTestHelper context) {
+        Strider strider = context.spawn(EntityType.STRIDER, SPAWN_POSITION);
+        ItemStack stack = strider.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.STRIDER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnTadpoleGivesTadpoleSpawnEggItemStack(TestContext context) {
-        TadpoleEntity tadpole = context.spawnEntity(EntityType.TADPOLE, SPAWN_POSITION);
-        ItemStack stack = tadpole.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnTadpoleGivesTadpoleSpawnEggItemStack(GameTestHelper context) {
+        Tadpole tadpole = context.spawn(EntityType.TADPOLE, SPAWN_POSITION);
+        ItemStack stack = tadpole.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.TADPOLE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnTraderLlamaGivesTraderLlamaSpawnEggItemStack(TestContext context) {
-        TraderLlamaEntity traderLlama = context.spawnEntity(EntityType.TRADER_LLAMA, SPAWN_POSITION);
-        ItemStack stack = traderLlama.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnTraderLlamaGivesTraderLlamaSpawnEggItemStack(GameTestHelper context) {
+        TraderLlama traderLlama = context.spawn(EntityType.TRADER_LLAMA, SPAWN_POSITION);
+        ItemStack stack = traderLlama.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.TRADER_LLAMA_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnTropicalFishGivesTropicalFishSpawnEggItemStack(TestContext context) {
-        TropicalFishEntity tropicalFish = context.spawnEntity(EntityType.TROPICAL_FISH, SPAWN_POSITION);
-        ItemStack stack = tropicalFish.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnTropicalFishGivesTropicalFishSpawnEggItemStack(GameTestHelper context) {
+        TropicalFish tropicalFish = context.spawn(EntityType.TROPICAL_FISH, SPAWN_POSITION);
+        ItemStack stack = tropicalFish.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.TROPICAL_FISH_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnTurtleGivesTurtleSpawnEggItemStack(TestContext context) {
-        TurtleEntity turtle = context.spawnEntity(EntityType.TURTLE, SPAWN_POSITION);
-        ItemStack stack = turtle.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnTurtleGivesTurtleSpawnEggItemStack(GameTestHelper context) {
+        Turtle turtle = context.spawn(EntityType.TURTLE, SPAWN_POSITION);
+        ItemStack stack = turtle.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.TURTLE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnVexGivesVexSpawnEggItemStack(TestContext context) {
-        VexEntity vex = context.spawnEntity(EntityType.VEX, SPAWN_POSITION);
-        ItemStack stack = vex.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnVexGivesVexSpawnEggItemStack(GameTestHelper context) {
+        Vex vex = context.spawn(EntityType.VEX, SPAWN_POSITION);
+        ItemStack stack = vex.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.VEX_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnVillagerGivesVillagerSpawnEggItemStack(TestContext context) {
-        VillagerEntity villager = context.spawnEntity(EntityType.VILLAGER, SPAWN_POSITION);
-        ItemStack stack = villager.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnVillagerGivesVillagerSpawnEggItemStack(GameTestHelper context) {
+        Villager villager = context.spawn(EntityType.VILLAGER, SPAWN_POSITION);
+        ItemStack stack = villager.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.VILLAGER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnVindicatorGivesVindicatorSpawnEggItemStack(TestContext context) {
-        VindicatorEntity vindicator = context.spawnEntity(EntityType.VINDICATOR, SPAWN_POSITION);
-        ItemStack stack = vindicator.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnVindicatorGivesVindicatorSpawnEggItemStack(GameTestHelper context) {
+        Vindicator vindicator = context.spawn(EntityType.VINDICATOR, SPAWN_POSITION);
+        ItemStack stack = vindicator.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.VINDICATOR_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnWanderingTraderGivesWanderingTraderSpawnEggItemStack(TestContext context) {
-        WanderingTraderEntity wanderingTrader = context.spawnEntity(EntityType.WANDERING_TRADER, SPAWN_POSITION);
-        ItemStack stack = wanderingTrader.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnWanderingTraderGivesWanderingTraderSpawnEggItemStack(GameTestHelper context) {
+        WanderingTrader wanderingTrader = context.spawn(EntityType.WANDERING_TRADER, SPAWN_POSITION);
+        ItemStack stack = wanderingTrader.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.WANDERING_TRADER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnWardenGivesWardenSpawnEggItemStack(TestContext context) {
-        WardenEntity warden = context.spawnEntity(EntityType.WARDEN, SPAWN_POSITION);
-        ItemStack stack = warden.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnWardenGivesWardenSpawnEggItemStack(GameTestHelper context) {
+        Warden warden = context.spawn(EntityType.WARDEN, SPAWN_POSITION);
+        ItemStack stack = warden.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.WARDEN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnWitchGivesWitchSpawnEggItemStack(TestContext context) {
-        WitchEntity witch = context.spawnEntity(EntityType.WITCH, SPAWN_POSITION);
-        ItemStack stack = witch.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnWitchGivesWitchSpawnEggItemStack(GameTestHelper context) {
+        Witch witch = context.spawn(EntityType.WITCH, SPAWN_POSITION);
+        ItemStack stack = witch.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.WITCH_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnWitherGivesWitherSpawnEggItemStack(TestContext context) {
-        WitherEntity wither = context.spawnEntity(EntityType.WITHER, SPAWN_POSITION);
-        ItemStack stack = wither.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnWitherGivesWitherSpawnEggItemStack(GameTestHelper context) {
+        WitherBoss wither = context.spawn(EntityType.WITHER, SPAWN_POSITION);
+        ItemStack stack = wither.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.WITHER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnWitherSkeletonGivesWitherSkeletonSpawnEggItemStack(TestContext context) {
-        WitherSkeletonEntity witherSkeleton = context.spawnEntity(EntityType.WITHER_SKELETON, SPAWN_POSITION);
-        ItemStack stack = witherSkeleton.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnWitherSkeletonGivesWitherSkeletonSpawnEggItemStack(GameTestHelper context) {
+        WitherSkeleton witherSkeleton = context.spawn(EntityType.WITHER_SKELETON, SPAWN_POSITION);
+        ItemStack stack = witherSkeleton.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.WITHER_SKELETON_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnWolfGivesWolfSpawnEggItemStack(TestContext context) {
-        WolfEntity wolf = context.spawnEntity(EntityType.WOLF, SPAWN_POSITION);
-        ItemStack stack = wolf.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnWolfGivesWolfSpawnEggItemStack(GameTestHelper context) {
+        Wolf wolf = context.spawn(EntityType.WOLF, SPAWN_POSITION);
+        ItemStack stack = wolf.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.WOLF_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnZoglinGivesZoglinSpawnEggItemStack(TestContext context) {
-        ZoglinEntity zoglin = context.spawnEntity(EntityType.ZOGLIN, SPAWN_POSITION);
-        ItemStack stack = zoglin.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnZoglinGivesZoglinSpawnEggItemStack(GameTestHelper context) {
+        Zoglin zoglin = context.spawn(EntityType.ZOGLIN, SPAWN_POSITION);
+        ItemStack stack = zoglin.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ZOGLIN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnZombieGivesZombieSpawnEggItemStack(TestContext context) {
-        ZombieEntity zombie = context.spawnEntity(EntityType.ZOMBIE, SPAWN_POSITION);
-        ItemStack stack = zombie.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnZombieGivesZombieSpawnEggItemStack(GameTestHelper context) {
+        Zombie zombie = context.spawn(EntityType.ZOMBIE, SPAWN_POSITION);
+        ItemStack stack = zombie.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ZOMBIE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnZombieHorseGivesZombieHorseSpawnEggItemStack(TestContext context) {
-        ZombieHorseEntity zombieHorse = context.spawnEntity(EntityType.ZOMBIE_HORSE, SPAWN_POSITION);
-        ItemStack stack = zombieHorse.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnZombieHorseGivesZombieHorseSpawnEggItemStack(GameTestHelper context) {
+        ZombieHorse zombieHorse = context.spawn(EntityType.ZOMBIE_HORSE, SPAWN_POSITION);
+        ItemStack stack = zombieHorse.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnZombieVillagerGivesZombieVillagerSpawnEggItemStack(TestContext context) {
-        ZombieVillagerEntity zombieVillager = context.spawnEntity(EntityType.ZOMBIE_VILLAGER, SPAWN_POSITION);
-        ItemStack stack = zombieVillager.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnZombieVillagerGivesZombieVillagerSpawnEggItemStack(GameTestHelper context) {
+        ZombieVillager zombieVillager = context.spawn(EntityType.ZOMBIE_VILLAGER, SPAWN_POSITION);
+        ItemStack stack = zombieVillager.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnZombifiedPiglinGivesZombifiedPiglinSpawnEggItemStack(TestContext context) {
-        ZombifiedPiglinEntity zombifiedPiglin = context.spawnEntity(EntityType.ZOMBIFIED_PIGLIN, SPAWN_POSITION);
-        ItemStack stack = zombifiedPiglin.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnZombifiedPiglinGivesZombifiedPiglinSpawnEggItemStack(GameTestHelper context) {
+        ZombifiedPiglin zombifiedPiglin = context.spawn(EntityType.ZOMBIFIED_PIGLIN, SPAWN_POSITION);
+        ItemStack stack = zombifiedPiglin.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnAcaciaBoatGivesAcaciaBoatItemStack(TestContext context) {
-        BoatEntity acaciaBoat = context.spawnEntity(EntityType.ACACIA_BOAT, SPAWN_POSITION);
-        ItemStack stack = acaciaBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnAcaciaBoatGivesAcaciaBoatItemStack(GameTestHelper context) {
+        Boat acaciaBoat = context.spawn(EntityType.ACACIA_BOAT, SPAWN_POSITION);
+        ItemStack stack = acaciaBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ACACIA_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnAcaciaChestBoatGivesAcaciaChestBoatItemStack(TestContext context) {
-        ChestBoatEntity acaciaChestBoat = context.spawnEntity(EntityType.ACACIA_CHEST_BOAT, SPAWN_POSITION);
-        ItemStack stack = acaciaChestBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnAcaciaChestBoatGivesAcaciaChestBoatItemStack(GameTestHelper context) {
+        ChestBoat acaciaChestBoat = context.spawn(EntityType.ACACIA_CHEST_BOAT, SPAWN_POSITION);
+        ItemStack stack = acaciaChestBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.ACACIA_CHEST_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnBambooRaftGivesBambooRaftItemStack(TestContext context) {
-        RaftEntity bambooRaft = context.spawnEntity(EntityType.BAMBOO_RAFT, SPAWN_POSITION);
-        ItemStack stack = bambooRaft.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnBambooRaftGivesBambooRaftItemStack(GameTestHelper context) {
+        Raft bambooRaft = context.spawn(EntityType.BAMBOO_RAFT, SPAWN_POSITION);
+        ItemStack stack = bambooRaft.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.BAMBOO_RAFT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnBambooChestRaftGivesBambooChestRaftItemStack(TestContext context) {
-        ChestRaftEntity bambooChestRaft = context.spawnEntity(EntityType.BAMBOO_CHEST_RAFT, SPAWN_POSITION);
-        ItemStack stack = bambooChestRaft.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnBambooChestRaftGivesBambooChestRaftItemStack(GameTestHelper context) {
+        ChestRaft bambooChestRaft = context.spawn(EntityType.BAMBOO_CHEST_RAFT, SPAWN_POSITION);
+        ItemStack stack = bambooChestRaft.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.BAMBOO_CHEST_RAFT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnBirchBoatGivesBirchBoatItemStack(TestContext context) {
-        BoatEntity birchBoat = context.spawnEntity(EntityType.BIRCH_BOAT, SPAWN_POSITION);
-        ItemStack stack = birchBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnBirchBoatGivesBirchBoatItemStack(GameTestHelper context) {
+        Boat birchBoat = context.spawn(EntityType.BIRCH_BOAT, SPAWN_POSITION);
+        ItemStack stack = birchBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.BIRCH_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnBirchChestBoatGivesBirchChestBoatItemStack(TestContext context) {
-        ChestBoatEntity birchChestBoat = context.spawnEntity(EntityType.BIRCH_CHEST_BOAT, SPAWN_POSITION);
-        ItemStack stack = birchChestBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnBirchChestBoatGivesBirchChestBoatItemStack(GameTestHelper context) {
+        ChestBoat birchChestBoat = context.spawn(EntityType.BIRCH_CHEST_BOAT, SPAWN_POSITION);
+        ItemStack stack = birchChestBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.BIRCH_CHEST_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnCherryBoatGivesCherryBoatItemStack(TestContext context) {
-        BoatEntity cherryBoat = context.spawnEntity(EntityType.CHERRY_BOAT, SPAWN_POSITION);
-        ItemStack stack = cherryBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnCherryBoatGivesCherryBoatItemStack(GameTestHelper context) {
+        Boat cherryBoat = context.spawn(EntityType.CHERRY_BOAT, SPAWN_POSITION);
+        ItemStack stack = cherryBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.CHERRY_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnCherryChestBoatGivesCherryChestBoatItemStack(TestContext context) {
-        ChestBoatEntity cherryChestBoat = context.spawnEntity(EntityType.CHERRY_CHEST_BOAT, SPAWN_POSITION);
-        ItemStack stack = cherryChestBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnCherryChestBoatGivesCherryChestBoatItemStack(GameTestHelper context) {
+        ChestBoat cherryChestBoat = context.spawn(EntityType.CHERRY_CHEST_BOAT, SPAWN_POSITION);
+        ItemStack stack = cherryChestBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.CHERRY_CHEST_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnDarkOakBoatGivesDarkOakBoatItemStack(TestContext context) {
-        BoatEntity darkOakBoat = context.spawnEntity(EntityType.DARK_OAK_BOAT, SPAWN_POSITION);
-        ItemStack stack = darkOakBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnDarkOakBoatGivesDarkOakBoatItemStack(GameTestHelper context) {
+        Boat darkOakBoat = context.spawn(EntityType.DARK_OAK_BOAT, SPAWN_POSITION);
+        ItemStack stack = darkOakBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.DARK_OAK_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnDarkOakChestBoatGivesDarkOakChestBoatItemStack(TestContext context) {
-        ChestBoatEntity darkOakChestBoat = context.spawnEntity(EntityType.DARK_OAK_CHEST_BOAT, SPAWN_POSITION);
-        ItemStack stack = darkOakChestBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnDarkOakChestBoatGivesDarkOakChestBoatItemStack(GameTestHelper context) {
+        ChestBoat darkOakChestBoat = context.spawn(EntityType.DARK_OAK_CHEST_BOAT, SPAWN_POSITION);
+        ItemStack stack = darkOakChestBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.DARK_OAK_CHEST_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnJungleBoatGivesJungleBoatItemStack(TestContext context) {
-        BoatEntity jungleBoat = context.spawnEntity(EntityType.JUNGLE_BOAT, SPAWN_POSITION);
-        ItemStack stack = jungleBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnJungleBoatGivesJungleBoatItemStack(GameTestHelper context) {
+        Boat jungleBoat = context.spawn(EntityType.JUNGLE_BOAT, SPAWN_POSITION);
+        ItemStack stack = jungleBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.JUNGLE_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnJungleChestBoatGivesJungleChestBoatItemStack(TestContext context) {
-        ChestBoatEntity jungleChestBoat = context.spawnEntity(EntityType.JUNGLE_CHEST_BOAT, SPAWN_POSITION);
-        ItemStack stack = jungleChestBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnJungleChestBoatGivesJungleChestBoatItemStack(GameTestHelper context) {
+        ChestBoat jungleChestBoat = context.spawn(EntityType.JUNGLE_CHEST_BOAT, SPAWN_POSITION);
+        ItemStack stack = jungleChestBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.JUNGLE_CHEST_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnMangroveBoatGivesMangroveBoatItemStack(TestContext context) {
-        BoatEntity mangroveBoat = context.spawnEntity(EntityType.MANGROVE_BOAT, SPAWN_POSITION);
-        ItemStack stack = mangroveBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnMangroveBoatGivesMangroveBoatItemStack(GameTestHelper context) {
+        Boat mangroveBoat = context.spawn(EntityType.MANGROVE_BOAT, SPAWN_POSITION);
+        ItemStack stack = mangroveBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.MANGROVE_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnMangroveChestBoatGivesMangroveChestBoatItemStack(TestContext context) {
-        ChestBoatEntity mangroveChestBoat = context.spawnEntity(EntityType.MANGROVE_CHEST_BOAT, SPAWN_POSITION);
-        ItemStack stack = mangroveChestBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnMangroveChestBoatGivesMangroveChestBoatItemStack(GameTestHelper context) {
+        ChestBoat mangroveChestBoat = context.spawn(EntityType.MANGROVE_CHEST_BOAT, SPAWN_POSITION);
+        ItemStack stack = mangroveChestBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.MANGROVE_CHEST_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnOakBoatGivesOakBoatItemStack(TestContext context) {
-        BoatEntity oakBoat = context.spawnEntity(EntityType.OAK_BOAT, SPAWN_POSITION);
-        ItemStack stack = oakBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnOakBoatGivesOakBoatItemStack(GameTestHelper context) {
+        Boat oakBoat = context.spawn(EntityType.OAK_BOAT, SPAWN_POSITION);
+        ItemStack stack = oakBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.OAK_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnOakChestBoatGivesOakChestBoatItemStack(TestContext context) {
-        ChestBoatEntity oakChestBoat = context.spawnEntity(EntityType.OAK_CHEST_BOAT, SPAWN_POSITION);
-        ItemStack stack = oakChestBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnOakChestBoatGivesOakChestBoatItemStack(GameTestHelper context) {
+        ChestBoat oakChestBoat = context.spawn(EntityType.OAK_CHEST_BOAT, SPAWN_POSITION);
+        ItemStack stack = oakChestBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.OAK_CHEST_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSpruceBoatGivesSpruceBoatItemStack(TestContext context) {
-        BoatEntity spruceBoat = context.spawnEntity(EntityType.SPRUCE_BOAT, SPAWN_POSITION);
-        ItemStack stack = spruceBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSpruceBoatGivesSpruceBoatItemStack(GameTestHelper context) {
+        Boat spruceBoat = context.spawn(EntityType.SPRUCE_BOAT, SPAWN_POSITION);
+        ItemStack stack = spruceBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SPRUCE_BOAT)
         );
     }
 
     @GameTest(structure = "itematic:entity.platform")
-    public void getPickStackOnSpruceChestBoatGivesSpruceChestBoatItemStack(TestContext context) {
-        ChestBoatEntity spruceChestBoat = context.spawnEntity(EntityType.SPRUCE_CHEST_BOAT, SPAWN_POSITION);
-        ItemStack stack = spruceChestBoat.getPickBlockStack();
-        context.addFinalTask(() -> Assert.itemStack(context, stack)
+    public void getPickStackOnSpruceChestBoatGivesSpruceChestBoatItemStack(GameTestHelper context) {
+        ChestBoat spruceChestBoat = context.spawn(EntityType.SPRUCE_CHEST_BOAT, SPAWN_POSITION);
+        ItemStack stack = spruceChestBoat.getPickResult();
+        context.succeedIf(() -> Assert.itemStack(context, stack)
             .is(ItemKeys.SPRUCE_CHEST_BOAT)
         );
     }

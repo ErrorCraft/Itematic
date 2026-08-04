@@ -1,13 +1,13 @@
 package net.errorcraft.itematic.mixin.entity.vehicle;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.vehicle.AbstractBoatEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,12 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Supplier;
 
-@Mixin(AbstractBoatEntity.class)
+@Mixin(AbstractBoat.class)
 public abstract class AbstractBoatEntityExtender extends VehicleEntityExtender {
     @Unique
-    private RegistryKey<Item> itemKey;
+    private ResourceKey<Item> itemKey;
 
-    public AbstractBoatEntityExtender(EntityType<?> type, World world) {
+    public AbstractBoatEntityExtender(EntityType<?> type, Level world) {
         super(type, world);
     }
 
@@ -30,23 +30,23 @@ public abstract class AbstractBoatEntityExtender extends VehicleEntityExtender {
         method = "<init>",
         at = @At("TAIL")
     )
-    private void setItemKey(EntityType<? extends AbstractBoatEntity> type, World world, Supplier<Item> itemSupplier, CallbackInfo info) {
-        this.itemKey = Registries.ITEM.getKey(itemSupplier.get()).orElseThrow();
+    private void setItemKey(EntityType<? extends AbstractBoat> type, Level world, Supplier<Item> itemSupplier, CallbackInfo info) {
+        this.itemKey = BuiltInRegistries.ITEM.getResourceKey(itemSupplier.get()).orElseThrow();
     }
 
     @Redirect(
-        method = "getPickBlockStack",
+        method = "getPickResult",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(this.itemKey);
+    private ItemStack newItemStackUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(this.itemKey);
     }
 
     @Override
-    protected RegistryKey<Item> asItemKey() {
+    protected ResourceKey<Item> asItemKey() {
         return this.itemKey;
     }
 }

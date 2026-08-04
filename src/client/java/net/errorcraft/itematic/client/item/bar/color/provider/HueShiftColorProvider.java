@@ -6,7 +6,7 @@ import net.errorcraft.itematic.client.item.bar.color.ColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.ColorProviderType;
 import net.errorcraft.itematic.client.item.bar.color.ColorProviderTypes;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 public record HueShiftColorProvider(int start, int end) implements ColorProvider {
     public static final MapCodec<HueShiftColorProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -21,7 +21,7 @@ public record HueShiftColorProvider(int start, int end) implements ColorProvider
 
     @Override
     public int get(float progress) {
-        int hue = MathHelper.lerp(progress, this.start, this.end);
-        return MathHelper.hsvToRgb(hue / 360.0f, 1.0f, 1.0f);
+        int hue = Mth.lerpInt(progress, this.start, this.end);
+        return Mth.hsvToRgb(hue / 360.0f, 1.0f, 1.0f);
     }
 }

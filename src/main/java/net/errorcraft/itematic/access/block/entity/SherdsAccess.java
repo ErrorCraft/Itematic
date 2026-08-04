@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.access.block.entity;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.Item;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface SherdsAccess {
-    default List<Optional<RegistryEntry<Item>>> itematic$optionalEntries() {
+    default List<Optional<Holder<Item>>> itematic$optionalEntries() {
         return null;
     }
-    default List<RegistryEntry<Item>> itematic$entries(RegistryWrapper.WrapperLookup lookup) {
+    default List<Holder<Item>> itematic$entries(HolderLookup.Provider lookup) {
         return null;
     }
 }

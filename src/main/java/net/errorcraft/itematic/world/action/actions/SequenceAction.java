@@ -8,7 +8,7 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
 
 public record SequenceAction(SequenceHandler<?> handler) implements Action<SequenceAction> {
     public static final MapCodec<SequenceAction> CODEC = SequenceHandler.CODEC.xmap(SequenceAction::new, SequenceAction::handler);
@@ -32,13 +32,13 @@ public record SequenceAction(SequenceHandler<?> handler) implements Action<Seque
     }
 
     public void validate(RecursionValidator validator) {
-        for (RegistryEntry<ActionEntry> entry : this.handler.iterateEntries()) {
+        for (Holder<ActionEntry> entry : this.handler.iterateEntries()) {
             validateEntry(validator, entry);
         }
     }
 
-    private static void validateEntry(RecursionValidator validator, RegistryEntry<ActionEntry> entry) {
-        if (!(entry instanceof RegistryEntry.Reference<ActionEntry> referenceEntry)) {
+    private static void validateEntry(RecursionValidator validator, Holder<ActionEntry> entry) {
+        if (!(entry instanceof Holder.Reference<ActionEntry> referenceEntry)) {
             return;
         }
 

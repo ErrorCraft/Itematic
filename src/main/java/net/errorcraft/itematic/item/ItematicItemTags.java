@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.item;
 
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 
 public class ItematicItemTags {
     public static final TagKey<Item> BOW_AMMUNITION = of("bow_ammunition");
@@ -161,6 +161,6 @@ public class ItematicItemTags {
     private ItematicItemTags() {}
 
     private static TagKey<Item> of(String id) {
-        return TagKey.of(RegistryKeys.ITEM, Identifier.ofVanilla(id));
+        return TagKey.create(Registries.ITEM, Identifier.withDefaultNamespace(id));
     }
 }

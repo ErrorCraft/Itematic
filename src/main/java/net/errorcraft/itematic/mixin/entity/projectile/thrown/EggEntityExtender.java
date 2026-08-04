@@ -2,40 +2,40 @@ package net.errorcraft.itematic.mixin.entity.projectile.thrown;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.component.ComponentsAccess;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.ChickenVariant;
-import net.minecraft.entity.projectile.thrown.EggEntity;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.LazyRegistryEntryReference;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.chicken.ChickenVariant;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEgg;
+import net.minecraft.world.item.EitherHolder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(EggEntity.class)
+@Mixin(ThrownEgg.class)
 public abstract class EggEntityExtender extends ThrownItemEntityExtender {
     @Unique
-    private LazyRegistryEntryReference<ChickenVariant> chickenVariant;
+    private EitherHolder<ChickenVariant> chickenVariant;
 
-    public EggEntityExtender(EntityType<? extends ThrownItemEntity> entityType, World world) {
+    public EggEntityExtender(EntityType<? extends ThrowableItemProjectile> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected void copyComponentsFrom(ComponentsAccess from) {
-        super.copyComponentsFrom(from);
-        this.chickenVariant = from.get(DataComponentTypes.CHICKEN_VARIANT);
+    protected void applyImplicitComponents(DataComponentGetter from) {
+        super.applyImplicitComponents(from);
+        this.chickenVariant = from.get(DataComponents.CHICKEN_VARIANT);
     }
 
     @ModifyExpressionValue(
-        method = "onCollision",
+        method = "onHit",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
         )
     )
     private Object getChickenVariantPossiblyUseDefault(Object original) {
@@ -47,7 +47,7 @@ public abstract class EggEntityExtender extends ThrownItemEntityExtender {
     }
 
     @Override
-    protected RegistryKey<Item> getDefaultItemKey() {
+    protected ResourceKey<Item> getDefaultItemKey() {
         return ItemKeys.EGG;
     }
 }

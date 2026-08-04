@@ -1,46 +1,46 @@
 package net.errorcraft.itematic.mixin.entity.ai.brain.task;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.ai.brain.task.BoneMealTask;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ai.behavior.UseBonemeal;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(BoneMealTask.class)
+@Mixin(UseBonemeal.class)
 public class BoneMealTaskExtender {
     @Redirect(
-        method = "shouldRun(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;)Z",
+        method = "checkExtraStartConditions(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/npc/villager/Villager;)Z",
         at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/item/Items;BONE_MEAL:Lnet/minecraft/item/Item;",
+            target = "Lnet/minecraft/world/item/Items;BONE_MEAL:Lnet/minecraft/world/item/Item;",
             opcode = Opcodes.GETSTATIC
         )
     )
-    private Item getBoneMealUseDynamicRegistry(ServerWorld world) {
+    private Item getBoneMealUseDynamicRegistry(ServerLevel world) {
         return world.itematic$getItem(ItemKeys.BONE_MEAL).value();
     }
 
     @Redirect(
-        method = "run(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;J)V",
+        method = "start(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/npc/villager/Villager;J)V",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack"
+            target = "net/minecraft/world/item/ItemStack"
         )
     )
-    private ItemStack newItemStackForBoneMealUseCreateStack(ItemConvertible item, ServerWorld world) {
+    private ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, ServerLevel world) {
         return world.itematic$createStack(ItemKeys.BONE_MEAL);
     }
 
     @Redirect(
-        method = "keepRunning(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;J)V",
+        method = "tick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/npc/villager/Villager;J)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForBoneMealUseRegistryKeyCheck(ItemStack instance, Item item) {

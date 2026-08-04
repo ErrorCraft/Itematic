@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.item.event;
 
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
 
-public record ItemEvent(RegistryKey<ItemEvent> id) {
+public record ItemEvent(ResourceKey<ItemEvent> id) {
     @Override
     public String toString() {
-        return this.id.getValue().toString();
+        return this.id.identifier().toString();
     }
 }

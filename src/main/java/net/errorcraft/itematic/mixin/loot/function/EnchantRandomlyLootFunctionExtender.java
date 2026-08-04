@@ -4,24 +4,24 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.EnchantableItemComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.function.EnchantRandomlyLootFunction;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
-@Mixin(EnchantRandomlyLootFunction.class)
+@Mixin(EnchantRandomlyFunction.class)
 public class EnchantRandomlyLootFunctionExtender {
     @Redirect(
-        method = "process",
+        method = "run",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForBookUseItemComponent(ItemStack instance, Item item) {
@@ -31,27 +31,27 @@ public class EnchantRandomlyLootFunctionExtender {
     }
 
     @Redirect(
-        method = "addEnchantmentToStack",
+        method = "enchantItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private static boolean isOfForBookUseItemComponentStatic(ItemStack instance, Item item, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
-        Optional<RegistryEntry<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
+    private static boolean isOfForBookUseItemComponentStatic(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
             .flatMap(EnchantableItemComponent::transformsInto);
         optionalItem.ifPresent(transformsInto::set);
         return optionalItem.isPresent();
     }
 
     @Redirect(
-        method = "addEnchantmentToStack",
+        method = "enchantItem",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForEnchantedBookUseItemComponent(ItemConvertible item, ItemStack stack, @Share("transformsInto") LocalRef<RegistryEntry<Item>> transformsInto) {
+    private static ItemStack newItemStackForEnchantedBookUseItemComponent(ItemLike item, ItemStack stack, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
         return stack.itematic$copyWithItem(transformsInto.get());
     }
 }

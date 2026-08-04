@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.datafixers.util.Unit;
 import com.mojang.serialization.*;
-import net.minecraft.registry.Registry;
+import net.minecraft.core.Registry;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,11 +33,11 @@ public class SetMapCodec<K, V> extends MapCodec<Set<V>> {
     @SuppressWarnings("unchecked")
     public static <K, V> SetMapCodec<K, V> ofRegistry(Registry<K> registry, Function<K, Codec<? extends V>> keyToCodec, Function<V, Codec<? extends V>> entryToCodec, Function<V, K> valueToKey) {
         return new SetMapCodec<>(
-            registry.getCodec(),
+            registry.byNameCodec(),
             keyToCodec::apply,
             v -> (Encoder<V>) entryToCodec.apply(v),
             valueToKey,
-            k -> registry.getKey(k).orElseThrow().toString(),
+            k -> registry.getResourceKey(k).orElseThrow().toString(),
             registry
         );
     }

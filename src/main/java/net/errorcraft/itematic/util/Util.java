@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.util;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -10,7 +10,7 @@ public class Util {
     private Util() {}
 
     public static String descriptionKey(String prefix, Identifier id, String suffix) {
-        return net.minecraft.util.Util.createTranslationKey(prefix, id) + "." + suffix;
+        return net.minecraft.util.Util.makeDescriptionId(prefix, id) + "." + suffix;
     }
 
     public static String stackTraceMessage(String message) {

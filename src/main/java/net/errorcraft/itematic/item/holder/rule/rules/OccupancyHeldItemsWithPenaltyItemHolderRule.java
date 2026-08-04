@@ -9,15 +9,15 @@ import net.errorcraft.itematic.item.holder.rule.ItemHolderRule;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.item.holder.rule.ItemHolderRuleTypes;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.math.Fraction;
 
 public record OccupancyHeldItemsWithPenaltyItemHolderRule(Fraction penalty) implements ItemHolderRule {
     public static final MapCodec<OccupancyHeldItemsWithPenaltyItemHolderRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ItemHolderItemComponent.CAPACITY_CODEC.fieldOf("penalty").forGetter(OccupancyHeldItemsWithPenaltyItemHolderRule::penalty)
     ).apply(instance, OccupancyHeldItemsWithPenaltyItemHolderRule::new));
-    public static final PacketCodec<ByteBuf, OccupancyHeldItemsWithPenaltyItemHolderRule> PACKET_CODEC = PacketCodecUtil.FRACTION.xmap(OccupancyHeldItemsWithPenaltyItemHolderRule::new, OccupancyHeldItemsWithPenaltyItemHolderRule::penalty);
+    public static final StreamCodec<ByteBuf, OccupancyHeldItemsWithPenaltyItemHolderRule> PACKET_CODEC = PacketCodecUtil.FRACTION.map(OccupancyHeldItemsWithPenaltyItemHolderRule::new, OccupancyHeldItemsWithPenaltyItemHolderRule::penalty);
 
     public static OccupancyHeldItemsWithPenaltyItemHolderRule of(Fraction fraction) {
         return new OccupancyHeldItemsWithPenaltyItemHolderRule(fraction);

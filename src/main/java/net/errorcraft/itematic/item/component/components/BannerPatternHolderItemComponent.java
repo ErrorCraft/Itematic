@@ -5,12 +5,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BannerPatternsComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DyeColor;
-
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import java.util.Optional;
 
 public record BannerPatternHolderItemComponent(Optional<DyeColor> color) implements ItemComponent<BannerPatternHolderItemComponent> {
@@ -29,8 +28,8 @@ public record BannerPatternHolderItemComponent(Optional<DyeColor> color) impleme
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.BANNER_PATTERNS, BannerPatternsComponent.DEFAULT);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY);
     }
 
     public boolean modifiable() {
@@ -42,12 +41,12 @@ public record BannerPatternHolderItemComponent(Optional<DyeColor> color) impleme
             return Optional.empty();
         }
 
-        DyeColor baseColor = stack.get(DataComponentTypes.BASE_COLOR);
+        DyeColor baseColor = stack.get(DataComponents.BASE_COLOR);
         if (baseColor == null) {
             return Optional.empty();
         }
 
-        return Optional.of(baseTranslationKey + "." + baseColor.getId());
+        return Optional.of(baseTranslationKey + "." + baseColor.getName());
     }
 
     public static BannerPatternHolderItemComponent of() {

@@ -1,8 +1,7 @@
 package net.errorcraft.itematic.access.client.recipebook;
 
 import net.errorcraft.itematic.item.ItemAccess;
-import net.minecraft.item.ItemStack;
-
+import net.minecraft.world.item.ItemStack;
 import java.util.Optional;
 
 public interface RecipeBookWidgetTabAccess {

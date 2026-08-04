@@ -3,12 +3,12 @@ package net.errorcraft.itematic.mixin.village;
 import net.errorcraft.itematic.access.village.VillagerDataAccess;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.village.VillagerData;
-import net.minecraft.village.VillagerProfession;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.npc.villager.VillagerData;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.Unique;
 public class VillagerDataExtender implements VillagerDataAccess {
     @Shadow
     @Final
-    private RegistryEntry<VillagerProfession> profession;
+    private Holder<VillagerProfession> profession;
 
     @Shadow
     @Final
@@ -39,13 +39,13 @@ public class VillagerDataExtender implements VillagerDataAccess {
             return null;
         }
 
-        Identifier tag = this.profession.getKey().orElseThrow().getValue().withPath(path -> path + "_" + this.levelName());
-        return TagKey.of(ItematicRegistryKeys.TRADE, tag);
+        Identifier tag = this.profession.unwrapKey().orElseThrow().identifier().withPath(path -> path + "_" + this.levelName());
+        return TagKey.create(ItematicRegistryKeys.TRADE, tag);
     }
 
     @Unique
     private String levelName() {
-        int index = MathHelper.clamp(this.level - 1, 0, LEVELS.length - 1);
+        int index = Mth.clamp(this.level - 1, 0, LEVELS.length - 1);
         return LEVELS[index];
     }
 }

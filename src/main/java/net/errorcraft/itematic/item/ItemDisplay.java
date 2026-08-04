@@ -4,61 +4,60 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.ItematicDataComponentTypes;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeyedValue;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextCodecs;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
-
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.resources.DependantName;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public record ItemDisplay(String translationKey, Identifier model, Rarity rarity, Optional<List<Text>> tooltip, Optional<Boolean> glint, Identifier itemBarStyle, Optional<Identifier> tooltipStyle) {
+public record ItemDisplay(String translationKey, Identifier model, Rarity rarity, Optional<List<Component>> tooltip, Optional<Boolean> glint, Identifier itemBarStyle, Optional<Identifier> tooltipStyle) {
     public static final Codec<ItemDisplay> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.STRING.fieldOf("translation_key").forGetter(ItemDisplay::translationKey),
         Identifier.CODEC.fieldOf("model").forGetter(ItemDisplay::model),
         Rarity.CODEC.optionalFieldOf("rarity", Rarity.COMMON).forGetter(ItemDisplay::rarity),
-        TextCodecs.CODEC.listOf().optionalFieldOf("tooltip").forGetter(ItemDisplay::tooltip),
+        ComponentSerialization.CODEC.listOf().optionalFieldOf("tooltip").forGetter(ItemDisplay::tooltip),
         Codec.BOOL.optionalFieldOf("glint").forGetter(ItemDisplay::glint),
         Identifier.CODEC.optionalFieldOf("item_bar_style", ItemBarStyleKeys.DAMAGE).forGetter(ItemDisplay::itemBarStyle),
         Identifier.CODEC.optionalFieldOf("tooltip_style").forGetter(ItemDisplay::tooltipStyle)
     ).apply(instance, ItemDisplay::new));
 
-    public void addComponents(ComponentMap.Builder builder) {
-        builder.add(DataComponentTypes.ITEM_NAME, Text.translatable(this.translationKey));
-        builder.add(DataComponentTypes.ITEM_MODEL, this.model);
-        builder.add(DataComponentTypes.RARITY, this.rarity);
-        this.glint.ifPresent(glint -> builder.add(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, glint));
-        builder.add(ItematicDataComponentTypes.ITEM_BAR_STYLE, this.itemBarStyle);
-        this.tooltipStyle.ifPresent(tooltipStyle -> builder.add(DataComponentTypes.TOOLTIP_STYLE, tooltipStyle));
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.ITEM_NAME, Component.translatable(this.translationKey));
+        builder.set(DataComponents.ITEM_MODEL, this.model);
+        builder.set(DataComponents.RARITY, this.rarity);
+        this.glint.ifPresent(glint -> builder.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, glint));
+        builder.set(ItematicDataComponentTypes.ITEM_BAR_STYLE, this.itemBarStyle);
+        this.tooltipStyle.ifPresent(tooltipStyle -> builder.set(DataComponents.TOOLTIP_STYLE, tooltipStyle));
     }
 
     public static class Builder {
-        private static final RegistryKeyedValue<Item, String> ITEM_NAME_SUPPLIER = ItemAccessor.SettingsAccessor.itemNameSupplier();
-        private static final RegistryKeyedValue<Item, String> BLOCK_NAME_SUPPLIER = ItemAccessor.SettingsAccessor.blockNameSupplier();
+        private static final DependantName<Item, String> ITEM_NAME_SUPPLIER = ItemAccessor.SettingsAccessor.itemNameSupplier();
+        private static final DependantName<Item, String> BLOCK_NAME_SUPPLIER = ItemAccessor.SettingsAccessor.blockNameSupplier();
 
         private final String translationKey;
         private final Identifier model;
         private Rarity rarity = Rarity.COMMON;
-        private List<Text> tooltip;
+        private List<Component> tooltip;
         private Boolean glint;
         private Identifier itemBarStyle = ItemBarStyleKeys.DAMAGE;
 
-        private Builder(RegistryKey<Item> name, RegistryKeyedValue<Item, String> nameSupplier) {
+        private Builder(ResourceKey<Item> name, DependantName<Item, String> nameSupplier) {
             this.translationKey = nameSupplier.get(name);
-            this.model = name.getValue();
+            this.model = name.identifier();
         }
 
-        public static Builder forItem(RegistryKey<Item> name) {
+        public static Builder forItem(ResourceKey<Item> name) {
             return new Builder(name, ITEM_NAME_SUPPLIER);
         }
 
-        public static Builder forBlock(RegistryKey<Item> name) {
+        public static Builder forBlock(ResourceKey<Item> name) {
             return new Builder(name, BLOCK_NAME_SUPPLIER);
         }
 
@@ -79,7 +78,7 @@ public record ItemDisplay(String translationKey, Identifier model, Rarity rarity
             return this;
         }
 
-        public Builder tooltip(Text... lines) {
+        public Builder tooltip(Component... lines) {
             if (this.tooltip == null) {
                 this.tooltip = new ArrayList<>();
             }

@@ -1,30 +1,30 @@
 package net.errorcraft.itematic.mixin.recipe;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.TransmuteRecipeResult;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.TransmuteResult;
+import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(TransmuteRecipeResult.class)
+@Mixin(TransmuteResult.class)
 public class TransmuteRecipeResultExtender {
     @Shadow
     @Final
-    private RegistryEntry<Item> itemEntry;
+    private Holder<Item> item;
 
     @Redirect(
         method = "apply",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;copyComponentsToNewStack(Lnet/minecraft/item/ItemConvertible;I)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack copyComponentsToNewStackUseRegistryEntry(ItemStack instance, ItemConvertible item, int count) {
-        return instance.itematic$copyComponentsToNewStack(this.itemEntry, count);
+    private ItemStack copyComponentsToNewStackUseRegistryEntry(ItemStack instance, ItemLike item, int count) {
+        return instance.itematic$copyComponentsToNewStack(this.item, count);
     }
 }

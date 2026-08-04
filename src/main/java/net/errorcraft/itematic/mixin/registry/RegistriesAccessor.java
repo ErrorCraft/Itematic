@@ -1,15 +1,15 @@
 package net.errorcraft.itematic.mixin.registry;
 
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(Registries.class)
+@Mixin(BuiltInRegistries.class)
 public interface RegistriesAccessor {
-    @Invoker("create")
-    static <T> Registry<T> create(RegistryKey<? extends Registry<T>> key, Registries.Initializer<T> initializer) {
+    @Invoker("registerSimple")
+    static <T> Registry<T> create(ResourceKey<? extends Registry<T>> key, BuiltInRegistries.RegistryBootstrap<T> initializer) {
         throw new AssertionError();
     }
 }

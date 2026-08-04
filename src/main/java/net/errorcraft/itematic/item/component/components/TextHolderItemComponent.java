@@ -7,11 +7,11 @@ import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class TextHolderItemComponent implements ItemComponent<TextHolderItemComponent> {
     public static final TextHolderItemComponent INSTANCE = new TextHolderItemComponent();
@@ -30,9 +30,9 @@ public class TextHolderItemComponent implements ItemComponent<TextHolderItemComp
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        user.useBook(stack, hand);
-        user.incrementStat(Stats.USED.itematic$getOrCreateStat(stack.getRegistryEntry()));
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        user.openItemGui(stack, hand);
+        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
         return ItemResult.SUCCEED;
     }
 }

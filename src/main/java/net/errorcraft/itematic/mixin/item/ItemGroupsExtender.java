@@ -3,302 +3,302 @@ package net.errorcraft.itematic.mixin.item;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProviderTags;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(ItemGroups.class)
+@Mixin(CreativeModeTabs.class)
 public class ItemGroupsExtender {
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;BUILDING_BLOCKS:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;BUILDING_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup buildingBlocksSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab buildingBlocksSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.BRICKS);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.BUILDING_BLOCKS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;COLORED_BLOCKS:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;COLORED_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup coloredBlocksSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab coloredBlocksSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.CYAN_WOOL);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.COLORED_BLOCKS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;NATURAL:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;NATURAL_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup naturalSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab naturalSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.GRASS_BLOCK);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.NATURAL_BLOCKS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;FUNCTIONAL:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;FUNCTIONAL_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup functionalSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab functionalSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.OAK_SIGN);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.FUNCTIONAL_BLOCKS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;REDSTONE:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;REDSTONE_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup redstoneSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab redstoneSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.REDSTONE);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.REDSTONE_BLOCKS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;HOTBAR:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;HOTBAR:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup hotbarSetIcon(ItemGroup original) {
+    private static CreativeModeTab hotbarSetIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.BOOKSHELF);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;SEARCH:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;SEARCH:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup searchSetIcon(ItemGroup original) {
+    private static CreativeModeTab searchSetIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.COMPASS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;TOOLS:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;TOOLS_AND_UTILITIES:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup toolsSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab toolsSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.DIAMOND_PICKAXE);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.TOOLS_AND_UTILITIES);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;COMBAT:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;COMBAT:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup combatSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab combatSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.NETHERITE_SWORD);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.COMBAT);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;FOOD_AND_DRINK:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;FOOD_AND_DRINKS:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup foodAndDrinkSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab foodAndDrinkSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.GOLDEN_APPLE);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.FOOD_AND_DRINKS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;INGREDIENTS:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;INGREDIENTS:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup ingredientsSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab ingredientsSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.IRON_INGOT);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.INGREDIENTS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;SPAWN_EGGS:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;SPAWN_EGGS:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup spawnEggsSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab spawnEggsSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.PIG_SPAWN_EGG);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.SPAWN_EGGS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;OPERATOR:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;OP_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup operatorSetEntryTagAndIcon(ItemGroup original) {
+    private static CreativeModeTab operatorSetEntryTagAndIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.COMMAND_BLOCK);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.OP_BLOCKS);
         return original;
     }
 
     @ModifyExpressionValue(
-        method = "registerAndGetDefault",
+        method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemGroup$Builder;build()Lnet/minecraft/item/ItemGroup;",
+            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/ItemGroups;INVENTORY:Lnet/minecraft/registry/RegistryKey;",
+                target = "Lnet/minecraft/world/item/CreativeModeTabs;INVENTORY:Lnet/minecraft/resources/ResourceKey;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private static ItemGroup inventorySetIcon(ItemGroup original) {
+    private static CreativeModeTab inventorySetIcon(CreativeModeTab original) {
         original.itematic$setIconKey(ItemKeys.CHEST);
         return original;
     }

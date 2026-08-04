@@ -1,30 +1,30 @@
 package net.errorcraft.itematic.mixin.entity.decoration;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.GlowItemFrameEntity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.GlowItemFrame;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(GlowItemFrameEntity.class)
-public class GlowItemFrameEntityExtender extends ItemFrameEntity {
-    public GlowItemFrameEntityExtender(EntityType<? extends ItemFrameEntity> entityType, World world) {
+@Mixin(GlowItemFrame.class)
+public class GlowItemFrameEntityExtender extends ItemFrame {
+    public GlowItemFrameEntityExtender(EntityType<? extends ItemFrame> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "getAsItemStack",
+        method = "getFrameItemStack",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForGlowItemFrameUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.GLOW_ITEM_FRAME);
+    private ItemStack newItemStackForGlowItemFrameUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.GLOW_ITEM_FRAME);
     }
 }

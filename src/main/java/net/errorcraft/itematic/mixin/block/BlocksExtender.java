@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.block;
 
 import net.errorcraft.itematic.access.block.AbstractPlantStemBlockAccess;
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -324,11 +324,11 @@ public class BlocksExtender {
 
     @Shadow
     @Final
-    public static Block POTTED_AZALEA_BUSH;
+    public static Block POTTED_AZALEA;
 
     @Shadow
     @Final
-    public static Block POTTED_FLOWERING_AZALEA_BUSH;
+    public static Block POTTED_FLOWERING_AZALEA;
 
     @Shadow
     @Final
@@ -705,8 +705,8 @@ public class BlocksExtender {
         POTTED_WARPED_FUNGUS.itematic$setAsItemKey(ItemKeys.WARPED_FUNGUS);
         POTTED_CRIMSON_ROOTS.itematic$setAsItemKey(ItemKeys.CRIMSON_ROOTS);
         POTTED_WARPED_ROOTS.itematic$setAsItemKey(ItemKeys.WARPED_ROOTS);
-        POTTED_AZALEA_BUSH.itematic$setAsItemKey(ItemKeys.AZALEA);
-        POTTED_FLOWERING_AZALEA_BUSH.itematic$setAsItemKey(ItemKeys.FLOWERING_AZALEA);
+        POTTED_AZALEA.itematic$setAsItemKey(ItemKeys.AZALEA);
+        POTTED_FLOWERING_AZALEA.itematic$setAsItemKey(ItemKeys.FLOWERING_AZALEA);
         POTTED_OPEN_EYEBLOSSOM.itematic$setAsItemKey(ItemKeys.OPEN_EYEBLOSSOM);
         POTTED_CLOSED_EYEBLOSSOM.itematic$setAsItemKey(ItemKeys.CLOSED_EYEBLOSSOM);
         SKELETON_WALL_SKULL.itematic$setAsItemKey(ItemKeys.SKELETON_SKULL);

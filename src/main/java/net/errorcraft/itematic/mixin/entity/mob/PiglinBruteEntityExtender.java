@@ -1,41 +1,41 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.AbstractPiglinEntity;
-import net.minecraft.entity.mob.PiglinBruteEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(PiglinBruteEntity.class)
+@Mixin(PiglinBrute.class)
 public abstract class PiglinBruteEntityExtender extends MobEntityExtender {
-    public PiglinBruteEntityExtender(EntityType<? extends AbstractPiglinEntity> entityType, World world) {
+    public PiglinBruteEntityExtender(EntityType<? extends AbstractPiglin> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForGoldenAxeUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.GOLDEN_AXE);
+    private ItemStack newItemStackForGoldenAxeUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.GOLDEN_AXE);
     }
 
     @Redirect(
-        method = "canGather",
+        method = "wantsToPickUp",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForGoldenAxeUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -43,7 +43,7 @@ public abstract class PiglinBruteEntityExtender extends MobEntityExtender {
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.PIGLIN_BRUTE_SPAWN_EGG;
     }
 }

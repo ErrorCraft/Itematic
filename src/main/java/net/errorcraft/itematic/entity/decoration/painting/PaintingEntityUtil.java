@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.entity.decoration.painting;
 
-import net.minecraft.entity.decoration.painting.PaintingEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.decoration.painting.Painting;
+import net.minecraft.world.level.Level;
 
 public class PaintingEntityUtil {
     private PaintingEntityUtil() {}
 
-    public static PaintingEntity create(World world, BlockPos pos, Direction facing) {
-        return PaintingEntity.placePainting(world, pos, facing).orElse(null);
+    public static Painting create(Level world, BlockPos pos, Direction facing) {
+        return Painting.create(world, pos, facing).orElse(null);
     }
 }

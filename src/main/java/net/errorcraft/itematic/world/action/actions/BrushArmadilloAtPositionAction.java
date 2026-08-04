@@ -7,14 +7,13 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.ArmadilloEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.animal.armadillo.Armadillo;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 import java.util.List;
 
 public record BrushArmadilloAtPositionAction(PositionTarget position) implements Action<BrushArmadilloAtPositionAction> {
@@ -33,24 +32,24 @@ public record BrushArmadilloAtPositionAction(PositionTarget position) implements
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        List<ArmadilloEntity> armadillos = context.world().getEntitiesByClass(
-            ArmadilloEntity.class,
-            new Box(pos),
-            EntityPredicates.EXCEPT_SPECTATOR
+        List<Armadillo> armadillos = context.world().getEntitiesOfClass(
+            Armadillo.class,
+            new AABB(pos),
+            EntitySelector.NO_SPECTATORS
         );
         if (armadillos.isEmpty()) {
             return false;
         }
 
-        Entity interactingEntity = context.get(LootContextParameters.THIS_ENTITY);
-        ItemStack usedStack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
-        for (ArmadilloEntity armadillo : armadillos) {
-            if (armadillo.brushScute(interactingEntity, usedStack)) {
+        Entity interactingEntity = context.get(LootContextParams.THIS_ENTITY);
+        ItemStack usedStack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        for (Armadillo armadillo : armadillos) {
+            if (armadillo.brushOffScute(interactingEntity, usedStack)) {
                 return true;
             }
         }

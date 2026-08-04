@@ -4,14 +4,14 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
-import net.minecraft.block.SuspiciousStewIngredient;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.MooshroomEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.cow.MushroomCow;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SuspiciousEffectHolder;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,17 +19,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(MooshroomEntity.class)
+@Mixin(MushroomCow.class)
 public abstract class MooshroomEntityExtender extends MobEntityExtender {
-    public MooshroomEntityExtender(EntityType<? extends MooshroomEntity> entityType, World world) {
+    public MooshroomEntityExtender(EntityType<? extends MushroomCow> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         )
     )
@@ -38,47 +38,47 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "net/minecraft/world/item/ItemStack",
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForSuspiciousStewUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
+    private ItemStack newItemStackForSuspiciousStewUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/item/ItemStack",
+            target = "net/minecraft/world/item/ItemStack",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;SUSPICIOUS_STEW:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;SUSPICIOUS_STEW:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForMushroomStewUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.MUSHROOM_STEW);
+    private ItemStack newItemStackForMushroomStewUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.MUSHROOM_STEW);
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;SHEARS:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;SHEARS:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -88,19 +88,19 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
     }
 
     @Redirect(
-        method = "getStewEffectFrom",
+        method = "getEffectsFromItemStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/SuspiciousStewIngredient;of(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/block/SuspiciousStewIngredient;"
+            target = "Lnet/minecraft/world/level/block/SuspiciousEffectHolder;tryGet(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/level/block/SuspiciousEffectHolder;"
         )
     )
-    private SuspiciousStewIngredient suspiciousStewEffectsUseItemComponent(ItemConvertible item, @Local(argsOnly = true) ItemStack stack) {
+    private SuspiciousEffectHolder suspiciousStewEffectsUseItemComponent(ItemLike item, @Local(argsOnly = true) ItemStack stack) {
         return stack.itematic$getBehavior(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
             .orElse(null);
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.MOOSHROOM_SPAWN_EGG;
     }
 }

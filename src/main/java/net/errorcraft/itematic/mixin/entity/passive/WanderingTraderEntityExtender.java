@@ -7,20 +7,20 @@ import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.TradeTags;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.MerchantEntity;
-import net.minecraft.entity.passive.WanderingTraderEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.potion.Potion;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Util;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.villager.AbstractVillager;
+import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(WanderingTraderEntity.class)
+@Mixin(WanderingTrader.class)
 public abstract class WanderingTraderEntityExtender extends MerchantEntityExtender {
     @Unique
     private static final Object2IntMap<TagKey<Trade>> TRADE_TO_AMOUNT = Util.make(new Object2IntArrayMap<>(), trades -> {
@@ -38,45 +38,45 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         trades.put(TradeTags.WANDERING_TRADER_REGULAR, 5);
     });
 
-    public WanderingTraderEntityExtender(EntityType<? extends MerchantEntity> entityType, World world) {
+    public WanderingTraderEntityExtender(EntityType<? extends AbstractVillager> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "initGoals",
+        method = "registerGoals",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/PotionContentsComponent;createStack(Lnet/minecraft/item/Item;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForPotionUseCreateStack(Item item, RegistryEntry<Potion> potion) {
-        return PotionContentsComponentUtil.setPotion(this.getEntityWorld().itematic$createStack(ItemKeys.POTION), potion);
+    private ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion) {
+        return PotionContentsComponentUtil.setPotion(this.level().itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(
-        method = "initGoals",
+        method = "registerGoals",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;POTION:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForMilkBucketUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.MILK_BUCKET);
+    private ItemStack newItemStackForMilkBucketUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.MILK_BUCKET);
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
     private boolean isOfForVillagerSpawnEggUseRegistryKeyCheck(ItemStack instance, Item item) {
@@ -85,14 +85,14 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
 
     @Override
     protected void fillRecipes(LootContext context) {
-        Registry<Trade> trades = context.getWorld().getRegistryManager().getOrThrow(ItematicRegistryKeys.TRADE);
+        Registry<Trade> trades = context.getLevel().registryAccess().lookupOrThrow(ItematicRegistryKeys.TRADE);
         for (TagKey<Trade> trade : TRADE_TO_AMOUNT.keySet()) {
             this.fillRecipesFromPool(trades.getOrThrow(trade), TRADE_TO_AMOUNT.getInt(trade), context);
         }
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.WANDERING_TRADER_SPAWN_EGG;
     }
 }

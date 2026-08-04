@@ -1,13 +1,13 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.AbstractCowEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.GoatEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.cow.AbstractCow;
+import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,25 +15,25 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin({
-    AbstractCowEntity.class,
-    GoatEntity.class
+    AbstractCow.class,
+    Goat.class
 })
-public abstract class MilkableEntitiesExtender extends AnimalEntity {
-    protected MilkableEntitiesExtender(EntityType<? extends AnimalEntity> entityType, World world) {
+public abstract class MilkableEntitiesExtender extends Animal {
+    protected MilkableEntitiesExtender(EntityType<? extends Animal> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;BUCKET:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;BUCKET:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -43,13 +43,13 @@ public abstract class MilkableEntitiesExtender extends AnimalEntity {
     }
 
     @Redirect(
-        method = "interactMob",
+        method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/Item;getDefaultStack()Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/world/item/Item;getDefaultInstance()Lnet/minecraft/world/item/ItemStack;"
         )
     )
     private ItemStack getDefaultStackForMilkBucketUseRegistryEntry(Item instance) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.MILK_BUCKET);
+        return this.level().itematic$createStack(ItemKeys.MILK_BUCKET);
     }
 }

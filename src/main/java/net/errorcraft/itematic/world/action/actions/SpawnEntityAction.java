@@ -9,9 +9,9 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
 
 public record SpawnEntityAction(EntitySpawner entity, PositionTarget position) implements Action<SpawnEntityAction> {
     public static final MapCodec<SpawnEntityAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -19,7 +19,7 @@ public record SpawnEntityAction(EntitySpawner entity, PositionTarget position) i
         PositionTarget.CODEC.fieldOf("position").forGetter(SpawnEntityAction::position)
     ).apply(instance, SpawnEntityAction::new));
 
-    public static SpawnEntityAction of(RegistryEntry<EntityType<?>> entity, PositionTarget position) {
+    public static SpawnEntityAction of(Holder<EntityType<?>> entity, PositionTarget position) {
         return new SpawnEntityAction(EntitySpawner.of(entity), position);
     }
 
@@ -31,6 +31,6 @@ public record SpawnEntityAction(EntitySpawner entity, PositionTarget position) i
     @Override
     public boolean execute(ActionContext context) {
         EntityPlacer placer = EntityPlacer.of(this.entity, null);
-        return placer.place(context, this.position, SpawnReason.COMMAND) != null;
+        return placer.place(context, this.position, EntitySpawnReason.COMMAND) != null;
     }
 }

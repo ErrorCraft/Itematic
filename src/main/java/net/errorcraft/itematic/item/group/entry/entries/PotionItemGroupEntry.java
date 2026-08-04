@@ -5,32 +5,31 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import java.util.Collection;
 
 public class PotionItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     public static final MapCodec<PotionItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> createCodec(instance).and(
-        RegistryFixedCodec.of(RegistryKeys.ITEM).fieldOf("item").forGetter(entry -> entry.item)
+        RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(entry -> entry.item)
     ).apply(instance, PotionItemGroupEntry::new));
 
-    private final RegistryEntry<Item> item;
+    private final Holder<Item> item;
 
-    public PotionItemGroupEntry(RegistryEntry<Item> item) {
-        this(ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS, false, item);
+    public PotionItemGroupEntry(Holder<Item> item) {
+        this(CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS, false, item);
     }
 
-    public PotionItemGroupEntry(ItemGroup.StackVisibility visibility, boolean requiresPermissions, RegistryEntry<Item> item) {
+    public PotionItemGroupEntry(CreativeModeTab.TabVisibility visibility, boolean requiresPermissions, Holder<Item> item) {
         super(visibility, requiresPermissions);
         this.item = item;
     }
 
-    public static PotionItemGroupEntry of(RegistryEntry<Item> item) {
+    public static PotionItemGroupEntry of(Holder<Item> item) {
         return new PotionItemGroupEntry(item);
     }
 
@@ -40,10 +39,10 @@ public class PotionItemGroupEntry extends PossiblyHiddenItemGroupEntry {
     }
 
     @Override
-    protected Collection<ItemStack> createStacks(ItemGroup.DisplayContext context) {
-        return context.lookup()
-            .getOrThrow(RegistryKeys.POTION)
-            .streamEntries()
+    protected Collection<ItemStack> createStacks(CreativeModeTab.ItemDisplayParameters context) {
+        return context.holders()
+            .lookupOrThrow(Registries.POTION)
+            .listElements()
             .map(entry -> PotionContentsComponentUtil.setPotion(new ItemStack(this.item), entry))
             .toList();
     }

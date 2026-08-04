@@ -4,34 +4,33 @@ import net.errorcraft.itematic.mixin.client.gui.screen.recipebook.GhostRecipeAcc
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
 import net.errorcraft.itematic.recipe.display.BrewingRecipeDisplay;
 import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
-import net.minecraft.client.gui.screen.ButtonTextures;
-import net.minecraft.client.gui.screen.recipebook.GhostRecipe;
-import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
-import net.minecraft.client.gui.screen.recipebook.RecipeResultCollection;
-import net.minecraft.client.recipebook.RecipeBookType;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipeFinder;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.context.ContextParameterMap;
-
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.screens.recipebook.GhostSlots;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
+import net.minecraft.client.gui.screens.recipebook.RecipeCollection;
+import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.context.ContextMap;
+import net.minecraft.world.entity.player.StackedItemContents;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import java.util.List;
 
-public class BrewingRecipeBookWidget extends RecipeBookWidget<BrewingStandMenuDelegate> {
-    private static final ButtonTextures TEXTURES = new ButtonTextures(
-        Identifier.ofVanilla("recipe_book/brewing_stand_filter_enabled"),
-        Identifier.ofVanilla("recipe_book/brewing_stand_filter_disabled"),
-        Identifier.ofVanilla("recipe_book/brewing_stand_filter_enabled_highlighted"),
-        Identifier.ofVanilla("recipe_book/brewing_stand_filter_disabled_highlighted")
+public class BrewingRecipeBookWidget extends RecipeBookComponent<BrewingStandMenuDelegate> {
+    private static final WidgetSprites TEXTURES = new WidgetSprites(
+        Identifier.withDefaultNamespace("recipe_book/brewing_stand_filter_enabled"),
+        Identifier.withDefaultNamespace("recipe_book/brewing_stand_filter_disabled"),
+        Identifier.withDefaultNamespace("recipe_book/brewing_stand_filter_enabled_highlighted"),
+        Identifier.withDefaultNamespace("recipe_book/brewing_stand_filter_disabled_highlighted")
     );
-    private static final Text TOGGLE_BREWABLE_TEXT = Text.translatable("gui.recipebook.toggleRecipes.brewable");
-    private static final List<Tab> TABS = List.of(
-        new Tab(RecipeBookType.ITEMATIC_BREWING),
+    private static final Component TOGGLE_BREWABLE_TEXT = Component.translatable("gui.recipebook.toggleRecipes.brewable");
+    private static final List<TabInfo> TABS = List.of(
+        new TabInfo(SearchRecipeBookCategory.ITEMATIC_BREWING),
         // Item references are intended as key conversion is handled by a mixin
-        new Tab(Items.NETHER_WART, Items.MAGMA_CREAM, ItematicRecipeBookCategories.BREWING_MODIFY),
-        new Tab(Items.SPLASH_POTION, Items.LINGERING_POTION, ItematicRecipeBookCategories.BREWING_AMPLIFY)
+        new TabInfo(Items.NETHER_WART, Items.MAGMA_CREAM, ItematicRecipeBookCategories.BREWING_MODIFY),
+        new TabInfo(Items.SPLASH_POTION, Items.LINGERING_POTION, ItematicRecipeBookCategories.BREWING_AMPLIFY)
     );
 
     public BrewingRecipeBookWidget(BrewingStandMenuDelegate menu) {
@@ -39,7 +38,7 @@ public class BrewingRecipeBookWidget extends RecipeBookWidget<BrewingStandMenuDe
     }
 
     @Override
-    protected ButtonTextures getBookButtonTextures() {
+    protected WidgetSprites getFilterButtonTextures() {
         return TEXTURES;
     }
 
@@ -49,20 +48,20 @@ public class BrewingRecipeBookWidget extends RecipeBookWidget<BrewingStandMenuDe
     }
 
     @Override
-    protected void populateRecipes(RecipeResultCollection recipeResultCollection, RecipeFinder recipeFinder) {
-        recipeResultCollection.populateRecipes(recipeFinder, display -> display instanceof BrewingRecipeDisplay);
+    protected void selectMatchingRecipes(RecipeCollection recipeResultCollection, StackedItemContents recipeFinder) {
+        recipeResultCollection.selectRecipes(recipeFinder, display -> display instanceof BrewingRecipeDisplay);
     }
 
     @Override
-    protected Text getToggleCraftableButtonText() {
+    protected Component getRecipeFilterName() {
         return TOGGLE_BREWABLE_TEXT;
     }
 
     @Override
-    protected void showGhostRecipe(GhostRecipe ghostRecipe, RecipeDisplay display, ContextParameterMap context) {
+    protected void fillGhostRecipe(GhostSlots ghostRecipe, RecipeDisplay display, ContextMap context) {
         if (display instanceof BrewingRecipeDisplay brewingRecipeDisplay) {
-            ((GhostRecipeAccessor) ghostRecipe).itematic$addInputs(this.craftingScreenHandler.firstInputSlot(), context, brewingRecipeDisplay.base());
-            ((GhostRecipeAccessor) ghostRecipe).itematic$addInputs(this.craftingScreenHandler.ingredientSlot(), context, brewingRecipeDisplay.reagent());
+            ((GhostRecipeAccessor) ghostRecipe).itematic$addInputs(this.menu.firstInputSlot(), context, brewingRecipeDisplay.base());
+            ((GhostRecipeAccessor) ghostRecipe).itematic$addInputs(this.menu.ingredientSlot(), context, brewingRecipeDisplay.reagent());
         }
     }
 }

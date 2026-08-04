@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.EntityTypeAccess;
-import net.errorcraft.itematic.access.entity.EntityTypeBuilderAccess;
 import net.errorcraft.itematic.entity.EntitySpawnCallback;
 import net.errorcraft.itematic.entity.decoration.painting.PaintingEntityUtil;
 import net.errorcraft.itematic.entity.initializer.EntityInitializer;
@@ -13,19 +12,28 @@ import net.errorcraft.itematic.entity.initializer.EntityInitializerSupplier;
 import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.entity.*;
-import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.decoration.GlowItemFrameEntity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
-import net.minecraft.entity.decoration.painting.PaintingEntity;
-import net.minecraft.entity.projectile.*;
-import net.minecraft.entity.vehicle.*;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
+import net.minecraft.world.entity.decoration.GlowItemFrame;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.decoration.painting.Painting;
+import net.minecraft.world.entity.projectile.EyeOfEnder;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.entity.projectile.arrow.Arrow;
+import net.minecraft.world.entity.projectile.arrow.SpectralArrow;
+import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
+import net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball;
+import net.minecraft.world.entity.projectile.hurtingprojectile.windcharge.WindCharge;
+import net.minecraft.world.entity.vehicle.minecart.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,13 +48,13 @@ import java.util.function.Consumer;
 @Mixin(EntityType.class)
 public abstract class EntityTypeExtender<T extends Entity> implements EntityTypeAccess<T> {
     @Shadow
-    public static <T extends Entity> Consumer<T> copier(Consumer<T> chained, World world, ItemStack stack, @Nullable LivingEntity spawner) {
+    public static <T extends Entity> Consumer<T> appendDefaultStackConfig(Consumer<T> chained, Level world, ItemStack stack, @Nullable LivingEntity spawner) {
         return null;
     }
 
     @Shadow
     @Nullable
-    public abstract T create(ServerWorld world, @Nullable Consumer<T> afterConsumer, BlockPos pos, SpawnReason reason, boolean alignPosition, boolean invertY);
+    public abstract T create(ServerLevel world, @Nullable Consumer<T> afterConsumer, BlockPos pos, EntitySpawnReason reason, boolean alignPosition, boolean invertY);
 
     @Unique
     private EntityInitializer<T> initializer;
@@ -58,7 +66,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -68,7 +76,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<MinecartEntity> setMinecartInitializer(EntityType.Builder<MinecartEntity> builder) {
+    private static EntityType.Builder<Minecart> setMinecartInitializer(EntityType.Builder<Minecart> builder) {
         builder.itematic$initializer(MinecartEntityInitializer::new);
         return builder;
     }
@@ -77,7 +85,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -87,7 +95,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<ChestMinecartEntity> setChestMinecartInitializer(EntityType.Builder<ChestMinecartEntity> builder) {
+    private static EntityType.Builder<MinecartChest> setChestMinecartInitializer(EntityType.Builder<MinecartChest> builder) {
         builder.itematic$initializer(MinecartEntityInitializer::new);
         return builder;
     }
@@ -96,7 +104,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -106,7 +114,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<FurnaceMinecartEntity> setFurnaceMinecartInitializer(EntityType.Builder<FurnaceMinecartEntity> builder) {
+    private static EntityType.Builder<MinecartFurnace> setFurnaceMinecartInitializer(EntityType.Builder<MinecartFurnace> builder) {
         builder.itematic$initializer(MinecartEntityInitializer::new);
         return builder;
     }
@@ -115,7 +123,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -125,7 +133,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<TntMinecartEntity> setTntMinecartInitializer(EntityType.Builder<TntMinecartEntity> builder) {
+    private static EntityType.Builder<MinecartTNT> setTntMinecartInitializer(EntityType.Builder<MinecartTNT> builder) {
         builder.itematic$initializer(MinecartEntityInitializer::new);
         return builder;
     }
@@ -134,7 +142,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -144,7 +152,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<SpawnerMinecartEntity> setSpawnerMinecartInitializer(EntityType.Builder<SpawnerMinecartEntity> builder) {
+    private static EntityType.Builder<MinecartSpawner> setSpawnerMinecartInitializer(EntityType.Builder<MinecartSpawner> builder) {
         builder.itematic$initializer(MinecartEntityInitializer::new);
         return builder;
     }
@@ -153,7 +161,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -163,7 +171,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<HopperMinecartEntity> setHopperMinecartInitializer(EntityType.Builder<HopperMinecartEntity> builder) {
+    private static EntityType.Builder<MinecartHopper> setHopperMinecartInitializer(EntityType.Builder<MinecartHopper> builder) {
         builder.itematic$initializer(MinecartEntityInitializer::new);
         return builder;
     }
@@ -172,7 +180,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -182,7 +190,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<CommandBlockMinecartEntity> setCommandBlockMinecartInitializer(EntityType.Builder<CommandBlockMinecartEntity> builder) {
+    private static EntityType.Builder<MinecartCommandBlock> setCommandBlockMinecartInitializer(EntityType.Builder<MinecartCommandBlock> builder) {
         builder.itematic$initializer(MinecartEntityInitializer::new);
         return builder;
     }
@@ -191,7 +199,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -201,7 +209,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<EndCrystalEntity> setEndCrystalInitializer(EntityType.Builder<EndCrystalEntity> builder) {
+    private static EntityType.Builder<EndCrystal> setEndCrystalInitializer(EntityType.Builder<EndCrystal> builder) {
         builder.itematic$initializer(EndCrystalEntityInitializer.INSTANCE);
         return builder;
     }
@@ -210,7 +218,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -220,7 +228,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<PaintingEntity> setPaintingInitializer(EntityType.Builder<PaintingEntity> builder) {
+    private static EntityType.Builder<Painting> setPaintingInitializer(EntityType.Builder<Painting> builder) {
         builder.itematic$initializer(DecorationEntityInitializer.of(PaintingEntityUtil::create));
         return builder;
     }
@@ -229,7 +237,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -239,8 +247,8 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<ItemFrameEntity> setItemFrameInitializer(EntityType.Builder<ItemFrameEntity> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.of(ItemFrameEntity::new));
+    private static EntityType.Builder<ItemFrame> setItemFrameInitializer(EntityType.Builder<ItemFrame> builder) {
+        builder.itematic$initializer(DecorationEntityInitializer.of(ItemFrame::new));
         return builder;
     }
 
@@ -248,7 +256,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -258,8 +266,8 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<GlowItemFrameEntity> setGlowItemFrameInitializer(EntityType.Builder<GlowItemFrameEntity> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.of(GlowItemFrameEntity::new));
+    private static EntityType.Builder<GlowItemFrame> setGlowItemFrameInitializer(EntityType.Builder<GlowItemFrame> builder) {
+        builder.itematic$initializer(DecorationEntityInitializer.of(GlowItemFrame::new));
         return builder;
     }
 
@@ -267,7 +275,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -277,10 +285,10 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<ArrowEntity> setArrowInitializer(EntityType.Builder<ArrowEntity> builder) {
+    private static EntityType.Builder<Arrow> setArrowInitializer(EntityType.Builder<Arrow> builder) {
         builder.itematic$initializer(PersistentProjectileEntityInitializer.of(
-            ArrowEntity::new,
-            ArrowEntity::new
+            Arrow::new,
+            Arrow::new
         ));
         return builder;
     }
@@ -289,7 +297,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -299,10 +307,10 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<SpectralArrowEntity> setSpectralArrowInitializer(EntityType.Builder<SpectralArrowEntity> builder) {
+    private static EntityType.Builder<SpectralArrow> setSpectralArrowInitializer(EntityType.Builder<SpectralArrow> builder) {
         builder.itematic$initializer(PersistentProjectileEntityInitializer.of(
-            SpectralArrowEntity::new,
-            SpectralArrowEntity::new
+            SpectralArrow::new,
+            SpectralArrow::new
         ));
         return builder;
     }
@@ -311,7 +319,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -321,7 +329,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<TridentEntity> setTridentInitializer(EntityType.Builder<TridentEntity> builder) {
+    private static EntityType.Builder<ThrownTrident> setTridentInitializer(EntityType.Builder<ThrownTrident> builder) {
         builder.itematic$initializer(TridentEntityInitializer.INSTANCE);
         return builder;
     }
@@ -330,7 +338,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -349,7 +357,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -359,7 +367,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<EyeOfEnderEntity> setEyeOfEnderInitializer(EntityType.Builder<EyeOfEnderEntity> builder) {
+    private static EntityType.Builder<EyeOfEnder> setEyeOfEnderInitializer(EntityType.Builder<EyeOfEnder> builder) {
         builder.itematic$initializer(EyeOfEnderEntityInitializer.INSTANCE);
         return builder;
     }
@@ -368,7 +376,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -378,10 +386,10 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<SmallFireballEntity> setSmallFireballInitializer(EntityType.Builder<SmallFireballEntity> builder) {
+    private static EntityType.Builder<SmallFireball> setSmallFireballInitializer(EntityType.Builder<SmallFireball> builder) {
         builder.itematic$initializer(ThrownBallEntityInitializer.of(
-            (player, world, x, y, z) -> new SmallFireballEntity(world, player, new Vec3d(x, y, z)),
-            SmallFireballEntity::new
+            (player, world, x, y, z) -> new SmallFireball(world, player, new Vec3(x, y, z)),
+            SmallFireball::new
         ));
         return builder;
     }
@@ -390,7 +398,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/entity/EntityType$Builder;)Lnet/minecraft/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityType;register(Ljava/lang/String;Lnet/minecraft/world/entity/EntityType$Builder;)Lnet/minecraft/world/entity/EntityType;",
             ordinal = 0
         ),
         slice = @Slice(
@@ -400,22 +408,22 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             )
         )
     )
-    private static EntityType.Builder<WindChargeEntity> setWindChargeInitializer(EntityType.Builder<WindChargeEntity> builder) {
+    private static EntityType.Builder<WindCharge> setWindChargeInitializer(EntityType.Builder<WindCharge> builder) {
         builder.itematic$initializer(ThrownBallEntityInitializer.of(
-            WindChargeEntity::new,
-            WindChargeEntity::new
+            WindCharge::new,
+            WindCharge::new
         ));
         return builder;
     }
 
     @WrapOperation(
-        method = "create(Lnet/minecraft/world/World;Lnet/minecraft/entity/SpawnReason;)Lnet/minecraft/entity/Entity;",
+        method = "create(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/EntitySpawnReason;)Lnet/minecraft/world/entity/Entity;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/EntityType$EntityFactory;create(Lnet/minecraft/entity/EntityType;Lnet/minecraft/world/World;)Lnet/minecraft/entity/Entity;"
+            target = "Lnet/minecraft/world/entity/EntityType$EntityFactory;create(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)Lnet/minecraft/world/entity/Entity;"
         )
     )
-    private T useEntityInitializer(EntityType.EntityFactory<T> instance, EntityType<T> type, World world, Operation<T> original, @Local(argsOnly = true) SpawnReason reason) {
+    private T useEntityInitializer(EntityType.EntityFactory<T> instance, EntityType<T> type, Level world, Operation<T> original, @Local(argsOnly = true) EntitySpawnReason reason) {
         if (this.actionContext == null) {
             return original.call(instance, type, world);
         }
@@ -432,8 +440,8 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Override
-    public T itematic$create(ActionContext context, SpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
-        if (!(context.world() instanceof ServerWorld world)) {
+    public T itematic$create(ActionContext context, EntitySpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
+        if (!(context.world() instanceof ServerLevel world)) {
             return null;
         }
 
@@ -451,21 +459,21 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     @Unique
     @Nullable
     private static <T extends Entity> Consumer<T> copier(ActionContext context, @Nullable EntitySpawnCallback callback, boolean allowItemData) {
-        ItemStack stack = context.get(LootContextParameters.TOOL);
+        ItemStack stack = context.get(LootContextParams.TOOL);
         if (!allowItemData || ItemStackUtil.isNullOrEmpty(stack)) {
             return callback == null ? null : entity -> callback.accept(entity, stack);
         }
 
-        return copier(
+        return appendDefaultStackConfig(
             callback == null ?entity -> {} : entity -> callback.accept(entity, stack),
             context.world(),
             stack,
-            context.get(LootContextParameters.THIS_ENTITY, LivingEntity.class)
+            context.get(LootContextParams.THIS_ENTITY, LivingEntity.class)
         );
     }
 
     @Mixin(EntityType.Builder.class)
-    public static class BuilderExtender<T extends Entity> implements EntityTypeBuilderAccess<T> {
+    public static class BuilderExtender<T extends Entity> implements BuilderAccess<T> {
         @Unique
         private EntityInitializerSupplier<T> initializer = SimpleEntityInitializer::new;
 

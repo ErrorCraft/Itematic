@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.entity.projectile;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Hand;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 
 public class ItematicProjectileUtil {
     private ItematicProjectileUtil() {}
 
-    public static Hand getHandPossiblyHolding(LivingEntity entity, RegistryKey<Item> key) {
-        return entity.getMainHandStack().itematic$isOf(key) ? Hand.MAIN_HAND : Hand.OFF_HAND;
+    public static InteractionHand getHandPossiblyHolding(LivingEntity entity, ResourceKey<Item> key) {
+        return entity.getMainHandItem().itematic$isOf(key) ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
     }
 }

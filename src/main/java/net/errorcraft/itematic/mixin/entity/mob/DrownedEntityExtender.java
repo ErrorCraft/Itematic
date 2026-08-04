@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import net.errorcraft.itematic.item.ItemKeys;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.DrownedEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.zombie.Drowned;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,68 +16,68 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(DrownedEntity.class)
+@Mixin(Drowned.class)
 public abstract class DrownedEntityExtender extends MobEntityExtender {
-    public DrownedEntityExtender(EntityType<? extends ZombieEntity> entityType, World world) {
+    public DrownedEntityExtender(EntityType<? extends Zombie> entityType, Level world) {
         super(entityType, world);
     }
 
     @Redirect(
-        method = "initialize",
+        method = "finalizeSpawn",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForNautilusShellUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.NAUTILUS_SHELL);
+    private ItemStack newItemStackForNautilusShellUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.NAUTILUS_SHELL);
     }
 
     @Redirect(
         method = {
-            "initEquipment",
-            "shootAt"
+            "populateDefaultEquipmentSlots",
+            "performRangedAttack"
         },
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForTridentUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.TRIDENT);
+    private ItemStack newItemStackForTridentUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.TRIDENT);
     }
 
     @Redirect(
-        method = "initEquipment",
+        method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/item/ItemStack;",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;TRIDENT:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;TRIDENT:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private ItemStack newItemStackForFishingRodUseCreateStack(ItemConvertible item) {
-        return this.getEntityWorld().itematic$createStack(ItemKeys.FISHING_ROD);
+    private ItemStack newItemStackForFishingRodUseCreateStack(ItemLike item) {
+        return this.level().itematic$createStack(ItemKeys.FISHING_ROD);
     }
 
     @Redirect(
-        method = "prefersNewEquipment",
+        method = "canReplaceCurrentItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/item/Items;NAUTILUS_SHELL:Lnet/minecraft/item/Item;",
+                target = "Lnet/minecraft/world/item/Items;NAUTILUS_SHELL:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
@@ -87,17 +87,17 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
     }
 
     @Override
-    protected @Nullable RegistryKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickBlockKey() {
         return ItemKeys.DROWNED_SPAWN_EGG;
     }
 
-    @Mixin(targets = "net/minecraft/entity/mob/DrownedEntity$TridentAttackGoal")
+    @Mixin(targets = "net/minecraft/world/entity/monster/zombie/Drowned$DrownedTridentAttackGoal")
     public static class TridentAttackGoalExtender {
         @Redirect(
-            method = "canStart",
+            method = "canUse",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"
+                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
             )
         )
         private boolean isOfForTridentUseRegistryKeyCheck(ItemStack instance, Item item) {

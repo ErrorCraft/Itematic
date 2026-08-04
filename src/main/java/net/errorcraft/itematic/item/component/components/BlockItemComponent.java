@@ -15,28 +15,27 @@ import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.block.Block;
-import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ContainerComponent;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Hand;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
-
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import java.util.Set;
 
 public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set<Pass> passes) implements ItemComponent<BlockItemComponent> {
@@ -50,19 +49,19 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
         return new BlockItemComponent(block, operatorOnly, passes);
     }
 
-    public static BlockItemComponent of(RegistryEntry<Block> block) {
+    public static BlockItemComponent of(Holder<Block> block) {
         return of(new SimpleBlockPicker(block), false, Pass.DEFAULT_PASSES);
     }
 
-    public static BlockItemComponent of(RegistryEntry<Block> block, Pass... passes) {
+    public static BlockItemComponent of(Holder<Block> block, Pass... passes) {
         return of(new SimpleBlockPicker(block), false, Set.of(passes));
     }
 
-    public static BlockItemComponent operator(RegistryEntry<Block> block) {
+    public static BlockItemComponent operator(Holder<Block> block) {
         return of(new SimpleBlockPicker(block), true, Pass.DEFAULT_PASSES);
     }
 
-    public static BlockItemComponent attachedToSide(RegistryEntry<Block> attachedBlock, RegistryEntry<Block> otherBlock, Direction attachedSide) {
+    public static BlockItemComponent attachedToSide(Holder<Block> attachedBlock, Holder<Block> otherBlock, Direction attachedSide) {
         return of(new AttachedToSideBlockPicker(attachedBlock, otherBlock, attachedSide), false, Pass.DEFAULT_PASSES);
     }
 
@@ -77,22 +76,22 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     }
 
     @Override
-    public ItemResult use(World world, PlayerEntity user, Hand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.FLUID)) {
             return ItemResult.PASS;
         }
 
-        BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
+        BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
         }
 
-        ItemUsageContext context = new ItemUsageContext(world, user, hand, stack, blockHitResult);
+        UseOnContext context = new UseOnContext(world, user, hand, stack, blockHitResult);
         return this.place(context, stackExchanger);
     }
 
     @Override
-    public ItemResult useOnBlock(ItemUsageContext context, ItemStackExchanger stackExchanger) {
+    public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.BLOCK)) {
             return ItemResult.PASS;
         }
@@ -101,7 +100,7 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     }
 
     @Override
-    public void addComponents(ComponentMap.Builder builder) {
+    public void addComponents(DataComponentMap.Builder builder) {
         this.block.defaultBlock().value().itematic$addComponents(builder);
     }
 
@@ -110,9 +109,9 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
     }
 
     public void onDestroyed(ItemEntity item) {
-        ContainerComponent container = item.getStack().set(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
+        ItemContainerContents container = item.getItem().set(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
         if (container != null) {
-            ItemUsage.spawnItemContents(item, container.iterateNonEmptyCopy());
+            ItemUtils.onContainerDestroyed(item, container.nonEmptyItemsCopy());
         }
     }
 
@@ -133,18 +132,18 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
         }
 
         if (decrementCount) {
-            context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY)
-                .decrementUnlessCreative(
+            context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
+                .consume(
                     1,
-                    context.get(LootContextParameters.THIS_ENTITY, LivingEntity.class)
+                    context.get(LootContextParams.THIS_ENTITY, LivingEntity.class)
                 );
         }
 
         return true;
     }
 
-    private ItemResult place(ItemUsageContext context, ItemStackExchanger stackExchanger) {
-        ActionContext actionContext = new ItemPlacementContext(context)
+    private ItemResult place(UseOnContext context, ItemStackExchanger stackExchanger) {
+        ActionContext actionContext = new BlockPlaceContext(context)
             .itematic$actionContext(stackExchanger);
         if (this.place(actionContext, PositionTarget.INTERACTED, true)) {
             return ItemResult.SUCCEED;
@@ -153,12 +152,12 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
         return ItemResult.PASS;
     }
 
-    public enum Pass implements StringIdentifiable {
+    public enum Pass implements StringRepresentable {
         BLOCK("block"),
         FLUID("fluid");
 
         public static final Set<Pass> DEFAULT_PASSES = Set.of(BLOCK);
-        public static final Codec<Pass> CODEC = StringIdentifiable.createCodec(Pass::values);
+        public static final Codec<Pass> CODEC = StringRepresentable.fromEnum(Pass::values);
 
         private final String name;
 
@@ -167,7 +166,7 @@ public record BlockItemComponent(BlockPicker<?> block, boolean operatorOnly, Set
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.name;
         }
     }
