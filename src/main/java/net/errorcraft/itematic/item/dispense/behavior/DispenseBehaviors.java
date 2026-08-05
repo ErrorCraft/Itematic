@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.item.dispense.behavior;
 
-import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
+import net.errorcraft.itematic.references.BlockKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.Action;

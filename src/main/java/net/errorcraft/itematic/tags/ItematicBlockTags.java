@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.block;
+package net.errorcraft.itematic.tags;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;

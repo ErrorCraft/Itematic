@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.world.action;
 
-import net.errorcraft.itematic.block.BlockKeys;
-import net.errorcraft.itematic.block.ItematicBlockTags;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
+import net.errorcraft.itematic.references.BlockKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
@@ -37,6 +37,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+
 import java.util.function.UnaryOperator;
 
 public class Actions {

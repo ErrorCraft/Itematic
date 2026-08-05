@@ -1,11 +1,11 @@
-package net.errorcraft.itematic.block;
+package net.errorcraft.itematic.world.phys.shapes;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import org.jetbrains.annotations.Nullable;
 
-public class ShapeContexts {
-    private ShapeContexts() {}
+public class CollisionContexts {
+    private CollisionContexts() {}
 
     public static CollisionContext ofNullable(@Nullable Entity entity) {
         if (entity == null) {

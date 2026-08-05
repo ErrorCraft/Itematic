@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.data.server.tag;
 
-import net.errorcraft.itematic.block.BlockKeys;
-import net.errorcraft.itematic.block.ItematicBlockTags;
+import net.errorcraft.itematic.references.BlockKeys;
+import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;

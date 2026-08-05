@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.item.placement.block;
 
-import net.errorcraft.itematic.block.ShapeContexts;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.mixin.block.BlockItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.phys.shapes.CollisionContexts;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -118,7 +118,7 @@ public class BlockPlacer {
             return false;
         }
 
-        CollisionContext shapeContext = ShapeContexts.ofNullable(placer);
+        CollisionContext shapeContext = CollisionContexts.ofNullable(placer);
         Level world = this.context.world();
         return state.canSurvive(world, pos) &&
             world.isUnobstructed(state, pos, shapeContext);

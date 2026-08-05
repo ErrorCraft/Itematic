@@ -2,13 +2,13 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.block.BlockKeys;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
 import net.errorcraft.itematic.item.weapon.melee.component.KineticMeleeWeapon;
 import net.errorcraft.itematic.item.weapon.melee.component.PiercingMeleeWeapon;
+import net.errorcraft.itematic.references.BlockKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
