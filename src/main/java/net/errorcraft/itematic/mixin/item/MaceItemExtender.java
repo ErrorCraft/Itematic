@@ -4,8 +4,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.SmashingWeaponDataComponent;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.world.item.component.SmashingWeapon;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,21 +26,21 @@ import java.util.Objects;
 @Mixin(MaceItem.class)
 public class MaceItemExtender {
     @Unique
-    private static SmashingWeaponDataComponent usedStackSmashingWeaponDataComponent;
+    private static SmashingWeapon usedStackSmashingWeapon;
 
     @Inject(
         method = "hurtEnemy",
         at = @At("HEAD"),
         cancellable = true
     )
-    private void storeSmashingWeaponDataComponent(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfo info, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
-        SmashingWeaponDataComponent smashingWeaponDataComponent = stack.get(ItematicDataComponentTypes.SMASHING_WEAPON);
-        if (smashingWeaponDataComponent == null) {
+    private void storeSmashingWeapon(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfo info, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+        SmashingWeapon smashingWeapon = stack.get(ItematicDataComponents.SMASHING_WEAPON);
+        if (smashingWeapon == null) {
             info.cancel();
             return;
         }
 
-        smashingWeapon.set(smashingWeaponDataComponent);
+        smashingWeaponReference.set(smashingWeapon);
     }
 
     @WrapOperation(
@@ -50,8 +50,8 @@ public class MaceItemExtender {
             target = "Lnet/minecraft/world/item/MaceItem;canSmashAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"
         )
     )
-    private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, Operation<Boolean> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
-        return smashingWeapon.get().canSmash(attacker);
+    private boolean canSmashAttackUseDataComponent(LivingEntity attacker, Operation<Boolean> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+        return smashingWeaponReference.get().canSmash(attacker);
     }
 
     @ModifyConstant(
@@ -60,8 +60,8 @@ public class MaceItemExtender {
             doubleValue = 5.0d
         )
     )
-    private double heavySmashAttackFallDistanceUseDataComponent(double constant, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
-        return smashingWeapon.get().heavySmashAttackFallDistance();
+    private double heavySmashAttackFallDistanceUseDataComponent(double constant, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+        return smashingWeaponReference.get().heavySmashAttackFallDistance();
     }
 
     @WrapOperation(
@@ -72,8 +72,8 @@ public class MaceItemExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private SoundEvent getOnGroundLargeFallDistanceSoundUseDataComponent(Operation<SoundEvent> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
-        return smashingWeapon.get()
+    private SoundEvent getOnGroundLargeFallDistanceSoundUseDataComponent(Operation<SoundEvent> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+        return smashingWeaponReference.get()
             .hitSounds()
             .onGroundLargeFallDistance()
             .value();
@@ -87,8 +87,8 @@ public class MaceItemExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private SoundEvent getOnGroundSmallFallDistanceSoundUseDataComponent(Operation<SoundEvent> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
-        return smashingWeapon.get()
+    private SoundEvent getOnGroundSmallFallDistanceSoundUseDataComponent(Operation<SoundEvent> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+        return smashingWeaponReference.get()
             .hitSounds()
             .onGroundSmallFallDistance()
             .value();
@@ -102,8 +102,8 @@ public class MaceItemExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private SoundEvent getInAirSoundUseDataComponent(Operation<SoundEvent> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
-        return smashingWeapon.get()
+    private SoundEvent getInAirSoundUseDataComponent(Operation<SoundEvent> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+        return smashingWeaponReference.get()
             .hitSounds()
             .inAir()
             .value();
@@ -116,10 +116,10 @@ public class MaceItemExtender {
             target = "Lnet/minecraft/world/item/MaceItem;knockback(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V"
         )
     )
-    private void temporarilyStoreUsedStack(Level world, Entity attacker, Entity attacked, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeaponDataComponent> smashingWeapon) {
-        usedStackSmashingWeaponDataComponent = smashingWeapon.get();
+    private void temporarilyStoreSmashingWeapon(Level world, Entity attacker, Entity attacked, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+        usedStackSmashingWeapon = smashingWeaponReference.get();
         original.call(world, attacker, attacker);
-        usedStackSmashingWeaponDataComponent = null;
+        usedStackSmashingWeapon = null;
     }
 
     @WrapOperation(
@@ -129,8 +129,8 @@ public class MaceItemExtender {
             target = "Lnet/minecraft/world/item/MaceItem;canSmashAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"
         )
     )
-    private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, Operation<Boolean> original, ItemStack stack) {
-        SmashingWeaponDataComponent smashingWeapon = stack.get(ItematicDataComponentTypes.SMASHING_WEAPON);
+    private boolean canSmashAttackUseDataComponent(LivingEntity attacker, Operation<Boolean> original, ItemStack stack) {
+        SmashingWeapon smashingWeapon = stack.get(ItematicDataComponents.SMASHING_WEAPON);
         if (smashingWeapon == null) {
             return false;
         }
@@ -145,9 +145,9 @@ public class MaceItemExtender {
             target = "Lnet/minecraft/world/item/MaceItem;canSmashAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"
         )
     )
-    private boolean shouldDealAdditionalDamageUseDataComponent(LivingEntity attacker, Operation<Boolean> original) {
-        SmashingWeaponDataComponent smashingWeapon = Objects.requireNonNull(attacker.getWeaponItem())
-            .get(ItematicDataComponentTypes.SMASHING_WEAPON);
+    private boolean canSmashAttackUseDataComponent(LivingEntity attacker, Operation<Boolean> original) {
+        SmashingWeapon smashingWeapon = Objects.requireNonNull(attacker.getWeaponItem())
+            .get(ItematicDataComponents.SMASHING_WEAPON);
         if (smashingWeapon == null) {
             return false;
         }
@@ -165,7 +165,7 @@ public class MaceItemExtender {
         )
     )
     private static double knockbackPowerUseDataComponent(double constant) {
-        return usedStackSmashingWeaponDataComponent.knockbackPower();
+        return usedStackSmashingWeapon.knockbackPower();
     }
 
     @ModifyConstant(
@@ -175,6 +175,6 @@ public class MaceItemExtender {
         )
     )
     private static double heavySmashAttackFallDistanceUseDataComponent(double constant) {
-        return usedStackSmashingWeaponDataComponent.heavySmashAttackFallDistance();
+        return usedStackSmashingWeapon.heavySmashAttackFallDistance();
     }
 }

@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
 import net.errorcraft.itematic.screen.ItematicScreenHandlerTypes;
 import net.errorcraft.itematic.util.TestUtil;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -24,7 +24,7 @@ public class BrewingStandBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER));
         brewingStandMenu.getSlot(3)
             .setByPlayer(world.itematic$createStack(ItemKeys.NETHER_WART));
         brewingStandMenu.getSlot(4)
@@ -45,7 +45,7 @@ public class BrewingStandBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.AWKWARD));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.AWKWARD));
         brewingStandMenu.getSlot(3)
             .setByPlayer(world.itematic$createStack(ItemKeys.SUGAR));
         brewingStandMenu.getSlot(4)
@@ -69,7 +69,7 @@ public class BrewingStandBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
             .setByPlayer(world.itematic$createStack(ItemKeys.GLOWSTONE_DUST));
         brewingStandMenu.getSlot(4)
@@ -93,7 +93,7 @@ public class BrewingStandBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
             .setByPlayer(world.itematic$createStack(ItemKeys.REDSTONE));
         brewingStandMenu.getSlot(4)
@@ -117,7 +117,7 @@ public class BrewingStandBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
             .setByPlayer(world.itematic$createStack(ItemKeys.GUNPOWDER));
         brewingStandMenu.getSlot(4)
@@ -141,7 +141,7 @@ public class BrewingStandBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.SPLASH_POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.SPLASH_POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
             .setByPlayer(world.itematic$createStack(ItemKeys.DRAGON_BREATH));
         brewingStandMenu.getSlot(4)
@@ -168,11 +168,11 @@ public class BrewingStandBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(1)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER));
         brewingStandMenu.getSlot(2)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.LEAPING));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.LEAPING));
         brewingStandMenu.getSlot(3)
             .setByPlayer(world.itematic$createStack(ItemKeys.NETHER_WART));
         brewingStandMenu.getSlot(4)
@@ -204,9 +204,9 @@ public class BrewingStandBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER));
         brewingStandMenu.getSlot(1)
-            .setByPlayer(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.AWKWARD));
+            .setByPlayer(PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.AWKWARD));
         brewingStandMenu.getSlot(3)
             .setByPlayer(world.itematic$createStack(ItemKeys.SUGAR));
         brewingStandMenu.getSlot(4)

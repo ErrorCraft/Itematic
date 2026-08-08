@@ -6,14 +6,15 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.item.component.WeaponAttackDamage;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceKey;
@@ -58,25 +59,31 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     protected int useItemRemaining;
 
     @Shadow
-    public abstract boolean isHolding(Predicate<ItemStack> predicate);
-
-    @Shadow
-    public abstract void startUsingItem(InteractionHand hand);
-
-    @Shadow
-    public abstract ItemStack getItemInHand(InteractionHand hand);
-
-    @Shadow
-    public abstract boolean isUsingItem();
+    public abstract double getAttributeBaseValue(Holder<Attribute> attribute);
 
     @Shadow
     public abstract AttributeMap getAttributes();
 
     @Shadow
-    public abstract double getAttributeBaseValue(Holder<Attribute> attribute);
+    public abstract ItemStack getMainHandItem();
+
+    @Shadow
+    public abstract boolean isHolding(Predicate<ItemStack> predicate);
+
+    @Shadow
+    public abstract ItemStack getItemInHand(InteractionHand hand);
+
+    @Shadow
+    public abstract ItemStack getItemBySlot(EquipmentSlot equipmentSlot);
+
+    @Shadow
+    public abstract boolean isUsingItem();
 
     @Shadow
     public abstract InteractionHand getUsedItemHand();
+
+    @Shadow
+    public abstract void startUsingItem(InteractionHand hand);
 
     @Unique
     private int itemUsedTicks;
@@ -107,17 +114,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     private void checkPresenceEquipmentBehavior(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
         if (!newStack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
             info.cancel();
-        }
-    }
-
-    @Inject(
-        method = "getProjectile",
-        at = @At("HEAD"),
-        cancellable = true
-    )
-    private void getAmmunitionUseItemComponent(ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
-        if (stack.itematic$hasBehavior(ItemComponentTypes.SHOOTER)) {
-            info.setReturnValue(this.itematic$getAmmunition(stack));
         }
     }
 
@@ -436,7 +432,31 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Override
-    public void itematic$startUsingHand(InteractionHand hand, int ticks) {
+    public ItemStack itematic$getHeldItem(HolderSet<Item> items) {
+        ItemStack offHandStack = this.getItemInHand(InteractionHand.OFF_HAND);
+        if (offHandStack.is(items)) {
+            return offHandStack;
+        }
+
+        ItemStack mainHandStack = this.getItemInHand(InteractionHand.MAIN_HAND);
+        if (mainHandStack.is(items)) {
+            return mainHandStack;
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack itematic$getAmmunition(ItemStack stack) {
+        HolderSet<Item> shooterHeldAmmunition = stack.getOrDefault(
+            ItematicDataComponents.SHOOTER_HELD_AMMUNITION,
+            HolderSet.empty()
+        );
+        return this.itematic$getHeldItem(shooterHeldAmmunition);
+    }
+
+    @Override
+    public void itematic$startUsingItem(InteractionHand hand, int ticks) {
         ItemStack stack = this.getItemInHand(hand);
         if (stack.isEmpty() || this.isUsingItem()) {
             return;
@@ -474,7 +494,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             return null;
         }
 
-        WeaponAttackDamageDataComponent weaponAttackDamage = stack.get(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE);
+        WeaponAttackDamage weaponAttackDamage = stack.get(ItematicDataComponents.WEAPON_ATTACK_DAMAGE);
         if (weaponAttackDamage == null) {
             return null;
         }

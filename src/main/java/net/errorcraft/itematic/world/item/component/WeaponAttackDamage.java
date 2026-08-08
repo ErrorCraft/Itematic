@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.component.type;
+package net.errorcraft.itematic.world.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -17,15 +17,15 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Optional;
 
-public record WeaponAttackDamageDataComponent(List<Rule> rules, double defaultDamage) {
-    public static final Codec<WeaponAttackDamageDataComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Rule.CODEC.listOf().fieldOf("rules").forGetter(WeaponAttackDamageDataComponent::rules),
-        ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("default_damage").forGetter(WeaponAttackDamageDataComponent::defaultDamage)
-    ).apply(instance, WeaponAttackDamageDataComponent::new));
-    public static final StreamCodec<RegistryFriendlyByteBuf, WeaponAttackDamageDataComponent> PACKET_CODEC = StreamCodec.composite(
-        Rule.PACKET_CODEC.apply(ByteBufCodecs.list()), WeaponAttackDamageDataComponent::rules,
-        ByteBufCodecs.DOUBLE, WeaponAttackDamageDataComponent::defaultDamage,
-        WeaponAttackDamageDataComponent::new
+public record WeaponAttackDamage(List<Rule> rules, double defaultDamage) {
+    public static final Codec<WeaponAttackDamage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Rule.CODEC.listOf().fieldOf("rules").forGetter(WeaponAttackDamage::rules),
+        ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("default_damage").forGetter(WeaponAttackDamage::defaultDamage)
+    ).apply(instance, WeaponAttackDamage::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, WeaponAttackDamage> PACKET_CODEC = StreamCodec.composite(
+        Rule.PACKET_CODEC.apply(ByteBufCodecs.list()), WeaponAttackDamage::rules,
+        ByteBufCodecs.DOUBLE, WeaponAttackDamage::defaultDamage,
+        WeaponAttackDamage::new
     );
 
     public double getDamage(ItemStack stack, Entity entity) {

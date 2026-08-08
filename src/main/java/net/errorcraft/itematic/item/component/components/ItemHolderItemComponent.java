@@ -2,7 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -152,8 +152,8 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
-        builder.set(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY, this.capacity);
-        builder.set(ItematicDataComponentTypes.ITEM_HOLDER_RULES, this.rules);
+        builder.set(ItematicDataComponents.ITEM_HOLDER_CAPACITY, this.capacity);
+        builder.set(ItematicDataComponents.ITEM_HOLDER_RULES, this.rules);
     }
 
     public Optional<TooltipComponent> tooltipData(ItemStack stack) {
@@ -162,7 +162,7 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
             return Optional.empty();
         }
 
-        Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
+        Fraction capacity = stack.get(ItematicDataComponents.ITEM_HOLDER_CAPACITY);
         if (capacity == null) {
             return Optional.empty();
         }
@@ -178,12 +178,12 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
             return null;
         }
 
-        Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
+        Fraction capacity = stack.get(ItematicDataComponents.ITEM_HOLDER_CAPACITY);
         if (capacity == null) {
             return null;
         }
 
-        ItemHolderRules rules = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_RULES);
+        ItemHolderRules rules = stack.get(ItematicDataComponents.ITEM_HOLDER_RULES);
         if (rules == null) {
             return null;
         }
@@ -208,12 +208,12 @@ public record ItemHolderItemComponent(Fraction capacity, ItemHolderRules rules, 
     }
 
     public BundleContents.Mutable createBuilder(ItemStack stack, BundleContents existingBundleContents) {
-        Fraction capacity = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_CAPACITY);
+        Fraction capacity = stack.get(ItematicDataComponents.ITEM_HOLDER_CAPACITY);
         if (capacity == null) {
             return null;
         }
 
-        ItemHolderRules rules = stack.get(ItematicDataComponentTypes.ITEM_HOLDER_RULES);
+        ItemHolderRules rules = stack.get(ItematicDataComponents.ITEM_HOLDER_RULES);
         if (rules == null) {
             return null;
         }

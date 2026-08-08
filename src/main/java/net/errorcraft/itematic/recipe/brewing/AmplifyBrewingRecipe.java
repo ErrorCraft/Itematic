@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.recipe.brewing;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
 import net.errorcraft.itematic.recipe.display.BrewingRecipeDisplay;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -73,7 +73,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
     }
 
     private static ItemStack displayStack(Holder<Item> item) {
-        return PotionContentsComponentUtil.setPotion(new ItemStack(item), Potions.WATER);
+        return PotionContentsUtil.setPotion(new ItemStack(item), Potions.WATER);
     }
 
     public static class Serializer implements RecipeSerializer<AmplifyBrewingRecipe> {

@@ -3,12 +3,12 @@ package net.errorcraft.itematic.mixin.block.cauldron;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.BlockItemComponent;
 import net.errorcraft.itematic.item.component.components.DyeableItemComponent;
 import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.stats.Stat;
@@ -87,7 +87,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion, @Local(argsOnly = true) Level world) {
-        return PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), potion);
+        return PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(

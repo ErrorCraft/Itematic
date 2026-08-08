@@ -1,15 +1,14 @@
 package net.errorcraft.itematic.mixin.component.type;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.mojang.datafixers.kinds.App;
 import com.mojang.datafixers.util.Function3;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.component.type.ToolComponentAccess;
-import net.errorcraft.itematic.component.type.ToolComponentRuleExtraFields;
+import net.errorcraft.itematic.predicate.item.ItemPredicates;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -71,7 +70,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
         HolderSet<Block> blocks;
 
         @Unique
-        private ToolComponentRuleExtraFields extraFields = new ToolComponentRuleExtraFields(Optional.empty());
+        private Optional<ItemPredicate> item = Optional.empty();
 
         @Redirect(
             method = "method_58430",
@@ -163,7 +162,7 @@ public class ToolComponentExtender implements ToolComponentAccess {
             return rule -> Optional.ofNullable(from1.apply(rule));
         }
 
-        @Redirect(
+        @ModifyExpressionValue(
             method = "<clinit>",
             at = @At(
                 value = "INVOKE",
@@ -171,15 +170,11 @@ public class ToolComponentExtender implements ToolComponentAccess {
                 remap = false
             )
         )
-        private static Codec<Tool.Rule> createCodecAddExtraFields(Function<RecordCodecBuilder.Instance<Tool.Rule>, ? extends App<RecordCodecBuilder.Mu<Tool.Rule>, Tool.Rule>> builder) {
-            MapCodec<Tool.Rule> mapCodec = RecordCodecBuilder.mapCodec(builder);
-            return mapCodec.dependent(ToolComponentRuleExtraFields.CODEC, rule -> Pair.of(
-                ((RuleExtender)(Object) rule).extraFields,
-                ToolComponentRuleExtraFields.CODEC
-            ), (rule, extraFields) -> {
-                ((RuleExtender)(Object) rule).extraFields = extraFields;
-                return rule;
-            }).codec();
+        private static Codec<Tool.Rule> addExtraMapCodecFields(Codec<Tool.Rule> original) {
+            return RecordCodecBuilder.create(instance -> instance.group(
+                MapCodec.assumeMapUnsafe(original).forGetter(Function.identity()),
+                ItemPredicate.CODEC.optionalFieldOf("item").forGetter(Tool.Rule::itematic$item)
+            ).apply(instance, RuleExtender::setItem));
         }
 
         @ModifyExpressionValue(
@@ -189,15 +184,22 @@ public class ToolComponentExtender implements ToolComponentAccess {
                 target = "Lnet/minecraft/network/codec/StreamCodec;composite(Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lnet/minecraft/network/codec/StreamCodec;Ljava/util/function/Function;Lcom/mojang/datafixers/util/Function3;)Lnet/minecraft/network/codec/StreamCodec;"
             )
         )
-        private static StreamCodec<RegistryFriendlyByteBuf, Tool.Rule> createPacketCodecAddExtraFields(StreamCodec<RegistryFriendlyByteBuf, Tool.Rule> original) {
+        private static StreamCodec<RegistryFriendlyByteBuf, Tool.Rule> addExtraCompositeStreamCodecEntries(StreamCodec<RegistryFriendlyByteBuf, Tool.Rule> original) {
             return StreamCodec.composite(
                 original, Function.identity(),
-                ToolComponentRuleExtraFields.PACKET_CODEC, rule -> ((RuleExtender)(Object) rule).extraFields,
-                (rule, extraFields) -> {
-                    ((RuleExtender)(Object) rule).extraFields = extraFields;
-                    return rule;
-                }
+                ItemPredicates.PACKET_CODEC.apply(ByteBufCodecs::optional), Tool.Rule::itematic$item,
+                RuleExtender::setItem
             );
+        }
+
+        @Override
+        public Optional<ItemPredicate> itematic$item() {
+            return this.item;
+        }
+
+        @Override
+        public void itematic$setItem(Optional<ItemPredicate> item) {
+            this.item = item;
         }
 
         @Override
@@ -206,12 +208,18 @@ public class ToolComponentExtender implements ToolComponentAccess {
                 return false;
             }
 
-            return this.extraFields.item()
-                .map(item -> item.test(stack))
+            return this.item.map(item -> item.test(stack))
                 .orElse(true);
         }
 
         @Unique
+        private static Tool.Rule setItem(Tool.Rule rule, Optional<ItemPredicate> item) {
+            rule.itematic$setItem(item);
+            return rule;
+        }
+
+        @Unique
+        @SuppressWarnings("DataFlowIssue")
         private static Tool.Rule create(Optional<HolderSet<Block>> blocks, Optional<Float> speed, Optional<Boolean> correctForDrops) {
             return new Tool.Rule(blocks.orElse(null), speed, correctForDrops);
         }

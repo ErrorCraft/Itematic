@@ -78,7 +78,6 @@
     "block.vault.VaultConfigExtender",
     "command.argument.ArgumentTypesExtender",
     "command.argument.ScoreboardCriterionArgumentTypeExtender",
-    "component.DataComponentTypesAccessor",
     "component.DataComponentTypesExtender",
     "component.type.BundleContentsComponentAccessor",
     "component.type.BundleContentsComponentExtender",

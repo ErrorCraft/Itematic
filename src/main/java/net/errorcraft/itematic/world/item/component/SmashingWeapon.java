@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.component.type;
+package net.errorcraft.itematic.world.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -11,23 +11,23 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 
-public record SmashingWeaponDataComponent(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance, double knockbackPower) {
-    public static final Codec<SmashingWeaponDataComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        HitSounds.CODEC.fieldOf("hit_sounds").forGetter(SmashingWeaponDataComponent::hitSounds),
-        ItematicCodecs.POSITIVE_DOUBLE.fieldOf("smash_attack_fall_distance").forGetter(SmashingWeaponDataComponent::smashAttackFallDistance),
-        ItematicCodecs.POSITIVE_DOUBLE.fieldOf("heavy_smash_attack_fall_distance").forGetter(SmashingWeaponDataComponent::heavySmashAttackFallDistance),
-        ItematicCodecs.POSITIVE_DOUBLE.fieldOf("knockback_power").forGetter(SmashingWeaponDataComponent::knockbackPower)
-    ).apply(instance, SmashingWeaponDataComponent::new));
-    public static final StreamCodec<RegistryFriendlyByteBuf, SmashingWeaponDataComponent> PACKET_CODEC = StreamCodec.composite(
-        HitSounds.PACKET_CODEC, SmashingWeaponDataComponent::hitSounds,
-        ByteBufCodecs.DOUBLE, SmashingWeaponDataComponent::smashAttackFallDistance,
-        ByteBufCodecs.DOUBLE, SmashingWeaponDataComponent::heavySmashAttackFallDistance,
-        ByteBufCodecs.DOUBLE, SmashingWeaponDataComponent::knockbackPower,
-        SmashingWeaponDataComponent::new
+public record SmashingWeapon(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance, double knockbackPower) {
+    public static final Codec<SmashingWeapon> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        HitSounds.CODEC.fieldOf("hit_sounds").forGetter(SmashingWeapon::hitSounds),
+        ItematicCodecs.POSITIVE_DOUBLE.fieldOf("smash_attack_fall_distance").forGetter(SmashingWeapon::smashAttackFallDistance),
+        ItematicCodecs.POSITIVE_DOUBLE.fieldOf("heavy_smash_attack_fall_distance").forGetter(SmashingWeapon::heavySmashAttackFallDistance),
+        ItematicCodecs.POSITIVE_DOUBLE.fieldOf("knockback_power").forGetter(SmashingWeapon::knockbackPower)
+    ).apply(instance, SmashingWeapon::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, SmashingWeapon> PACKET_CODEC = StreamCodec.composite(
+        HitSounds.PACKET_CODEC, SmashingWeapon::hitSounds,
+        ByteBufCodecs.DOUBLE, SmashingWeapon::smashAttackFallDistance,
+        ByteBufCodecs.DOUBLE, SmashingWeapon::heavySmashAttackFallDistance,
+        ByteBufCodecs.DOUBLE, SmashingWeapon::knockbackPower,
+        SmashingWeapon::new
     );
 
-    public static SmashingWeaponDataComponent of(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance, double knockbackPower) {
-        return new SmashingWeaponDataComponent(hitSounds, smashAttackFallDistance, heavySmashAttackFallDistance, knockbackPower);
+    public static SmashingWeapon of(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance, double knockbackPower) {
+        return new SmashingWeapon(hitSounds, smashAttackFallDistance, heavySmashAttackFallDistance, knockbackPower);
     }
 
     public boolean canSmash(LivingEntity attacker) {

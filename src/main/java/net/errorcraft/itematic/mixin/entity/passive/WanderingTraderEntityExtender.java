@@ -2,11 +2,11 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.TradeTags;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -50,7 +50,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         )
     )
     private ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion) {
-        return PotionContentsComponentUtil.setPotion(this.level().itematic$createStack(ItemKeys.POTION), potion);
+        return PotionContentsUtil.setPotion(this.level().itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(

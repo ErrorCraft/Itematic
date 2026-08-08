@@ -4,8 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.item.ItemAccess;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.UseDurationDataComponent;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.ItemDisplay;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemResult;
@@ -22,6 +21,7 @@ import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.component.UseDuration;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.core.BlockPos;
@@ -514,7 +514,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return;
         }
 
-        info.setReturnValue(stack.getOrDefault(ItematicDataComponentTypes.USE_ANIMATION, ItemUseAnimation.NONE));
+        info.setReturnValue(stack.getOrDefault(ItematicDataComponents.USE_ANIMATION, ItemUseAnimation.NONE));
     }
 
     /**
@@ -527,7 +527,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return 0;
         }
 
-        UseDurationDataComponent useDuration = this.components.get(ItematicDataComponentTypes.USE_DURATION);
+        UseDuration useDuration = this.components.get(ItematicDataComponents.USE_DURATION);
         if (useDuration == null) {
             return 0;
         }

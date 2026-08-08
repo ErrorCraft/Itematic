@@ -1,9 +1,11 @@
 package net.errorcraft.itematic.mixin.component;
 
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.world.item.equipment.Glider;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Unit;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,9 +30,8 @@ public class DataComponentTypesExtender {
             )
         )
     )
-    @SuppressWarnings("unchecked")
-    private static <T> DataComponentType<T> useCustomGliderDataComponent(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
-        return (DataComponentType<T>) ItematicDataComponentTypes.GLIDER;
+    private static DataComponentType<Glider> useCustomGliderDataComponent(String id, UnaryOperator<DataComponentType.Builder<Unit>> builderOperator) {
+        return ItematicDataComponents.GLIDER;
     }
 
     @Redirect(

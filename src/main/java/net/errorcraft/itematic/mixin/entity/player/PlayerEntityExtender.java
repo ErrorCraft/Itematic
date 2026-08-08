@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.mixin.entity.player;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.errorcraft.itematic.access.entity.LivingEntityAccess;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.ItemListDataComponent;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.mixin.entity.LivingEntityExtender;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
@@ -14,12 +14,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 import org.objectweb.asm.Opcodes;
@@ -32,17 +30,16 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Player.class)
-public abstract class PlayerEntityExtender extends LivingEntity implements LivingEntityAccess {
+public abstract class PlayerEntityExtender extends LivingEntityExtender {
     @Shadow
     @Final
     Inventory inventory;
 
     @Shadow
-    @Final
-    private Abilities abilities;
+    public abstract Inventory getInventory();
 
     @Shadow
-    public abstract Inventory getInventory();
+    public abstract boolean isCreative();
 
     protected PlayerEntityExtender(EntityType<? extends LivingEntity> entityType, Level world) {
         super(entityType, world);
@@ -116,21 +113,22 @@ public abstract class PlayerEntityExtender extends LivingEntity implements Livin
 
     @Override
     public ItemStack itematic$getAmmunition(ItemStack stack) {
-        ItemListDataComponent heldAmmunition = stack.getOrDefault(ItematicDataComponentTypes.SHOOTER_HELD_AMMUNITION, ItemListDataComponent.DEFAULT);
-        ItemStack heldStack = ProjectileWeaponItem.getHeldProjectile(this, heldAmmunition::isValidFor);
-        if (!heldStack.isEmpty()) {
-            return heldStack;
+        ItemStack ammunition = super.itematic$getAmmunition(stack);
+        if (!ammunition.isEmpty()) {
+            return ammunition;
         }
 
-        ItemListDataComponent ammunition = stack.getOrDefault(ItematicDataComponentTypes.SHOOTER_AMMUNITION, ItemListDataComponent.DEFAULT);
+        HolderSet<Item> shooterAmmunition = stack.getOrDefault(ItematicDataComponents.SHOOTER_AMMUNITION, HolderSet.empty());
         for (int i = 0; i < this.inventory.getContainerSize(); i++) {
             ItemStack inventoryStack = this.inventory.getItem(i);
-            if (ammunition.isValidFor(inventoryStack)) {
+            if (inventoryStack.is(shooterAmmunition)) {
                 return inventoryStack;
             }
         }
 
-        return this.abilities.instabuild ? this.level().itematic$createStack(ItemKeys.ARROW) : ItemStack.EMPTY;
+        return this.isCreative()
+            ? this.level().itematic$createStack(ItemKeys.ARROW)
+            : ItemStack.EMPTY;
     }
 
     @Unique

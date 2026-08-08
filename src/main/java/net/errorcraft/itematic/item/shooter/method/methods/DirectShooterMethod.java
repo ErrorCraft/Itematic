@@ -2,13 +2,13 @@ package net.errorcraft.itematic.item.shooter.method.methods;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.UseDurationDataComponent;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
 import net.errorcraft.itematic.mixin.item.RangedWeaponItemAccessor;
+import net.errorcraft.itematic.world.item.component.UseDuration;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -48,7 +48,7 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
 
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
-        builder.set(ItematicDataComponentTypes.SHOOTER_SHOOT_SOUND, this.shootSound);
+        builder.set(ItematicDataComponents.SHOOTER_SHOOT_SOUND, this.shootSound);
     }
 
     @Override
@@ -76,7 +76,7 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
             shooter.shoot(serverWorld, user, user.getUsedItemHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
         }
 
-        Holder<SoundEvent> shootSound = stack.get(ItematicDataComponentTypes.SHOOTER_SHOOT_SOUND);
+        Holder<SoundEvent> shootSound = stack.get(ItematicDataComponents.SHOOTER_SHOOT_SOUND);
         if (shootSound != null) {
             world.playSound(null, user.getX(), user.getY(), user.getZ(), shootSound.value(), SoundSource.PLAYERS, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
         }
@@ -96,7 +96,7 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
 
     @Override
     public OptionalInt useDuration(ItemStack stack, LivingEntity user) {
-        return OptionalInt.of(UseDurationDataComponent.INDEFINITE_USE_DURATION);
+        return OptionalInt.of(UseDuration.INDEFINITE);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
@@ -41,7 +41,7 @@ public abstract class WitchEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion) {
-        return PotionContentsComponentUtil.setPotion(this.level().itematic$createStack(ItemKeys.POTION), potion);
+        return PotionContentsUtil.setPotion(this.level().itematic$createStack(ItemKeys.POTION), potion);
     }
 
     @Redirect(
@@ -52,7 +52,7 @@ public abstract class WitchEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForSplashPotionUseCreateStack(Item item, Holder<Potion> potion) {
-        return PotionContentsComponentUtil.setPotion(this.level().itematic$createStack(ItemKeys.SPLASH_POTION), potion);
+        return PotionContentsUtil.setPotion(this.level().itematic$createStack(ItemKeys.SPLASH_POTION), potion);
     }
 
     @Override

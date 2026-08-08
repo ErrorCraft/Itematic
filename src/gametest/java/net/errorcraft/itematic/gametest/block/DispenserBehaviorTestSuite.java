@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.util.TestUtil;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -361,7 +361,7 @@ public class DispenserBehaviorTestSuite {
     public void dispensingWaterBottleConvertsBlockToMud(GameTestHelper context) {
         DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
         ServerLevel world = context.getLevel();
-        ItemStack stack = PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER);
+        ItemStack stack = PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER);
         blockEntity.insertItem(stack);
         context.startSequence()
             .thenExecute(() -> context.pressButton(BUTTON_POSITION))
@@ -378,7 +378,7 @@ public class DispenserBehaviorTestSuite {
     public void dispensingWaterBottleOnInvalidBlockDropsItem(GameTestHelper context) {
         DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
         ServerLevel world = context.getLevel();
-        ItemStack stack = PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER);
+        ItemStack stack = PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER);
         blockEntity.insertItem(stack);
         context.startSequence()
             .thenExecute(() -> context.pressButton(BUTTON_POSITION))

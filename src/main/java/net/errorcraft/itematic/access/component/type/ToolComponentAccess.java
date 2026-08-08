@@ -1,7 +1,10 @@
 package net.errorcraft.itematic.access.component.type;
 
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.Optional;
 
 public interface ToolComponentAccess {
     default float itematic$getSpeed(ItemStack stack, BlockState state) {
@@ -13,6 +16,10 @@ public interface ToolComponentAccess {
     }
 
     interface RuleAccess {
+        default Optional<ItemPredicate> itematic$item() {
+            return Optional.empty();
+        }
+        default void itematic$setItem(Optional<ItemPredicate> item) {}
         default boolean itematic$matches(ItemStack stack, BlockState state) {
             return false;
         }

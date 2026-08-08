@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.errorcraft.itematic.client.item.bar.ItemBarStyleLoader;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.render.state.GuiRenderState;
@@ -44,7 +44,7 @@ public abstract class DrawContextExtender {
         )
     )
     private boolean useDataComponent(boolean original, @Local(argsOnly = true) ItemStack stack) {
-        Identifier itemBarStyleId = stack.get(ItematicDataComponentTypes.ITEM_BAR_STYLE);
+        Identifier itemBarStyleId = stack.get(ItematicDataComponents.ITEM_BAR_STYLE);
         if (itemBarStyleId == null) {
             return false;
         }
@@ -62,7 +62,7 @@ public abstract class DrawContextExtender {
         )
     )
     private void renderItemBarFromDataComponent(ItemStack stack, int x, int y, CallbackInfo info) {
-        Identifier itemBarStyleId = stack.get(ItematicDataComponentTypes.ITEM_BAR_STYLE);
+        Identifier itemBarStyleId = stack.get(ItematicDataComponents.ITEM_BAR_STYLE);
         if (itemBarStyleId == null) {
             return;
         }

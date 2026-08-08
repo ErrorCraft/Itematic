@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.access.item.ItemStackAccess;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemUtil;
 import net.errorcraft.itematic.item.component.ItemComponent;
@@ -99,9 +99,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
 
     @Shadow
     public abstract int getDamageValue();
-
-    @Shadow
-    public abstract void setDamageValue(int damage);
 
     @Shadow
     public abstract void shrink(int amount);
@@ -430,7 +427,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         cancellable = true
     )
     private void checkNullRegistryEntry(HolderSet<Item> registryEntryList, CallbackInfoReturnable<Boolean> info) {
-        if (this.entry == null) {
+        if (this.isEmpty()) {
             info.setReturnValue(false);
         }
     }
@@ -698,7 +695,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
      */
     @Overwrite
     public String toString() {
-        return this.count + " " + this.itematic$key().identifier().toString();
+        return this.count + " " + this.itematic$key().identifier();
     }
 
     @Inject(
@@ -852,7 +849,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
             return 1.0d;
         }
 
-        return this.getOrDefault(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, 1.0d);
+        return this.getOrDefault(ItematicDataComponents.ATTACK_SPEED_MULTIPLIER, 1.0d);
     }
 
     @Unique

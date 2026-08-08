@@ -2,15 +2,16 @@ package net.errorcraft.itematic.item.use.provider.providers;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.use.provider.IntegerProvider;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderType;
 import net.errorcraft.itematic.item.use.provider.IntegerProviderTypes;
+import net.errorcraft.itematic.world.item.component.UseDuration;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+
 import java.util.OptionalInt;
 
 public class TridentIntegerProvider implements IntegerProvider {
@@ -28,7 +29,7 @@ public class TridentIntegerProvider implements IntegerProvider {
     @Override
     public OptionalInt get(ItemStack stack, LivingEntity user) {
         if (mayStartUsing(stack, user)) {
-            return OptionalInt.of(UseDurationDataComponent.INDEFINITE_USE_DURATION);
+            return OptionalInt.of(UseDuration.INDEFINITE);
         }
 
         return OptionalInt.empty();

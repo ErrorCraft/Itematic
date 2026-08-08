@@ -2,8 +2,6 @@ package net.errorcraft.itematic.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
-import net.errorcraft.itematic.component.type.SmashingWeaponDataComponent;
 import net.errorcraft.itematic.entity.EntityTypeKeys;
 import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
 import net.errorcraft.itematic.entity.spawn.EntitySpawner;
@@ -44,11 +42,10 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
+import net.errorcraft.itematic.world.item.component.ItemDamageRules;
+import net.errorcraft.itematic.world.item.component.SmashingWeapon;
 import net.minecraft.advancements.criterion.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderSet;
+import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.predicates.DamagePredicate;
@@ -59,7 +56,10 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -109,6 +109,8 @@ public class ItemUtil {
         ItemComponentSet.CODEC.optionalFieldOf("behavior", ItemComponentSet.EMPTY).forGetter(Item::itematic$behavior),
         ItemEventMap.CODEC.optionalFieldOf("events", ItemEventMap.EMPTY).forGetter(Item::itematic$events)
     ).apply(instance, ItemUtil::create));
+    public static final Codec<HolderSet<Item>> HOLDER_SET_CODEC = RegistryCodecs.homogeneousList(Registries.ITEM);
+    public static final StreamCodec<RegistryFriendlyByteBuf, HolderSet<Item>> HOLDER_SET_STREAM_CODEC = ByteBufCodecs.holderSet(Registries.ITEM);
 
     public static void bootstrap(BootstrapContext<Item> registerable) {
         new Bootstrapper(registerable).bootstrap();
@@ -6028,7 +6030,7 @@ public class ItemUtil {
                                 CrossbowItemAccessor.fireworkRocketPower()
                             )
                         ),
-                        ItemDamageRulesDataComponent.Rule.of(
+                        ItemDamageRules.Rule.of(
                             HolderSet.direct(this.items.getOrThrow(ItemKeys.FIREWORK_ROCKET)),
                             3
                         )
@@ -6142,8 +6144,8 @@ public class ItemUtil {
                     .with(DamageableItemComponent.of(500))
                     .with(ToolItemComponent.builder(2).build())
                     .with(WeaponItemComponent.builder(1, 5.0d, 0.15d)
-                        .type(MeleeWeaponComponents.SMASHING, SmashingMeleeWeapon.of(SmashingWeaponDataComponent.of(
-                            SmashingWeaponDataComponent.HitSounds.of(
+                        .type(MeleeWeaponComponents.SMASHING, SmashingMeleeWeapon.of(SmashingWeapon.of(
+                            SmashingWeapon.HitSounds.of(
                                 this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_AIR),
                                 this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_GROUND),
                                 this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_GROUND_HEAVY)

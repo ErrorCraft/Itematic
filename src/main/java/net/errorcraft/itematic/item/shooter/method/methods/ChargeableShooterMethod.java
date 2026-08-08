@@ -3,7 +3,7 @@ package net.errorcraft.itematic.item.shooter.method.methods;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.shooter.ChargingSoundsUtil;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethod;
@@ -67,9 +67,9 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
-        builder.set(ItematicDataComponentTypes.SHOOTER_DEFAULT_CHARGE_TIME, this.defaultChargeTime);
-        builder.set(ItematicDataComponentTypes.SHOOTER_DEFAULT_CHARGING_SOUNDS, this.defaultChargingSounds);
-        builder.set(ItematicDataComponentTypes.SHOOTER_CHARGED_POWER_RULES, this.chargedPowerRules);
+        builder.set(ItematicDataComponents.SHOOTER_DEFAULT_CHARGE_TIME, this.defaultChargeTime);
+        builder.set(ItematicDataComponents.SHOOTER_DEFAULT_CHARGING_SOUNDS, this.defaultChargingSounds);
+        builder.set(ItematicDataComponents.SHOOTER_CHARGED_POWER_RULES, this.chargedPowerRules);
     }
 
     @Override
@@ -78,7 +78,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             return false;
         }
 
-        ChargedPowerRules chargedPowerRules = stack.get(ItematicDataComponentTypes.SHOOTER_CHARGED_POWER_RULES);
+        ChargedPowerRules chargedPowerRules = stack.get(ItematicDataComponents.SHOOTER_CHARGED_POWER_RULES);
         if (chargedPowerRules == null) {
             return false;
         }
@@ -172,7 +172,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
 
     private CrossbowItem.ChargingSounds chargingSounds(ItemStack stack) {
         return EnchantmentHelper.pickHighestLevel(stack, EnchantmentEffectComponents.CROSSBOW_CHARGING_SOUNDS)
-            .orElseGet(() -> stack.getOrDefault(ItematicDataComponentTypes.SHOOTER_DEFAULT_CHARGING_SOUNDS, ChargingSoundsUtil.EMPTY));
+            .orElseGet(() -> stack.getOrDefault(ItematicDataComponents.SHOOTER_DEFAULT_CHARGING_SOUNDS, ChargingSoundsUtil.EMPTY));
     }
 
     private static boolean chargeProjectiles(LivingEntity user, ItemStack stack) {

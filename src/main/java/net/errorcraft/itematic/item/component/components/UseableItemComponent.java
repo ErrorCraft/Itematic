@@ -2,8 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.UseDurationDataComponent;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -13,6 +12,7 @@ import net.errorcraft.itematic.item.use.provider.providers.ConstantIntegerProvid
 import net.errorcraft.itematic.item.use.provider.providers.IndefiniteIntegerProvider;
 import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.component.UseDuration;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -27,12 +27,13 @@ import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+
 import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, ItemUseAnimation animation, Optional<ItemStack> remainder, UseEffects effects, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
+public record UseableItemComponent(Optional<UseDuration> ticks, ItemUseAnimation animation, Optional<ItemStack> remainder, UseEffects effects, Set<Pass> passes) implements ItemComponent<UseableItemComponent> {
     public static final Codec<UseableItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        UseDurationDataComponent.CODEC.optionalFieldOf("ticks").forGetter(UseableItemComponent::ticks),
+        UseDuration.CODEC.optionalFieldOf("ticks").forGetter(UseableItemComponent::ticks),
         ItemUseAnimation.CODEC.optionalFieldOf("animation", ItemUseAnimation.NONE).forGetter(UseableItemComponent::animation),
         ItemStack.CODEC.optionalFieldOf("remainder").forGetter(UseableItemComponent::remainder),
         UseEffects.CODEC.optionalFieldOf("effects", UseEffects.DEFAULT).forGetter(UseableItemComponent::effects),
@@ -82,8 +83,8 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Ite
 
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
-        this.ticks.ifPresent(ticks -> builder.set(ItematicDataComponentTypes.USE_DURATION, ticks));
-        builder.set(ItematicDataComponentTypes.USE_ANIMATION, this.animation);
+        this.ticks.ifPresent(ticks -> builder.set(ItematicDataComponents.USE_DURATION, ticks));
+        builder.set(ItematicDataComponents.USE_ANIMATION, this.animation);
         this.remainder.ifPresent(remainder -> builder.set(DataComponents.USE_REMAINDER, new UseRemainder(remainder)));
         builder.set(DataComponents.USE_EFFECTS, this.effects);
     }
@@ -97,12 +98,12 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Ite
             return ItemResult.PASS;
         }
 
-        UseDurationDataComponent useDuration = stack.get(ItematicDataComponentTypes.USE_DURATION);
+        UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
         if (useDuration == null) {
             return ItemResult.CONSUME;
         }
 
-        if (useDuration.startUsing(world, user, hand, stack)) {
+        if (useDuration.startUsing(stack, user, hand)) {
             return ItemResult.CONSUME;
         }
 
@@ -120,7 +121,7 @@ public record UseableItemComponent(Optional<UseDurationDataComponent> ticks, Ite
 
         public UseableItemComponent build() {
             return new UseableItemComponent(
-                Optional.ofNullable(this.ticks).map(UseDurationDataComponent::new),
+                Optional.ofNullable(this.ticks).map(UseDuration::new),
                 this.animation,
                 Optional.ofNullable(this.remainder).map(ItemStack::new),
                 this.effects,

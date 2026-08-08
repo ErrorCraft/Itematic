@@ -2,9 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.ItemDamageRulesDataComponent;
-import net.errorcraft.itematic.component.type.ItemListDataComponent;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -15,6 +13,7 @@ import net.errorcraft.itematic.item.use.provider.providers.ShooterIntegerProvide
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
@@ -38,16 +37,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-public record ShooterItemComponent(HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRulesDataComponent itemDamage) implements ItemComponent<ShooterItemComponent> {
+public record ShooterItemComponent(HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRules itemDamage) implements ItemComponent<ShooterItemComponent> {
     public static final Codec<ShooterItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemComponent::heldAmmunition),
         RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("ammunition").forGetter(ShooterItemComponent::ammunition),
         ExtraCodecs.POSITIVE_INT.fieldOf("range").forGetter(ShooterItemComponent::range),
         ShooterMethod.CODEC.fieldOf("method").forGetter(ShooterItemComponent::method),
-        ItemDamageRulesDataComponent.CODEC.fieldOf("item_damage").forGetter(ShooterItemComponent::itemDamage)
+        ItemDamageRules.CODEC.fieldOf("item_damage").forGetter(ShooterItemComponent::itemDamage)
     ).apply(instance, ShooterItemComponent::new));
 
-    public static ItemComponent<?>[] of(ItemUseAnimation animation, HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRulesDataComponent.Rule... rules) {
+    public static ItemComponent<?>[] of(ItemUseAnimation animation, HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRules.Rule... rules) {
         return new ItemComponent<?>[] {
             UseableItemComponent.builder()
                 .useFor(ShooterIntegerProvider.INSTANCE)
@@ -58,7 +57,7 @@ public record ShooterItemComponent(HolderSet<Item> heldAmmunition, HolderSet<Ite
                 ammunition,
                 range,
                 method,
-                new ItemDamageRulesDataComponent(List.of(rules), 1)
+                new ItemDamageRules(List.of(rules), 1)
             )
         };
     }
@@ -94,9 +93,9 @@ public record ShooterItemComponent(HolderSet<Item> heldAmmunition, HolderSet<Ite
 
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
-        builder.set(ItematicDataComponentTypes.SHOOTER_AMMUNITION, new ItemListDataComponent(this.ammunition));
-        builder.set(ItematicDataComponentTypes.SHOOTER_HELD_AMMUNITION, new ItemListDataComponent(this.heldAmmunition));
-        builder.set(ItematicDataComponentTypes.SHOOTER_DAMAGE_RULES, this.itemDamage);
+        builder.set(ItematicDataComponents.SHOOTER_AMMUNITION, this.ammunition);
+        builder.set(ItematicDataComponents.SHOOTER_HELD_AMMUNITION, this.heldAmmunition);
+        builder.set(ItematicDataComponents.SHOOTER_DAMAGE_RULES, this.itemDamage);
         this.method.addComponents(builder);
     }
 
@@ -129,7 +128,7 @@ public record ShooterItemComponent(HolderSet<Item> heldAmmunition, HolderSet<Ite
     }
 
     private void damageItem(ItemStack stack, ServerLevel world, InteractionHand hand, LivingEntity shooter) {
-        ItemDamageRulesDataComponent rules = stack.get(ItematicDataComponentTypes.SHOOTER_DAMAGE_RULES);
+        ItemDamageRules rules = stack.get(ItematicDataComponents.SHOOTER_DAMAGE_RULES);
         if (rules == null) {
             return;
         }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic;
 
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.entity.spawn.rule.EntitySpawnRuleType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvents;
@@ -40,7 +40,7 @@ public class Itematic implements ModInitializer {
         BlockPickerTypes.init();
         ItematicItemModifierTypes.init();
         TradeModifierTypes.init();
-        ItematicDataComponentTypes.init();
+        ItematicDataComponents.init();
         IntegerProviderTypes.init();
         ItemHolderRuleTypes.init();
         ShooterMethodTypes.init();

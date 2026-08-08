@@ -2,8 +2,7 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.WeaponAttackDamageDataComponent;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -17,6 +16,7 @@ import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.component.WeaponAttackDamage;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponentMap;
@@ -35,16 +35,17 @@ import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+
 import java.util.List;
 import java.util.Optional;
 
-public record WeaponItemComponent(int itemDamagePerAttack, DataComponentMap types, Optional<Holder<DamageType>> damageType, Optional<SwingAnimation> swingAnimation, WeaponAttackDamageDataComponent attackDamage, double attackSpeed, Optional<AttackRange> attackRange, Optional<Float> minimumAttackCharge) implements ItemComponent<WeaponItemComponent>, DataComponentHolder {
+public record WeaponItemComponent(int itemDamagePerAttack, DataComponentMap types, Optional<Holder<DamageType>> damageType, Optional<SwingAnimation> swingAnimation, WeaponAttackDamage attackDamage, double attackSpeed, Optional<AttackRange> attackRange, Optional<Float> minimumAttackCharge) implements ItemComponent<WeaponItemComponent>, DataComponentHolder {
     public static final Codec<WeaponItemComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("item_damage_per_attack", 1).forGetter(WeaponItemComponent::itemDamagePerAttack),
         MeleeWeaponComponents.CODEC.optionalFieldOf("types", DataComponentMap.EMPTY).forGetter(WeaponItemComponent::types),
         DamageType.CODEC.optionalFieldOf("damage_type").forGetter(WeaponItemComponent::damageType),
         SwingAnimation.CODEC.optionalFieldOf("swing_animation").forGetter(WeaponItemComponent::swingAnimation),
-        WeaponAttackDamageDataComponent.CODEC.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
+        WeaponAttackDamage.CODEC.fieldOf("attack_damage").forGetter(WeaponItemComponent::attackDamage),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("attack_speed").forGetter(WeaponItemComponent::attackSpeed),
         AttackRange.CODEC.optionalFieldOf("attack_range").forGetter(WeaponItemComponent::attackRange),
         ExtraCodecs.floatRange(0.0f, 1.0f).optionalFieldOf("minimum_attack_charge").forGetter(WeaponItemComponent::minimumAttackCharge)
@@ -105,8 +106,8 @@ public record WeaponItemComponent(int itemDamagePerAttack, DataComponentMap type
             this.itemDamagePerAttack,
             disablesBlocking != null ? disablesBlocking.seconds() : 0.0f
         ));
-        builder.set(ItematicDataComponentTypes.WEAPON_ATTACK_DAMAGE, this.attackDamage);
-        builder.set(ItematicDataComponentTypes.ATTACK_SPEED_MULTIPLIER, this.attackSpeed);
+        builder.set(ItematicDataComponents.WEAPON_ATTACK_DAMAGE, this.attackDamage);
+        builder.set(ItematicDataComponents.ATTACK_SPEED_MULTIPLIER, this.attackSpeed);
         this.getAllOfType(MeleeWeaponWithDataComponents.class)
             .forEach(meleeWeapon -> meleeWeapon.addComponents(builder));
         this.damageType.ifPresent(damageType -> builder.set(DataComponents.DAMAGE_TYPE, new EitherHolder<>(damageType)));
@@ -167,7 +168,7 @@ public record WeaponItemComponent(int itemDamagePerAttack, DataComponentMap type
                 this.types.build(),
                 Optional.ofNullable(this.damageType),
                 Optional.ofNullable(this.swingAnimation),
-                new WeaponAttackDamageDataComponent(List.of(), this.attackDamage),
+                new WeaponAttackDamage(List.of(), this.attackDamage),
                 this.attackSpeed,
                 Optional.ofNullable(this.attackRange),
                 Optional.ofNullable(this.minimumAttackCharge)

@@ -2,15 +2,16 @@ package net.errorcraft.itematic.item.group.entry.entries;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.item.group.entry.PossiblyHiddenItemGroupEntry;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
 import java.util.Collection;
 
 public class PotionItemGroupEntry extends PossiblyHiddenItemGroupEntry {
@@ -43,7 +44,7 @@ public class PotionItemGroupEntry extends PossiblyHiddenItemGroupEntry {
         return context.holders()
             .lookupOrThrow(Registries.POTION)
             .listElements()
-            .map(entry -> PotionContentsComponentUtil.setPotion(new ItemStack(this.item), entry))
+            .map(entry -> PotionContentsUtil.setPotion(new ItemStack(this.item), entry))
             .toList();
     }
 }

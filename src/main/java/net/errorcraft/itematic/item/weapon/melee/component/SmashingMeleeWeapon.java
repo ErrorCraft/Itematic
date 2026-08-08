@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.item.weapon.melee.component;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
-import net.errorcraft.itematic.component.type.SmashingWeaponDataComponent;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponWithDataComponents;
+import net.errorcraft.itematic.world.item.component.SmashingWeapon;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -12,20 +12,20 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MaceItem;
 
-public record SmashingMeleeWeapon(SmashingWeaponDataComponent smashingWeapon) implements MeleeWeaponWithDataComponents {
-    public static final Codec<SmashingMeleeWeapon> CODEC = SmashingWeaponDataComponent.CODEC.xmap(
+public record SmashingMeleeWeapon(SmashingWeapon smashingWeapon) implements MeleeWeaponWithDataComponents {
+    public static final Codec<SmashingMeleeWeapon> CODEC = SmashingWeapon.CODEC.xmap(
         SmashingMeleeWeapon::new,
         SmashingMeleeWeapon::smashingWeapon
     );
     private static final MaceItem DUMMY = new MaceItem(new Item.Properties());
 
-    public static SmashingMeleeWeapon of(SmashingWeaponDataComponent smashingWeapon) {
+    public static SmashingMeleeWeapon of(SmashingWeapon smashingWeapon) {
         return new SmashingMeleeWeapon(smashingWeapon);
     }
 
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
-        builder.set(ItematicDataComponentTypes.SMASHING_WEAPON, this.smashingWeapon);
+        builder.set(ItematicDataComponents.SMASHING_WEAPON, this.smashingWeapon);
     }
 
     public void hit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
@@ -41,7 +41,7 @@ public record SmashingMeleeWeapon(SmashingWeaponDataComponent smashingWeapon) im
     }
 
     public DamageSource damageSource(ItemStack stack, LivingEntity attacker) {
-        SmashingWeaponDataComponent smashingWeapon = stack.get(ItematicDataComponentTypes.SMASHING_WEAPON);
+        SmashingWeapon smashingWeapon = stack.get(ItematicDataComponents.SMASHING_WEAPON);
         if (smashingWeapon != null) {
             return smashingWeapon.damageSource(attacker);
         }

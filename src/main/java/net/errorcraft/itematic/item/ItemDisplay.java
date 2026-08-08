@@ -2,7 +2,7 @@ package net.errorcraft.itematic.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.ItematicDataComponentTypes;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.item.ItemAccessor;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -33,7 +33,7 @@ public record ItemDisplay(String translationKey, Identifier model, Rarity rarity
         builder.set(DataComponents.ITEM_MODEL, this.model);
         builder.set(DataComponents.RARITY, this.rarity);
         this.glint.ifPresent(glint -> builder.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, glint));
-        builder.set(ItematicDataComponentTypes.ITEM_BAR_STYLE, this.itemBarStyle);
+        builder.set(ItematicDataComponents.ITEM_BAR_STYLE, this.itemBarStyle);
         this.tooltipStyle.ifPresent(tooltipStyle -> builder.set(DataComponents.TOOLTIP_STYLE, tooltipStyle));
     }
 

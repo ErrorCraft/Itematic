@@ -2,8 +2,8 @@ package net.errorcraft.itematic.recipe.display.slot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItematicItemTags;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
@@ -18,6 +18,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.crafting.display.DisplayContentsFactory;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
+
 import java.util.stream.Stream;
 
 public record PotionSlotDisplay(Holder<Potion> potion) implements SlotDisplay {
@@ -45,7 +46,7 @@ public record PotionSlotDisplay(Holder<Potion> potion) implements SlotDisplay {
             .stream()
             .flatMap(HolderSet.ListBacked::stream)
             .map(ItemStack::new)
-            .map(stack -> PotionContentsComponentUtil.setPotion(stack, this.potion))
+            .map(stack -> PotionContentsUtil.setPotion(stack, this.potion))
             .map(fromStack::forStack);
     }
 

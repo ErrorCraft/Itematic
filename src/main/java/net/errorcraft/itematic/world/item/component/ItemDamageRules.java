@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.component.type;
+package net.errorcraft.itematic.world.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -15,15 +15,15 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.Optional;
 
-public record ItemDamageRulesDataComponent(List<Rule> rules, int defaultItemDamage) {
-    public static final Codec<ItemDamageRulesDataComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Rule.CODEC.listOf().fieldOf("rules").forGetter(ItemDamageRulesDataComponent::rules),
-        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("default_damage").forGetter(ItemDamageRulesDataComponent::defaultItemDamage)
-    ).apply(instance, ItemDamageRulesDataComponent::new));
-    public static final StreamCodec<RegistryFriendlyByteBuf, ItemDamageRulesDataComponent> PACKET_CODEC = StreamCodec.composite(
-        Rule.PACKET_CODEC.apply(ByteBufCodecs.list()), ItemDamageRulesDataComponent::rules,
-        ByteBufCodecs.VAR_INT, ItemDamageRulesDataComponent::defaultItemDamage,
-        ItemDamageRulesDataComponent::new
+public record ItemDamageRules(List<Rule> rules, int defaultItemDamage) {
+    public static final Codec<ItemDamageRules> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Rule.CODEC.listOf().fieldOf("rules").forGetter(ItemDamageRules::rules),
+        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("default_damage").forGetter(ItemDamageRules::defaultItemDamage)
+    ).apply(instance, ItemDamageRules::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemDamageRules> PACKET_CODEC = StreamCodec.composite(
+        Rule.PACKET_CODEC.apply(ByteBufCodecs.list()), ItemDamageRules::rules,
+        ByteBufCodecs.VAR_INT, ItemDamageRules::defaultItemDamage,
+        ItemDamageRules::new
     );
 
     public int damage(ItemStack stack) {

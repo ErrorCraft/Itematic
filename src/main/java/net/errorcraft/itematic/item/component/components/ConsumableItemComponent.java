@@ -2,7 +2,6 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.component.type.UseDurationDataComponent;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
@@ -11,6 +10,7 @@ import net.errorcraft.itematic.mixin.component.type.ConsumableComponentAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.component.UseDuration;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
@@ -30,6 +30,7 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -103,7 +104,7 @@ public record ConsumableItemComponent(boolean hasConsumeParticles, Holder<SoundE
     }
 
     private static boolean shouldSpawnParticlesAndPlaySounds(int usedTicks, int remainingUseTicks) {
-        boolean isValidTime = remainingUseTicks != UseDurationDataComponent.INDEFINITE_USE_DURATION && usedTicks > (usedTicks + remainingUseTicks) * CONSUME_EFFECTS_THRESHOLD;
+        boolean isValidTime = remainingUseTicks != UseDuration.INDEFINITE && usedTicks > (usedTicks + remainingUseTicks) * CONSUME_EFFECTS_THRESHOLD;
         return isValidTime && usedTicks % 4 == 0;
     }
 

@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.recipe.brewing;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
@@ -9,6 +8,7 @@ import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
 import net.errorcraft.itematic.recipe.display.BrewingRecipeDisplay;
 import net.errorcraft.itematic.recipe.display.slot.PotionSlotDisplay;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponents;
@@ -43,7 +43,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
 
     @Override
     protected ItemStack assemble(ItemStack base) {
-        return PotionContentsComponentUtil.setPotion(base.copyWithCount(1), this.result());
+        return PotionContentsUtil.setPotion(base.copyWithCount(1), this.result());
     }
 
     @Override

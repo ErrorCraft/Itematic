@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.access.entity;
 
+import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
@@ -12,10 +13,13 @@ public interface LivingEntityAccess {
     default boolean itematic$isHolding(ResourceKey<Item> key) {
         return false;
     }
+    default ItemStack itematic$getHeldItem(HolderSet<Item> items) {
+        return ItemStack.EMPTY;
+    }
     default ItemStack itematic$getAmmunition(ItemStack stack) {
         return ItemStack.EMPTY;
     }
-    default void itematic$startUsingHand(InteractionHand hand, int ticks) {}
+    default void itematic$startUsingItem(InteractionHand hand, int ticks) {}
     default int itematic$itemUsedTicks() {
         return 0;
     }
