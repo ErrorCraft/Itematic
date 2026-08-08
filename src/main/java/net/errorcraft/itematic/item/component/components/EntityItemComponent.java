@@ -2,9 +2,6 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.entity.spawn.EntitySpawner;
-import net.errorcraft.itematic.entity.spawn.rule.type.DiscardEntitySpawnRule;
-import net.errorcraft.itematic.entity.spawn.rule.type.OffsetSpawnPositionEntitySpawnRule;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
@@ -20,6 +17,9 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
+import net.errorcraft.itematic.world.entity.spawn.rule.type.DiscardEntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.type.OffsetSpawnPositionEntitySpawnRule;
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
@@ -55,6 +55,7 @@ import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemConditi
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;

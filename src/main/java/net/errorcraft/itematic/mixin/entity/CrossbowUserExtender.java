@@ -3,11 +3,11 @@ package net.errorcraft.itematic.mixin.entity;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
 import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
+import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
@@ -30,7 +30,7 @@ public interface CrossbowUserExtender {
         )
     )
     private InteractionHand getHandPossiblyHoldingForCrossbowUseRegistryKey(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.CROSSBOW);
+        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemKeys.CROSSBOW);
     }
 
     @ModifyConstant(

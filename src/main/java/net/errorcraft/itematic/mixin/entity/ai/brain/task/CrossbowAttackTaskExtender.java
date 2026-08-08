@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.ai.brain.task;
 
-import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -35,6 +35,6 @@ public class CrossbowAttackTaskExtender {
         )
     )
     private InteractionHand getHandPossiblyHoldingForCrossbowUseRegistryKey(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.CROSSBOW);
+        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemKeys.CROSSBOW);
     }
 }

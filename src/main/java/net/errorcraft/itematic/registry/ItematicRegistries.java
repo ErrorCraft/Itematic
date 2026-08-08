@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.registry;
 
-import net.errorcraft.itematic.entity.spawn.rule.EntitySpawnRuleType;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.event.ItemEvent;
@@ -23,6 +22,7 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
+import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleType;
 import net.errorcraft.itematic.world.modification.WorldModificationType;
 import net.errorcraft.itematic.world.modification.WorldModificationTypes;
 import net.minecraft.core.Registry;

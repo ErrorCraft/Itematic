@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.ai.goal;
 
-import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
@@ -32,6 +32,6 @@ public class BowAttackGoalExtender {
         )
     )
     private InteractionHand getHandPossiblyHoldingForBowUseRegistryKey(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.BOW);
+        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemKeys.BOW);
     }
 }

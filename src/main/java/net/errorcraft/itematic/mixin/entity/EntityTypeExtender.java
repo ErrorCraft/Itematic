@@ -5,13 +5,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.EntityTypeAccess;
-import net.errorcraft.itematic.entity.EntitySpawnCallback;
-import net.errorcraft.itematic.entity.decoration.painting.PaintingEntityUtil;
-import net.errorcraft.itematic.entity.initializer.EntityInitializer;
-import net.errorcraft.itematic.entity.initializer.EntityInitializerSupplier;
-import net.errorcraft.itematic.entity.initializer.initializers.*;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
+import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.world.entity.initializer.EntityInitializerSupplier;
+import net.errorcraft.itematic.world.entity.initializer.initializers.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -48,13 +47,13 @@ import java.util.function.Consumer;
 @Mixin(EntityType.class)
 public abstract class EntityTypeExtender<T extends Entity> implements EntityTypeAccess<T> {
     @Shadow
-    public static <T extends Entity> Consumer<T> appendDefaultStackConfig(Consumer<T> chained, Level world, ItemStack stack, @Nullable LivingEntity spawner) {
+    public static <T extends Entity> Consumer<T> appendDefaultStackConfig(Consumer<T> chained, Level level, ItemStack stack, @Nullable LivingEntity spawner) {
         return null;
     }
 
     @Shadow
     @Nullable
-    public abstract T create(ServerLevel world, @Nullable Consumer<T> afterConsumer, BlockPos pos, EntitySpawnReason reason, boolean alignPosition, boolean invertY);
+    public abstract T create(ServerLevel level, @Nullable Consumer<T> afterConsumer, BlockPos pos, EntitySpawnReason reason, boolean alignPosition, boolean invertY);
 
     @Unique
     private EntityInitializer<T> initializer;
@@ -229,7 +228,9 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<Painting> setPaintingInitializer(EntityType.Builder<Painting> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.of(PaintingEntityUtil::create));
+        builder.itematic$initializer(HangingEntityInitializer.of(
+            (level, pos, facing) -> Painting.create(level, pos, facing).orElse(null)
+        ));
         return builder;
     }
 
@@ -248,7 +249,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<ItemFrame> setItemFrameInitializer(EntityType.Builder<ItemFrame> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.of(ItemFrame::new));
+        builder.itematic$initializer(HangingEntityInitializer.of(ItemFrame::new));
         return builder;
     }
 
@@ -267,7 +268,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<GlowItemFrame> setGlowItemFrameInitializer(EntityType.Builder<GlowItemFrame> builder) {
-        builder.itematic$initializer(DecorationEntityInitializer.of(GlowItemFrame::new));
+        builder.itematic$initializer(HangingEntityInitializer.of(GlowItemFrame::new));
         return builder;
     }
 
@@ -286,7 +287,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<Arrow> setArrowInitializer(EntityType.Builder<Arrow> builder) {
-        builder.itematic$initializer(PersistentProjectileEntityInitializer.of(
+        builder.itematic$initializer(ArrowEntityInitializer.of(
             Arrow::new,
             Arrow::new
         ));
@@ -308,7 +309,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<SpectralArrow> setSpectralArrowInitializer(EntityType.Builder<SpectralArrow> builder) {
-        builder.itematic$initializer(PersistentProjectileEntityInitializer.of(
+        builder.itematic$initializer(ArrowEntityInitializer.of(
             SpectralArrow::new,
             SpectralArrow::new
         ));
@@ -330,7 +331,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     private static EntityType.Builder<ThrownTrident> setTridentInitializer(EntityType.Builder<ThrownTrident> builder) {
-        builder.itematic$initializer(TridentEntityInitializer.INSTANCE);
+        builder.itematic$initializer(ThrownTridentEntityInitializer.INSTANCE);
         return builder;
     }
 
@@ -423,9 +424,9 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             target = "Lnet/minecraft/world/entity/EntityType$EntityFactory;create(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)Lnet/minecraft/world/entity/Entity;"
         )
     )
-    private T useEntityInitializer(EntityType.EntityFactory<T> instance, EntityType<T> type, Level world, Operation<T> original, @Local(argsOnly = true) EntitySpawnReason reason) {
+    private T useEntityInitializer(EntityType.EntityFactory<T> instance, EntityType<T> type, Level level, Operation<T> original, @Local(argsOnly = true) EntitySpawnReason reason) {
         if (this.actionContext == null) {
-            return original.call(instance, type, world);
+            return original.call(instance, type, level);
         }
 
         // Copy to a local and set the field to null so we don't get a StackOverflowError
@@ -441,13 +442,13 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
     @Override
     public T itematic$create(ActionContext context, EntitySpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
-        if (!(context.world() instanceof ServerLevel world)) {
+        if (!(context.world() instanceof ServerLevel level)) {
             return null;
         }
 
         this.actionContext = context;
         return this.create(
-            world,
+            level,
             copier(context, callback, allowItemData),
             pos,
             reason,

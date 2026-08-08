@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
@@ -42,7 +42,7 @@ public abstract class IllusionerEntityExtender extends SpellcasterIllager {
         )
     )
     private InteractionHand getHandPossiblyHoldingForBowUseRegistryKey(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.BOW);
+        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemKeys.BOW);
     }
 
     @Redirect(

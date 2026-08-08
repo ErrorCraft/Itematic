@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.item.placement;
 
-import net.errorcraft.itematic.entity.EntitySpawnCallback;
-import net.errorcraft.itematic.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
+import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;

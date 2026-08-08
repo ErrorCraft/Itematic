@@ -1,13 +1,13 @@
 package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.item.component.ItemComponent;
 import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;

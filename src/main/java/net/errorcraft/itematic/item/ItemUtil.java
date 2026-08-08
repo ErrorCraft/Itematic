@@ -2,12 +2,6 @@ package net.errorcraft.itematic.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.entity.EntityTypeKeys;
-import net.errorcraft.itematic.entity.effect.StatusEffectKeys;
-import net.errorcraft.itematic.entity.spawn.EntitySpawner;
-import net.errorcraft.itematic.entity.spawn.rule.type.AlignYawEntitySpawnRule;
-import net.errorcraft.itematic.entity.spawn.rule.type.DiscardEntitySpawnRule;
-import net.errorcraft.itematic.entity.spawn.rule.type.FitsInVolumeEntitySpawnRule;
 import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
@@ -42,6 +36,12 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
+import net.errorcraft.itematic.world.effect.MobEffectKeys;
+import net.errorcraft.itematic.world.entity.EntityTypeKeys;
+import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
+import net.errorcraft.itematic.world.entity.spawn.rule.type.AlignYawEntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.type.DiscardEntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.type.FitsInVolumeEntitySpawnRule;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.SmashingWeapon;
 import net.minecraft.advancements.criterion.*;
@@ -460,7 +460,7 @@ public class ItemUtil {
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.3f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 600)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 600)
                         )
                     ))
                     .build()
@@ -548,9 +548,9 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 1200, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.HUNGER), 300, 2),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.NAUSEA), 300)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 1200, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.HUNGER), 300, 2),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.NAUSEA), 300)
                         )
                     ))
                     .build()
@@ -628,7 +628,7 @@ public class ItemUtil {
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.8f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.HUNGER), 600)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.HUNGER), 600)
                         )
                     ))
                     .build()
@@ -644,7 +644,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 100)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 100)
                         )
                     ))
                     .build()
@@ -661,7 +661,7 @@ public class ItemUtil {
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.6f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 100)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 100)
                         )
                     ))
                     .build()
@@ -677,8 +677,8 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 100, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 2400)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.REGENERATION), 100, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.ABSORPTION), 2400)
                         )
                     ))
                     .build()
@@ -697,10 +697,10 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 400, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.RESISTANCE), 6000),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 6000),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 2400)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.REGENERATION), 400, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.RESISTANCE), 6000),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.FIRE_RESISTANCE), 6000),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.ABSORPTION), 2400)
                         )
                     ))
                     .build()
@@ -740,7 +740,7 @@ public class ItemUtil {
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         RemoveStatusEffectsAction.of(
                             LootContext.EntityTarget.THIS,
-                            this.statusEffects.getOrThrow(StatusEffectKeys.POISON)
+                            this.statusEffects.getOrThrow(MobEffectKeys.POISON)
                         )
                     ))
                     .build()
@@ -7636,7 +7636,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DANDELION)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.SATURATION), 140)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7650,7 +7650,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OPEN_EYEBLOSSOM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.BLINDNESS), 140)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.BLINDNESS), 140)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7664,7 +7664,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CLOSED_EYEBLOSSOM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.NAUSEA), 140)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.NAUSEA), 140)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7678,7 +7678,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POPPY)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.NIGHT_VISION), 100)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7692,7 +7692,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_ORCHID)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.SATURATION), 140)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.SATURATION), 140)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7706,7 +7706,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ALLIUM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 80)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.FIRE_RESISTANCE), 80)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7720,7 +7720,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZURE_BLUET)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.BLINDNESS), 160)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.BLINDNESS), 160)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7734,7 +7734,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_TULIP)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WEAKNESS), 180)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7748,7 +7748,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_TULIP)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WEAKNESS), 180)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7762,7 +7762,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_TULIP)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WEAKNESS), 180)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7776,7 +7776,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_TULIP)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WEAKNESS), 180)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7790,7 +7790,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXEYE_DAISY)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 160)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.REGENERATION), 160)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7804,7 +7804,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CORNFLOWER)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.JUMP_BOOST), 120)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.JUMP_BOOST), 120)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7818,7 +7818,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_OF_THE_VALLEY)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.POISON), 240)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 240)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -7832,7 +7832,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WITHER_ROSE)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.WITHER), 160)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WITHER), 160)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -8040,7 +8040,7 @@ public class ItemUtil {
                     .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TORCHFLOWER)))
                     .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(StatusEffectKeys.NIGHT_VISION), 100)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.NIGHT_VISION), 100)
                     ))
                     .build(),
                 ItemEventMap.builder()
@@ -12451,9 +12451,9 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.BEFORE_DEATH_HOLDER, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.REGENERATION), 900, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.ABSORPTION), 100, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(StatusEffectKeys.FIRE_RESISTANCE), 800, 0)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.REGENERATION), 900, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.ABSORPTION), 100, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.FIRE_RESISTANCE), 800, 0)
                         )
                     ))
                     .build()

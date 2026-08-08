@@ -4,10 +4,10 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
-import net.errorcraft.itematic.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
+import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
@@ -85,7 +85,7 @@ public class AbstractSkeletonEntityExtender extends Monster {
         )
     )
     private InteractionHand getHandPossiblyHoldingForBowUseRegistryKey(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getHandPossiblyHolding(entity, ItemKeys.BOW);
+        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemKeys.BOW);
     }
 
     @ModifyReturnValue(

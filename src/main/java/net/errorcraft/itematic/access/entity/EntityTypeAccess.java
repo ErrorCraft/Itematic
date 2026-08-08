@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.access.entity;
 
-import net.errorcraft.itematic.entity.EntitySpawnCallback;
-import net.errorcraft.itematic.entity.initializer.EntityInitializer;
-import net.errorcraft.itematic.entity.initializer.EntityInitializerSupplier;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
+import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.world.entity.initializer.EntityInitializerSupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;

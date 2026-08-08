@@ -2,10 +2,10 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.google.common.collect.ImmutableSet;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.entity.passive.VillagerEntityUtil;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
+import net.errorcraft.itematic.world.entity.npc.villager.Villagers;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -86,7 +86,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
     )
     @SuppressWarnings("unchecked")
     private <K, V> V getFoodPointsUseRegistryKey(Map<K, V> instance, Object o, @Local ItemStack stack) {
-        return (V) VillagerEntityUtil.ITEM_FOOD_POINTS.get(stack.itematic$key());
+        return (V) Villagers.ITEM_FOOD_POINTS.get(stack.itematic$key());
     }
 
     @Redirect(
@@ -97,7 +97,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         )
     )
     private Stream<Map.Entry<Item, Integer>> getFoodPointsUseRegistryKey(Set<Map.Entry<Item, Integer>> instance) {
-        return VillagerEntityUtil.ITEM_FOOD_POINTS.entrySet()
+        return Villagers.ITEM_FOOD_POINTS.entrySet()
             .stream()
             .map(entry -> {
                 Item item = this.level().itematic$getItem(entry.getKey()).value();

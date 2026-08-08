@@ -2,7 +2,6 @@ package net.errorcraft.itematic.item.component.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.ItemResult;
 import net.errorcraft.itematic.item.ItemStackUtil;
@@ -18,6 +17,7 @@ import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.world.modification.WorldModification;
 import net.errorcraft.itematic.world.modification.type.DrainFluidWorldModification;
 import net.errorcraft.itematic.world.modification.type.PlaceBlockWorldModification;

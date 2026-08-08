@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.entity.passive.VillagerEntityUtil;
 import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.world.entity.npc.villager.Villagers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
@@ -45,7 +45,7 @@ public class GatherItemsVillagerTaskExtender {
     )
     private Map<Item, Integer> getItemFoodPointsUseRegistryKey(ServerLevel serverWorld) {
         if (this.itemFoodPointsCache == null) {
-            this.itemFoodPointsCache = VillagerEntityUtil.ITEM_FOOD_POINTS.entrySet()
+            this.itemFoodPointsCache = Villagers.ITEM_FOOD_POINTS.entrySet()
                 .stream()
                 .collect(Collectors.toMap(
                     key -> serverWorld.itematic$getItem(key.getKey()).value(),
