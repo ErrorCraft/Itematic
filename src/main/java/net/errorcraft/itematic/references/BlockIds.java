@@ -5,7 +5,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 
-public class BlockKeys {
+public class BlockIds {
     public static final ResourceKey<Block> AIR = of("air");
     public static final ResourceKey<Block> STONE = of("stone");
     public static final ResourceKey<Block> GRANITE = of("granite");
@@ -1134,7 +1134,7 @@ public class BlockKeys {
     public static final ResourceKey<Block> POTTED_CLOSED_EYEBLOSSOM = of("potted_closed_eyeblossom");
     public static final ResourceKey<Block> FIREFLY_BUSH = of("firefly_bush");
 
-    private BlockKeys() {}
+    private BlockIds() {}
 
     private static ResourceKey<Block> of(String id) {
         return ResourceKey.create(Registries.BLOCK, Identifier.withDefaultNamespace(id));

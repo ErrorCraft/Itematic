@@ -2,7 +2,6 @@ package net.errorcraft.itematic.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.fluid.FluidKeys;
 import net.errorcraft.itematic.item.component.ItemComponentSet;
 import net.errorcraft.itematic.item.component.components.*;
 import net.errorcraft.itematic.item.composting.CompostChances;
@@ -24,7 +23,10 @@ import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.item.MaceItemAccessor;
 import net.errorcraft.itematic.potion.PotionKeys;
-import net.errorcraft.itematic.references.BlockKeys;
+import net.errorcraft.itematic.references.BlockIds;
+import net.errorcraft.itematic.references.EntityTypeIds;
+import net.errorcraft.itematic.references.FluidIds;
+import net.errorcraft.itematic.references.MobEffectIds;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
@@ -36,8 +38,6 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
-import net.errorcraft.itematic.world.effect.MobEffectKeys;
-import net.errorcraft.itematic.world.entity.EntityTypeKeys;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.world.entity.spawn.rule.type.AlignYawEntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.type.DiscardEntitySpawnRule;
@@ -265,7 +265,7 @@ public class ItemUtil {
                                 .speed(1.0d)
                                 .build())
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundSource.BLOCKS))
-                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockKeys.MUD)))
+                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockIds.MUD)))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -323,7 +323,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(Consumables.DEFAULT_FOOD)
                         .food(Foods.CARROT)
                         .build())
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARROTS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CARROTS)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -334,7 +334,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(Consumables.DEFAULT_FOOD)
                         .food(Foods.POTATO)
                         .build())
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POTATOES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POTATOES)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -377,7 +377,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(Consumables.DEFAULT_FOOD)
                         .food(Foods.SWEET_BERRIES)
                         .build())
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SWEET_BERRY_BUSH)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SWEET_BERRY_BUSH)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -388,7 +388,7 @@ public class ItemUtil {
                     .with(ConsumableItemComponent.builder(Consumables.DEFAULT_FOOD)
                         .food(Foods.GLOW_BERRIES)
                         .build())
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAVE_VINES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CAVE_VINES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -460,7 +460,7 @@ public class ItemUtil {
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.3f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 600)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 600)
                         )
                     ))
                     .build()
@@ -548,9 +548,9 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 1200, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.HUNGER), 300, 2),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.NAUSEA), 300)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 1200, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.HUNGER), 300, 2),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.NAUSEA), 300)
                         )
                     ))
                     .build()
@@ -628,7 +628,7 @@ public class ItemUtil {
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.8f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.HUNGER), 600)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.HUNGER), 600)
                         )
                     ))
                     .build()
@@ -644,7 +644,7 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 100)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 100)
                         )
                     ))
                     .build()
@@ -661,7 +661,7 @@ public class ItemUtil {
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.6f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 100)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 100)
                         )
                     ))
                     .build()
@@ -677,8 +677,8 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.REGENERATION), 100, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.ABSORPTION), 2400)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 100, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 2400)
                         )
                     ))
                     .build()
@@ -697,10 +697,10 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.REGENERATION), 400, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.RESISTANCE), 6000),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.FIRE_RESISTANCE), 6000),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.ABSORPTION), 2400)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 400, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.RESISTANCE), 6000),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 6000),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 2400)
                         )
                     ))
                     .build()
@@ -740,7 +740,7 @@ public class ItemUtil {
                     .add(ItemEvents.CONSUME_ITEM, ActionEntry.of(
                         RemoveStatusEffectsAction.of(
                             LootContext.EntityTarget.THIS,
-                            this.statusEffects.getOrThrow(MobEffectKeys.POISON)
+                            this.statusEffects.getOrThrow(MobEffectIds.POISON)
                         )
                     ))
                     .build()
@@ -756,448 +756,448 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRANITE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRANITE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRANITE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRANITE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_GRANITE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_GRANITE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_GRANITE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_GRANITE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIORITE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DIORITE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIORITE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DIORITE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_DIORITE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_DIORITE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DIORITE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_DIORITE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ANDESITE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ANDESITE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANDESITE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ANDESITE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_ANDESITE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_ANDESITE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_ANDESITE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_ANDESITE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COBBLED_DEEPSLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COBBLED_DEEPSLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLED_DEEPSLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COBBLED_DEEPSLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_DEEPSLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_DEEPSLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DEEPSLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_DEEPSLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CALCITE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CALCITE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CALCITE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CALCITE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUFF, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUFF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUFF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUFF)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUFF_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUFF_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUFF_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUFF_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUFF_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUFF_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUFF_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUFF_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUFF_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUFF_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUFF_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUFF_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_TUFF, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_TUFF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_TUFF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_TUFF)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_TUFF, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_TUFF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_TUFF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_TUFF)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_TUFF_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_TUFF_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_TUFF_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_TUFF_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_TUFF_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_TUFF_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_TUFF_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_TUFF_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_TUFF_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_TUFF_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_TUFF_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_TUFF_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUFF_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUFF_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUFF_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUFF_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUFF_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUFF_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUFF_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUFF_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUFF_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUFF_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUFF_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUFF_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUFF_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUFF_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUFF_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUFF_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_TUFF_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_TUFF_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_TUFF_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_TUFF_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DRIPSTONE_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DRIPSTONE_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRIPSTONE_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DRIPSTONE_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRASS_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRASS_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRASS_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRASS_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIRT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DIRT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIRT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DIRT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COARSE_DIRT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COARSE_DIRT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COARSE_DIRT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COARSE_DIRT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PODZOL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PODZOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PODZOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PODZOL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ROOTED_DIRT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ROOTED_DIRT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ROOTED_DIRT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ROOTED_DIRT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MUD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MUD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_NYLIUM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_NYLIUM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_NYLIUM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_NYLIUM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_NYLIUM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_NYLIUM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_NYLIUM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_NYLIUM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COBBLESTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COBBLESTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLESTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COBBLESTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_PLANKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_PLANKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_PLANKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_PLANKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEDROCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BEDROCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEDROCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BEDROCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SAND, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SAND)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SAND)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SUSPICIOUS_SAND, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SUSPICIOUS_SAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUSPICIOUS_SAND)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SUSPICIOUS_SAND)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SUSPICIOUS_GRAVEL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SUSPICIOUS_GRAVEL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUSPICIOUS_GRAVEL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SUSPICIOUS_GRAVEL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_SAND, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_SAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SAND)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_SAND)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAVEL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAVEL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAVEL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAVEL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COAL_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COAL_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COAL_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COAL_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_COAL_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_COAL_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_COAL_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_COAL_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.IRON_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.IRON_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_IRON_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_IRON_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_IRON_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_IRON_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_COPPER_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_COPPER_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_COPPER_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_COPPER_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLD_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GOLD_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GOLD_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GOLD_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_GOLD_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_GOLD_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_GOLD_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_GOLD_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.REDSTONE_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.REDSTONE_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.REDSTONE_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_REDSTONE_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_REDSTONE_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_REDSTONE_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_REDSTONE_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EMERALD_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EMERALD_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EMERALD_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EMERALD_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_EMERALD_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_EMERALD_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_EMERALD_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_EMERALD_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LAPIS_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LAPIS_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LAPIS_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LAPIS_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_LAPIS_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_LAPIS_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_LAPIS_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_LAPIS_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DIAMOND_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIAMOND_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DIAMOND_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_DIAMOND_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_DIAMOND_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_DIAMOND_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_DIAMOND_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_GOLD_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHER_GOLD_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_GOLD_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_GOLD_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_QUARTZ_ORE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHER_QUARTZ_ORE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_QUARTZ_ORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_QUARTZ_ORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RAW_IRON_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RAW_IRON_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RAW_IRON_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RAW_IRON_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RAW_COPPER_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RAW_COPPER_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RAW_COPPER_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RAW_COPPER_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RAW_GOLD_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RAW_GOLD_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RAW_GOLD_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RAW_GOLD_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HEAVY_CORE, create(
@@ -1206,812 +1206,812 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HEAVY_CORE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.HEAVY_CORE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.AMETHYST_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.AMETHYST_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AMETHYST_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.AMETHYST_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BUDDING_AMETHYST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BUDDING_AMETHYST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BUDDING_AMETHYST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BUDDING_AMETHYST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.IRON_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.IRON_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOLD_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GOLD_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GOLD_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GOLD_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIAMOND_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DIAMOND_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIAMOND_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DIAMOND_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_CHISELED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_CHISELED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_CHISELED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_CHISELED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_CHISELED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_CHISELED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_CHISELED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_CHISELED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_CHISELED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_CHISELED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_CHISELED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_CHISELED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CUT_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CUT_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CUT_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_CUT_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_CUT_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_CUT_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_CUT_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_CUT_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_CUT_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_CUT_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_CUT_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_CUT_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_CUT_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_CUT_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_CUT_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CUT_COPPER_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CUT_COPPER_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_COPPER_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CUT_COPPER_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_CUT_COPPER_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_CUT_COPPER_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_CUT_COPPER_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_CUT_COPPER_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_CUT_COPPER_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_CUT_COPPER_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_CUT_COPPER_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_CUT_COPPER_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_CUT_COPPER_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_CUT_COPPER_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_CUT_COPPER_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_CUT_COPPER_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CUT_COPPER_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CUT_COPPER_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_COPPER_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CUT_COPPER_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_CUT_COPPER_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_CUT_COPPER_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_CUT_COPPER_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_CUT_COPPER_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_CUT_COPPER_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_CUT_COPPER_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_CUT_COPPER_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_CUT_COPPER_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_CUT_COPPER_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_CUT_COPPER_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_CUT_COPPER_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_CUT_COPPER_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_CHISELED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_CHISELED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_CHISELED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_CHISELED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_CHISELED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_CHISELED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_CHISELED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_CHISELED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_CHISELED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_CHISELED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_CHISELED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_CHISELED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_CHISELED_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_CHISELED_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_CHISELED_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_CHISELED_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_CUT_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_CUT_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_CUT_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_CUT_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_CUT_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_CUT_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_CUT_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_CUT_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_CUT_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_CUT_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_CUT_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_CUT_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_CUT_COPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_CUT_COPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_CUT_COPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_CUT_COPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_CUT_COPPER_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_CUT_COPPER_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_CUT_COPPER_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_CUT_COPPER_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_CUT_COPPER_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_CUT_COPPER_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_CUT_COPPER_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_CUT_COPPER_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_CUT_COPPER_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_CUT_COPPER_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_CUT_COPPER_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_CUT_COPPER_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_CUT_COPPER_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_CUT_COPPER_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_CUT_COPPER_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_CUT_COPPER_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_CUT_COPPER_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_CUT_COPPER_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_CUT_COPPER_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_CUT_COPPER_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_CUT_COPPER_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_CUT_COPPER_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_CUT_COPPER_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_CUT_COPPER_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUDDY_MANGROVE_ROOTS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MUDDY_MANGROVE_ROOTS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUDDY_MANGROVE_ROOTS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MUDDY_MANGROVE_ROOTS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_STEM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_STEM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_STEM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_STEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_STEM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_STEM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_STEM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_STEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRIPPED_CRIMSON_STEM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_CRIMSON_STEM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_CRIMSON_STEM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_CRIMSON_STEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRIPPED_WARPED_STEM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_WARPED_STEM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_WARPED_STEM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_WARPED_STEM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRIPPED_CRIMSON_HYPHAE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_CRIMSON_HYPHAE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_CRIMSON_HYPHAE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_CRIMSON_HYPHAE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRIPPED_WARPED_HYPHAE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_WARPED_HYPHAE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_WARPED_HYPHAE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_WARPED_HYPHAE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_HYPHAE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_HYPHAE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_HYPHAE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_HYPHAE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_HYPHAE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_HYPHAE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_HYPHAE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_HYPHAE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPONGE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SPONGE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPONGE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPONGE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WET_SPONGE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WET_SPONGE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WET_SPONGE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WET_SPONGE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TINTED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TINTED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TINTED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TINTED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LAPIS_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LAPIS_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LAPIS_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LAPIS_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SANDSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SANDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SANDSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SANDSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_SANDSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_SANDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_SANDSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_SANDSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CUT_SANDSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CUT_SANDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_SANDSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CUT_SANDSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COBWEB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COBWEB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBWEB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COBWEB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_STONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_STONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_STONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_STONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SANDSTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SANDSTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SANDSTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SANDSTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CUT_SANDSTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CUT_SANDSTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_SANDSTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CUT_SANDSTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PETRIFIED_OAK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PETRIFIED_OAK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PETRIFIED_OAK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PETRIFIED_OAK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COBBLESTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COBBLESTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLESTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COBBLESTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STONE_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONE_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUD_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MUD_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MUD_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHER_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.QUARTZ_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.QUARTZ_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.QUARTZ_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_SANDSTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_SANDSTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SANDSTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_SANDSTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CUT_RED_SANDSTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CUT_RED_SANDSTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_RED_SANDSTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CUT_RED_SANDSTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPUR_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPUR_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPUR_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPUR_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRISMARINE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PRISMARINE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRISMARINE_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PRISMARINE_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_PRISMARINE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_PRISMARINE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_PRISMARINE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_PRISMARINE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_QUARTZ, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_QUARTZ).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_QUARTZ)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_QUARTZ)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_RED_SANDSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_RED_SANDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_RED_SANDSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_RED_SANDSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_SANDSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_SANDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_SANDSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_SANDSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_STONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_STONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_STONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_STONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DECORATED_POT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DECORATED_POT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DECORATED_POT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DECORATED_POT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSSY_COBBLESTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSSY_COBBLESTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_COBBLESTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSSY_COBBLESTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OBSIDIAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OBSIDIAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OBSIDIAN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OBSIDIAN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_ROD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.END_ROD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_ROD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.END_ROD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHORUS_PLANT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHORUS_PLANT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHORUS_PLANT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHORUS_PLANT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHORUS_FLOWER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHORUS_FLOWER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHORUS_FLOWER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHORUS_FLOWER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPUR_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPUR_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPUR_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPUR_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPUR_PILLAR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPUR_PILLAR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPUR_PILLAR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPUR_PILLAR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPUR_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPUR_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPUR_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPUR_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPAWNER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SPAWNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPAWNER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPAWNER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CREAKING_HEART, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CREAKING_HEART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CREAKING_HEART)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CREAKING_HEART)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FARMLAND, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.FARMLAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FARMLAND)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FARMLAND)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FURNACE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.FURNACE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FURNACE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FURNACE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COBBLESTONE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COBBLESTONE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLESTONE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COBBLESTONE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNOW, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SNOW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SNOW)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SNOW)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ICE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ICE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ICE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ICE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNOW_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SNOW_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SNOW_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SNOW_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CLAY, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CLAY).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CLAY)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CLAY)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_FENCE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_FENCE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_FENCE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_FENCE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.JACK_O_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.JACK_O_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JACK_O_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JACK_O_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHERRACK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHERRACK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHERRACK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHERRACK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SOUL_SAND, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SOUL_SAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SOUL_SAND)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SOUL_SAND)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SOUL_SOIL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SOUL_SOIL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SOUL_SOIL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SOUL_SOIL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BASALT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BASALT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BASALT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BASALT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BASALT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BASALT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BASALT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BASALT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_BASALT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_BASALT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_BASALT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_BASALT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOWSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GLOWSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLOWSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GLOWSTONE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.CHARGE_RESPAWN_ANCHOR)))
                     .build()
             ));
@@ -2019,385 +2019,385 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.INFESTED_STONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_STONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.INFESTED_STONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.INFESTED_COBBLESTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.INFESTED_COBBLESTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_COBBLESTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.INFESTED_COBBLESTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.INFESTED_STONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.INFESTED_STONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_STONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.INFESTED_STONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.INFESTED_MOSSY_STONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.INFESTED_MOSSY_STONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_MOSSY_STONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.INFESTED_MOSSY_STONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.INFESTED_CRACKED_STONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.INFESTED_CRACKED_STONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_CRACKED_STONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.INFESTED_CRACKED_STONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.INFESTED_CHISELED_STONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.INFESTED_CHISELED_STONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_CHISELED_STONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.INFESTED_CHISELED_STONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.INFESTED_DEEPSLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.INFESTED_DEEPSLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.INFESTED_DEEPSLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.INFESTED_DEEPSLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSSY_STONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSSY_STONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_STONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSSY_STONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRACKED_STONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRACKED_STONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_STONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRACKED_STONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_STONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_STONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_STONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_STONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PACKED_MUD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PACKED_MUD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PACKED_MUD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PACKED_MUD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUD_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MUD_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MUD_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRACKED_DEEPSLATE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRACKED_DEEPSLATE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_DEEPSLATE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRACKED_DEEPSLATE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_TILES, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_TILES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_TILES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_TILES)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRACKED_DEEPSLATE_TILES, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRACKED_DEEPSLATE_TILES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_DEEPSLATE_TILES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRACKED_DEEPSLATE_TILES)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_DEEPSLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_DEEPSLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_DEEPSLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_DEEPSLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.REINFORCED_DEEPSLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.REINFORCED_DEEPSLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REINFORCED_DEEPSLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.REINFORCED_DEEPSLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_BARS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.IRON_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_BARS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.IRON_BARS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_BARS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_BARS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_BARS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER_BARS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_BARS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_BARS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER_BARS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_BARS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_BARS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER_BARS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_BARS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_BARS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_BARS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_BARS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_BARS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_BARS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_BARS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_BARS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_BARS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_BARS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_BARS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_BARS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_BARS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_BARS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_BARS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_CHAIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.IRON_CHAIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.IRON_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_CHAIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_CHAIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER_CHAIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_CHAIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER_CHAIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_CHAIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER_CHAIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_CHAIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_CHAIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_CHAIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_CHAIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_CHAIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_CHAIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_CHAIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_CHAIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_CHAIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_CHAIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_CHAIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STONE_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONE_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUD_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MUD_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MUD_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MYCELIUM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MYCELIUM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MYCELIUM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MYCELIUM)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHER_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRACKED_NETHER_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRACKED_NETHER_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_NETHER_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRACKED_NETHER_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_NETHER_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_NETHER_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_NETHER_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_NETHER_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_BRICK_FENCE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHER_BRICK_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICK_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICK_FENCE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHER_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCULK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SCULK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SCULK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCULK_VEIN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SCULK_VEIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK_VEIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SCULK_VEIN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCULK_CATALYST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SCULK_CATALYST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK_CATALYST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SCULK_CATALYST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCULK_SHRIEKER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SCULK_SHRIEKER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK_SHRIEKER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SCULK_SHRIEKER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENCHANTING_TABLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ENCHANTING_TABLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ENCHANTING_TABLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ENCHANTING_TABLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_PORTAL_FRAME, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.END_PORTAL_FRAME).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.END_PORTAL_FRAME)))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_STONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.END_STONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.END_STONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_STONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.END_STONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.END_STONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DRAGON_EGG, create(
@@ -2406,42 +2406,42 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRAGON_EGG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DRAGON_EGG)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SANDSTONE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SANDSTONE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SANDSTONE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SANDSTONE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENDER_CHEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ENDER_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ENDER_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ENDER_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EMERALD_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EMERALD_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EMERALD_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EMERALD_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEACON, create(
@@ -2450,217 +2450,217 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEACON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BEACON)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COBBLESTONE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COBBLESTONE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLESTONE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COBBLESTONE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSSY_COBBLESTONE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSSY_COBBLESTONE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_COBBLESTONE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSSY_COBBLESTONE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRISMARINE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PRISMARINE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_SANDSTONE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_SANDSTONE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SANDSTONE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_SANDSTONE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSSY_STONE_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSSY_STONE_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_STONE_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSSY_STONE_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRANITE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRANITE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRANITE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRANITE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STONE_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONE_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MUD_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MUD_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUD_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MUD_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.NETHER_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHER_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ANDESITE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ANDESITE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANDESITE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ANDESITE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_NETHER_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_NETHER_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_NETHER_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_NETHER_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SANDSTONE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SANDSTONE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SANDSTONE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SANDSTONE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_STONE_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.END_STONE_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.END_STONE_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIORITE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DIORITE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIORITE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DIORITE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACKSTONE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACKSTONE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACKSTONE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACKSTONE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COBBLED_DEEPSLATE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COBBLED_DEEPSLATE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLED_DEEPSLATE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COBBLED_DEEPSLATE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_DEEPSLATE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_DEEPSLATE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DEEPSLATE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_DEEPSLATE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_TILE_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_TILE_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_TILE_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_TILE_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ANVIL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ANVIL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANVIL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ANVIL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHIPPED_ANVIL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHIPPED_ANVIL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHIPPED_ANVIL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHIPPED_ANVIL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DAMAGED_ANVIL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DAMAGED_ANVIL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DAMAGED_ANVIL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DAMAGED_ANVIL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_QUARTZ_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_QUARTZ_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_QUARTZ_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_QUARTZ_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.QUARTZ_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.QUARTZ_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.QUARTZ_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.QUARTZ_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.QUARTZ_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.QUARTZ_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.QUARTZ_PILLAR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.QUARTZ_PILLAR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_PILLAR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.QUARTZ_PILLAR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.QUARTZ_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.QUARTZ_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.QUARTZ_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.QUARTZ_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BARRIER, create(
@@ -2669,7 +2669,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BARRIER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BARRIER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT, create(
@@ -2678,126 +2678,126 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PACKED_ICE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PACKED_ICE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PACKED_ICE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PACKED_ICE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIRT_PATH, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DIRT_PATH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIRT_PATH)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DIRT_PATH)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRISMARINE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PRISMARINE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PRISMARINE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRISMARINE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PRISMARINE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_PRISMARINE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_PRISMARINE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_PRISMARINE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_PRISMARINE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRISMARINE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PRISMARINE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PRISMARINE_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PRISMARINE_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PRISMARINE_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_PRISMARINE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_PRISMARINE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_PRISMARINE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_PRISMARINE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SEA_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SEA_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SEA_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SEA_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_SANDSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_SANDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SANDSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_SANDSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_RED_SANDSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_RED_SANDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_RED_SANDSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_RED_SANDSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CUT_RED_SANDSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CUT_RED_SANDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CUT_RED_SANDSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CUT_RED_SANDSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_SANDSTONE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_SANDSTONE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SANDSTONE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_SANDSTONE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGMA_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGMA_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGMA_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGMA_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_NETHER_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_NETHER_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_NETHER_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_NETHER_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BONE_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BONE_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BONE_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BONE_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRUCTURE_VOID, create(
@@ -2806,14 +2806,14 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRUCTURE_VOID)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRUCTURE_VOID)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TURTLE_EGG, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TURTLE_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TURTLE_EGG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TURTLE_EGG)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNIFFER_EGG, create(
@@ -2822,161 +2822,161 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SNIFFER_EGG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SNIFFER_EGG)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DRIED_GHAST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DRIED_GHAST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRIED_GHAST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DRIED_GHAST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_TUBE_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_TUBE_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_TUBE_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_TUBE_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_BRAIN_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_BRAIN_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BRAIN_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_BRAIN_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_BUBBLE_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_BUBBLE_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BUBBLE_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_BUBBLE_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_FIRE_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_FIRE_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_FIRE_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_FIRE_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_HORN_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_HORN_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_HORN_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_HORN_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUBE_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUBE_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUBE_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUBE_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BRAIN_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BRAIN_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRAIN_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BRAIN_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BUBBLE_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BUBBLE_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BUBBLE_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BUBBLE_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FIRE_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.FIRE_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FIRE_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FIRE_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HORN_CORAL_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.HORN_CORAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HORN_CORAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.HORN_CORAL_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUBE_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUBE_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TUBE_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TUBE_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BRAIN_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BRAIN_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BRAIN_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BRAIN_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BUBBLE_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BUBBLE_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BUBBLE_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BUBBLE_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FIRE_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.FIRE_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FIRE_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FIRE_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HORN_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.HORN_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HORN_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.HORN_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_BRAIN_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_BRAIN_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BRAIN_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_BRAIN_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_BUBBLE_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_BUBBLE_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BUBBLE_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_BUBBLE_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_FIRE_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_FIRE_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_FIRE_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_FIRE_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_HORN_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_HORN_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_HORN_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_HORN_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_TUBE_CORAL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_TUBE_CORAL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_TUBE_CORAL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_TUBE_CORAL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_ICE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_ICE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_ICE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_ICE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CONDUIT, create(
@@ -2985,427 +2985,427 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CONDUIT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CONDUIT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_GRANITE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_GRANITE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_GRANITE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_GRANITE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_RED_SANDSTONE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_RED_SANDSTONE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_RED_SANDSTONE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_RED_SANDSTONE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSSY_STONE_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSSY_STONE_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_STONE_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSSY_STONE_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_DIORITE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_DIORITE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DIORITE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_DIORITE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSSY_COBBLESTONE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSSY_COBBLESTONE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_COBBLESTONE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSSY_COBBLESTONE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_STONE_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.END_STONE_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.END_STONE_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STONE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_SANDSTONE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_SANDSTONE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_SANDSTONE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_SANDSTONE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_QUARTZ_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_QUARTZ_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_QUARTZ_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_QUARTZ_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRANITE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRANITE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRANITE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRANITE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ANDESITE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ANDESITE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANDESITE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ANDESITE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_NETHER_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_NETHER_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_NETHER_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_NETHER_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_ANDESITE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_ANDESITE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_ANDESITE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_ANDESITE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIORITE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DIORITE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIORITE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DIORITE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COBBLED_DEEPSLATE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COBBLED_DEEPSLATE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLED_DEEPSLATE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COBBLED_DEEPSLATE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_DEEPSLATE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_DEEPSLATE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DEEPSLATE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_DEEPSLATE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_TILE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_TILE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_TILE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_TILE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_GRANITE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_GRANITE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_GRANITE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_GRANITE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_RED_SANDSTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_RED_SANDSTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_RED_SANDSTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_RED_SANDSTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSSY_STONE_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSSY_STONE_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_STONE_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSSY_STONE_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_DIORITE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_DIORITE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DIORITE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_DIORITE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSSY_COBBLESTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSSY_COBBLESTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSSY_COBBLESTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSSY_COBBLESTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.END_STONE_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.END_STONE_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.END_STONE_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.END_STONE_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_SANDSTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_SANDSTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_SANDSTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_SANDSTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOOTH_QUARTZ_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOOTH_QUARTZ_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOOTH_QUARTZ_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOOTH_QUARTZ_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRANITE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRANITE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRANITE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRANITE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ANDESITE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ANDESITE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANDESITE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ANDESITE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_NETHER_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_NETHER_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_NETHER_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_NETHER_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_ANDESITE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_ANDESITE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_ANDESITE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_ANDESITE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DIORITE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DIORITE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DIORITE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DIORITE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COBBLED_DEEPSLATE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COBBLED_DEEPSLATE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COBBLED_DEEPSLATE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COBBLED_DEEPSLATE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_DEEPSLATE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_DEEPSLATE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_DEEPSLATE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_DEEPSLATE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEEPSLATE_TILE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEEPSLATE_TILE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEEPSLATE_TILE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_TILE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.REDSTONE_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.REDSTONE_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.REDSTONE_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.REPEATER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.REPEATER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REPEATER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.REPEATER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COMPARATOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COMPARATOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COMPARATOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COMPARATOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PISTON, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PISTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PISTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PISTON)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STICKY_PISTON, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STICKY_PISTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STICKY_PISTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STICKY_PISTON)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SLIME_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SLIME_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SLIME_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SLIME_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HONEY_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.HONEY_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HONEY_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.HONEY_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OBSERVER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OBSERVER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OBSERVER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OBSERVER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.HOPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HOPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.HOPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DISPENSER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DISPENSER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DISPENSER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DISPENSER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DROPPER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DROPPER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DROPPER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DROPPER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TARGET, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TARGET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TARGET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TARGET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LEVER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LEVER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LEVER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LEVER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHTNING_ROD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHTNING_ROD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHTNING_ROD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHTNING_ROD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_LIGHTNING_ROD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_LIGHTNING_ROD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_LIGHTNING_ROD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_LIGHTNING_ROD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_LIGHTNING_ROD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_LIGHTNING_ROD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_LIGHTNING_ROD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_LIGHTNING_ROD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_LIGHTNING_ROD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_LIGHTNING_ROD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_LIGHTNING_ROD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_LIGHTNING_ROD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_LIGHTNING_ROD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_LIGHTNING_ROD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_LIGHTNING_ROD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_LIGHTNING_ROD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_LIGHTNING_ROD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_LIGHTNING_ROD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_LIGHTNING_ROD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_LIGHTNING_ROD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_LIGHTNING_ROD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_LIGHTNING_ROD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_LIGHTNING_ROD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_LIGHTNING_ROD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_LIGHTNING_ROD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_LIGHTNING_ROD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_LIGHTNING_ROD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_LIGHTNING_ROD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCULK_SENSOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SCULK_SENSOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCULK_SENSOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SCULK_SENSOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CALIBRATED_SCULK_SENSOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CALIBRATED_SCULK_SENSOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CALIBRATED_SCULK_SENSOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CALIBRATED_SCULK_SENSOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TRIPWIRE_HOOK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TRIPWIRE_HOOK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TRIPWIRE_HOOK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TRIPWIRE_HOOK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TNT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TNT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TNT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TNT)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_TNT)))
                     .build()
             ));
@@ -3413,917 +3413,917 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.REDSTONE_LAMP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_LAMP)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.REDSTONE_LAMP)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_BUTTON, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STONE_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONE_BUTTON)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BUTTON, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BUTTON)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_BUTTON, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_BUTTON)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_BUTTON, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_BUTTON)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONE_PRESSURE_PLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STONE_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONE_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONE_PRESSURE_PLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_PRESSURE_PLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_PRESSURE_PLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_WEIGHTED_PRESSURE_PLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_WEIGHTED_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_WEIGHTED_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_WEIGHTED_PRESSURE_PLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HEAVY_WEIGHTED_PRESSURE_PLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.HEAVY_WEIGHTED_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HEAVY_WEIGHTED_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.HEAVY_WEIGHTED_PRESSURE_PLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_PRESSURE_PLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_PRESSURE_PLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_PRESSURE_PLATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_PRESSURE_PLATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.IRON_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.IRON_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_DOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_DOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.IRON_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.IRON_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.IRON_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_TRAPDOOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_TRAPDOOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_FENCE_GATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_FENCE_GATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_FENCE_GATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_FENCE_GATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POWERED_RAIL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POWERED_RAIL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POWERED_RAIL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POWERED_RAIL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.DETECTOR_RAIL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DETECTOR_RAIL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DETECTOR_RAIL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DETECTOR_RAIL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RAIL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RAIL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RAIL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RAIL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ACTIVATOR_RAIL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ACTIVATOR_RAIL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACTIVATOR_RAIL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACTIVATOR_RAIL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BREWING_STAND, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BREWING_STAND).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BREWING_STAND)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BREWING_STAND)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAULDRON, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CAULDRON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAULDRON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CAULDRON)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FLOWER_POT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.FLOWER_POT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLOWER_POT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FLOWER_POT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMOKER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMOKER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMOKER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMOKER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLAST_FURNACE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLAST_FURNACE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLAST_FURNACE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLAST_FURNACE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRINDSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRINDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRINDSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRINDSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STONECUTTER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.STONECUTTER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STONECUTTER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STONECUTTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BELL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BELL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BELL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BELL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SOUL_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SOUL_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SOUL_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SOUL_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_LANTERN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_LANTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_LANTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_LANTERN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAMPFIRE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CAMPFIRE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAMPFIRE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CAMPFIRE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SOUL_CAMPFIRE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SOUL_CAMPFIRE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SOUL_CAMPFIRE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SOUL_CAMPFIRE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEE_NEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BEE_NEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEE_NEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BEE_NEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEEHIVE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BEEHIVE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEEHIVE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BEEHIVE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.HONEYCOMB_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.HONEYCOMB_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HONEYCOMB_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.HONEYCOMB_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LODESTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LODESTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LODESTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LODESTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRYING_OBSIDIAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRYING_OBSIDIAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRYING_OBSIDIAN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRYING_OBSIDIAN)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACKSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACKSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACKSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACKSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACKSTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACKSTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACKSTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACKSTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACKSTONE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACKSTONE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACKSTONE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACKSTONE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GILDED_BLACKSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GILDED_BLACKSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GILDED_BLACKSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GILDED_BLACKSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_POLISHED_BLACKSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_POLISHED_BLACKSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_POLISHED_BLACKSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_POLISHED_BLACKSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLISHED_BLACKSTONE_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POLISHED_BLACKSTONE_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POLISHED_BLACKSTONE_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRACKED_POLISHED_BLACKSTONE_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRACKED_POLISHED_BLACKSTONE_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRACKED_POLISHED_BLACKSTONE_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRACKED_POLISHED_BLACKSTONE_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RESPAWN_ANCHOR, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RESPAWN_ANCHOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RESPAWN_ANCHOR)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.SMALL_AMETHYST_BUD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SMALL_AMETHYST_BUD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMALL_AMETHYST_BUD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMALL_AMETHYST_BUD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MEDIUM_AMETHYST_BUD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MEDIUM_AMETHYST_BUD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MEDIUM_AMETHYST_BUD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MEDIUM_AMETHYST_BUD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LARGE_AMETHYST_BUD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LARGE_AMETHYST_BUD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LARGE_AMETHYST_BUD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LARGE_AMETHYST_BUD)))
                     .build()
             ));
             this.registerable.register(ItemKeys.AMETHYST_CLUSTER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.AMETHYST_CLUSTER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AMETHYST_CLUSTER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.AMETHYST_CLUSTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POINTED_DRIPSTONE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POINTED_DRIPSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POINTED_DRIPSTONE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POINTED_DRIPSTONE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OCHRE_FROGLIGHT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OCHRE_FROGLIGHT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OCHRE_FROGLIGHT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OCHRE_FROGLIGHT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.VERDANT_FROGLIGHT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.VERDANT_FROGLIGHT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.VERDANT_FROGLIGHT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.VERDANT_FROGLIGHT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PEARLESCENT_FROGLIGHT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PEARLESCENT_FROGLIGHT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PEARLESCENT_FROGLIGHT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PEARLESCENT_FROGLIGHT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.FROGSPAWN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.FROGSPAWN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FROGSPAWN), BlockItemComponent.Pass.FLUID))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FROGSPAWN), BlockItemComponent.Pass.FLUID))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_GRATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_GRATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_GRATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_GRATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER_GRATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_GRATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_GRATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_GRATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER_GRATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_GRATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_GRATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_GRATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER_GRATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_GRATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_GRATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_GRATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_GRATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_GRATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_GRATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_GRATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_GRATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_GRATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_GRATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_GRATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_GRATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_GRATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_GRATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_GRATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_GRATE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_GRATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_GRATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_GRATE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_BULB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_BULB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_BULB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_BULB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER_BULB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_BULB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_BULB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_BULB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER_BULB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_BULB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_BULB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_BULB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER_BULB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_BULB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_BULB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_BULB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_BULB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_BULB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_BULB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_BULB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_BULB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_BULB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_BULB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_BULB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_BULB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_BULB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_BULB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_BULB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_BULB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_BULB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_BULB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_BULB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TRIAL_SPAWNER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TRIAL_SPAWNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TRIAL_SPAWNER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TRIAL_SPAWNER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.VAULT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.VAULT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.VAULT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.VAULT)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRAFTER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRAFTER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRAFTER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRAFTER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RESIN_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RESIN_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RESIN_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RESIN_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RESIN_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RESIN_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RESIN_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RESIN_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RESIN_BRICK_STAIRS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RESIN_BRICK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RESIN_BRICK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RESIN_BRICK_STAIRS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RESIN_BRICK_SLAB, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RESIN_BRICK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RESIN_BRICK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RESIN_BRICK_SLAB)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RESIN_BRICK_WALL, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RESIN_BRICK_WALL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RESIN_BRICK_WALL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RESIN_BRICK_WALL)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHISELED_RESIN_BRICKS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_RESIN_BRICKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_RESIN_BRICKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_RESIN_BRICKS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TEST_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TEST_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TEST_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TEST_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.TEST_INSTANCE_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TEST_INSTANCE_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TEST_INSTANCE_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TEST_INSTANCE_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_CHEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER_CHEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER_CHEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER_CHEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_CHEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_CHEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_CHEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_CHEST, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_CHEST)))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_GOLEM_STATUE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_GOLEM_STATUE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COPPER_GOLEM_STATUE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COPPER_GOLEM_STATUE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.EXPOSED_COPPER_GOLEM_STATUE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.EXPOSED_COPPER_GOLEM_STATUE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.EXPOSED_COPPER_GOLEM_STATUE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_GOLEM_STATUE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WEATHERED_COPPER_GOLEM_STATUE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WEATHERED_COPPER_GOLEM_STATUE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEATHERED_COPPER_GOLEM_STATUE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_GOLEM_STATUE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXIDIZED_COPPER_GOLEM_STATUE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXIDIZED_COPPER_GOLEM_STATUE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXIDIZED_COPPER_GOLEM_STATUE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_GOLEM_STATUE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_COPPER_GOLEM_STATUE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_COPPER_GOLEM_STATUE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_COPPER_GOLEM_STATUE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_GOLEM_STATUE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_EXPOSED_COPPER_GOLEM_STATUE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_EXPOSED_COPPER_GOLEM_STATUE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_EXPOSED_COPPER_GOLEM_STATUE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_GOLEM_STATUE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_WEATHERED_COPPER_GOLEM_STATUE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_WEATHERED_COPPER_GOLEM_STATUE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_WEATHERED_COPPER_GOLEM_STATUE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_GOLEM_STATUE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WAXED_OXIDIZED_COPPER_GOLEM_STATUE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WAXED_OXIDIZED_COPPER_GOLEM_STATUE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WAXED_OXIDIZED_COPPER_GOLEM_STATUE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_GOLEM_STATUE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_SHELF, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -4331,7 +4331,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -4342,126 +4342,126 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.TORCH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.TORCH), this.blocks.getOrThrow(BlockKeys.WALL_TORCH), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.TORCH), this.blocks.getOrThrow(BlockIds.WALL_TORCH), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.SOUL_TORCH, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SOUL_TORCH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.SOUL_TORCH), this.blocks.getOrThrow(BlockKeys.SOUL_WALL_TORCH), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.SOUL_TORCH), this.blocks.getOrThrow(BlockIds.SOUL_WALL_TORCH), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_TORCH, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.COPPER_TORCH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.COPPER_TORCH), this.blocks.getOrThrow(BlockKeys.COPPER_WALL_TORCH), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.COPPER_TORCH), this.blocks.getOrThrow(BlockIds.COPPER_WALL_TORCH), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.TUBE_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TUBE_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.TUBE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.TUBE_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.TUBE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.TUBE_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.BRAIN_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BRAIN_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BRAIN_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.BRAIN_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.BRAIN_CORAL_FAN), this.blocks.getOrThrow(BlockIds.BRAIN_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.BUBBLE_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BUBBLE_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BUBBLE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.BUBBLE_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.BUBBLE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.BUBBLE_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.FIRE_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.FIRE_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.FIRE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.FIRE_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.FIRE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.FIRE_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.HORN_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.HORN_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.HORN_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.HORN_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.HORN_CORAL_FAN), this.blocks.getOrThrow(BlockIds.HORN_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_TUBE_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_TUBE_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_TUBE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_TUBE_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_TUBE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_TUBE_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_BRAIN_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_BRAIN_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_BRAIN_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_BRAIN_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_BRAIN_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_BRAIN_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_BUBBLE_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_BUBBLE_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_BUBBLE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_BUBBLE_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_BUBBLE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_BUBBLE_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_FIRE_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_FIRE_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_FIRE_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_FIRE_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_FIRE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_FIRE_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.DEAD_HORN_CORAL_FAN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_HORN_CORAL_FAN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DEAD_HORN_CORAL_FAN), this.blocks.getOrThrow(BlockKeys.DEAD_HORN_CORAL_WALL_FAN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_HORN_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_HORN_CORAL_WALL_FAN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.REDSTONE_TORCH, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.REDSTONE_TORCH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.REDSTONE_TORCH), this.blocks.getOrThrow(BlockKeys.REDSTONE_WALL_TORCH), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.REDSTONE_TORCH), this.blocks.getOrThrow(BlockIds.REDSTONE_WALL_TORCH), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_SIGN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CRIMSON_SIGN), this.blocks.getOrThrow(BlockKeys.CRIMSON_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.CRIMSON_SIGN), this.blocks.getOrThrow(BlockIds.CRIMSON_WALL_SIGN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_SIGN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.WARPED_SIGN), this.blocks.getOrThrow(BlockKeys.WARPED_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.WARPED_SIGN), this.blocks.getOrThrow(BlockIds.WARPED_WALL_SIGN), Direction.DOWN))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_HANGING_SIGN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CRIMSON_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.CRIMSON_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.CRIMSON_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.CRIMSON_WALL_HANGING_SIGN), Direction.UP))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_HANGING_SIGN, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.WARPED_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.WARPED_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.WARPED_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.WARPED_WALL_HANGING_SIGN), Direction.UP))
                     .build()
             ));
         }
@@ -4472,896 +4472,896 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_STAINED_GLASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_STAINED_GLASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_STAINED_GLASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_STAINED_GLASS)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_STAINED_GLASS_PANE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_STAINED_GLASS_PANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_STAINED_GLASS_PANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_STAINED_GLASS_PANE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_GLAZED_TERRACOTTA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_GLAZED_TERRACOTTA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_GLAZED_TERRACOTTA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_GLAZED_TERRACOTTA)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_CONCRETE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_CONCRETE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CONCRETE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_CONCRETE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_CONCRETE_POWDER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_CONCRETE_POWDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CONCRETE_POWDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_CONCRETE_POWDER)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_BED, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_BED).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_BED)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_BED)))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGENTA_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_BLUE_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.YELLOW_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIME_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GRAY_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.LIGHT_GRAY_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CYAN_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.PURPLE_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BROWN_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.GREEN_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_CANDLE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLACK_CANDLE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_CANDLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CANDLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_CANDLE)))
                     .build()
             ));
         }
@@ -5371,7 +5371,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5379,7 +5379,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5387,7 +5387,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5395,7 +5395,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5403,7 +5403,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5411,7 +5411,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5419,7 +5419,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5427,7 +5427,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5435,7 +5435,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5443,7 +5443,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5451,7 +5451,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5459,7 +5459,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5467,7 +5467,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5475,7 +5475,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5483,7 +5483,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5491,7 +5491,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5499,7 +5499,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_SHULKER_BOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_SHULKER_BOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_SHULKER_BOX)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
                     .build()
             ));
@@ -5510,14 +5510,14 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.STRING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TRIPWIRE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TRIPWIRE)))
                     .build()
             ));
             this.registerable.register(ItemKeys.RESIN_CLUMP, create(
                 ItemDisplay.Builder.forItem(ItemKeys.RESIN_CLUMP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RESIN_CLUMP)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RESIN_CLUMP)))
                     .build()
             ));
         }
@@ -5529,7 +5529,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.COMMAND_BLOCK)))
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockIds.COMMAND_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.REPEATING_COMMAND_BLOCK, create(
@@ -5538,7 +5538,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.REPEATING_COMMAND_BLOCK)))
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockIds.REPEATING_COMMAND_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHAIN_COMMAND_BLOCK, create(
@@ -5547,7 +5547,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.CHAIN_COMMAND_BLOCK)))
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockIds.CHAIN_COMMAND_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRUCTURE_BLOCK, create(
@@ -5556,7 +5556,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.STRUCTURE_BLOCK)))
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockIds.STRUCTURE_BLOCK)))
                     .build()
             ));
             this.registerable.register(ItemKeys.JIGSAW, create(
@@ -5565,7 +5565,7 @@ public class ItemUtil {
                     .build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockKeys.JIGSAW)))
+                    .with(BlockItemComponent.operator(this.blocks.getOrThrow(BlockIds.JIGSAW)))
                     .build()
             ));
         }
@@ -5989,10 +5989,10 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(238))
                     .with(ToolItemComponent.builder(1)
-                        .rule(Tool.Rule.minesAndDrops(HolderSet.direct(this.blocks.getOrThrow(BlockKeys.COBWEB)), 15.0f))
+                        .rule(Tool.Rule.minesAndDrops(HolderSet.direct(this.blocks.getOrThrow(BlockIds.COBWEB)), 15.0f))
                         .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.LEAVES), 15.0f))
                         .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.WOOL), 5.0f))
-                        .rule(Tool.Rule.overrideSpeed(HolderSet.direct(this.blocks.getOrThrow(BlockKeys.VINE), this.blocks.getOrThrow(BlockKeys.GLOW_LICHEN)), 2.0f))
+                        .rule(Tool.Rule.overrideSpeed(HolderSet.direct(this.blocks.getOrThrow(BlockIds.VINE), this.blocks.getOrThrow(BlockIds.GLOW_LICHEN)), 2.0f))
                         .build())
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHEAR)))
                     .build()
@@ -6052,7 +6052,7 @@ public class ItemUtil {
                     .with(WeaponItemComponent.builder(1, TridentItem.BASE_DAMAGE, 0.275d)
                         .build())
                     .with(ThrowableItemComponent.trident(TridentItem.PROJECTILE_SHOOT_POWER, 0.0f, TridentItem.THROW_THRESHOLD_TIME))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.TRIDENT)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.TRIDENT)))
                     .with(EnchantableItemComponent.of(1))
                     .build(),
                 ItemEventMap.builder()
@@ -6086,7 +6086,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(25))
-                    .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.PIG), 7))
+                    .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.PIG), 7))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemKeys.FISHING_ROD))))
@@ -6097,7 +6097,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(DamageableItemComponent.of(100))
-                    .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.STRIDER), 1))
+                    .with(SteeringItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.STRIDER), 1))
                     .build(),
                 ItemEventMap.builder()
                     .add(ItemEvents.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemKeys.FISHING_ROD))))
@@ -6170,7 +6170,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EntityItemComponent.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.MINECART),
+                        this.entityTypes.getOrThrow(EntityTypeIds.MINECART),
                         this.blocks,
                         this.dispenseBehaviors
                     ))
@@ -6181,7 +6181,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EntityItemComponent.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.CHEST_MINECART),
+                        this.entityTypes.getOrThrow(EntityTypeIds.CHEST_MINECART),
                         this.blocks,
                         this.dispenseBehaviors
                     ))
@@ -6192,7 +6192,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EntityItemComponent.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.FURNACE_MINECART),
+                        this.entityTypes.getOrThrow(EntityTypeIds.FURNACE_MINECART),
                         this.blocks,
                         this.dispenseBehaviors
                     ))
@@ -6203,7 +6203,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EntityItemComponent.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.TNT_MINECART),
+                        this.entityTypes.getOrThrow(EntityTypeIds.TNT_MINECART),
                         this.blocks,
                         this.dispenseBehaviors
                     ))
@@ -6214,7 +6214,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EntityItemComponent.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.HOPPER_MINECART),
+                        this.entityTypes.getOrThrow(EntityTypeIds.HOPPER_MINECART),
                         this.blocks,
                         this.dispenseBehaviors
                     ))
@@ -6227,7 +6227,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
                     .with(EntityItemComponent.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.COMMAND_BLOCK_MINECART),
+                        this.entityTypes.getOrThrow(EntityTypeIds.COMMAND_BLOCK_MINECART),
                         this.blocks,
                         this.dispenseBehaviors
                     ))
@@ -6237,7 +6237,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.OAK_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6245,7 +6245,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.OAK_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6253,7 +6253,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPRUCE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.SPRUCE_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.SPRUCE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6261,7 +6261,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPRUCE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.SPRUCE_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.SPRUCE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6269,7 +6269,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BIRCH_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.BIRCH_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.BIRCH_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6277,7 +6277,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BIRCH_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.BIRCH_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.BIRCH_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6285,7 +6285,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.JUNGLE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.JUNGLE_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.JUNGLE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6293,7 +6293,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.JUNGLE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.JUNGLE_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.JUNGLE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6301,7 +6301,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ACACIA_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.ACACIA_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.ACACIA_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6309,7 +6309,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ACACIA_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.ACACIA_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.ACACIA_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6317,7 +6317,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHERRY_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.CHERRY_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.CHERRY_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6325,7 +6325,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.CHERRY_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.CHERRY_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.CHERRY_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6333,7 +6333,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.DARK_OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.DARK_OAK_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.DARK_OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6341,7 +6341,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.DARK_OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.DARK_OAK_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.DARK_OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6349,7 +6349,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PALE_OAK_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.PALE_OAK_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.PALE_OAK_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6357,7 +6357,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PALE_OAK_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.PALE_OAK_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.PALE_OAK_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6365,7 +6365,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MANGROVE_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.MANGROVE_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.MANGROVE_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6373,7 +6373,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MANGROVE_CHEST_BOAT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.MANGROVE_CHEST_BOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.MANGROVE_CHEST_BOAT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6381,7 +6381,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BAMBOO_RAFT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.BAMBOO_RAFT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.BAMBOO_RAFT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6389,7 +6389,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BAMBOO_CHEST_RAFT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeKeys.BAMBOO_CHEST_RAFT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.BAMBOO_CHEST_RAFT), this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.BOAT))
                     .build()
             ));
@@ -6398,7 +6398,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EntityItemComponent.of(
-                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.PAINTING))
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.PAINTING))
                             .allowItemData()
                             .spawnRule(
                                 DiscardEntitySpawnRule.INSTANCE,
@@ -6416,7 +6416,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EntityItemComponent.of(
-                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.ITEM_FRAME))
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.ITEM_FRAME))
                             .allowItemData()
                             .build()
                     ))
@@ -6427,7 +6427,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EntityItemComponent.of(
-                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_ITEM_FRAME))
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.GLOW_ITEM_FRAME))
                             .allowItemData()
                             .build()
                     ))
@@ -6438,7 +6438,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
                     .with(EntityItemComponent.ofDispensing(
-                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.ARMOR_STAND))
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.ARMOR_STAND))
                             .spawnRule(
                                 DiscardEntitySpawnRule.INSTANCE,
                                 SideCheckPredicate.builder(Direction.DOWN)
@@ -6458,7 +6458,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EntityItemComponent.of(
-                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeKeys.END_CRYSTAL))
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.END_CRYSTAL))
                             .spawnRule(
                                 DiscardEntitySpawnRule.INSTANCE,
                                 InvertedLootItemCondition.invert(
@@ -6500,609 +6500,609 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ARMADILLO_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ARMADILLO), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ARMADILLO), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ALLAY_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ALLAY_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ALLAY), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ALLAY), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.AXOLOTL_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.AXOLOTL_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.AXOLOTL), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BAT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BAT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BAT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BEE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BEE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BEE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BEE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLAZE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BLAZE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BLAZE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BLAZE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BOGGED_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BOGGED_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BOGGED), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BOGGED), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.BREEZE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.BREEZE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.BREEZE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BREEZE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CAT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CAT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAMEL_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CAMEL_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CAMEL), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CAMEL), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAMEL_HUSK_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CAMEL_HUSK_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CAMEL_HUSK), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CAMEL_HUSK), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CAVE_SPIDER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CAVE_SPIDER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CAVE_SPIDER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CAVE_SPIDER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHICKEN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CHICKEN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CHICKEN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CHICKEN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.COD_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.COD_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.COD), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.COD), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.COPPER_GOLEM_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.COPPER_GOLEM_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.COPPER_GOLEM), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.COPPER_GOLEM), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.COW_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.COW_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.COW), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.COW), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CREAKING_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CREAKING_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CREAKING), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CREAKING), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.CREEPER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.CREEPER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.CREEPER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CREEPER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.DOLPHIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DOLPHIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.DOLPHIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.DOLPHIN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.DONKEY_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DONKEY_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.DONKEY), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.DONKEY), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.DROWNED_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.DROWNED_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.DROWNED), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.DROWNED), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ELDER_GUARDIAN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ELDER_GUARDIAN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENDER_DRAGON_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ENDER_DRAGON_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ENDER_DRAGON), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ENDER_DRAGON), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENDERMAN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ENDERMAN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ENDERMAN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ENDERMAN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ENDERMITE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ENDERMITE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ENDERMITE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ENDERMITE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.EVOKER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.EVOKER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.EVOKER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.EVOKER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.FOX_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.FOX_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.FOX), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.FOX), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.FROG_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.FROG_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.FROG), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.FROG), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.GHAST_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GHAST_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.GHAST), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.GHAST), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HAPPY_GHAST_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HAPPY_GHAST_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.HAPPY_GHAST), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.HAPPY_GHAST), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.GLOW_SQUID_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GLOW_SQUID_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.GLOW_SQUID), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.GLOW_SQUID), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.GOAT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GOAT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.GOAT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.GOAT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.GUARDIAN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.GUARDIAN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.GUARDIAN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.GUARDIAN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HOGLIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HOGLIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.HOGLIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.HOGLIN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HORSE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HORSE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.HORSE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.HORSE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.HUSK_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.HUSK_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.HUSK), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.HUSK), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.IRON_GOLEM_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.IRON_GOLEM_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.IRON_GOLEM), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.IRON_GOLEM), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.LLAMA_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LLAMA_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.LLAMA), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.LLAMA), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.MAGMA_CUBE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.MAGMA_CUBE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.MAGMA_CUBE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.MAGMA_CUBE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOOSHROOM_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.MOOSHROOM_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.MOOSHROOM), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.MOOSHROOM), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.MULE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.MULE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.MULE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.MULE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.NAUTILUS_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.NAUTILUS_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.NAUTILUS), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.NAUTILUS), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.OCELOT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.OCELOT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.OCELOT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.OCELOT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PANDA_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PANDA_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PANDA), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PANDA), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PARCHED_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PARCHED_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PARCHED), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PARCHED), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PARROT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PARROT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PARROT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PARROT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PHANTOM_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PHANTOM_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PHANTOM), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PHANTOM), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PIG_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PIG_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PIG), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PIG), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PIGLIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PIGLIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PIGLIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PIGLIN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PIGLIN_BRUTE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PIGLIN_BRUTE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PILLAGER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PILLAGER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PILLAGER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PILLAGER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.POLAR_BEAR_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.POLAR_BEAR_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.POLAR_BEAR), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.POLAR_BEAR), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PUFFERFISH_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PUFFERFISH_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PUFFERFISH), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.RABBIT_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.RABBIT_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.RABBIT), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.RABBIT), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.RAVAGER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.RAVAGER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.RAVAGER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.RAVAGER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SALMON_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SALMON_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SALMON), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHEEP_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SHEEP_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SHEEP), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SHEEP), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHULKER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SHULKER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SHULKER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SHULKER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SILVERFISH_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SILVERFISH_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SILVERFISH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SILVERFISH), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SKELETON_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SKELETON_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SKELETON), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SKELETON), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SKELETON_HORSE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SKELETON_HORSE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SKELETON_HORSE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SKELETON_HORSE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SLIME_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SLIME_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SLIME), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SLIME), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNIFFER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SNIFFER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SNIFFER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SNIFFER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SNOW_GOLEM_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SNOW_GOLEM_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SNOW_GOLEM), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SNOW_GOLEM), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPIDER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SPIDER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SPIDER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SPIDER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.SQUID_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SQUID_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.SQUID), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SQUID), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRAY_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.STRAY_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.STRAY), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.STRAY), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.STRIDER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.STRIDER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.STRIDER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.STRIDER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TADPOLE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TADPOLE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.TADPOLE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TRADER_LLAMA_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TRADER_LLAMA_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.TRADER_LLAMA), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.TRADER_LLAMA), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TROPICAL_FISH_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.TROPICAL_FISH), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TURTLE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TURTLE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.TURTLE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.TURTLE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.VEX_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.VEX_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.VEX), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.VEX), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.VILLAGER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.VILLAGER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.VILLAGER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.VILLAGER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.VINDICATOR_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.VINDICATOR_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.VINDICATOR), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.VINDICATOR), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WANDERING_TRADER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WANDERING_TRADER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WANDERING_TRADER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WANDERING_TRADER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARDEN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WARDEN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WARDEN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WARDEN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WITCH_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WITCH_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WITCH), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WITCH), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WITHER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WITHER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WITHER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WITHER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WITHER_SKELETON_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WITHER_SKELETON_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WITHER_SKELETON), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WITHER_SKELETON), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.WOLF_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WOLF_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.WOLF), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WOLF), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOGLIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOGLIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOGLIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOGLIN), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOMBIE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_HORSE), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIE_HORSE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIE_NAUTILUS_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOMBIE_NAUTILUS_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_NAUTILUS), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIE_NAUTILUS), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIE_VILLAGER), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIE_VILLAGER), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG, create(
                 ItemDisplay.Builder.forItem(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeKeys.ZOMBIFIED_PIGLIN), this.dispenseBehaviors))
+                    .with(EntityItemComponent.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIFIED_PIGLIN), this.dispenseBehaviors))
                     .build()
             ));
         }
@@ -7112,7 +7112,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7120,7 +7120,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7128,7 +7128,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7136,7 +7136,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7144,7 +7144,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7152,7 +7152,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7160,7 +7160,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7168,7 +7168,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7176,7 +7176,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7184,7 +7184,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.AZALEA_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZALEA_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.AZALEA_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7192,115 +7192,115 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_SAPLING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_SAPLING)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_SAPLING)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_OAK_SAPLING))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_OAK_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.SPRUCE_SAPLING, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_SAPLING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_SAPLING)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_SAPLING)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_SPRUCE_SAPLING))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_SPRUCE_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.BIRCH_SAPLING, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_SAPLING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_SAPLING)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_SAPLING)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_BIRCH_SAPLING))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BIRCH_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.JUNGLE_SAPLING, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_SAPLING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_SAPLING)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_SAPLING)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_JUNGLE_SAPLING))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_JUNGLE_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.ACACIA_SAPLING, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_SAPLING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_SAPLING)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_SAPLING)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_ACACIA_SAPLING))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_ACACIA_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.CHERRY_SAPLING, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_SAPLING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_SAPLING)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_SAPLING)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CHERRY_SAPLING))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CHERRY_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.DARK_OAK_SAPLING, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SAPLING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SAPLING)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_SAPLING)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_DARK_OAK_SAPLING))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_DARK_OAK_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.PALE_OAK_SAPLING, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_SAPLING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_SAPLING)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_SAPLING)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_PALE_OAK_SAPLING))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_PALE_OAK_SAPLING))
                     .build()
             ));
             this.registerable.register(ItemKeys.MANGROVE_PROPAGULE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_PROPAGULE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_PROPAGULE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_PROPAGULE)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_MANGROVE_PROPAGULE))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_MANGROVE_PROPAGULE))
                     .build()
             ));
             this.registerable.register(ItemKeys.SHORT_GRASS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SHORT_GRASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHORT_GRASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SHORT_GRASS)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7308,7 +7308,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.KELP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.KELP)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.KELP)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7316,7 +7316,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSS_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSS_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSS_CARPET)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7324,7 +7324,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_MOSS_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_MOSS_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_MOSS_CARPET)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7332,7 +7332,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_PETALS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_PETALS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_PETALS)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7340,7 +7340,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.HANGING_ROOTS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HANGING_ROOTS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.HANGING_ROOTS)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7348,7 +7348,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SMALL_DRIPLEAF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMALL_DRIPLEAF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMALL_DRIPLEAF)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7356,7 +7356,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.WHEAT_SEEDS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHEAT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHEAT)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7364,7 +7364,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PUMPKIN_SEEDS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PUMPKIN_STEM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PUMPKIN_STEM)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7372,7 +7372,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.MELON_SEEDS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MELON_STEM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MELON_STEM)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7380,7 +7380,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.TORCHFLOWER_SEEDS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TORCHFLOWER_CROP)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TORCHFLOWER_CROP)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7388,7 +7388,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.PITCHER_POD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PITCHER_CROP)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PITCHER_CROP)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7396,7 +7396,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.BEETROOT_SEEDS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BEETROOTS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BEETROOTS)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7404,7 +7404,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_ROOTS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_ROOTS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_ROOTS)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
@@ -7413,7 +7413,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SEAGRASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SEAGRASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SEAGRASS)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7421,7 +7421,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_HANGING_MOSS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_HANGING_MOSS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_HANGING_MOSS)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7429,7 +7429,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WILDFLOWERS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WILDFLOWERS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WILDFLOWERS)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7437,7 +7437,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BUSH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BUSH)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BUSH)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7445,7 +7445,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.FIREFLY_BUSH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FIREFLY_BUSH)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FIREFLY_BUSH)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7453,7 +7453,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CACTUS_FLOWER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CACTUS_FLOWER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CACTUS_FLOWER)))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
             ));
@@ -7461,7 +7461,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA_LEAVES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA_LEAVES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FLOWERING_AZALEA_LEAVES)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
@@ -7469,7 +7469,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHER_SPROUTS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_SPROUTS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_SPROUTS)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
@@ -7477,7 +7477,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WEEPING_VINES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WEEPING_VINES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WEEPING_VINES)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
@@ -7485,7 +7485,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.TWISTING_VINES).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TWISTING_VINES)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TWISTING_VINES)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
@@ -7493,7 +7493,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SUGAR_CANE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUGAR_CANE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SUGAR_CANE)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
@@ -7501,7 +7501,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.VINE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.VINE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.VINE)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
@@ -7509,7 +7509,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.GLOW_LICHEN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GLOW_LICHEN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GLOW_LICHEN)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
@@ -7517,7 +7517,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.TALL_GRASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TALL_GRASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TALL_GRASS)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
@@ -7525,18 +7525,18 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CACTUS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CACTUS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CACTUS)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CACTUS))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CACTUS))
                     .build()
             ));
             this.registerable.register(ItemKeys.DRIED_KELP_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.DRIED_KELP_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DRIED_KELP_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DRIED_KELP_BLOCK)))
                     .with(CompostableItemComponent.of(CompostChances.FIFTY_FIFTY))
                     .with(FuelItemComponent.of(FuelTimes.DRIED_KELP_BLOCK))
                     .build()
@@ -7545,18 +7545,18 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.FERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FERN)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_FERN))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FERN))
                     .build()
             ));
             this.registerable.register(ItemKeys.LILY_PAD, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LILY_PAD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_PAD), BlockItemComponent.Pass.FLUID))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LILY_PAD), BlockItemComponent.Pass.FLUID))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7564,7 +7564,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.NETHER_WART).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_WART)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_WART)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7572,7 +7572,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.COCOA_BEANS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COCOA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COCOA)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7580,7 +7580,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIG_DRIPLEAF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIG_DRIPLEAF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIG_DRIPLEAF)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7588,7 +7588,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PUMPKIN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PUMPKIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PUMPKIN)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7597,7 +7597,7 @@ public class ItemUtil {
                 AttributeModifiers.hideFromLocatorBar(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARVED_PUMPKIN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CARVED_PUMPKIN)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(EquipmentItemComponent.of(Equippable.builder(EquipmentSlot.HEAD)
                         .setSwappable(false)
@@ -7610,7 +7610,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MELON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MELON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MELON)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7618,7 +7618,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SEA_PICKLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SEA_PICKLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SEA_PICKLE)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7633,229 +7633,229 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DANDELION).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DANDELION)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DANDELION)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.SATURATION), 140)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.SATURATION), 140)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_DANDELION))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_DANDELION))
                     .build()
             ));
             this.registerable.register(ItemKeys.OPEN_EYEBLOSSOM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OPEN_EYEBLOSSOM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OPEN_EYEBLOSSOM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OPEN_EYEBLOSSOM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.BLINDNESS), 140)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.BLINDNESS), 140)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_OPEN_EYEBLOSSOM))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_OPEN_EYEBLOSSOM))
                     .build()
             ));
             this.registerable.register(ItemKeys.CLOSED_EYEBLOSSOM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CLOSED_EYEBLOSSOM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CLOSED_EYEBLOSSOM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CLOSED_EYEBLOSSOM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.NAUSEA), 140)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.NAUSEA), 140)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CLOSED_EYEBLOSSOM))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CLOSED_EYEBLOSSOM))
                     .build()
             ));
             this.registerable.register(ItemKeys.POPPY, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.POPPY).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.POPPY)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.POPPY)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.NIGHT_VISION), 100)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.NIGHT_VISION), 100)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_POPPY))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_POPPY))
                     .build()
             ));
             this.registerable.register(ItemKeys.BLUE_ORCHID, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_ORCHID).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_ORCHID)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_ORCHID)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.SATURATION), 140)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.SATURATION), 140)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_BLUE_ORCHID))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BLUE_ORCHID))
                     .build()
             ));
             this.registerable.register(ItemKeys.ALLIUM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ALLIUM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ALLIUM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ALLIUM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.FIRE_RESISTANCE), 80)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 80)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_ALLIUM))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_ALLIUM))
                     .build()
             ));
             this.registerable.register(ItemKeys.AZURE_BLUET, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.AZURE_BLUET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZURE_BLUET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.AZURE_BLUET)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.BLINDNESS), 160)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.BLINDNESS), 160)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_AZURE_BLUET))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_AZURE_BLUET))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_TULIP, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_TULIP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_TULIP)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_TULIP)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_RED_TULIP))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_RED_TULIP))
                     .build()
             ));
             this.registerable.register(ItemKeys.ORANGE_TULIP, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_TULIP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_TULIP)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_TULIP)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_ORANGE_TULIP))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_ORANGE_TULIP))
                     .build()
             ));
             this.registerable.register(ItemKeys.WHITE_TULIP, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_TULIP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_TULIP)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_TULIP)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WHITE_TULIP))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WHITE_TULIP))
                     .build()
             ));
             this.registerable.register(ItemKeys.PINK_TULIP, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_TULIP).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_TULIP)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_TULIP)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WEAKNESS), 180)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_PINK_TULIP))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_PINK_TULIP))
                     .build()
             ));
             this.registerable.register(ItemKeys.OXEYE_DAISY, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OXEYE_DAISY).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OXEYE_DAISY)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OXEYE_DAISY)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.REGENERATION), 160)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 160)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_OXEYE_DAISY))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_OXEYE_DAISY))
                     .build()
             ));
             this.registerable.register(ItemKeys.CORNFLOWER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CORNFLOWER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CORNFLOWER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CORNFLOWER)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.JUMP_BOOST), 120)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.JUMP_BOOST), 120)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CORNFLOWER))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CORNFLOWER))
                     .build()
             ));
             this.registerable.register(ItemKeys.LILY_OF_THE_VALLEY, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.LILY_OF_THE_VALLEY).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILY_OF_THE_VALLEY)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LILY_OF_THE_VALLEY)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.POISON), 240)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.POISON), 240)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_LILY_OF_THE_VALLEY))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_LILY_OF_THE_VALLEY))
                     .build()
             ));
             this.registerable.register(ItemKeys.WITHER_ROSE, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WITHER_ROSE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WITHER_ROSE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WITHER_ROSE)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.WITHER), 160)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WITHER), 160)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WITHER_ROSE))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WITHER_ROSE))
                     .build()
             ));
             this.registerable.register(ItemKeys.AZALEA, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.AZALEA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.AZALEA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.AZALEA)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_AZALEA_BUSH))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_AZALEA_BUSH))
                     .build()
             ));
             this.registerable.register(ItemKeys.SUNFLOWER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SUNFLOWER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SUNFLOWER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SUNFLOWER)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7863,7 +7863,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LILAC).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LILAC)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LILAC)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7871,7 +7871,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ROSE_BUSH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ROSE_BUSH)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ROSE_BUSH)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7879,7 +7879,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PEONY).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PEONY)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PEONY)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7887,7 +7887,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LARGE_FERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LARGE_FERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LARGE_FERN)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7895,7 +7895,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPORE_BLOSSOM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPORE_BLOSSOM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPORE_BLOSSOM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7903,73 +7903,73 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_MUSHROOM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_MUSHROOM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_MUSHROOM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_BROWN_MUSHROOM))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BROWN_MUSHROOM))
                     .build()
             ));
             this.registerable.register(ItemKeys.RED_MUSHROOM, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_MUSHROOM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_MUSHROOM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_MUSHROOM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_RED_MUSHROOM))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_RED_MUSHROOM))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_FUNGUS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_FUNGUS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_FUNGUS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_FUNGUS)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CRIMSON_FUNGUS))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_FUNGUS))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_FUNGUS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_FUNGUS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_FUNGUS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_FUNGUS)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WARPED_FUNGUS))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_FUNGUS))
                     .build()
             ));
             this.registerable.register(ItemKeys.CRIMSON_ROOTS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.CRIMSON_ROOTS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRIMSON_ROOTS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRIMSON_ROOTS)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_CRIMSON_ROOTS))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_ROOTS))
                     .build()
             ));
             this.registerable.register(ItemKeys.WARPED_ROOTS, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_ROOTS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_ROOTS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_ROOTS)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_WARPED_ROOTS))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_ROOTS))
                     .build()
             ));
             this.registerable.register(ItemKeys.MOSS_BLOCK, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.MOSS_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MOSS_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MOSS_BLOCK)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7977,7 +7977,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_MOSS_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_MOSS_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_MOSS_BLOCK)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7985,7 +7985,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MUSHROOM_STEM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MUSHROOM_STEM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MUSHROOM_STEM)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -7993,7 +7993,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SHROOMLIGHT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHROOMLIGHT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SHROOMLIGHT)))
                     .with(CompostableItemComponent.of(CompostChances.BIG))
                     .build()
             ));
@@ -8001,7 +8001,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHER_WART_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHER_WART_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHER_WART_BLOCK)))
                     .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
@@ -8009,7 +8009,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WARPED_WART_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WARPED_WART_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WARPED_WART_BLOCK)))
                     .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
@@ -8017,7 +8017,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.HAY_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.HAY_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.HAY_BLOCK)))
                     .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
@@ -8025,33 +8025,33 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.FLOWERING_AZALEA).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLOWERING_AZALEA)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FLOWERING_AZALEA)))
                     .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_FLOWERING_AZALEA_BUSH))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FLOWERING_AZALEA_BUSH))
                     .build()
             ));
             this.registerable.register(ItemKeys.TORCHFLOWER, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.TORCHFLOWER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TORCHFLOWER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TORCHFLOWER)))
                     .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .with(SuspiciousEffectIngredientItemComponent.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectKeys.NIGHT_VISION), 100)
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.NIGHT_VISION), 100)
                     ))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_TORCHFLOWER))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_TORCHFLOWER))
                     .build()
             ));
             this.registerable.register(ItemKeys.PITCHER_PLANT, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.PITCHER_PLANT).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PITCHER_PLANT)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PITCHER_PLANT)))
                     .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
@@ -8059,7 +8059,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_MUSHROOM_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_MUSHROOM_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_MUSHROOM_BLOCK)))
                     .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
@@ -8067,7 +8067,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_MUSHROOM_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_MUSHROOM_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_MUSHROOM_BLOCK)))
                     .with(CompostableItemComponent.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
@@ -8075,7 +8075,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CAKE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(1))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CAKE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CAKE)))
                     .with(CompostableItemComponent.of(CompostChances.GUARANTEED))
                     .build()
             ));
@@ -8522,7 +8522,7 @@ public class ItemUtil {
                         .setEquipSound(ArmorMaterials.ARMADILLO_SCUTE.equipSound())
                         .setAsset(ArmorMaterials.ARMADILLO_SCUTE.assetId())
                         .setAllowedEntities(HolderSet.direct(
-                            this.entityTypes.getOrThrow(EntityTypeKeys.WOLF)
+                            this.entityTypes.getOrThrow(EntityTypeIds.WOLF)
                         ))
                         .setCanBeSheared(true)
                         .setShearingSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_UNEQUIP_WOLF))
@@ -8689,8 +8689,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
-                        this.blocks.getOrThrow(BlockKeys.SKELETON_SKULL),
-                        this.blocks.getOrThrow(BlockKeys.SKELETON_WALL_SKULL),
+                        this.blocks.getOrThrow(BlockIds.SKELETON_SKULL),
+                        this.blocks.getOrThrow(BlockIds.SKELETON_WALL_SKULL),
                         this.dispenseBehaviors
                     ))
                     .build()
@@ -8703,8 +8703,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
-                        this.blocks.getOrThrow(BlockKeys.WITHER_SKELETON_SKULL),
-                        this.blocks.getOrThrow(BlockKeys.WITHER_SKELETON_WALL_SKULL),
+                        this.blocks.getOrThrow(BlockIds.WITHER_SKELETON_SKULL),
+                        this.blocks.getOrThrow(BlockIds.WITHER_SKELETON_WALL_SKULL),
                         this.dispenseBehaviors
                     ))
                     .build()
@@ -8717,8 +8717,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
-                        this.blocks.getOrThrow(BlockKeys.PLAYER_HEAD),
-                        this.blocks.getOrThrow(BlockKeys.PLAYER_WALL_HEAD),
+                        this.blocks.getOrThrow(BlockIds.PLAYER_HEAD),
+                        this.blocks.getOrThrow(BlockIds.PLAYER_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
                     .build()
@@ -8731,8 +8731,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
-                        this.blocks.getOrThrow(BlockKeys.ZOMBIE_HEAD),
-                        this.blocks.getOrThrow(BlockKeys.ZOMBIE_WALL_HEAD),
+                        this.blocks.getOrThrow(BlockIds.ZOMBIE_HEAD),
+                        this.blocks.getOrThrow(BlockIds.ZOMBIE_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
                     .build()
@@ -8745,8 +8745,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
-                        this.blocks.getOrThrow(BlockKeys.CREEPER_HEAD),
-                        this.blocks.getOrThrow(BlockKeys.CREEPER_WALL_HEAD),
+                        this.blocks.getOrThrow(BlockIds.CREEPER_HEAD),
+                        this.blocks.getOrThrow(BlockIds.CREEPER_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
                     .build()
@@ -8759,8 +8759,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
-                        this.blocks.getOrThrow(BlockKeys.DRAGON_HEAD),
-                        this.blocks.getOrThrow(BlockKeys.DRAGON_WALL_HEAD),
+                        this.blocks.getOrThrow(BlockIds.DRAGON_HEAD),
+                        this.blocks.getOrThrow(BlockIds.DRAGON_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
                     .build()
@@ -8773,8 +8773,8 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(EquipmentItemComponent.forSkull(
-                        this.blocks.getOrThrow(BlockKeys.PIGLIN_HEAD),
-                        this.blocks.getOrThrow(BlockKeys.PIGLIN_WALL_HEAD),
+                        this.blocks.getOrThrow(BlockIds.PIGLIN_HEAD),
+                        this.blocks.getOrThrow(BlockIds.PIGLIN_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
                     .build()
@@ -8786,7 +8786,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.COAL_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COAL_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COAL_BLOCK)))
                     .with(FuelItemComponent.of(FuelTimes.COAL_BLOCK))
                     .build()
             ));
@@ -8815,7 +8815,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.OAK_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.OAK_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8823,7 +8823,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.SPRUCE_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.SPRUCE_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.SPRUCE_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.SPRUCE_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8831,7 +8831,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BIRCH_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.BIRCH_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.BIRCH_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.BIRCH_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8839,7 +8839,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.JUNGLE_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.JUNGLE_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.JUNGLE_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.JUNGLE_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8847,7 +8847,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.ACACIA_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.ACACIA_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.ACACIA_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.ACACIA_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8855,7 +8855,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CHERRY_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.CHERRY_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.CHERRY_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.CHERRY_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8863,7 +8863,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DARK_OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.DARK_OAK_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.DARK_OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.DARK_OAK_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8871,7 +8871,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.PALE_OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.PALE_OAK_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.PALE_OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.PALE_OAK_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8879,7 +8879,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.MANGROVE_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.MANGROVE_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.MANGROVE_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.MANGROVE_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8887,7 +8887,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_HANGING_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BAMBOO_HANGING_SIGN), this.blocks.getOrThrow(BlockKeys.BAMBOO_WALL_HANGING_SIGN), Direction.UP))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.BAMBOO_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.BAMBOO_WALL_HANGING_SIGN), Direction.UP))
                     .with(FuelItemComponent.of(FuelTimes.HANGING_SIGN))
                     .build()
             ));
@@ -8895,7 +8895,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.OAK_SIGN), this.blocks.getOrThrow(BlockKeys.OAK_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.OAK_SIGN), this.blocks.getOrThrow(BlockIds.OAK_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8903,7 +8903,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.SPRUCE_SIGN), this.blocks.getOrThrow(BlockKeys.SPRUCE_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.SPRUCE_SIGN), this.blocks.getOrThrow(BlockIds.SPRUCE_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8911,7 +8911,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BIRCH_SIGN), this.blocks.getOrThrow(BlockKeys.BIRCH_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.BIRCH_SIGN), this.blocks.getOrThrow(BlockIds.BIRCH_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8919,7 +8919,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.JUNGLE_SIGN), this.blocks.getOrThrow(BlockKeys.JUNGLE_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.JUNGLE_SIGN), this.blocks.getOrThrow(BlockIds.JUNGLE_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8927,7 +8927,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.ACACIA_SIGN), this.blocks.getOrThrow(BlockKeys.ACACIA_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.ACACIA_SIGN), this.blocks.getOrThrow(BlockIds.ACACIA_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8935,7 +8935,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CHERRY_SIGN), this.blocks.getOrThrow(BlockKeys.CHERRY_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.CHERRY_SIGN), this.blocks.getOrThrow(BlockIds.CHERRY_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8943,7 +8943,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SIGN), this.blocks.getOrThrow(BlockKeys.DARK_OAK_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.DARK_OAK_SIGN), this.blocks.getOrThrow(BlockIds.DARK_OAK_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8951,7 +8951,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.PALE_OAK_SIGN), this.blocks.getOrThrow(BlockKeys.PALE_OAK_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.PALE_OAK_SIGN), this.blocks.getOrThrow(BlockIds.PALE_OAK_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8959,7 +8959,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.MANGROVE_SIGN), this.blocks.getOrThrow(BlockKeys.MANGROVE_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.MANGROVE_SIGN), this.blocks.getOrThrow(BlockIds.MANGROVE_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8967,7 +8967,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_SIGN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BAMBOO_SIGN), this.blocks.getOrThrow(BlockKeys.BAMBOO_WALL_SIGN), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.BAMBOO_SIGN), this.blocks.getOrThrow(BlockIds.BAMBOO_WALL_SIGN), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.SIGN))
                     .build()
             ));
@@ -8975,7 +8975,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -8983,7 +8983,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -8991,7 +8991,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -8999,7 +8999,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9007,7 +9007,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9015,7 +9015,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9023,7 +9023,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9031,7 +9031,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9039,7 +9039,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9047,7 +9047,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_PLANKS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_PLANKS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_PLANKS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9055,7 +9055,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_MOSAIC)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9063,7 +9063,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9071,7 +9071,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9079,7 +9079,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9087,7 +9087,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9095,7 +9095,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9103,7 +9103,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9111,7 +9111,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9119,7 +9119,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9127,7 +9127,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9135,7 +9135,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_BLOCK)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9143,7 +9143,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_OAK_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_OAK_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_OAK_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9151,7 +9151,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_SPRUCE_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_SPRUCE_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_SPRUCE_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9159,7 +9159,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_BIRCH_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_BIRCH_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_BIRCH_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9167,7 +9167,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_JUNGLE_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_JUNGLE_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_JUNGLE_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9175,7 +9175,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_ACACIA_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_ACACIA_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_ACACIA_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9183,7 +9183,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_CHERRY_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_CHERRY_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_CHERRY_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9191,7 +9191,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_DARK_OAK_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_DARK_OAK_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_DARK_OAK_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9199,7 +9199,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_PALE_OAK_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_PALE_OAK_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_PALE_OAK_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9207,7 +9207,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_MANGROVE_LOG).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_MANGROVE_LOG)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_MANGROVE_LOG)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9215,7 +9215,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_OAK_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_OAK_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_OAK_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9223,7 +9223,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_SPRUCE_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_SPRUCE_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_SPRUCE_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9231,7 +9231,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_BIRCH_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_BIRCH_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_BIRCH_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9239,7 +9239,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_JUNGLE_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_JUNGLE_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_JUNGLE_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9247,7 +9247,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_ACACIA_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_ACACIA_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_ACACIA_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9255,7 +9255,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_CHERRY_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_CHERRY_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_CHERRY_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9263,7 +9263,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_DARK_OAK_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_DARK_OAK_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_DARK_OAK_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9271,7 +9271,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_PALE_OAK_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_PALE_OAK_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_PALE_OAK_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9279,7 +9279,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_MANGROVE_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_MANGROVE_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_MANGROVE_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9287,7 +9287,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.STRIPPED_BAMBOO_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.STRIPPED_BAMBOO_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.STRIPPED_BAMBOO_BLOCK)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9295,7 +9295,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9303,7 +9303,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9311,7 +9311,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9319,7 +9319,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9327,7 +9327,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9335,7 +9335,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9343,7 +9343,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9351,7 +9351,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9359,7 +9359,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_WOOD).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_WOOD)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_WOOD)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9367,7 +9367,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9375,7 +9375,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9383,7 +9383,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9391,7 +9391,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9399,7 +9399,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9407,7 +9407,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9415,7 +9415,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9423,7 +9423,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9431,7 +9431,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9439,7 +9439,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_FENCE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_FENCE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_FENCE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9447,7 +9447,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9455,7 +9455,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9463,7 +9463,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9471,7 +9471,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9479,7 +9479,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9487,7 +9487,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9495,7 +9495,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9503,7 +9503,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9511,7 +9511,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9519,7 +9519,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9527,7 +9527,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC_STAIRS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_STAIRS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_MOSAIC_STAIRS)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9535,7 +9535,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9543,7 +9543,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9551,7 +9551,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9559,7 +9559,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9567,7 +9567,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9575,7 +9575,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9583,7 +9583,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9591,7 +9591,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9599,7 +9599,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9607,7 +9607,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_PRESSURE_PLATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_PRESSURE_PLATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_PRESSURE_PLATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9615,7 +9615,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9623,7 +9623,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9631,7 +9631,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9639,7 +9639,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9647,7 +9647,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9655,7 +9655,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9663,7 +9663,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9671,7 +9671,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9679,7 +9679,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9687,7 +9687,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_TRAPDOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_TRAPDOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_TRAPDOOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9695,7 +9695,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9703,7 +9703,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9711,7 +9711,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9719,7 +9719,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9727,7 +9727,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9735,7 +9735,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9743,7 +9743,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9751,7 +9751,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9759,7 +9759,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9767,7 +9767,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_FENCE_GATE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_FENCE_GATE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_FENCE_GATE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9775,7 +9775,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BOOKSHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BOOKSHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BOOKSHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9783,7 +9783,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHISELED_BOOKSHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHISELED_BOOKSHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHISELED_BOOKSHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9791,7 +9791,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LECTERN).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LECTERN)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LECTERN)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9799,7 +9799,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHEST)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_CHEST)))
                     .build()
@@ -9808,7 +9808,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.TRAPPED_CHEST).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TRAPPED_CHEST)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TRAPPED_CHEST)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9816,7 +9816,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LADDER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LADDER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LADDER)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9824,7 +9824,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CRAFTING_TABLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CRAFTING_TABLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CRAFTING_TABLE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9832,7 +9832,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUKEBOX).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUKEBOX)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUKEBOX)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9840,7 +9840,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.NOTE_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NOTE_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NOTE_BLOCK)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9848,7 +9848,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LOOM).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LOOM)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LOOM)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9856,7 +9856,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.COMPOSTER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.COMPOSTER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.COMPOSTER)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9864,7 +9864,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BARREL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BARREL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BARREL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9872,7 +9872,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CARTOGRAPHY_TABLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CARTOGRAPHY_TABLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CARTOGRAPHY_TABLE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9880,7 +9880,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.FLETCHING_TABLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.FLETCHING_TABLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.FLETCHING_TABLE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9888,7 +9888,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SMITHING_TABLE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SMITHING_TABLE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SMITHING_TABLE)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9896,7 +9896,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DAYLIGHT_DETECTOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DAYLIGHT_DETECTOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DAYLIGHT_DETECTOR)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -9904,7 +9904,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9912,7 +9912,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9920,7 +9920,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9928,7 +9928,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9936,7 +9936,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9944,7 +9944,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9952,7 +9952,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9960,7 +9960,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9968,7 +9968,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9976,7 +9976,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_DOOR).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_DOOR)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_DOOR)))
                     .with(FuelItemComponent.of(FuelTimes.DOOR))
                     .build()
             ));
@@ -9984,7 +9984,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -9992,7 +9992,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10000,7 +10000,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10008,7 +10008,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10016,7 +10016,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10024,7 +10024,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10032,7 +10032,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10040,7 +10040,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10048,7 +10048,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10056,7 +10056,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10064,7 +10064,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_MOSAIC_SLAB).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_MOSAIC_SLAB)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_MOSAIC_SLAB)))
                     .with(FuelItemComponent.of(FuelTimes.SLAB))
                     .build()
             ));
@@ -10072,18 +10072,18 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DEAD_BUSH).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DEAD_BUSH)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DEAD_BUSH)))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_DEAD_BUSH))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_DEAD_BUSH))
                     .build()
             ));
             this.registerable.register(ItemKeys.OAK_BUTTON, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10091,7 +10091,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10099,7 +10099,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10107,7 +10107,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10115,7 +10115,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10123,7 +10123,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10131,7 +10131,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10139,7 +10139,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10147,7 +10147,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10155,7 +10155,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_BUTTON).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_BUTTON)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_BUTTON)))
                     .with(FuelItemComponent.of(FuelTimes.BUTTON))
                     .build()
             ));
@@ -10177,18 +10177,18 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO)))
                     .with(FuelItemComponent.of(FuelTimes.BAMBOO))
                     .build(),
                 ItemEventMap.builder()
-                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockKeys.POTTED_BAMBOO))
+                    .add(ItemEvents.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BAMBOO))
                     .build()
             ));
             this.registerable.register(ItemKeys.SCAFFOLDING, create(
                 ItemDisplay.Builder.forBlock(ItemKeys.SCAFFOLDING).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SCAFFOLDING)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SCAFFOLDING)))
                     .with(FuelItemComponent.of(FuelTimes.SCAFFOLDING))
                     .build()
             ));
@@ -10196,7 +10196,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10204,7 +10204,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10212,7 +10212,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10220,7 +10220,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10228,7 +10228,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10236,7 +10236,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10244,7 +10244,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10252,7 +10252,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10260,7 +10260,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10268,7 +10268,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10276,7 +10276,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10284,7 +10284,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10292,7 +10292,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10300,7 +10300,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10308,7 +10308,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10316,7 +10316,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_WOOL).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_WOOL)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_WOOL)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL))
                     .build()
             ));
@@ -10324,7 +10324,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.WHITE_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.WHITE_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.WHITE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10334,7 +10334,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ORANGE_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ORANGE_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.ORANGE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10344,7 +10344,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MAGENTA_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MAGENTA_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.MAGENTA)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10354,7 +10354,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.LIGHT_BLUE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10364,7 +10364,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.YELLOW_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.YELLOW_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.YELLOW)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10374,7 +10374,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIME_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIME_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.LIME)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10384,7 +10384,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PINK_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PINK_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.PINK)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10394,7 +10394,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GRAY_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GRAY_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.GRAY)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10404,7 +10404,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.LIGHT_GRAY)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10414,7 +10414,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CYAN_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CYAN_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.CYAN)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10424,7 +10424,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PURPLE_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PURPLE_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.PURPLE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10434,7 +10434,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLUE_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLUE_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.BLUE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10444,7 +10444,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BROWN_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BROWN_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.BROWN)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10454,7 +10454,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.GREEN_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.GREEN_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.GREEN)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10464,7 +10464,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.RED_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.RED_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.RED)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10474,7 +10474,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_CARPET).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BLACK_CARPET)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BLACK_CARPET)))
                     .with(FuelItemComponent.of(FuelTimes.WOOL_CARPET))
                     .with(EquipmentItemComponent.of(Equippable.llamaSwag(DyeColor.BLACK)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -10484,7 +10484,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SHORT_DRY_GRASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SHORT_DRY_GRASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SHORT_DRY_GRASS)))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
@@ -10493,7 +10493,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.TALL_DRY_GRASS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.TALL_DRY_GRASS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.TALL_DRY_GRASS)))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
@@ -10502,7 +10502,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LEAF_LITTER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.LEAF_LITTER)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.LEAF_LITTER)))
                     .with(FuelItemComponent.of(FuelTimes.PLANT))
                     .with(CompostableItemComponent.of(CompostChances.SMALL))
                     .build()
@@ -10511,7 +10511,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ACACIA_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ACACIA_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ACACIA_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10519,7 +10519,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BAMBOO_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BAMBOO_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BAMBOO_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10527,7 +10527,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BIRCH_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.BIRCH_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.BIRCH_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10535,7 +10535,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CHERRY_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.CHERRY_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.CHERRY_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10543,7 +10543,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.DARK_OAK_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.DARK_OAK_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10551,7 +10551,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.JUNGLE_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.JUNGLE_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.JUNGLE_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10559,7 +10559,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MANGROVE_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.MANGROVE_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.MANGROVE_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10567,7 +10567,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.OAK_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.OAK_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.OAK_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10575,7 +10575,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PALE_OAK_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.PALE_OAK_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10583,7 +10583,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.SPRUCE_SHELF).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.SPRUCE_SHELF)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.SPRUCE_SHELF)))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .build()
             ));
@@ -10594,7 +10594,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.ARROW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ARROW)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.ARROW)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
@@ -10603,7 +10603,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SNOWBALL)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.SNOWBALL)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
@@ -10613,7 +10613,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
                     .with(ProjectileItemComponent.of(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.EGG),
+                        this.entityTypes.getOrThrow(EntityTypeIds.EGG),
                         DataComponentPatch.builder()
                             .set(
                                 DataComponents.CHICKEN_VARIANT,
@@ -10632,7 +10632,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
                     .with(ProjectileItemComponent.of(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.EGG),
+                        this.entityTypes.getOrThrow(EntityTypeIds.EGG),
                         DataComponentPatch.builder()
                             .set(
                                 DataComponents.CHICKEN_VARIANT,
@@ -10651,7 +10651,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
                     .with(ProjectileItemComponent.of(
-                        this.entityTypes.getOrThrow(EntityTypeKeys.EGG),
+                        this.entityTypes.getOrThrow(EntityTypeIds.EGG),
                         DataComponentPatch.builder()
                             .set(
                                 DataComponents.CHICKEN_VARIANT,
@@ -10669,7 +10669,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
                     .with(ThrowableItemComponent.of(1.5f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ENDER_PEARL)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.ENDER_PEARL)))
                     .with(CooldownItemComponent.of(20))
                     .build()
             ));
@@ -10678,7 +10678,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ThrowableItemComponent.of())
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EYE_OF_ENDER)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.EYE_OF_ENDER)))
                     .with(PreventUseWhenUsedOnTargetItemComponent.forBlock())
                     .build(),
                 ItemEventMap.builder()
@@ -10687,7 +10687,7 @@ public class ItemUtil {
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.location()
                                 .setBlock(BlockPredicate.Builder.block()
-                                    .of(this.blocks, this.blocks.getOrThrow(BlockKeys.END_PORTAL_FRAME).value())
+                                    .of(this.blocks, this.blocks.getOrThrow(BlockIds.END_PORTAL_FRAME).value())
                                     .setProperties(StatePropertiesPredicate.Builder.properties()
                                         .hasProperty(BlockStateProperties.EYE, false)))
                         ),
@@ -10723,7 +10723,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ThrowableItemComponent.of(0.7f, -20.0f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.EXPERIENCE_BOTTLE)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.EXPERIENCE_BOTTLE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                     .build()
             ));
@@ -10732,7 +10732,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(FireworkShapeModifierItemComponent.of(FireworkExplosion.Shape.LARGE_BALL))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SMALL_FIREBALL)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.SMALL_FIREBALL)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_CHARGE)))
                     .build(),
                 ItemEventMap.builder()
@@ -10751,7 +10751,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(ThrowableItemComponent.of(1.5f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.WIND_CHARGE)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.WIND_CHARGE)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .with(CooldownItemComponent.of(10))
                     .build()
@@ -10761,7 +10761,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(FireworkItemComponent.INSTANCE)
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.FIREWORK_ROCKET)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.FIREWORK_ROCKET)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
                     .build()
             ));
@@ -10771,7 +10771,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(PotionHolderItemComponent.of(1.0f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SPLASH_POTION)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.SPLASH_POTION)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                     .build()
             ));
@@ -10779,7 +10779,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.SPECTRAL_ARROW).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.SPECTRAL_ARROW)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.SPECTRAL_ARROW)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
@@ -10788,7 +10788,7 @@ public class ItemUtil {
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
                     .with(PotionHolderItemComponent.of(0.125f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.ARROW)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.ARROW)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                     .build()
             ));
@@ -10798,7 +10798,7 @@ public class ItemUtil {
                     .with(StackableItemComponent.of(1))
                     .with(PotionHolderItemComponent.of(0.25f))
                     .with(ThrowableItemComponent.of(0.5f, -20.0f))
-                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeKeys.LINGERING_POTION)))
+                    .with(ProjectileItemComponent.of(this.entityTypes.getOrThrow(EntityTypeIds.LINGERING_POTION)))
                     .with(DispensableItemComponent.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                     .build()
             ));
@@ -11111,60 +11111,60 @@ public class ItemUtil {
             this.registerable.register(ItemKeys.WATER_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.WATER_BUCKET).build(),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.placeFluid(this.fluids.getOrThrow(FluidKeys.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
+                    .with(BucketItemComponent.placeFluid(this.fluids.getOrThrow(FluidIds.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.LAVA_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.LAVA_BUCKET).build(),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.placeFluid(this.fluids.getOrThrow(FluidKeys.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
+                    .with(BucketItemComponent.placeFluid(this.fluids.getOrThrow(FluidIds.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
                     .with(FuelItemComponent.of(FuelTimes.LAVA, this.items.getOrThrow(ItemKeys.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemKeys.POWDER_SNOW_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.POWDER_SNOW_BUCKET).build(),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.placeBlock(this.blocks.getOrThrow(BlockKeys.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_POWDER_SNOW), this.items, this.dispenseBehaviors))
+                    .with(BucketItemComponent.placeBlock(this.blocks.getOrThrow(BlockIds.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_POWDER_SNOW), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.PUFFERFISH_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.PUFFERFISH_BUCKET).build(),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .with(FoodItemComponent.of(Foods.PUFFERFISH))
                     .build()
             ));
             this.registerable.register(ItemKeys.SALMON_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.SALMON_BUCKET).build(),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.SALMON), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.SALMON), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .with(FoodItemComponent.of(Foods.SALMON))
                     .build()
             ));
             this.registerable.register(ItemKeys.COD_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.COD_BUCKET).build(),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.COD), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.COD), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .with(FoodItemComponent.of(Foods.COD))
                     .build()
             ));
             this.registerable.register(ItemKeys.TROPICAL_FISH_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TROPICAL_FISH_BUCKET).build(),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .with(FoodItemComponent.of(Foods.TROPICAL_FISH))
                     .build()
             ));
             this.registerable.register(ItemKeys.AXOLOTL_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.AXOLOTL_BUCKET).build(),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.AXOLOTL), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_AXOLOTL), this.items, this.dispenseBehaviors))
+                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.AXOLOTL), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_AXOLOTL), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemKeys.TADPOLE_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemKeys.TADPOLE_BUCKET).build(),
                 ItemComponentSet.builder()
-                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidKeys.WATER), this.entityTypes.getOrThrow(EntityTypeKeys.TADPOLE), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_TADPOLE), this.items, this.dispenseBehaviors))
+                    .with(BucketItemComponent.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.TADPOLE), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_TADPOLE), this.items, this.dispenseBehaviors))
                     .build()
             ));
         }
@@ -11368,7 +11368,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.WHITE_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.WHITE_BANNER), this.blocks.getOrThrow(BlockKeys.WHITE_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.WHITE_BANNER), this.blocks.getOrThrow(BlockIds.WHITE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.WHITE))
                     .build()
@@ -11377,7 +11377,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ORANGE_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.ORANGE_BANNER), this.blocks.getOrThrow(BlockKeys.ORANGE_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.ORANGE_BANNER), this.blocks.getOrThrow(BlockIds.ORANGE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.ORANGE))
                     .build()
@@ -11386,7 +11386,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.MAGENTA_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.MAGENTA_BANNER), this.blocks.getOrThrow(BlockKeys.MAGENTA_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.MAGENTA_BANNER), this.blocks.getOrThrow(BlockIds.MAGENTA_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.MAGENTA))
                     .build()
@@ -11395,7 +11395,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_BLUE_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_BANNER), this.blocks.getOrThrow(BlockKeys.LIGHT_BLUE_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_BANNER), this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_BLUE))
                     .build()
@@ -11404,7 +11404,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.YELLOW_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.YELLOW_BANNER), this.blocks.getOrThrow(BlockKeys.YELLOW_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.YELLOW_BANNER), this.blocks.getOrThrow(BlockIds.YELLOW_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.YELLOW))
                     .build()
@@ -11413,7 +11413,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIME_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.LIME_BANNER), this.blocks.getOrThrow(BlockKeys.LIME_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.LIME_BANNER), this.blocks.getOrThrow(BlockIds.LIME_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.LIME))
                     .build()
@@ -11422,7 +11422,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PINK_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.PINK_BANNER), this.blocks.getOrThrow(BlockKeys.PINK_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.PINK_BANNER), this.blocks.getOrThrow(BlockIds.PINK_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.PINK))
                     .build()
@@ -11431,7 +11431,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.GRAY_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.GRAY_BANNER), this.blocks.getOrThrow(BlockKeys.GRAY_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.GRAY_BANNER), this.blocks.getOrThrow(BlockIds.GRAY_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.GRAY))
                     .build()
@@ -11440,7 +11440,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.LIGHT_GRAY_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_BANNER), this.blocks.getOrThrow(BlockKeys.LIGHT_GRAY_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_BANNER), this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.LIGHT_GRAY))
                     .build()
@@ -11449,7 +11449,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.CYAN_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.CYAN_BANNER), this.blocks.getOrThrow(BlockKeys.CYAN_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.CYAN_BANNER), this.blocks.getOrThrow(BlockIds.CYAN_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.CYAN))
                     .build()
@@ -11458,7 +11458,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.PURPLE_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.PURPLE_BANNER), this.blocks.getOrThrow(BlockKeys.PURPLE_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.PURPLE_BANNER), this.blocks.getOrThrow(BlockIds.PURPLE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.PURPLE))
                     .build()
@@ -11467,7 +11467,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BLUE_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BLUE_BANNER), this.blocks.getOrThrow(BlockKeys.BLUE_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.BLUE_BANNER), this.blocks.getOrThrow(BlockIds.BLUE_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.BLUE))
                     .build()
@@ -11476,7 +11476,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BROWN_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BROWN_BANNER), this.blocks.getOrThrow(BlockKeys.BROWN_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.BROWN_BANNER), this.blocks.getOrThrow(BlockIds.BROWN_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.BROWN))
                     .build()
@@ -11485,7 +11485,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.GREEN_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.GREEN_BANNER), this.blocks.getOrThrow(BlockKeys.GREEN_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.GREEN_BANNER), this.blocks.getOrThrow(BlockIds.GREEN_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.GREEN))
                     .build()
@@ -11494,7 +11494,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.RED_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.RED_BANNER), this.blocks.getOrThrow(BlockKeys.RED_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.RED_BANNER), this.blocks.getOrThrow(BlockIds.RED_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.RED))
                     .build()
@@ -11503,7 +11503,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.BLACK_BANNER).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(16))
-                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockKeys.BLACK_BANNER), this.blocks.getOrThrow(BlockKeys.BLACK_WALL_BANNER), Direction.DOWN))
+                    .with(BlockItemComponent.attachedToSide(this.blocks.getOrThrow(BlockIds.BLACK_BANNER), this.blocks.getOrThrow(BlockIds.BLACK_WALL_BANNER), Direction.DOWN))
                     .with(FuelItemComponent.of(FuelTimes.WOOD))
                     .with(BannerPatternHolderItemComponent.of(DyeColor.BLACK))
                     .build()
@@ -11788,7 +11788,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.ANCIENT_DEBRIS).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.ANCIENT_DEBRIS)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.ANCIENT_DEBRIS)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
@@ -11796,7 +11796,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forBlock(ItemKeys.NETHERITE_BLOCK).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.NETHERITE_BLOCK)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.NETHERITE_BLOCK)))
                     .with(ImmuneToDamageItemComponent.of(DamageTypeTags.IS_FIRE))
                     .build()
             ));
@@ -11832,7 +11832,7 @@ public class ItemUtil {
                 ItemDisplay.Builder.forItem(ItemKeys.REDSTONE).build(),
                 ItemComponentSet.builder()
                     .with(StackableItemComponent.of(64))
-                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockKeys.REDSTONE_WIRE)))
+                    .with(BlockItemComponent.of(this.blocks.getOrThrow(BlockIds.REDSTONE_WIRE)))
                     .with(TrimMaterialProviderItemComponent.of(this.trimMaterials.getOrThrow(TrimMaterials.REDSTONE)))
                     .build()
             ));
@@ -12012,7 +12012,7 @@ public class ItemUtil {
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.location()
                                 .setBlock(BlockPredicate.Builder.block()
-                                    .of(this.blocks, this.blocks.getOrThrow(BlockKeys.LODESTONE).value()))
+                                    .of(this.blocks, this.blocks.getOrThrow(BlockIds.LODESTONE).value()))
                         ),
                         PassingSequenceHandler.builder()
                             .add(ModifyItemAction.of(
@@ -12451,9 +12451,9 @@ public class ItemUtil {
                 ItemEventMap.builder()
                     .add(ItemEvents.BEFORE_DEATH_HOLDER, ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.REGENERATION), 900, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.ABSORPTION), 100, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectKeys.FIRE_RESISTANCE), 800, 0)
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 900, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 100, 1),
+                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 800, 0)
                         )
                     ))
                     .build()

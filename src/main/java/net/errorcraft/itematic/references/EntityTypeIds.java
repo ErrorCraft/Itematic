@@ -1,11 +1,11 @@
-package net.errorcraft.itematic.world.entity;
+package net.errorcraft.itematic.references;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 
-public class EntityTypeKeys {
+public class EntityTypeIds {
     public static final ResourceKey<EntityType<?>> ACACIA_BOAT = of("acacia_boat");
     public static final ResourceKey<EntityType<?>> ACACIA_CHEST_BOAT = of("acacia_chest_boat");
     public static final ResourceKey<EntityType<?>> ALLAY = of("allay");
@@ -139,7 +139,7 @@ public class EntityTypeKeys {
     public static final ResourceKey<EntityType<?>> ZOMBIE_VILLAGER = of("zombie_villager");
     public static final ResourceKey<EntityType<?>> ZOMBIFIED_PIGLIN = of("zombified_piglin");
 
-    private EntityTypeKeys() {}
+    private EntityTypeIds() {}
 
     private static ResourceKey<EntityType<?>> of(String id) {
         return ResourceKey.create(Registries.ENTITY_TYPE, Identifier.withDefaultNamespace(id));

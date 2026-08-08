@@ -3,7 +3,8 @@ package net.errorcraft.itematic.item.dispense.behavior;
 import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
-import net.errorcraft.itematic.references.BlockKeys;
+import net.errorcraft.itematic.references.BlockIds;
+import net.errorcraft.itematic.references.EntityTypeIds;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.Action;
@@ -15,7 +16,6 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPas
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToSucceedSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
-import net.errorcraft.itematic.world.entity.EntityTypeKeys;
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
@@ -76,7 +76,7 @@ public class DispenseBehaviors {
                     PositionTarget.INTERACTED,
                     LocationPredicate.Builder.location()
                         .setBlock(BlockPredicate.Builder.block()
-                            .of(blocks, blocks.getOrThrow(BlockKeys.RESPAWN_ANCHOR).value()))
+                            .of(blocks, blocks.getOrThrow(BlockIds.RESPAWN_ANCHOR).value()))
                 ),
                 decrement(ChargeRespawnAnchorAction.of(PositionTarget.INTERACTED)))
         ).doNotDispenseOnFailure().build());
@@ -142,7 +142,7 @@ public class DispenseBehaviors {
         registerable.register(SPAWN_TNT, DispenseBehavior.builder(
             PassingSequenceHandler.builder()
                 .add(SpawnEntityAction.of(
-                    entityTypes.getOrThrow(EntityTypeKeys.TNT),
+                    entityTypes.getOrThrow(EntityTypeIds.TNT),
                     PositionTarget.INTERACTED
                 ))
                 .add(DecrementItemAction.of(1))

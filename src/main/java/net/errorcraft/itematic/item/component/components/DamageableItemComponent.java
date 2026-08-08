@@ -8,7 +8,7 @@ import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
 import net.errorcraft.itematic.item.weapon.melee.component.KineticMeleeWeapon;
 import net.errorcraft.itematic.item.weapon.melee.component.PiercingMeleeWeapon;
-import net.errorcraft.itematic.references.BlockKeys;
+import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
@@ -53,7 +53,7 @@ public record DamageableItemComponent(int durability, Optional<Holder<SoundEvent
             DamageableItemComponent.of(material.durability()),
             ToolItemComponent.builder(2)
                 .preventCreativeDestruction()
-                .rule(Tool.Rule.minesAndDrops(HolderSet.direct(blocks.getOrThrow(BlockKeys.COBWEB)), 15.0f))
+                .rule(Tool.Rule.minesAndDrops(HolderSet.direct(blocks.getOrThrow(BlockIds.COBWEB)), 15.0f))
                 .rule(Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f))
                 .build(),
             WeaponItemComponent.builder(1, 4.0d + material.attackDamageBonus(), 0.4d)

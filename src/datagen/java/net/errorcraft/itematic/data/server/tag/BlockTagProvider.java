@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.data.server.tag;
 
-import net.errorcraft.itematic.references.BlockKeys;
+import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
@@ -17,18 +17,18 @@ public class BlockTagProvider extends FabricTagProvider<Block> {
     @Override
     protected void addTags(HolderLookup.Provider lookup) {
         this.builder(ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)
-            .add(BlockKeys.BEDROCK)
-            .add(BlockKeys.OBSIDIAN);
+            .add(BlockIds.BEDROCK)
+            .add(BlockIds.OBSIDIAN);
         this.builder(ItematicBlockTags.TILLABLE_INTO_FARMLAND)
-            .add(BlockKeys.GRASS_BLOCK)
-            .add(BlockKeys.DIRT)
-            .add(BlockKeys.DIRT_PATH);
+            .add(BlockIds.GRASS_BLOCK)
+            .add(BlockIds.DIRT)
+            .add(BlockIds.DIRT_PATH);
         this.builder(ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)
-            .add(BlockKeys.GRASS_BLOCK)
-            .add(BlockKeys.DIRT)
-            .add(BlockKeys.PODZOL)
-            .add(BlockKeys.COARSE_DIRT)
-            .add(BlockKeys.MYCELIUM)
-            .add(BlockKeys.ROOTED_DIRT);
+            .add(BlockIds.GRASS_BLOCK)
+            .add(BlockIds.DIRT)
+            .add(BlockIds.PODZOL)
+            .add(BlockIds.COARSE_DIRT)
+            .add(BlockIds.MYCELIUM)
+            .add(BlockIds.ROOTED_DIRT);
     }
 }

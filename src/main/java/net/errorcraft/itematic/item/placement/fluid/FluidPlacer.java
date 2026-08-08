@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.item.placement.fluid;
 
-import net.errorcraft.itematic.fluid.FluidKeys;
-import net.errorcraft.itematic.fluid.FluidUtil;
+import net.errorcraft.itematic.references.FluidIds;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.level.material.FluidUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -63,7 +63,7 @@ public class FluidPlacer {
             return false;
         }
 
-        if (!this.fluid.is(FluidKeys.WATER)) {
+        if (!this.fluid.is(FluidIds.WATER)) {
             return true;
         }
 
@@ -132,7 +132,7 @@ public class FluidPlacer {
             return false;
         }
 
-        if (!this.fluid.is(FluidKeys.WATER)) {
+        if (!this.fluid.is(FluidIds.WATER)) {
             return false;
         }
 

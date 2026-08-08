@@ -1,11 +1,11 @@
-package net.errorcraft.itematic.world.effect;
+package net.errorcraft.itematic.references;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffect;
 
-public class MobEffectKeys {
+public class MobEffectIds {
     public static final ResourceKey<MobEffect> ABSORPTION = of("absorption");
     public static final ResourceKey<MobEffect> BLINDNESS = of("blindness");
     public static final ResourceKey<MobEffect> FIRE_RESISTANCE = of("fire_resistance");
@@ -20,7 +20,7 @@ public class MobEffectKeys {
     public static final ResourceKey<MobEffect> WEAKNESS = of("weakness");
     public static final ResourceKey<MobEffect> WITHER = of("wither");
 
-    private MobEffectKeys() {}
+    private MobEffectIds() {}
 
     private static ResourceKey<MobEffect> of(String id) {
         return ResourceKey.create(Registries.MOB_EFFECT, Identifier.withDefaultNamespace(id));

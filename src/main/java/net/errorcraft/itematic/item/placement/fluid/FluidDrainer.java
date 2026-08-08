@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.item.placement.fluid;
 
-import net.errorcraft.itematic.fluid.FluidUtil;
 import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.level.material.FluidUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;

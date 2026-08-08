@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.fluid;
+package net.errorcraft.itematic.world.level.material;
 
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -21,14 +21,14 @@ public class FluidUtil {
             return null;
         }
 
-        if (!canPlaceAt(context, pos)) {
+        if (!mayPlaceAt(context, pos)) {
             return null;
         }
 
         return pos;
     }
 
-    private static boolean canPlaceAt(ActionContext context, BlockPos pos) {
+    private static boolean mayPlaceAt(ActionContext context, BlockPos pos) {
         Entity placer = context.get(LootContextParams.THIS_ENTITY);
         if (placer == null) {
             return true;
