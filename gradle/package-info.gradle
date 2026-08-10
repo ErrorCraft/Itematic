@@ -1,0 +1,55 @@
+import java.nio.file.Files
+
+for (def sourceSet in sourceSets) {
+    def name = sourceSet.name
+    def sourceDirectory = file("src/$name/java")
+    def outputDirectory = file("src/generated/$name")
+    def generateTask = tasks.register(sourceSet.getTaskName('generate', 'PackageInfoFiles'), GeneratePackageInfoFiles) {
+        it.group = 'itematic'
+        it.description = "Generates package-info files for the $name source set"
+        it.sourceDirectory = sourceDirectory
+        it.outputDirectory = outputDirectory
+    }
+    sourceSet.java.srcDirs += generateTask
+    ideaSyncTask.dependsOn generateTask
+}
+
+abstract class GeneratePackageInfoFiles extends DefaultTask {
+    @SkipWhenEmpty
+    @InputDirectory
+    abstract DirectoryProperty getSourceDirectory()
+
+    @OutputDirectory
+    abstract DirectoryProperty getOutputDirectory()
+
+    @TaskAction
+    def run() {
+        def outputPath = outputDirectory.asFile.get().toPath()
+        outputPath.deleteDir()
+        def sourcePath = sourceDirectory.asFile.get().toPath()
+        sourcePath.eachDirRecurse {
+            def hasJavaFiles = Files.list(it).withCloseable { stream ->
+                stream.any {
+                    Files.isRegularFile(it) && it.fileName.toString().endsWith('.java')
+                }
+            }
+            if (!hasJavaFiles) {
+                return
+            }
+
+            def relativeSourcePath = sourcePath.relativize(it)
+            def targetPath = outputPath.resolve(relativeSourcePath)
+            def packageName = relativeSourcePath.toString().replace(File.separator, '.')
+            Files.createDirectories(targetPath)
+            targetPath.resolve('package-info.java').withWriter {
+                it.write(
+"""@NullMarked
+package $packageName;
+
+import org.jspecify.annotations.NullMarked;
+"""
+                )
+            }
+        }
+    }
+}

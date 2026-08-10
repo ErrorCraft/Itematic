@@ -67,6 +67,8 @@ sourceSets {
 	}
 }
 
+apply from: 'gradle/package-info.gradle'
+
 loom {
 	mods {
 		itematic {
