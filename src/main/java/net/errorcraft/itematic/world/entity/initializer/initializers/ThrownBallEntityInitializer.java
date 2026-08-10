@@ -12,6 +12,7 @@ import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingPr
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 public record ThrownBallEntityInitializer<T extends AbstractHurtingProjectile>(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) implements EntityInitializer<T> {
     private static final double VELOCITY_DEVIATION = 0.11485d;
@@ -21,7 +22,7 @@ public record ThrownBallEntityInitializer<T extends AbstractHurtingProjectile>(O
     }
 
     @Override
-    public T create(ActionContext context, EntitySpawnReason reason) {
+    public @Nullable T create(ActionContext context, EntitySpawnReason reason) {
         Level level = context.world();
         Player user = context.get(LootContextParams.THIS_ENTITY, Player.class);
         if (user != null) {

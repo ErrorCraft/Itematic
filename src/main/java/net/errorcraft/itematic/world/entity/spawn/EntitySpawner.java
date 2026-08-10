@@ -31,7 +31,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +68,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
         return this.entity.value();
     }
 
+    @Nullable
     public Entity spawn(ActionContext context, Vec3 initialPos, EntitySpawnReason spawnReason, EntitySpawnCallback spawnCallback, boolean invertY) {
         EntitySpawnContext spawnContext = this.createSpawnContext(context, initialPos);
         if (spawnContext == null) {
@@ -84,6 +85,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
         return this.spawn(spawnContext, spawnActionContext, spawnReason, spawnCallback, invertY);
     }
 
+    @Nullable
     private EntitySpawnContext createSpawnContext(ActionContext context, Vec3 initialPos) {
         if (!(context.world() instanceof ServerLevel level)) {
             return null;
@@ -113,6 +115,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
         return true;
     }
 
+    @Nullable
     private Entity spawn(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, EntitySpawnCallback spawnCallback, boolean invertY) {
         Entity entity = this.createEntity(spawnContext, spawnActionContext, spawnReason, spawnCallback, invertY);
         if (entity == null) {
@@ -129,6 +132,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
         return entity;
     }
 
+    @Nullable
     private Entity createEntity(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
         Entity entity = spawnContext.entityType().itematic$create(
             spawnActionContext,
@@ -182,6 +186,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
         private final Holder<EntityType<?>> entity;
         private final List<ConditionedEntitySpawnRule> spawnRules = new ArrayList<>();
         private DataComponentPatch components = DataComponentPatch.EMPTY;
+        @Nullable
         private Holder<SoundEvent> spawnSound;
         private boolean allowItemData;
 

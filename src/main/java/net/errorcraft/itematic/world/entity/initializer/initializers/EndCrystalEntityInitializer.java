@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.end.EndDragonFight;
+import org.jspecify.annotations.Nullable;
 
 public class EndCrystalEntityInitializer implements EntityInitializer<EndCrystal> {
     public static final EndCrystalEntityInitializer INSTANCE = new EndCrystalEntityInitializer();
@@ -15,7 +16,7 @@ public class EndCrystalEntityInitializer implements EntityInitializer<EndCrystal
     private EndCrystalEntityInitializer() {}
 
     @Override
-    public EndCrystal create(ActionContext context, EntitySpawnReason reason) {
+    public @Nullable EndCrystal create(ActionContext context, EntitySpawnReason reason) {
         Level level = context.world();
         EndCrystal entity = EntityType.END_CRYSTAL.create(level, reason);
         if (entity == null) {

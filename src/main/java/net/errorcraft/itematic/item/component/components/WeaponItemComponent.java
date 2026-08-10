@@ -35,6 +35,7 @@ import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -137,6 +138,7 @@ public record WeaponItemComponent(int itemDamagePerAttack, DataComponentMap type
         }
     }
 
+    @Nullable
     public DamageSource damageSource(ItemStack stack, LivingEntity attacker) {
         SmashingMeleeWeapon smashing = this.types.get(MeleeWeaponComponents.SMASHING);
         if (smashing != null) {

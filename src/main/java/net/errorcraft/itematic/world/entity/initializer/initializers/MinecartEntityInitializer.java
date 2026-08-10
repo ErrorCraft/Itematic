@@ -11,10 +11,11 @@ import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import org.jspecify.annotations.Nullable;
 
 public record MinecartEntityInitializer<T extends AbstractMinecart>(EntityType<T> type) implements EntityInitializer<T> {
     @Override
-    public T create(ActionContext context, EntitySpawnReason reason) {
+    public @Nullable T create(ActionContext context, EntitySpawnReason reason) {
         Level level = context.world();
         T entity = this.type.create(level, reason);
         if (entity == null) {

@@ -12,12 +12,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import org.jspecify.annotations.Nullable;
 
 public class ThrownTridentEntityInitializer implements EntityInitializer<ThrownTrident> {
     public static final ThrownTridentEntityInitializer INSTANCE = new ThrownTridentEntityInitializer();
 
     @Override
-    public ThrownTrident create(ActionContext context, EntitySpawnReason reason) {
+    public @Nullable ThrownTrident create(ActionContext context, EntitySpawnReason reason) {
         ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
         LivingEntity user = context.get(LootContextParams.THIS_ENTITY, LivingEntity.class);
         float spinAttackStrength = user != null ?
@@ -34,9 +35,9 @@ public class ThrownTridentEntityInitializer implements EntityInitializer<ThrownT
         return entity;
     }
 
-    private ThrownTrident create(Level level, LivingEntity possibleUser, ItemStack stack) {
-        if (possibleUser != null) {
-            return new ThrownTrident(level, possibleUser, stack);
+    private ThrownTrident create(Level level, @Nullable LivingEntity user, ItemStack stack) {
+        if (user != null) {
+            return new ThrownTrident(level, user, stack);
         }
 
         return new ThrownTrident(EntityType.TRIDENT, level);

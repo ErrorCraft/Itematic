@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MaceItem;
+import org.jspecify.annotations.Nullable;
 
 public record SmashingMeleeWeapon(SmashingWeapon smashingWeapon) implements MeleeWeaponWithDataComponents {
     public static final Codec<SmashingMeleeWeapon> CODEC = SmashingWeapon.CODEC.xmap(
@@ -40,6 +41,7 @@ public record SmashingMeleeWeapon(SmashingWeapon smashingWeapon) implements Mele
         DUMMY.postHurtEnemy(stack, target, attacker);
     }
 
+    @Nullable
     public DamageSource damageSource(ItemStack stack, LivingEntity attacker) {
         SmashingWeapon smashingWeapon = stack.get(ItematicDataComponents.SMASHING_WEAPON);
         if (smashingWeapon != null) {

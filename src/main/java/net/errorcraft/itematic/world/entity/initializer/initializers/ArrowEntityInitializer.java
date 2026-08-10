@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record ArrowEntityInitializer<T extends AbstractArrow>(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) implements EntityInitializer<T> {
     public static <T extends AbstractArrow> EntityInitializer<T> of(OwnerCreator<T> ownerCreator, SimpleCreator<T> simpleCreator) {
@@ -18,7 +18,7 @@ public record ArrowEntityInitializer<T extends AbstractArrow>(OwnerCreator<T> ow
     }
 
     @Override
-    public T create(ActionContext context, EntitySpawnReason reason) {
+    public @Nullable T create(ActionContext context, EntitySpawnReason reason) {
         if (context.get(LootContextParams.THIS_ENTITY) instanceof LivingEntity entity) {
             ItemStack shooter = entity.getUseItem();
             if (shooter.isEmpty()) {

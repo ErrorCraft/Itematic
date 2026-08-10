@@ -68,6 +68,7 @@ public record WeaponAttackDamage(List<Rule> rules, double defaultDamage) {
             if (this.entities.isPresent() && !this.entities.get().contains(entity.getType().builtInRegistryHolder())) {
                 return false;
             }
+
             return this.item.map(item -> item.test(stack))
                 .orElse(true);
         }

@@ -10,6 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import org.jspecify.annotations.Nullable;
 
 public record SmashingWeapon(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance, double knockbackPower) {
     public static final Codec<SmashingWeapon> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -34,6 +35,7 @@ public record SmashingWeapon(HitSounds hitSounds, double smashAttackFallDistance
         return attacker.fallDistance > this.smashAttackFallDistance && !attacker.isFallFlying();
     }
 
+    @Nullable
     public DamageSource damageSource(LivingEntity attacker) {
         if (this.canSmash(attacker)) {
             return attacker.damageSources().mace(attacker);

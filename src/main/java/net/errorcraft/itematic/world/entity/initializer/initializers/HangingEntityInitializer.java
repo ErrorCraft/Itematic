@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record HangingEntityInitializer<T extends HangingEntity>(Creator<T> creator) implements EntityInitializer<T> {
     public static <T extends HangingEntity> EntityInitializer<T> of(Creator<T> creator) {
@@ -19,7 +19,7 @@ public record HangingEntityInitializer<T extends HangingEntity>(Creator<T> creat
     }
 
     @Override
-    public T create(ActionContext context, EntitySpawnReason reason) {
+    public @Nullable T create(ActionContext context, EntitySpawnReason reason) {
         BlockPos pos = context.get(ItematicContextParameters.INTERACTED_POSITION, BlockPos::containing);
         if (pos == null) {
             return null;

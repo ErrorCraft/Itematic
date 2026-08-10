@@ -33,7 +33,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -48,7 +48,7 @@ import java.util.function.Consumer;
 public abstract class EntityTypeExtender<T extends Entity> implements EntityTypeAccess<T> {
     @Shadow
     public static <T extends Entity> Consumer<T> appendDefaultStackConfig(Consumer<T> chained, Level level, ItemStack stack, @Nullable LivingEntity spawner) {
-        return null;
+        throw new UnsupportedOperationException("Implemented via mixin");
     }
 
     @Shadow
@@ -59,6 +59,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     private EntityInitializer<T> initializer;
 
     @Unique
+    @Nullable
     private ActionContext actionContext;
 
     @ModifyArg(
@@ -424,6 +425,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             target = "Lnet/minecraft/world/entity/EntityType$EntityFactory;create(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)Lnet/minecraft/world/entity/Entity;"
         )
     )
+    @Nullable
     private T useEntityInitializer(EntityType.EntityFactory<T> instance, EntityType<T> type, Level level, Operation<T> original, @Local(argsOnly = true) EntitySpawnReason reason) {
         if (this.actionContext == null) {
             return original.call(instance, type, level);
@@ -441,7 +443,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Override
-    public T itematic$create(ActionContext context, EntitySpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
+    public @Nullable T itematic$create(ActionContext context, EntitySpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
         if (!(context.world() instanceof ServerLevel level)) {
             return null;
         }

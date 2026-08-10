@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.phys.shapes;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class CollisionContexts {
     private CollisionContexts() {}

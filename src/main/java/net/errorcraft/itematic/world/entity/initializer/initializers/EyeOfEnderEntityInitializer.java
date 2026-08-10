@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder> {
     public static final EyeOfEnderEntityInitializer INSTANCE = new EyeOfEnderEntityInitializer();
@@ -22,7 +23,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
     private EyeOfEnderEntityInitializer() {}
 
     @Override
-    public EyeOfEnder create(ActionContext context, EntitySpawnReason reason) {
+    public @Nullable EyeOfEnder create(ActionContext context, EntitySpawnReason reason) {
         if (!(context.world() instanceof ServerLevel level)) {
             return null;
         }

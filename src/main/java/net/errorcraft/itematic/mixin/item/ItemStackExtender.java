@@ -55,7 +55,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.*;
@@ -682,6 +682,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
             target = "Lnet/minecraft/world/item/Item;getItemDamageSource(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/damagesource/DamageSource;"
         )
     )
+    @Nullable
     @SuppressWarnings("ConstantValue")
     private DamageSource getDamageSourceUseItemComponent(Item instance, LivingEntity user) {
         return this.itematic$getBehavior(ItemComponentTypes.WEAPON)

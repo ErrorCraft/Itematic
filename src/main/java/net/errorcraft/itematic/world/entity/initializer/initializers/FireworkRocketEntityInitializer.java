@@ -8,6 +8,7 @@ import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 public class FireworkRocketEntityInitializer implements EntityInitializer<FireworkRocketEntity> {
     public static final FireworkRocketEntityInitializer INSTANCE = new FireworkRocketEntityInitializer();
@@ -15,7 +16,7 @@ public class FireworkRocketEntityInitializer implements EntityInitializer<Firewo
     private FireworkRocketEntityInitializer() {}
 
     @Override
-    public FireworkRocketEntity create(ActionContext context, EntitySpawnReason reason) {
+    public @Nullable FireworkRocketEntity create(ActionContext context, EntitySpawnReason reason) {
         Vec3 pos = context.get(ItematicContextParameters.INTERACTED_POSITION);
         if (pos == null) {
             return null;
