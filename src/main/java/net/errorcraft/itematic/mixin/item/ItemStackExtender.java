@@ -745,15 +745,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     }
 
     @Override
-    public ItemStack itematic$copyOrSplit(@Nullable LivingEntity holder, int amount) {
-        if (holder != null && holder.hasInfiniteMaterials()) {
-            return this.copyWithCount(amount);
-        }
-
-        return this.split(amount);
-    }
-
-    @Override
     public ItemStack itematic$copyWithItem(Holder<Item> item) {
         return this.itematic$copyComponentsToNewStack(item, this.count);
     }

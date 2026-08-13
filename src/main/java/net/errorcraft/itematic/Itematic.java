@@ -1,8 +1,6 @@
 package net.errorcraft.itematic;
 
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.loot.function.ItematicItemModifierTypes;
-import net.errorcraft.itematic.loot.predicate.ItematicPredicateTypes;
 import net.errorcraft.itematic.predicate.entity.ItematicEntitySubPredicateTypes;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
@@ -23,6 +21,8 @@ import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.world.level.storage.loot.functions.ItematicItemModifierTypes;
+import net.errorcraft.itematic.world.level.storage.loot.predicates.ItematicPredicateTypes;
 import net.errorcraft.itematic.world.modification.WorldModificationTypes;
 import net.fabricmc.api.ModInitializer;
 

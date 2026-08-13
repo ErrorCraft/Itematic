@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.loot.function;
+package net.errorcraft.itematic.world.level.storage.loot.functions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -31,8 +31,11 @@ public class SplitItemModifier extends LootItemConditionalFunction {
         this.count = count;
     }
 
-    public static net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction.Builder<?> builder(int count) {
-        return simpleBuilder(conditions -> new SplitItemModifier(conditions, ConstantValue.exactly(count)));
+    public static Builder<?> builder(int count) {
+        return simpleBuilder(conditions -> new SplitItemModifier(
+            conditions,
+            ConstantValue.exactly(count)
+        ));
     }
 
     @Override
@@ -43,6 +46,9 @@ public class SplitItemModifier extends LootItemConditionalFunction {
     @Override
     protected ItemStack run(ItemStack stack, LootContext context) {
         LivingEntity holder = context.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof LivingEntity target ? target : null;
-        return stack.itematic$copyOrSplit(holder, this.count.getInt(context));
+        return stack.consumeAndReturn(
+            this.count.getInt(context),
+            holder
+        );
     }
 }

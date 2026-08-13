@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.loot.function;
+package net.errorcraft.itematic.world.level.storage.loot.functions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -32,7 +32,7 @@ public class SetItemPointerLocationItemModifier extends LootItemConditionalFunct
         this.position = position;
     }
 
-    public static net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction.Builder<?> builder(PositionTarget position) {
+    public static Builder<?> builder(PositionTarget position) {
         return simpleBuilder(conditions -> new SetItemPointerLocationItemModifier(conditions, position));
     }
 

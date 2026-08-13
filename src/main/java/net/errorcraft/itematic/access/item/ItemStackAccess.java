@@ -8,12 +8,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -25,9 +23,6 @@ public interface ItemStackAccess {
     default void itematic$tryIncrement(int count) {}
     default int itematic$tryDecrement(int amount) {
         return 0;
-    }
-    default ItemStack itematic$copyOrSplit(@Nullable LivingEntity holder, int amount) {
-        return ItemStack.EMPTY;
     }
     default ItemStack itematic$copyWithItem(Holder<Item> item) {
         return ItemStack.EMPTY;

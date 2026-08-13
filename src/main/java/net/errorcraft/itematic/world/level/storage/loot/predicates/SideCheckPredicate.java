@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.loot.predicate;
+package net.errorcraft.itematic.world.level.storage.loot.predicates;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -15,6 +15,10 @@ public record SideCheckPredicate(Set<Direction> sides) implements LootItemCondit
         SetCodec.forEnum(Direction.CODEC).fieldOf("sides").forGetter(SideCheckPredicate::sides)
     ).apply(instance, SideCheckPredicate::new));
 
+    public static LootItemCondition.Builder builder(Direction... sides) {
+        return () -> new SideCheckPredicate(Set.of(sides));
+    }
+
     @Override
     public LootItemConditionType getType() {
         return ItematicPredicateTypes.SIDE_CHECK;
@@ -23,9 +27,5 @@ public record SideCheckPredicate(Set<Direction> sides) implements LootItemCondit
     @Override
     public boolean test(LootContext context) {
         return this.sides.contains(context.getOptionalParameter(ItematicContextParameters.SIDE));
-    }
-
-    public static LootItemCondition.Builder builder(Direction... sides) {
-        return () -> new SideCheckPredicate(Set.of(sides));
     }
 }

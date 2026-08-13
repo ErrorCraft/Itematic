@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.loot.function;
+package net.errorcraft.itematic.world.level.storage.loot.functions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -25,13 +25,13 @@ public class SetRandomPotionItemModifier extends LootItemConditionalFunction {
 
     private final Optional<HolderSet<Potion>> options;
 
-    public static SetRandomPotionItemModifier of(HolderSet<Potion> options) {
-        return new SetRandomPotionItemModifier(List.of(), Optional.of(options));
-    }
-
     public SetRandomPotionItemModifier(List<LootItemCondition> conditions, Optional<HolderSet<Potion>> options) {
         super(conditions);
         this.options = options;
+    }
+
+    public static SetRandomPotionItemModifier of(HolderSet<Potion> options) {
+        return new SetRandomPotionItemModifier(List.of(), Optional.of(options));
     }
 
     @Override

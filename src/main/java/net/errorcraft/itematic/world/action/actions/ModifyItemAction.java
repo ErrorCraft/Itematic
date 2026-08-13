@@ -2,12 +2,12 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.loot.context.ItemStackTargetUtil;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemStacks;
+import net.errorcraft.itematic.world.level.storage.loot.ItemStackTargets;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 public record ModifyItemAction(LootContext.ItemStackTarget stack, LootItemFunction itemModifier) implements Action<ModifyItemAction> {
     public static final MapCodec<ModifyItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItemStackTargetUtil.CODEC.optionalFieldOf("stack", LootContext.ItemStackTarget.TOOL).forGetter(ModifyItemAction::stack),
+        ItemStackTargets.CODEC.optionalFieldOf("stack", LootContext.ItemStackTarget.TOOL).forGetter(ModifyItemAction::stack),
         LootItemFunctions.ROOT_CODEC.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier)
     ).apply(instance, ModifyItemAction::new));
 

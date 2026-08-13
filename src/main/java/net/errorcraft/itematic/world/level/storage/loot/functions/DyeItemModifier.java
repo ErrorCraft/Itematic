@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.loot.function;
+package net.errorcraft.itematic.world.level.storage.loot.functions;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DyeItemModifier extends LootItemConditionalFunction {
     public static final MapCodec<DyeItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(
-        Codec.floatRange(0.0f, 1.0f).listOf().fieldOf("chances").forGetter(DyeItemModifier::chances)
+        Codec.floatRange(0.0f, 1.0f).listOf().fieldOf("chances").forGetter(dye -> dye.chances)
     ).apply(instance, DyeItemModifier::new));
 
     private final List<Float> chances;
@@ -28,26 +28,8 @@ public class DyeItemModifier extends LootItemConditionalFunction {
         this.chances = chances;
     }
 
-    public List<Float> chances() {
-        return this.chances;
-    }
-
-    @Override
-    protected ItemStack run(ItemStack stack, LootContext context) {
-        if (!stack.itematic$hasBehavior(ItemBehaviorType.DYEABLE)) {
-            return stack;
-        }
-        List<DyeItem> dyes = new ArrayList<>();
-        RandomSource random = context.getRandom();
-        for (float chance : this.chances) {
-            if (random.nextFloat() < chance) {
-                dyes.add(dye(random));
-            }
-        }
-        if (dyes.isEmpty()) {
-            return stack;
-        }
-        return DyedItemColor.applyDyes(stack, dyes);
+    public static DyeItemModifier of(Float... chances) {
+        return new DyeItemModifier(List.of(), List.of(chances));
     }
 
     @Override
@@ -55,8 +37,25 @@ public class DyeItemModifier extends LootItemConditionalFunction {
         return ItematicItemModifierTypes.DYE;
     }
 
-    public static DyeItemModifier of(Float... chances) {
-        return new DyeItemModifier(List.of(), List.of(chances));
+    @Override
+    protected ItemStack run(ItemStack stack, LootContext context) {
+        if (!stack.itematic$hasBehavior(ItemBehaviorType.DYEABLE)) {
+            return stack;
+        }
+
+        List<DyeItem> dyes = new ArrayList<>();
+        RandomSource random = context.getRandom();
+        for (float chance : this.chances) {
+            if (random.nextFloat() < chance) {
+                dyes.add(dye(random));
+            }
+        }
+
+        if (dyes.isEmpty()) {
+            return stack;
+        }
+
+        return DyedItemColor.applyDyes(stack, dyes);
     }
 
     private DyeItem dye(RandomSource random) {

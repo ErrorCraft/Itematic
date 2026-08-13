@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.loot.condition;
+package net.errorcraft.itematic.world.level.storage.loot.predicates;
 
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.advancements.criterion.LocationPredicate;

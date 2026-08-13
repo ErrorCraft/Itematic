@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.core.dispenser.behavior;
 
-import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
 import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.references.EntityTypeIds;
 import net.errorcraft.itematic.references.ItemIds;
@@ -16,6 +15,7 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToSuc
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
