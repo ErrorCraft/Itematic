@@ -3,9 +3,9 @@ package net.errorcraft.itematic.mixin.client.world;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.BlockItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
@@ -22,7 +22,7 @@ import java.util.Set;
 @Mixin(ClientLevel.class)
 public class ClientWorldExtender {
     @Unique
-    private static final Set<ResourceKey<Item>> BLOCK_MARKER_ITEM_KEYS = Set.of(ItemKeys.BARRIER, ItemKeys.LIGHT);
+    private static final Set<ResourceKey<Item>> BLOCK_MARKER_ITEM_KEYS = Set.of(ItemIds.BARRIER, ItemIds.LIGHT);
 
     @Redirect(
         method = "getMarkerParticleTarget",
@@ -42,10 +42,10 @@ public class ClientWorldExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBlockItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, @Local ItemStack itemStack, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
-        Optional<BlockItemComponent> optionalComponent = itemStack.itematic$getBehavior(ItemComponentTypes.BLOCK);
-        optionalComponent.ifPresent(blockItemComponent::set);
-        return optionalComponent.isPresent();
+    private boolean instanceOfBlockItemUseItemBehaviorCheck(Object reference, Class<BlockItem> clazz, @Local ItemStack stack, @Share("block") LocalRef<BlockItemBehavior> block) {
+        Optional<BlockItemBehavior> optionalBlock = stack.itematic$getBehavior(ItemBehaviorType.BLOCK);
+        optionalBlock.ifPresent(block::set);
+        return optionalBlock.isPresent();
     }
 
     @ModifyVariable(
@@ -64,8 +64,8 @@ public class ClientWorldExtender {
             target = "Lnet/minecraft/world/item/BlockItem;getBlock()Lnet/minecraft/world/level/block/Block;"
         )
     )
-    private Block blockUseItemComponent(BlockItem instance, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
-        return blockItemComponent.get()
+    private Block getBlockUseItemBehavior(BlockItem instance, @Share("block") LocalRef<BlockItemBehavior> block) {
+        return block.get()
             .block()
             .defaultBlock()
             .value();

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +31,7 @@ public abstract class StonecuttingRecipeExtender extends SingleItemRecipe implem
             new StonecutterRecipeDisplay(
                 this.input().display(),
                 this.resultDisplay(),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.STONECUTTER))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.STONECUTTER))
             )
         );
     }

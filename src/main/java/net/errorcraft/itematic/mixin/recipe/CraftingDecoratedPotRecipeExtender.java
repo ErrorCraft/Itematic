@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.recipe;
 
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.block.entity.SherdsAccessor;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -28,8 +28,8 @@ public class CraftingDecoratedPotRecipeExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
-    private boolean isInForDecoratedPotIngredientsUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
-        return !instance.isEmpty() && instance.itematic$hasBehavior(ItemComponentTypes.DECORATED_POT_PATTERN);
+    private boolean isInForDecoratedPotIngredientsUseItemBehaviorCheck(ItemStack instance, TagKey<Item> tag) {
+        return !instance.isEmpty() && instance.itematic$hasBehavior(ItemBehaviorType.DECORATED_POT_PATTERN);
     }
 
     /**
@@ -39,7 +39,7 @@ public class CraftingDecoratedPotRecipeExtender {
     @Overwrite
     public ItemStack assemble(CraftingInput input, HolderLookup.Provider lookup) {
         ItemStack stack = lookup.lookupOrThrow(Registries.ITEM)
-            .get(ItemKeys.DECORATED_POT)
+            .get(ItemIds.DECORATED_POT)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);
         if (stack.isEmpty()) {

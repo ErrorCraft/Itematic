@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.arrow.SpectralArrow;
@@ -25,6 +25,6 @@ public abstract class SpectralArrowEntityExtender extends AbstractArrow {
         )
     )
     private ItemStack newItemStackForSpectralArrowUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.SPECTRAL_ARROW);
+        return this.level().itematic$createStack(ItemIds.SPECTRAL_ARROW);
     }
 }

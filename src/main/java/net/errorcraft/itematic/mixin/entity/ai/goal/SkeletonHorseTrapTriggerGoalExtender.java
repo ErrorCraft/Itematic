@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.ai.goal;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.animal.equine.SkeletonHorse;
 import net.minecraft.world.entity.animal.equine.SkeletonTrapGoal;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +25,6 @@ public class SkeletonHorseTrapTriggerGoalExtender {
         )
     )
     private ItemStack newItemStackForIronHelmetUseCreateStack(ItemLike item) {
-        return this.horse.level().itematic$createStack(ItemKeys.IRON_HELMET);
+        return this.horse.level().itematic$createStack(ItemIds.IRON_HELMET);
     }
 }

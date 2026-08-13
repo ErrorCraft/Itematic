@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelReader;
@@ -19,6 +19,6 @@ public class TallSeagrassBlockExtender {
         )
     )
     private ItemStack newItemStackForTallSeagrassUseCreateStack(ItemLike item, LevelReader world) {
-        return world.itematic$createStack(ItemKeys.SEAGRASS);
+        return world.itematic$createStack(ItemIds.SEAGRASS);
     }
 }

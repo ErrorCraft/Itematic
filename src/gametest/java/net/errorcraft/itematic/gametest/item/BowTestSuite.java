@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.gametest.item;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -20,14 +20,14 @@ public class BowTestSuite {
     @GameTest(structure = "itematic:item.bow.platform")
     public void usingBowWithMultishotSpawnsMultipleArrows(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack bow = world.itematic$createStack(ItemKeys.BOW);
+        ItemStack bow = world.itematic$createStack(ItemIds.BOW);
         bow.enchant(
             world.registryAccess()
                 .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(Enchantments.MULTISHOT),
             1
         );
-        ItemStack ammunition = world.itematic$createStack(ItemKeys.ARROW);
+        ItemStack ammunition = world.itematic$createStack(ItemIds.ARROW);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, bow);

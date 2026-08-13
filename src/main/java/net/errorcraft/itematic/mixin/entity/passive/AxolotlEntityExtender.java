@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -29,7 +29,7 @@ public abstract class AxolotlEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForTropicalFishBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.TROPICAL_FISH_BUCKET);
+        return instance.itematic$isOf(ItemIds.TROPICAL_FISH_BUCKET);
     }
 
     @Redirect(
@@ -40,7 +40,7 @@ public abstract class AxolotlEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.WATER_BUCKET);
+        return this.level().itematic$createStack(ItemIds.WATER_BUCKET);
     }
 
     @Redirect(
@@ -51,11 +51,11 @@ public abstract class AxolotlEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForAxolotlBucketUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.AXOLOTL_BUCKET);
+        return this.level().itematic$createStack(ItemIds.AXOLOTL_BUCKET);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.AXOLOTL_SPAWN_EGG;
+        return ItemIds.AXOLOTL_SPAWN_EGG;
     }
 }

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.component.type;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.component.type.BundleContentsComponentAccess;
-import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BundleContents;
 import org.apache.commons.lang3.math.Fraction;

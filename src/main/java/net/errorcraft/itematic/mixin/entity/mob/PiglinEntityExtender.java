@@ -4,10 +4,10 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
-import net.errorcraft.itematic.item.weapon.melee.MeleeWeaponComponents;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
@@ -38,7 +38,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForCrossbowUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.CROSSBOW);
+        return this.level().itematic$createStack(ItemIds.CROSSBOW);
     }
 
     @ModifyExpressionValue(
@@ -69,8 +69,8 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
     )
     private ItemStack newItemStackForGoldenWeaponUseCreateStack(ItemLike item, @Share("spearChance") LocalIntRef spearChance) {
         return this.level().itematic$createStack(spearChance.get() == 0
-            ? ItemKeys.GOLDEN_SPEAR
-            : ItemKeys.GOLDEN_SWORD
+            ? ItemIds.GOLDEN_SPEAR
+            : ItemIds.GOLDEN_SWORD
         );
     }
 
@@ -82,7 +82,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isHoldingForCrossbowUseRegistryKeyCheck(Piglin instance, Item item) {
-        return instance.itematic$isHolding(ItemKeys.CROSSBOW);
+        return instance.itematic$isHolding(ItemIds.CROSSBOW);
     }
 
     @ModifyReturnValue(
@@ -90,13 +90,13 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
         at = @At("TAIL")
     )
     private boolean useItemBehaviorComponent(boolean original, ItemStack stack) {
-        if (stack.itematic$getBehavior(ItemComponentTypes.SHOOTER)
-            .map(shooter -> shooter.usesMethod(ShooterMethodTypes.CHARGEABLE))
+        if (stack.itematic$getBehavior(ItemBehaviorType.SHOOTER)
+            .map(shooter -> shooter.usesMethod(ShooterMethodType.CHARGEABLE))
             .orElse(false)) {
             return true;
         }
 
-        return stack.itematic$getBehavior(ItemComponentTypes.WEAPON)
+        return stack.itematic$getBehavior(ItemBehaviorType.WEAPON)
             .map(weapon -> weapon.has(MeleeWeaponComponents.KINETIC))
             .orElse(false);
     }
@@ -109,7 +109,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForGoldIngotUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GOLD_INGOT);
+        return instance.itematic$isOf(ItemIds.GOLD_INGOT);
     }
 
     @Redirect(
@@ -128,7 +128,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForGoldenHelmetUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.GOLDEN_HELMET);
+        return this.level().itematic$createStack(ItemIds.GOLDEN_HELMET);
     }
 
     @Redirect(
@@ -147,7 +147,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForGoldenChestplateUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.GOLDEN_CHESTPLATE);
+        return this.level().itematic$createStack(ItemIds.GOLDEN_CHESTPLATE);
     }
 
     @Redirect(
@@ -166,7 +166,7 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForGoldenLeggingsUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.GOLDEN_LEGGINGS);
+        return this.level().itematic$createStack(ItemIds.GOLDEN_LEGGINGS);
     }
 
     @Redirect(
@@ -185,11 +185,11 @@ public abstract class PiglinEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForGoldenBootsUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.GOLDEN_BOOTS);
+        return this.level().itematic$createStack(ItemIds.GOLDEN_BOOTS);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.PIGLIN_SPAWN_EGG;
+        return ItemIds.PIGLIN_SPAWN_EGG;
     }
 }

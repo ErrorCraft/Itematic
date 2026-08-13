@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.component.type;
 
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +18,7 @@ public class DyedColorComponentExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
-    private static boolean isInForDyeableUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.DYEABLE);
+    private static boolean isInForDyeableUseItemBehaviorCheck(ItemStack instance, TagKey<Item> tag) {
+        return instance.itematic$hasBehavior(ItemBehaviorType.DYEABLE);
     }
 }

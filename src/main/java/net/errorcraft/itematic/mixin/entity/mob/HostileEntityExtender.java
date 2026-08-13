@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.LivingEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +21,6 @@ public abstract class HostileEntityExtender extends LivingEntityExtender {
             return ammunition;
         }
 
-        return this.level().itematic$createStack(ItemKeys.ARROW);
+        return this.level().itematic$createStack(ItemIds.ARROW);
     }
 }

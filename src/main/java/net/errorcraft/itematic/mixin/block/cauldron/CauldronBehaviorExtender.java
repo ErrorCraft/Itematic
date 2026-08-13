@@ -1,14 +1,11 @@
 package net.errorcraft.itematic.mixin.block.cauldron;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.BlockItemComponent;
-import net.errorcraft.itematic.item.component.components.DyeableItemComponent;
-import net.errorcraft.itematic.item.placement.block.picker.BlockPicker;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
+import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
 import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.stats.Stat;
@@ -35,9 +32,9 @@ public interface CauldronBehaviorExtender {
             target = "Lnet/minecraft/world/level/block/Block;byItem(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/level/block/Block;"
         )
     )
-    private static Block getBlockFromItemUseItemComponent(Item item) {
-        return item.itematic$getBehavior(ItemComponentTypes.BLOCK)
-            .map(BlockItemComponent::block)
+    private static Block getBlockFromItemUseItemBehavior(Item item) {
+        return item.itematic$getBehavior(ItemBehaviorType.BLOCK)
+            .map(BlockItemBehavior::block)
             .map(BlockPicker::defaultBlock)
             .map(Holder::value)
             .orElse(null);
@@ -51,7 +48,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack copyComponentsToNewStackForShulkerBoxUseRegistryEntry(ItemStack instance, ItemLike itemConvertible, int count, @Local(argsOnly = true) Level world) {
-        return instance.itematic$copyComponentsToNewStack(world.itematic$getItem(ItemKeys.SHULKER_BOX), count);
+        return instance.itematic$copyComponentsToNewStack(world.itematic$getItem(ItemIds.SHULKER_BOX), count);
     }
 
     @Redirect(
@@ -61,8 +58,8 @@ public interface CauldronBehaviorExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
-    private static boolean isInForDyeableItemUseItemComponentCheck(ItemStack instance, TagKey<Item> tag, @Share("dyeableItemComponent") LocalRef<DyeableItemComponent> dyeableItemComponent) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.DYEABLE);
+    private static boolean isDyeableUseItemBehaviorCheck(ItemStack instance, TagKey<Item> tag) {
+        return instance.itematic$hasBehavior(ItemBehaviorType.DYEABLE);
     }
 
     @Redirect(
@@ -76,7 +73,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemKeys.GLASS_BOTTLE);
+        return world.itematic$createStack(ItemIds.GLASS_BOTTLE);
     }
 
     @Redirect(
@@ -87,7 +84,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion, @Local(argsOnly = true) Level world) {
-        return PotionContentsUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), potion);
+        return PotionContentsUtil.setPotion(world.itematic$createStack(ItemIds.POTION), potion);
     }
 
     @Redirect(
@@ -98,7 +95,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemKeys.WATER_BUCKET);
+        return world.itematic$createStack(ItemIds.WATER_BUCKET);
     }
 
     @Redirect(
@@ -109,7 +106,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemKeys.LAVA_BUCKET);
+        return world.itematic$createStack(ItemIds.LAVA_BUCKET);
     }
 
     @Redirect(
@@ -120,7 +117,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET);
+        return world.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
     }
 
     @Redirect(
@@ -131,7 +128,7 @@ public interface CauldronBehaviorExtender {
         )
     )
     private static ItemStack newItemStackForBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemKeys.BUCKET);
+        return world.itematic$createStack(ItemIds.BUCKET);
     }
 
     @ModifyArg(
@@ -144,7 +141,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object lavaBucketUseRegistryKey(Object key) {
-        return ItemKeys.LAVA_BUCKET;
+        return ItemIds.LAVA_BUCKET;
     }
 
     @ModifyArg(
@@ -163,7 +160,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object waterBucketUseRegistryKey(Object key) {
-        return ItemKeys.WATER_BUCKET;
+        return ItemIds.WATER_BUCKET;
     }
 
     @ModifyArg(
@@ -182,7 +179,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object powderSnowBucketUseRegistryKey(Object key) {
-        return ItemKeys.POWDER_SNOW_BUCKET;
+        return ItemIds.POWDER_SNOW_BUCKET;
     }
 
     @ModifyArg(
@@ -201,7 +198,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object emptyCauldronPotionUseRegistryKey(Object key) {
-        return ItemKeys.POTION;
+        return ItemIds.POTION;
     }
 
     @ModifyArg(
@@ -221,7 +218,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object waterCauldronPotionUseRegistryKey(Object key) {
-        return ItemKeys.POTION;
+        return ItemIds.POTION;
     }
 
     @ModifyArg(
@@ -240,7 +237,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object waterCauldronBucketUseRegistryKey(Object key) {
-        return ItemKeys.BUCKET;
+        return ItemIds.BUCKET;
     }
 
     @ModifyArg(
@@ -259,7 +256,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object lavaCauldronBucketUseRegistryKey(Object key) {
-        return ItemKeys.BUCKET;
+        return ItemIds.BUCKET;
     }
 
     @ModifyArg(
@@ -278,7 +275,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object powderSnowCauldronBucketUseRegistryKey(Object key) {
-        return ItemKeys.BUCKET;
+        return ItemIds.BUCKET;
     }
 
     @ModifyArg(
@@ -297,7 +294,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object glassBottleUseRegistryKey(Object key) {
-        return ItemKeys.GLASS_BOTTLE;
+        return ItemIds.GLASS_BOTTLE;
     }
 
     @ModifyArg(
@@ -316,7 +313,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object leatherBootsUseRegistryKey(Object key) {
-        return ItemKeys.LEATHER_BOOTS;
+        return ItemIds.LEATHER_BOOTS;
     }
 
     @ModifyArg(
@@ -335,7 +332,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object leatherLeggingsUseRegistryKey(Object key) {
-        return ItemKeys.LEATHER_LEGGINGS;
+        return ItemIds.LEATHER_LEGGINGS;
     }
 
     @ModifyArg(
@@ -354,7 +351,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object leatherChestplateUseRegistryKey(Object key) {
-        return ItemKeys.LEATHER_CHESTPLATE;
+        return ItemIds.LEATHER_CHESTPLATE;
     }
 
     @ModifyArg(
@@ -373,7 +370,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object leatherHelmetUseRegistryKey(Object key) {
-        return ItemKeys.LEATHER_HELMET;
+        return ItemIds.LEATHER_HELMET;
     }
 
     @ModifyArg(
@@ -392,7 +389,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object leatherHorseArmorUseRegistryKey(Object key) {
-        return ItemKeys.LEATHER_HORSE_ARMOR;
+        return ItemIds.LEATHER_HORSE_ARMOR;
     }
 
     @ModifyArg(
@@ -411,7 +408,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object wolfArmorUseRegistryKey(Object key) {
-        return ItemKeys.WOLF_ARMOR;
+        return ItemIds.WOLF_ARMOR;
     }
 
     @ModifyArg(
@@ -430,7 +427,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object whiteBannerUseRegistryKey(Object key) {
-        return ItemKeys.WHITE_BANNER;
+        return ItemIds.WHITE_BANNER;
     }
 
     @ModifyArg(
@@ -449,7 +446,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object grayBannerUseRegistryKey(Object key) {
-        return ItemKeys.GRAY_BANNER;
+        return ItemIds.GRAY_BANNER;
     }
 
     @ModifyArg(
@@ -468,7 +465,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object blackBannerUseRegistryKey(Object key) {
-        return ItemKeys.BLACK_BANNER;
+        return ItemIds.BLACK_BANNER;
     }
 
     @ModifyArg(
@@ -487,7 +484,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object blueBannerUseRegistryKey(Object key) {
-        return ItemKeys.BLUE_BANNER;
+        return ItemIds.BLUE_BANNER;
     }
 
     @ModifyArg(
@@ -506,7 +503,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object brownBannerUseRegistryKey(Object key) {
-        return ItemKeys.BROWN_BANNER;
+        return ItemIds.BROWN_BANNER;
     }
 
     @ModifyArg(
@@ -525,7 +522,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object cyanBannerUseRegistryKey(Object key) {
-        return ItemKeys.CYAN_BANNER;
+        return ItemIds.CYAN_BANNER;
     }
 
     @ModifyArg(
@@ -544,7 +541,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object greenBannerUseRegistryKey(Object key) {
-        return ItemKeys.GREEN_BANNER;
+        return ItemIds.GREEN_BANNER;
     }
 
     @ModifyArg(
@@ -563,7 +560,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object lightBlueBannerUseRegistryKey(Object key) {
-        return ItemKeys.LIGHT_BLUE_BANNER;
+        return ItemIds.LIGHT_BLUE_BANNER;
     }
 
     @ModifyArg(
@@ -582,7 +579,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object lightGrayBannerUseRegistryKey(Object key) {
-        return ItemKeys.LIGHT_GRAY_BANNER;
+        return ItemIds.LIGHT_GRAY_BANNER;
     }
 
     @ModifyArg(
@@ -601,7 +598,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object limeBannerUseRegistryKey(Object key) {
-        return ItemKeys.LIME_BANNER;
+        return ItemIds.LIME_BANNER;
     }
 
     @ModifyArg(
@@ -620,7 +617,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object magentaBannerUseRegistryKey(Object key) {
-        return ItemKeys.MAGENTA_BANNER;
+        return ItemIds.MAGENTA_BANNER;
     }
 
     @ModifyArg(
@@ -639,7 +636,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object orangeBannerUseRegistryKey(Object key) {
-        return ItemKeys.ORANGE_BANNER;
+        return ItemIds.ORANGE_BANNER;
     }
 
     @ModifyArg(
@@ -658,7 +655,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object pinkBannerUseRegistryKey(Object key) {
-        return ItemKeys.PINK_BANNER;
+        return ItemIds.PINK_BANNER;
     }
 
     @ModifyArg(
@@ -677,7 +674,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object purpleBannerUseRegistryKey(Object key) {
-        return ItemKeys.PURPLE_BANNER;
+        return ItemIds.PURPLE_BANNER;
     }
 
     @ModifyArg(
@@ -696,7 +693,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object redBannerUseRegistryKey(Object key) {
-        return ItemKeys.RED_BANNER;
+        return ItemIds.RED_BANNER;
     }
 
     @ModifyArg(
@@ -715,7 +712,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object yellowBannerUseRegistryKey(Object key) {
-        return ItemKeys.YELLOW_BANNER;
+        return ItemIds.YELLOW_BANNER;
     }
 
     @ModifyArg(
@@ -734,7 +731,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object whiteShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.WHITE_SHULKER_BOX;
+        return ItemIds.WHITE_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -753,7 +750,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object grayShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.GRAY_SHULKER_BOX;
+        return ItemIds.GRAY_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -772,7 +769,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object blackShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.BLACK_SHULKER_BOX;
+        return ItemIds.BLACK_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -791,7 +788,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object blueShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.BLUE_SHULKER_BOX;
+        return ItemIds.BLUE_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -810,7 +807,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object brownShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.BROWN_SHULKER_BOX;
+        return ItemIds.BROWN_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -829,7 +826,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object cyanShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.CYAN_SHULKER_BOX;
+        return ItemIds.CYAN_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -848,7 +845,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object greenShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.GREEN_SHULKER_BOX;
+        return ItemIds.GREEN_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -867,7 +864,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object lightBlueShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.LIGHT_BLUE_SHULKER_BOX;
+        return ItemIds.LIGHT_BLUE_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -886,7 +883,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object lightGrayShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.LIGHT_GRAY_SHULKER_BOX;
+        return ItemIds.LIGHT_GRAY_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -905,7 +902,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object limeShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.LIME_SHULKER_BOX;
+        return ItemIds.LIME_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -924,7 +921,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object magentaShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.MAGENTA_SHULKER_BOX;
+        return ItemIds.MAGENTA_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -943,7 +940,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object orangeShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.ORANGE_SHULKER_BOX;
+        return ItemIds.ORANGE_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -962,7 +959,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object pinkShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.PINK_SHULKER_BOX;
+        return ItemIds.PINK_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -981,7 +978,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object purpleShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.PURPLE_SHULKER_BOX;
+        return ItemIds.PURPLE_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -1000,7 +997,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object redShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.RED_SHULKER_BOX;
+        return ItemIds.RED_SHULKER_BOX;
     }
 
     @ModifyArg(
@@ -1019,7 +1016,7 @@ public interface CauldronBehaviorExtender {
         index = 0
     )
     private static Object yellowShulkerBoxUseRegistryKey(Object key) {
-        return ItemKeys.YELLOW_SHULKER_BOX;
+        return ItemIds.YELLOW_SHULKER_BOX;
     }
 
     @Redirect(

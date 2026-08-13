@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.entity;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -72,7 +72,7 @@ public class PickEntityTestSuite {
         Armadillo armadillo = context.spawn(EntityType.ARMADILLO, SPAWN_POSITION);
         ItemStack stack = armadillo.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ARMADILLO_SPAWN_EGG)
+            .is(ItemIds.ARMADILLO_SPAWN_EGG)
         );
     }
 
@@ -81,7 +81,7 @@ public class PickEntityTestSuite {
         Allay allay = context.spawn(EntityType.ALLAY, SPAWN_POSITION);
         ItemStack stack = allay.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ALLAY_SPAWN_EGG)
+            .is(ItemIds.ALLAY_SPAWN_EGG)
         );
     }
 
@@ -90,7 +90,7 @@ public class PickEntityTestSuite {
         Axolotl axolotl = context.spawn(EntityType.AXOLOTL, SPAWN_POSITION);
         ItemStack stack = axolotl.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.AXOLOTL_SPAWN_EGG)
+            .is(ItemIds.AXOLOTL_SPAWN_EGG)
         );
     }
 
@@ -99,7 +99,7 @@ public class PickEntityTestSuite {
         Bat bat = context.spawn(EntityType.BAT, SPAWN_POSITION);
         ItemStack stack = bat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BAT_SPAWN_EGG)
+            .is(ItemIds.BAT_SPAWN_EGG)
         );
     }
 
@@ -108,7 +108,7 @@ public class PickEntityTestSuite {
         Bee bee = context.spawn(EntityType.BEE, SPAWN_POSITION);
         ItemStack stack = bee.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BEE_SPAWN_EGG)
+            .is(ItemIds.BEE_SPAWN_EGG)
         );
     }
 
@@ -117,7 +117,7 @@ public class PickEntityTestSuite {
         Blaze blaze = context.spawn(EntityType.BLAZE, SPAWN_POSITION);
         ItemStack stack = blaze.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BLAZE_SPAWN_EGG)
+            .is(ItemIds.BLAZE_SPAWN_EGG)
         );
     }
 
@@ -126,7 +126,7 @@ public class PickEntityTestSuite {
         Cat cat = context.spawn(EntityType.CAT, SPAWN_POSITION);
         ItemStack stack = cat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAT_SPAWN_EGG)
+            .is(ItemIds.CAT_SPAWN_EGG)
         );
     }
 
@@ -135,7 +135,7 @@ public class PickEntityTestSuite {
         Camel camel = context.spawn(EntityType.CAMEL, SPAWN_POSITION);
         ItemStack stack = camel.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAMEL_SPAWN_EGG)
+            .is(ItemIds.CAMEL_SPAWN_EGG)
         );
     }
 
@@ -144,7 +144,7 @@ public class PickEntityTestSuite {
         CaveSpider caveSpider = context.spawn(EntityType.CAVE_SPIDER, SPAWN_POSITION);
         ItemStack stack = caveSpider.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAVE_SPIDER_SPAWN_EGG)
+            .is(ItemIds.CAVE_SPIDER_SPAWN_EGG)
         );
     }
 
@@ -153,7 +153,7 @@ public class PickEntityTestSuite {
         Chicken chicken = context.spawn(EntityType.CHICKEN, SPAWN_POSITION);
         ItemStack stack = chicken.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CHICKEN_SPAWN_EGG)
+            .is(ItemIds.CHICKEN_SPAWN_EGG)
         );
     }
 
@@ -162,7 +162,7 @@ public class PickEntityTestSuite {
         Cod cod = context.spawn(EntityType.COD, SPAWN_POSITION);
         ItemStack stack = cod.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.COD_SPAWN_EGG)
+            .is(ItemIds.COD_SPAWN_EGG)
         );
     }
 
@@ -171,7 +171,7 @@ public class PickEntityTestSuite {
         Cow cow = context.spawn(EntityType.COW, SPAWN_POSITION);
         ItemStack stack = cow.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.COW_SPAWN_EGG)
+            .is(ItemIds.COW_SPAWN_EGG)
         );
     }
 
@@ -180,7 +180,7 @@ public class PickEntityTestSuite {
         Creeper creeper = context.spawn(EntityType.CREEPER, SPAWN_POSITION);
         ItemStack stack = creeper.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CREEPER_SPAWN_EGG)
+            .is(ItemIds.CREEPER_SPAWN_EGG)
         );
     }
 
@@ -189,7 +189,7 @@ public class PickEntityTestSuite {
         Dolphin dolphin = context.spawn(EntityType.DOLPHIN, SPAWN_POSITION);
         ItemStack stack = dolphin.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DOLPHIN_SPAWN_EGG)
+            .is(ItemIds.DOLPHIN_SPAWN_EGG)
         );
     }
 
@@ -198,7 +198,7 @@ public class PickEntityTestSuite {
         Donkey donkey = context.spawn(EntityType.DONKEY, SPAWN_POSITION);
         ItemStack stack = donkey.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DONKEY_SPAWN_EGG)
+            .is(ItemIds.DONKEY_SPAWN_EGG)
         );
     }
 
@@ -207,7 +207,7 @@ public class PickEntityTestSuite {
         Drowned drowned = context.spawn(EntityType.DROWNED, SPAWN_POSITION);
         ItemStack stack = drowned.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DROWNED_SPAWN_EGG)
+            .is(ItemIds.DROWNED_SPAWN_EGG)
         );
     }
 
@@ -216,7 +216,7 @@ public class PickEntityTestSuite {
         ElderGuardian elderGuardian = context.spawn(EntityType.ELDER_GUARDIAN, SPAWN_POSITION);
         ItemStack stack = elderGuardian.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ELDER_GUARDIAN_SPAWN_EGG)
+            .is(ItemIds.ELDER_GUARDIAN_SPAWN_EGG)
         );
     }
 
@@ -225,7 +225,7 @@ public class PickEntityTestSuite {
         EnderDragon enderDragon = context.spawn(EntityType.ENDER_DRAGON, SPAWN_POSITION);
         ItemStack stack = enderDragon.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ENDER_DRAGON_SPAWN_EGG)
+            .is(ItemIds.ENDER_DRAGON_SPAWN_EGG)
         );
     }
 
@@ -234,7 +234,7 @@ public class PickEntityTestSuite {
         EnderMan enderman = context.spawn(EntityType.ENDERMAN, SPAWN_POSITION);
         ItemStack stack = enderman.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ENDERMAN_SPAWN_EGG)
+            .is(ItemIds.ENDERMAN_SPAWN_EGG)
         );
     }
 
@@ -243,7 +243,7 @@ public class PickEntityTestSuite {
         Endermite endermite = context.spawn(EntityType.ENDERMITE, SPAWN_POSITION);
         ItemStack stack = endermite.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ENDERMITE_SPAWN_EGG)
+            .is(ItemIds.ENDERMITE_SPAWN_EGG)
         );
     }
 
@@ -252,7 +252,7 @@ public class PickEntityTestSuite {
         Evoker evoker = context.spawn(EntityType.EVOKER, SPAWN_POSITION);
         ItemStack stack = evoker.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.EVOKER_SPAWN_EGG)
+            .is(ItemIds.EVOKER_SPAWN_EGG)
         );
     }
 
@@ -261,7 +261,7 @@ public class PickEntityTestSuite {
         Fox fox = context.spawn(EntityType.FOX, SPAWN_POSITION);
         ItemStack stack = fox.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.FOX_SPAWN_EGG)
+            .is(ItemIds.FOX_SPAWN_EGG)
         );
     }
 
@@ -270,7 +270,7 @@ public class PickEntityTestSuite {
         Frog frog = context.spawn(EntityType.FROG, SPAWN_POSITION);
         ItemStack stack = frog.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.FROG_SPAWN_EGG)
+            .is(ItemIds.FROG_SPAWN_EGG)
         );
     }
 
@@ -279,7 +279,7 @@ public class PickEntityTestSuite {
         Ghast ghast = context.spawn(EntityType.GHAST, SPAWN_POSITION);
         ItemStack stack = ghast.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.GHAST_SPAWN_EGG)
+            .is(ItemIds.GHAST_SPAWN_EGG)
         );
     }
 
@@ -288,7 +288,7 @@ public class PickEntityTestSuite {
         GlowSquid glowSquid = context.spawn(EntityType.GLOW_SQUID, SPAWN_POSITION);
         ItemStack stack = glowSquid.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.GLOW_SQUID_SPAWN_EGG)
+            .is(ItemIds.GLOW_SQUID_SPAWN_EGG)
         );
     }
 
@@ -297,7 +297,7 @@ public class PickEntityTestSuite {
         Goat goat = context.spawn(EntityType.GOAT, SPAWN_POSITION);
         ItemStack stack = goat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.GOAT_SPAWN_EGG)
+            .is(ItemIds.GOAT_SPAWN_EGG)
         );
     }
 
@@ -306,7 +306,7 @@ public class PickEntityTestSuite {
         Guardian guardian = context.spawn(EntityType.GUARDIAN, SPAWN_POSITION);
         ItemStack stack = guardian.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.GUARDIAN_SPAWN_EGG)
+            .is(ItemIds.GUARDIAN_SPAWN_EGG)
         );
     }
 
@@ -315,7 +315,7 @@ public class PickEntityTestSuite {
         Hoglin hoglin = context.spawn(EntityType.HOGLIN, SPAWN_POSITION);
         ItemStack stack = hoglin.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.HOGLIN_SPAWN_EGG)
+            .is(ItemIds.HOGLIN_SPAWN_EGG)
         );
     }
 
@@ -324,7 +324,7 @@ public class PickEntityTestSuite {
         Horse horse = context.spawn(EntityType.HORSE, SPAWN_POSITION);
         ItemStack stack = horse.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.HORSE_SPAWN_EGG)
+            .is(ItemIds.HORSE_SPAWN_EGG)
         );
     }
 
@@ -333,7 +333,7 @@ public class PickEntityTestSuite {
         Husk husk = context.spawn(EntityType.HUSK, SPAWN_POSITION);
         ItemStack stack = husk.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.HUSK_SPAWN_EGG)
+            .is(ItemIds.HUSK_SPAWN_EGG)
         );
     }
 
@@ -342,7 +342,7 @@ public class PickEntityTestSuite {
         IronGolem ironGolem = context.spawn(EntityType.IRON_GOLEM, SPAWN_POSITION);
         ItemStack stack = ironGolem.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.IRON_GOLEM_SPAWN_EGG)
+            .is(ItemIds.IRON_GOLEM_SPAWN_EGG)
         );
     }
 
@@ -351,7 +351,7 @@ public class PickEntityTestSuite {
         Llama llama = context.spawn(EntityType.LLAMA, SPAWN_POSITION);
         ItemStack stack = llama.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.LLAMA_SPAWN_EGG)
+            .is(ItemIds.LLAMA_SPAWN_EGG)
         );
     }
 
@@ -360,7 +360,7 @@ public class PickEntityTestSuite {
         MagmaCube magmaCube = context.spawn(EntityType.MAGMA_CUBE, SPAWN_POSITION);
         ItemStack stack = magmaCube.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MAGMA_CUBE_SPAWN_EGG)
+            .is(ItemIds.MAGMA_CUBE_SPAWN_EGG)
         );
     }
 
@@ -369,7 +369,7 @@ public class PickEntityTestSuite {
         MushroomCow mooshroom = context.spawn(EntityType.MOOSHROOM, SPAWN_POSITION);
         ItemStack stack = mooshroom.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MOOSHROOM_SPAWN_EGG)
+            .is(ItemIds.MOOSHROOM_SPAWN_EGG)
         );
     }
 
@@ -378,7 +378,7 @@ public class PickEntityTestSuite {
         Mule mule = context.spawn(EntityType.MULE, SPAWN_POSITION);
         ItemStack stack = mule.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MULE_SPAWN_EGG)
+            .is(ItemIds.MULE_SPAWN_EGG)
         );
     }
 
@@ -387,7 +387,7 @@ public class PickEntityTestSuite {
         Ocelot ocelot = context.spawn(EntityType.OCELOT, SPAWN_POSITION);
         ItemStack stack = ocelot.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.OCELOT_SPAWN_EGG)
+            .is(ItemIds.OCELOT_SPAWN_EGG)
         );
     }
 
@@ -396,7 +396,7 @@ public class PickEntityTestSuite {
         Panda panda = context.spawn(EntityType.PANDA, SPAWN_POSITION);
         ItemStack stack = panda.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PANDA_SPAWN_EGG)
+            .is(ItemIds.PANDA_SPAWN_EGG)
         );
     }
 
@@ -405,7 +405,7 @@ public class PickEntityTestSuite {
         Parrot parrot = context.spawn(EntityType.PARROT, SPAWN_POSITION);
         ItemStack stack = parrot.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PARROT_SPAWN_EGG)
+            .is(ItemIds.PARROT_SPAWN_EGG)
         );
     }
 
@@ -414,7 +414,7 @@ public class PickEntityTestSuite {
         Phantom phantom = context.spawn(EntityType.PHANTOM, SPAWN_POSITION);
         ItemStack stack = phantom.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PHANTOM_SPAWN_EGG)
+            .is(ItemIds.PHANTOM_SPAWN_EGG)
         );
     }
 
@@ -423,7 +423,7 @@ public class PickEntityTestSuite {
         Pig pig = context.spawn(EntityType.PIG, SPAWN_POSITION);
         ItemStack stack = pig.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PIG_SPAWN_EGG)
+            .is(ItemIds.PIG_SPAWN_EGG)
         );
     }
 
@@ -432,7 +432,7 @@ public class PickEntityTestSuite {
         Piglin piglin = context.spawn(EntityType.PIGLIN, SPAWN_POSITION);
         ItemStack stack = piglin.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PIGLIN_SPAWN_EGG)
+            .is(ItemIds.PIGLIN_SPAWN_EGG)
         );
     }
 
@@ -441,7 +441,7 @@ public class PickEntityTestSuite {
         PiglinBrute piglinBrute = context.spawn(EntityType.PIGLIN_BRUTE, SPAWN_POSITION);
         ItemStack stack = piglinBrute.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PIGLIN_BRUTE_SPAWN_EGG)
+            .is(ItemIds.PIGLIN_BRUTE_SPAWN_EGG)
         );
     }
 
@@ -450,7 +450,7 @@ public class PickEntityTestSuite {
         Pillager pillager = context.spawn(EntityType.PILLAGER, SPAWN_POSITION);
         ItemStack stack = pillager.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PILLAGER_SPAWN_EGG)
+            .is(ItemIds.PILLAGER_SPAWN_EGG)
         );
     }
 
@@ -459,7 +459,7 @@ public class PickEntityTestSuite {
         PolarBear polarBear = context.spawn(EntityType.POLAR_BEAR, SPAWN_POSITION);
         ItemStack stack = polarBear.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.POLAR_BEAR_SPAWN_EGG)
+            .is(ItemIds.POLAR_BEAR_SPAWN_EGG)
         );
     }
 
@@ -468,7 +468,7 @@ public class PickEntityTestSuite {
         Pufferfish pufferfish = context.spawn(EntityType.PUFFERFISH, SPAWN_POSITION);
         ItemStack stack = pufferfish.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PUFFERFISH_SPAWN_EGG)
+            .is(ItemIds.PUFFERFISH_SPAWN_EGG)
         );
     }
 
@@ -477,7 +477,7 @@ public class PickEntityTestSuite {
         Rabbit rabbit = context.spawn(EntityType.RABBIT, SPAWN_POSITION);
         ItemStack stack = rabbit.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.RABBIT_SPAWN_EGG)
+            .is(ItemIds.RABBIT_SPAWN_EGG)
         );
     }
 
@@ -486,7 +486,7 @@ public class PickEntityTestSuite {
         Ravager ravager = context.spawn(EntityType.RAVAGER, SPAWN_POSITION);
         ItemStack stack = ravager.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.RAVAGER_SPAWN_EGG)
+            .is(ItemIds.RAVAGER_SPAWN_EGG)
         );
     }
 
@@ -495,7 +495,7 @@ public class PickEntityTestSuite {
         Salmon salmon = context.spawn(EntityType.SALMON, SPAWN_POSITION);
         ItemStack stack = salmon.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SALMON_SPAWN_EGG)
+            .is(ItemIds.SALMON_SPAWN_EGG)
         );
     }
 
@@ -504,7 +504,7 @@ public class PickEntityTestSuite {
         Sheep sheep = context.spawn(EntityType.SHEEP, SPAWN_POSITION);
         ItemStack stack = sheep.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SHEEP_SPAWN_EGG)
+            .is(ItemIds.SHEEP_SPAWN_EGG)
         );
     }
 
@@ -513,7 +513,7 @@ public class PickEntityTestSuite {
         Shulker shulker = context.spawn(EntityType.SHULKER, SPAWN_POSITION);
         ItemStack stack = shulker.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SHULKER_SPAWN_EGG)
+            .is(ItemIds.SHULKER_SPAWN_EGG)
         );
     }
 
@@ -522,7 +522,7 @@ public class PickEntityTestSuite {
         Silverfish silverfish = context.spawn(EntityType.SILVERFISH, SPAWN_POSITION);
         ItemStack stack = silverfish.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SILVERFISH_SPAWN_EGG)
+            .is(ItemIds.SILVERFISH_SPAWN_EGG)
         );
     }
 
@@ -531,7 +531,7 @@ public class PickEntityTestSuite {
         Skeleton skeleton = context.spawn(EntityType.SKELETON, SPAWN_POSITION);
         ItemStack stack = skeleton.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SKELETON_SPAWN_EGG)
+            .is(ItemIds.SKELETON_SPAWN_EGG)
         );
     }
 
@@ -540,7 +540,7 @@ public class PickEntityTestSuite {
         SkeletonHorse skeletonHorse = context.spawn(EntityType.SKELETON_HORSE, SPAWN_POSITION);
         ItemStack stack = skeletonHorse.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SKELETON_HORSE_SPAWN_EGG)
+            .is(ItemIds.SKELETON_HORSE_SPAWN_EGG)
         );
     }
 
@@ -549,7 +549,7 @@ public class PickEntityTestSuite {
         Slime slime = context.spawn(EntityType.SLIME, SPAWN_POSITION);
         ItemStack stack = slime.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SLIME_SPAWN_EGG)
+            .is(ItemIds.SLIME_SPAWN_EGG)
         );
     }
 
@@ -558,7 +558,7 @@ public class PickEntityTestSuite {
         Sniffer sniffer = context.spawn(EntityType.SNIFFER, SPAWN_POSITION);
         ItemStack stack = sniffer.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SNIFFER_SPAWN_EGG)
+            .is(ItemIds.SNIFFER_SPAWN_EGG)
         );
     }
 
@@ -567,7 +567,7 @@ public class PickEntityTestSuite {
         SnowGolem snowGolem = context.spawn(EntityType.SNOW_GOLEM, SPAWN_POSITION);
         ItemStack stack = snowGolem.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SNOW_GOLEM_SPAWN_EGG)
+            .is(ItemIds.SNOW_GOLEM_SPAWN_EGG)
         );
     }
 
@@ -576,7 +576,7 @@ public class PickEntityTestSuite {
         Spider spider = context.spawn(EntityType.SPIDER, SPAWN_POSITION);
         ItemStack stack = spider.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SPIDER_SPAWN_EGG)
+            .is(ItemIds.SPIDER_SPAWN_EGG)
         );
     }
 
@@ -585,7 +585,7 @@ public class PickEntityTestSuite {
         Squid squid = context.spawn(EntityType.SQUID, SPAWN_POSITION);
         ItemStack stack = squid.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SQUID_SPAWN_EGG)
+            .is(ItemIds.SQUID_SPAWN_EGG)
         );
     }
 
@@ -594,7 +594,7 @@ public class PickEntityTestSuite {
         Stray stray = context.spawn(EntityType.STRAY, SPAWN_POSITION);
         ItemStack stack = stray.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.STRAY_SPAWN_EGG)
+            .is(ItemIds.STRAY_SPAWN_EGG)
         );
     }
 
@@ -603,7 +603,7 @@ public class PickEntityTestSuite {
         Strider strider = context.spawn(EntityType.STRIDER, SPAWN_POSITION);
         ItemStack stack = strider.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.STRIDER_SPAWN_EGG)
+            .is(ItemIds.STRIDER_SPAWN_EGG)
         );
     }
 
@@ -612,7 +612,7 @@ public class PickEntityTestSuite {
         Tadpole tadpole = context.spawn(EntityType.TADPOLE, SPAWN_POSITION);
         ItemStack stack = tadpole.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.TADPOLE_SPAWN_EGG)
+            .is(ItemIds.TADPOLE_SPAWN_EGG)
         );
     }
 
@@ -621,7 +621,7 @@ public class PickEntityTestSuite {
         TraderLlama traderLlama = context.spawn(EntityType.TRADER_LLAMA, SPAWN_POSITION);
         ItemStack stack = traderLlama.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.TRADER_LLAMA_SPAWN_EGG)
+            .is(ItemIds.TRADER_LLAMA_SPAWN_EGG)
         );
     }
 
@@ -630,7 +630,7 @@ public class PickEntityTestSuite {
         TropicalFish tropicalFish = context.spawn(EntityType.TROPICAL_FISH, SPAWN_POSITION);
         ItemStack stack = tropicalFish.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.TROPICAL_FISH_SPAWN_EGG)
+            .is(ItemIds.TROPICAL_FISH_SPAWN_EGG)
         );
     }
 
@@ -639,7 +639,7 @@ public class PickEntityTestSuite {
         Turtle turtle = context.spawn(EntityType.TURTLE, SPAWN_POSITION);
         ItemStack stack = turtle.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.TURTLE_SPAWN_EGG)
+            .is(ItemIds.TURTLE_SPAWN_EGG)
         );
     }
 
@@ -648,7 +648,7 @@ public class PickEntityTestSuite {
         Vex vex = context.spawn(EntityType.VEX, SPAWN_POSITION);
         ItemStack stack = vex.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.VEX_SPAWN_EGG)
+            .is(ItemIds.VEX_SPAWN_EGG)
         );
     }
 
@@ -657,7 +657,7 @@ public class PickEntityTestSuite {
         Villager villager = context.spawn(EntityType.VILLAGER, SPAWN_POSITION);
         ItemStack stack = villager.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.VILLAGER_SPAWN_EGG)
+            .is(ItemIds.VILLAGER_SPAWN_EGG)
         );
     }
 
@@ -666,7 +666,7 @@ public class PickEntityTestSuite {
         Vindicator vindicator = context.spawn(EntityType.VINDICATOR, SPAWN_POSITION);
         ItemStack stack = vindicator.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.VINDICATOR_SPAWN_EGG)
+            .is(ItemIds.VINDICATOR_SPAWN_EGG)
         );
     }
 
@@ -675,7 +675,7 @@ public class PickEntityTestSuite {
         WanderingTrader wanderingTrader = context.spawn(EntityType.WANDERING_TRADER, SPAWN_POSITION);
         ItemStack stack = wanderingTrader.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WANDERING_TRADER_SPAWN_EGG)
+            .is(ItemIds.WANDERING_TRADER_SPAWN_EGG)
         );
     }
 
@@ -684,7 +684,7 @@ public class PickEntityTestSuite {
         Warden warden = context.spawn(EntityType.WARDEN, SPAWN_POSITION);
         ItemStack stack = warden.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WARDEN_SPAWN_EGG)
+            .is(ItemIds.WARDEN_SPAWN_EGG)
         );
     }
 
@@ -693,7 +693,7 @@ public class PickEntityTestSuite {
         Witch witch = context.spawn(EntityType.WITCH, SPAWN_POSITION);
         ItemStack stack = witch.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WITCH_SPAWN_EGG)
+            .is(ItemIds.WITCH_SPAWN_EGG)
         );
     }
 
@@ -702,7 +702,7 @@ public class PickEntityTestSuite {
         WitherBoss wither = context.spawn(EntityType.WITHER, SPAWN_POSITION);
         ItemStack stack = wither.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WITHER_SPAWN_EGG)
+            .is(ItemIds.WITHER_SPAWN_EGG)
         );
     }
 
@@ -711,7 +711,7 @@ public class PickEntityTestSuite {
         WitherSkeleton witherSkeleton = context.spawn(EntityType.WITHER_SKELETON, SPAWN_POSITION);
         ItemStack stack = witherSkeleton.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WITHER_SKELETON_SPAWN_EGG)
+            .is(ItemIds.WITHER_SKELETON_SPAWN_EGG)
         );
     }
 
@@ -720,7 +720,7 @@ public class PickEntityTestSuite {
         Wolf wolf = context.spawn(EntityType.WOLF, SPAWN_POSITION);
         ItemStack stack = wolf.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WOLF_SPAWN_EGG)
+            .is(ItemIds.WOLF_SPAWN_EGG)
         );
     }
 
@@ -729,7 +729,7 @@ public class PickEntityTestSuite {
         Zoglin zoglin = context.spawn(EntityType.ZOGLIN, SPAWN_POSITION);
         ItemStack stack = zoglin.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ZOGLIN_SPAWN_EGG)
+            .is(ItemIds.ZOGLIN_SPAWN_EGG)
         );
     }
 
@@ -738,7 +738,7 @@ public class PickEntityTestSuite {
         Zombie zombie = context.spawn(EntityType.ZOMBIE, SPAWN_POSITION);
         ItemStack stack = zombie.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ZOMBIE_SPAWN_EGG)
+            .is(ItemIds.ZOMBIE_SPAWN_EGG)
         );
     }
 
@@ -747,7 +747,7 @@ public class PickEntityTestSuite {
         ZombieHorse zombieHorse = context.spawn(EntityType.ZOMBIE_HORSE, SPAWN_POSITION);
         ItemStack stack = zombieHorse.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ZOMBIE_HORSE_SPAWN_EGG)
+            .is(ItemIds.ZOMBIE_HORSE_SPAWN_EGG)
         );
     }
 
@@ -756,7 +756,7 @@ public class PickEntityTestSuite {
         ZombieVillager zombieVillager = context.spawn(EntityType.ZOMBIE_VILLAGER, SPAWN_POSITION);
         ItemStack stack = zombieVillager.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG)
+            .is(ItemIds.ZOMBIE_VILLAGER_SPAWN_EGG)
         );
     }
 
@@ -765,7 +765,7 @@ public class PickEntityTestSuite {
         ZombifiedPiglin zombifiedPiglin = context.spawn(EntityType.ZOMBIFIED_PIGLIN, SPAWN_POSITION);
         ItemStack stack = zombifiedPiglin.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG)
+            .is(ItemIds.ZOMBIFIED_PIGLIN_SPAWN_EGG)
         );
     }
 
@@ -774,7 +774,7 @@ public class PickEntityTestSuite {
         Boat acaciaBoat = context.spawn(EntityType.ACACIA_BOAT, SPAWN_POSITION);
         ItemStack stack = acaciaBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ACACIA_BOAT)
+            .is(ItemIds.ACACIA_BOAT)
         );
     }
 
@@ -783,7 +783,7 @@ public class PickEntityTestSuite {
         ChestBoat acaciaChestBoat = context.spawn(EntityType.ACACIA_CHEST_BOAT, SPAWN_POSITION);
         ItemStack stack = acaciaChestBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ACACIA_CHEST_BOAT)
+            .is(ItemIds.ACACIA_CHEST_BOAT)
         );
     }
 
@@ -792,7 +792,7 @@ public class PickEntityTestSuite {
         Raft bambooRaft = context.spawn(EntityType.BAMBOO_RAFT, SPAWN_POSITION);
         ItemStack stack = bambooRaft.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BAMBOO_RAFT)
+            .is(ItemIds.BAMBOO_RAFT)
         );
     }
 
@@ -801,7 +801,7 @@ public class PickEntityTestSuite {
         ChestRaft bambooChestRaft = context.spawn(EntityType.BAMBOO_CHEST_RAFT, SPAWN_POSITION);
         ItemStack stack = bambooChestRaft.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BAMBOO_CHEST_RAFT)
+            .is(ItemIds.BAMBOO_CHEST_RAFT)
         );
     }
 
@@ -810,7 +810,7 @@ public class PickEntityTestSuite {
         Boat birchBoat = context.spawn(EntityType.BIRCH_BOAT, SPAWN_POSITION);
         ItemStack stack = birchBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BIRCH_BOAT)
+            .is(ItemIds.BIRCH_BOAT)
         );
     }
 
@@ -819,7 +819,7 @@ public class PickEntityTestSuite {
         ChestBoat birchChestBoat = context.spawn(EntityType.BIRCH_CHEST_BOAT, SPAWN_POSITION);
         ItemStack stack = birchChestBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BIRCH_CHEST_BOAT)
+            .is(ItemIds.BIRCH_CHEST_BOAT)
         );
     }
 
@@ -828,7 +828,7 @@ public class PickEntityTestSuite {
         Boat cherryBoat = context.spawn(EntityType.CHERRY_BOAT, SPAWN_POSITION);
         ItemStack stack = cherryBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CHERRY_BOAT)
+            .is(ItemIds.CHERRY_BOAT)
         );
     }
 
@@ -837,7 +837,7 @@ public class PickEntityTestSuite {
         ChestBoat cherryChestBoat = context.spawn(EntityType.CHERRY_CHEST_BOAT, SPAWN_POSITION);
         ItemStack stack = cherryChestBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CHERRY_CHEST_BOAT)
+            .is(ItemIds.CHERRY_CHEST_BOAT)
         );
     }
 
@@ -846,7 +846,7 @@ public class PickEntityTestSuite {
         Boat darkOakBoat = context.spawn(EntityType.DARK_OAK_BOAT, SPAWN_POSITION);
         ItemStack stack = darkOakBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DARK_OAK_BOAT)
+            .is(ItemIds.DARK_OAK_BOAT)
         );
     }
 
@@ -855,7 +855,7 @@ public class PickEntityTestSuite {
         ChestBoat darkOakChestBoat = context.spawn(EntityType.DARK_OAK_CHEST_BOAT, SPAWN_POSITION);
         ItemStack stack = darkOakChestBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DARK_OAK_CHEST_BOAT)
+            .is(ItemIds.DARK_OAK_CHEST_BOAT)
         );
     }
 
@@ -864,7 +864,7 @@ public class PickEntityTestSuite {
         Boat jungleBoat = context.spawn(EntityType.JUNGLE_BOAT, SPAWN_POSITION);
         ItemStack stack = jungleBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.JUNGLE_BOAT)
+            .is(ItemIds.JUNGLE_BOAT)
         );
     }
 
@@ -873,7 +873,7 @@ public class PickEntityTestSuite {
         ChestBoat jungleChestBoat = context.spawn(EntityType.JUNGLE_CHEST_BOAT, SPAWN_POSITION);
         ItemStack stack = jungleChestBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.JUNGLE_CHEST_BOAT)
+            .is(ItemIds.JUNGLE_CHEST_BOAT)
         );
     }
 
@@ -882,7 +882,7 @@ public class PickEntityTestSuite {
         Boat mangroveBoat = context.spawn(EntityType.MANGROVE_BOAT, SPAWN_POSITION);
         ItemStack stack = mangroveBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MANGROVE_BOAT)
+            .is(ItemIds.MANGROVE_BOAT)
         );
     }
 
@@ -891,7 +891,7 @@ public class PickEntityTestSuite {
         ChestBoat mangroveChestBoat = context.spawn(EntityType.MANGROVE_CHEST_BOAT, SPAWN_POSITION);
         ItemStack stack = mangroveChestBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MANGROVE_CHEST_BOAT)
+            .is(ItemIds.MANGROVE_CHEST_BOAT)
         );
     }
 
@@ -900,7 +900,7 @@ public class PickEntityTestSuite {
         Boat oakBoat = context.spawn(EntityType.OAK_BOAT, SPAWN_POSITION);
         ItemStack stack = oakBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.OAK_BOAT)
+            .is(ItemIds.OAK_BOAT)
         );
     }
 
@@ -909,7 +909,7 @@ public class PickEntityTestSuite {
         ChestBoat oakChestBoat = context.spawn(EntityType.OAK_CHEST_BOAT, SPAWN_POSITION);
         ItemStack stack = oakChestBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.OAK_CHEST_BOAT)
+            .is(ItemIds.OAK_CHEST_BOAT)
         );
     }
 
@@ -918,7 +918,7 @@ public class PickEntityTestSuite {
         Boat spruceBoat = context.spawn(EntityType.SPRUCE_BOAT, SPAWN_POSITION);
         ItemStack stack = spruceBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SPRUCE_BOAT)
+            .is(ItemIds.SPRUCE_BOAT)
         );
     }
 
@@ -927,7 +927,7 @@ public class PickEntityTestSuite {
         ChestBoat spruceChestBoat = context.spawn(EntityType.SPRUCE_CHEST_BOAT, SPAWN_POSITION);
         ItemStack stack = spruceChestBoat.getPickResult();
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SPRUCE_CHEST_BOAT)
+            .is(ItemIds.SPRUCE_CHEST_BOAT)
         );
     }
 }

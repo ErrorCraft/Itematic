@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
@@ -33,6 +33,6 @@ public abstract class SlimeEntityExtender extends MobEntityExtender {
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.SLIME_SPAWN_EGG;
+        return ItemIds.SLIME_SPAWN_EGG;
     }
 }

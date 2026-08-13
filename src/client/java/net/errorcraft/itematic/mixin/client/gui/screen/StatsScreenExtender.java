@@ -3,9 +3,9 @@ package net.errorcraft.itematic.mixin.client.gui.screen;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.client.gui.screen.StatsScreenAccess;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.BlockItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.screens.achievement.StatsScreen;
@@ -147,7 +147,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 }
             }
 
-            entries.removeIf(entry -> entry.is(ItemKeys.AIR));
+            entries.removeIf(entry -> entry.is(ItemIds.AIR));
             return entries;
         }
 
@@ -169,10 +169,12 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     ordinal = 0
                 )
             )
-            private boolean instanceOfBlockItemForFirstItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatisticsList.ItemRow first, @Share("blockItemComponentFirst") LocalRef<BlockItemComponent> blockItemComponentFirst) {
-                Optional<BlockItemComponent> optionalComponent = first.itematic$registryEntry().value().itematic$getBehavior(ItemComponentTypes.BLOCK);
-                optionalComponent.ifPresent(blockItemComponentFirst::set);
-                return optionalComponent.isPresent();
+            private boolean instanceOfBlockItemForFirstItemUseItemBehaviorCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatisticsList.ItemRow first, @Share("firstBlock") LocalRef<BlockItemBehavior> firstBlock) {
+                Optional<BlockItemBehavior> optionalFirstBlock = first.itematic$registryEntry()
+                    .value()
+                    .itematic$getBehavior(ItemBehaviorType.BLOCK);
+                optionalFirstBlock.ifPresent(firstBlock::set);
+                return optionalFirstBlock.isPresent();
             }
 
             @ModifyConstant(
@@ -188,10 +190,12 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private boolean instanceOfBlockItemForSecondItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatisticsList.ItemRow first, StatsScreen.ItemStatisticsList.ItemRow second, @Share("blockItemComponentSecond") LocalRef<BlockItemComponent> blockItemComponentSecond) {
-                Optional<BlockItemComponent> optionalComponent = second.itematic$registryEntry().value().itematic$getBehavior(ItemComponentTypes.BLOCK);
-                optionalComponent.ifPresent(blockItemComponentSecond::set);
-                return optionalComponent.isPresent();
+            private boolean instanceOfBlockItemForSecondItemUseItemBehaviorCheck(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatisticsList.ItemRow first, StatsScreen.ItemStatisticsList.ItemRow second, @Share("secondBlock") LocalRef<BlockItemBehavior> secondBlock) {
+                Optional<BlockItemBehavior> optionalSecondBlock = second.itematic$registryEntry()
+                    .value()
+                    .itematic$getBehavior(ItemBehaviorType.BLOCK);
+                optionalSecondBlock.ifPresent(secondBlock::set);
+                return optionalSecondBlock.isPresent();
             }
 
             @Redirect(
@@ -236,8 +240,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForFirstBlockUseItemComponent(StatsCounter instance, StatType<Block> type, T stat, @Share("blockItemComponentFirst") LocalRef<BlockItemComponent> blockItemComponentFirst) {
-                return instance.getValue(type.itematic$getOrCreateStat(blockItemComponentFirst.get().block().defaultBlock()));
+            private <T> int getStatForFirstBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T stat, @Share("firstBlock") LocalRef<BlockItemBehavior> firstBlock) {
+                return instance.getValue(type.itematic$getOrCreateStat(firstBlock.get().block().defaultBlock()));
             }
 
             @Redirect(
@@ -260,8 +264,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForSecondBlockUseItemComponent(StatsCounter instance, StatType<Block> type, T stat, @Share("blockItemComponentSecond") LocalRef<BlockItemComponent> blockItemComponentSecond) {
-                return instance.getValue(type.itematic$getOrCreateStat(blockItemComponentSecond.get().block().defaultBlock()));
+            private <T> int getStatForSecondBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T stat, @Share("secondBlock") LocalRef<BlockItemBehavior> secondBlock) {
+                return instance.getValue(type.itematic$getOrCreateStat(secondBlock.get().block().defaultBlock()));
             }
 
             @Redirect(
@@ -333,7 +337,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             private StatsScreen.ItemStatisticsList.ItemRow.ItemRowWidget itemRowWidget;
 
             @Unique
-            private Holder<Item> entry;
+            private Holder<Item> item;
 
             @Redirect(
                 method = "<init>",
@@ -353,10 +357,10 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     ordinal = 0
                 )
             )
-            private boolean instanceOfBlockItemUseItemComponentCheck(Object reference, Class<BlockItem> clazz, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
-                Optional<BlockItemComponent> optionalComponent = this.entry.value().itematic$getBehavior(ItemComponentTypes.BLOCK);
-                optionalComponent.ifPresent(blockItemComponent::set);
-                return optionalComponent.isPresent();
+            private boolean instanceOfBlockItemUseItemBehaviorCheck(Object reference, Class<BlockItem> clazz, @Share("block") LocalRef<BlockItemBehavior> block) {
+                Optional<BlockItemBehavior> optionalBlock = this.item.value().itematic$getBehavior(ItemBehaviorType.BLOCK);
+                optionalBlock.ifPresent(block::set);
+                return optionalBlock.isPresent();
             }
 
             @Redirect(
@@ -397,8 +401,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> Stat<Block> getOrCreateStatForBlockUseItemComponent(StatType<Block> instance, T key, @Share("blockItemComponent") LocalRef<BlockItemComponent> blockItemComponent) {
-                return instance.itematic$getOrCreateStat(blockItemComponent.get().block().defaultBlock());
+            private <T> Stat<Block> getOrCreateStatForBlockUseItemBehavior(StatType<Block> instance, T key, @Share("block") LocalRef<BlockItemBehavior> block) {
+                return instance.itematic$getOrCreateStat(block.get().block().defaultBlock());
             }
 
             @Redirect(
@@ -416,18 +420,18 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> Stat<Item> getOrCreateStatForItemUseItemComponent(StatType<Item> instance, T key) {
-                return instance.itematic$getOrCreateStat(this.entry);
+            private <T> Stat<Item> getOrCreateStatForItemUseItemBehavior(StatType<Item> instance, T key) {
+                return instance.itematic$getOrCreateStat(this.item);
             }
 
             @Override
             public Holder<Item> itematic$registryEntry() {
-                return this.entry;
+                return this.item;
             }
 
             @Override
             public void itematic$setRegistryEntry(Holder<Item> entry) {
-                this.entry = entry;
+                this.item = entry;
                 this.itemRowWidget.itematic$setStack(new ItemStack(entry));
             }
         }

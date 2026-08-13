@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.component.type;
 
-import net.errorcraft.itematic.item.data.InventoryTickListener;
+import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;

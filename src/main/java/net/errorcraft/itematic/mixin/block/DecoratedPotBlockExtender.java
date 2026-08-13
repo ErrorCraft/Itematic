@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.block.AbstractBlockAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -63,7 +63,7 @@ public class DecoratedPotBlockExtender implements AbstractBlockAccess {
         )
     )
     private ItemStack getStackWithUseCreateStack(PotDecorations sherds, LevelReader world) {
-        ItemStack stack = world.itematic$createStack(ItemKeys.DECORATED_POT);
+        ItemStack stack = world.itematic$createStack(ItemIds.DECORATED_POT);
         stack.set(DataComponents.POT_DECORATIONS, sherds);
         return stack;
     }

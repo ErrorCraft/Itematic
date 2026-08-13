@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.screen;
 
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.FuelValues;
@@ -17,7 +17,7 @@ public class AbstractFurnaceScreenHandlerExtender {
             target = "Lnet/minecraft/world/level/block/entity/FuelValues;isFuel(Lnet/minecraft/world/item/ItemStack;)Z"
         )
     )
-    private boolean isFuelUseItemComponentCheck(FuelValues instance, ItemStack item) {
-        return item.itematic$hasBehavior(ItemComponentTypes.FUEL);
+    private boolean isFuelUseItemBehaviorCheck(FuelValues instance, ItemStack item) {
+        return item.itematic$hasBehavior(ItemBehaviorType.FUEL);
     }
 }

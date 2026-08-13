@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -26,7 +26,7 @@ public class BucketItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.bucket.platform.water")
     public void usingBucketOnWaterTakesWaterAndGivesWaterBucket(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack bucket = world.itematic$createStack(ItemKeys.BUCKET);
+        ItemStack bucket = world.itematic$createStack(ItemIds.BUCKET);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));
@@ -42,7 +42,7 @@ public class BucketItemComponentTestSuite {
                 InteractionResult.Success.class,
                 () -> "Expected Bucket usage to be successful",
                 success -> Assert.itemStack(context, success.heldItemTransformedTo())
-                    .is(ItemKeys.WATER_BUCKET)
+                    .is(ItemIds.WATER_BUCKET)
             );
         });
     }
@@ -50,7 +50,7 @@ public class BucketItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.bucket.platform.powder_snow")
     public void usingBucketOnPowderSnowTakesWaterAndGivesPowderSnowBucket(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack bucket = world.itematic$createStack(ItemKeys.BUCKET);
+        ItemStack bucket = world.itematic$createStack(ItemIds.BUCKET);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));
@@ -66,7 +66,7 @@ public class BucketItemComponentTestSuite {
                 InteractionResult.Success.class,
                 () -> "Expected Bucket usage to be successful",
                 success -> Assert.itemStack(context, success.heldItemTransformedTo())
-                    .is(ItemKeys.POWDER_SNOW_BUCKET)
+                    .is(ItemIds.POWDER_SNOW_BUCKET)
             );
         });
     }
@@ -74,7 +74,7 @@ public class BucketItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.bucket.platform")
     public void usingWaterBucketOnGroundPlacesWater(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack waterBucket = world.itematic$createStack(ItemKeys.WATER_BUCKET);
+        ItemStack waterBucket = world.itematic$createStack(ItemIds.WATER_BUCKET);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));
@@ -88,7 +88,7 @@ public class BucketItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.bucket.platform")
     public void usingPowderSnowBucketOnGroundPlacesPowderSnow(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack powderSnowBucket = world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET);
+        ItemStack powderSnowBucket = world.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));
@@ -102,7 +102,7 @@ public class BucketItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.bucket.platform")
     public void usingPufferfishBucketOnGroundPlacesWaterAndPufferfish(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack pufferfishBucket = world.itematic$createStack(ItemKeys.PUFFERFISH_BUCKET);
+        ItemStack pufferfishBucket = world.itematic$createStack(ItemIds.PUFFERFISH_BUCKET);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));

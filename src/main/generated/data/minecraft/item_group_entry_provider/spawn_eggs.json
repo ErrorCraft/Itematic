@@ -1,7 +1,7 @@
 {
   "entries": [
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/spawners"
     },
     "minecraft:creaking_heart",

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Leashable;
@@ -23,6 +23,6 @@ public interface LeashableExtender {
         )
     )
     private static ItemEntity dropItemForLeadUseRegistryKey(Entity instance, ServerLevel world, ItemLike item) {
-        return instance.itematic$dropItem(world, ItemKeys.LEAD);
+        return instance.itematic$dropItem(world, ItemIds.LEAD);
     }
 }

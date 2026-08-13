@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.block.entity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.block.entity.SherdsAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
@@ -190,7 +190,7 @@ public abstract class SherdsExtender implements SherdsAccess {
     public List<Holder<Item>> itematic$entries(HolderLookup.Provider lookup) {
         HolderLookup.RegistryLookup<Item> items = lookup.lookupOrThrow(Registries.ITEM);
         return Stream.of(this.back, this.left, this.right, this.front)
-            .map(optional -> optional.orElse(items.getOrThrow(ItemKeys.BRICK)))
+            .map(optional -> optional.orElse(items.getOrThrow(ItemIds.BRICK)))
             .toList();
     }
 }

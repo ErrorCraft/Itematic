@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.boss;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -30,11 +30,11 @@ public abstract class WitherEntityExtender extends MobEntityExtender {
         )
     )
     private ItemEntity dropItemForNetherStarUseRegistryKey(WitherBoss instance, ServerLevel world, ItemLike itemConvertible) {
-        return this.itematic$dropItem(world, ItemKeys.NETHER_STAR);
+        return this.itematic$dropItem(world, ItemIds.NETHER_STAR);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.WITHER_SPAWN_EGG;
+        return ItemIds.WITHER_SPAWN_EGG;
     }
 }

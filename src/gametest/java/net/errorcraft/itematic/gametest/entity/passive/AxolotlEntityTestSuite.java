@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.entity.passive;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ public class AxolotlEntityTestSuite {
     public void holdingTropicalFishBucketTemptsAxolotl(GameTestHelper context) {
         Axolotl axolotl = context.spawn(EntityType.AXOLOTL, SPAWN_POSITION);
         ServerPlayer player = context.makeMockServerPlayerInLevel();
-        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemKeys.TROPICAL_FISH_BUCKET));
+        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemIds.TROPICAL_FISH_BUCKET));
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         context.succeedWhen(() -> {
             Optional<Player> temptingPlayer = axolotl.getBrain().getMemory(MemoryModuleType.TEMPTING_PLAYER);

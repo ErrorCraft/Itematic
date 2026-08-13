@@ -1,60 +1,60 @@
 {
   "entries": [
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/food"
     },
     {
-      "type": "suspicious_effect_ingredient",
+      "type": "minecraft:suspicious_effect_ingredient",
       "item": "minecraft:suspicious_stew"
     },
     "minecraft:milk_bucket",
     "minecraft:honey_bottle",
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:ominous_bottle_amplifier": 0
       },
       "item": "minecraft:ominous_bottle"
     },
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:ominous_bottle_amplifier": 1
       },
       "item": "minecraft:ominous_bottle"
     },
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:ominous_bottle_amplifier": 2
       },
       "item": "minecraft:ominous_bottle"
     },
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:ominous_bottle_amplifier": 3
       },
       "item": "minecraft:ominous_bottle"
     },
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:ominous_bottle_amplifier": 4
       },
       "item": "minecraft:ominous_bottle"
     },
     {
-      "type": "potion",
+      "type": "minecraft:potion",
       "item": "minecraft:potion"
     },
     {
-      "type": "potion",
+      "type": "minecraft:potion",
       "item": "minecraft:splash_potion"
     },
     {
-      "type": "potion",
+      "type": "minecraft:potion",
       "item": "minecraft:lingering_potion"
     }
   ]

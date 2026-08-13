@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.loot.function;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.EnchantableItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,10 +24,10 @@ public class SetEnchantmentsLootFunctionExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isOfForBookUseItemComponent(ItemStack instance, Item item, @Share("transformedEntry") LocalRef<Holder<Item>> transformedEntry) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
-            .flatMap(EnchantableItemComponent::transformsInto);
-        optionalItem.ifPresent(transformedEntry::set);
+    private boolean isBookUseItemBehaviorCheck(ItemStack instance, Item item, @Share("transformedItem") LocalRef<Holder<Item>> transformedItem) {
+        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+            .flatMap(EnchantableItemBehavior::transformsInto);
+        optionalItem.ifPresent(transformedItem::set);
         return optionalItem.isPresent();
     }
 
@@ -38,7 +38,7 @@ public class SetEnchantmentsLootFunctionExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack withItemForEnchantedBookUseItemComponent(ItemStack instance, ItemLike item, @Share("transformedEntry") LocalRef<Holder<Item>> transformedEntry) {
-        return instance.itematic$copyWithItem(transformedEntry.get());
+    private ItemStack withItemForEnchantedBookUseItemBehavior(ItemStack instance, ItemLike item, @Share("transformedItem") LocalRef<Holder<Item>> transformedItem) {
+        return instance.itematic$copyWithItem(transformedItem.get());
     }
 }

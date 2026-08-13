@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,7 +31,7 @@ public abstract class LlamaEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForWheatUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.WHEAT);
+        return instance.itematic$isOf(ItemIds.WHEAT);
     }
 
     @Redirect(
@@ -50,11 +50,11 @@ public abstract class LlamaEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForHayBlockUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.HAY_BLOCK);
+        return instance.itematic$isOf(ItemIds.HAY_BLOCK);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.LLAMA_SPAWN_EGG;
+        return ItemIds.LLAMA_SPAWN_EGG;
     }
 }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.gametest.block;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -19,7 +19,7 @@ public class ShulkerBoxBlockTestSuite {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         state.getBlock().playerWillDestroy(world, absolutePos, state, player);
-        context.succeedIf(() -> context.assertItemEntityPresent(context.getLevel().itematic$getItem(ItemKeys.SHULKER_BOX).value()));
+        context.succeedIf(() -> context.assertItemEntityPresent(context.getLevel().itematic$getItem(ItemIds.SHULKER_BOX).value()));
     }
 
     @GameTest(structure = "itematic:block.red_shulker_box")
@@ -29,6 +29,6 @@ public class ShulkerBoxBlockTestSuite {
         BlockState state = context.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         state.getBlock().playerWillDestroy(world, absolutePos, state, player);
-        context.succeedIf(() -> context.assertItemEntityPresent(context.getLevel().itematic$getItem(ItemKeys.RED_SHULKER_BOX).value()));
+        context.succeedIf(() -> context.assertItemEntityPresent(context.getLevel().itematic$getItem(ItemIds.RED_SHULKER_BOX).value()));
     }
 }

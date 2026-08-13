@@ -3,8 +3,8 @@ package net.errorcraft.itematic.mixin.enchantment;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.EnchantableItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,8 +25,8 @@ public class EnchantmentHelperExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private static boolean isOfUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.ENCHANTMENT_HOLDER);
+    private static boolean isOfUseItemBehaviorCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER);
     }
 
     @Redirect(
@@ -36,9 +36,9 @@ public class EnchantmentHelperExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private static boolean isOfForBookUseItemComponent(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
-            .flatMap(EnchantableItemComponent::transformsInto);
+    private static boolean isOfForBookUseItemBehavior(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+            .flatMap(EnchantableItemBehavior::transformsInto);
         optionalItem.ifPresent(transformsInto::set);
         return optionalItem.isPresent();
     }
@@ -50,7 +50,7 @@ public class EnchantmentHelperExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForEnchantedBookUseItemComponent(ItemLike item, @Local(argsOnly = true) ItemStack target, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+    private static ItemStack newItemStackForEnchantedBookUseItemBehavior(ItemLike item, @Local(argsOnly = true) ItemStack target, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
         return target.itematic$copyWithItem(transformsInto.get());
     }
 
@@ -61,9 +61,9 @@ public class EnchantmentHelperExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private static boolean isOfUseItemComponent(ItemStack instance, Item item) {
-        return instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
-            .flatMap(EnchantableItemComponent::transformsInto)
+    private static boolean isOfUseItemBehavior(ItemStack instance, Item item) {
+        return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+            .flatMap(EnchantableItemBehavior::transformsInto)
             .isPresent();
     }
 }

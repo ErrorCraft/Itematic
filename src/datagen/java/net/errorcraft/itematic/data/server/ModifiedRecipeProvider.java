@@ -2,7 +2,7 @@ package net.errorcraft.itematic.data.server;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.minecraft.core.Holder;
@@ -33,25 +33,25 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
         HolderLookup.RegistryLookup<Item> items = lookup.lookupOrThrow(Registries.ITEM);
         provider.accept(
             Identifier.withDefaultNamespace("honey_block"),
-            shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(ItemKeys.HONEY_BLOCK))
-                .input('#', items.getOrThrow(ItemKeys.HONEY_BOTTLE), items.getOrThrow(ItemKeys.GLASS_BOTTLE))
+            shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(ItemIds.HONEY_BLOCK))
+                .input('#', items.getOrThrow(ItemIds.HONEY_BOTTLE), items.getOrThrow(ItemIds.GLASS_BOTTLE))
                 .pattern("##")
                 .pattern("##")
                 .build()
         );
         provider.accept(
             Identifier.withDefaultNamespace("sugar_from_honey_bottle"),
-            shapelessRecipe(RecipeCategory.MISC, items.getOrThrow(ItemKeys.SUGAR), 3)
-                .input(items.getOrThrow(ItemKeys.HONEY_BOTTLE), 1, items.getOrThrow(ItemKeys.GLASS_BOTTLE))
+            shapelessRecipe(RecipeCategory.MISC, items.getOrThrow(ItemIds.SUGAR), 3)
+                .input(items.getOrThrow(ItemIds.HONEY_BOTTLE), 1, items.getOrThrow(ItemIds.GLASS_BOTTLE))
                 .build()
         );
         provider.accept(
             Identifier.withDefaultNamespace("cake"),
-            shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(ItemKeys.CAKE))
-                .input('A', items.getOrThrow(ItemKeys.MILK_BUCKET), items.getOrThrow(ItemKeys.BUCKET))
-                .input('B', items.getOrThrow(ItemKeys.SUGAR))
-                .input('C', items.getOrThrow(ItemKeys.WHEAT))
-                .input('E', items.getOrThrow(ItemKeys.EGG))
+            shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(ItemIds.CAKE))
+                .input('A', items.getOrThrow(ItemIds.MILK_BUCKET), items.getOrThrow(ItemIds.BUCKET))
+                .input('B', items.getOrThrow(ItemIds.SUGAR))
+                .input('C', items.getOrThrow(ItemIds.WHEAT))
+                .input('E', items.getOrThrow(ItemIds.EGG))
                 .pattern("AAA")
                 .pattern("BEB")
                 .pattern("CCC")

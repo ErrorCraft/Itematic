@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.entity.ai.brain.task;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.inventory.SimpleInventoryAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.ai.behavior.WorkAtComposter;
@@ -21,7 +21,7 @@ import java.util.List;
 @Mixin(WorkAtComposter.class)
 public class FarmerWorkTaskExtender {
     @Unique
-    private static final List<ResourceKey<Item>> COMPOSTABLE_KEYS = List.of(ItemKeys.WHEAT_SEEDS, ItemKeys.BEETROOT_SEEDS);
+    private static final List<ResourceKey<Item>> COMPOSTABLE_KEYS = List.of(ItemIds.WHEAT_SEEDS, ItemIds.BEETROOT_SEEDS);
 
     @Redirect(
         method = "makeBread",
@@ -31,7 +31,7 @@ public class FarmerWorkTaskExtender {
         )
     )
     private ItemStack removeItemUseRegistryKey(SimpleContainer instance, Item item, int count) {
-        ((SimpleInventoryAccess) instance).itematic$removeItem(ItemKeys.WHEAT, count);
+        ((SimpleInventoryAccess) instance).itematic$removeItem(ItemIds.WHEAT, count);
         return ItemStack.EMPTY;
     }
 
@@ -43,7 +43,7 @@ public class FarmerWorkTaskExtender {
         )
     )
     private ItemStack newItemStackForBreadUseCreateStack(ItemLike item, int count, @Local(argsOnly = true) Villager villager) {
-        return villager.level().itematic$createStack(ItemKeys.BREAD, count);
+        return villager.level().itematic$createStack(ItemIds.BREAD, count);
     }
 
     @Redirect(
@@ -66,6 +66,6 @@ public class FarmerWorkTaskExtender {
         )
     )
     private Item getWheatUseDynamicRegistry(@Local(argsOnly = true) Villager entity) {
-        return entity.level().itematic$getItem(ItemKeys.WHEAT).value();
+        return entity.level().itematic$getItem(ItemIds.WHEAT).value();
     }
 }

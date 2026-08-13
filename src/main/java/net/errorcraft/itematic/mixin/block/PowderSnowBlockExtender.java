@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -21,7 +21,7 @@ public class PowderSnowBlockExtender {
         )
     )
     private static boolean isOfForLeatherBootsUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.LEATHER_BOOTS);
+        return instance.itematic$isOf(ItemIds.LEATHER_BOOTS);
     }
 
     @Redirect(
@@ -32,6 +32,6 @@ public class PowderSnowBlockExtender {
         )
     )
     private ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) LevelAccessor world) {
-        return world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET);
+        return world.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
     }
 }

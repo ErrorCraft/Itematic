@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
@@ -28,11 +28,11 @@ public abstract class WitherSkeletonEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForStoneSwordUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.STONE_SWORD);
+        return this.level().itematic$createStack(ItemIds.STONE_SWORD);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.WITHER_SKELETON_SPAWN_EGG;
+        return ItemIds.WITHER_SKELETON_SPAWN_EGG;
     }
 }

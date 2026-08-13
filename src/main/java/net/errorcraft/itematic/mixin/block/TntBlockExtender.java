@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -32,7 +32,7 @@ public class TntBlockExtender {
         )
     )
     private boolean isOfForFlintAndSteelUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.FLINT_AND_STEEL);
+        return instance.itematic$isOf(ItemIds.FLINT_AND_STEEL);
     }
 
     @ModifyExpressionValue(

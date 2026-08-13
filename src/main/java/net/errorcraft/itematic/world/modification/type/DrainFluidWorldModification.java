@@ -1,14 +1,15 @@
 package net.errorcraft.itematic.world.modification.type;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.item.placement.fluid.FluidDrainer;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.item.placement.fluid.FluidDrainer;
 import net.errorcraft.itematic.world.modification.WorldModification;
 import net.errorcraft.itematic.world.modification.WorldModificationType;
 import net.errorcraft.itematic.world.modification.WorldModificationTypes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
+
 import java.util.Optional;
 
 public class DrainFluidWorldModification implements WorldModification {

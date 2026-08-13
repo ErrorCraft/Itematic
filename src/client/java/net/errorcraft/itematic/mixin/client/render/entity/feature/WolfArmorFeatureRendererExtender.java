@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.render.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.WolfArmorLayer;
 import net.minecraft.client.renderer.entity.state.WolfRenderState;
@@ -18,7 +18,7 @@ public class WolfArmorFeatureRendererExtender {
         cancellable = true
     )
     private void checkPresenceEquipmentBehavior(PoseStack matrixStack, SubmitNodeCollector orderedRenderCommandQueue, int i, WolfRenderState wolfEntityRenderState, float f, float g, CallbackInfo info) {
-        if (!wolfEntityRenderState.bodyArmorItem.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!wolfEntityRenderState.bodyArmorItem.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.cancel();
         }
     }

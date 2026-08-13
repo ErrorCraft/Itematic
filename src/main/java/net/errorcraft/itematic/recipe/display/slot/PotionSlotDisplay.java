@@ -2,7 +2,7 @@ package net.errorcraft.itematic.recipe.display.slot;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.ItematicItemTags;
+import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;

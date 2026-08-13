@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
@@ -21,7 +21,7 @@ public class LecternBlockEntityExtender {
         cancellable = true
     )
     private void checkPresenceWritableAndTextHolderBehavior(CallbackInfoReturnable<Boolean> info) {
-        if (!this.book.itematic$hasBehavior(ItemComponentTypes.WRITABLE) && !this.book.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER)) {
+        if (!this.book.itematic$hasBehavior(ItemBehaviorType.WRITABLE) && !this.book.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             info.setReturnValue(false);
         }
     }
@@ -32,7 +32,7 @@ public class LecternBlockEntityExtender {
         cancellable = true
     )
     private void checkPresenceTextHolderBehavior(ItemStack book, Player player, CallbackInfoReturnable<ItemStack> info) {
-        if (!book.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER)) {
+        if (!book.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             info.setReturnValue(book);
         }
     }

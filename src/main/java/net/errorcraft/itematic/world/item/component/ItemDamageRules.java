@@ -20,8 +20,8 @@ public record ItemDamageRules(List<Rule> rules, int defaultItemDamage) {
         Rule.CODEC.listOf().fieldOf("rules").forGetter(ItemDamageRules::rules),
         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("default_damage").forGetter(ItemDamageRules::defaultItemDamage)
     ).apply(instance, ItemDamageRules::new));
-    public static final StreamCodec<RegistryFriendlyByteBuf, ItemDamageRules> PACKET_CODEC = StreamCodec.composite(
-        Rule.PACKET_CODEC.apply(ByteBufCodecs.list()), ItemDamageRules::rules,
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemDamageRules> STREAM_CODEC = StreamCodec.composite(
+        Rule.STREAM_CODEC.apply(ByteBufCodecs.list()), ItemDamageRules::rules,
         ByteBufCodecs.VAR_INT, ItemDamageRules::defaultItemDamage,
         ItemDamageRules::new
     );
@@ -41,7 +41,7 @@ public record ItemDamageRules(List<Rule> rules, int defaultItemDamage) {
             RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("items").forGetter(Rule::items),
             ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("damage").forGetter(Rule::damage)
         ).apply(instance, Rule::new));
-        public static final StreamCodec<RegistryFriendlyByteBuf, Rule> PACKET_CODEC = StreamCodec.composite(
+        public static final StreamCodec<RegistryFriendlyByteBuf, Rule> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.holderSet(Registries.ITEM), Rule::items,
             ByteBufCodecs.VAR_INT.apply(ByteBufCodecs::optional), Rule::damage,
             Rule::new

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.Item;
@@ -65,7 +65,7 @@ public abstract class TransmuteRecipeExtender implements CraftingRecipe, RecipeA
                     this.material.display()
                 ),
                 this.result.display(),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.CRAFTING_TABLE))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.CRAFTING_TABLE))
             )
         );
     }

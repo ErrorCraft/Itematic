@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.screen;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -50,7 +50,7 @@ public class AnvilScreenHandlerExtender {
             )
         )
     )
-    private boolean isOfForEnchantedBookUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.ENCHANTMENT_HOLDER);
+    private boolean isOfForEnchantedBookUseItemBehaviorCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER);
     }
 }

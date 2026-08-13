@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.mixin.util;
 
 import net.errorcraft.itematic.access.util.DyeColorAccess;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.DyeItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.DyeItemBehavior;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.DyeColor;
@@ -94,22 +94,22 @@ public class DyeColorExtender implements DyeColorAccess {
     private ResourceKey<Item> itemKey;
 
     static {
-        WHITE.itematic$setItemKey(ItemKeys.WHITE_DYE);
-        ORANGE.itematic$setItemKey(ItemKeys.ORANGE_DYE);
-        MAGENTA.itematic$setItemKey(ItemKeys.MAGENTA_DYE);
-        LIGHT_BLUE.itematic$setItemKey(ItemKeys.LIGHT_BLUE_DYE);
-        YELLOW.itematic$setItemKey(ItemKeys.YELLOW_DYE);
-        LIME.itematic$setItemKey(ItemKeys.LIME_DYE);
-        PINK.itematic$setItemKey(ItemKeys.PINK_DYE);
-        GRAY.itematic$setItemKey(ItemKeys.GRAY_DYE);
-        LIGHT_GRAY.itematic$setItemKey(ItemKeys.LIGHT_GRAY_DYE);
-        CYAN.itematic$setItemKey(ItemKeys.CYAN_DYE);
-        PURPLE.itematic$setItemKey(ItemKeys.PURPLE_DYE);
-        BLUE.itematic$setItemKey(ItemKeys.BLUE_DYE);
-        BROWN.itematic$setItemKey(ItemKeys.BROWN_DYE);
-        GREEN.itematic$setItemKey(ItemKeys.GREEN_DYE);
-        RED.itematic$setItemKey(ItemKeys.RED_DYE);
-        BLACK.itematic$setItemKey(ItemKeys.BLACK_DYE);
+        WHITE.itematic$setItemKey(ItemIds.WHITE_DYE);
+        ORANGE.itematic$setItemKey(ItemIds.ORANGE_DYE);
+        MAGENTA.itematic$setItemKey(ItemIds.MAGENTA_DYE);
+        LIGHT_BLUE.itematic$setItemKey(ItemIds.LIGHT_BLUE_DYE);
+        YELLOW.itematic$setItemKey(ItemIds.YELLOW_DYE);
+        LIME.itematic$setItemKey(ItemIds.LIME_DYE);
+        PINK.itematic$setItemKey(ItemIds.PINK_DYE);
+        GRAY.itematic$setItemKey(ItemIds.GRAY_DYE);
+        LIGHT_GRAY.itematic$setItemKey(ItemIds.LIGHT_GRAY_DYE);
+        CYAN.itematic$setItemKey(ItemIds.CYAN_DYE);
+        PURPLE.itematic$setItemKey(ItemIds.PURPLE_DYE);
+        BLUE.itematic$setItemKey(ItemIds.BLUE_DYE);
+        BROWN.itematic$setItemKey(ItemIds.BROWN_DYE);
+        GREEN.itematic$setItemKey(ItemIds.GREEN_DYE);
+        RED.itematic$setItemKey(ItemIds.RED_DYE);
+        BLACK.itematic$setItemKey(ItemIds.BLACK_DYE);
     }
 
     @Redirect(
@@ -137,8 +137,8 @@ public class DyeColorExtender implements DyeColorAccess {
             target = "Ljava/util/Optional;filter(Ljava/util/function/Predicate;)Ljava/util/Optional;"
         )
     )
-    private static Optional<DyeItemComponent> instanceOfDyeItemUseItemComponent(Optional<Item> instance, Predicate<? super Object> predicate) {
-        return instance.flatMap(item -> item.itematic$getBehavior(ItemComponentTypes.DYE));
+    private static Optional<DyeItemBehavior> instanceOfDyeItemUseItemBehavior(Optional<Item> instance, Predicate<? super Object> predicate) {
+        return instance.flatMap(item -> item.itematic$getBehavior(ItemBehaviorType.DYE));
     }
 
     @Redirect(
@@ -155,7 +155,7 @@ public class DyeColorExtender implements DyeColorAccess {
             )
         )
     )
-    private static Optional<DyeItemComponent> castToDyeItemDoNothing(Optional<DyeItemComponent> instance, Function<? super Item, ? extends DyeItem> mapper) {
+    private static Optional<DyeItemBehavior> castToDyeItemDoNothing(Optional<DyeItemBehavior> instance, Function<? super Item, ? extends DyeItem> mapper) {
         return instance;
     }
 
@@ -173,8 +173,8 @@ public class DyeColorExtender implements DyeColorAccess {
             )
         )
     )
-    private static Function<? super DyeItemComponent, ? extends DyeColor> getColorUseItemComponent(Function<? super DyeItem, ? extends DyeColor> mapper) {
-        return DyeItemComponent::color;
+    private static Function<? super DyeItemBehavior, ? extends DyeColor> getColorUseItemBehavior(Function<? super DyeItem, ? extends DyeColor> mapper) {
+        return DyeItemBehavior::color;
     }
 
     @Override

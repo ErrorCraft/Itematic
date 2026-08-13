@@ -3,12 +3,12 @@ package net.errorcraft.itematic.mixin.block.entity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.block.entity.BrewingStandBlockEntityAccess;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
 import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
+import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
@@ -215,7 +215,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
         )
     )
     private boolean isOfForGlassBottleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GLASS_BOTTLE);
+        return instance.itematic$isOf(ItemIds.GLASS_BOTTLE);
     }
 
     @ModifyReturnValue(

@@ -3,9 +3,9 @@ package net.errorcraft.itematic.mixin.recipe;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.DyeItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.DyeItemBehavior;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
@@ -30,7 +30,7 @@ public class FireworkStarFadeRecipeExtender {
         )
     )
     private boolean fireworkStarUseRegistryKeyCheck(Ingredient instance, ItemStack stack) {
-        return stack.itematic$isOf(ItemKeys.FIREWORK_STAR);
+        return stack.itematic$isOf(ItemIds.FIREWORK_STAR);
     }
 
     @ModifyConstant(
@@ -39,8 +39,8 @@ public class FireworkStarFadeRecipeExtender {
             classValue = DyeItem.class
         )
     )
-    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack) {
-        return inputStack.itematic$hasBehavior(ItemComponentTypes.DYE);
+    private boolean instanceOfDyeItemUseItemBehaviorCheck(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack) {
+        return inputStack.itematic$hasBehavior(ItemBehaviorType.DYE);
     }
 
     @ModifyConstant(
@@ -50,10 +50,10 @@ public class FireworkStarFadeRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack ingredient, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
-        Optional<DyeItemComponent> optionalComponent = ingredient.itematic$getBehavior(ItemComponentTypes.DYE);
-        optionalComponent.ifPresent(dyeItemComponent::set);
-        return optionalComponent.isPresent();
+    private boolean instanceOfDyeItemUseItemBehaviorCheck(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack ingredient, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        Optional<DyeItemBehavior> optionalDye = ingredient.itematic$getBehavior(ItemBehaviorType.DYE);
+        optionalDye.ifPresent(dye::set);
+        return optionalDye.isPresent();
     }
 
     @ModifyVariable(
@@ -72,7 +72,7 @@ public class FireworkStarFadeRecipeExtender {
             target = "Lnet/minecraft/world/item/DyeItem;getDyeColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemComponent(DyeItem instance, @Share("dyeItemComponent") LocalRef<DyeItemComponent> dyeItemComponent) {
-        return dyeItemComponent.get().color();
+    private DyeColor getDyeColorUseItemBehavior(DyeItem instance, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        return dye.get().color();
     }
 }

@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.level.ItemAccess;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
@@ -22,7 +22,7 @@ public class LightBlockExtender {
     )
     private Item getLightUseDynamicRegistry(Item item, @Local(argsOnly = true) BlockGetter world) {
         if (world instanceof ItemAccess itemAccess) {
-            return itemAccess.getOptionalEntry(ItemKeys.LIGHT)
+            return itemAccess.get(ItemIds.LIGHT)
                 .map(Holder::value)
                 .orElse(null);
         }

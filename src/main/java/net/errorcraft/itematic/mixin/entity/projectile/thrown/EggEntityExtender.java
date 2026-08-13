@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.projectile.thrown;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
@@ -48,6 +48,6 @@ public abstract class EggEntityExtender extends ThrownItemEntityExtender {
 
     @Override
     protected ResourceKey<Item> getDefaultItemKey() {
-        return ItemKeys.EGG;
+        return ItemIds.EGG;
     }
 }

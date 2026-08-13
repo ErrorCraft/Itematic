@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelAccessor;
@@ -20,6 +20,6 @@ public interface WaterloggableExtender {
         )
     )
     private ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) LevelAccessor world) {
-        return world.itematic$createStack(ItemKeys.WATER_BUCKET);
+        return world.itematic$createStack(ItemIds.WATER_BUCKET);
     }
 }

@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.client.recipebook;
 
 import net.errorcraft.itematic.access.client.recipebook.RecipeBookWidgetTabAccess;
-import net.errorcraft.itematic.item.ItemAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.level.ItemAccess;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -48,7 +48,7 @@ public class RecipeBookWidgetExtender {
             at = @At("TAIL")
         )
         private void setIcons(SearchRecipeBookCategory type, CallbackInfo info) {
-            this.primaryIconItem = ItemKeys.COMPASS;
+            this.primaryIconItem = ItemIds.COMPASS;
             this.secondaryIconItem = Optional.empty();
         }
 
@@ -72,14 +72,14 @@ public class RecipeBookWidgetExtender {
 
         @Override
         public ItemStack itematic$primaryIconItem(ItemAccess items) {
-            return items.getOptionalEntry(this.primaryIconItem)
+            return items.get(this.primaryIconItem)
                 .map(ItemStack::new)
                 .orElse(ItemStack.EMPTY);
         }
 
         @Override
         public Optional<ItemStack> itematic$secondaryIconItem(ItemAccess items) {
-            return this.secondaryIconItem.flatMap(items::getOptionalEntry)
+            return this.secondaryIconItem.flatMap(items::get)
                 .map(ItemStack::new);
         }
     }

@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.illager.AbstractIllager;
@@ -28,8 +28,8 @@ public abstract class PillagerEntityExtender extends MobEntityExtender {
         at = @At("TAIL")
     )
     private boolean useItemBehaviorComponent(boolean original, ItemStack stack) {
-        return stack.itematic$getBehavior(ItemComponentTypes.SHOOTER)
-            .map(shooter -> shooter.usesMethod(ShooterMethodTypes.CHARGEABLE))
+        return stack.itematic$getBehavior(ItemBehaviorType.SHOOTER)
+            .map(shooter -> shooter.usesMethod(ShooterMethodType.CHARGEABLE))
             .orElse(false);
     }
 
@@ -41,7 +41,7 @@ public abstract class PillagerEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForWhiteBannerUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.WHITE_BANNER);
+        return instance.itematic$isOf(ItemIds.WHITE_BANNER);
     }
 
     @Redirect(
@@ -52,7 +52,7 @@ public abstract class PillagerEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isHoldingForCrossbowUseRegistryKeyCheck(Pillager instance, Item item) {
-        return instance.itematic$isHolding(ItemKeys.CROSSBOW);
+        return instance.itematic$isHolding(ItemIds.CROSSBOW);
     }
 
     @Redirect(
@@ -66,7 +66,7 @@ public abstract class PillagerEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForCrossbowUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.CROSSBOW);
+        return this.level().itematic$createStack(ItemIds.CROSSBOW);
     }
 
     @Redirect(
@@ -77,11 +77,11 @@ public abstract class PillagerEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForCrossbowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CROSSBOW);
+        return instance.itematic$isOf(ItemIds.CROSSBOW);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.PILLAGER_SPAWN_EGG;
+        return ItemIds.PILLAGER_SPAWN_EGG;
     }
 }

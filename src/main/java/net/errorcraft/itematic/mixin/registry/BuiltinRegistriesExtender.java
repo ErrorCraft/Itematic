@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.registry;
 
-import net.errorcraft.itematic.item.ItemUtil;
-import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
-import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProviders;
+import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trades;
 import net.errorcraft.itematic.world.action.Actions;
+import net.errorcraft.itematic.world.item.Items;
+import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProviders;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
@@ -20,7 +20,7 @@ public class BuiltinRegistriesExtender {
     private static RegistrySetBuilder BUILDER;
 
     static {
-        BUILDER.add(Registries.ITEM, ItemUtil::bootstrap)
+        BUILDER.add(Registries.ITEM, Items::bootstrap)
             .add(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProviders::bootstrap)
             .add(ItematicRegistryKeys.TRADE, Trades::bootstrap)
             .add(ItematicRegistryKeys.ACTION, Actions::bootstrap)

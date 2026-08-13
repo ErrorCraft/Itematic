@@ -27,7 +27,7 @@
     "minecraft:lectern",
     "minecraft:daylight_detector",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/lightning_rods"
     },
     "minecraft:piston",
@@ -39,13 +39,13 @@
     "minecraft:crafter",
     "minecraft:hopper",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/chests"
     },
     "minecraft:barrel",
     "minecraft:chiseled_bookshelf",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/shelves"
     },
     "minecraft:furnace",
@@ -57,11 +57,11 @@
     "minecraft:composter",
     "minecraft:cauldron",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/rails"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/minecarts"
     },
     "minecraft:oak_chest_boat",

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.loot.function;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.SetStewEffectFunction;
@@ -18,6 +18,6 @@ public class SetStewEffectLootFunctionExtender {
         )
     )
     private boolean isOfForSuspiciousStewUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SUSPICIOUS_STEW);
+        return instance.itematic$isOf(ItemIds.SUSPICIOUS_STEW);
     }
 }

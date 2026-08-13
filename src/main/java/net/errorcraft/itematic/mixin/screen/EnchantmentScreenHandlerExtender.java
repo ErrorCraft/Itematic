@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.screen;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.EnchantableItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
 import net.minecraft.core.Holder;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.Item;
@@ -25,9 +25,9 @@ public class EnchantmentScreenHandlerExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isOfForBookUseItemComponent(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
-            .flatMap(EnchantableItemComponent::transformsInto);
+    private boolean isOfForBookUseItemBehavior(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+            .flatMap(EnchantableItemBehavior::transformsInto);
         optionalItem.ifPresent(transformsInto::set);
         return optionalItem.isPresent();
     }
@@ -39,7 +39,7 @@ public class EnchantmentScreenHandlerExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack withItemForEnchantedBookUseItemComponent(ItemStack instance, ItemLike item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+    private ItemStack withItemForEnchantedBookUseItemBehavior(ItemStack instance, ItemLike item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
         return instance.itematic$copyWithItem(transformsInto.get());
     }
 
@@ -50,9 +50,9 @@ public class EnchantmentScreenHandlerExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isOfForBookUseItemComponent(ItemStack instance, Item item) {
-        return instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
-            .flatMap(EnchantableItemComponent::transformsInto)
+    private boolean isOfForBookUseItemBehavior(ItemStack instance, Item item) {
+        return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+            .flatMap(EnchantableItemBehavior::transformsInto)
             .isPresent();
     }
 
@@ -64,7 +64,7 @@ public class EnchantmentScreenHandlerExtender {
         )
     )
     private boolean isOfForLapisLazuliUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.LAPIS_LAZULI);
+        return instance.itematic$isOf(ItemIds.LAPIS_LAZULI);
     }
 
     @Mixin(targets = "net/minecraft/world/inventory/EnchantmentMenu$3")
@@ -77,7 +77,7 @@ public class EnchantmentScreenHandlerExtender {
             )
         )
         private boolean isOfForLapisLazuliUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.LAPIS_LAZULI);
+            return instance.itematic$isOf(ItemIds.LAPIS_LAZULI);
         }
     }
 }

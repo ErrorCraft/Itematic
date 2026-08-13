@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.decoration;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -29,7 +29,7 @@ public abstract class ArmorStandEntityExtender extends LivingEntity {
         )
     )
     private ItemStack newItemStackForArmorStandUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.ARMOR_STAND);
+        return this.level().itematic$createStack(ItemIds.ARMOR_STAND);
     }
 
     @Redirect(
@@ -40,6 +40,6 @@ public abstract class ArmorStandEntityExtender extends LivingEntity {
         )
     )
     private boolean isOfForNameTagUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.NAME_TAG);
+        return instance.itematic$isOf(ItemIds.NAME_TAG);
     }
 }

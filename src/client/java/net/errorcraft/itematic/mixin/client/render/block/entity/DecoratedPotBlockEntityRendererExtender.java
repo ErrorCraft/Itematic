@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.render.block.entity;
 
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.DecoratedPotPatternItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.DecoratedPotPatternItemBehavior;
 import net.minecraft.client.renderer.blockentity.DecoratedPotRenderer;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -21,9 +21,9 @@ public class DecoratedPotBlockEntityRendererExtender {
             ordinal = 0
         )
     )
-    private static ResourceKey<DecoratedPotPattern> fromSherdUseItemComponent(Item sherd) {
-        return sherd.itematic$getBehavior(ItemComponentTypes.DECORATED_POT_PATTERN)
-            .map(DecoratedPotPatternItemComponent::pattern)
+    private static ResourceKey<DecoratedPotPattern> fromSherdUseItemBehavior(Item sherd) {
+        return sherd.itematic$getBehavior(ItemBehaviorType.DECORATED_POT_PATTERN)
+            .map(DecoratedPotPatternItemBehavior::pattern)
             .flatMap(Holder::unwrapKey)
             .orElse(null);
     }

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -33,7 +33,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForEmeraldUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.EMERALD);
+        return this.level().itematic$createStack(ItemIds.EMERALD);
     }
 
     @Redirect(
@@ -45,7 +45,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForEggUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.EGG);
+        return this.level().itematic$createStack(ItemIds.EGG);
     }
 
     @Redirect(
@@ -63,7 +63,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForRabbitFootUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.RABBIT_FOOT);
+        return this.level().itematic$createStack(ItemIds.RABBIT_FOOT);
     }
 
     @Redirect(
@@ -81,7 +81,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForRabbitHideUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.RABBIT_HIDE);
+        return this.level().itematic$createStack(ItemIds.RABBIT_HIDE);
     }
 
     @Redirect(
@@ -99,7 +99,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForWheatUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.WHEAT);
+        return this.level().itematic$createStack(ItemIds.WHEAT);
     }
 
     @Redirect(
@@ -117,7 +117,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForLeatherUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.LEATHER);
+        return this.level().itematic$createStack(ItemIds.LEATHER);
     }
 
     @Redirect(
@@ -135,12 +135,12 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForFeatherUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.FEATHER);
+        return this.level().itematic$createStack(ItemIds.FEATHER);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.FOX_SPAWN_EGG;
+        return ItemIds.FOX_SPAWN_EGG;
     }
 
     @Mixin(Fox.FoxEatBerriesGoal.class)
@@ -158,7 +158,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
             )
         )
         private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item) {
-            return this.field_17975.level().itematic$createStack(ItemKeys.SWEET_BERRIES);
+            return this.field_17975.level().itematic$createStack(ItemIds.SWEET_BERRIES);
         }
 
         @Redirect(
@@ -176,7 +176,7 @@ public abstract class FoxEntityExtender extends MobEntityExtender {
             )
         )
         private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item, int count) {
-            return this.field_17975.level().itematic$createStack(ItemKeys.SWEET_BERRIES, count);
+            return this.field_17975.level().itematic$createStack(ItemIds.SWEET_BERRIES, count);
         }
     }
 }

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.component.type;
 
-import net.errorcraft.itematic.item.component.components.MapHolderItemComponent;
-import net.errorcraft.itematic.item.data.InventoryTickListener;
+import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
+import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -26,7 +26,7 @@ public class MapIdComponentExtender implements InventoryTickListener {
         }
 
         if (!mapState.locked && slot != null && slot.getType() == EquipmentSlot.Type.HAND) {
-            MapHolderItemComponent.DUMMY.update(world, owner, mapState);
+            MapHolderItemBehavior.DUMMY.update(world, owner, mapState);
         }
     }
 }

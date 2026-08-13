@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.EnderMan;
@@ -28,11 +28,11 @@ public abstract class EndermanEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForDiamondAxeUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.DIAMOND_AXE);
+        return this.level().itematic$createStack(ItemIds.DIAMOND_AXE);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.ENDERMAN_SPAWN_EGG;
+        return ItemIds.ENDERMAN_SPAWN_EGG;
     }
 }

@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.access.item;
 
-import net.errorcraft.itematic.item.component.ItemComponent;
-import net.errorcraft.itematic.item.component.ItemComponentType;
-import net.errorcraft.itematic.item.event.ItemEvent;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.resources.ResourceKey;
@@ -42,10 +42,10 @@ public interface ItemStackAccess {
         return false;
     }
     default void itematic$damage(int amount, ActionContext context) {}
-    default <T extends ItemComponent<T>> boolean itematic$hasBehavior(ItemComponentType<T> type) {
+    default <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {
         return false;
     }
-    default <T extends ItemComponent<T>> Optional<T> itematic$getBehavior(ItemComponentType<T> type) {
+    default <T extends ItemBehavior<T>> Optional<T> itematic$getBehavior(ItemBehaviorType<T> type) {
         return Optional.empty();
     }
     default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {

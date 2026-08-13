@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.MapExtendingRecipe;
@@ -50,9 +50,9 @@ public class MapExtendingRecipeExtender {
     @Unique
     private static boolean isValid(ItemStack stack, int index) {
         if (index == MAP_SLOT) {
-            return stack.itematic$hasBehavior(ItemComponentTypes.MAP_HOLDER);
+            return stack.itematic$hasBehavior(ItemBehaviorType.MAP_HOLDER);
         }
 
-        return stack.itematic$isOf(ItemKeys.PAPER);
+        return stack.itematic$isOf(ItemIds.PAPER);
     }
 }

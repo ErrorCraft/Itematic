@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.item;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProviderTags;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.tags.ItemGroupEntryProviderTags;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import org.objectweb.asm.Opcodes;
@@ -28,7 +28,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab buildingBlocksSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.BRICKS);
+        original.itematic$setIconKey(ItemIds.BRICKS);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.BUILDING_BLOCKS);
         return original;
     }
@@ -49,7 +49,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab coloredBlocksSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.CYAN_WOOL);
+        original.itematic$setIconKey(ItemIds.CYAN_WOOL);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.COLORED_BLOCKS);
         return original;
     }
@@ -70,7 +70,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab naturalSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.GRASS_BLOCK);
+        original.itematic$setIconKey(ItemIds.GRASS_BLOCK);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.NATURAL_BLOCKS);
         return original;
     }
@@ -91,7 +91,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab functionalSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.OAK_SIGN);
+        original.itematic$setIconKey(ItemIds.OAK_SIGN);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.FUNCTIONAL_BLOCKS);
         return original;
     }
@@ -112,7 +112,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab redstoneSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.REDSTONE);
+        original.itematic$setIconKey(ItemIds.REDSTONE);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.REDSTONE_BLOCKS);
         return original;
     }
@@ -133,7 +133,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab hotbarSetIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.BOOKSHELF);
+        original.itematic$setIconKey(ItemIds.BOOKSHELF);
         return original;
     }
 
@@ -153,7 +153,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab searchSetIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.COMPASS);
+        original.itematic$setIconKey(ItemIds.COMPASS);
         return original;
     }
 
@@ -173,7 +173,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab toolsSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.DIAMOND_PICKAXE);
+        original.itematic$setIconKey(ItemIds.DIAMOND_PICKAXE);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.TOOLS_AND_UTILITIES);
         return original;
     }
@@ -194,7 +194,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab combatSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.NETHERITE_SWORD);
+        original.itematic$setIconKey(ItemIds.NETHERITE_SWORD);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.COMBAT);
         return original;
     }
@@ -215,7 +215,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab foodAndDrinkSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.GOLDEN_APPLE);
+        original.itematic$setIconKey(ItemIds.GOLDEN_APPLE);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.FOOD_AND_DRINKS);
         return original;
     }
@@ -236,7 +236,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab ingredientsSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.IRON_INGOT);
+        original.itematic$setIconKey(ItemIds.IRON_INGOT);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.INGREDIENTS);
         return original;
     }
@@ -257,7 +257,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab spawnEggsSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.PIG_SPAWN_EGG);
+        original.itematic$setIconKey(ItemIds.PIG_SPAWN_EGG);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.SPAWN_EGGS);
         return original;
     }
@@ -278,7 +278,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab operatorSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.COMMAND_BLOCK);
+        original.itematic$setIconKey(ItemIds.COMMAND_BLOCK);
         original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.OP_BLOCKS);
         return original;
     }
@@ -299,7 +299,7 @@ public class ItemGroupsExtender {
         )
     )
     private static CreativeModeTab inventorySetIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemKeys.CHEST);
+        original.itematic$setIconKey(ItemIds.CHEST);
         return original;
     }
 }

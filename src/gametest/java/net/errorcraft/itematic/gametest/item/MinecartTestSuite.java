@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,7 @@ public class MinecartTestSuite {
     public void usingMinecartWithoutRailsDoesNotPlaceMinecart(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -38,7 +38,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnNorthSouthRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -54,7 +54,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnEastWestRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -70,7 +70,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnAscendingEastRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -86,7 +86,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnAscendingWestRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -102,7 +102,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnAscendingNorthRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -118,7 +118,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnAscendingSouthRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -134,7 +134,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnSouthEastRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -150,7 +150,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnSouthWestRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -166,7 +166,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnNorthWestRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -182,7 +182,7 @@ public class MinecartTestSuite {
     public void usingMinecartOnNorthEastRailsPlacesMinecartAtCorrectPosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.MINECART));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.MINECART));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, RAIL_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.MINECART)
@@ -197,7 +197,7 @@ public class MinecartTestSuite {
     @GameTest(structure = "itematic:item.minecart.platform.rails.north_south")
     public void placingMinecartSetsCustomNameFromItemStack(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack minecart = world.itematic$createStack(ItemKeys.MINECART);
+        ItemStack minecart = world.itematic$createStack(ItemIds.MINECART);
         Component customName = Component.literal("abc");
         minecart.set(DataComponents.CUSTOM_NAME, customName);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);

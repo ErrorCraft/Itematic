@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.gametest.item.component;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,7 @@ public class ImmuneToDamageItemComponentTestSuite {
             0.0d,
             0.0d,
             0.0d,
-            world.itematic$createStack(ItemKeys.NETHER_STAR)
+            world.itematic$createStack(ItemIds.NETHER_STAR)
         );
         TestUtil.spawnEntity(context, netherStar, SPAWN_POSITION);
         netherStar.hurtServer(world, world.damageSources().explosion(null), Float.MAX_VALUE);
@@ -35,7 +35,7 @@ public class ImmuneToDamageItemComponentTestSuite {
             0.0d,
             0.0d,
             0.0d,
-            world.itematic$createStack(ItemKeys.STICK)
+            world.itematic$createStack(ItemIds.STICK)
         );
         TestUtil.spawnEntity(context, stick, SPAWN_POSITION);
         stick.hurtServer(world, world.damageSources().explosion(null), Float.MAX_VALUE);
@@ -50,7 +50,7 @@ public class ImmuneToDamageItemComponentTestSuite {
             0.0d,
             0.0d,
             0.0d,
-            world.itematic$createStack(ItemKeys.NETHERITE_INGOT)
+            world.itematic$createStack(ItemIds.NETHERITE_INGOT)
         );
         TestUtil.spawnEntity(context, netheriteIngot, SPAWN_POSITION);
         netheriteIngot.hurtServer(world, world.damageSources().inFire(), Float.MAX_VALUE);
@@ -65,7 +65,7 @@ public class ImmuneToDamageItemComponentTestSuite {
             0.0d,
             0.0d,
             0.0d,
-            world.itematic$createStack(ItemKeys.STICK)
+            world.itematic$createStack(ItemIds.STICK)
         );
         TestUtil.spawnEntity(context, stick, SPAWN_POSITION);
         stick.hurtServer(world, world.damageSources().inFire(), Float.MAX_VALUE);

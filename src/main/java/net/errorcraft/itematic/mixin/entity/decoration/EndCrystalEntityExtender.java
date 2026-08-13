@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.decoration;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
@@ -25,6 +25,6 @@ public abstract class EndCrystalEntityExtender extends Entity {
         )
     )
     private ItemStack newItemStackForEndCrystalUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.END_CRYSTAL);
+        return this.level().itematic$createStack(ItemIds.END_CRYSTAL);
     }
 }

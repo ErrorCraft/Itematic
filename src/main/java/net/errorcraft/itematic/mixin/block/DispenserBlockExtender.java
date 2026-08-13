@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.DispensableItemComponent;
-import net.errorcraft.itematic.item.dispense.behavior.DispenseBehaviors;
+import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.DispensableItemBehavior;
 import net.minecraft.core.Holder;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class DispenserBlockExtender {
     /**
      * @author ErrorCraft
-     * @reason Uses the ItemComponent implementation for data-driven items.
+     * @reason Uses the ItemBehavior implementation for data-driven items.
      */
     @Overwrite
     public DispenseItemBehavior getDispenseMethod(Level world, ItemStack stack) {
@@ -27,8 +27,8 @@ public class DispenserBlockExtender {
 
     @Unique
     private static Optional<DispenseItemBehavior> behavior(ItemStack stack) {
-        return stack.itematic$getBehavior(ItemComponentTypes.DISPENSABLE)
-            .map(DispensableItemComponent::behavior)
+        return stack.itematic$getBehavior(ItemBehaviorType.DISPENSABLE)
+            .map(DispensableItemBehavior::behavior)
             .map(Holder::value);
     }
 }

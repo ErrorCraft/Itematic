@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.illager.AbstractIllager;
@@ -31,11 +31,11 @@ public abstract class VindicatorEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronAxeUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.IRON_AXE);
+        return this.level().itematic$createStack(ItemIds.IRON_AXE);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.VINDICATOR_SPAWN_EGG;
+        return ItemIds.VINDICATOR_SPAWN_EGG;
     }
 }

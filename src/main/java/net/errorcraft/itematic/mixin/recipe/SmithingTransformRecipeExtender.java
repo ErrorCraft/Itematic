@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -43,7 +43,7 @@ public class SmithingTransformRecipeExtender implements RecipeAccess {
                 this.base.display(),
                 Ingredient.optionalIngredientToDisplay(this.addition),
                 this.result.display(),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.SMITHING_TABLE))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.SMITHING_TABLE))
             )
         );
     }

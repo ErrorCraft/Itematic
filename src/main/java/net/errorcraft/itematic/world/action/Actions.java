@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.world.action;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.loot.condition.LocationCheckPredicates;
 import net.errorcraft.itematic.loot.predicate.SideCheckPredicate;
 import net.errorcraft.itematic.references.BlockIds;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
@@ -82,7 +82,7 @@ public class Actions {
             ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockIds.DIRT)))
-                .add(DropItemFromBlockAction.of(PositionTarget.INTERACTED, items.getOrThrow(ItemKeys.HANGING_ROOTS)))
+                .add(DropItemFromBlockAction.of(PositionTarget.INTERACTED, items.getOrThrow(ItemIds.HANGING_ROOTS)))
         ));
         registerable.register(USE_SHOVEL_ON_BLOCK, ActionEntry.of(
             InvertedLootItemCondition.invert(

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.vehicle;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -33,6 +33,6 @@ public abstract class VehicleEntityExtender extends Entity {
 
     @Unique
     protected ResourceKey<Item> asItemKey() {
-        return ItemKeys.MINECART;
+        return ItemIds.MINECART;
     }
 }

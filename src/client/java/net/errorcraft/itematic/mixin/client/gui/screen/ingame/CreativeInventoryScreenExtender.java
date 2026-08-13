@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
@@ -43,7 +43,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractContainerS
     )
     @SuppressWarnings("ConstantConditions")
     private void storePaperRegistryEntry(CreativeModeTab group, CallbackInfo info, @Share("paper") LocalRef<Holder<Item>> paper) {
-        paper.set(this.minecraft.level.itematic$getItem(ItemKeys.PAPER));
+        paper.set(this.minecraft.level.itematic$getItem(ItemIds.PAPER));
     }
 
     @Redirect(

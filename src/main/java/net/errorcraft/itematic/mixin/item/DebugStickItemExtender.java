@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.item;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.util.Util;
 import net.minecraft.world.item.DebugStickItem;
 import org.objectweb.asm.Opcodes;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(DebugStickItem.class)
 public class DebugStickItemExtender {
     @Unique
-    private static final String KEY = Util.makeDescriptionId("item", ItemKeys.DEBUG_STICK.identifier());
+    private static final String KEY = Util.makeDescriptionId("item", ItemIds.DEBUG_STICK.identifier());
 
     @Redirect(
         method = "handleInteraction",

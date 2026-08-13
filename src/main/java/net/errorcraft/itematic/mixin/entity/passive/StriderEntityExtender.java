@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -32,7 +32,7 @@ public abstract class StriderEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isHoldingForWarpedFungusOnAStickUseRegistryKeyCheck(Player instance, Item item) {
-        return instance.itematic$isHolding(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
+        return instance.itematic$isHolding(ItemIds.WARPED_FUNGUS_ON_A_STICK);
     }
 
     @Redirect(
@@ -43,11 +43,11 @@ public abstract class StriderEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForWarpedFungusOnAStickUseCreateStack(ItemLike item, @Local(argsOnly = true) ServerLevelAccessor world) {
-        return world.itematic$createStack(ItemKeys.WARPED_FUNGUS_ON_A_STICK);
+        return world.itematic$createStack(ItemIds.WARPED_FUNGUS_ON_A_STICK);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.STRIDER_SPAWN_EGG;
+        return ItemIds.STRIDER_SPAWN_EGG;
     }
 }

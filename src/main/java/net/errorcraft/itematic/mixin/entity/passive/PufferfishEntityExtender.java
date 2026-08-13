@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.fish.AbstractFish;
@@ -29,11 +29,11 @@ public abstract class PufferfishEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForPufferfishBucketUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.PUFFERFISH_BUCKET);
+        return this.level().itematic$createStack(ItemIds.PUFFERFISH_BUCKET);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.PUFFERFISH_SPAWN_EGG;
+        return ItemIds.PUFFERFISH_SPAWN_EGG;
     }
 }

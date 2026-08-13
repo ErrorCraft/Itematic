@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.ingame;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.BannerPatternHolderItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.LoomScreen;
 import net.minecraft.network.chat.Component;
@@ -41,10 +41,10 @@ public abstract class LoomScreenExtender extends AbstractContainerScreen<LoomMen
             target = "Lnet/minecraft/world/item/BannerItem;getColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemComponent(BannerItem instance, @Local(ordinal = 3) Slot outputSlot) {
+    private DyeColor getColorUseItemBehavior(BannerItem instance, @Local(ordinal = 3) Slot outputSlot) {
         return outputSlot.getItem()
-            .itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
-            .flatMap(BannerPatternHolderItemComponent::color)
+            .itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+            .flatMap(BannerPatternHolderItemBehavior::color)
             .orElse(DyeColor.WHITE);
     }
 }

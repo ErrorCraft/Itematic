@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.village;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.access.village.VillagerProfessionAccess;
-import net.errorcraft.itematic.item.ItematicItemTags;
+import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.Item;

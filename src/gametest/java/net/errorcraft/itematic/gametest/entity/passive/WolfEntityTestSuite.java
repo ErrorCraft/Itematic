@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.entity.passive;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ public class WolfEntityTestSuite {
         Wolf wolf = context.spawn(EntityType.WOLF, SPAWN_POSITION);
         wolf.setTame(true, true);
         ServerPlayer player = context.makeMockServerPlayerInLevel();
-        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemKeys.BONE));
+        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemIds.BONE));
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         context.succeedWhen(() -> Assert.isTrue(
             context,
@@ -37,7 +37,7 @@ public class WolfEntityTestSuite {
         Wolf wolf = context.spawn(EntityType.WOLF, SPAWN_POSITION);
         wolf.setTame(true, true);
         ServerPlayer player = context.makeMockServerPlayerInLevel();
-        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemKeys.BEEF));
+        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemIds.BEEF));
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         context.succeedWhen(() -> Assert.isTrue(
             context,
@@ -52,7 +52,7 @@ public class WolfEntityTestSuite {
         wolf.setTame(true, true);
         context.withLowHealth(wolf);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemKeys.BEEF));
+        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemIds.BEEF));
         wolf.mobInteract(player, InteractionHand.MAIN_HAND);
         context.succeedIf(() -> Assert.livingEntity(context, wolf)
             .hasHealth(health -> health.isGreaterThan(0.25f)));

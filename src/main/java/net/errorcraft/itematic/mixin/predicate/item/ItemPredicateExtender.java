@@ -6,10 +6,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.predicate.item.ItemPredicateAccess;
-import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.predicate.item.ItemPredicates;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.Item;
@@ -28,7 +28,7 @@ import java.util.function.Function;
 @Mixin(ItemPredicate.class)
 public class ItemPredicateExtender implements ItemPredicateAccess {
     @Unique
-    private Optional<Set<ItemComponentType<?>>> behavior = Optional.empty();
+    private Optional<Set<ItemBehaviorType<?>>> behavior = Optional.empty();
 
     @ModifyExpressionValue(
         method = "<clinit>",
@@ -41,7 +41,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
     private static Codec<ItemPredicate> addExtraMapCodecFields(Codec<ItemPredicate> original) {
         return RecordCodecBuilder.create(instance -> instance.group(
             MapCodec.assumeMapUnsafe(original).forGetter(Function.identity()),
-            SetCodec.forRegistry(ItematicRegistries.ITEM_COMPONENT_TYPE).optionalFieldOf("behavior").forGetter(ItemPredicate::itematic$behavior)
+            SetCodec.forRegistry(ItematicRegistries.ITEM_BEHAVIOR_TYPE).optionalFieldOf("behavior").forGetter(ItemPredicate::itematic$behavior)
         ).apply(instance, ItemPredicates::setBehavior));
     }
 
@@ -54,7 +54,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
             return true;
         }
 
-        for (ItemComponentType<?> type : this.behavior.get()) {
+        for (ItemBehaviorType<?> type : this.behavior.get()) {
             if (!stack.itematic$hasBehavior(type)) {
                 return false;
             }
@@ -64,12 +64,12 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
     }
 
     @Override
-    public Optional<Set<ItemComponentType<?>>> itematic$behavior() {
+    public Optional<Set<ItemBehaviorType<?>>> itematic$behavior() {
         return this.behavior;
     }
 
     @Override
-    public void itematic$setBehavior(Optional<Set<ItemComponentType<?>>> behavior) {
+    public void itematic$setBehavior(Optional<Set<ItemBehaviorType<?>>> behavior) {
         this.behavior = behavior;
     }
 
@@ -79,7 +79,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         private Optional<HolderSet<Item>> items;
 
         @Unique
-        private final Set<ItemComponentType<?>> behavior = new HashSet<>();
+        private final Set<ItemBehaviorType<?>> behavior = new HashSet<>();
 
         @ModifyReturnValue(
             method = "build",
@@ -97,7 +97,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         }
 
         @Override
-        public ItemPredicate.Builder itematic$behavior(ItemComponentType<?>... behavior) {
+        public ItemPredicate.Builder itematic$behavior(ItemBehaviorType<?>... behavior) {
             this.behavior.addAll(List.of(behavior));
             return (ItemPredicate.Builder)(Object) this;
         }

@@ -4,13 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.item.ItemUtil;
-import net.errorcraft.itematic.item.dispense.behavior.DispenseBehavior;
-import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
+import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.registry.ActionValidator;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.world.action.ActionEntry;
+import net.errorcraft.itematic.world.item.Items;
+import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryDataLoader;
@@ -38,7 +38,7 @@ public class RegistryLoaderExtender {
     private static List<RegistryDataLoader.RegistryData<?>> addCustomEntries(List<RegistryDataLoader.RegistryData<?>> original) {
         return new ImmutableList.Builder<RegistryDataLoader.RegistryData<?>>()
             .addAll(original)
-            .add(createEntry(Registries.ITEM, ItemUtil.CODEC))
+            .add(createEntry(Registries.ITEM, Items.CODEC))
             .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
             .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
@@ -57,7 +57,7 @@ public class RegistryLoaderExtender {
     private static List<RegistryDataLoader.RegistryData<?>> addCustomNetworkEntries(List<RegistryDataLoader.RegistryData<?>> original) {
         return new ImmutableList.Builder<RegistryDataLoader.RegistryData<?>>()
             .addAll(original)
-            .add(createEntry(Registries.ITEM, ItemUtil.CODEC))
+            .add(createEntry(Registries.ITEM, Items.CODEC))
             .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
             .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
             .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))

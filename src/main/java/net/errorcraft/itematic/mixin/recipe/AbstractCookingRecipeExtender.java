@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -49,6 +49,6 @@ public abstract class AbstractCookingRecipeExtender extends SingleItemRecipe imp
 
     @Unique
     protected ResourceKey<Item> cookerItemKey() {
-        return ItemKeys.FURNACE;
+        return ItemIds.FURNACE;
     }
 }

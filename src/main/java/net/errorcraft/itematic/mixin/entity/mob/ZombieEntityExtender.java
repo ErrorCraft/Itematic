@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.entity.mob;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
@@ -54,9 +54,9 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
     )
     private ItemStack newItemStackUseCreateStack(ItemLike item, ServerLevelAccessor world, @Share("jackOLanternChance") LocalFloatRef jackOLanternChance) {
         if (jackOLanternChance.get() < 0.1f) {
-            return world.itematic$createStack(ItemKeys.JACK_O_LANTERN);
+            return world.itematic$createStack(ItemIds.JACK_O_LANTERN);
         }
-        return world.itematic$createStack(ItemKeys.CARVED_PUMPKIN);
+        return world.itematic$createStack(ItemIds.CARVED_PUMPKIN);
     }
 
     @Redirect(
@@ -67,7 +67,7 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForGlowInkSacUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GLOW_INK_SAC);
+        return instance.itematic$isOf(ItemIds.GLOW_INK_SAC);
     }
 
     @Redirect(
@@ -79,7 +79,7 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronSwordUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.IRON_SWORD);
+        return this.level().itematic$createStack(ItemIds.IRON_SWORD);
     }
 
     @Redirect(
@@ -98,7 +98,7 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronSpearUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.IRON_SPEAR);
+        return this.level().itematic$createStack(ItemIds.IRON_SPEAR);
     }
 
     @Redirect(
@@ -117,11 +117,11 @@ public abstract class ZombieEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronShovelUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.IRON_SHOVEL);
+        return this.level().itematic$createStack(ItemIds.IRON_SHOVEL);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.ZOMBIE_SPAWN_EGG;
+        return ItemIds.ZOMBIE_SPAWN_EGG;
     }
 }

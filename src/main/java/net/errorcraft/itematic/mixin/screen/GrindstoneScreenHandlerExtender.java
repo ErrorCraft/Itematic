@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.screen;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.EnchantmentHolderItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantmentHolderItemBehavior;
 import net.minecraft.core.Holder;
 import net.minecraft.world.inventory.GrindstoneMenu;
 import net.minecraft.world.item.Item;
@@ -24,9 +24,9 @@ public class GrindstoneScreenHandlerExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isOfForEnchantedBookUseItemComponent(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTMENT_HOLDER)
-            .map(EnchantmentHolderItemComponent::grindingTransformsInto);
+    private boolean isOfForEnchantedBookUseItemBehavior(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER)
+            .map(EnchantmentHolderItemBehavior::grindingTransformsInto);
         optionalItem.ifPresent(transformsInto::set);
         return optionalItem.isPresent();
     }
@@ -38,7 +38,7 @@ public class GrindstoneScreenHandlerExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack withItemForBookUseItemComponent(ItemStack instance, ItemLike item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+    private ItemStack withItemForBookUseItemBehavior(ItemStack instance, ItemLike item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
         return instance.itematic$copyWithItem(transformsInto.get());
     }
 
@@ -54,8 +54,8 @@ public class GrindstoneScreenHandlerExtender {
                 target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"
             )
         )
-        private boolean isDamageableUseItemComponentCheck(ItemStack instance) {
-            return instance.itematic$hasBehavior(ItemComponentTypes.ENCHANTABLE);
+        private boolean isDamageableUseItemBehaviorCheck(ItemStack instance) {
+            return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTABLE);
         }
     }
 }

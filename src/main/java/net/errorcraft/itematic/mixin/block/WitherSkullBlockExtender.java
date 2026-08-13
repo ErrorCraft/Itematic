@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.WitherSkullBlock;
@@ -18,6 +18,6 @@ public class WitherSkullBlockExtender {
         )
     )
     private static boolean isOfForWitherSkeletonSkullUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.WITHER_SKELETON_SKULL);
+        return instance.itematic$isOf(ItemIds.WITHER_SKELETON_SKULL);
     }
 }

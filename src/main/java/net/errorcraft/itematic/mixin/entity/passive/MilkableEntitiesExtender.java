@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.cow.AbstractCow;
@@ -39,7 +39,7 @@ public abstract class MilkableEntitiesExtender extends Animal {
         )
     )
     private boolean isOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BUCKET);
+        return instance.itematic$isOf(ItemIds.BUCKET);
     }
 
     @Redirect(
@@ -50,6 +50,6 @@ public abstract class MilkableEntitiesExtender extends Animal {
         )
     )
     private ItemStack getDefaultStackForMilkBucketUseRegistryEntry(Item instance) {
-        return this.level().itematic$createStack(ItemKeys.MILK_BUCKET);
+        return this.level().itematic$createStack(ItemIds.MILK_BUCKET);
     }
 }

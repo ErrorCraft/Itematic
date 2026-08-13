@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.client.render.item.property.select;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.renderer.item.properties.select.Charge;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ChargedProjectiles;
@@ -18,6 +18,6 @@ public class ChargeTypePropertyExtender {
         )
     )
     private boolean containsForFireworkRocketUseRegistryKeyCheck(ChargedProjectiles instance, Item item) {
-        return instance.itematic$contains(ItemKeys.FIREWORK_ROCKET);
+        return instance.itematic$contains(ItemIds.FIREWORK_ROCKET);
     }
 }

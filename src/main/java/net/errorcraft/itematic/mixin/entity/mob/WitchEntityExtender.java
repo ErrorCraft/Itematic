@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -30,7 +30,7 @@ public abstract class WitchEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForPotionUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.POTION);
+        return instance.itematic$isOf(ItemIds.POTION);
     }
 
     @Redirect(
@@ -41,7 +41,7 @@ public abstract class WitchEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion) {
-        return PotionContentsUtil.setPotion(this.level().itematic$createStack(ItemKeys.POTION), potion);
+        return PotionContentsUtil.setPotion(this.level().itematic$createStack(ItemIds.POTION), potion);
     }
 
     @Redirect(
@@ -52,11 +52,11 @@ public abstract class WitchEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForSplashPotionUseCreateStack(Item item, Holder<Potion> potion) {
-        return PotionContentsUtil.setPotion(this.level().itematic$createStack(ItemKeys.SPLASH_POTION), potion);
+        return PotionContentsUtil.setPotion(this.level().itematic$createStack(ItemIds.SPLASH_POTION), potion);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.WITCH_SPAWN_EGG;
+        return ItemIds.WITCH_SPAWN_EGG;
     }
 }

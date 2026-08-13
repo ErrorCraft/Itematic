@@ -3,11 +3,11 @@ package net.errorcraft.itematic.mixin.entity;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
-import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.ChargeableShooterMethod;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
@@ -30,7 +30,7 @@ public interface CrossbowUserExtender {
         )
     )
     private InteractionHand getHandPossiblyHoldingForCrossbowUseRegistryKey(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemKeys.CROSSBOW);
+        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemIds.CROSSBOW);
     }
 
     @ModifyConstant(
@@ -40,10 +40,10 @@ public interface CrossbowUserExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfCrossbowItemUseItemComponent(Object reference, Class<CrossbowItem> clazz, @Local ItemStack heldStack, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
-        Optional<ShooterItemComponent> optionalComponent = heldStack.itematic$getBehavior(ItemComponentTypes.SHOOTER);
-        optionalComponent.ifPresent(shooterItemComponent::set);
-        return optionalComponent.isPresent();
+    private boolean instanceOfCrossbowItemUseItemBehavior(Object reference, Class<CrossbowItem> clazz, @Local ItemStack heldStack, @Share("shooter") LocalRef<ShooterItemBehavior> shooterReference) {
+        Optional<ShooterItemBehavior> optionalShooter = heldStack.itematic$getBehavior(ItemBehaviorType.SHOOTER);
+        optionalShooter.ifPresent(shooterReference::set);
+        return optionalShooter.isPresent();
     }
 
     @ModifyVariable(
@@ -62,9 +62,9 @@ public interface CrossbowUserExtender {
             target = "Lnet/minecraft/world/item/CrossbowItem;performShooting(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;FFLnet/minecraft/world/entity/LivingEntity;)V"
         )
     )
-    private void shootAllUseItemComponent(CrossbowItem instance, Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack, float speed, float divergence, LivingEntity livingEntity, @Share("shooterItemComponent") LocalRef<ShooterItemComponent> shooterItemComponent) {
-        if (shooterItemComponent.get().method() instanceof ChargeableShooterMethod chargeableShooterMethod) {
-            chargeableShooterMethod.shoot(shooterItemComponent.get(), world, shooter, hand, stack, speed, divergence, livingEntity);
+    private void shootAllUseItemBehavior(CrossbowItem instance, Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack, float speed, float divergence, LivingEntity livingEntity, @Share("shooter") LocalRef<ShooterItemBehavior> shooterReference) {
+        if (shooterReference.get().method() instanceof ChargeableShooterMethod chargeableShooterMethod) {
+            chargeableShooterMethod.shoot(shooterReference.get(), world, shooter, hand, stack, speed, divergence, livingEntity);
         }
     }
 }

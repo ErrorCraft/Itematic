@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -20,19 +20,19 @@ public class WaterCauldronBlockTestSuite {
     public void usingColoredShulkerBoxOnWaterCauldronClearsColor(GameTestHelper context) {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel world = context.getLevel();
-        ItemStack whiteShulkerBox = world.itematic$createStack(ItemKeys.WHITE_SHULKER_BOX);
+        ItemStack whiteShulkerBox = world.itematic$createStack(ItemIds.WHITE_SHULKER_BOX);
         player.setItemInHand(InteractionHand.MAIN_HAND, whiteShulkerBox);
         world.addFreshEntity(player);
         context.useBlock(WATER_CAULDRON_POSITION, player);
         context.succeedIf(() -> Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
-            .is(ItemKeys.SHULKER_BOX));
+            .is(ItemIds.SHULKER_BOX));
     }
 
     @GameTest(structure = "itematic:block.water_cauldron")
     public void usingColoredWolfArmorOnWaterCauldronClearsColor(GameTestHelper context) {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel world = context.getLevel();
-        ItemStack wolfArmor = world.itematic$createStack(ItemKeys.WOLF_ARMOR);
+        ItemStack wolfArmor = world.itematic$createStack(ItemIds.WOLF_ARMOR);
         wolfArmor.set(DataComponents.DYED_COLOR, new DyedItemColor(0xffffff));
         player.setItemInHand(InteractionHand.MAIN_HAND, wolfArmor);
         world.addFreshEntity(player);

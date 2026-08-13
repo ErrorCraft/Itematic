@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +18,6 @@ public abstract class MagmaCubeEntityExtender extends MobEntityExtender {
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.MAGMA_CUBE_SPAWN_EGG;
+        return ItemIds.MAGMA_CUBE_SPAWN_EGG;
     }
 }

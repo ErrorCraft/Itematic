@@ -5,12 +5,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.EntityTypeAccess;
-import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializerSupplier;
 import net.errorcraft.itematic.world.entity.initializer.initializers.*;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -463,7 +463,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     @Nullable
     private static <T extends Entity> Consumer<T> copier(ActionContext context, @Nullable EntitySpawnCallback callback, boolean allowItemData) {
         ItemStack stack = context.get(LootContextParams.TOOL);
-        if (!allowItemData || ItemStackUtil.isNullOrEmpty(stack)) {
+        if (!allowItemData || ItemStacks.isNullOrEmpty(stack)) {
             return callback == null ? null : entity -> callback.accept(entity, stack);
         }
 

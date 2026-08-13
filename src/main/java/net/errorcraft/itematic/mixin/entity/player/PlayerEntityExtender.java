@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.entity.player;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.entity.LivingEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
@@ -53,7 +53,7 @@ public abstract class PlayerEntityExtender extends LivingEntityExtender {
         )
     )
     private boolean isEquippedForTurtleHelmetUseRegistryKeyCheck(Player instance, Item item) {
-        return this.isEquipped(ItemKeys.TURTLE_HELMET);
+        return this.isEquipped(ItemIds.TURTLE_HELMET);
     }
 
     @Redirect(
@@ -102,8 +102,8 @@ public abstract class PlayerEntityExtender extends LivingEntityExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isOfUseItemComponentCheck(ItemStack instance, Item item) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.ZOOM);
+    private boolean isOfUseItemBehaviorCheck(ItemStack instance, Item item) {
+        return instance.itematic$hasBehavior(ItemBehaviorType.ZOOM);
     }
 
     @Override
@@ -127,7 +127,7 @@ public abstract class PlayerEntityExtender extends LivingEntityExtender {
         }
 
         return this.isCreative()
-            ? this.level().itematic$createStack(ItemKeys.ARROW)
+            ? this.level().itematic$createStack(ItemIds.ARROW)
             : ItemStack.EMPTY;
     }
 

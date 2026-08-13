@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
@@ -41,11 +41,11 @@ public abstract class IronGolemEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForIronIngotUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.IRON_INGOT);
+        return instance.itematic$isOf(ItemIds.IRON_INGOT);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.IRON_GOLEM_SPAWN_EGG;
+        return ItemIds.IRON_GOLEM_SPAWN_EGG;
     }
 }

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.google.common.collect.ImmutableSet;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.world.entity.npc.villager.Villagers;
@@ -74,7 +74,7 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
         )
     )
     private boolean isOfForVillagerSpawnEggUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.VILLAGER_SPAWN_EGG);
+        return instance.itematic$isOf(ItemIds.VILLAGER_SPAWN_EGG);
     }
 
     @Redirect(
@@ -120,6 +120,6 @@ public abstract class VillagerEntityExtender extends MerchantEntityExtender {
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.VILLAGER_SPAWN_EGG;
+        return ItemIds.VILLAGER_SPAWN_EGG;
     }
 }

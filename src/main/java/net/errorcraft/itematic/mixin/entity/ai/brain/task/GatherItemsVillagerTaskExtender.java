@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.npc.villager.Villagers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -87,7 +87,7 @@ public class GatherItemsVillagerTaskExtender {
         )
     )
     private Item keepRunningGetWheatUseDynamicRegistry(ServerLevel serverWorld) {
-        return serverWorld.itematic$getItem(ItemKeys.WHEAT).value();
+        return serverWorld.itematic$getItem(ItemIds.WHEAT).value();
     }
 
     @Inject(

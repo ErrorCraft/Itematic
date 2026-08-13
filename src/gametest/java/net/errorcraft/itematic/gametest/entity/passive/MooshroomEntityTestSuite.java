@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.entity.passive;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -24,14 +24,14 @@ public class MooshroomEntityTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         context.succeedIf(() -> {
             ServerLevel world = context.getLevel();
-            player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.DANDELION));
+            player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.DANDELION));
             InteractionResult dandelionResult = mooshroom.mobInteract(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
                 context,
                 dandelionResult.consumesAction(),
                 () -> "Expected interaction with Dandelion on brown Mooshroom to be successful"
             );
-            player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.BOWL));
+            player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.BOWL));
             InteractionResult bowlResult = mooshroom.mobInteract(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
                 context,
@@ -39,7 +39,7 @@ public class MooshroomEntityTestSuite {
                 () -> "Expected interaction with Bowl on brown Mooshroom to be successful"
             );
             Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
-                .is(ItemKeys.SUSPICIOUS_STEW)
+                .is(ItemIds.SUSPICIOUS_STEW)
                 .hasComponent(
                     DataComponents.SUSPICIOUS_STEW_EFFECTS,
                     suspiciousStewEffects -> Assert.isFalse(
@@ -56,7 +56,7 @@ public class MooshroomEntityTestSuite {
         MushroomCow mooshroom = context.spawn(EntityType.MOOSHROOM, SPAWN_POSITION);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         context.succeedIf(() -> {
-            player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemKeys.BOWL));
+            player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemIds.BOWL));
             InteractionResult bowlResult = mooshroom.mobInteract(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
                 context,
@@ -64,7 +64,7 @@ public class MooshroomEntityTestSuite {
                 () -> "Expected interaction with Bowl on Mooshroom to be successful"
             );
             Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
-                .is(ItemKeys.MUSHROOM_STEW);
+                .is(ItemIds.MUSHROOM_STEW);
         });
     }
 }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.ai.brain.task;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.behavior.UseBonemeal;
 import net.minecraft.world.item.Item;
@@ -22,7 +22,7 @@ public class BoneMealTaskExtender {
         )
     )
     private Item getBoneMealUseDynamicRegistry(ServerLevel world) {
-        return world.itematic$getItem(ItemKeys.BONE_MEAL).value();
+        return world.itematic$getItem(ItemIds.BONE_MEAL).value();
     }
 
     @Redirect(
@@ -33,7 +33,7 @@ public class BoneMealTaskExtender {
         )
     )
     private ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, ServerLevel world) {
-        return world.itematic$createStack(ItemKeys.BONE_MEAL);
+        return world.itematic$createStack(ItemIds.BONE_MEAL);
     }
 
     @Redirect(
@@ -44,6 +44,6 @@ public class BoneMealTaskExtender {
         )
     )
     private boolean isOfForBoneMealUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BONE_MEAL);
+        return instance.itematic$isOf(ItemIds.BONE_MEAL);
     }
 }

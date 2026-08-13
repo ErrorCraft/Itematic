@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,11 +29,11 @@ public abstract class ZombieHorseEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronSpearUseCreateStack(ItemLike item, ServerLevelAccessor world) {
-        return world.itematic$createStack(ItemKeys.IRON_SPEAR);
+        return world.itematic$createStack(ItemIds.IRON_SPEAR);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.ZOMBIE_HORSE_SPAWN_EGG;
+        return ItemIds.ZOMBIE_HORSE_SPAWN_EGG;
     }
 }

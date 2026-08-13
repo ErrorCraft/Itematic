@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.arrow.Arrow;
@@ -28,6 +28,6 @@ public abstract class ArrowEntityExtender extends AbstractArrow {
         )
     )
     private ItemStack newItemStackForArrowUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.ARROW);
+        return this.level().itematic$createStack(ItemIds.ARROW);
     }
 }

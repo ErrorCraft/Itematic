@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.ingame;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.BeaconScreen;
 import net.minecraft.network.chat.Component;
@@ -32,7 +32,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
         )
     )
     private ItemStack newItemStackForNetheriteIngotUseCreateStack(ItemLike item) {
-        return this.createStack(ItemKeys.NETHERITE_INGOT);
+        return this.createStack(ItemIds.NETHERITE_INGOT);
     }
 
     @Redirect(
@@ -51,7 +51,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
         )
     )
     private ItemStack newItemStackForEmeraldUseCreateStack(ItemLike item) {
-        return this.createStack(ItemKeys.EMERALD);
+        return this.createStack(ItemIds.EMERALD);
     }
 
     @Redirect(
@@ -70,7 +70,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
         )
     )
     private ItemStack newItemStackForDiamondUseCreateStack(ItemLike item) {
-        return this.createStack(ItemKeys.DIAMOND);
+        return this.createStack(ItemIds.DIAMOND);
     }
 
     @Redirect(
@@ -89,7 +89,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
         )
     )
     private ItemStack newItemStackForGoldIngotUseCreateStack(ItemLike item) {
-        return this.createStack(ItemKeys.GOLD_INGOT);
+        return this.createStack(ItemIds.GOLD_INGOT);
     }
 
     @Redirect(
@@ -108,7 +108,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
         )
     )
     private ItemStack newItemStackForIronIngotUseCreateStack(ItemLike item) {
-        return this.createStack(ItemKeys.IRON_INGOT);
+        return this.createStack(ItemIds.IRON_INGOT);
     }
 
     @Unique

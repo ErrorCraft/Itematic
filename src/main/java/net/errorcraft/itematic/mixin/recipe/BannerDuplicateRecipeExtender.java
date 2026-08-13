@@ -3,8 +3,8 @@ package net.errorcraft.itematic.mixin.recipe;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.BannerPatternHolderItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -24,9 +24,9 @@ public class BannerDuplicateRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBannerItemUseItemComponentCheck(Object reference, Class<BannerItem> clazz, @Local ItemStack inputStack, @Share("dyeColor") LocalRef<DyeColor> dyeColor) {
-        Optional<DyeColor> optionalDyeColor = inputStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
-            .flatMap(BannerPatternHolderItemComponent::color);
+    private boolean instanceOfBannerItemUseItemBehaviorCheck(Object reference, Class<BannerItem> clazz, @Local ItemStack inputStack, @Share("dyeColor") LocalRef<DyeColor> dyeColor) {
+        Optional<DyeColor> optionalDyeColor = inputStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+            .flatMap(BannerPatternHolderItemBehavior::color);
         optionalDyeColor.ifPresent(dyeColor::set);
         return optionalDyeColor.isPresent();
     }
@@ -47,7 +47,7 @@ public class BannerDuplicateRecipeExtender {
             target = "Lnet/minecraft/world/item/BannerItem;getColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemComponent(BannerItem instance, @Share("dyeColor") LocalRef<DyeColor> dyeColor) {
+    private DyeColor getColorUseItemBehavior(BannerItem instance, @Share("dyeColor") LocalRef<DyeColor> dyeColor) {
         return dyeColor.get();
     }
 }

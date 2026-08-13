@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -20,6 +20,6 @@ public interface BucketableExtender {
         )
     )
     private static Item tryBucketGetWaterBucketUseDynamicRegistry(Player player) {
-        return player.level().itematic$getItem(ItemKeys.WATER_BUCKET).value();
+        return player.level().itematic$getItem(ItemIds.WATER_BUCKET).value();
     }
 }

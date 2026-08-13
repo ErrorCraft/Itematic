@@ -4,10 +4,10 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
@@ -39,7 +39,7 @@ public class AbstractSkeletonEntityExtender extends Monster {
         )
     )
     private ItemStack newItemStackForBowUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.BOW);
+        return this.level().itematic$createStack(ItemIds.BOW);
     }
 
     @ModifyExpressionValue(
@@ -69,9 +69,9 @@ public class AbstractSkeletonEntityExtender extends Monster {
     )
     private ItemStack newItemStackUseCreateStack(ItemLike item, ServerLevelAccessor world, @Share("randomFloat") LocalFloatRef randomFloat) {
         if (randomFloat.get() < 0.1f) {
-            return world.itematic$createStack(ItemKeys.JACK_O_LANTERN);
+            return world.itematic$createStack(ItemIds.JACK_O_LANTERN);
         }
-        return world.itematic$createStack(ItemKeys.CARVED_PUMPKIN);
+        return world.itematic$createStack(ItemIds.CARVED_PUMPKIN);
     }
 
     @Redirect(
@@ -85,7 +85,7 @@ public class AbstractSkeletonEntityExtender extends Monster {
         )
     )
     private InteractionHand getHandPossiblyHoldingForBowUseRegistryKey(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemKeys.BOW);
+        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemIds.BOW);
     }
 
     @ModifyReturnValue(
@@ -93,8 +93,8 @@ public class AbstractSkeletonEntityExtender extends Monster {
         at = @At("TAIL")
     )
     private boolean useItemBehaviorComponent(boolean original, ItemStack stack) {
-        return stack.itematic$getBehavior(ItemComponentTypes.SHOOTER)
-            .map(shooter -> shooter.usesMethod(ShooterMethodTypes.DIRECT))
+        return stack.itematic$getBehavior(ItemBehaviorType.SHOOTER)
+            .map(shooter -> shooter.usesMethod(ShooterMethodType.DIRECT))
             .orElse(false);
     }
 
@@ -106,7 +106,7 @@ public class AbstractSkeletonEntityExtender extends Monster {
         )
     )
     private boolean isOfForBowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BOW);
+        return instance.itematic$isOf(ItemIds.BOW);
     }
 
     @Redirect(

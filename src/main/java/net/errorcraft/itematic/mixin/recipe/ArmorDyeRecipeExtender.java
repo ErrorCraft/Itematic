@@ -3,8 +3,8 @@ package net.errorcraft.itematic.mixin.recipe;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.DyeItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.DyeItemBehavior;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
@@ -27,8 +27,8 @@ public class ArmorDyeRecipeExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
-    private boolean isInForDyeableUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.DYEABLE);
+    private boolean isInForDyeableUseItemBehaviorCheck(ItemStack instance, TagKey<Item> tag) {
+        return instance.itematic$hasBehavior(ItemBehaviorType.DYEABLE);
     }
 
     @ModifyConstant(
@@ -38,8 +38,8 @@ public class ArmorDyeRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemComponentForMatches(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack, @Share("dye") LocalRef<DyeItemComponent> dye) {
-        Optional<DyeItemComponent> optionalDye = inputStack.itematic$getBehavior(ItemComponentTypes.DYE);
+    private boolean instanceOfDyeItemUseItemBehaviorForMatches(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        Optional<DyeItemBehavior> optionalDye = inputStack.itematic$getBehavior(ItemBehaviorType.DYE);
         optionalDye.ifPresent(dye::set);
         return optionalDye.isPresent();
     }
@@ -51,8 +51,8 @@ public class ArmorDyeRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemComponentForCraft(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack inputStack, @Share("dye") LocalRef<DyeItemComponent> dye) {
-        Optional<DyeItemComponent> optionalDye = inputStack.itematic$getBehavior(ItemComponentTypes.DYE);
+    private boolean instanceOfDyeItemUseItemBehaviorForCraft(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack inputStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        Optional<DyeItemBehavior> optionalDye = inputStack.itematic$getBehavior(ItemBehaviorType.DYE);
         optionalDye.ifPresent(dye::set);
         return optionalDye.isPresent();
     }
@@ -75,7 +75,7 @@ public class ArmorDyeRecipeExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private <E> E addDyeItemUseItemComponent(E e, @Share("dye") LocalRef<DyeItemComponent> dye) {
+    private <E> E addDyeItemUseItemBehavior(E e, @Share("dye") LocalRef<DyeItemBehavior> dye) {
         return (E) DyeItem.byColor(dye.get().color());
     }
 }

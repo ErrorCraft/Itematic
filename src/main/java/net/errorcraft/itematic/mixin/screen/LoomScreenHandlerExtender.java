@@ -4,9 +4,9 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.BannerPatternHolderItemComponent;
-import net.errorcraft.itematic.item.component.components.DyeItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.DyeItemBehavior;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.item.*;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,7 +27,7 @@ public class LoomScreenHandlerExtender {
         )
     )
     private boolean containsProvidersBannerPatternsDataComponentAlsoCheckItemBehaviorComponent(boolean original, @Local(ordinal = 1) ItemStack slotStack) {
-        return original && slotStack.itematic$hasBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER);
+        return original && slotStack.itematic$hasBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER);
     }
 
     @ModifyConstant(
@@ -37,8 +37,8 @@ public class LoomScreenHandlerExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<BannerItem> clazz, @Local(ordinal = 1) ItemStack slotStack, @Share("dye") LocalRef<DyeItemComponent> dye) {
-        Optional<DyeItemComponent> optionalDye = slotStack.itematic$getBehavior(ItemComponentTypes.DYE);
+    private boolean instanceOfDyeItemUseItemBehaviorCheck(Object reference, Class<BannerItem> clazz, @Local(ordinal = 1) ItemStack slotStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        Optional<DyeItemBehavior> optionalDye = slotStack.itematic$getBehavior(ItemBehaviorType.DYE);
         optionalDye.ifPresent(dye::set);
         return optionalDye.isPresent();
     }
@@ -61,7 +61,7 @@ public class LoomScreenHandlerExtender {
             target = "Lnet/minecraft/world/item/DyeItem;getDyeColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemComponent(DyeItem instance, @Share("dye") LocalRef<DyeItemComponent> dye) {
+    private DyeColor getColorUseItemBehavior(DyeItem instance, @Share("dye") LocalRef<DyeItemBehavior> dye) {
         return dye.get().color();
     }
 
@@ -74,9 +74,9 @@ public class LoomScreenHandlerExtender {
                 ordinal = 0
             )
         )
-        private boolean instanceOfBannerItemUseItemComponent(Object reference, Class<BannerItem> clazz, ItemStack stack) {
-            return stack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
-                .map(BannerPatternHolderItemComponent::modifiable)
+        private boolean instanceOfBannerItemUseItemBehavior(Object reference, Class<BannerItem> clazz, ItemStack stack) {
+            return stack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+                .map(BannerPatternHolderItemBehavior::modifiable)
                 .orElse(false);
         }
     }
@@ -90,8 +90,8 @@ public class LoomScreenHandlerExtender {
                 ordinal = 0
             )
         )
-        private boolean instanceOfDyeItemUseItemComponentCheck(Object reference, Class<DyeItem> clazz, ItemStack stack) {
-            return stack.itematic$hasBehavior(ItemComponentTypes.DYE);
+        private boolean instanceOfDyeItemUseItemBehaviorCheck(Object reference, Class<DyeItem> clazz, ItemStack stack) {
+            return stack.itematic$hasBehavior(ItemBehaviorType.DYE);
         }
     }
 
@@ -105,7 +105,7 @@ public class LoomScreenHandlerExtender {
             )
         )
         private boolean containsProvidersBannerPatternsDataComponentAlsoCheckItemBehaviorComponent(boolean original, ItemStack stack) {
-            return original && stack.itematic$hasBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER);
+            return original && stack.itematic$hasBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER);
         }
     }
 }

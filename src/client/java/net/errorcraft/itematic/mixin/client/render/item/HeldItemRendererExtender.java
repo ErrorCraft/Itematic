@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.client.render.item;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.ShooterItemComponent;
-import net.errorcraft.itematic.item.shooter.method.ShooterMethodTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,10 +43,10 @@ public class HeldItemRendererExtender {
             )
         )
     )
-    private static boolean isOfForBowUseItemComponent(ItemStack instance, Item item) {
-        return instance.itematic$getBehavior(ItemComponentTypes.SHOOTER)
-            .map(ShooterItemComponent::method)
-            .filter(method -> method.type() == ShooterMethodTypes.DIRECT)
+    private static boolean isOfForBowUseItemBehavior(ItemStack instance, Item item) {
+        return instance.itematic$getBehavior(ItemBehaviorType.SHOOTER)
+            .map(ShooterItemBehavior::method)
+            .filter(method -> method.type() == ShooterMethodType.DIRECT)
             .isPresent();
     }
 
@@ -65,13 +65,13 @@ public class HeldItemRendererExtender {
             )
         )
     )
-    private boolean isOfForCrossbowUseItemComponent(ItemStack instance, Item item, AbstractClientPlayer player, @Share("useDuration") LocalIntRef useDuration) {
-        Optional<ShooterItemComponent> optionalShooter = instance.itematic$getBehavior(ItemComponentTypes.SHOOTER);
+    private boolean isOfForCrossbowUseItemBehavior(ItemStack instance, Item item, AbstractClientPlayer player, @Share("useDuration") LocalIntRef useDuration) {
+        Optional<ShooterItemBehavior> optionalShooter = instance.itematic$getBehavior(ItemBehaviorType.SHOOTER);
         if (optionalShooter.isEmpty()) {
             return false;
         }
 
-        if (optionalShooter.get().method().type() !=  ShooterMethodTypes.CHARGEABLE) {
+        if (optionalShooter.get().method().type() !=  ShooterMethodType.CHARGEABLE) {
             return false;
         }
 
@@ -180,10 +180,10 @@ public class HeldItemRendererExtender {
             )
         )
     )
-    private static boolean isOfForCrossbowUseItemComponentStatic(ItemStack instance, Item item) {
-        return instance.itematic$getBehavior(ItemComponentTypes.SHOOTER)
-            .map(ShooterItemComponent::method)
-            .filter(method -> method.type() == ShooterMethodTypes.CHARGEABLE)
+    private static boolean isOfForCrossbowUseItemBehaviorStatic(ItemStack instance, Item item) {
+        return instance.itematic$getBehavior(ItemBehaviorType.SHOOTER)
+            .map(ShooterItemBehavior::method)
+            .filter(method -> method.type() == ShooterMethodType.CHARGEABLE)
             .isPresent();
     }
 }

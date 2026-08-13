@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -30,11 +30,11 @@ public abstract class SnifferEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForSnifferEggUseCreateStack(ItemLike item, ServerLevel world) {
-        return world.itematic$createStack(ItemKeys.SNIFFER_EGG);
+        return world.itematic$createStack(ItemIds.SNIFFER_EGG);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.SNIFFER_SPAWN_EGG;
+        return ItemIds.SNIFFER_SPAWN_EGG;
     }
 }

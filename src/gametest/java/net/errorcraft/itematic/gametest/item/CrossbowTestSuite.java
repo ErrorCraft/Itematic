@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.component.DataComponents;
@@ -17,10 +17,10 @@ public class CrossbowTestSuite {
     @GameTest(maxTicks = 100)
     public void usingCrossbowWithInfinityChargesArrowFromInventoryButDoesNotConsumeTheArrow(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack crossbow = TestUtil.createItemStackWithEnchantment(world, ItemKeys.CROSSBOW, Enchantments.INFINITY);
+        ItemStack crossbow = TestUtil.createItemStackWithEnchantment(world, ItemIds.CROSSBOW, Enchantments.INFINITY);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
-        player.getInventory().add(world.itematic$createStack(ItemKeys.ARROW));
+        player.getInventory().add(world.itematic$createStack(ItemIds.ARROW));
         world.addFreshEntity(player);
         context.startSequence()
             .thenExecute(() -> crossbow.use(world, player, InteractionHand.MAIN_HAND))
@@ -31,13 +31,13 @@ public class CrossbowTestSuite {
                         DataComponents.CHARGED_PROJECTILES,
                         component -> Assert.isTrue(
                             context,
-                            component.itematic$contains(ItemKeys.ARROW),
+                            component.itematic$contains(ItemIds.ARROW),
                             () -> "Expected item stack to have an Arrow as a charged projectile"
                         )
                     );
                 Assert.isTrue(
                     context,
-                    player.getInventory().contains(s -> s.itematic$isOf(ItemKeys.ARROW)),
+                    player.getInventory().contains(s -> s.itematic$isOf(ItemIds.ARROW)),
                     () -> "Expected Player to have an Arrow in their inventory"
                 );
             })

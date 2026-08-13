@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.entity.passive;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ public class SnifferEntityTestSuite {
     public void holdingTorchflowerSeedsTemptsSniffer(GameTestHelper context) {
         Sniffer sniffer = context.spawn(EntityType.SNIFFER, SPAWN_POSITION);
         ServerPlayer player = context.makeMockServerPlayerInLevel();
-        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemKeys.TORCHFLOWER_SEEDS));
+        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemIds.TORCHFLOWER_SEEDS));
         TestUtil.setEntityPos(context, player, SPAWN_POSITION);
         context.succeedWhen(() -> {
             Optional<Player> temptingPlayer = sniffer.getBrain().getMemory(MemoryModuleType.TEMPTING_PLAYER);

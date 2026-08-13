@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.fish.AbstractSchoolingFish;
@@ -29,11 +29,11 @@ public abstract class TropicalFishEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForTropicalFishBucketUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.TROPICAL_FISH_BUCKET);
+        return this.level().itematic$createStack(ItemIds.TROPICAL_FISH_BUCKET);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.TROPICAL_FISH_SPAWN_EGG;
+        return ItemIds.TROPICAL_FISH_SPAWN_EGG;
     }
 }

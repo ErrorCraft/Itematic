@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
@@ -25,6 +25,6 @@ public abstract class TridentEntityExtender extends AbstractArrow {
         )
     )
     private ItemStack newItemStackForTridentUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.TRIDENT);
+        return this.level().itematic$createStack(ItemIds.TRIDENT);
     }
 }

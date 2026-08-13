@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.gametest.item.component;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,7 @@ public class EntityItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.entity.platform")
     public void usingOakBoatOnGroundPlacesOakBoat(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack oakBoat = world.itematic$createStack(ItemKeys.OAK_BOAT);
+        ItemStack oakBoat = world.itematic$createStack(ItemIds.OAK_BOAT);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, oakBoat);
         world.addFreshEntity(player);
@@ -31,7 +31,7 @@ public class EntityItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.entity.platform")
     public void usingPigSpawnEggOnGroundPlacesPig(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack pigSpawnEgg = world.itematic$createStack(ItemKeys.PIG_SPAWN_EGG);
+        ItemStack pigSpawnEgg = world.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
         world.addFreshEntity(player);

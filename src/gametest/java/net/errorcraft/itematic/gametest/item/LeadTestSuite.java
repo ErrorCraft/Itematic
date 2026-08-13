@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ public class LeadTestSuite {
     @GameTest(structure = "itematic:item.lead.platform")
     public void usingLeadOnHorseLeashesHorse(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack lead = world.itematic$createStack(ItemKeys.LEAD);
+        ItemStack lead = world.itematic$createStack(ItemIds.LEAD);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, lead);
         world.addFreshEntity(player);
@@ -45,7 +45,7 @@ public class LeadTestSuite {
     @GameTest(structure = "itematic:item.lead.platform")
     public void usingLeadOnBoatLeashesBoat(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack lead = world.itematic$createStack(ItemKeys.LEAD);
+        ItemStack lead = world.itematic$createStack(ItemIds.LEAD);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, lead);
         world.addFreshEntity(player);

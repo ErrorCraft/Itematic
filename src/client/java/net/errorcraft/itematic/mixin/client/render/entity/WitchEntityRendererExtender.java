@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.client.render.entity;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.renderer.entity.WitchRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +18,6 @@ public class WitchEntityRendererExtender {
         )
     )
     private boolean isOfForPotionUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.POTION);
+        return instance.itematic$isOf(ItemIds.POTION);
     }
 }

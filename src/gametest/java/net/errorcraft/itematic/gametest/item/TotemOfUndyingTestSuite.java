@@ -2,7 +2,7 @@ package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.assertion.ItemStackAssert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +17,7 @@ public class TotemOfUndyingTestSuite {
     public void holdingTotemOfUndyingSavesHolderFromDeath(GameTestHelper context) {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel world = context.getLevel();
-        ItemStack totemOfUndying = world.itematic$createStack(ItemKeys.TOTEM_OF_UNDYING);
+        ItemStack totemOfUndying = world.itematic$createStack(ItemIds.TOTEM_OF_UNDYING);
         player.setItemInHand(InteractionHand.MAIN_HAND, totemOfUndying);
         player.hurtServer(world, world.damageSources().fall(), Float.MAX_VALUE);
         context.succeedIf(() -> Assert.livingEntity(context, player)

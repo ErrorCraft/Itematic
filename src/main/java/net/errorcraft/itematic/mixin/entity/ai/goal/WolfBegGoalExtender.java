@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.ai.goal;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.ai.goal.BegGoal;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +18,6 @@ public class WolfBegGoalExtender {
         )
     )
     private boolean isOfForBoneUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BONE);
+        return instance.itematic$isOf(ItemIds.BONE);
     }
 }

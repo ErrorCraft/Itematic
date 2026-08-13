@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.decoration;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
@@ -27,7 +27,7 @@ public abstract class PaintingEntityExtender extends HangingEntity {
         )
     )
     private ItemEntity dropItemForPaintingUseRegistryKey(Painting instance, ServerLevel world, ItemLike itemConvertible) {
-        return this.itematic$dropItem(world, ItemKeys.PAINTING);
+        return this.itematic$dropItem(world, ItemIds.PAINTING);
     }
 
     @Redirect(
@@ -38,6 +38,6 @@ public abstract class PaintingEntityExtender extends HangingEntity {
         )
     )
     private ItemStack newItemStackForPaintingUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.PAINTING);
+        return this.level().itematic$createStack(ItemIds.PAINTING);
     }
 }

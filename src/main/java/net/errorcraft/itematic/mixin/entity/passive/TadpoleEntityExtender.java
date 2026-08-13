@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.fish.AbstractFish;
@@ -29,11 +29,11 @@ public abstract class TadpoleEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForTadpoleBucketUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.TADPOLE_BUCKET);
+        return this.level().itematic$createStack(ItemIds.TADPOLE_BUCKET);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.TADPOLE_SPAWN_EGG;
+        return ItemIds.TADPOLE_SPAWN_EGG;
     }
 }

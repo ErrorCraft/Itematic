@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
@@ -28,7 +28,7 @@ public abstract class PiglinBruteEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForGoldenAxeUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.GOLDEN_AXE);
+        return this.level().itematic$createStack(ItemIds.GOLDEN_AXE);
     }
 
     @Redirect(
@@ -39,11 +39,11 @@ public abstract class PiglinBruteEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForGoldenAxeUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GOLDEN_AXE);
+        return instance.itematic$isOf(ItemIds.GOLDEN_AXE);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.PIGLIN_BRUTE_SPAWN_EGG;
+        return ItemIds.PIGLIN_BRUTE_SPAWN_EGG;
     }
 }

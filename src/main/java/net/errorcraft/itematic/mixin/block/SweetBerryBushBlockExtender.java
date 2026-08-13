@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -20,7 +20,7 @@ public class SweetBerryBushBlockExtender {
         )
     )
     private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item, LevelReader world) {
-        return world.itematic$createStack(ItemKeys.SWEET_BERRIES);
+        return world.itematic$createStack(ItemIds.SWEET_BERRIES);
     }
 
     @Redirect(
@@ -31,6 +31,6 @@ public class SweetBerryBushBlockExtender {
         )
     )
     private boolean isOfForBoneMealUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BONE_MEAL);
+        return instance.itematic$isOf(ItemIds.BONE_MEAL);
     }
 }

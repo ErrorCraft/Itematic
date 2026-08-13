@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.projectile.thrown;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
@@ -17,6 +17,6 @@ public abstract class SplashPotionEntityExtender extends ThrownItemEntityExtende
 
     @Override
     protected ResourceKey<Item> getDefaultItemKey() {
-        return ItemKeys.SPLASH_POTION;
+        return ItemIds.SPLASH_POTION;
     }
 }

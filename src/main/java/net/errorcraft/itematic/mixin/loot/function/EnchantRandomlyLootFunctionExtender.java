@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.loot.function;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.EnchantableItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,9 +24,9 @@ public class EnchantRandomlyLootFunctionExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isOfForBookUseItemComponent(ItemStack instance, Item item) {
-        return instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
-            .flatMap(EnchantableItemComponent::transformsInto)
+    private boolean isOfForBookUseItemBehavior(ItemStack instance, Item item) {
+        return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+            .flatMap(EnchantableItemBehavior::transformsInto)
             .isPresent();
     }
 
@@ -37,9 +37,9 @@ public class EnchantRandomlyLootFunctionExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private static boolean isOfForBookUseItemComponentStatic(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemComponentTypes.ENCHANTABLE)
-            .flatMap(EnchantableItemComponent::transformsInto);
+    private static boolean isOfForBookUseItemBehaviorStatic(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+            .flatMap(EnchantableItemBehavior::transformsInto);
         optionalItem.ifPresent(transformsInto::set);
         return optionalItem.isPresent();
     }
@@ -51,7 +51,7 @@ public class EnchantRandomlyLootFunctionExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForEnchantedBookUseItemComponent(ItemLike item, ItemStack stack, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+    private static ItemStack newItemStackForEnchantedBookUseItemBehavior(ItemLike item, ItemStack stack, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
         return stack.itematic$copyWithItem(transformsInto.get());
     }
 }

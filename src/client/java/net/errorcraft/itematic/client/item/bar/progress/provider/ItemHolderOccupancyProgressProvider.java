@@ -2,7 +2,7 @@ package net.errorcraft.itematic.client.item.bar.progress.provider;
 
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProviderKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.math.Fraction;
@@ -26,7 +26,7 @@ public class ItemHolderOccupancyProgressProvider implements ProgressProvider {
     }
 
     private static Optional<Fraction> occupancy(ItemStack stack) {
-        return stack.itematic$getBehavior(ItemComponentTypes.ITEM_HOLDER)
+        return stack.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
             .map(c -> c.occupancy(stack));
     }
 }

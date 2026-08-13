@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.hurtingprojectile.Fireball;
@@ -25,6 +25,6 @@ public class AbstractFireballEntityExtender extends AbstractHurtingProjectile {
         )
     )
     private ItemStack newItemStackForFireChargeUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.FIRE_CHARGE);
+        return this.level().itematic$createStack(ItemIds.FIRE_CHARGE);
     }
 }

@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -61,11 +61,11 @@ public abstract class PigEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isHoldingForCarrotOnAStickUseRegistryKeyCheck(Player instance, Item item) {
-        return instance.itematic$isHolding(ItemKeys.CARROT_ON_A_STICK);
+        return instance.itematic$isHolding(ItemIds.CARROT_ON_A_STICK);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.PIG_SPAWN_EGG;
+        return ItemIds.PIG_SPAWN_EGG;
     }
 }

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.block.AbstractBlockAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
@@ -37,7 +37,7 @@ public class BeehiveBlockExtender implements AbstractBlockAccess {
         )
     )
     private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SHEARS);
+        return instance.itematic$isOf(ItemIds.SHEARS);
     }
 
     @Redirect(
@@ -56,7 +56,7 @@ public class BeehiveBlockExtender implements AbstractBlockAccess {
         )
     )
     private boolean isOfForGlassBottleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GLASS_BOTTLE);
+        return instance.itematic$isOf(ItemIds.GLASS_BOTTLE);
     }
 
     @Redirect(
@@ -67,7 +67,7 @@ public class BeehiveBlockExtender implements AbstractBlockAccess {
         )
     )
     private ItemStack newItemStackForHoneyBottleUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemKeys.HONEY_BOTTLE);
+        return world.itematic$createStack(ItemIds.HONEY_BOTTLE);
     }
 
     @Redirect(

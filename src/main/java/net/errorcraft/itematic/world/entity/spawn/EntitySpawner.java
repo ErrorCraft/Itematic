@@ -2,13 +2,13 @@ package net.errorcraft.itematic.world.entity.spawn;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.mixin.entity.EntityAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
 import net.errorcraft.itematic.world.entity.spawn.rule.ConditionedEntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
+import net.errorcraft.itematic.world.item.ItemEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
@@ -173,7 +173,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
             entity.position()
         );
         spawnedContext.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
-            .itematic$invokeEvent(ItemEvents.SPAWN_ENTITY, spawnedContext);
+            .itematic$invokeEvent(ItemEvent.SPAWN_ENTITY, spawnedContext);
     }
 
     private void applyComponents(Entity entity, ItemStack stack) {

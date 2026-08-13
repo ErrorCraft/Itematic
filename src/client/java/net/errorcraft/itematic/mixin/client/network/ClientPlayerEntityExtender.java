@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.client.network;
 
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +17,7 @@ public class ClientPlayerEntityExtender {
         cancellable = true
     )
     private void checkPresenceTextHolderBehavior(ItemStack book, InteractionHand hand, CallbackInfo info) {
-        if (!book.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER)) {
+        if (!book.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             info.cancel();
         }
     }

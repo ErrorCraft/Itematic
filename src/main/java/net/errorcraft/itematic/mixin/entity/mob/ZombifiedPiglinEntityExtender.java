@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.entity.mob;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.zombie.Zombie;
@@ -44,13 +44,13 @@ public abstract class ZombifiedPiglinEntityExtender extends MobEntityExtender {
     )
     private ItemStack newItemStackForGoldenWeaponUseCreateStack(ItemLike item, @Share("spearChance") LocalIntRef spearChance) {
         return this.level().itematic$createStack(spearChance.get() == 0
-            ? ItemKeys.GOLDEN_SPEAR
-            : ItemKeys.GOLDEN_SWORD
+            ? ItemIds.GOLDEN_SPEAR
+            : ItemIds.GOLDEN_SWORD
         );
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.ZOMBIFIED_PIGLIN_SPAWN_EGG;
+        return ItemIds.ZOMBIFIED_PIGLIN_SPAWN_EGG;
     }
 }

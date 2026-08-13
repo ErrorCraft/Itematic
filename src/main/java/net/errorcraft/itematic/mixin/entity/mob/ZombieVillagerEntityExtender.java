@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,11 +27,11 @@ public abstract class ZombieVillagerEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GOLDEN_APPLE);
+        return instance.itematic$isOf(ItemIds.GOLDEN_APPLE);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.ZOMBIE_VILLAGER_SPAWN_EGG;
+        return ItemIds.ZOMBIE_VILLAGER_SPAWN_EGG;
     }
 }

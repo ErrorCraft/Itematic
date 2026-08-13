@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.block.AbstractBlockAccess;
-import net.errorcraft.itematic.item.ItemAccess;
-import net.errorcraft.itematic.item.UnplaceableItemPlacementContext;
+import net.errorcraft.itematic.world.item.context.UnplaceableBlockPlaceContext;
+import net.errorcraft.itematic.world.level.ItemAccess;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,7 +43,7 @@ public class ScaffoldingBlockExtender extends Block implements AbstractBlockAcce
     )
     private Item getLightUseDynamicRegistry(Item item, @Local(argsOnly = true) BlockState state, @Local(argsOnly = true) BlockGetter world) {
         if (world instanceof ItemAccess itemAccess) {
-            return itemAccess.getOptionalEntry(state.getBlock().itematic$asItemKey())
+            return itemAccess.get(state.getBlock().itematic$asItemKey())
                 .map(Holder::value)
                 .orElse(null);
         }
@@ -60,7 +60,7 @@ public class ScaffoldingBlockExtender extends Block implements AbstractBlockAcce
         }
 
         if (ScaffoldingBlock.getDistance(world, pos) == STABILITY_MAX_DISTANCE) {
-            return UnplaceableItemPlacementContext.of(context);
+            return UnplaceableBlockPlaceContext.of(context);
         }
 
         return context;
@@ -87,7 +87,7 @@ public class ScaffoldingBlockExtender extends Block implements AbstractBlockAcce
             }
         }
 
-        return UnplaceableItemPlacementContext.of(context);
+        return UnplaceableBlockPlaceContext.of(context);
     }
 
     @Unique
@@ -123,6 +123,6 @@ public class ScaffoldingBlockExtender extends Block implements AbstractBlockAcce
             return BlockPlaceContext.at(context, pos, direction);
         }
 
-        return UnplaceableItemPlacementContext.of(context);
+        return UnplaceableBlockPlaceContext.of(context);
     }
 }

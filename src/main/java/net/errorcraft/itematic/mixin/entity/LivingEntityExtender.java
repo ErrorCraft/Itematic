@@ -7,12 +7,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.LivingEntityAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.ConsumableItemComponent;
-import net.errorcraft.itematic.item.event.ItemEvents;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.item.component.WeaponAttackDamage;
+import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.ConsumableItemBehavior;
+import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentType;
@@ -98,7 +98,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void checkPresenceEquipmentBehaviorEquipmentSlot(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> info) {
-        if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.setReturnValue(EquipmentSlot.MAINHAND);
         }
     }
@@ -112,7 +112,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void checkPresenceEquipmentBehavior(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
-        if (!newStack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!newStack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.cancel();
         }
     }
@@ -133,7 +133,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isOfForSkeletonSkullUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SKELETON_SKULL);
+        return instance.itematic$isOf(ItemIds.SKELETON_SKULL);
     }
 
     @Redirect(
@@ -152,7 +152,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isOfForZombieHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.ZOMBIE_HEAD);
+        return instance.itematic$isOf(ItemIds.ZOMBIE_HEAD);
     }
 
     @Redirect(
@@ -171,7 +171,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isOfForCreeperHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CREEPER_HEAD);
+        return instance.itematic$isOf(ItemIds.CREEPER_HEAD);
     }
 
     @Redirect(
@@ -194,7 +194,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isOfForPiglinHeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.PIGLIN_HEAD);
+        return instance.itematic$isOf(ItemIds.PIGLIN_HEAD);
     }
 
     @Redirect(
@@ -206,7 +206,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     @SuppressWarnings("unchecked")
     private <T> T getDeathProtectionDataComponentUseEventListenerCheck(ItemStack instance, DataComponentType<T> type) {
-        if (instance.itematic$hasEventListener(ItemEvents.BEFORE_DEATH_HOLDER)) {
+        if (instance.itematic$hasEventListener(ItemEvent.BEFORE_DEATH_HOLDER)) {
             return (T) DeathProtection.TOTEM_OF_UNDYING;
         }
 
@@ -242,7 +242,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             .add(LootContextParams.ORIGIN, entity.position())
             .add(LootContextParams.TOOL, stack)
             .build();
-        stack.itematic$invokeEvent(ItemEvents.BEFORE_DEATH_HOLDER, context);
+        stack.itematic$invokeEvent(ItemEvent.BEFORE_DEATH_HOLDER, context);
     }
 
     @Inject(
@@ -323,7 +323,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void shouldSpawnParticles(ItemStack stack, int count, CallbackInfo info) {
-        if (!this.useItem.itematic$getBehavior(ItemComponentTypes.CONSUMABLE).map(ConsumableItemComponent::hasConsumeParticles).orElse(false)) {
+        if (!this.useItem.itematic$getBehavior(ItemBehaviorType.CONSUMABLE).map(ConsumableItemBehavior::hasConsumeParticles).orElse(false)) {
             info.cancel();
         }
     }
@@ -335,8 +335,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private static boolean containsGliderUseItemComponent(ItemStack instance, DataComponentType<Unit> type) {
-        return instance.itematic$getBehavior(ItemComponentTypes.GLIDER)
+    private static boolean containsGliderUseItemBehavior(ItemStack instance, DataComponentType<Unit> type) {
+        return instance.itematic$getBehavior(ItemBehaviorType.GLIDER)
             .map(glider -> glider.canUse(instance))
             .orElse(false);
     }
@@ -361,7 +361,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         cancellable = true
     )
     private void checkPresenceEquipmentBehaviorBoolean(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.setReturnValue(false);
         }
     }
@@ -385,7 +385,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private Object checkPresenceEquipmentBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
-        if (!instance.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!instance.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return null;
         }
 
@@ -400,7 +400,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private ItemStack newItemStackForWitherRoseUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.WITHER_ROSE);
+        return this.level().itematic$createStack(ItemIds.WITHER_ROSE);
     }
 
     @ModifyReturnValue(
@@ -490,7 +490,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Unique
     private Double getBaseAttackDamage(ItemStack stack) {
-        if (!stack.itematic$hasBehavior(ItemComponentTypes.WEAPON)) {
+        if (!stack.itematic$hasBehavior(ItemBehaviorType.WEAPON)) {
             return null;
         }
 

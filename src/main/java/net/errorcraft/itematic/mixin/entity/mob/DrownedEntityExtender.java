@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.zombie.Drowned;
@@ -30,7 +30,7 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForNautilusShellUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.NAUTILUS_SHELL);
+        return this.level().itematic$createStack(ItemIds.NAUTILUS_SHELL);
     }
 
     @Redirect(
@@ -45,7 +45,7 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForTridentUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.TRIDENT);
+        return this.level().itematic$createStack(ItemIds.TRIDENT);
     }
 
     @Redirect(
@@ -64,7 +64,7 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForFishingRodUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.FISHING_ROD);
+        return this.level().itematic$createStack(ItemIds.FISHING_ROD);
     }
 
     @Redirect(
@@ -83,12 +83,12 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForNautilusShellUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.NAUTILUS_SHELL);
+        return instance.itematic$isOf(ItemIds.NAUTILUS_SHELL);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.DROWNED_SPAWN_EGG;
+        return ItemIds.DROWNED_SPAWN_EGG;
     }
 
     @Mixin(targets = "net/minecraft/world/entity/monster/zombie/Drowned$DrownedTridentAttackGoal")
@@ -101,7 +101,7 @@ public abstract class DrownedEntityExtender extends MobEntityExtender {
             )
         )
         private boolean isOfForTridentUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.TRIDENT);
+            return instance.itematic$isOf(ItemIds.TRIDENT);
         }
     }
 }

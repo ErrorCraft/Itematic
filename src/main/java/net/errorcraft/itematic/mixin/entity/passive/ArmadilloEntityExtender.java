@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -28,11 +28,11 @@ public abstract class ArmadilloEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForBrushUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BRUSH);
+        return instance.itematic$isOf(ItemIds.BRUSH);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.ARMADILLO_SPAWN_EGG;
+        return ItemIds.ARMADILLO_SPAWN_EGG;
     }
 }

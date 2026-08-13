@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.render.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
@@ -21,7 +21,7 @@ public class ArmorFeatureRendererExtender<S extends HumanoidRenderState> {
         cancellable = true
     )
     private static void checkPresenceEquipmentBehavior(ItemStack stack, EquipmentSlot slot, CallbackInfoReturnable<Boolean> info) {
-        if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.setReturnValue(false);
         }
     }
@@ -32,7 +32,7 @@ public class ArmorFeatureRendererExtender<S extends HumanoidRenderState> {
         cancellable = true
     )
     private void checkPresenceEquipmentBehavior(PoseStack matrices, SubmitNodeCollector orderedRenderCommandQueue, ItemStack stack, EquipmentSlot slot, int light, S bipedEntityRenderState, CallbackInfo info) {
-        if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.cancel();
         }
     }

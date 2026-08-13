@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -17,7 +17,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PISTON)
+            .is(ItemIds.PISTON)
         );
     }
 
@@ -27,7 +27,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.STICKY_PISTON)
+            .is(ItemIds.STICKY_PISTON)
         );
     }
 
@@ -37,7 +37,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.REDSTONE)
+            .is(ItemIds.REDSTONE)
         );
     }
 
@@ -47,7 +47,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.STRING)
+            .is(ItemIds.STRING)
         );
     }
 
@@ -57,7 +57,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.TORCH)
+            .is(ItemIds.TORCH)
         );
     }
 
@@ -67,7 +67,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.REDSTONE_TORCH)
+            .is(ItemIds.REDSTONE_TORCH)
         );
     }
 
@@ -77,7 +77,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SOUL_TORCH)
+            .is(ItemIds.SOUL_TORCH)
         );
     }
 
@@ -87,7 +87,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.OAK_SIGN)
+            .is(ItemIds.OAK_SIGN)
         );
     }
 
@@ -97,7 +97,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SPRUCE_SIGN)
+            .is(ItemIds.SPRUCE_SIGN)
         );
     }
 
@@ -107,7 +107,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BIRCH_SIGN)
+            .is(ItemIds.BIRCH_SIGN)
         );
     }
 
@@ -117,7 +117,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ACACIA_SIGN)
+            .is(ItemIds.ACACIA_SIGN)
         );
     }
 
@@ -127,7 +127,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CHERRY_SIGN)
+            .is(ItemIds.CHERRY_SIGN)
         );
     }
 
@@ -137,7 +137,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PALE_OAK_SIGN)
+            .is(ItemIds.PALE_OAK_SIGN)
         );
     }
 
@@ -147,7 +147,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.JUNGLE_SIGN)
+            .is(ItemIds.JUNGLE_SIGN)
         );
     }
 
@@ -157,7 +157,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DARK_OAK_SIGN)
+            .is(ItemIds.DARK_OAK_SIGN)
         );
     }
 
@@ -167,7 +167,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MANGROVE_SIGN)
+            .is(ItemIds.MANGROVE_SIGN)
         );
     }
 
@@ -177,7 +177,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BAMBOO_SIGN)
+            .is(ItemIds.BAMBOO_SIGN)
         );
     }
 
@@ -187,7 +187,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CRIMSON_SIGN)
+            .is(ItemIds.CRIMSON_SIGN)
         );
     }
 
@@ -197,7 +197,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WARPED_SIGN)
+            .is(ItemIds.WARPED_SIGN)
         );
     }
 
@@ -207,7 +207,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.OAK_HANGING_SIGN)
+            .is(ItemIds.OAK_HANGING_SIGN)
         );
     }
 
@@ -217,7 +217,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SPRUCE_HANGING_SIGN)
+            .is(ItemIds.SPRUCE_HANGING_SIGN)
         );
     }
 
@@ -227,7 +227,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BIRCH_HANGING_SIGN)
+            .is(ItemIds.BIRCH_HANGING_SIGN)
         );
     }
 
@@ -237,7 +237,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ACACIA_HANGING_SIGN)
+            .is(ItemIds.ACACIA_HANGING_SIGN)
         );
     }
 
@@ -247,7 +247,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CHERRY_HANGING_SIGN)
+            .is(ItemIds.CHERRY_HANGING_SIGN)
         );
     }
 
@@ -257,7 +257,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PALE_OAK_HANGING_SIGN)
+            .is(ItemIds.PALE_OAK_HANGING_SIGN)
         );
     }
 
@@ -267,7 +267,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.JUNGLE_HANGING_SIGN)
+            .is(ItemIds.JUNGLE_HANGING_SIGN)
         );
     }
 
@@ -277,7 +277,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DARK_OAK_HANGING_SIGN)
+            .is(ItemIds.DARK_OAK_HANGING_SIGN)
         );
     }
 
@@ -287,7 +287,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MANGROVE_HANGING_SIGN)
+            .is(ItemIds.MANGROVE_HANGING_SIGN)
         );
     }
 
@@ -297,7 +297,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CRIMSON_HANGING_SIGN)
+            .is(ItemIds.CRIMSON_HANGING_SIGN)
         );
     }
 
@@ -307,7 +307,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WARPED_HANGING_SIGN)
+            .is(ItemIds.WARPED_HANGING_SIGN)
         );
     }
 
@@ -317,7 +317,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BAMBOO_HANGING_SIGN)
+            .is(ItemIds.BAMBOO_HANGING_SIGN)
         );
     }
 
@@ -327,7 +327,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PUMPKIN_SEEDS)
+            .is(ItemIds.PUMPKIN_SEEDS)
         );
     }
 
@@ -337,7 +337,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MELON_SEEDS)
+            .is(ItemIds.MELON_SEEDS)
         );
     }
 
@@ -347,7 +347,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PUMPKIN_SEEDS)
+            .is(ItemIds.PUMPKIN_SEEDS)
         );
     }
 
@@ -357,7 +357,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MELON_SEEDS)
+            .is(ItemIds.MELON_SEEDS)
         );
     }
 
@@ -367,7 +367,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.COCOA_BEANS)
+            .is(ItemIds.COCOA_BEANS)
         );
     }
 
@@ -377,7 +377,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CARROT)
+            .is(ItemIds.CARROT)
         );
     }
 
@@ -387,7 +387,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.POTATO)
+            .is(ItemIds.POTATO)
         );
     }
 
@@ -397,7 +397,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.TORCHFLOWER_SEEDS)
+            .is(ItemIds.TORCHFLOWER_SEEDS)
         );
     }
 
@@ -407,7 +407,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PITCHER_POD)
+            .is(ItemIds.PITCHER_POD)
         );
     }
 
@@ -417,7 +417,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BEETROOT_SEEDS)
+            .is(ItemIds.BEETROOT_SEEDS)
         );
     }
 
@@ -427,7 +427,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.GLOW_BERRIES)
+            .is(ItemIds.GLOW_BERRIES)
         );
     }
 
@@ -437,7 +437,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.GLOW_BERRIES)
+            .is(ItemIds.GLOW_BERRIES)
         );
     }
 
@@ -447,7 +447,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BIG_DRIPLEAF)
+            .is(ItemIds.BIG_DRIPLEAF)
         );
     }
 
@@ -457,7 +457,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SEAGRASS)
+            .is(ItemIds.SEAGRASS)
         );
     }
 
@@ -467,7 +467,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.KELP)
+            .is(ItemIds.KELP)
         );
     }
 
@@ -477,7 +477,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAULDRON)
+            .is(ItemIds.CAULDRON)
         );
     }
 
@@ -487,7 +487,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAULDRON)
+            .is(ItemIds.CAULDRON)
         );
     }
 
@@ -497,7 +497,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAULDRON)
+            .is(ItemIds.CAULDRON)
         );
     }
 
@@ -507,7 +507,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.POWDER_SNOW_BUCKET)
+            .is(ItemIds.POWDER_SNOW_BUCKET)
         );
     }
 
@@ -517,7 +517,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.TORCHFLOWER)
+            .is(ItemIds.TORCHFLOWER)
         );
     }
 
@@ -527,7 +527,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.OAK_SAPLING)
+            .is(ItemIds.OAK_SAPLING)
         );
     }
 
@@ -537,7 +537,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SPRUCE_SAPLING)
+            .is(ItemIds.SPRUCE_SAPLING)
         );
     }
 
@@ -547,7 +547,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BIRCH_SAPLING)
+            .is(ItemIds.BIRCH_SAPLING)
         );
     }
 
@@ -557,7 +557,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.JUNGLE_SAPLING)
+            .is(ItemIds.JUNGLE_SAPLING)
         );
     }
 
@@ -567,7 +567,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ACACIA_SAPLING)
+            .is(ItemIds.ACACIA_SAPLING)
         );
     }
 
@@ -577,7 +577,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CHERRY_SAPLING)
+            .is(ItemIds.CHERRY_SAPLING)
         );
     }
 
@@ -587,7 +587,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DARK_OAK_SAPLING)
+            .is(ItemIds.DARK_OAK_SAPLING)
         );
     }
 
@@ -597,7 +597,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MANGROVE_PROPAGULE)
+            .is(ItemIds.MANGROVE_PROPAGULE)
         );
     }
 
@@ -607,7 +607,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.FERN)
+            .is(ItemIds.FERN)
         );
     }
 
@@ -617,7 +617,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DANDELION)
+            .is(ItemIds.DANDELION)
         );
     }
 
@@ -627,7 +627,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.POPPY)
+            .is(ItemIds.POPPY)
         );
     }
 
@@ -637,7 +637,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BLUE_ORCHID)
+            .is(ItemIds.BLUE_ORCHID)
         );
     }
 
@@ -647,7 +647,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ALLIUM)
+            .is(ItemIds.ALLIUM)
         );
     }
 
@@ -657,7 +657,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.AZURE_BLUET)
+            .is(ItemIds.AZURE_BLUET)
         );
     }
 
@@ -667,7 +667,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.RED_TULIP)
+            .is(ItemIds.RED_TULIP)
         );
     }
 
@@ -677,7 +677,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ORANGE_TULIP)
+            .is(ItemIds.ORANGE_TULIP)
         );
     }
 
@@ -687,7 +687,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WHITE_TULIP)
+            .is(ItemIds.WHITE_TULIP)
         );
     }
 
@@ -697,7 +697,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PINK_TULIP)
+            .is(ItemIds.PINK_TULIP)
         );
     }
 
@@ -707,7 +707,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.OXEYE_DAISY)
+            .is(ItemIds.OXEYE_DAISY)
         );
     }
 
@@ -717,7 +717,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CORNFLOWER)
+            .is(ItemIds.CORNFLOWER)
         );
     }
 
@@ -727,7 +727,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.LILY_OF_THE_VALLEY)
+            .is(ItemIds.LILY_OF_THE_VALLEY)
         );
     }
 
@@ -737,7 +737,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WITHER_ROSE)
+            .is(ItemIds.WITHER_ROSE)
         );
     }
 
@@ -747,7 +747,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.RED_MUSHROOM)
+            .is(ItemIds.RED_MUSHROOM)
         );
     }
 
@@ -757,7 +757,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BROWN_MUSHROOM)
+            .is(ItemIds.BROWN_MUSHROOM)
         );
     }
 
@@ -767,7 +767,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DEAD_BUSH)
+            .is(ItemIds.DEAD_BUSH)
         );
     }
 
@@ -777,7 +777,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CACTUS)
+            .is(ItemIds.CACTUS)
         );
     }
 
@@ -787,7 +787,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BAMBOO)
+            .is(ItemIds.BAMBOO)
         );
     }
 
@@ -797,7 +797,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CRIMSON_FUNGUS)
+            .is(ItemIds.CRIMSON_FUNGUS)
         );
     }
 
@@ -807,7 +807,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WARPED_FUNGUS)
+            .is(ItemIds.WARPED_FUNGUS)
         );
     }
 
@@ -817,7 +817,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CRIMSON_ROOTS)
+            .is(ItemIds.CRIMSON_ROOTS)
         );
     }
 
@@ -827,7 +827,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WARPED_ROOTS)
+            .is(ItemIds.WARPED_ROOTS)
         );
     }
 
@@ -837,7 +837,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.AZALEA)
+            .is(ItemIds.AZALEA)
         );
     }
 
@@ -847,7 +847,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.FLOWERING_AZALEA)
+            .is(ItemIds.FLOWERING_AZALEA)
         );
     }
 
@@ -857,7 +857,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.OPEN_EYEBLOSSOM)
+            .is(ItemIds.OPEN_EYEBLOSSOM)
         );
     }
 
@@ -867,7 +867,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CLOSED_EYEBLOSSOM)
+            .is(ItemIds.CLOSED_EYEBLOSSOM)
         );
     }
 
@@ -877,7 +877,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SKELETON_SKULL)
+            .is(ItemIds.SKELETON_SKULL)
         );
     }
 
@@ -887,7 +887,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WITHER_SKELETON_SKULL)
+            .is(ItemIds.WITHER_SKELETON_SKULL)
         );
     }
 
@@ -897,7 +897,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ZOMBIE_HEAD)
+            .is(ItemIds.ZOMBIE_HEAD)
         );
     }
 
@@ -907,7 +907,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PLAYER_HEAD)
+            .is(ItemIds.PLAYER_HEAD)
         );
     }
 
@@ -917,7 +917,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CREEPER_HEAD)
+            .is(ItemIds.CREEPER_HEAD)
         );
     }
 
@@ -927,7 +927,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DRAGON_HEAD)
+            .is(ItemIds.DRAGON_HEAD)
         );
     }
 
@@ -937,7 +937,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PIGLIN_HEAD)
+            .is(ItemIds.PIGLIN_HEAD)
         );
     }
 
@@ -947,7 +947,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WHITE_BANNER)
+            .is(ItemIds.WHITE_BANNER)
         );
     }
 
@@ -957,7 +957,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.ORANGE_BANNER)
+            .is(ItemIds.ORANGE_BANNER)
         );
     }
 
@@ -967,7 +967,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.MAGENTA_BANNER)
+            .is(ItemIds.MAGENTA_BANNER)
         );
     }
 
@@ -977,7 +977,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.LIGHT_BLUE_BANNER)
+            .is(ItemIds.LIGHT_BLUE_BANNER)
         );
     }
 
@@ -987,7 +987,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.YELLOW_BANNER)
+            .is(ItemIds.YELLOW_BANNER)
         );
     }
 
@@ -997,7 +997,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.LIME_BANNER)
+            .is(ItemIds.LIME_BANNER)
         );
     }
 
@@ -1007,7 +1007,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PINK_BANNER)
+            .is(ItemIds.PINK_BANNER)
         );
     }
 
@@ -1017,7 +1017,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.GRAY_BANNER)
+            .is(ItemIds.GRAY_BANNER)
         );
     }
 
@@ -1027,7 +1027,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.LIGHT_GRAY_BANNER)
+            .is(ItemIds.LIGHT_GRAY_BANNER)
         );
     }
 
@@ -1037,7 +1037,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CYAN_BANNER)
+            .is(ItemIds.CYAN_BANNER)
         );
     }
 
@@ -1047,7 +1047,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.PURPLE_BANNER)
+            .is(ItemIds.PURPLE_BANNER)
         );
     }
 
@@ -1057,7 +1057,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BLUE_BANNER)
+            .is(ItemIds.BLUE_BANNER)
         );
     }
 
@@ -1067,7 +1067,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BROWN_BANNER)
+            .is(ItemIds.BROWN_BANNER)
         );
     }
 
@@ -1077,7 +1077,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.GREEN_BANNER)
+            .is(ItemIds.GREEN_BANNER)
         );
     }
 
@@ -1087,7 +1087,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.RED_BANNER)
+            .is(ItemIds.RED_BANNER)
         );
     }
 
@@ -1097,7 +1097,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BLACK_BANNER)
+            .is(ItemIds.BLACK_BANNER)
         );
     }
 
@@ -1107,7 +1107,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DEAD_TUBE_CORAL_FAN)
+            .is(ItemIds.DEAD_TUBE_CORAL_FAN)
         );
     }
 
@@ -1117,7 +1117,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DEAD_BRAIN_CORAL_FAN)
+            .is(ItemIds.DEAD_BRAIN_CORAL_FAN)
         );
     }
 
@@ -1127,7 +1127,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DEAD_BUBBLE_CORAL_FAN)
+            .is(ItemIds.DEAD_BUBBLE_CORAL_FAN)
         );
     }
 
@@ -1137,7 +1137,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DEAD_FIRE_CORAL_FAN)
+            .is(ItemIds.DEAD_FIRE_CORAL_FAN)
         );
     }
 
@@ -1147,7 +1147,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.DEAD_HORN_CORAL_FAN)
+            .is(ItemIds.DEAD_HORN_CORAL_FAN)
         );
     }
 
@@ -1157,7 +1157,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.TUBE_CORAL_FAN)
+            .is(ItemIds.TUBE_CORAL_FAN)
         );
     }
 
@@ -1167,7 +1167,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BRAIN_CORAL_FAN)
+            .is(ItemIds.BRAIN_CORAL_FAN)
         );
     }
 
@@ -1177,7 +1177,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BUBBLE_CORAL_FAN)
+            .is(ItemIds.BUBBLE_CORAL_FAN)
         );
     }
 
@@ -1187,7 +1187,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.FIRE_CORAL_FAN)
+            .is(ItemIds.FIRE_CORAL_FAN)
         );
     }
 
@@ -1197,7 +1197,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.HORN_CORAL_FAN)
+            .is(ItemIds.HORN_CORAL_FAN)
         );
     }
 
@@ -1207,7 +1207,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.BAMBOO)
+            .is(ItemIds.BAMBOO)
         );
     }
 
@@ -1217,7 +1217,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.SWEET_BERRIES)
+            .is(ItemIds.SWEET_BERRIES)
         );
     }
 
@@ -1227,7 +1227,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.WEEPING_VINES)
+            .is(ItemIds.WEEPING_VINES)
         );
     }
 
@@ -1237,7 +1237,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.TWISTING_VINES)
+            .is(ItemIds.TWISTING_VINES)
         );
     }
 
@@ -1247,7 +1247,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1257,7 +1257,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1267,7 +1267,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1277,7 +1277,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1287,7 +1287,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1297,7 +1297,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1307,7 +1307,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1317,7 +1317,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1327,7 +1327,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1337,7 +1337,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1347,7 +1347,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1357,7 +1357,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1367,7 +1367,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1377,7 +1377,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1387,7 +1387,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1397,7 +1397,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 
@@ -1407,7 +1407,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(context.getLevel(), absolutePos, false);
         context.succeedIf(() -> Assert.itemStack(context, stack)
-            .is(ItemKeys.CAKE)
+            .is(ItemIds.CAKE)
         );
     }
 }

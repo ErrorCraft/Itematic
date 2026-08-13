@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -21,7 +21,7 @@ public class PaintingTestSuite {
     public void usingPaintingOnVerticalSidePlacesPainting(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.PAINTING));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.PAINTING));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.NORTH);
         context.succeedIf(() -> Assert.entityType(context, EntityType.PAINTING)
@@ -32,7 +32,7 @@ public class PaintingTestSuite {
     public void usingPaintingOnTopSideDoesNotPlacePainting(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.PAINTING));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.PAINTING));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.PAINTING)
@@ -43,7 +43,7 @@ public class PaintingTestSuite {
     public void usingPaintingOnBottomSideDoesNotPlacePainting(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.PAINTING));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.PAINTING));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.DOWN);
         context.succeedIf(() -> Assert.entityType(context, EntityType.PAINTING)

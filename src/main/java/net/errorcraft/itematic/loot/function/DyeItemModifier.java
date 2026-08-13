@@ -3,7 +3,7 @@ package net.errorcraft.itematic.loot.function;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -34,7 +34,7 @@ public class DyeItemModifier extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext context) {
-        if (!stack.itematic$hasBehavior(ItemComponentTypes.DYEABLE)) {
+        if (!stack.itematic$hasBehavior(ItemBehaviorType.DYEABLE)) {
             return stack;
         }
         List<DyeItem> dyes = new ArrayList<>();

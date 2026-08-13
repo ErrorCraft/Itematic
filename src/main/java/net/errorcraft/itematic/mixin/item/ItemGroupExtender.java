@@ -3,9 +3,9 @@ package net.errorcraft.itematic.mixin.item;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.mojang.logging.LogUtils;
 import net.errorcraft.itematic.access.item.ItemGroupAccess;
-import net.errorcraft.itematic.item.ItemAccess;
-import net.errorcraft.itematic.item.group.entry.provider.ItemGroupEntryProvider;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
+import net.errorcraft.itematic.world.level.ItemAccess;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
@@ -57,7 +57,7 @@ public class ItemGroupExtender implements ItemGroupAccess {
 
     @Override
     public ItemStack itematic$icon(ItemAccess access) {
-        return new ItemStack(access.getEntry(this.iconKey));
+        return new ItemStack(access.getOrThrow(this.iconKey));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,6 +17,6 @@ public abstract class BlastingRecipeExtender extends AbstractCookingRecipeExtend
 
     @Override
     protected ResourceKey<Item> cookerItemKey() {
-        return ItemKeys.BLAST_FURNACE;
+        return ItemIds.BLAST_FURNACE;
     }
 }

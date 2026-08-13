@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.screen;
 
 import net.errorcraft.itematic.access.screen.BrewingStandScreenHandlerAccess;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItematicItemTags;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.minecraft.world.inventory.BrewingStandMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
@@ -117,7 +117,7 @@ public class BrewingStandScreenHandlerExtender implements BrewingStandScreenHand
             )
         )
         private static boolean matchesIsOfForGlassBottleUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.GLASS_BOTTLE);
+            return instance.itematic$isOf(ItemIds.GLASS_BOTTLE);
         }
     }
 }

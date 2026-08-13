@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
@@ -19,7 +19,7 @@ public class HoneyBottleTestSuite {
         player.getFoodData().setFoodLevel(0);
         player.addEffect(new MobEffectInstance(MobEffects.POISON, MobEffectInstance.INFINITE_DURATION));
         ServerLevel world = context.getLevel();
-        ItemStack honeyBottle = world.itematic$createStack(ItemKeys.HONEY_BOTTLE);
+        ItemStack honeyBottle = world.itematic$createStack(ItemIds.HONEY_BOTTLE);
         player.setItemInHand(InteractionHand.MAIN_HAND, honeyBottle);
         world.addFreshEntity(player);
         context.startSequence()

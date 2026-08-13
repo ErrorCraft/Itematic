@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,7 @@ public class GlowItemFrameTestSuite {
     public void usingGlowItemFrameOnGroundPlacesGlowItemFrame(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemKeys.GLOW_ITEM_FRAME));
+        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.GLOW_ITEM_FRAME));
         world.addFreshEntity(player);
         TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.UP);
         context.succeedIf(() -> Assert.entityType(context, EntityType.GLOW_ITEM_FRAME)
@@ -38,13 +38,13 @@ public class GlowItemFrameTestSuite {
     public void usingGlowItemFrameWithEntityDataPlacesGlowItemFrameWithSpecifiedData(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack glowItemFrame = world.itematic$createStack(ItemKeys.GLOW_ITEM_FRAME);
+        ItemStack glowItemFrame = world.itematic$createStack(ItemIds.GLOW_ITEM_FRAME);
         CompoundTag entityData = new CompoundTag();
         entityData.put(
             "Item",
             ItemStack.CODEC.encodeStart(
                 context.getLevel().registryAccess().createSerializationContext(NbtOps.INSTANCE),
-                world.itematic$createStack(ItemKeys.STICK)
+                world.itematic$createStack(ItemIds.STICK)
             ).getOrThrow()
         );
         glowItemFrame.set(
@@ -61,7 +61,7 @@ public class GlowItemFrameTestSuite {
             .existsAt(GLOW_ITEM_FRAME_POSITION, glowItemFrameAssert -> glowItemFrameAssert.test(
                 ItemFrame::getItem,
                 stack -> Assert.itemStack(context, stack)
-                    .is(ItemKeys.STICK)
+                    .is(ItemIds.STICK)
             )));
     }
 }

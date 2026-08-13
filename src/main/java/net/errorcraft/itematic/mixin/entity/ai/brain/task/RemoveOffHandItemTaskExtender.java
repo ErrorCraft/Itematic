@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.entity.ai.brain.task;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.StopHoldingItemIfNoLongerAdmiring;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +18,6 @@ public class RemoveOffHandItemTaskExtender {
         )
     )
     private static boolean containsBlocksAttacksDataComponentAlsoCheckItemBehaviorComponent(boolean original, @Local(argsOnly = true) Piglin piglin) {
-        return original && piglin.getOffhandItem().itematic$hasBehavior(ItemComponentTypes.ATTACK_BLOCKING);
+        return original && piglin.getOffhandItem().itematic$hasBehavior(ItemBehaviorType.ATTACK_BLOCKING);
     }
 }

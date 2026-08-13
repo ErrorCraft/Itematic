@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.screen;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.inventory.CartographyTableMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +31,7 @@ public class CartographyTableScreenHandlerExtender {
         )
     )
     private boolean isOfForGlassPaneUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GLASS_PANE);
+        return instance.itematic$isOf(ItemIds.GLASS_PANE);
     }
 
     @Redirect(
@@ -53,7 +53,7 @@ public class CartographyTableScreenHandlerExtender {
         )
     )
     private boolean isOfForPaperUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.PAPER);
+        return instance.itematic$isOf(ItemIds.PAPER);
     }
 
     @Redirect(
@@ -75,7 +75,7 @@ public class CartographyTableScreenHandlerExtender {
         )
     )
     private boolean isOfForMapUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.MAP);
+        return instance.itematic$isOf(ItemIds.MAP);
     }
 
     @Mixin(targets = "net/minecraft/world/inventory/CartographyTableMenu$4")
@@ -89,7 +89,7 @@ public class CartographyTableScreenHandlerExtender {
             )
         )
         private boolean isOfForPaperUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.PAPER);
+            return instance.itematic$isOf(ItemIds.PAPER);
         }
 
         @Redirect(
@@ -108,7 +108,7 @@ public class CartographyTableScreenHandlerExtender {
             )
         )
         private boolean isOfForGlassPaneUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.GLASS_PANE);
+            return instance.itematic$isOf(ItemIds.GLASS_PANE);
         }
 
         @Redirect(
@@ -127,7 +127,7 @@ public class CartographyTableScreenHandlerExtender {
             )
         )
         private boolean isOfForMapUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.MAP);
+            return instance.itematic$isOf(ItemIds.MAP);
         }
     }
 }

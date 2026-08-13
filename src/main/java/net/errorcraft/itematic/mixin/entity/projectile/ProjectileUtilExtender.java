@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -22,8 +22,8 @@ public class ProjectileUtilExtender {
             target = "Lnet/minecraft/world/item/ArrowItem;createArrow(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/projectile/arrow/AbstractArrow;"
         )
     )
-    private static AbstractArrow createProjectileUseItemComponent(ArrowItem instance, Level world, ItemStack projectile, LivingEntity shooter, ItemStack shotFrom) {
-        Entity entity = projectile.itematic$getBehavior(ItemComponentTypes.PROJECTILE)
+    private static AbstractArrow createProjectileUseItemBehavior(ArrowItem instance, Level world, ItemStack projectile, LivingEntity shooter, ItemStack shotFrom) {
+        Entity entity = projectile.itematic$getBehavior(ItemBehaviorType.PROJECTILE)
             .map(projectileBehavior -> projectileBehavior.spawnEntity(world, shooter, projectile, 1.0f, 1.0f))
             .orElse(null);
         if (entity instanceof AbstractArrow persistentProjectileEntity) {

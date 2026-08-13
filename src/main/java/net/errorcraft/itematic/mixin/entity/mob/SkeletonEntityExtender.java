@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
@@ -18,6 +18,6 @@ public abstract class SkeletonEntityExtender extends MobEntityExtender {
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.SKELETON_SPAWN_EGG;
+        return ItemIds.SKELETON_SPAWN_EGG;
     }
 }

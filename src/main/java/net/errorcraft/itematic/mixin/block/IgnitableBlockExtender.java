@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CandleCakeBlock;
@@ -29,7 +29,7 @@ public class IgnitableBlockExtender {
         )
     )
     private boolean isOfForFireChargeUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.FIRE_CHARGE);
+        return instance.itematic$isOf(ItemIds.FIRE_CHARGE);
     }
 
     @Redirect(
@@ -48,6 +48,6 @@ public class IgnitableBlockExtender {
         )
     )
     private boolean isOfForFlintAndSteelUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.FLINT_AND_STEEL);
+        return instance.itematic$isOf(ItemIds.FLINT_AND_STEEL);
     }
 }

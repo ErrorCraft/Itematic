@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.screen.slot;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.inventory.FurnaceFuelSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +18,6 @@ public class FurnaceFuelSlotExtender {
         )
     )
     private static boolean isOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BUCKET);
+        return instance.itematic$isOf(ItemIds.BUCKET);
     }
 }

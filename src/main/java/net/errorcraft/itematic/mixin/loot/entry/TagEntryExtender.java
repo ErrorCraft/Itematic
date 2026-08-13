@@ -24,6 +24,6 @@ public class TagEntryExtender {
         )
     )
     private Iterable<Holder<Item>> iterateEntriesUseDynamicRegistry(DefaultedRegistry<Item> instance, TagKey<Item> tagKey, @Local(argsOnly = true) LootContext context) {
-        return context.getLevel().itematic$getItemAccess().iterateEntries(tagKey);
+        return context.getLevel().itematic$getItemAccess().iterateTag(tagKey);
     }
 }

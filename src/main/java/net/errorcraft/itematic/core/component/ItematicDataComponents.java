@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.core.component;
 
-import net.errorcraft.itematic.item.ItemUtil;
-import net.errorcraft.itematic.item.component.components.ItemHolderItemComponent;
-import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
-import net.errorcraft.itematic.item.shooter.ChargingSoundsUtil;
-import net.errorcraft.itematic.item.shooter.method.methods.ChargeableShooterMethod;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.world.item.Items;
+import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
-import net.errorcraft.itematic.world.item.component.SmashingWeapon;
-import net.errorcraft.itematic.world.item.component.UseDuration;
-import net.errorcraft.itematic.world.item.component.WeaponAttackDamage;
 import net.errorcraft.itematic.world.item.equipment.Glider;
+import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.world.item.use.duration.UseDuration;
+import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
+import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
+import net.errorcraft.itematic.world.item.weapon.shooter.ChargingSounds;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.ChargeableShooterMethod;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -31,7 +31,7 @@ public class ItematicDataComponents {
     public static final DataComponentType<UseDuration> USE_DURATION = register(
         "use_duration",
         builder -> builder.persistent(UseDuration.CODEC)
-            .networkSynchronized(UseDuration.PACKET_CODEC)
+            .networkSynchronized(UseDuration.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<ItemUseAnimation> USE_ANIMATION = register(
@@ -42,14 +42,14 @@ public class ItematicDataComponents {
     );
     public static final DataComponentType<HolderSet<Item>> SHOOTER_AMMUNITION = register(
         "shooter_ammunition",
-        builder -> builder.persistent(ItemUtil.HOLDER_SET_CODEC)
-            .networkSynchronized(ItemUtil.HOLDER_SET_STREAM_CODEC)
+        builder -> builder.persistent(Items.HOLDER_SET_CODEC)
+            .networkSynchronized(Items.HOLDER_SET_STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<HolderSet<Item>> SHOOTER_HELD_AMMUNITION = register(
         "shooter_held_ammunition",
-        builder -> builder.persistent(ItemUtil.HOLDER_SET_CODEC)
-            .networkSynchronized(ItemUtil.HOLDER_SET_STREAM_CODEC)
+        builder -> builder.persistent(Items.HOLDER_SET_CODEC)
+            .networkSynchronized(Items.HOLDER_SET_STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<Double> ATTACK_SPEED_MULTIPLIER = register(
@@ -61,7 +61,7 @@ public class ItematicDataComponents {
     public static final DataComponentType<WeaponAttackDamage> WEAPON_ATTACK_DAMAGE = register(
         "weapon_attack_damage",
         builder -> builder.persistent(WeaponAttackDamage.CODEC)
-            .networkSynchronized(WeaponAttackDamage.PACKET_CODEC)
+            .networkSynchronized(WeaponAttackDamage.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<Identifier> ITEM_BAR_STYLE = register(
@@ -72,20 +72,20 @@ public class ItematicDataComponents {
     );
     public static final DataComponentType<Fraction> ITEM_HOLDER_CAPACITY = register(
         "item_holder_capacity",
-        builder -> builder.persistent(ItemHolderItemComponent.CAPACITY_CODEC)
+        builder -> builder.persistent(ItemHolderItemBehavior.CAPACITY_CODEC)
             .networkSynchronized(PacketCodecUtil.FRACTION)
             .cacheEncoding()
     );
     public static final DataComponentType<ItemHolderRules> ITEM_HOLDER_RULES = register(
         "item_holder_rules",
         builder -> builder.persistent(ItemHolderRules.CODEC)
-            .networkSynchronized(ItemHolderRules.PACKET_CODEC)
+            .networkSynchronized(ItemHolderRules.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<ItemDamageRules> SHOOTER_DAMAGE_RULES = register(
         "shooter_damage_rules",
         builder -> builder.persistent(ItemDamageRules.CODEC)
-            .networkSynchronized(ItemDamageRules.PACKET_CODEC)
+            .networkSynchronized(ItemDamageRules.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<Float> SHOOTER_DEFAULT_CHARGE_TIME = register(
@@ -97,13 +97,13 @@ public class ItematicDataComponents {
     public static final DataComponentType<CrossbowItem.ChargingSounds> SHOOTER_DEFAULT_CHARGING_SOUNDS = register(
         "shooter_default_charging_sounds",
         builder -> builder.persistent(CrossbowItem.ChargingSounds.CODEC)
-            .networkSynchronized(ChargingSoundsUtil.PACKET_CODEC)
+            .networkSynchronized(ChargingSounds.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<ChargeableShooterMethod.ChargedPowerRules> SHOOTER_CHARGED_POWER_RULES = register(
         "shooter_charged_power_rules",
         builder -> builder.persistent(ChargeableShooterMethod.ChargedPowerRules.CODEC)
-            .networkSynchronized(ChargeableShooterMethod.ChargedPowerRules.PACKET_CODEC)
+            .networkSynchronized(ChargeableShooterMethod.ChargedPowerRules.STREAM_CODEC)
     );
     public static final DataComponentType<Holder<SoundEvent>> SHOOTER_SHOOT_SOUND = register(
         "shooter_shoot_sound",
@@ -119,7 +119,7 @@ public class ItematicDataComponents {
     public static final DataComponentType<SmashingWeapon> SMASHING_WEAPON = register(
         "smashing_weapon",
         builder -> builder.persistent(SmashingWeapon.CODEC)
-            .networkSynchronized(SmashingWeapon.PACKET_CODEC)
+            .networkSynchronized(SmashingWeapon.STREAM_CODEC)
             .cacheEncoding()
     );
 

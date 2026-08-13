@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.player;
 
 import com.mojang.authlib.GameProfile;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,7 +30,7 @@ public abstract class ServerPlayerEntityExtender extends Player {
         cancellable = true
     )
     private void checkPresenceTextHolderBehavior(ItemStack book, InteractionHand hand, CallbackInfo info) {
-        if (!book.itematic$hasBehavior(ItemComponentTypes.TEXT_HOLDER)) {
+        if (!book.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             info.cancel();
         }
     }

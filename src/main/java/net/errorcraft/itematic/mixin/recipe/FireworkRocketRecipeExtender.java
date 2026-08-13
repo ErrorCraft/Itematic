@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private boolean paperUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.itematic$isOf(ItemKeys.PAPER);
+        return itemStack.itematic$isOf(ItemIds.PAPER);
     }
 
     @Redirect(
@@ -47,7 +47,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private boolean durationModifierUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.itematic$isOf(ItemKeys.GUNPOWDER);
+        return itemStack.itematic$isOf(ItemIds.GUNPOWDER);
     }
 
     @Redirect(
@@ -69,7 +69,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private boolean fireworkStarUseRegistryKeyCheck(Ingredient instance, ItemStack itemStack) {
-        return itemStack.itematic$isOf(ItemKeys.FIREWORK_STAR);
+        return itemStack.itematic$isOf(ItemIds.FIREWORK_STAR);
     }
 
     @Redirect(
@@ -81,7 +81,7 @@ public class FireworkRocketRecipeExtender {
     )
     private ItemStack newItemStackForFireworkRocketUseRegistryEntry(ItemLike item, int count, @Local(argsOnly = true) HolderLookup.Provider lookup) {
         return lookup.lookupOrThrow(Registries.ITEM)
-            .get(ItemKeys.FIREWORK_ROCKET)
+            .get(ItemIds.FIREWORK_ROCKET)
             .map(entry -> new ItemStack(entry, count))
             .orElse(ItemStack.EMPTY);
     }

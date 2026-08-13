@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.village.raid;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.Item;
@@ -24,11 +24,11 @@ public class RaidUtil {
     }
 
     public static void createOminousBanner(LevelAccessor world) {
-        ominousBanner = world.itematic$createStack(ItemKeys.WHITE_BANNER);
+        ominousBanner = world.itematic$createStack(ItemIds.WHITE_BANNER);
     }
 
     public static ItemStack getOminousBanner(HolderGetter<Item> items, HolderGetter<BannerPattern> bannerPatterns) {
-        ominousBanner = new ItemStack(items.getOrThrow(ItemKeys.WHITE_BANNER));
+        ominousBanner = new ItemStack(items.getOrThrow(ItemIds.WHITE_BANNER));
         return Raid.getOminousBannerInstance(bannerPatterns);
     }
 }

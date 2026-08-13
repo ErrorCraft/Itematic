@@ -6,9 +6,9 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.errorcraft.itematic.access.entity.mob.MobEntityAccess;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.SpawnEggItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SpawnEggItemBehavior;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -45,40 +45,40 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     private static final Int2ObjectMap<Map<EquipmentSlot, ResourceKey<Item>>> LEVEL_TO_EQUIPMENT = Util.make(new Int2ObjectOpenHashMap<>(), map -> {
         map.defaultReturnValue(Map.of());
         map.put(0, Map.of(
-            EquipmentSlot.HEAD, ItemKeys.LEATHER_HELMET,
-            EquipmentSlot.CHEST, ItemKeys.LEATHER_CHESTPLATE,
-            EquipmentSlot.LEGS, ItemKeys.LEATHER_LEGGINGS,
-            EquipmentSlot.FEET, ItemKeys.LEATHER_BOOTS
+            EquipmentSlot.HEAD, ItemIds.LEATHER_HELMET,
+            EquipmentSlot.CHEST, ItemIds.LEATHER_CHESTPLATE,
+            EquipmentSlot.LEGS, ItemIds.LEATHER_LEGGINGS,
+            EquipmentSlot.FEET, ItemIds.LEATHER_BOOTS
         ));
         map.put(1, Map.of(
-            EquipmentSlot.HEAD, ItemKeys.COPPER_HELMET,
-            EquipmentSlot.CHEST, ItemKeys.COPPER_CHESTPLATE,
-            EquipmentSlot.LEGS, ItemKeys.COPPER_LEGGINGS,
-            EquipmentSlot.FEET, ItemKeys.COPPER_BOOTS
+            EquipmentSlot.HEAD, ItemIds.COPPER_HELMET,
+            EquipmentSlot.CHEST, ItemIds.COPPER_CHESTPLATE,
+            EquipmentSlot.LEGS, ItemIds.COPPER_LEGGINGS,
+            EquipmentSlot.FEET, ItemIds.COPPER_BOOTS
         ));
         map.put(2, Map.of(
-            EquipmentSlot.HEAD, ItemKeys.GOLDEN_HELMET,
-            EquipmentSlot.CHEST, ItemKeys.GOLDEN_CHESTPLATE,
-            EquipmentSlot.LEGS, ItemKeys.GOLDEN_LEGGINGS,
-            EquipmentSlot.FEET, ItemKeys.GOLDEN_BOOTS
+            EquipmentSlot.HEAD, ItemIds.GOLDEN_HELMET,
+            EquipmentSlot.CHEST, ItemIds.GOLDEN_CHESTPLATE,
+            EquipmentSlot.LEGS, ItemIds.GOLDEN_LEGGINGS,
+            EquipmentSlot.FEET, ItemIds.GOLDEN_BOOTS
         ));
         map.put(3, Map.of(
-            EquipmentSlot.HEAD, ItemKeys.CHAINMAIL_HELMET,
-            EquipmentSlot.CHEST, ItemKeys.CHAINMAIL_CHESTPLATE,
-            EquipmentSlot.LEGS, ItemKeys.CHAINMAIL_LEGGINGS,
-            EquipmentSlot.FEET, ItemKeys.CHAINMAIL_BOOTS
+            EquipmentSlot.HEAD, ItemIds.CHAINMAIL_HELMET,
+            EquipmentSlot.CHEST, ItemIds.CHAINMAIL_CHESTPLATE,
+            EquipmentSlot.LEGS, ItemIds.CHAINMAIL_LEGGINGS,
+            EquipmentSlot.FEET, ItemIds.CHAINMAIL_BOOTS
         ));
         map.put(4, Map.of(
-            EquipmentSlot.HEAD, ItemKeys.IRON_HELMET,
-            EquipmentSlot.CHEST, ItemKeys.IRON_CHESTPLATE,
-            EquipmentSlot.LEGS, ItemKeys.IRON_LEGGINGS,
-            EquipmentSlot.FEET, ItemKeys.IRON_BOOTS
+            EquipmentSlot.HEAD, ItemIds.IRON_HELMET,
+            EquipmentSlot.CHEST, ItemIds.IRON_CHESTPLATE,
+            EquipmentSlot.LEGS, ItemIds.IRON_LEGGINGS,
+            EquipmentSlot.FEET, ItemIds.IRON_BOOTS
         ));
         map.put(5, Map.of(
-            EquipmentSlot.HEAD, ItemKeys.DIAMOND_HELMET,
-            EquipmentSlot.CHEST, ItemKeys.DIAMOND_CHESTPLATE,
-            EquipmentSlot.LEGS, ItemKeys.DIAMOND_LEGGINGS,
-            EquipmentSlot.FEET, ItemKeys.DIAMOND_BOOTS
+            EquipmentSlot.HEAD, ItemIds.DIAMOND_HELMET,
+            EquipmentSlot.CHEST, ItemIds.DIAMOND_CHESTPLATE,
+            EquipmentSlot.LEGS, ItemIds.DIAMOND_LEGGINGS,
+            EquipmentSlot.FEET, ItemIds.DIAMOND_BOOTS
         ));
     });
 
@@ -104,10 +104,10 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
             ordinal = 0
         )
     )
-    private boolean instanceOfSpawnEggItemUseItemComponentCheck(Object reference, Class<SpawnEggItem> clazz, @Local ItemStack itemStack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
-        Optional<SpawnEggItemComponent> optionalSpawnEggItemComponent = itemStack.itematic$getBehavior(ItemComponentTypes.SPAWN_EGG);
-        optionalSpawnEggItemComponent.ifPresent(spawnEggItemComponent::set);
-        return optionalSpawnEggItemComponent.isPresent();
+    private boolean instanceOfSpawnEggItemUseItemBehaviorCheck(Object reference, Class<SpawnEggItem> clazz, @Local ItemStack itemStack, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
+        Optional<SpawnEggItemBehavior> optionalSpawnEgg = itemStack.itematic$getBehavior(ItemBehaviorType.SPAWN_EGG);
+        optionalSpawnEgg.ifPresent(spawnEgg::set);
+        return optionalSpawnEgg.isPresent();
     }
 
     @Redirect(
@@ -117,8 +117,8 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
             target = "Lnet/minecraft/world/item/SpawnEggItem;spawnOffspringFromSpawnEgg(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"
         )
     )
-    private Optional<Mob> spawnBabyUseItemComponent(SpawnEggItem instance, Player user, Mob entity, EntityType<? extends Mob> entityType, ServerLevel world, Vec3 pos, ItemStack stack, @Share("spawnEggItemComponent") LocalRef<SpawnEggItemComponent> spawnEggItemComponent) {
-        return spawnEggItemComponent.get().spawnBaby(user, entity, entityType, world, pos, stack);
+    private Optional<Mob> spawnBabyUseItemBehavior(SpawnEggItem instance, Player user, Mob entity, EntityType<? extends Mob> entityType, ServerLevel world, Vec3 pos, ItemStack stack, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
+        return spawnEgg.get().spawnBaby(user, entity, entityType, world, pos, stack);
     }
 
     @Redirect(
@@ -130,7 +130,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
         )
     )
     private boolean isOfForLeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.LEAD);
+        return instance.itematic$isOf(ItemIds.LEAD);
     }
 
     @Redirect(
@@ -142,7 +142,7 @@ public abstract class MobEntityExtender extends LivingEntity implements MobEntit
     )
     private Item getEquipmentForSlotUseRegistryKey(EquipmentSlot equipmentSlot, int equipmentLevel, @Share("item") LocalRef<Holder<Item>> item) {
         ResourceKey<Item> key = LEVEL_TO_EQUIPMENT.get(equipmentLevel).get(equipmentSlot);
-        Optional<Holder.Reference<Item>> optionalEntry = this.level().itematic$getItemAccess().getOptionalEntry(key);
+        Optional<Holder.Reference<Item>> optionalEntry = this.level().itematic$getItemAccess().get(key);
         if (optionalEntry.isEmpty()) {
             return null;
         }

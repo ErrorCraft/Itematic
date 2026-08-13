@@ -2,12 +2,12 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ItemStack;
@@ -43,7 +43,7 @@ public record MarkBannerOnItemAction(PositionTarget position) implements Action<
         }
 
         ItemStack stack = context.get(LootContextParams.TOOL);
-        if (ItemStackUtil.isNullOrEmpty(stack)) {
+        if (ItemStacks.isNullOrEmpty(stack)) {
             return false;
         }
 

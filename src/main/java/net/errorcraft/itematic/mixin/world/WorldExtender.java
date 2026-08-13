@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.world;
 
 import net.errorcraft.itematic.access.world.WorldAccess;
 import net.errorcraft.itematic.access.world.WorldViewAccess;
-import net.errorcraft.itematic.item.ItemAccess;
+import net.errorcraft.itematic.world.level.ItemAccess;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
@@ -46,7 +46,7 @@ public abstract class WorldExtender implements WorldViewAccess, WorldAccess {
 
     @Override
     public Holder<Item> itematic$getItem(ResourceKey<Item> key) {
-        return this.itemAccess.getEntry(key);
+        return this.itemAccess.getOrThrow(key);
     }
 
     @Override

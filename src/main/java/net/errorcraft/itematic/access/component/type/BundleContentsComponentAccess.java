@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.access.component.type;
 
-import net.errorcraft.itematic.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.minecraft.world.item.component.BundleContents;
 import org.apache.commons.lang3.math.Fraction;
 

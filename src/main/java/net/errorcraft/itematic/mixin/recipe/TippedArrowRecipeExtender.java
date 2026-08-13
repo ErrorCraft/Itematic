@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
@@ -23,7 +23,7 @@ public class TippedArrowRecipeExtender {
         )
     )
     private boolean isOfForArrowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.ARROW);
+        return instance.itematic$isOf(ItemIds.ARROW);
     }
 
     @Redirect(
@@ -35,7 +35,7 @@ public class TippedArrowRecipeExtender {
     )
     private ItemStack newItemStackForTippedArrowUseRegistryEntry(ItemLike item, int count, @Local(argsOnly = true) HolderLookup.Provider lookup) {
         return lookup.lookupOrThrow(Registries.ITEM)
-            .get(ItemKeys.TIPPED_ARROW)
+            .get(ItemIds.TIPPED_ARROW)
             .map(entry -> new ItemStack(entry, count))
             .orElse(ItemStack.EMPTY);
     }
@@ -52,6 +52,6 @@ public class TippedArrowRecipeExtender {
         )
     )
     private boolean isOfForLingeringPotionUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.LINGERING_POTION);
+        return instance.itematic$isOf(ItemIds.LINGERING_POTION);
     }
 }

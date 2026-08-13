@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.loot;
 
 import net.errorcraft.itematic.access.loot.ContainerComponentModifierAccess;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BundleContents;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +13,7 @@ public interface ContainerComponentModifiersExtender {
     class BundleContentsExtender implements ContainerComponentModifierAccess<BundleContents> {
         @Override
         public BundleContents itematic$apply(ItemStack stack, BundleContents component, Stream<ItemStack> newContents) {
-            return stack.itematic$getBehavior(ItemComponentTypes.ITEM_HOLDER)
+            return stack.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
                 .map(c -> c.createBuilder(stack, component))
                 .map(BundleContents.Mutable::clearItems)
                 .map(builder -> {

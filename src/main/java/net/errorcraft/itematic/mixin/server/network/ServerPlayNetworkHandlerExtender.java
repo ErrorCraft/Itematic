@@ -5,8 +5,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.recipe.RecipeAccess;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.WritableItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -34,7 +34,7 @@ public class ServerPlayNetworkHandlerExtender {
         )
     )
     private boolean containsWritableBookContentDataComponentAlsoCheckItemBehaviorComponent(boolean original, @Local ItemStack stack) {
-        return original && stack.itematic$hasBehavior(ItemComponentTypes.WRITABLE);
+        return original && stack.itematic$hasBehavior(ItemBehaviorType.WRITABLE);
     }
 
     @ModifyExpressionValue(
@@ -44,8 +44,8 @@ public class ServerPlayNetworkHandlerExtender {
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private boolean containsWritableBookContentDataComponentAlsoCheckAndStoreItemBehaviorComponent(boolean original, @Local ItemStack stack, @Share("writable") LocalRef<WritableItemComponent> writable) {
-        Optional<WritableItemComponent> optionalWritable = stack.itematic$getBehavior(ItemComponentTypes.WRITABLE);
+    private boolean containsWritableBookContentDataComponentAlsoCheckAndStoreItemBehaviorComponent(boolean original, @Local ItemStack stack, @Share("writable") LocalRef<WritableItemBehavior> writable) {
+        Optional<WritableItemBehavior> optionalWritable = stack.itematic$getBehavior(ItemBehaviorType.WRITABLE);
         optionalWritable.ifPresent(writable::set);
         return original && optionalWritable.isPresent();
     }
@@ -57,7 +57,7 @@ public class ServerPlayNetworkHandlerExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack withItemForWrittenBookUseItemComponent(ItemStack instance, ItemLike itemConvertible, @Share("writable") LocalRef<WritableItemComponent> writable) {
+    private ItemStack withItemForWrittenBookUseItemBehavior(ItemStack instance, ItemLike itemConvertible, @Share("writable") LocalRef<WritableItemBehavior> writable) {
         return instance.itematic$copyWithItem(writable.get().transformsInto());
     }
 

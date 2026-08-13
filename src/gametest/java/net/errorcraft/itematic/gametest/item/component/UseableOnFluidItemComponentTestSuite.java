@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -36,7 +36,7 @@ public class UseableOnFluidItemComponentTestSuite {
             Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_WATER_POSITION_ON_LAND))
         );
         ServerLevel world = context.getLevel();
-        ItemStack lilyPad = world.itematic$createStack(ItemKeys.LILY_PAD);
+        ItemStack lilyPad = world.itematic$createStack(ItemIds.LILY_PAD);
         player.setItemInHand(InteractionHand.MAIN_HAND, lilyPad);
         context.succeedIf(() -> {
             InteractionResult result = lilyPad.use(world, player, InteractionHand.MAIN_HAND);
@@ -56,7 +56,7 @@ public class UseableOnFluidItemComponentTestSuite {
         TestUtil.setEntityPos(context, player, SPAWN_POSITION_ON_LAND);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_WATER_POSITION_ON_LAND)));
         ServerLevel world = context.getLevel();
-        ItemStack pigSpawnEgg = world.itematic$createStack(ItemKeys.PIG_SPAWN_EGG);
+        ItemStack pigSpawnEgg = world.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
         context.succeedIf(() -> {
             InteractionResult result = pigSpawnEgg.use(world, player, InteractionHand.MAIN_HAND);
@@ -75,7 +75,7 @@ public class UseableOnFluidItemComponentTestSuite {
         TestUtil.setEntityPos(context, player, SPAWN_POSITION_ON_LAND);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_AIR_POSITION_ON_LAND)));
         ServerLevel world = context.getLevel();
-        ItemStack pigSpawnEgg = world.itematic$createStack(ItemKeys.PIG_SPAWN_EGG);
+        ItemStack pigSpawnEgg = world.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
         context.succeedIf(() -> {
             InteractionResult result = pigSpawnEgg.use(world, player, InteractionHand.MAIN_HAND);
@@ -94,7 +94,7 @@ public class UseableOnFluidItemComponentTestSuite {
         TestUtil.setEntityPos(context, player, SPAWN_POSITION_IN_WATER);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_WATER_POSITION_IN_WATER)));
         ServerLevel world = context.getLevel();
-        ItemStack pigSpawnEgg = world.itematic$createStack(ItemKeys.PIG_SPAWN_EGG);
+        ItemStack pigSpawnEgg = world.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
         TestUtil.useStackOnBlockInside(context, player, pigSpawnEgg, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER, Direction.DOWN);
         context.succeedIf(() -> context.assertEntityPresent(EntityType.PIG, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER));
@@ -106,7 +106,7 @@ public class UseableOnFluidItemComponentTestSuite {
         TestUtil.setEntityPos(context, player, SPAWN_POSITION_IN_WATER);
         player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_AIR_POSITION_IN_WATER)));
         ServerLevel world = context.getLevel();
-        ItemStack pigSpawnEgg = world.itematic$createStack(ItemKeys.PIG_SPAWN_EGG);
+        ItemStack pigSpawnEgg = world.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
         InteractionResult result = pigSpawnEgg.use(world, player, InteractionHand.MAIN_HAND);
         context.succeedIf(() -> {

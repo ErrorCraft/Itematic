@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.core.BlockPos;
@@ -23,7 +23,7 @@ public class ThrowableItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.throwable.platform")
     public void throwingEggSpawnsEggAtEyePosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack egg = world.itematic$createStack(ItemKeys.EGG);
+        ItemStack egg = world.itematic$createStack(ItemIds.EGG);
         Player player = TestUtil.createMockPlayer(context, GameType.SURVIVAL, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, egg);
         world.addFreshEntity(player);
@@ -41,7 +41,7 @@ public class ThrowableItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.throwable.platform")
     public void throwingEnderPearlSpawnsEnderPearlAtEyePosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack enderPearl = world.itematic$createStack(ItemKeys.ENDER_PEARL);
+        ItemStack enderPearl = world.itematic$createStack(ItemIds.ENDER_PEARL);
         Player player = TestUtil.createMockPlayer(context, GameType.SURVIVAL, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, enderPearl);
         world.addFreshEntity(player);
@@ -59,7 +59,7 @@ public class ThrowableItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.throwable.platform")
     public void throwingSnowballSpawnsSnowballAtEyePosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack snowball = world.itematic$createStack(ItemKeys.SNOWBALL);
+        ItemStack snowball = world.itematic$createStack(ItemIds.SNOWBALL);
         Player player = TestUtil.createMockPlayer(context, GameType.SURVIVAL, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, snowball);
         world.addFreshEntity(player);
@@ -77,7 +77,7 @@ public class ThrowableItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.throwable.platform")
     public void throwingExperienceBottleSpawnsExperienceBottleAtEyePosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack experienceBottle = world.itematic$createStack(ItemKeys.EXPERIENCE_BOTTLE);
+        ItemStack experienceBottle = world.itematic$createStack(ItemIds.EXPERIENCE_BOTTLE);
         Player player = TestUtil.createMockPlayer(context, GameType.SURVIVAL, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, experienceBottle);
         world.addFreshEntity(player);
@@ -95,7 +95,7 @@ public class ThrowableItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.throwable.platform")
     public void throwingSplashPotionSpawnsPotionAtEyePosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack splashPotion = world.itematic$createStack(ItemKeys.SPLASH_POTION);
+        ItemStack splashPotion = world.itematic$createStack(ItemIds.SPLASH_POTION);
         Player player = TestUtil.createMockPlayer(context, GameType.SURVIVAL, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, splashPotion);
         world.addFreshEntity(player);
@@ -113,7 +113,7 @@ public class ThrowableItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.throwable.platform")
     public void throwingLingeringPotionSpawnsPotionAtEyePosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack lingeringPotion = world.itematic$createStack(ItemKeys.LINGERING_POTION);
+        ItemStack lingeringPotion = world.itematic$createStack(ItemIds.LINGERING_POTION);
         Player player = TestUtil.createMockPlayer(context, GameType.SURVIVAL, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, lingeringPotion);
         world.addFreshEntity(player);
@@ -131,8 +131,8 @@ public class ThrowableItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.throwable.platform")
     public void throwingTridentSpawnsTridentAtEyePosition(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack trident = world.itematic$createStack(ItemKeys.TRIDENT);
-        int minDrawDuration = TestUtil.getItemBehavior(context, trident, ItemComponentTypes.THROWABLE)
+        ItemStack trident = world.itematic$createStack(ItemIds.TRIDENT);
+        int minDrawDuration = TestUtil.getItemBehavior(context, trident, ItemBehaviorType.THROWABLE)
             .drawDuration()
             .flatMap(MinMaxBounds::min)
             .orElseThrow(() -> context.assertionException(Component.literal("Trident does not have a minimum draw duration")));

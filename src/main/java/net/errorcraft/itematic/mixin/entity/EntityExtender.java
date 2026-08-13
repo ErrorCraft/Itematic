@@ -7,7 +7,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.entity.EntityAccess;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.advancements.criterion.PlayerInteractTrigger;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -55,7 +55,7 @@ public abstract class EntityExtender implements EntityAccess {
         )
     )
     private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SHEARS);
+        return instance.itematic$isOf(ItemIds.SHEARS);
     }
 
     @Redirect(
@@ -74,7 +74,7 @@ public abstract class EntityExtender implements EntityAccess {
         )
     )
     private boolean isOfForLeadUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.LEAD);
+        return instance.itematic$isOf(ItemIds.LEAD);
     }
 
     @Definition(id = "ServerPlayerEntity", type = ServerPlayer.class)

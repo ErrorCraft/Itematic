@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
@@ -28,7 +28,7 @@ public abstract class AbstractHorseEntityExtender extends Animal {
         )
     )
     private boolean isOfForWheatUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.WHEAT);
+        return instance.itematic$isOf(ItemIds.WHEAT);
     }
 
     @Redirect(
@@ -47,7 +47,7 @@ public abstract class AbstractHorseEntityExtender extends Animal {
         )
     )
     private boolean isOfForSugarUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SUGAR);
+        return instance.itematic$isOf(ItemIds.SUGAR);
     }
 
     @Redirect(
@@ -66,7 +66,7 @@ public abstract class AbstractHorseEntityExtender extends Animal {
         )
     )
     private boolean isOfForHayBlockUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.HAY_BLOCK);
+        return instance.itematic$isOf(ItemIds.HAY_BLOCK);
     }
 
     @Redirect(
@@ -85,7 +85,7 @@ public abstract class AbstractHorseEntityExtender extends Animal {
         )
     )
     private boolean isOfForAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.APPLE);
+        return instance.itematic$isOf(ItemIds.APPLE);
     }
 
     @Redirect(
@@ -104,7 +104,7 @@ public abstract class AbstractHorseEntityExtender extends Animal {
         )
     )
     private boolean isOfForCarrotUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CARROT);
+        return instance.itematic$isOf(ItemIds.CARROT);
     }
 
     @Redirect(
@@ -123,7 +123,7 @@ public abstract class AbstractHorseEntityExtender extends Animal {
         )
     )
     private boolean isOfForGoldenCarrotUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GOLDEN_CARROT);
+        return instance.itematic$isOf(ItemIds.GOLDEN_CARROT);
     }
 
     @Redirect(
@@ -142,7 +142,7 @@ public abstract class AbstractHorseEntityExtender extends Animal {
         )
     )
     private boolean isOfForGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GOLDEN_APPLE);
+        return instance.itematic$isOf(ItemIds.GOLDEN_APPLE);
     }
 
     @Redirect(
@@ -161,6 +161,6 @@ public abstract class AbstractHorseEntityExtender extends Animal {
         )
     )
     private boolean isOfForEnchantedGoldenAppleUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.ENCHANTED_GOLDEN_APPLE);
+        return instance.itematic$isOf(ItemIds.ENCHANTED_GOLDEN_APPLE);
     }
 }

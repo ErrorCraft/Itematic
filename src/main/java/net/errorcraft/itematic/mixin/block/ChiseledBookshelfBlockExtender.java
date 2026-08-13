@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.EnchantmentHolderItemComponent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantmentHolderItemBehavior;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
 import net.minecraft.world.item.Item;
@@ -24,9 +24,9 @@ public class ChiseledBookshelfBlockExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private static boolean isOfForEnchantedBookUseItemComponent(ItemStack instance, Item item) {
-        return instance.itematic$getBehavior(ItemComponentTypes.ENCHANTMENT_HOLDER)
-            .map(EnchantmentHolderItemComponent::grindingTransformsInto)
+    private static boolean isOfForEnchantedBookUseItemBehavior(ItemStack instance, Item item) {
+        return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER)
+            .map(EnchantmentHolderItemBehavior::grindingTransformsInto)
             .isPresent();
     }
 

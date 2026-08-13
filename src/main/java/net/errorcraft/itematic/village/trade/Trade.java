@@ -2,8 +2,8 @@ package net.errorcraft.itematic.village.trade;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.village.TradeOffersAccessor;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.Range;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -209,7 +210,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         }
 
         public static Entry ofEmerald(HolderGetter<Item> items, int count) {
-            return of(items.getOrThrow(ItemKeys.EMERALD), count);
+            return of(items.getOrThrow(ItemIds.EMERALD), count);
         }
     }
 }

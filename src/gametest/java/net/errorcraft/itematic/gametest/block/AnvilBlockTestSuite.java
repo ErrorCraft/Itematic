@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -22,11 +22,11 @@ public class AnvilBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.IRON_PICKAXE, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.IRON_PICKAXE, Enchantments.EFFICIENCY));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.EFFICIENCY));
         context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
-            .is(ItemKeys.IRON_PICKAXE)
+            .is(ItemIds.IRON_PICKAXE)
             .hasEnchantments(Enchantments.UNBREAKING, Enchantments.EFFICIENCY));
     }
 
@@ -36,9 +36,9 @@ public class AnvilBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.IRON_PICKAXE, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.DIAMOND_PICKAXE, Enchantments.EFFICIENCY));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.DIAMOND_PICKAXE, Enchantments.EFFICIENCY));
         context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
             .isEmpty());
     }
@@ -49,11 +49,11 @@ public class AnvilBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.IRON_PICKAXE, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.ENCHANTED_BOOK, Enchantments.EFFICIENCY));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.ENCHANTED_BOOK, Enchantments.EFFICIENCY));
         context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
-            .is(ItemKeys.IRON_PICKAXE)
+            .is(ItemIds.IRON_PICKAXE)
             .hasEnchantments(Enchantments.UNBREAKING, Enchantments.EFFICIENCY));
     }
 
@@ -63,9 +63,9 @@ public class AnvilBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.IRON_PICKAXE, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.ENCHANTED_BOOK, Enchantments.SHARPNESS));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.ENCHANTED_BOOK, Enchantments.SHARPNESS));
         context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
             .isEmpty());
     }
@@ -76,11 +76,11 @@ public class AnvilBlockTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.ENCHANTED_BOOK, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.ENCHANTED_BOOK, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemKeys.ENCHANTED_BOOK, Enchantments.EFFICIENCY));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.ENCHANTED_BOOK, Enchantments.EFFICIENCY));
         context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
-            .is(ItemKeys.ENCHANTED_BOOK)
+            .is(ItemIds.ENCHANTED_BOOK)
             .hasEnchantments(Enchantments.UNBREAKING, Enchantments.EFFICIENCY));
     }
 }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.equine.AbstractChestedHorse;
@@ -30,7 +30,7 @@ public abstract class AbstractDonkeyEntityExtender extends AbstractHorse {
         )
     )
     private ItemEntity dropItemForChestUseRegistryKey(AbstractChestedHorse instance, ServerLevel world, ItemLike itemConvertible) {
-        return this.itematic$dropItem(world, ItemKeys.CHEST);
+        return this.itematic$dropItem(world, ItemIds.CHEST);
     }
 
     @Redirect(
@@ -41,7 +41,7 @@ public abstract class AbstractDonkeyEntityExtender extends AbstractHorse {
         )
     )
     private boolean isOfForChestUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.CHEST);
+        return instance.itematic$isOf(ItemIds.CHEST);
     }
 
     @Mixin(targets = "net/minecraft/world/entity/animal/equine/AbstractChestedHorse$1")
@@ -58,7 +58,7 @@ public abstract class AbstractDonkeyEntityExtender extends AbstractHorse {
             )
         )
         private ItemStack newItemStackForChestUseCreateStack(ItemLike item) {
-            return this.field_27867.level().itematic$createStack(ItemKeys.CHEST);
+            return this.field_27867.level().itematic$createStack(ItemIds.CHEST);
         }
 
         @Redirect(
@@ -69,7 +69,7 @@ public abstract class AbstractDonkeyEntityExtender extends AbstractHorse {
             )
         )
         private boolean isOfForChestUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.CHEST);
+            return instance.itematic$isOf(ItemIds.CHEST);
         }
     }
 }

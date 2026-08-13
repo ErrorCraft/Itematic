@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;
@@ -27,11 +27,11 @@ public abstract class CreeperEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForFireChargeUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.FIRE_CHARGE);
+        return instance.itematic$isOf(ItemIds.FIRE_CHARGE);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.CREEPER_SPAWN_EGG;
+        return ItemIds.CREEPER_SPAWN_EGG;
     }
 }

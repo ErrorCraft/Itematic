@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.access.client.recipebook;
 
-import net.errorcraft.itematic.item.ItemAccess;
+import net.errorcraft.itematic.world.level.ItemAccess;
 import net.minecraft.world.item.ItemStack;
 import java.util.Optional;
 

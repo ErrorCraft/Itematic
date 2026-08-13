@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.fish.AbstractSchoolingFish;
@@ -29,11 +29,11 @@ public abstract class CodEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForCodBucketUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.COD_BUCKET);
+        return this.level().itematic$createStack(ItemIds.COD_BUCKET);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.COD_SPAWN_EGG;
+        return ItemIds.COD_SPAWN_EGG;
     }
 }

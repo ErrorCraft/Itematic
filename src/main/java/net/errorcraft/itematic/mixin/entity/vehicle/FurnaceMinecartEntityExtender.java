@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.vehicle;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.minecart.MinecartFurnace;
@@ -26,11 +26,11 @@ public abstract class FurnaceMinecartEntityExtender extends VehicleEntityExtende
         )
     )
     private ItemStack newItemStackForFurnaceMinecartUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.FURNACE_MINECART);
+        return this.level().itematic$createStack(ItemIds.FURNACE_MINECART);
     }
 
     @Override
     protected ResourceKey<Item> asItemKey() {
-        return ItemKeys.FURNACE_MINECART;
+        return ItemIds.FURNACE_MINECART;
     }
 }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.vehicle;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.minecart.MinecartTNT;
@@ -26,11 +26,11 @@ public abstract class TntMinecartEntityExtender extends VehicleEntityExtender {
         )
     )
     private ItemStack newItemStackForTntMinecartUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.TNT_MINECART);
+        return this.level().itematic$createStack(ItemIds.TNT_MINECART);
     }
 
     @Override
     protected ResourceKey<Item> asItemKey() {
-        return ItemKeys.TNT_MINECART;
+        return ItemIds.TNT_MINECART;
     }
 }

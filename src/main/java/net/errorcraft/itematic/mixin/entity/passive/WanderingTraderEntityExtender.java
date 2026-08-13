@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.entity.passive;
 
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.TradeTags;
@@ -50,7 +50,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         )
     )
     private ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion) {
-        return PotionContentsUtil.setPotion(this.level().itematic$createStack(ItemKeys.POTION), potion);
+        return PotionContentsUtil.setPotion(this.level().itematic$createStack(ItemIds.POTION), potion);
     }
 
     @Redirect(
@@ -69,7 +69,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         )
     )
     private ItemStack newItemStackForMilkBucketUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.MILK_BUCKET);
+        return this.level().itematic$createStack(ItemIds.MILK_BUCKET);
     }
 
     @Redirect(
@@ -80,7 +80,7 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
         )
     )
     private boolean isOfForVillagerSpawnEggUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.VILLAGER_SPAWN_EGG);
+        return instance.itematic$isOf(ItemIds.VILLAGER_SPAWN_EGG);
     }
 
     @Override
@@ -93,6 +93,6 @@ public abstract class WanderingTraderEntityExtender extends MerchantEntityExtend
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.WANDERING_TRADER_SPAWN_EGG;
+        return ItemIds.WANDERING_TRADER_SPAWN_EGG;
     }
 }

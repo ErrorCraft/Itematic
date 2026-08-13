@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,7 +38,7 @@ public abstract class CopperGolemEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SHEARS);
+        return instance.itematic$isOf(ItemIds.SHEARS);
     }
 
     @Redirect(
@@ -57,11 +57,11 @@ public abstract class CopperGolemEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForHoneycombUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SHEARS);
+        return instance.itematic$isOf(ItemIds.SHEARS);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.COPPER_GOLEM_SPAWN_EGG;
+        return ItemIds.COPPER_GOLEM_SPAWN_EGG;
     }
 }

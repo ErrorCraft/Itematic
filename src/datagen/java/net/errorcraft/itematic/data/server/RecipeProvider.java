@@ -2,9 +2,9 @@ package net.errorcraft.itematic.data.server;
 
 import net.errorcraft.itematic.data.recipe.brewing.AmplifyBrewingRecipeBuilder;
 import net.errorcraft.itematic.data.recipe.brewing.ModifyBrewingRecipeBuilder;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.ItematicItemTags;
 import net.errorcraft.itematic.potion.PotionKeys;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderGetter;
@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
+
 import java.util.concurrent.CompletableFuture;
 
 public class RecipeProvider extends FabricRecipeProvider {
@@ -51,49 +52,49 @@ public class RecipeProvider extends FabricRecipeProvider {
 
         @Override
         public void buildRecipes() {
-            this.amplify(ItemKeys.POTION, ItemKeys.GUNPOWDER, ItemKeys.SPLASH_POTION)
+            this.amplify(ItemIds.POTION, ItemIds.GUNPOWDER, ItemIds.SPLASH_POTION)
                 .save(this.output);
-            this.amplify(ItemKeys.SPLASH_POTION, ItemKeys.DRAGON_BREATH, ItemKeys.LINGERING_POTION)
-                .remainder(this.items.getOrThrow(ItemKeys.GLASS_BOTTLE))
+            this.amplify(ItemIds.SPLASH_POTION, ItemIds.DRAGON_BREATH, ItemIds.LINGERING_POTION)
+                .remainder(this.items.getOrThrow(ItemIds.GLASS_BOTTLE))
                 .save(this.output);
 
-            this.modify(PotionKeys.WATER, ItemKeys.FERMENTED_SPIDER_EYE, PotionKeys.WEAKNESS)
+            this.modify(PotionKeys.WATER, ItemIds.FERMENTED_SPIDER_EYE, PotionKeys.WEAKNESS)
                 .save(this.output);
-            this.modify(PotionKeys.WATER, ItemKeys.GLOWSTONE_DUST, PotionKeys.THICK)
+            this.modify(PotionKeys.WATER, ItemIds.GLOWSTONE_DUST, PotionKeys.THICK)
                 .save(this.output);
             this.modify(PotionKeys.WATER, ItematicItemTags.MUNDANE_POTION_REAGENTS, PotionKeys.MUNDANE)
                 .save(this.output);
-            this.modify(PotionKeys.WATER, ItemKeys.NETHER_WART, PotionKeys.AWKWARD)
+            this.modify(PotionKeys.WATER, ItemIds.NETHER_WART, PotionKeys.AWKWARD)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.BLAZE_POWDER, PotionKeys.STRENGTH)
+            this.modify(PotionKeys.AWKWARD, ItemIds.BLAZE_POWDER, PotionKeys.STRENGTH)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.BREEZE_ROD, PotionKeys.WIND_CHARGED)
+            this.modify(PotionKeys.AWKWARD, ItemIds.BREEZE_ROD, PotionKeys.WIND_CHARGED)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.COBWEB, PotionKeys.WEAVING)
+            this.modify(PotionKeys.AWKWARD, ItemIds.COBWEB, PotionKeys.WEAVING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.GHAST_TEAR, PotionKeys.REGENERATION)
+            this.modify(PotionKeys.AWKWARD, ItemIds.GHAST_TEAR, PotionKeys.REGENERATION)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.GLISTERING_MELON_SLICE, PotionKeys.HEALING)
+            this.modify(PotionKeys.AWKWARD, ItemIds.GLISTERING_MELON_SLICE, PotionKeys.HEALING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.GOLDEN_CARROT, PotionKeys.NIGHT_VISION)
+            this.modify(PotionKeys.AWKWARD, ItemIds.GOLDEN_CARROT, PotionKeys.NIGHT_VISION)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.MAGMA_CREAM, PotionKeys.FIRE_RESISTANCE)
+            this.modify(PotionKeys.AWKWARD, ItemIds.MAGMA_CREAM, PotionKeys.FIRE_RESISTANCE)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.PHANTOM_MEMBRANE, PotionKeys.SLOW_FALLING)
+            this.modify(PotionKeys.AWKWARD, ItemIds.PHANTOM_MEMBRANE, PotionKeys.SLOW_FALLING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.PUFFERFISH, PotionKeys.WATER_BREATHING)
+            this.modify(PotionKeys.AWKWARD, ItemIds.PUFFERFISH, PotionKeys.WATER_BREATHING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.RABBIT_FOOT, PotionKeys.LEAPING)
+            this.modify(PotionKeys.AWKWARD, ItemIds.RABBIT_FOOT, PotionKeys.LEAPING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.SLIME_BLOCK, PotionKeys.OOZING)
+            this.modify(PotionKeys.AWKWARD, ItemIds.SLIME_BLOCK, PotionKeys.OOZING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.SPIDER_EYE, PotionKeys.POISON)
+            this.modify(PotionKeys.AWKWARD, ItemIds.SPIDER_EYE, PotionKeys.POISON)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.STONE, PotionKeys.INFESTED)
+            this.modify(PotionKeys.AWKWARD, ItemIds.STONE, PotionKeys.INFESTED)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.SUGAR, PotionKeys.SWIFTNESS)
+            this.modify(PotionKeys.AWKWARD, ItemIds.SUGAR, PotionKeys.SWIFTNESS)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemKeys.TURTLE_HELMET, PotionKeys.TURTLE_MASTER)
+            this.modify(PotionKeys.AWKWARD, ItemIds.TURTLE_HELMET, PotionKeys.TURTLE_MASTER)
                 .save(this.output);
 
             this.lengthen(PotionKeys.FIRE_RESISTANCE, PotionKeys.LONG_FIRE_RESISTANCE)
@@ -197,15 +198,15 @@ public class RecipeProvider extends FabricRecipeProvider {
         }
 
         private ModifyBrewingRecipeBuilder lengthen(ResourceKey<Potion> from, ResourceKey<Potion> to) {
-            return this.modify(from, ItemKeys.REDSTONE, to, potionName(from, to));
+            return this.modify(from, ItemIds.REDSTONE, to, potionName(from, to));
         }
 
         private ModifyBrewingRecipeBuilder strengthen(ResourceKey<Potion> from, ResourceKey<Potion> to) {
-            return this.modify(from, ItemKeys.GLOWSTONE_DUST, to, potionName(from, to));
+            return this.modify(from, ItemIds.GLOWSTONE_DUST, to, potionName(from, to));
         }
 
         private ModifyBrewingRecipeBuilder negate(ResourceKey<Potion> from, ResourceKey<Potion> to) {
-            return this.modify(from, ItemKeys.FERMENTED_SPIDER_EYE, to, potionName(from, to));
+            return this.modify(from, ItemIds.FERMENTED_SPIDER_EYE, to, potionName(from, to));
         }
 
         private static String potionName(ResourceKey<Potion> potion) {

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +31,7 @@ public abstract class IllusionerEntityExtender extends SpellcasterIllager {
         )
     )
     private ItemStack newItemStackForBowUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.BOW);
+        return this.level().itematic$createStack(ItemIds.BOW);
     }
 
     @Redirect(
@@ -42,7 +42,7 @@ public abstract class IllusionerEntityExtender extends SpellcasterIllager {
         )
     )
     private InteractionHand getHandPossiblyHoldingForBowUseRegistryKey(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemKeys.BOW);
+        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemIds.BOW);
     }
 
     @Redirect(

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.client.gui.tooltip;
 
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.client.gui.BundleMouseActions;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -18,7 +18,7 @@ public class BundleTooltipSubmenuHandlerExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
-    private boolean isInForBundlesUseItemComponentCheck(ItemStack instance, TagKey<Item> tag) {
-        return instance.itematic$hasBehavior(ItemComponentTypes.ITEM_HOLDER);
+    private boolean isInForBundlesUseItemBehaviorCheck(ItemStack instance, TagKey<Item> tag) {
+        return instance.itematic$hasBehavior(ItemBehaviorType.ITEM_HOLDER);
     }
 }

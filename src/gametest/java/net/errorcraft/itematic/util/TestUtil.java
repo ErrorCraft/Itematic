@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.util;
 
-import net.errorcraft.itematic.item.component.ItemComponent;
-import net.errorcraft.itematic.item.component.ItemComponentType;
 import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -57,11 +58,11 @@ public class TestUtil {
         return stack;
     }
 
-    public static <T extends ItemComponent<T>> T getItemBehavior(GameTestHelper helper, ItemStack stack, ItemComponentType<T> type) {
+    public static <T extends ItemBehavior<T>> T getItemBehavior(GameTestHelper helper, ItemStack stack, ItemBehaviorType<T> type) {
         return stack.itematic$getBehavior(type)
             .orElseThrow(() -> helper.assertionException(
                 "test.error.item.expected_item_behavior",
-                ItematicRegistries.ITEM_COMPONENT_TYPE.getId(type)
+                ItematicRegistries.ITEM_BEHAVIOR_TYPE.getId(type)
             ));
     }
 

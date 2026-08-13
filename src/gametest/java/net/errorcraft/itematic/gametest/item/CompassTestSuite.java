@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ public class CompassTestSuite {
     @GameTest(structure = "itematic:item.compass.platform.lodestone")
     public void usingCompassOnLodestoneSetsTrackedDataFromBlock(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack compass = world.itematic$createStack(ItemKeys.COMPASS);
+        ItemStack compass = world.itematic$createStack(ItemIds.COMPASS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, compass);
         world.addFreshEntity(player);
@@ -59,7 +59,7 @@ public class CompassTestSuite {
     @GameTest(structure = "itematic:item.compass.platform.lodestone")
     public void destroyingLodestoneRemovesTrackedDataFromLodestoneCompass(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack compass = world.itematic$createStack(ItemKeys.COMPASS);
+        ItemStack compass = world.itematic$createStack(ItemIds.COMPASS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, compass);
         world.addFreshEntity(player);

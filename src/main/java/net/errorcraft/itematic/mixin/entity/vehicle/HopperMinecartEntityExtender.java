@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.vehicle;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.minecart.MinecartHopper;
@@ -26,11 +26,11 @@ public abstract class HopperMinecartEntityExtender extends VehicleEntityExtender
         )
     )
     private ItemStack newItemStackForHopperMinecartUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.HOPPER_MINECART);
+        return this.level().itematic$createStack(ItemIds.HOPPER_MINECART);
     }
 
     @Override
     protected ResourceKey<Item> asItemKey() {
-        return ItemKeys.HOPPER_MINECART;
+        return ItemIds.HOPPER_MINECART;
     }
 }

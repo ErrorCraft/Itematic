@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -27,8 +27,8 @@ public class ItemHolderItemComponentTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel world = context.getLevel();
         Inventory inventory = player.getInventory();
-        ItemStack bundle = world.itematic$createStack(ItemKeys.BUNDLE);
-        inventory.add(SLOT, world.itematic$createStack(ItemKeys.STICK));
+        ItemStack bundle = world.itematic$createStack(ItemIds.BUNDLE);
+        inventory.add(SLOT, world.itematic$createStack(ItemIds.STICK));
         Slot slot = new Slot(inventory, SLOT, 0, 0);
         world.addFreshEntity(player);
         context.succeedIf(() -> {
@@ -44,7 +44,7 @@ public class ItemHolderItemComponentTestSuite {
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
                     component -> Assert.itemStack(context, component.getItemUnsafe(0))
-                        .is(ItemKeys.STICK)
+                        .is(ItemIds.STICK)
                 );
         });
     }
@@ -54,8 +54,8 @@ public class ItemHolderItemComponentTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel world = context.getLevel();
         Inventory inventory = player.getInventory();
-        ItemStack bundle = world.itematic$createStack(ItemKeys.BUNDLE);
-        addToBundleContentsComponent(context, bundle, world.itematic$createStack(ItemKeys.STICK));
+        ItemStack bundle = world.itematic$createStack(ItemIds.BUNDLE);
+        addToBundleContentsComponent(context, bundle, world.itematic$createStack(ItemIds.STICK));
         Slot slot = new Slot(inventory, SLOT, 0, 0);
         world.addFreshEntity(player);
         context.succeedIf(() -> {
@@ -66,7 +66,7 @@ public class ItemHolderItemComponentTestSuite {
                 () -> "Expected right clicking on slot with item holder to be successful"
             );
             Assert.itemStack(context, inventory.getItem(SLOT))
-                .is(ItemKeys.STICK);
+                .is(ItemIds.STICK);
             Assert.itemStack(context, bundle)
                 .hasComponent(DataComponents.BUNDLE_CONTENTS, component -> Assert.isTrue(
                     context,
@@ -81,9 +81,9 @@ public class ItemHolderItemComponentTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel level = context.getLevel();
         Slot inventorySlot = new Slot(player.getInventory(), SLOT, 0, 0);
-        inventorySlot.setByPlayer(level.itematic$createStack(ItemKeys.BUNDLE));
+        inventorySlot.setByPlayer(level.itematic$createStack(ItemIds.BUNDLE));
         SlotAccess carriedSlot = Objects.requireNonNull(player.getSlot(Player.HELD_ITEM_SLOT));
-        carriedSlot.set(level.itematic$createStack(ItemKeys.STICK));
+        carriedSlot.set(level.itematic$createStack(ItemIds.STICK));
         context.succeedIf(() -> {
             boolean success = inventorySlot.getItem()
                 .overrideOtherStackedOnMe(carriedSlot.get(), inventorySlot, ClickAction.SECONDARY, player, carriedSlot);
@@ -98,7 +98,7 @@ public class ItemHolderItemComponentTestSuite {
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
                     component -> Assert.itemStack(context, component.getItemUnsafe(0))
-                        .is(ItemKeys.STICK)
+                        .is(ItemIds.STICK)
                 );
         });
     }
@@ -107,8 +107,8 @@ public class ItemHolderItemComponentTestSuite {
     public void rightClickingOnItemHolderWithNoStackRemovesStackFromItemHolder(GameTestHelper context) {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel level = context.getLevel();
-        ItemStack bundle = level.itematic$createStack(ItemKeys.BUNDLE);
-        addToBundleContentsComponent(context, bundle, level.itematic$createStack(ItemKeys.STICK));
+        ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
+        addToBundleContentsComponent(context, bundle, level.itematic$createStack(ItemIds.STICK));
         Slot inventorySlot = new Slot(player.getInventory(), SLOT, 0, 0);
         inventorySlot.setByPlayer(bundle);
         SlotAccess carriedSlot = Objects.requireNonNull(player.getSlot(Player.HELD_ITEM_SLOT));
@@ -121,7 +121,7 @@ public class ItemHolderItemComponentTestSuite {
                 () -> "Expected right clicking on item holder to be successful"
             );
             Assert.itemStack(context, carriedSlot.get())
-                .is(ItemKeys.STICK);
+                .is(ItemIds.STICK);
             Assert.itemStack(context, player.getInventory().getItem(SLOT))
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
@@ -136,7 +136,7 @@ public class ItemHolderItemComponentTestSuite {
 
     private static void addToBundleContentsComponent(GameTestHelper helper, ItemStack bundle, ItemStack stackToAdd) {
         BundleContents.Mutable builder = Objects.requireNonNull(
-            TestUtil.getItemBehavior(helper, bundle, ItemComponentTypes.ITEM_HOLDER).createBuilder(bundle)
+            TestUtil.getItemBehavior(helper, bundle, ItemBehaviorType.ITEM_HOLDER).createBuilder(bundle)
         );
         builder.tryInsert(stackToAdd);
         bundle.set(DataComponents.BUNDLE_CONTENTS, builder.toImmutable());

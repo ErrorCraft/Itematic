@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.client.render.entity;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.renderer.entity.DrownedRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +18,6 @@ public class DrownedEntityRendererExtender {
         )
     )
     private boolean isOfForTridentUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.TRIDENT);
+        return instance.itematic$isOf(ItemIds.TRIDENT);
     }
 }

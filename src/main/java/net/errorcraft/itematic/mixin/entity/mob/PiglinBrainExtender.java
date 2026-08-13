@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.item.Item;
@@ -19,7 +19,7 @@ public class PiglinBrainExtender {
         )
     )
     private static boolean isOfForGoldNuggetUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GOLD_NUGGET);
+        return instance.itematic$isOf(ItemIds.GOLD_NUGGET);
     }
 
     @Redirect(
@@ -30,7 +30,7 @@ public class PiglinBrainExtender {
         )
     )
     private static boolean isOfForGoldIngotUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GOLD_INGOT);
+        return instance.itematic$isOf(ItemIds.GOLD_INGOT);
     }
 
     @Redirect(
@@ -41,6 +41,6 @@ public class PiglinBrainExtender {
         )
     )
     private static boolean isHoldingForCrossbowUseRegistryKeyCheck(LivingEntity instance, Item item) {
-        return instance.itematic$isHolding(ItemKeys.CROSSBOW);
+        return instance.itematic$isHolding(ItemIds.CROSSBOW);
     }
 }

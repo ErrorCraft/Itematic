@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.mob;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
@@ -28,11 +28,11 @@ public abstract class VexEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForIronSwordUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.IRON_SWORD);
+        return this.level().itematic$createStack(ItemIds.IRON_SWORD);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.VEX_SPAWN_EGG;
+        return ItemIds.VEX_SPAWN_EGG;
     }
 }

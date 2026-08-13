@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.recipe;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.MapCloningRecipe;
@@ -21,6 +21,6 @@ public class MapCloningRecipeExtender {
         )
     )
     private boolean isOfForMapUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.MAP);
+        return instance.itematic$isOf(ItemIds.MAP);
     }
 }

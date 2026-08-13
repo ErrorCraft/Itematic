@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.block;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelReader;
@@ -20,6 +20,6 @@ public class CaveVinesImplementationsExtender {
         )
     )
     private ItemStack newItemStackForGlowBerriesUseCreateStack(ItemLike item, LevelReader world) {
-        return world.itematic$createStack(ItemKeys.GLOW_BERRIES);
+        return world.itematic$createStack(ItemIds.GLOW_BERRIES);
     }
 }

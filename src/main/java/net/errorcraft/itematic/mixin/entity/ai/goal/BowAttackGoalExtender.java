@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.ai.goal;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +21,7 @@ public class BowAttackGoalExtender {
         )
     )
     private boolean isHoldingForBowUseRegistryKeyCheck(Monster instance, Item item) {
-        return instance.itematic$isHolding(ItemKeys.BOW);
+        return instance.itematic$isHolding(ItemIds.BOW);
     }
 
     @Redirect(
@@ -32,6 +32,6 @@ public class BowAttackGoalExtender {
         )
     )
     private InteractionHand getHandPossiblyHoldingForBowUseRegistryKey(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemKeys.BOW);
+        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemIds.BOW);
     }
 }

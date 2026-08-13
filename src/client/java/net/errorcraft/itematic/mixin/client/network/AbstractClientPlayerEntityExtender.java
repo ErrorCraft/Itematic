@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.mixin.client.network;
 
 import com.mojang.authlib.GameProfile;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.ZoomItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -29,7 +29,7 @@ public abstract class AbstractClientPlayerEntityExtender extends Player {
         )
     )
     private boolean isOfForBowUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BOW);
+        return instance.itematic$isOf(ItemIds.BOW);
     }
 
     @ModifyConstant(
@@ -38,9 +38,9 @@ public abstract class AbstractClientPlayerEntityExtender extends Player {
             floatValue = 0.1f
         )
     )
-    private float fovMultiplierForSpyglassUseItemComponent(float original) {
-        return this.getActiveItem().itematic$getBehavior(ItemComponentTypes.ZOOM)
-            .map(ZoomItemComponent::fieldOfViewMultiplier)
+    private float fovMultiplierForSpyglassUseItemBehavior(float original) {
+        return this.getActiveItem().itematic$getBehavior(ItemBehaviorType.ZOOM)
+            .map(ZoomItemBehavior::fieldOfViewMultiplier)
             .orElse(original);
     }
 }

@@ -1,11 +1,11 @@
 {
   "entries": [
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/tools"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/buckets"
     },
     "minecraft:fishing_rod",
@@ -17,7 +17,7 @@
     "minecraft:name_tag",
     "minecraft:lead",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/bundles"
     },
     "minecraft:compass",
@@ -31,7 +31,7 @@
     "minecraft:ender_eye",
     "minecraft:elytra",
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 1
@@ -40,7 +40,7 @@
       "item": "minecraft:firework_rocket"
     },
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 2
@@ -49,7 +49,7 @@
       "item": "minecraft:firework_rocket"
     },
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 3
@@ -59,30 +59,30 @@
     },
     "minecraft:saddle",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/harnesses"
     },
     "minecraft:carrot_on_a_stick",
     "minecraft:warped_fungus_on_a_stick",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/boats"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/rails"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/minecarts"
     },
     {
-      "type": "instrument",
+      "type": "minecraft:instrument",
       "item": "minecraft:goat_horn",
       "tag": "minecraft:goat_horns"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/music_discs"
     }
   ]

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.vehicle;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.minecart.MinecartSpawner;
@@ -25,6 +25,6 @@ public abstract class SpawnerMinecartEntityExtender extends AbstractMinecart {
         )
     )
     private ItemStack newItemStackForMinecartUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.MINECART);
+        return this.level().itematic$createStack(ItemIds.MINECART);
     }
 }

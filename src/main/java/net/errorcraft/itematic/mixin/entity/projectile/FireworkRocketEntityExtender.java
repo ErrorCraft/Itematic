@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.projectile;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -26,7 +26,7 @@ public abstract class FireworkRocketEntityExtender extends Projectile {
         )
     )
     private Item getHandPosOffsetUseRegistryEntry(Item item) {
-        return this.level().itematic$getItem(ItemKeys.FIREWORK_ROCKET).value();
+        return this.level().itematic$getItem(ItemIds.FIREWORK_ROCKET).value();
     }
 
     @Redirect(
@@ -40,6 +40,6 @@ public abstract class FireworkRocketEntityExtender extends Projectile {
         )
     )
     private ItemStack newItemStackForFireworkRocketUseCreateStack() {
-        return this.level().itematic$createStack(ItemKeys.FIREWORK_ROCKET);
+        return this.level().itematic$createStack(ItemIds.FIREWORK_ROCKET);
     }
 }

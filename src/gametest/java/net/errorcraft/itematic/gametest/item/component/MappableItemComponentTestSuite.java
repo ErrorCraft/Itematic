@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -17,7 +17,7 @@ public class MappableItemComponentTestSuite {
     public void usingMapFillsMap(GameTestHelper context) {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel world = context.getLevel();
-        ItemStack map = world.itematic$createStack(ItemKeys.MAP);
+        ItemStack map = world.itematic$createStack(ItemIds.MAP);
         player.setItemInHand(InteractionHand.MAIN_HAND, map);
         world.addFreshEntity(player);
         InteractionResult result = map.use(world, player, InteractionHand.MAIN_HAND);
@@ -27,7 +27,7 @@ public class MappableItemComponentTestSuite {
             InteractionResult.Success.class,
             () -> "Expected mappable item usage to be successful",
             success -> Assert.itemStack(context, success.heldItemTransformedTo())
-                .is(ItemKeys.FILLED_MAP)
+                .is(ItemIds.FILLED_MAP)
                 .hasComponent(DataComponents.MAP_ID)
         ));
     }

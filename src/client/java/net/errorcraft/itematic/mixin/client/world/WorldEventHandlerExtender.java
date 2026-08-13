@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.client.world;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelEventHandler;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +34,7 @@ public class WorldEventHandlerExtender {
         )
     )
     private ItemStack newItemStackForSplashPotionUseCreateStack(ItemLike item) {
-        return this.level.itematic$createStack(ItemKeys.SPLASH_POTION);
+        return this.level.itematic$createStack(ItemIds.SPLASH_POTION);
     }
 
     @Redirect(
@@ -54,6 +54,6 @@ public class WorldEventHandlerExtender {
         )
     )
     private ItemStack newItemStackForEnderEyeUseCreateStack(ItemLike item) {
-        return this.level.itematic$createStack(ItemKeys.ENDER_EYE);
+        return this.level.itematic$createStack(ItemIds.ENDER_EYE);
     }
 }

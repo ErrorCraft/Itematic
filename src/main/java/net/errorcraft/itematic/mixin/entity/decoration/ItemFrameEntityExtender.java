@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.decoration;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -25,6 +25,6 @@ public abstract class ItemFrameEntityExtender extends HangingEntity {
         )
     )
     private ItemStack newItemStackForItemFrameUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.ITEM_FRAME);
+        return this.level().itematic$createStack(ItemIds.ITEM_FRAME);
     }
 }

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.block;
 
 import net.errorcraft.itematic.access.block.AbstractBlockAccess;
-import net.errorcraft.itematic.item.ItemUtil;
+import net.errorcraft.itematic.world.item.Items;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -53,7 +53,7 @@ public abstract class AbstractBlockExtender implements AbstractBlockAccess {
     public ResourceKey<Item> itematic$asItemKey() {
         if (this.itemKey == null) {
             this.itemKey = BuiltInRegistries.ITEM.getResourceKey(this.asItem())
-                .orElseGet(() -> ItemUtil.keyFromBlock(this.asBlock()));
+                .orElseGet(() -> Items.keyFromBlock(this.asBlock()));
         }
 
         return this.itemKey;

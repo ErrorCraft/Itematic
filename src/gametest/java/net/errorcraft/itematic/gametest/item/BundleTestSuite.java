@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -22,8 +22,8 @@ public class BundleTestSuite {
     @GameTest
     public void addingNormalItemToBundleAddsIt(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack bundleStack = world.itematic$createStack(ItemKeys.BUNDLE);
-        ItemStack addedStack = world.itematic$createStack(ItemKeys.STICK);
+        ItemStack bundleStack = world.itematic$createStack(ItemIds.BUNDLE);
+        ItemStack addedStack = world.itematic$createStack(ItemIds.STICK);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         Inventory inventory = player.getInventory();
         inventory.add(SLOT_INDEX, addedStack);
@@ -40,7 +40,7 @@ public class BundleTestSuite {
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
                     bundleContents -> Assert.itemStack(context, bundleContents.getItemUnsafe(0))
-                        .is(ItemKeys.STICK)
+                        .is(ItemIds.STICK)
                 );
         });
     }
@@ -48,8 +48,8 @@ public class BundleTestSuite {
     @GameTest
     public void addingShulkerBoxToBundleRejectsIt(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack bundleStack = world.itematic$createStack(ItemKeys.BUNDLE);
-        ItemStack addedStack = world.itematic$createStack(ItemKeys.SHULKER_BOX);
+        ItemStack bundleStack = world.itematic$createStack(ItemIds.BUNDLE);
+        ItemStack addedStack = world.itematic$createStack(ItemIds.SHULKER_BOX);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         Inventory inventory = player.getInventory();
         inventory.add(SLOT_INDEX, addedStack);
@@ -73,10 +73,10 @@ public class BundleTestSuite {
     @GameTest
     public void addingBundleToBundleAddsItWithPenalty(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack bundle = world.itematic$createStack(ItemKeys.BUNDLE);
+        ItemStack bundle = world.itematic$createStack(ItemIds.BUNDLE);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         Inventory inventory = player.getInventory();
-        inventory.add(SLOT_INDEX, world.itematic$createStack(ItemKeys.BUNDLE));
+        inventory.add(SLOT_INDEX, world.itematic$createStack(ItemIds.BUNDLE));
         Slot slot = new Slot(inventory, SLOT_INDEX, 0, 0);
         context.succeedIf(() -> {
             Assert.isTrue(
@@ -90,11 +90,11 @@ public class BundleTestSuite {
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
                     bundleContents -> Assert.itemStack(context, bundleContents.getItemUnsafe(0))
-                        .is(ItemKeys.BUNDLE)
+                        .is(ItemIds.BUNDLE)
                 );
             Assert.areEqual(
                 context,
-                TestUtil.getItemBehavior(context, bundle, ItemComponentTypes.ITEM_HOLDER).occupancy(bundle),
+                TestUtil.getItemBehavior(context, bundle, ItemBehaviorType.ITEM_HOLDER).occupancy(bundle),
                 BundleContentsComponentAccessor.nestedBundleOccupancy(),
                 "occupancy"
             );

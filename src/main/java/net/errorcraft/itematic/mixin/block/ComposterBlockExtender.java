@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.CompostableItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.CompostableItemBehavior;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -25,8 +25,8 @@ public class ComposterBlockExtender {
             remap = false
         )
     )
-    private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemLike> instance, Object o, ItemStack stack) {
-        return stack.itematic$hasBehavior(ItemComponentTypes.COMPOSTABLE);
+    private boolean containsKeyUseItemBehaviorCheck(Object2FloatMap<ItemLike> instance, Object o, ItemStack stack) {
+        return stack.itematic$hasBehavior(ItemBehaviorType.COMPOSTABLE);
     }
 
     @Redirect(
@@ -37,8 +37,8 @@ public class ComposterBlockExtender {
             remap = false
         )
     )
-    private static boolean containsKeyUseItemComponentCheckStatic(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$hasBehavior(ItemComponentTypes.COMPOSTABLE);
+    private static boolean containsKeyUseItemBehaviorCheckStatic(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
+        return stack.itematic$hasBehavior(ItemBehaviorType.COMPOSTABLE);
     }
 
     @Redirect(
@@ -49,9 +49,9 @@ public class ComposterBlockExtender {
             remap = false
         )
     )
-    private static float getFloatUseItemComponent(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$getBehavior(ItemComponentTypes.COMPOSTABLE)
-            .map(CompostableItemComponent::levelIncreaseChance)
+    private static float getFloatUseItemBehavior(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
+        return stack.itematic$getBehavior(ItemBehaviorType.COMPOSTABLE)
+            .map(CompostableItemBehavior::levelIncreaseChance)
             .orElse(0.0f);
     }
 
@@ -63,7 +63,7 @@ public class ComposterBlockExtender {
         )
     )
     private static ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemKeys.BONE_MEAL);
+        return world.itematic$createStack(ItemIds.BONE_MEAL);
     }
 
     @Redirect(
@@ -74,7 +74,7 @@ public class ComposterBlockExtender {
         )
     )
     private ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, @Local(argsOnly = true) LevelAccessor world) {
-        return world.itematic$createStack(ItemKeys.BONE_MEAL);
+        return world.itematic$createStack(ItemIds.BONE_MEAL);
     }
 
     @Mixin(targets = "net/minecraft/world/level/block/ComposterBlock$InputContainer")
@@ -87,8 +87,8 @@ public class ComposterBlockExtender {
                 remap = false
             )
         )
-        private boolean containsKeyUseItemComponentCheck(Object2FloatMap<ItemLike> instance, Object o, int slot, ItemStack stack) {
-            return stack.itematic$hasBehavior(ItemComponentTypes.COMPOSTABLE);
+        private boolean containsKeyUseItemBehaviorCheck(Object2FloatMap<ItemLike> instance, Object o, int slot, ItemStack stack) {
+            return stack.itematic$hasBehavior(ItemBehaviorType.COMPOSTABLE);
         }
     }
 
@@ -102,7 +102,7 @@ public class ComposterBlockExtender {
             )
         )
         private boolean isOfForBoneMealUseRegistryKeyCheck(ItemStack instance, Item item) {
-            return instance.itematic$isOf(ItemKeys.BONE_MEAL);
+            return instance.itematic$isOf(ItemIds.BONE_MEAL);
         }
     }
 }

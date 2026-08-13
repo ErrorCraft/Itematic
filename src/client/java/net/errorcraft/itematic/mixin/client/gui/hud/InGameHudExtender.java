@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.client.gui.hud;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +20,7 @@ public class InGameHudExtender {
         )
     )
     private Object checkPresenceEquipmentBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
-        if (!instance.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!instance.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return null;
         }
 

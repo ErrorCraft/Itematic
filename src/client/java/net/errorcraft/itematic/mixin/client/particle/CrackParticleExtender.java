@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.particle;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BreakingItemParticle;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +21,7 @@ public class CrackParticleExtender {
             )
         )
         private ItemStack newItemStackForSnowballUseCreateStack(ItemLike item, @Local(argsOnly = true) ClientLevel clientWorld) {
-            return clientWorld.itematic$createStack(ItemKeys.SNOWBALL);
+            return clientWorld.itematic$createStack(ItemIds.SNOWBALL);
         }
     }
 
@@ -35,7 +35,7 @@ public class CrackParticleExtender {
             )
         )
         private ItemStack newItemStackForSlimeBallUseCreateStack(ItemLike item, @Local(argsOnly = true) ClientLevel clientWorld) {
-            return clientWorld.itematic$createStack(ItemKeys.SLIME_BALL);
+            return clientWorld.itematic$createStack(ItemIds.SLIME_BALL);
         }
     }
 }

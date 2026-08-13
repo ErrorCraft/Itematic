@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,7 +29,7 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack getDefaultStackForArmadilloScuteUseCreateStack(Item instance) {
-        return this.level().itematic$createStack(ItemKeys.ARMADILLO_SCUTE);
+        return this.level().itematic$createStack(ItemIds.ARMADILLO_SCUTE);
     }
 
     @Redirect(
@@ -40,7 +40,7 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForWolfArmorUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.WOLF_ARMOR);
+        return instance.itematic$isOf(ItemIds.WOLF_ARMOR);
     }
 
     @Redirect(
@@ -58,11 +58,11 @@ public abstract class WolfEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForBoneNotTamedUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BONE);
+        return instance.itematic$isOf(ItemIds.BONE);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.WOLF_SPAWN_EGG;
+        return ItemIds.WOLF_SPAWN_EGG;
     }
 }

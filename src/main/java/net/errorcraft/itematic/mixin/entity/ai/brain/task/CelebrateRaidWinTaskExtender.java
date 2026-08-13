@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.ai.brain.task;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.CelebrateVillagersSurvivedRaid;
@@ -57,6 +57,6 @@ public class CelebrateRaidWinTaskExtender extends Behavior<Villager> {
         )
     )
     private ItemStack newItemStackForFireworkRocketUseCreateStack(ItemLike item) {
-        return this.world.itematic$createStack(ItemKeys.FIREWORK_ROCKET);
+        return this.world.itematic$createStack(ItemIds.FIREWORK_ROCKET);
     }
 }

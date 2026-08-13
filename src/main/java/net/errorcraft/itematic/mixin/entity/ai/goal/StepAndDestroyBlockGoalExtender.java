@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.ai.goal;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.ai.goal.RemoveBlockGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -20,6 +20,6 @@ public class StepAndDestroyBlockGoalExtender {
         )
     )
     private ItemStack newItemStackForEggUseCreateStack(ItemLike item, @Local Level world) {
-        return world.itematic$createStack(ItemKeys.EGG);
+        return world.itematic$createStack(ItemIds.EGG);
     }
 }

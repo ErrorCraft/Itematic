@@ -5,9 +5,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.SmithingTemplateProviderItemComponent;
-import net.errorcraft.itematic.item.smithing.template.SmithingTemplate;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
+import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
 import net.minecraft.client.gui.screens.inventory.ItemCombinerScreen;
 import net.minecraft.client.gui.screens.inventory.SmithingScreen;
 import net.minecraft.core.component.DataComponentType;
@@ -43,8 +43,8 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
     private void storeSmithingTemplate(CallbackInfo info, @Share("smithingTemplate") LocalRef<Optional<SmithingTemplate>> smithingTemplate) {
         smithingTemplate.set(this.menu.getSlot(0)
             .getItem()
-            .itematic$getBehavior(ItemComponentTypes.SMITHING_TEMPLATE_PROVIDER)
-            .map(SmithingTemplateProviderItemComponent::template)
+            .itematic$getBehavior(ItemBehaviorType.SMITHING_TEMPLATE_PROVIDER)
+            .map(SmithingTemplateProviderItemBehavior::template)
         );
     }
 
@@ -80,7 +80,7 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
         )
     )
     private Object checkPresenceEquipmentBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
-        if (!instance.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!instance.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return null;
         }
 
@@ -94,9 +94,9 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
             ordinal = 0
         )
     )
-    private boolean instanceOfSmithingTemplateItemUseItemComponentCheck(Object reference, Class<SmithingTemplateItem> clazz, @Local(ordinal = 0) ItemStack itemStack, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplate) {
-        Optional<SmithingTemplate> optionalSmithingTemplate = itemStack.itematic$getBehavior(ItemComponentTypes.SMITHING_TEMPLATE_PROVIDER)
-            .map(SmithingTemplateProviderItemComponent::template);
+    private boolean instanceOfSmithingTemplateItemUseItemBehaviorCheck(Object reference, Class<SmithingTemplateItem> clazz, @Local(ordinal = 0) ItemStack itemStack, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplate) {
+        Optional<SmithingTemplate> optionalSmithingTemplate = itemStack.itematic$getBehavior(ItemBehaviorType.SMITHING_TEMPLATE_PROVIDER)
+            .map(SmithingTemplateProviderItemBehavior::template);
         optionalSmithingTemplate.ifPresent(smithingTemplate::set);
         return optionalSmithingTemplate.isPresent();
     }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.entity.projectile.thrown;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
@@ -36,6 +36,6 @@ public abstract class ThrownItemEntityExtender extends ThrowableProjectile {
 
     @Unique
     protected ResourceKey<Item> getDefaultItemKey() {
-        return ItemKeys.AIR;
+        return ItemIds.AIR;
     }
 }

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -18,7 +18,7 @@ public class PotionItemComponentTestSuite {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel world = context.getLevel();
         ItemStack potion = PotionContentsUtil.setPotion(
-            world.itematic$createStack(ItemKeys.POTION),
+            world.itematic$createStack(ItemIds.POTION),
             Potions.LEAPING
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, potion);

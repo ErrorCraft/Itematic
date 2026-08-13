@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -42,7 +42,7 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
         }
 
         ItemStack stack = context.get(LootContextParams.TOOL);
-        if (ItemStackUtil.isNullOrEmpty(stack)) {
+        if (ItemStacks.isNullOrEmpty(stack)) {
             return false;
         }
 

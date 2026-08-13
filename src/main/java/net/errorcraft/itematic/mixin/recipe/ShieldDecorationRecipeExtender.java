@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.mixin.recipe;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.BannerPatternHolderItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -26,7 +26,7 @@ public class ShieldDecorationRecipeExtender {
         )
     )
     private boolean isOfForShieldUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SHIELD);
+        return instance.itematic$isOf(ItemIds.SHIELD);
     }
 
     @ModifyConstant(
@@ -36,9 +36,9 @@ public class ShieldDecorationRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBannerItemUseItemComponentMatches(Object reference, Class<BannerItem> clazz, @Local ItemStack inputStack) {
-        return inputStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
-            .map(BannerPatternHolderItemComponent::modifiable)
+    private boolean instanceOfBannerItemUseItemBehaviorMatches(Object reference, Class<BannerItem> clazz, @Local ItemStack inputStack) {
+        return inputStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+            .map(BannerPatternHolderItemBehavior::modifiable)
             .orElse(false);
     }
 
@@ -49,9 +49,9 @@ public class ShieldDecorationRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBannerItemUseItemComponentCraft(Object reference, Class<BannerItem> clazz, @Local(ordinal = 2) ItemStack inputStack) {
-        return inputStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
-            .map(BannerPatternHolderItemComponent::modifiable)
+    private boolean instanceOfBannerItemUseItemBehaviorCraft(Object reference, Class<BannerItem> clazz, @Local(ordinal = 2) ItemStack inputStack) {
+        return inputStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+            .map(BannerPatternHolderItemBehavior::modifiable)
             .orElse(false);
     }
 
@@ -81,9 +81,9 @@ public class ShieldDecorationRecipeExtender {
             target = "Lnet/minecraft/world/item/BannerItem;getColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemComponent(BannerItem instance, @Local(ordinal = 0) ItemStack bannerStack) {
-        return bannerStack.itematic$getBehavior(ItemComponentTypes.BANNER_PATTERN_HOLDER)
-            .flatMap(BannerPatternHolderItemComponent::color)
+    private DyeColor getColorUseItemBehavior(BannerItem instance, @Local(ordinal = 0) ItemStack bannerStack) {
+        return bannerStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+            .flatMap(BannerPatternHolderItemBehavior::color)
             .orElse(DyeColor.WHITE);
     }
 }

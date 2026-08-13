@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.ingame;
 
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.gui.screens.inventory.CartographyTableScreen;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +28,7 @@ public class CartographyTableScreenExtender {
         )
     )
     private boolean isOfForPaperUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.PAPER);
+        return instance.itematic$isOf(ItemIds.PAPER);
     }
 
     @Redirect(
@@ -47,7 +47,7 @@ public class CartographyTableScreenExtender {
         )
     )
     private boolean isOfForMapUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.MAP);
+        return instance.itematic$isOf(ItemIds.MAP);
     }
 
     @Redirect(
@@ -66,6 +66,6 @@ public class CartographyTableScreenExtender {
         )
     )
     private boolean isOfForGlassPaneUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.GLASS_PANE);
+        return instance.itematic$isOf(ItemIds.GLASS_PANE);
     }
 }

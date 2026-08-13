@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.render.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.WingsLayer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
@@ -18,7 +18,7 @@ public class ElytraFeatureRendererExtender<S extends HumanoidRenderState> {
         cancellable = true
     )
     private void checkPresenceEquipmentBehavior(PoseStack matrixStack, SubmitNodeCollector orderedRenderCommandQueue, int i, S bipedEntityRenderState, float f, float g, CallbackInfo info) {
-        if (!bipedEntityRenderState.chestEquipment.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!bipedEntityRenderState.chestEquipment.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.cancel();
         }
     }

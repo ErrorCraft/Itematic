@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.recipe.brewing;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
 import net.errorcraft.itematic.recipe.display.BrewingRecipeDisplay;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -67,7 +67,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
                 new SlotDisplay.ItemStackSlotDisplay(displayStack(this.base())),
                 this.reagent().display(),
                 new SlotDisplay.ItemStackSlotDisplay(displayStack(this.result())),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemKeys.BREWING_STAND))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.BREWING_STAND))
             )
         );
     }

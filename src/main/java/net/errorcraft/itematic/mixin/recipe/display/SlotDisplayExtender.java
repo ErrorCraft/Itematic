@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.recipe.display;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -69,7 +69,7 @@ public interface SlotDisplayExtender {
 
             return lookup.lookupOrThrow(Registries.ITEM)
                 .listElements()
-                .filter(reference -> reference.value().itematic$hasBehavior(ItemComponentTypes.FUEL))
+                .filter(reference -> reference.value().itematic$hasBehavior(ItemBehaviorType.FUEL))
                 .collect(Collectors.toCollection(ObjectLinkedOpenHashSet::new));
         }
 

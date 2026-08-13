@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.client.network;
 
 import net.errorcraft.itematic.access.network.listener.ClientPlayPacketListenerAccess;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.event.ItemEvents;
 import net.errorcraft.itematic.mixin.item.ItemGroupsAccessor;
 import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
+import net.errorcraft.itematic.world.item.ItemEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -51,7 +51,7 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonPacke
         )
     )
     private static <T> boolean containsDeathProtectionDataComponentUseEventListenerCheck(ItemStack instance, DataComponentType<T> type) {
-        return instance.itematic$hasEventListener(ItemEvents.BEFORE_DEATH_HOLDER);
+        return instance.itematic$hasEventListener(ItemEvent.BEFORE_DEATH_HOLDER);
     }
 
     @Redirect(
@@ -62,7 +62,7 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonPacke
         )
     )
     private static ItemStack newItemStackForTotemOfUndyingUseCreateStack(ItemLike item, Player player) {
-        return player.level().itematic$createStack(ItemKeys.TOTEM_OF_UNDYING);
+        return player.level().itematic$createStack(ItemIds.TOTEM_OF_UNDYING);
     }
 
     @Override

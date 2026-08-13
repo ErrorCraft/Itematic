@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
-import net.errorcraft.itematic.item.ItemKeys;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
@@ -35,7 +35,7 @@ public abstract class GoatEntityExtender extends MobEntityExtender {
     )
     private Function<? super Holder<Instrument>, ? extends ItemStack> getStackForInstrumentUseCreateStack(Function<? super Holder<Instrument>, ? extends ItemStack> mapper) {
         return instrument -> {
-            ItemStack stack = this.level().itematic$createStack(ItemKeys.GOAT_HORN);
+            ItemStack stack = this.level().itematic$createStack(ItemIds.GOAT_HORN);
             stack.set(DataComponents.INSTRUMENT, new InstrumentComponent(instrument));
             return stack;
         };
@@ -43,6 +43,6 @@ public abstract class GoatEntityExtender extends MobEntityExtender {
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.GOAT_SPAWN_EGG;
+        return ItemIds.GOAT_SPAWN_EGG;
     }
 }

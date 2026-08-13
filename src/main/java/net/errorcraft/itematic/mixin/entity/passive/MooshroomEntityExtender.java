@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.mixin.entity.passive;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.mixin.entity.mob.MobEntityExtender;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.cow.MushroomCow;
@@ -34,7 +34,7 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForBowlUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BOWL);
+        return instance.itematic$isOf(ItemIds.BOWL);
     }
 
     @Redirect(
@@ -46,7 +46,7 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForSuspiciousStewUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
+        return this.level().itematic$createStack(ItemIds.SUSPICIOUS_STEW);
     }
 
     @Redirect(
@@ -65,7 +65,7 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
         )
     )
     private ItemStack newItemStackForMushroomStewUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemKeys.MUSHROOM_STEW);
+        return this.level().itematic$createStack(ItemIds.MUSHROOM_STEW);
     }
 
     @Redirect(
@@ -84,7 +84,7 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
         )
     )
     private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SHEARS);
+        return instance.itematic$isOf(ItemIds.SHEARS);
     }
 
     @Redirect(
@@ -94,13 +94,13 @@ public abstract class MooshroomEntityExtender extends MobEntityExtender {
             target = "Lnet/minecraft/world/level/block/SuspiciousEffectHolder;tryGet(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/level/block/SuspiciousEffectHolder;"
         )
     )
-    private SuspiciousEffectHolder suspiciousStewEffectsUseItemComponent(ItemLike item, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$getBehavior(ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
+    private SuspiciousEffectHolder suspiciousStewEffectsUseItemBehavior(ItemLike item, @Local(argsOnly = true) ItemStack stack) {
+        return stack.itematic$getBehavior(ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT)
             .orElse(null);
     }
 
     @Override
     protected @Nullable ResourceKey<Item> pickBlockKey() {
-        return ItemKeys.MOOSHROOM_SPAWN_EGG;
+        return ItemIds.MOOSHROOM_SPAWN_EGG;
     }
 }

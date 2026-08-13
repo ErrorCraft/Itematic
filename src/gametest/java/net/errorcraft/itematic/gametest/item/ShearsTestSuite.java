@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -24,10 +24,10 @@ public class ShearsTestSuite {
     public void usingShearsOnSaddledPigRemovesSaddle(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemKeys.SHEARS);
+        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
         Pig target = context.spawn(EntityType.PIG, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.SADDLE, world.itematic$createStack(ItemKeys.SADDLE));
+        target.setItemSlot(EquipmentSlot.SADDLE, world.itematic$createStack(ItemIds.SADDLE));
         context.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
@@ -46,7 +46,7 @@ public class ShearsTestSuite {
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
-                        .is(ItemKeys.SADDLE))
+                        .is(ItemIds.SADDLE))
                 );
         });
     }
@@ -55,10 +55,10 @@ public class ShearsTestSuite {
     public void usingShearsOnSaddledHorseRemovesSaddle(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemKeys.SHEARS);
+        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
         Horse target = context.spawn(EntityType.HORSE, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.SADDLE, world.itematic$createStack(ItemKeys.SADDLE));
+        target.setItemSlot(EquipmentSlot.SADDLE, world.itematic$createStack(ItemIds.SADDLE));
         context.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
@@ -77,7 +77,7 @@ public class ShearsTestSuite {
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
-                        .is(ItemKeys.SADDLE))
+                        .is(ItemIds.SADDLE))
                 );
         });
     }
@@ -86,10 +86,10 @@ public class ShearsTestSuite {
     public void usingShearsOnHorseWithHorseArmorRemovesHorseArmor(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemKeys.SHEARS);
+        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
         Horse target = context.spawn(EntityType.HORSE, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.BODY, world.itematic$createStack(ItemKeys.IRON_HORSE_ARMOR));
+        target.setItemSlot(EquipmentSlot.BODY, world.itematic$createStack(ItemIds.IRON_HORSE_ARMOR));
         context.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
@@ -108,7 +108,7 @@ public class ShearsTestSuite {
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
-                        .is(ItemKeys.IRON_HORSE_ARMOR))
+                        .is(ItemIds.IRON_HORSE_ARMOR))
                 );
         });
     }
@@ -117,10 +117,10 @@ public class ShearsTestSuite {
     public void usingShearsOnWolfWithCorrectOwnerRemovesWolfArmor(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemKeys.SHEARS);
+        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
         Wolf target = context.spawn(EntityType.WOLF, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.BODY, world.itematic$createStack(ItemKeys.WOLF_ARMOR));
+        target.setItemSlot(EquipmentSlot.BODY, world.itematic$createStack(ItemIds.WOLF_ARMOR));
         target.setOwner(player);
         context.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
@@ -140,7 +140,7 @@ public class ShearsTestSuite {
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
-                        .is(ItemKeys.WOLF_ARMOR))
+                        .is(ItemIds.WOLF_ARMOR))
                 );
         });
     }
@@ -149,10 +149,10 @@ public class ShearsTestSuite {
     public void usingShearsOnWolfWithIncorrectOwnerDoesNotRemoveWolfArmor(GameTestHelper context) {
         ServerLevel world = context.getLevel();
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemKeys.SHEARS);
+        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
         Wolf target = context.spawn(EntityType.WOLF, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.BODY, world.itematic$createStack(ItemKeys.WOLF_ARMOR));
+        target.setItemSlot(EquipmentSlot.BODY, world.itematic$createStack(ItemIds.WOLF_ARMOR));
         context.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
             Assert.isFalse(

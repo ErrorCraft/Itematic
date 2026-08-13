@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +17,7 @@ public class FishingRodTestSuite {
     public void usingFishingRodCastsFishingRod(GameTestHelper context) {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel world = context.getLevel();
-        ItemStack fishingRod = world.itematic$createStack(ItemKeys.FISHING_ROD);
+        ItemStack fishingRod = world.itematic$createStack(ItemIds.FISHING_ROD);
         player.setItemInHand(InteractionHand.MAIN_HAND, fishingRod);
         fishingRod.use(world, player, InteractionHand.MAIN_HAND);
         context.succeedIf(() -> Assert.isTrue(
@@ -31,7 +31,7 @@ public class FishingRodTestSuite {
     public void usingCastFishingRodRetractsFishingRod(GameTestHelper context) {
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel world = context.getLevel();
-        ItemStack fishingRod = world.itematic$createStack(ItemKeys.FISHING_ROD);
+        ItemStack fishingRod = world.itematic$createStack(ItemIds.FISHING_ROD);
         player.setItemInHand(InteractionHand.MAIN_HAND, fishingRod);
         Projectile.spawnProjectile(new FishingHook(player, world, 0, 0), world, fishingRod);
         fishingRod.use(world, player, InteractionHand.MAIN_HAND);

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
 import net.minecraft.world.item.Item;
@@ -22,7 +22,7 @@ public class PumpkinBlockExtender {
         )
     )
     private boolean isOfForShearsUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.SHEARS);
+        return instance.itematic$isOf(ItemIds.SHEARS);
     }
 
     @Redirect(
@@ -33,6 +33,6 @@ public class PumpkinBlockExtender {
         )
     )
     private <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local(argsOnly = true) Level world) {
-        return instance.itematic$getOrCreateStat(world.itematic$getItem(ItemKeys.SHEARS));
+        return instance.itematic$getOrCreateStat(world.itematic$getItem(ItemIds.SHEARS));
     }
 }

@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.access.item;
 
-import net.errorcraft.itematic.item.ItemDisplay;
-import net.errorcraft.itematic.item.component.ItemComponent;
-import net.errorcraft.itematic.item.component.ItemComponentSet;
-import net.errorcraft.itematic.item.component.ItemComponentType;
-import net.errorcraft.itematic.item.event.ItemEvent;
-import net.errorcraft.itematic.item.event.ItemEventMap;
+import net.errorcraft.itematic.world.action.ActionEventMap;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.item.ItemDisplay;
+import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -27,20 +28,20 @@ public interface ItemAccess {
         return null;
     }
     default void itematic$setAttributeModifiers(ItemAttributeModifiers attributeModifiers) {}
-    default ItemComponentSet itematic$behavior() {
+    default ItemBehaviorSet itematic$behavior() {
         return null;
     }
-    default void itematic$setBehavior(ItemComponentSet components) {}
-    default <T extends ItemComponent<T>> boolean itematic$hasBehavior(ItemComponentType<T> type) {
+    default void itematic$setBehavior(ItemBehaviorSet components) {}
+    default <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {
         return false;
     }
-    default <T extends ItemComponent<T>> Optional<T> itematic$getBehavior(ItemComponentType<T> type) {
+    default <T extends ItemBehavior<T>> Optional<T> itematic$getBehavior(ItemBehaviorType<T> type) {
         return Optional.empty();
     }
-    default ItemEventMap itematic$events() {
-        return null;
+    default ActionEventMap<ItemEvent> itematic$events() {
+        return ActionEventMap.empty();
     }
-    default void itematic$setEvents(ItemEventMap events) {}
+    default void itematic$setEvents(ActionEventMap<ItemEvent> events) {}
     default boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
         return false;
     }

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingOakSaplingOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack oakSapling = world.itematic$createStack(ItemKeys.OAK_SAPLING);
+        ItemStack oakSapling = world.itematic$createStack(ItemIds.OAK_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, oakSapling);
         world.addFreshEntity(player);
@@ -36,14 +36,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingOakSaplingOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack oakSapling = world.itematic$createStack(ItemKeys.OAK_SAPLING);
+        ItemStack oakSapling = world.itematic$createStack(ItemIds.OAK_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, oakSapling);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, oakSapling, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.OAK_SAPLING);
+                .is(ItemIds.OAK_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -52,7 +52,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingSpruceSaplingOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack spruceSapling = world.itematic$createStack(ItemKeys.SPRUCE_SAPLING);
+        ItemStack spruceSapling = world.itematic$createStack(ItemIds.SPRUCE_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, spruceSapling);
         world.addFreshEntity(player);
@@ -68,14 +68,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingSpruceSaplingOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack spruceSapling = world.itematic$createStack(ItemKeys.SPRUCE_SAPLING);
+        ItemStack spruceSapling = world.itematic$createStack(ItemIds.SPRUCE_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, spruceSapling);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, spruceSapling, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.SPRUCE_SAPLING);
+                .is(ItemIds.SPRUCE_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -84,7 +84,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingBirchSaplingOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack birchSapling = world.itematic$createStack(ItemKeys.BIRCH_SAPLING);
+        ItemStack birchSapling = world.itematic$createStack(ItemIds.BIRCH_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, birchSapling);
         world.addFreshEntity(player);
@@ -100,14 +100,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingBirchSaplingOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack birchSapling = world.itematic$createStack(ItemKeys.BIRCH_SAPLING);
+        ItemStack birchSapling = world.itematic$createStack(ItemIds.BIRCH_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, birchSapling);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, birchSapling, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.BIRCH_SAPLING);
+                .is(ItemIds.BIRCH_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -116,7 +116,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingJungleSaplingOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack jungleSapling = world.itematic$createStack(ItemKeys.JUNGLE_SAPLING);
+        ItemStack jungleSapling = world.itematic$createStack(ItemIds.JUNGLE_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, jungleSapling);
         world.addFreshEntity(player);
@@ -132,14 +132,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingJungleSaplingOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack jungleSapling = world.itematic$createStack(ItemKeys.JUNGLE_SAPLING);
+        ItemStack jungleSapling = world.itematic$createStack(ItemIds.JUNGLE_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, jungleSapling);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, jungleSapling, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.JUNGLE_SAPLING);
+                .is(ItemIds.JUNGLE_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -148,7 +148,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingAcaciaSaplingOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack acaciaSapling = world.itematic$createStack(ItemKeys.ACACIA_SAPLING);
+        ItemStack acaciaSapling = world.itematic$createStack(ItemIds.ACACIA_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, acaciaSapling);
         world.addFreshEntity(player);
@@ -164,14 +164,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingAcaciaSaplingOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack acaciaSapling = world.itematic$createStack(ItemKeys.ACACIA_SAPLING);
+        ItemStack acaciaSapling = world.itematic$createStack(ItemIds.ACACIA_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, acaciaSapling);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, acaciaSapling, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.ACACIA_SAPLING);
+                .is(ItemIds.ACACIA_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -180,7 +180,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingCherrySaplingOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack cherrySapling = world.itematic$createStack(ItemKeys.CHERRY_SAPLING);
+        ItemStack cherrySapling = world.itematic$createStack(ItemIds.CHERRY_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, cherrySapling);
         world.addFreshEntity(player);
@@ -196,14 +196,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingCherrySaplingOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack cherrySapling = world.itematic$createStack(ItemKeys.CHERRY_SAPLING);
+        ItemStack cherrySapling = world.itematic$createStack(ItemIds.CHERRY_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, cherrySapling);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, cherrySapling, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CHERRY_SAPLING);
+                .is(ItemIds.CHERRY_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -212,7 +212,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingDarkOakSaplingOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack darkOakSapling = world.itematic$createStack(ItemKeys.DARK_OAK_SAPLING);
+        ItemStack darkOakSapling = world.itematic$createStack(ItemIds.DARK_OAK_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, darkOakSapling);
         world.addFreshEntity(player);
@@ -228,14 +228,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingDarkOakSaplingOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack darkOakSapling = world.itematic$createStack(ItemKeys.DARK_OAK_SAPLING);
+        ItemStack darkOakSapling = world.itematic$createStack(ItemIds.DARK_OAK_SAPLING);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, darkOakSapling);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, darkOakSapling, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.DARK_OAK_SAPLING);
+                .is(ItemIds.DARK_OAK_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -244,7 +244,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingCrimsonFungusOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack crimsonFungus = world.itematic$createStack(ItemKeys.CRIMSON_FUNGUS);
+        ItemStack crimsonFungus = world.itematic$createStack(ItemIds.CRIMSON_FUNGUS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, crimsonFungus);
         world.addFreshEntity(player);
@@ -260,14 +260,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingCrimsonFungusOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack crimsonFungus = world.itematic$createStack(ItemKeys.CRIMSON_FUNGUS);
+        ItemStack crimsonFungus = world.itematic$createStack(ItemIds.CRIMSON_FUNGUS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, crimsonFungus);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, crimsonFungus, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CRIMSON_FUNGUS);
+                .is(ItemIds.CRIMSON_FUNGUS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -276,7 +276,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingWarpedFungusOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack warpedFungus = world.itematic$createStack(ItemKeys.WARPED_FUNGUS);
+        ItemStack warpedFungus = world.itematic$createStack(ItemIds.WARPED_FUNGUS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, warpedFungus);
         world.addFreshEntity(player);
@@ -292,14 +292,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingWarpedFungusOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack warpedFungus = world.itematic$createStack(ItemKeys.WARPED_FUNGUS);
+        ItemStack warpedFungus = world.itematic$createStack(ItemIds.WARPED_FUNGUS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, warpedFungus);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, warpedFungus, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.WARPED_FUNGUS);
+                .is(ItemIds.WARPED_FUNGUS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -308,7 +308,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingCrimsonRootsOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack crimsonRoots = world.itematic$createStack(ItemKeys.CRIMSON_ROOTS);
+        ItemStack crimsonRoots = world.itematic$createStack(ItemIds.CRIMSON_ROOTS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, crimsonRoots);
         world.addFreshEntity(player);
@@ -324,14 +324,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingCrimsonRootsOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack crimsonRoots = world.itematic$createStack(ItemKeys.CRIMSON_ROOTS);
+        ItemStack crimsonRoots = world.itematic$createStack(ItemIds.CRIMSON_ROOTS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, crimsonRoots);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, crimsonRoots, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CRIMSON_ROOTS);
+                .is(ItemIds.CRIMSON_ROOTS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -340,7 +340,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingWarpedRootsOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack warpedRoots = world.itematic$createStack(ItemKeys.WARPED_ROOTS);
+        ItemStack warpedRoots = world.itematic$createStack(ItemIds.WARPED_ROOTS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, warpedRoots);
         world.addFreshEntity(player);
@@ -356,14 +356,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingWarpedRootsOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack warpedRoots = world.itematic$createStack(ItemKeys.WARPED_ROOTS);
+        ItemStack warpedRoots = world.itematic$createStack(ItemIds.WARPED_ROOTS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, warpedRoots);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, warpedRoots, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.WARPED_ROOTS);
+                .is(ItemIds.WARPED_ROOTS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -372,7 +372,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingAzaleaBushOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack azalea = world.itematic$createStack(ItemKeys.AZALEA);
+        ItemStack azalea = world.itematic$createStack(ItemIds.AZALEA);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, azalea);
         world.addFreshEntity(player);
@@ -388,14 +388,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingAzaleaBushOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack azalea = world.itematic$createStack(ItemKeys.AZALEA);
+        ItemStack azalea = world.itematic$createStack(ItemIds.AZALEA);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, azalea);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, azalea, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.AZALEA);
+                .is(ItemIds.AZALEA);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -404,7 +404,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingFloweringAzaleaBushOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack floweringAzalea = world.itematic$createStack(ItemKeys.FLOWERING_AZALEA);
+        ItemStack floweringAzalea = world.itematic$createStack(ItemIds.FLOWERING_AZALEA);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, floweringAzalea);
         world.addFreshEntity(player);
@@ -420,14 +420,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingFloweringAzaleaBushOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack floweringAzalea = world.itematic$createStack(ItemKeys.FLOWERING_AZALEA);
+        ItemStack floweringAzalea = world.itematic$createStack(ItemIds.FLOWERING_AZALEA);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, floweringAzalea);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, floweringAzalea, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.FLOWERING_AZALEA);
+                .is(ItemIds.FLOWERING_AZALEA);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -436,7 +436,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingMangrovePropaguleOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack mangrovePropagule = world.itematic$createStack(ItemKeys.MANGROVE_PROPAGULE);
+        ItemStack mangrovePropagule = world.itematic$createStack(ItemIds.MANGROVE_PROPAGULE);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, mangrovePropagule);
         world.addFreshEntity(player);
@@ -452,14 +452,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingMangrovePropaguleOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack mangrovePropagule = world.itematic$createStack(ItemKeys.MANGROVE_PROPAGULE);
+        ItemStack mangrovePropagule = world.itematic$createStack(ItemIds.MANGROVE_PROPAGULE);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, mangrovePropagule);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, mangrovePropagule, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.MANGROVE_PROPAGULE);
+                .is(ItemIds.MANGROVE_PROPAGULE);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -468,7 +468,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingCactusOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack cactus = world.itematic$createStack(ItemKeys.CACTUS);
+        ItemStack cactus = world.itematic$createStack(ItemIds.CACTUS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, cactus);
         world.addFreshEntity(player);
@@ -484,14 +484,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingCactusOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack cactus = world.itematic$createStack(ItemKeys.CACTUS);
+        ItemStack cactus = world.itematic$createStack(ItemIds.CACTUS);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, cactus);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, cactus, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CACTUS);
+                .is(ItemIds.CACTUS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -500,7 +500,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingDeadBushOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack deadBush = world.itematic$createStack(ItemKeys.DEAD_BUSH);
+        ItemStack deadBush = world.itematic$createStack(ItemIds.DEAD_BUSH);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, deadBush);
         world.addFreshEntity(player);
@@ -516,14 +516,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingDeadBushOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack deadBush = world.itematic$createStack(ItemKeys.DEAD_BUSH);
+        ItemStack deadBush = world.itematic$createStack(ItemIds.DEAD_BUSH);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, deadBush);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, deadBush, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.DEAD_BUSH);
+                .is(ItemIds.DEAD_BUSH);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -532,7 +532,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingBambooOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack bamboo = world.itematic$createStack(ItemKeys.BAMBOO);
+        ItemStack bamboo = world.itematic$createStack(ItemIds.BAMBOO);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, bamboo);
         world.addFreshEntity(player);
@@ -548,14 +548,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingBambooOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack bamboo = world.itematic$createStack(ItemKeys.BAMBOO);
+        ItemStack bamboo = world.itematic$createStack(ItemIds.BAMBOO);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, bamboo);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, bamboo, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.BAMBOO);
+                .is(ItemIds.BAMBOO);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -564,7 +564,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingFernOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack fern = world.itematic$createStack(ItemKeys.FERN);
+        ItemStack fern = world.itematic$createStack(ItemIds.FERN);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, fern);
         world.addFreshEntity(player);
@@ -580,14 +580,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingFernOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack fern = world.itematic$createStack(ItemKeys.FERN);
+        ItemStack fern = world.itematic$createStack(ItemIds.FERN);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, fern);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, fern, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.FERN);
+                .is(ItemIds.FERN);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -596,7 +596,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingDandelionOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack dandelion = world.itematic$createStack(ItemKeys.DANDELION);
+        ItemStack dandelion = world.itematic$createStack(ItemIds.DANDELION);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, dandelion);
         world.addFreshEntity(player);
@@ -612,14 +612,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingDandelionOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack dandelion = world.itematic$createStack(ItemKeys.DANDELION);
+        ItemStack dandelion = world.itematic$createStack(ItemIds.DANDELION);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, dandelion);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, dandelion, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.DANDELION);
+                .is(ItemIds.DANDELION);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -628,7 +628,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingPoppyOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack poppy = world.itematic$createStack(ItemKeys.POPPY);
+        ItemStack poppy = world.itematic$createStack(ItemIds.POPPY);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, poppy);
         world.addFreshEntity(player);
@@ -644,14 +644,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_dandelion")
     public void usingPoppyOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack poppy = world.itematic$createStack(ItemKeys.POPPY);
+        ItemStack poppy = world.itematic$createStack(ItemIds.POPPY);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, poppy);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, poppy, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.POPPY);
+                .is(ItemIds.POPPY);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_DANDELION);
         });
@@ -660,7 +660,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingBlueOrchidOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack blueOrchid = world.itematic$createStack(ItemKeys.BLUE_ORCHID);
+        ItemStack blueOrchid = world.itematic$createStack(ItemIds.BLUE_ORCHID);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, blueOrchid);
         world.addFreshEntity(player);
@@ -676,14 +676,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingBlueOrchidOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack blueOrchid = world.itematic$createStack(ItemKeys.BLUE_ORCHID);
+        ItemStack blueOrchid = world.itematic$createStack(ItemIds.BLUE_ORCHID);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, blueOrchid);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, blueOrchid, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.BLUE_ORCHID);
+                .is(ItemIds.BLUE_ORCHID);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -692,7 +692,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingAlliumOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack allium = world.itematic$createStack(ItemKeys.ALLIUM);
+        ItemStack allium = world.itematic$createStack(ItemIds.ALLIUM);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, allium);
         world.addFreshEntity(player);
@@ -708,14 +708,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingAlliumOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack allium = world.itematic$createStack(ItemKeys.ALLIUM);
+        ItemStack allium = world.itematic$createStack(ItemIds.ALLIUM);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, allium);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, allium, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.ALLIUM);
+                .is(ItemIds.ALLIUM);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -724,7 +724,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingAzureBluetOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack azureBluet = world.itematic$createStack(ItemKeys.AZURE_BLUET);
+        ItemStack azureBluet = world.itematic$createStack(ItemIds.AZURE_BLUET);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, azureBluet);
         world.addFreshEntity(player);
@@ -740,14 +740,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingAzureBluetOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack azureBluet = world.itematic$createStack(ItemKeys.AZURE_BLUET);
+        ItemStack azureBluet = world.itematic$createStack(ItemIds.AZURE_BLUET);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, azureBluet);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, azureBluet, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.AZURE_BLUET);
+                .is(ItemIds.AZURE_BLUET);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -756,7 +756,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingRedTulipOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack redTulip = world.itematic$createStack(ItemKeys.RED_TULIP);
+        ItemStack redTulip = world.itematic$createStack(ItemIds.RED_TULIP);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, redTulip);
         world.addFreshEntity(player);
@@ -772,14 +772,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingRedTulipOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack redTulip = world.itematic$createStack(ItemKeys.RED_TULIP);
+        ItemStack redTulip = world.itematic$createStack(ItemIds.RED_TULIP);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, redTulip);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, redTulip, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.RED_TULIP);
+                .is(ItemIds.RED_TULIP);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -788,7 +788,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingOrangeTulipOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack orangeTulip = world.itematic$createStack(ItemKeys.ORANGE_TULIP);
+        ItemStack orangeTulip = world.itematic$createStack(ItemIds.ORANGE_TULIP);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, orangeTulip);
         world.addFreshEntity(player);
@@ -804,14 +804,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingOrangeTulipOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack orangeTulip = world.itematic$createStack(ItemKeys.ORANGE_TULIP);
+        ItemStack orangeTulip = world.itematic$createStack(ItemIds.ORANGE_TULIP);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, orangeTulip);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, orangeTulip, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.ORANGE_TULIP);
+                .is(ItemIds.ORANGE_TULIP);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -820,7 +820,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingWhiteTulipOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack whiteTulip = world.itematic$createStack(ItemKeys.WHITE_TULIP);
+        ItemStack whiteTulip = world.itematic$createStack(ItemIds.WHITE_TULIP);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, whiteTulip);
         world.addFreshEntity(player);
@@ -836,14 +836,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingWhiteTulipOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack whiteTulip = world.itematic$createStack(ItemKeys.WHITE_TULIP);
+        ItemStack whiteTulip = world.itematic$createStack(ItemIds.WHITE_TULIP);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, whiteTulip);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, whiteTulip, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.WHITE_TULIP);
+                .is(ItemIds.WHITE_TULIP);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -852,7 +852,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingPinkTulipOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack pinkTulip = world.itematic$createStack(ItemKeys.PINK_TULIP);
+        ItemStack pinkTulip = world.itematic$createStack(ItemIds.PINK_TULIP);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, pinkTulip);
         world.addFreshEntity(player);
@@ -868,14 +868,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingPinkTulipOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack pinkTulip = world.itematic$createStack(ItemKeys.PINK_TULIP);
+        ItemStack pinkTulip = world.itematic$createStack(ItemIds.PINK_TULIP);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, pinkTulip);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, pinkTulip, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.PINK_TULIP);
+                .is(ItemIds.PINK_TULIP);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -884,7 +884,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingOxeyeDaisyOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack oxeyeDaisy = world.itematic$createStack(ItemKeys.OXEYE_DAISY);
+        ItemStack oxeyeDaisy = world.itematic$createStack(ItemIds.OXEYE_DAISY);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, oxeyeDaisy);
         world.addFreshEntity(player);
@@ -900,14 +900,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingOxeyeDaisyOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack oxeyeDaisy = world.itematic$createStack(ItemKeys.OXEYE_DAISY);
+        ItemStack oxeyeDaisy = world.itematic$createStack(ItemIds.OXEYE_DAISY);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, oxeyeDaisy);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, oxeyeDaisy, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.OXEYE_DAISY);
+                .is(ItemIds.OXEYE_DAISY);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -916,7 +916,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingCornflowerOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack cornflower = world.itematic$createStack(ItemKeys.CORNFLOWER);
+        ItemStack cornflower = world.itematic$createStack(ItemIds.CORNFLOWER);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, cornflower);
         world.addFreshEntity(player);
@@ -932,14 +932,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingCornflowerOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack cornflower = world.itematic$createStack(ItemKeys.CORNFLOWER);
+        ItemStack cornflower = world.itematic$createStack(ItemIds.CORNFLOWER);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, cornflower);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, cornflower, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CORNFLOWER);
+                .is(ItemIds.CORNFLOWER);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -948,7 +948,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingLilyOfTheValleyOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack lilyOfTheValley = world.itematic$createStack(ItemKeys.LILY_OF_THE_VALLEY);
+        ItemStack lilyOfTheValley = world.itematic$createStack(ItemIds.LILY_OF_THE_VALLEY);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, lilyOfTheValley);
         world.addFreshEntity(player);
@@ -964,14 +964,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingLilyOfTheValleyOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack lilyOfTheValley = world.itematic$createStack(ItemKeys.LILY_OF_THE_VALLEY);
+        ItemStack lilyOfTheValley = world.itematic$createStack(ItemIds.LILY_OF_THE_VALLEY);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, lilyOfTheValley);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, lilyOfTheValley, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.LILY_OF_THE_VALLEY);
+                .is(ItemIds.LILY_OF_THE_VALLEY);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -980,7 +980,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingWitherRoseOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack witherRose = world.itematic$createStack(ItemKeys.WITHER_ROSE);
+        ItemStack witherRose = world.itematic$createStack(ItemIds.WITHER_ROSE);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, witherRose);
         world.addFreshEntity(player);
@@ -996,14 +996,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingWitherRoseOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack witherRose = world.itematic$createStack(ItemKeys.WITHER_ROSE);
+        ItemStack witherRose = world.itematic$createStack(ItemIds.WITHER_ROSE);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, witherRose);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, witherRose, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.WITHER_ROSE);
+                .is(ItemIds.WITHER_ROSE);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -1012,7 +1012,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingTorchflowerOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack torchflower = world.itematic$createStack(ItemKeys.TORCHFLOWER);
+        ItemStack torchflower = world.itematic$createStack(ItemIds.TORCHFLOWER);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, torchflower);
         world.addFreshEntity(player);
@@ -1028,14 +1028,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingTorchflowerOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack torchflower = world.itematic$createStack(ItemKeys.TORCHFLOWER);
+        ItemStack torchflower = world.itematic$createStack(ItemIds.TORCHFLOWER);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, torchflower);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, torchflower, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.TORCHFLOWER);
+                .is(ItemIds.TORCHFLOWER);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -1044,7 +1044,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingRedMushroomOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack redMushroom = world.itematic$createStack(ItemKeys.RED_MUSHROOM);
+        ItemStack redMushroom = world.itematic$createStack(ItemIds.RED_MUSHROOM);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, redMushroom);
         world.addFreshEntity(player);
@@ -1060,14 +1060,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingRedMushroomOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack redMushroom = world.itematic$createStack(ItemKeys.RED_MUSHROOM);
+        ItemStack redMushroom = world.itematic$createStack(ItemIds.RED_MUSHROOM);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, redMushroom);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, redMushroom, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.RED_MUSHROOM);
+                .is(ItemIds.RED_MUSHROOM);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -1076,7 +1076,7 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.flower_pot")
     public void usingBrownMushroomOnFlowerPotReplacesFlowerPot(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack brownMushroom = world.itematic$createStack(ItemKeys.BROWN_MUSHROOM);
+        ItemStack brownMushroom = world.itematic$createStack(ItemIds.BROWN_MUSHROOM);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, brownMushroom);
         world.addFreshEntity(player);
@@ -1092,14 +1092,14 @@ public class FlowerPotItemTestSuite {
     @GameTest(structure = "itematic:item.flower_pot.platform.potted_poppy")
     public void usingBrownMushroomOnPottedFlowerPotDoesNotReplacePottedFlower(GameTestHelper context) {
         ServerLevel world = context.getLevel();
-        ItemStack brownMushroom = world.itematic$createStack(ItemKeys.BROWN_MUSHROOM);
+        ItemStack brownMushroom = world.itematic$createStack(ItemIds.BROWN_MUSHROOM);
         Player player = context.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, brownMushroom);
         world.addFreshEntity(player);
         TestUtil.useStackOnBlockInside(context, player, brownMushroom, FLOWER_POT_POSITION, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.BROWN_MUSHROOM);
+                .is(ItemIds.BROWN_MUSHROOM);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.POTTED_POPPY);
         });
@@ -1113,7 +1113,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.OAK_SAPLING);
+                .is(ItemIds.OAK_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1127,7 +1127,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.SPRUCE_SAPLING);
+                .is(ItemIds.SPRUCE_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1141,7 +1141,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.BIRCH_SAPLING);
+                .is(ItemIds.BIRCH_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1155,7 +1155,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.JUNGLE_SAPLING);
+                .is(ItemIds.JUNGLE_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1169,7 +1169,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.ACACIA_SAPLING);
+                .is(ItemIds.ACACIA_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1183,7 +1183,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CHERRY_SAPLING);
+                .is(ItemIds.CHERRY_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1197,7 +1197,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.DARK_OAK_SAPLING);
+                .is(ItemIds.DARK_OAK_SAPLING);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1211,7 +1211,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CRIMSON_FUNGUS);
+                .is(ItemIds.CRIMSON_FUNGUS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1225,7 +1225,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.WARPED_FUNGUS);
+                .is(ItemIds.WARPED_FUNGUS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1239,7 +1239,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CRIMSON_ROOTS);
+                .is(ItemIds.CRIMSON_ROOTS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1253,7 +1253,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.WARPED_ROOTS);
+                .is(ItemIds.WARPED_ROOTS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1267,7 +1267,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.AZALEA);
+                .is(ItemIds.AZALEA);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1281,7 +1281,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.FLOWERING_AZALEA);
+                .is(ItemIds.FLOWERING_AZALEA);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1295,7 +1295,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.MANGROVE_PROPAGULE);
+                .is(ItemIds.MANGROVE_PROPAGULE);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1309,7 +1309,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CACTUS);
+                .is(ItemIds.CACTUS);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1323,7 +1323,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.DEAD_BUSH);
+                .is(ItemIds.DEAD_BUSH);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1337,7 +1337,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.BAMBOO);
+                .is(ItemIds.BAMBOO);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1351,7 +1351,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.FERN);
+                .is(ItemIds.FERN);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1365,7 +1365,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.DANDELION);
+                .is(ItemIds.DANDELION);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1379,7 +1379,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.POPPY);
+                .is(ItemIds.POPPY);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1393,7 +1393,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.BLUE_ORCHID);
+                .is(ItemIds.BLUE_ORCHID);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1407,7 +1407,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.ALLIUM);
+                .is(ItemIds.ALLIUM);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1421,7 +1421,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.AZURE_BLUET);
+                .is(ItemIds.AZURE_BLUET);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1435,7 +1435,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.RED_TULIP);
+                .is(ItemIds.RED_TULIP);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1449,7 +1449,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.ORANGE_TULIP);
+                .is(ItemIds.ORANGE_TULIP);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1463,7 +1463,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.WHITE_TULIP);
+                .is(ItemIds.WHITE_TULIP);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1477,7 +1477,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.PINK_TULIP);
+                .is(ItemIds.PINK_TULIP);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1491,7 +1491,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.OXEYE_DAISY);
+                .is(ItemIds.OXEYE_DAISY);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1505,7 +1505,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.CORNFLOWER);
+                .is(ItemIds.CORNFLOWER);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1519,7 +1519,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.LILY_OF_THE_VALLEY);
+                .is(ItemIds.LILY_OF_THE_VALLEY);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1533,7 +1533,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.WITHER_ROSE);
+                .is(ItemIds.WITHER_ROSE);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1547,7 +1547,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.TORCHFLOWER);
+                .is(ItemIds.TORCHFLOWER);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1561,7 +1561,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.RED_MUSHROOM);
+                .is(ItemIds.RED_MUSHROOM);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });
@@ -1575,7 +1575,7 @@ public class FlowerPotItemTestSuite {
         TestUtil.useBlock(context, FLOWER_POT_POSITION, player, Direction.UP);
         context.succeedIf(() -> {
             Assert.itemStack(context, player.getMainHandItem())
-                .is(ItemKeys.BROWN_MUSHROOM);
+                .is(ItemIds.BROWN_MUSHROOM);
             Assert.blockState(context, FLOWER_POT_POSITION)
                 .is(Blocks.FLOWER_POT);
         });

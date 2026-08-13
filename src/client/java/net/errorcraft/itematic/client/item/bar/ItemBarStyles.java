@@ -3,9 +3,10 @@ package net.errorcraft.itematic.client.item.bar;
 import net.errorcraft.itematic.client.item.bar.color.provider.FirstToPassConditionColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.provider.HueShiftColorProvider;
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
-import net.errorcraft.itematic.item.ItemBarStyleKeys;
 import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
+import net.errorcraft.itematic.references.ItemBarStyleIds;
 import net.minecraft.resources.Identifier;
+
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -13,7 +14,7 @@ public class ItemBarStyles {
     private ItemBarStyles() {}
 
     public static void bootstrap(BiConsumer<Identifier, ItemBarStyle> provider) {
-        provider.accept(ItemBarStyleKeys.DAMAGE, new ItemBarStyle(
+        provider.accept(ItemBarStyleIds.DAMAGE, new ItemBarStyle(
             ProgressProvider.DAMAGE,
             new HueShiftColorProvider(120, 0),
             List.of(
@@ -33,7 +34,7 @@ public class ItemBarStyles {
                 Identifier.withDefaultNamespace("item_bar/progress/0")
             )
         ));
-        provider.accept(ItemBarStyleKeys.BUNDLE, new ItemBarStyle(
+        provider.accept(ItemBarStyleIds.BUNDLE, new ItemBarStyle(
             ProgressProvider.ITEM_HOLDER_OCCUPANCY,
             FirstToPassConditionColorProvider.of(
                 BundleItemAccessor.itemBarColor(),

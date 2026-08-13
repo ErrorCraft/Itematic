@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.mixin.block.entity;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.FuelItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
@@ -28,8 +28,8 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private int getFuelTicksUseDataComponent(FuelValues instance, ItemStack item) {
-        return item.itematic$getBehavior(ItemComponentTypes.FUEL)
-            .map(FuelItemComponent::ticks)
+        return item.itematic$getBehavior(ItemBehaviorType.FUEL)
+            .map(FuelItemBehavior::ticks)
             .orElse(0);
     }
 
@@ -49,7 +49,7 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private static boolean isOfForWetSpongeUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.WET_SPONGE);
+        return instance.itematic$isOf(ItemIds.WET_SPONGE);
     }
 
     @Redirect(
@@ -68,7 +68,7 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private static boolean isOfForBucketUseRegistryKeyCheckStatic(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BUCKET);
+        return instance.itematic$isOf(ItemIds.BUCKET);
     }
 
     @Redirect(
@@ -79,7 +79,7 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private static ItemStack newItemStackForWaterBucketUseRegistryEntry(ItemLike item, RegistryAccess registryManager) {
-        return new ItemStack(registryManager.lookupOrThrow(Registries.ITEM).getOrThrow(ItemKeys.WATER_BUCKET));
+        return new ItemStack(registryManager.lookupOrThrow(Registries.ITEM).getOrThrow(ItemIds.WATER_BUCKET));
     }
 
     @Redirect(
@@ -91,7 +91,7 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private boolean isOfForWaterBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.WATER_BUCKET);
+        return instance.itematic$isOf(ItemIds.WATER_BUCKET);
     }
     @Redirect(
         method = "canTakeItemThroughFace",
@@ -109,7 +109,7 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private boolean isOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BUCKET);
+        return instance.itematic$isOf(ItemIds.BUCKET);
     }
 
     @Redirect(
@@ -119,8 +119,8 @@ public class AbstractFurnaceBlockEntityExtender {
             target = "Lnet/minecraft/world/level/block/entity/FuelValues;isFuel(Lnet/minecraft/world/item/ItemStack;)Z"
         )
     )
-    private boolean isFuelUseItemComponentCheck(FuelValues instance, ItemStack item) {
-        return item.itematic$hasBehavior(ItemComponentTypes.FUEL);
+    private boolean isFuelUseItemBehaviorCheck(FuelValues instance, ItemStack item) {
+        return item.itematic$hasBehavior(ItemBehaviorType.FUEL);
     }
 
     @Redirect(
@@ -131,7 +131,7 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private boolean isValidIsOfForBucketUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemKeys.BUCKET);
+        return instance.itematic$isOf(ItemIds.BUCKET);
     }
 
     @ModifyArg(
@@ -142,9 +142,9 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private static <E> E setRemainderItemStackUseItemComponent(E element, @Local(ordinal = 0) Item item) {
-        return (E) item.itematic$getBehavior(ItemComponentTypes.FUEL)
-            .flatMap(FuelItemComponent::remainder)
+    private static <E> E setRemainderItemStackUseItemBehavior(E element, @Local(ordinal = 0) Item item) {
+        return (E) item.itematic$getBehavior(ItemBehaviorType.FUEL)
+            .flatMap(FuelItemBehavior::remainder)
             .orElse(ItemStack.EMPTY);
     }
 }

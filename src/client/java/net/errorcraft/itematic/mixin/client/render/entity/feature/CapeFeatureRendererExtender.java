@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.client.render.entity.feature;
 
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.client.renderer.entity.layers.CapeLayer;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +17,7 @@ public class CapeFeatureRendererExtender {
         cancellable = true
     )
     private void checkPresenceEquipmentBehavior(ItemStack stack, EquipmentClientInfo.LayerType layerType, CallbackInfoReturnable<Boolean> info) {
-        if (!stack.itematic$hasBehavior(ItemComponentTypes.EQUIPMENT)) {
+        if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.setReturnValue(false);
         }
     }

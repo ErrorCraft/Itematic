@@ -12,9 +12,7 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
     },
-    "minecraft:dyeable": {
-      "default_color": -6265536
-    },
+    "minecraft:dyeable": {},
     "minecraft:equipment": {
       "allowed_entities": "#minecraft:can_wear_horse_armor",
       "asset_id": "minecraft:leather",
