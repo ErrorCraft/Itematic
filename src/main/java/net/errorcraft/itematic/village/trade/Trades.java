@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.village.trade;
 
 import net.errorcraft.itematic.mixin.world.entity.npc.villager.VillagerTradesAccessor;
-import net.errorcraft.itematic.potion.PotionKeys;
-import net.errorcraft.itematic.potion.PotionTags;
 import net.errorcraft.itematic.predicate.entity.VillagerEntitySubPredicate;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
+import net.errorcraft.itematic.references.PotionIds;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.tags.PotionTags;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.EnchantWithLevelsTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.ItemFromTypeTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.SingleEnchantmentTradeModifier;
@@ -797,7 +797,7 @@ public class Trades {
         registerable.register(SELL_FIREFLY_BUSH, sell(items, items.getOrThrow(ItemIds.FIREFLY_BUSH), 1, 5, VillagerTradesAccessor.noviceSellTradeExperience(), 1));
         registerable.register(SELL_TROPICAL_FISH_BUCKET, sell(items, items.getOrThrow(ItemIds.TROPICAL_FISH_BUCKET), 1, 4, 1, 5));
         registerable.register(SELL_PUFFERFISH_BUCKET, sell(items, items.getOrThrow(ItemIds.PUFFERFISH_BUCKET), 1, 4, 1, 5));
-        registerable.register(BUY_WATER_BOTTLE, buyWithPotion(items, potions.getOrThrow(PotionKeys.WATER), items.getOrThrow(ItemIds.POTION)));
+        registerable.register(BUY_WATER_BOTTLE, buyWithPotion(items, potions.getOrThrow(PotionIds.WATER), items.getOrThrow(ItemIds.POTION)));
         registerable.register(BUY_WATER_BUCKET, buy(items, items.getOrThrow(ItemIds.WATER_BUCKET), 1, 2, 2, 1));
         registerable.register(BUY_MILK_BUCKET, buy(items, items.getOrThrow(ItemIds.MILK_BUCKET), 1, 2, 2, 1));
         registerable.register(BUY_FERMENTED_SPIDER_EYE, buy(items, items.getOrThrow(ItemIds.FERMENTED_SPIDER_EYE), 1, 3, 2, 1));
@@ -817,7 +817,7 @@ public class Trades {
         registerable.register(SELL_SPRUCE_LOG, sell(items, items.getOrThrow(ItemIds.SPRUCE_LOG), 8, 4, 1, 1));
         registerable.register(SELL_PALE_OAK_LOG, sell(items, items.getOrThrow(ItemIds.PALE_OAK_LOG), 8, 4, 1, 1));
         registerable.register(SELL_ENCHANTED_IRON_PICKAXE_WANDERING_TRADER, sellEnchantedItem(items, items.getOrThrow(ItemIds.IRON_PICKAXE), 1, 3, VillagerTradesAccessor.highPriceMultiplier(), 1));
-        registerable.register(SELL_LONG_INVISIBILITY_POTION, sellWithPotion(items, potions.getOrThrow(PotionKeys.LONG_INVISIBILITY), items.getOrThrow(ItemIds.POTION), 1));
+        registerable.register(SELL_LONG_INVISIBILITY_POTION, sellWithPotion(items, potions.getOrThrow(PotionIds.LONG_INVISIBILITY), items.getOrThrow(ItemIds.POTION), 1));
     }
 
     private static Trade buy(HolderGetter<Item> items, Holder<Item> item, int count, int maxUses, int tradeExperience) {

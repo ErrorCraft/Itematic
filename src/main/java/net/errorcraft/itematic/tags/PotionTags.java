@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.potion;
+package net.errorcraft.itematic.tags;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;

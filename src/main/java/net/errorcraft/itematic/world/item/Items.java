@@ -7,7 +7,6 @@ import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.mixin.world.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
-import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.references.*;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.registry.ItematicRegistryKeys;
@@ -244,7 +243,7 @@ public class Items {
                                     .partial(
                                         DataComponentPredicates.POTIONS,
                                         new PotionsPredicate(HolderSet.direct(
-                                            this.potions.getOrThrow(PotionKeys.WATER)
+                                            this.potions.getOrThrow(PotionIds.WATER)
                                         ))
                                     ).build()
                                 )
@@ -12296,7 +12295,7 @@ public class Items {
                             .add(ExchangeItemAction.of(
                                 this.items.getOrThrow(ItemIds.POTION),
                                 DataComponentPatch.builder()
-                                    .set(DataComponents.POTION_CONTENTS, new PotionContents(this.potions.getOrThrow(PotionKeys.WATER)))
+                                    .set(DataComponents.POTION_CONTENTS, new PotionContents(this.potions.getOrThrow(PotionIds.WATER)))
                                     .build()))
                             .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
                             .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundSource.NEUTRAL))

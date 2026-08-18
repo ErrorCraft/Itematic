@@ -1,11 +1,11 @@
-package net.errorcraft.itematic.potion;
+package net.errorcraft.itematic.references;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.alchemy.Potion;
 
-public class PotionKeys {
+public class PotionIds {
     public static final ResourceKey<Potion> AWKWARD = of("awkward");
     public static final ResourceKey<Potion> FIRE_RESISTANCE = of("fire_resistance");
     public static final ResourceKey<Potion> HARMING = of("harming");
@@ -52,7 +52,7 @@ public class PotionKeys {
     public static final ResourceKey<Potion> WEAVING = of("weaving");
     public static final ResourceKey<Potion> WIND_CHARGED = of("wind_charged");
 
-    private PotionKeys() {}
+    private PotionIds() {}
 
     private static ResourceKey<Potion> of(String id) {
         return ResourceKey.create(Registries.POTION, Identifier.withDefaultNamespace(id));

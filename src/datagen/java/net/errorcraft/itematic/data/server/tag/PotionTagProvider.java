@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.data.server.tag;
 
-import net.errorcraft.itematic.potion.PotionTags;
+import net.errorcraft.itematic.tags.PotionTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.Holder;

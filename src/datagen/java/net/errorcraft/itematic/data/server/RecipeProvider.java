@@ -2,8 +2,8 @@ package net.errorcraft.itematic.data.server;
 
 import net.errorcraft.itematic.data.recipe.brewing.AmplifyBrewingRecipeBuilder;
 import net.errorcraft.itematic.data.recipe.brewing.ModifyBrewingRecipeBuilder;
-import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.references.PotionIds;
 import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -58,112 +58,112 @@ public class RecipeProvider extends FabricRecipeProvider {
                 .remainder(this.items.getOrThrow(ItemIds.GLASS_BOTTLE))
                 .save(this.output);
 
-            this.modify(PotionKeys.WATER, ItemIds.FERMENTED_SPIDER_EYE, PotionKeys.WEAKNESS)
+            this.modify(PotionIds.WATER, ItemIds.FERMENTED_SPIDER_EYE, PotionIds.WEAKNESS)
                 .save(this.output);
-            this.modify(PotionKeys.WATER, ItemIds.GLOWSTONE_DUST, PotionKeys.THICK)
+            this.modify(PotionIds.WATER, ItemIds.GLOWSTONE_DUST, PotionIds.THICK)
                 .save(this.output);
-            this.modify(PotionKeys.WATER, ItematicItemTags.MUNDANE_POTION_REAGENTS, PotionKeys.MUNDANE)
+            this.modify(PotionIds.WATER, ItematicItemTags.MUNDANE_POTION_REAGENTS, PotionIds.MUNDANE)
                 .save(this.output);
-            this.modify(PotionKeys.WATER, ItemIds.NETHER_WART, PotionKeys.AWKWARD)
+            this.modify(PotionIds.WATER, ItemIds.NETHER_WART, PotionIds.AWKWARD)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.BLAZE_POWDER, PotionKeys.STRENGTH)
+            this.modify(PotionIds.AWKWARD, ItemIds.BLAZE_POWDER, PotionIds.STRENGTH)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.BREEZE_ROD, PotionKeys.WIND_CHARGED)
+            this.modify(PotionIds.AWKWARD, ItemIds.BREEZE_ROD, PotionIds.WIND_CHARGED)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.COBWEB, PotionKeys.WEAVING)
+            this.modify(PotionIds.AWKWARD, ItemIds.COBWEB, PotionIds.WEAVING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.GHAST_TEAR, PotionKeys.REGENERATION)
+            this.modify(PotionIds.AWKWARD, ItemIds.GHAST_TEAR, PotionIds.REGENERATION)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.GLISTERING_MELON_SLICE, PotionKeys.HEALING)
+            this.modify(PotionIds.AWKWARD, ItemIds.GLISTERING_MELON_SLICE, PotionIds.HEALING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.GOLDEN_CARROT, PotionKeys.NIGHT_VISION)
+            this.modify(PotionIds.AWKWARD, ItemIds.GOLDEN_CARROT, PotionIds.NIGHT_VISION)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.MAGMA_CREAM, PotionKeys.FIRE_RESISTANCE)
+            this.modify(PotionIds.AWKWARD, ItemIds.MAGMA_CREAM, PotionIds.FIRE_RESISTANCE)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.PHANTOM_MEMBRANE, PotionKeys.SLOW_FALLING)
+            this.modify(PotionIds.AWKWARD, ItemIds.PHANTOM_MEMBRANE, PotionIds.SLOW_FALLING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.PUFFERFISH, PotionKeys.WATER_BREATHING)
+            this.modify(PotionIds.AWKWARD, ItemIds.PUFFERFISH, PotionIds.WATER_BREATHING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.RABBIT_FOOT, PotionKeys.LEAPING)
+            this.modify(PotionIds.AWKWARD, ItemIds.RABBIT_FOOT, PotionIds.LEAPING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.SLIME_BLOCK, PotionKeys.OOZING)
+            this.modify(PotionIds.AWKWARD, ItemIds.SLIME_BLOCK, PotionIds.OOZING)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.SPIDER_EYE, PotionKeys.POISON)
+            this.modify(PotionIds.AWKWARD, ItemIds.SPIDER_EYE, PotionIds.POISON)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.STONE, PotionKeys.INFESTED)
+            this.modify(PotionIds.AWKWARD, ItemIds.STONE, PotionIds.INFESTED)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.SUGAR, PotionKeys.SWIFTNESS)
+            this.modify(PotionIds.AWKWARD, ItemIds.SUGAR, PotionIds.SWIFTNESS)
                 .save(this.output);
-            this.modify(PotionKeys.AWKWARD, ItemIds.TURTLE_HELMET, PotionKeys.TURTLE_MASTER)
-                .save(this.output);
-
-            this.lengthen(PotionKeys.FIRE_RESISTANCE, PotionKeys.LONG_FIRE_RESISTANCE)
-                .save(this.output);
-            this.lengthen(PotionKeys.INVISIBILITY, PotionKeys.LONG_INVISIBILITY)
-                .save(this.output);
-            this.lengthen(PotionKeys.LEAPING, PotionKeys.LONG_LEAPING)
-                .save(this.output);
-            this.lengthen(PotionKeys.NIGHT_VISION, PotionKeys.LONG_NIGHT_VISION)
-                .save(this.output);
-            this.lengthen(PotionKeys.POISON, PotionKeys.LONG_POISON)
-                .save(this.output);
-            this.lengthen(PotionKeys.REGENERATION, PotionKeys.LONG_REGENERATION)
-                .save(this.output);
-            this.lengthen(PotionKeys.SLOW_FALLING, PotionKeys.LONG_SLOW_FALLING)
-                .save(this.output);
-            this.lengthen(PotionKeys.SLOWNESS, PotionKeys.LONG_SLOWNESS)
-                .save(this.output);
-            this.lengthen(PotionKeys.STRENGTH, PotionKeys.LONG_STRENGTH)
-                .save(this.output);
-            this.lengthen(PotionKeys.SWIFTNESS, PotionKeys.LONG_SWIFTNESS)
-                .save(this.output);
-            this.lengthen(PotionKeys.TURTLE_MASTER, PotionKeys.LONG_TURTLE_MASTER)
-                .save(this.output);
-            this.lengthen(PotionKeys.WATER_BREATHING, PotionKeys.LONG_WATER_BREATHING)
-                .save(this.output);
-            this.lengthen(PotionKeys.WEAKNESS, PotionKeys.LONG_WEAKNESS)
+            this.modify(PotionIds.AWKWARD, ItemIds.TURTLE_HELMET, PotionIds.TURTLE_MASTER)
                 .save(this.output);
 
-            this.strengthen(PotionKeys.HARMING, PotionKeys.STRONG_HARMING)
+            this.lengthen(PotionIds.FIRE_RESISTANCE, PotionIds.LONG_FIRE_RESISTANCE)
                 .save(this.output);
-            this.strengthen(PotionKeys.HEALING, PotionKeys.STRONG_HEALING)
+            this.lengthen(PotionIds.INVISIBILITY, PotionIds.LONG_INVISIBILITY)
                 .save(this.output);
-            this.strengthen(PotionKeys.LEAPING, PotionKeys.STRONG_LEAPING)
+            this.lengthen(PotionIds.LEAPING, PotionIds.LONG_LEAPING)
                 .save(this.output);
-            this.strengthen(PotionKeys.POISON, PotionKeys.STRONG_POISON)
+            this.lengthen(PotionIds.NIGHT_VISION, PotionIds.LONG_NIGHT_VISION)
                 .save(this.output);
-            this.strengthen(PotionKeys.REGENERATION, PotionKeys.STRONG_REGENERATION)
+            this.lengthen(PotionIds.POISON, PotionIds.LONG_POISON)
                 .save(this.output);
-            this.strengthen(PotionKeys.SLOWNESS, PotionKeys.STRONG_SLOWNESS)
+            this.lengthen(PotionIds.REGENERATION, PotionIds.LONG_REGENERATION)
                 .save(this.output);
-            this.strengthen(PotionKeys.STRENGTH, PotionKeys.STRONG_STRENGTH)
+            this.lengthen(PotionIds.SLOW_FALLING, PotionIds.LONG_SLOW_FALLING)
                 .save(this.output);
-            this.strengthen(PotionKeys.SWIFTNESS, PotionKeys.STRONG_SWIFTNESS)
+            this.lengthen(PotionIds.SLOWNESS, PotionIds.LONG_SLOWNESS)
                 .save(this.output);
-            this.strengthen(PotionKeys.TURTLE_MASTER, PotionKeys.STRONG_TURTLE_MASTER)
+            this.lengthen(PotionIds.STRENGTH, PotionIds.LONG_STRENGTH)
+                .save(this.output);
+            this.lengthen(PotionIds.SWIFTNESS, PotionIds.LONG_SWIFTNESS)
+                .save(this.output);
+            this.lengthen(PotionIds.TURTLE_MASTER, PotionIds.LONG_TURTLE_MASTER)
+                .save(this.output);
+            this.lengthen(PotionIds.WATER_BREATHING, PotionIds.LONG_WATER_BREATHING)
+                .save(this.output);
+            this.lengthen(PotionIds.WEAKNESS, PotionIds.LONG_WEAKNESS)
                 .save(this.output);
 
-            this.negate(PotionKeys.HEALING, PotionKeys.HARMING)
+            this.strengthen(PotionIds.HARMING, PotionIds.STRONG_HARMING)
                 .save(this.output);
-            this.negate(PotionKeys.LEAPING, PotionKeys.SLOWNESS)
+            this.strengthen(PotionIds.HEALING, PotionIds.STRONG_HEALING)
                 .save(this.output);
-            this.negate(PotionKeys.LONG_LEAPING, PotionKeys.LONG_SLOWNESS)
+            this.strengthen(PotionIds.LEAPING, PotionIds.STRONG_LEAPING)
                 .save(this.output);
-            this.negate(PotionKeys.LONG_NIGHT_VISION, PotionKeys.LONG_INVISIBILITY)
+            this.strengthen(PotionIds.POISON, PotionIds.STRONG_POISON)
                 .save(this.output);
-            this.negate(PotionKeys.LONG_POISON, PotionKeys.HARMING)
+            this.strengthen(PotionIds.REGENERATION, PotionIds.STRONG_REGENERATION)
                 .save(this.output);
-            this.negate(PotionKeys.LONG_SWIFTNESS, PotionKeys.LONG_SLOWNESS)
+            this.strengthen(PotionIds.SLOWNESS, PotionIds.STRONG_SLOWNESS)
                 .save(this.output);
-            this.negate(PotionKeys.NIGHT_VISION, PotionKeys.INVISIBILITY)
+            this.strengthen(PotionIds.STRENGTH, PotionIds.STRONG_STRENGTH)
                 .save(this.output);
-            this.negate(PotionKeys.POISON, PotionKeys.HARMING)
+            this.strengthen(PotionIds.SWIFTNESS, PotionIds.STRONG_SWIFTNESS)
                 .save(this.output);
-            this.negate(PotionKeys.STRONG_HEALING, PotionKeys.STRONG_HARMING)
+            this.strengthen(PotionIds.TURTLE_MASTER, PotionIds.STRONG_TURTLE_MASTER)
                 .save(this.output);
-            this.negate(PotionKeys.STRONG_POISON, PotionKeys.STRONG_HARMING)
+
+            this.negate(PotionIds.HEALING, PotionIds.HARMING)
                 .save(this.output);
-            this.negate(PotionKeys.SWIFTNESS, PotionKeys.SLOWNESS)
+            this.negate(PotionIds.LEAPING, PotionIds.SLOWNESS)
+                .save(this.output);
+            this.negate(PotionIds.LONG_LEAPING, PotionIds.LONG_SLOWNESS)
+                .save(this.output);
+            this.negate(PotionIds.LONG_NIGHT_VISION, PotionIds.LONG_INVISIBILITY)
+                .save(this.output);
+            this.negate(PotionIds.LONG_POISON, PotionIds.HARMING)
+                .save(this.output);
+            this.negate(PotionIds.LONG_SWIFTNESS, PotionIds.LONG_SLOWNESS)
+                .save(this.output);
+            this.negate(PotionIds.NIGHT_VISION, PotionIds.INVISIBILITY)
+                .save(this.output);
+            this.negate(PotionIds.POISON, PotionIds.HARMING)
+                .save(this.output);
+            this.negate(PotionIds.STRONG_HEALING, PotionIds.STRONG_HARMING)
+                .save(this.output);
+            this.negate(PotionIds.STRONG_POISON, PotionIds.STRONG_HARMING)
+                .save(this.output);
+            this.negate(PotionIds.SWIFTNESS, PotionIds.SLOWNESS)
                 .save(this.output);
         }
 
