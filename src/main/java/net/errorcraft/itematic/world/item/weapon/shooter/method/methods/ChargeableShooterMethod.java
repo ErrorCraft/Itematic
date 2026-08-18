@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.ProjectileWeaponItemAccessor;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargingSounds;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;

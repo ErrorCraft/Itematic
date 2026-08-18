@@ -24,11 +24,6 @@ public class TextHolderItemBehavior implements ItemBehavior<TextHolderItemBehavi
     }
 
     @Override
-    public Codec<TextHolderItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         user.openItemGui(stack, hand);
         user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));

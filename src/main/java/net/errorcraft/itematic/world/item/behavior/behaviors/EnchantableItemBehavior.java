@@ -44,11 +44,6 @@ public record EnchantableItemBehavior(int enchantability, Optional<Holder<Item>>
     }
 
     @Override
-    public Codec<EnchantableItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.ENCHANTABLE, new Enchantable(this.enchantability));
     }

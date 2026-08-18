@@ -48,11 +48,6 @@ public record PlayableItemBehavior(Holder<Instrument> defaultInstrument) impleme
     }
 
     @Override
-    public Codec<PlayableItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         return this.instrument(stack, user.registryAccess())
             .map(Holder::value)

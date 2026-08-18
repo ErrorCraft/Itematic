@@ -27,11 +27,6 @@ public record EnchantmentHolderItemBehavior(Holder<Item> grindingTransformsInto)
     }
 
     @Override
-    public Codec<EnchantmentHolderItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
     }

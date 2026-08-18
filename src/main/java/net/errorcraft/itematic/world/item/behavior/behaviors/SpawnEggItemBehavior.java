@@ -27,11 +27,6 @@ public class SpawnEggItemBehavior implements ItemBehavior<SpawnEggItemBehavior> 
         return ItemBehaviorType.SPAWN_EGG;
     }
 
-    @Override
-    public Codec<SpawnEggItemBehavior> codec() {
-        return CODEC;
-    }
-
     public Optional<Mob> spawnBaby(Player user, Mob entity, EntityType<? extends Mob> entityType, ServerLevel world, Vec3 pos, ItemStack stack) {
         Optional<EntityItemBehavior> entityBehavior = stack.itematic$getBehavior(ItemBehaviorType.ENTITY);
         if (entityBehavior.isEmpty()) {

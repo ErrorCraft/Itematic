@@ -2,7 +2,6 @@ package net.errorcraft.itematic.mixin.commands.arguments;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.serialization.JsonOps;
 import net.errorcraft.itematic.access.commands.arguments.ObjectiveCriteriaArgumentAccess;
 import net.errorcraft.itematic.stat.StatUtil;
 import net.errorcraft.itematic.world.scores.criteria.ItematicObjectiveCriteria;
@@ -33,7 +32,7 @@ public class ObjectiveCriteriaArgumentExtender implements ObjectiveCriteriaArgum
         )
     )
     private Optional<ObjectiveCriteria> useDynamicRegistry(String name) {
-        return ItematicObjectiveCriteria.byName(name, this.context.createSerializationContext(JsonOps.INSTANCE));
+        return ItematicObjectiveCriteria.byName(name, this.context::lookup);
     }
 
     @ModifyExpressionValue(

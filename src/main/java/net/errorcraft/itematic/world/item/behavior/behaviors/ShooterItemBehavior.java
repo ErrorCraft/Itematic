@@ -3,16 +3,16 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.world.ItemResult;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.ShooterUseDurationProvider;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.ShooterUseDurationProvider;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
@@ -64,11 +64,6 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
     @Override
     public ItemBehaviorType<ShooterItemBehavior> type() {
         return ItemBehaviorType.SHOOTER;
-    }
-
-    @Override
-    public Codec<ShooterItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

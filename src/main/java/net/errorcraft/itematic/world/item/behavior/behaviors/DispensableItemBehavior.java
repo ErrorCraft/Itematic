@@ -23,8 +23,4 @@ public record DispensableItemBehavior(Holder<DispenseBehavior> behavior) impleme
         return ItemBehaviorType.DISPENSABLE;
     }
 
-    @Override
-    public Codec<DispensableItemBehavior> codec() {
-        return CODEC;
-    }
 }

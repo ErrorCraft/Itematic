@@ -101,11 +101,6 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
     }
 
     @Override
-    public Codec<BucketItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(world, user, this.modification().fluidHandling());
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {

@@ -28,11 +28,6 @@ public record BannerPatternItemBehavior(TagKey<BannerPattern> patterns) implemen
     }
 
     @Override
-    public Codec<BannerPatternItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.PROVIDES_BANNER_PATTERNS, this.patterns);
     }

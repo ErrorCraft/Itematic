@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.serialization;
+package net.errorcraft.itematic.util;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -12,21 +12,21 @@ public class ItematicCodecs {
             return DataResult.success(value);
         }
 
-        return DataResult.error(() -> "Value must be non-negative: " + value);
+        return DataResult.error(() -> "Float must be non-negative: " + value);
     });
     public static final Codec<Double> POSITIVE_DOUBLE = Codec.DOUBLE.validate(value -> {
         if (value > 0 && value <= Double.MAX_VALUE) {
             return DataResult.success(value);
         }
 
-        return DataResult.error(() -> "Value must be positive: " + value);
+        return DataResult.error(() -> "Double must be positive: " + value);
     });
     public static final Codec<Double> NON_NEGATIVE_DOUBLE = Codec.DOUBLE.validate(value -> {
         if (value >= 0 && value <= Double.MAX_VALUE) {
             return DataResult.success(value);
         }
 
-        return DataResult.error(() -> "Value must be non-negative: " + value);
+        return DataResult.error(() -> "Double must be non-negative: " + value);
     });
     public static final Codec<Integer> HUE = Codec.intRange(0, 360);
     public static final Codec<Fraction> POSITIVE_FRACTION = RecordCodecBuilder.create(instance -> instance.group(
@@ -60,7 +60,7 @@ public class ItematicCodecs {
                 return DataResult.success(value);
             }
 
-            return DataResult.error(() -> "Value must be at most " + maxInclusive + ": " + value);
+            return DataResult.error(() -> "Float must be at most " + maxInclusive + ": " + value);
         });
     }
 

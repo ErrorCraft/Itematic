@@ -29,8 +29,4 @@ public record FuelItemBehavior(int ticks, Optional<ItemStack> remainder) impleme
         return ItemBehaviorType.FUEL;
     }
 
-    @Override
-    public Codec<FuelItemBehavior> codec() {
-        return CODEC;
-    }
 }

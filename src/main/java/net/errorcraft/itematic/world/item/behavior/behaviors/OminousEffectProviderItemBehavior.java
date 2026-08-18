@@ -2,9 +2,9 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -20,11 +20,6 @@ public class OminousEffectProviderItemBehavior implements ItemBehavior<OminousEf
     @Override
     public ItemBehaviorType<OminousEffectProviderItemBehavior> type() {
         return ItemBehaviorType.OMINOUS_EFFECT_PROVIDER;
-    }
-
-    @Override
-    public Codec<OminousEffectProviderItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

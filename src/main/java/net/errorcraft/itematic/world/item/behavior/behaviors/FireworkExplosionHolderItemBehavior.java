@@ -20,11 +20,6 @@ public class FireworkExplosionHolderItemBehavior implements ItemBehavior<Firewor
     }
 
     @Override
-    public Codec<FireworkExplosionHolderItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.FIREWORK_EXPLOSION, FireworkExplosion.DEFAULT);
     }

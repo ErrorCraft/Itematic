@@ -26,8 +26,4 @@ public record DecoratedPotPatternItemBehavior(Holder<DecoratedPotPattern> patter
         return ItemBehaviorType.DECORATED_POT_PATTERN;
     }
 
-    @Override
-    public Codec<DecoratedPotPatternItemBehavior> codec() {
-        return CODEC;
-    }
 }

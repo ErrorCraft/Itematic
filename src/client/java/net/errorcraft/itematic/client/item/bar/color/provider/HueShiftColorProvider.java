@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.client.item.bar.color.ColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.ColorProviderType;
 import net.errorcraft.itematic.client.item.bar.color.ColorProviderTypes;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.ItematicCodecs;
 import net.minecraft.util.Mth;
 
 public record HueShiftColorProvider(int start, int end) implements ColorProvider {

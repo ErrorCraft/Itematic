@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import net.errorcraft.itematic.access.world.scores.criteria.ObjectiveCriteriaAccess;
-import net.errorcraft.itematic.serialization.RegistryMapperCodec;
+import net.errorcraft.itematic.resources.RegistryMapperCodec;
 import net.errorcraft.itematic.world.scores.criteria.ItematicObjectiveCriteria;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.Final;

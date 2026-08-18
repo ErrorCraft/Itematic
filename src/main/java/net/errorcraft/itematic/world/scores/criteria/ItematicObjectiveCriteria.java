@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.world.scores.criteria;
 
 import net.errorcraft.itematic.mixin.world.scores.criteria.ObjectiveCriteriaAccessor;
+import net.errorcraft.itematic.resources.RegistryMapperCodec;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.stats.StatType;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
@@ -16,7 +16,7 @@ public class ItematicObjectiveCriteria {
 
     private ItematicObjectiveCriteria() {}
 
-    public static Optional<ObjectiveCriteria> byName(String name, RegistryOps<?> ops) {
+    public static Optional<ObjectiveCriteria> byName(String name, RegistryMapperCodec.RegistryProvider registries) {
         ObjectiveCriteria cachedCriterion = CRITERIA_CACHE.get(name);
         if (cachedCriterion != null) {
             return Optional.of(cachedCriterion);
@@ -31,13 +31,13 @@ public class ItematicObjectiveCriteria {
             .flatMap(statType -> getStat(
                 statType,
                 Identifier.bySeparator(name.substring(separatorIndex + 1), '.'),
-                ops
+                registries
             ));
     }
 
-    private static <T> Optional<ObjectiveCriteria> getStat(StatType<T> statType, Identifier id, RegistryOps<?> ops) {
+    private static <T> Optional<ObjectiveCriteria> getStat(StatType<T> statType, Identifier id, RegistryMapperCodec.RegistryProvider registries) {
         ResourceKey<? extends Registry<T>> registryId = statType.getRegistry().key();
-        return ops.getter(registryId)
+        return registries.get(registryId)
             .flatMap(registry -> registry.get(ResourceKey.create(registryId, id)))
             .map(statType::itematic$get);
     }

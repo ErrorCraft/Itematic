@@ -23,11 +23,6 @@ public record AttackBlockingItemBehavior(BlocksAttacks blocksAttacks) implements
     }
 
     @Override
-    public Codec<AttackBlockingItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.BLOCKS_ATTACKS, this.blocksAttacks);
     }

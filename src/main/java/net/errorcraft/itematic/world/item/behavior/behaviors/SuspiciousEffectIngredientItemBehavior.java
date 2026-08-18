@@ -23,11 +23,6 @@ public record SuspiciousEffectIngredientItemBehavior(List<SuspiciousStewEffects.
     }
 
     @Override
-    public Codec<SuspiciousEffectIngredientItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public SuspiciousStewEffects getSuspiciousEffects() {
         return new SuspiciousStewEffects(this.effects);
     }

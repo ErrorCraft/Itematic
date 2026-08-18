@@ -25,11 +25,6 @@ public record TrimMaterialProviderItemBehavior(Holder<TrimMaterial> trimMaterial
     }
 
     @Override
-    public Codec<TrimMaterialProviderItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.PROVIDES_TRIM_MATERIAL, new ProvidesTrimMaterial(this.trimMaterial));
     }

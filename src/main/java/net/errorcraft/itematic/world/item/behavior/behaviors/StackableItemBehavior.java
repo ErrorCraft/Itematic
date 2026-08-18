@@ -21,11 +21,6 @@ public record StackableItemBehavior(int maxStackSize) implements ItemBehavior<St
     }
 
     @Override
-    public Codec<StackableItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.MAX_STACK_SIZE, this.maxStackSize);
     }

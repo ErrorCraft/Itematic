@@ -34,11 +34,6 @@ public class DebugStickItemBehavior implements ItemBehavior<DebugStickItemBehavi
     }
 
     @Override
-    public Codec<DebugStickItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
         Level world = context.getLevel();
         if (world.isClientSide()) {

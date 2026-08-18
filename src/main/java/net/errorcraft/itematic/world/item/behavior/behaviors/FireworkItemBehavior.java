@@ -35,11 +35,6 @@ public class FireworkItemBehavior implements ItemBehavior<FireworkItemBehavior> 
     }
 
     @Override
-    public Codec<FireworkItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (!user.isFallFlying()) {
             return ItemResult.PASS;

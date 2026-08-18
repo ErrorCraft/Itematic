@@ -3,9 +3,9 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.UseCooldown;
 import net.minecraft.world.level.Level;
+
 import java.util.Optional;
 
 public record CooldownItemBehavior(Optional<Identifier> group, int ticks) implements ItemBehavior<CooldownItemBehavior> {
@@ -31,11 +32,6 @@ public record CooldownItemBehavior(Optional<Identifier> group, int ticks) implem
     @Override
     public ItemBehaviorType<CooldownItemBehavior> type() {
         return ItemBehaviorType.COOLDOWN;
-    }
-
-    @Override
-    public Codec<CooldownItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

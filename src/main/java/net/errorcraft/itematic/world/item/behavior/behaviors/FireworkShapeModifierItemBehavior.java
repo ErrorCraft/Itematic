@@ -17,8 +17,4 @@ public record FireworkShapeModifierItemBehavior(FireworkExplosion.Shape shape) i
         return ItemBehaviorType.FIREWORK_SHAPE_MODIFIER;
     }
 
-    @Override
-    public Codec<FireworkShapeModifierItemBehavior> codec() {
-        return CODEC;
-    }
 }

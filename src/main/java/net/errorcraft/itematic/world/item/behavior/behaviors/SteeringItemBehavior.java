@@ -40,11 +40,6 @@ public record SteeringItemBehavior(Holder<EntityType<?>> target, int damagePerUs
     }
 
     @Override
-    public Codec<SteeringItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (world.isClientSide()) {
             return ItemResult.PASS;

@@ -34,11 +34,6 @@ public class CastableItemBehavior implements ItemBehavior<CastableItemBehavior> 
     }
 
     @Override
-    public Codec<CastableItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (!this.tryRetract(world, user, stack, stackExchanger)) {
             this.cast(world, user, stack);

@@ -24,11 +24,6 @@ public record GliderItemBehavior(Glider glider) implements ItemBehavior<GliderIt
     }
 
     @Override
-    public Codec<GliderItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(ItematicDataComponents.GLIDER, this.glider);
     }

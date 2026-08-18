@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.serialization;
+package net.errorcraft.itematic.util;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -44,7 +44,7 @@ public class SetCodec<E> implements Codec<Set<E>> {
                 }
 
                 if (!duplicates.isEmpty()) {
-                    return DataResult.error(() -> "Set contained duplicate entries: " + duplicates.stream().map(E::toString).collect(Collectors.joining(", ")));
+                    return DataResult.error(() -> "Set contains duplicate elements: " + duplicates.stream().map(E::toString).collect(Collectors.joining(", ")));
                 }
 
                 return DataResult.success(Pair.of(set, pair.getSecond()));

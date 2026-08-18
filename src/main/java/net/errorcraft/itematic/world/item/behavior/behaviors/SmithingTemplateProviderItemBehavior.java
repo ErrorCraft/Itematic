@@ -20,8 +20,4 @@ public record SmithingTemplateProviderItemBehavior(SmithingTemplate template) im
         return ItemBehaviorType.SMITHING_TEMPLATE_PROVIDER;
     }
 
-    @Override
-    public Codec<SmithingTemplateProviderItemBehavior> codec() {
-        return CODEC;
-    }
 }

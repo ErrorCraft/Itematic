@@ -26,11 +26,6 @@ public class MapHolderItemBehavior implements ItemBehavior<MapHolderItemBehavior
     }
 
     @Override
-    public Codec<MapHolderItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.MAP_COLOR, MapItemColor.DEFAULT);
         builder.set(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY);

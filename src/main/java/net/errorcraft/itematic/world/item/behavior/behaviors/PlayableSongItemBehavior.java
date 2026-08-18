@@ -26,11 +26,6 @@ public record PlayableSongItemBehavior(Holder<JukeboxSong> song) implements Item
     }
 
     @Override
-    public Codec<PlayableSongItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.JUKEBOX_PLAYABLE, new JukeboxPlayable(new EitherHolder<>(this.song)));
     }

@@ -629,7 +629,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return false;
         }
 
-        return this.behavior.contains(type);
+        return this.behavior.has(type);
     }
 
     @Override

@@ -16,8 +16,4 @@ public class DyeableItemBehavior implements ItemBehavior<DyeableItemBehavior> {
         return ItemBehaviorType.DYEABLE;
     }
 
-    @Override
-    public Codec<DyeableItemBehavior> codec() {
-        return CODEC;
-    }
 }

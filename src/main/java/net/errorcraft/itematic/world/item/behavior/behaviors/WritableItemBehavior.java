@@ -34,11 +34,6 @@ public record WritableItemBehavior(Holder<Item> transformsInto) implements ItemB
     }
 
     @Override
-    public Codec<WritableItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         user.openItemGui(stack, hand);
         user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));

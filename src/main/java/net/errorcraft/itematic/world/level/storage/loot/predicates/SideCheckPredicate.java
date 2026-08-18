@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.level.storage.loot.predicates;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.util.SetCodec;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.storage.loot.LootContext;

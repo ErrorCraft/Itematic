@@ -3,19 +3,19 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.util.ItematicCodecs;
+import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponWithDataComponents;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.DisablesBlockingMeleeWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.KineticMeleeWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.SmashingMeleeWeapon;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponentMap;
@@ -58,11 +58,6 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
     @Override
     public ItemBehaviorType<WeaponItemBehavior> type() {
         return ItemBehaviorType.WEAPON;
-    }
-
-    @Override
-    public Codec<WeaponItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

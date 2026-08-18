@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.core.component;
 
 import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;

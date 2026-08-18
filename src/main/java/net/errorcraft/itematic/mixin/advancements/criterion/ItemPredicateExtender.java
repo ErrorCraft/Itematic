@@ -7,7 +7,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.advancements.criterion.ItemPredicateAccess;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
-import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.util.SetCodec;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderSet;

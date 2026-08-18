@@ -23,11 +23,6 @@ public class BrushItemBehavior implements ItemBehavior<BrushItemBehavior> {
     }
 
     @Override
-    public Codec<BrushItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
         DUMMY.itematic$setUsedTicks(usedTicks);
         DUMMY.onUseTick(world, user, stack, remainingUseTicks);

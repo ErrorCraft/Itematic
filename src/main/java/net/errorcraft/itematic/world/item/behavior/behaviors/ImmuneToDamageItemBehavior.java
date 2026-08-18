@@ -26,11 +26,6 @@ public record ImmuneToDamageItemBehavior(TagKey<DamageType> damage) implements I
     }
 
     @Override
-    public Codec<ImmuneToDamageItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.DAMAGE_RESISTANT, new DamageResistant(this.damage));
     }

@@ -3,9 +3,9 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,11 +25,6 @@ public record PreventUseWhenUsedOnTargetItemBehavior(boolean block, boolean enti
     @Override
     public ItemBehaviorType<PreventUseWhenUsedOnTargetItemBehavior> type() {
         return ItemBehaviorType.PREVENT_USE_WHEN_USED_ON_TARGET;
-    }
-
-    @Override
-    public Codec<PreventUseWhenUsedOnTargetItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

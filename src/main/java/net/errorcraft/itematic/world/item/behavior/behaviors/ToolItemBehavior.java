@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentMap;
@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +48,6 @@ public record ToolItemBehavior(Tool tool) implements ItemBehavior<ToolItemBehavi
     @Override
     public ItemBehaviorType<ToolItemBehavior> type() {
         return ItemBehaviorType.TOOL;
-    }
-
-    @Override
-    public Codec<ToolItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

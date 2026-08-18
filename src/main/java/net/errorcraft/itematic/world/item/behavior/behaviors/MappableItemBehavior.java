@@ -36,11 +36,6 @@ public record MappableItemBehavior(Holder<Item> transformsInto) implements ItemB
     }
 
     @Override
-    public Codec<MappableItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (!(world instanceof ServerLevel serverWorld)) {
             return ItemResult.SUCCEED;

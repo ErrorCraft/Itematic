@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
@@ -30,11 +30,6 @@ public record ZoomItemBehavior(float fieldOfViewMultiplier, Holder<SoundEvent> s
     @Override
     public ItemBehaviorType<ZoomItemBehavior> type() {
         return ItemBehaviorType.ZOOM;
-    }
-
-    @Override
-    public Codec<ZoomItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

@@ -5,9 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.world.item.BundleItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.tags.ItematicItemTags;
+import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
@@ -88,11 +88,6 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
     @Override
     public ItemBehaviorType<ItemHolderItemBehavior> type() {
         return ItemBehaviorType.ITEM_HOLDER;
-    }
-
-    @Override
-    public Codec<ItemHolderItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

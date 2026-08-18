@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
-import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.util.SetCodec;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
@@ -68,11 +68,6 @@ public record BlockItemBehavior(BlockPicker<?> block, boolean operatorOnly, Set<
     @Override
     public ItemBehaviorType<BlockItemBehavior> type() {
         return ItemBehaviorType.BLOCK;
-    }
-
-    @Override
-    public Codec<BlockItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

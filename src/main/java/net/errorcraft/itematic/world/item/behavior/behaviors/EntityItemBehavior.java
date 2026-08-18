@@ -6,7 +6,7 @@ import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.mixin.world.item.HangingEntityItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
-import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.util.SetCodec;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -156,11 +156,6 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     @Override
     public ItemBehaviorType<EntityItemBehavior> type() {
         return ItemBehaviorType.ENTITY;
-    }
-
-    @Override
-    public Codec<EntityItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

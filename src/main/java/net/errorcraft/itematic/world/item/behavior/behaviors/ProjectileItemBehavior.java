@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
@@ -41,11 +41,6 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
     @Override
     public ItemBehaviorType<ProjectileItemBehavior> type() {
         return ItemBehaviorType.PROJECTILE;
-    }
-
-    @Override
-    public Codec<ProjectileItemBehavior> codec() {
-        return CODEC;
     }
 
     public Entity spawnEntity(Level world, LivingEntity user, ItemStack stack, float angleOffset, float speed) {

@@ -2,9 +2,9 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.ExtraCodecs;
@@ -25,11 +25,6 @@ public record PotionHolderItemBehavior(float durationMultiplier) implements Item
     @Override
     public ItemBehaviorType<PotionHolderItemBehavior> type() {
         return ItemBehaviorType.POTION_HOLDER;
-    }
-
-    @Override
-    public Codec<PotionHolderItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

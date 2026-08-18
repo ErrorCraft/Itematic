@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.mixin.world.entity.npc.villager.VillagerTradesAccessor;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.util.Range;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
 import net.minecraft.core.Holder;

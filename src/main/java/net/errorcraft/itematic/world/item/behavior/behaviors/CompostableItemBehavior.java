@@ -19,8 +19,4 @@ public record CompostableItemBehavior(float levelIncreaseChance) implements Item
         return ItemBehaviorType.COMPOSTABLE;
     }
 
-    @Override
-    public Codec<CompostableItemBehavior> codec() {
-        return CODEC;
-    }
 }

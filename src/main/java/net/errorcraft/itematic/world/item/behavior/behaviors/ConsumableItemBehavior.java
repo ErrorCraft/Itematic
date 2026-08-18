@@ -62,11 +62,6 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
     }
 
     @Override
-    public Codec<ConsumableItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (stack.getUseDuration(user) != UseDuration.NONE) {
             return ItemResult.PASS;

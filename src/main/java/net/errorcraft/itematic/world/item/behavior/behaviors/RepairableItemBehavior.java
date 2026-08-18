@@ -27,11 +27,6 @@ public record RepairableItemBehavior(HolderSet<Item> items) implements ItemBehav
     }
 
     @Override
-    public Codec<RepairableItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.REPAIRABLE, new Repairable(this.items));
     }

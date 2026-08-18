@@ -1,16 +1,16 @@
 package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.world.ItemResult;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
-import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -110,11 +110,6 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
     @Override
     public ItemBehaviorType<EquipmentItemBehavior> type() {
         return ItemBehaviorType.EQUIPMENT;
-    }
-
-    @Override
-    public Codec<EquipmentItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

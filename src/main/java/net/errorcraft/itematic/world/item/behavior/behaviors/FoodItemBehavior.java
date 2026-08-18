@@ -2,12 +2,12 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
@@ -36,11 +36,6 @@ public record FoodItemBehavior(int nutrition, float saturation, boolean alwaysEd
     @Override
     public ItemBehaviorType<FoodItemBehavior> type() {
         return ItemBehaviorType.FOOD;
-    }
-
-    @Override
-    public Codec<FoodItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

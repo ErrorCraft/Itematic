@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.serialization.SetCodec;
+import net.errorcraft.itematic.util.SetCodec;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
@@ -47,11 +47,6 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
     @Override
     public ItemBehaviorType<UseableItemBehavior> type() {
         return ItemBehaviorType.USEABLE;
-    }
-
-    @Override
-    public Codec<UseableItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

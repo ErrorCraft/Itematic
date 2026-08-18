@@ -2,13 +2,13 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.references.BlockIds;
+import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.KineticMeleeWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.PiercingMeleeWeapon;
-import net.errorcraft.itematic.references.BlockIds;
-import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -172,11 +172,6 @@ public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>
     @Override
     public ItemBehaviorType<DamageableItemBehavior> type() {
         return ItemBehaviorType.DAMAGEABLE;
-    }
-
-    @Override
-    public Codec<DamageableItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

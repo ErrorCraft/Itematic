@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -58,11 +58,6 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
     @Override
     public ItemBehaviorType<ThrowableItemBehavior> type() {
         return ItemBehaviorType.THROWABLE;
-    }
-
-    @Override
-    public Codec<ThrowableItemBehavior> codec() {
-        return CODEC;
     }
 
     @Override

@@ -30,11 +30,6 @@ public record BannerPatternHolderItemBehavior(Optional<DyeColor> color) implemen
     }
 
     @Override
-    public Codec<BannerPatternHolderItemBehavior> codec() {
-        return CODEC;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY);
     }
