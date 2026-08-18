@@ -2,11 +2,9 @@ package net.errorcraft.itematic.mixin.resources;
 
 import com.google.common.collect.ImmutableList;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
-import net.errorcraft.itematic.registry.ActionValidator;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.item.Items;
@@ -18,12 +16,8 @@ import net.minecraft.resources.ResourceKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Coerce;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
-import java.util.Map;
 
 @Mixin(RegistryDataLoader.class)
 public class RegistryDataLoaderExtender {
@@ -38,11 +32,11 @@ public class RegistryDataLoaderExtender {
     private static List<RegistryDataLoader.RegistryData<?>> addCustomWorldRegistries(List<RegistryDataLoader.RegistryData<?>> original) {
         return new ImmutableList.Builder<RegistryDataLoader.RegistryData<?>>()
             .addAll(original)
-            .add(createEntry(Registries.ITEM, Items.CODEC))
-            .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
-            .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
-            .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
-            .add(createEntry(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createData(Registries.ITEM, Items.CODEC))
+            .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
+            .add(createData(ItematicRegistries.TRADE, Trade.CODEC))
+            .add(createData(ItematicRegistries.ACTION, ActionEntry.CODEC))
+            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }
 
@@ -57,32 +51,16 @@ public class RegistryDataLoaderExtender {
     private static List<RegistryDataLoader.RegistryData<?>> addCustomSynchronizedRegistries(List<RegistryDataLoader.RegistryData<?>> original) {
         return new ImmutableList.Builder<RegistryDataLoader.RegistryData<?>>()
             .addAll(original)
-            .add(createEntry(Registries.ITEM, Items.CODEC))
-            .add(createEntry(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
-            .add(createEntry(ItematicRegistryKeys.TRADE, Trade.CODEC))
-            .add(createEntry(ItematicRegistryKeys.ACTION, ActionEntry.CODEC))
-            .add(createEntry(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createData(Registries.ITEM, Items.CODEC))
+            .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
+            .add(createData(ItematicRegistries.TRADE, Trade.CODEC))
+            .add(createData(ItematicRegistries.ACTION, ActionEntry.CODEC))
+            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }
 
-    @Inject(
-        method = "method_45128",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/core/Registry;freeze()Lnet/minecraft/core/Registry;",
-            shift = At.Shift.AFTER
-        )
-    )
-    @SuppressWarnings("unchecked")
-    private static void postValidateRegistry(Map<ResourceKey<?>, Exception> exceptions, @Coerce Object loader, CallbackInfo info, @Local Registry<?> registry) {
-        if (ItematicRegistryKeys.ACTION.equals(registry.key())) {
-            ActionValidator validator = new ActionValidator((Registry<ActionEntry>) registry);
-            validator.validate(exceptions);
-        }
-    }
-
     @Unique
-    private static <T> RegistryDataLoader.RegistryData<T> createEntry(ResourceKey<Registry<T>> registry, Codec<T> codec) {
+    private static <T> RegistryDataLoader.RegistryData<T> createData(ResourceKey<Registry<T>> registry, Codec<T> codec) {
         return RegistryDataLoaderAccessor.RegistryDataAccessor.create(registry, codec);
     }
 }

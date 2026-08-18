@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.item.group.entry;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.group.entry.entries.StackItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.entries.TagItemGroupEntry;
 import net.minecraft.core.Holder;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.Item;
 import java.util.function.Function;
 
 public interface ItemGroupEntry<T extends ItemGroupEntry<T>> {
-    Codec<ItemGroupEntry<?>> ELEMENT_CODEC = ItematicRegistries.ITEM_GROUP_ENTRY_TYPE.byNameCodec()
+    Codec<ItemGroupEntry<?>> ELEMENT_CODEC = ItematicBuiltInRegistries.ITEM_GROUP_ENTRY_TYPE.byNameCodec()
         .dispatch(ItemGroupEntry::type, ItemGroupEntryType::codec);
     Codec<ItemGroupEntry<?>> CODEC = Codec.either(ELEMENT_CODEC, RegistryFixedCodec.create(Registries.ITEM))
         .xmap(

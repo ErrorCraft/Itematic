@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.world.action;
 
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.errorcraft.itematic.util.Vec3dProvider;
@@ -53,7 +53,7 @@ public class Actions {
     private Actions() {}
 
     public static void bootstrap(BootstrapContext<ActionEntry> registerable) {
-        HolderGetter<ActionEntry> actions = registerable.lookup(ItematicRegistryKeys.ACTION);
+        HolderGetter<ActionEntry> actions = registerable.lookup(ItematicRegistries.ACTION);
         HolderGetter<SoundEvent> soundEvents = registerable.lookup(Registries.SOUND_EVENT);
         HolderGetter<Block> blocks = registerable.lookup(Registries.BLOCK);
         HolderGetter<Item> items = registerable.lookup(Registries.ITEM);
@@ -254,6 +254,6 @@ public class Actions {
     }
 
     private static ResourceKey<ActionEntry> of(String name) {
-        return ResourceKey.create(ItematicRegistryKeys.ACTION, Identifier.withDefaultNamespace(name));
+        return ResourceKey.create(ItematicRegistries.ACTION, Identifier.withDefaultNamespace(name));
     }
 }

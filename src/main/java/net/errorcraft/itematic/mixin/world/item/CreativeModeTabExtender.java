@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.logging.LogUtils;
 import net.errorcraft.itematic.access.world.item.CreativeModeTabAccess;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
 import net.errorcraft.itematic.world.level.ItemAccess;
 import net.minecraft.core.Holder;
@@ -51,7 +51,7 @@ public class CreativeModeTabExtender implements CreativeModeTabAccess {
         }
 
         context.holders()
-            .lookupOrThrow(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER)
+            .lookupOrThrow(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER)
             .get(this.entryProviderTag)
             .ifPresent(entryList -> collectEntries(entryList, context, entries));
         return false;

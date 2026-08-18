@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.data.server.tag;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionTags;
 import net.errorcraft.itematic.world.action.Actions;
@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ActionTagProvider extends FabricTagProvider<ActionEntry> {
     public ActionTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, ItematicRegistryKeys.ACTION, registriesFuture);
+        super(output, ItematicRegistries.ACTION, registriesFuture);
     }
 
     @Override

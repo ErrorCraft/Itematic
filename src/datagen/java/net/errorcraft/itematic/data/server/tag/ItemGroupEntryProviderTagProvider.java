@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.data.server.tag;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.tags.ItemGroupEntryProviderTags;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProviders;
@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ItemGroupEntryProviderTagProvider extends FabricTagProvider<ItemGroupEntryProvider> {
     public ItemGroupEntryProviderTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, registriesFuture);
+        super(output, ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, registriesFuture);
     }
 
     @Override

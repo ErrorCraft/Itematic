@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.modification;
 
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.modification.type.DrainFluidWorldModification;
 import net.errorcraft.itematic.world.modification.type.PlaceBlockWorldModification;
 import net.errorcraft.itematic.world.modification.type.PlaceFluidWorldModification;
@@ -16,6 +16,6 @@ public class WorldModificationTypes {
     public static void init() {}
 
     private static <T extends WorldModification> WorldModificationType<T> register(String id, WorldModificationType<T> type) {
-        return Registry.register(ItematicRegistries.WORLD_MODIFICATION_TYPE, id, type);
+        return Registry.register(ItematicBuiltInRegistries.WORLD_MODIFICATION_TYPE, id, type);
     }
 }

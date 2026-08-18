@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.group.entry;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.group.entry.entries.*;
 import net.minecraft.core.Registry;
 
@@ -36,6 +36,6 @@ public record ItemGroupEntryType<T extends ItemGroupEntry<T>>(MapCodec<T> codec)
     );
 
     private static <T extends ItemGroupEntry<T>> ItemGroupEntryType<T> register(String id, ItemGroupEntryType<T> type) {
-        return Registry.register(ItematicRegistries.ITEM_GROUP_ENTRY_TYPE, id, type);
+        return Registry.register(ItematicBuiltInRegistries.ITEM_GROUP_ENTRY_TYPE, id, type);
     }
 }

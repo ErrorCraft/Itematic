@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.item;
 
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.minecraft.core.Registry;
 import net.minecraft.util.Util;
 
@@ -27,7 +27,7 @@ public record ItemEvent() {
     public static void init() {}
 
     private static ItemEvent register(String id) {
-        return Registry.register(ItematicRegistries.ITEM_EVENT, id, new ItemEvent());
+        return Registry.register(ItematicBuiltInRegistries.ITEM_EVENT, id, new ItemEvent());
     }
 
     @Override
@@ -37,6 +37,6 @@ public record ItemEvent() {
 
     @Override
     public String toString() {
-        return Util.getRegisteredName(ItematicRegistries.ITEM_EVENT, this);
+        return Util.getRegisteredName(ItematicBuiltInRegistries.ITEM_EVENT, this);
     }
 }

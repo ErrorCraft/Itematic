@@ -4,12 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.mixin.world.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
 import net.errorcraft.itematic.references.*;
-import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.errorcraft.itematic.tags.ItematicItemTags;
@@ -104,7 +104,7 @@ public class Items {
         ItemDisplay.CODEC.fieldOf("display").forGetter(Item::itematic$display),
         ItemAttributeModifiers.CODEC.optionalFieldOf("attribute_modifiers", ItemAttributeModifiers.EMPTY).forGetter(Item::itematic$attributeModifiers),
         ItemBehaviorSet.CODEC.optionalFieldOf("behavior", ItemBehaviorSet.EMPTY).forGetter(Item::itematic$behavior),
-        ActionEventMap.codec(ItematicRegistries.ITEM_EVENT).optionalFieldOf("events", ActionEventMap.empty()).forGetter(Item::itematic$events)
+        ActionEventMap.codec(ItematicBuiltInRegistries.ITEM_EVENT).optionalFieldOf("events", ActionEventMap.empty()).forGetter(Item::itematic$events)
     ).apply(instance, Items::create));
     public static final Codec<HolderSet<Item>> HOLDER_SET_CODEC = RegistryCodecs.homogeneousList(Registries.ITEM);
     public static final StreamCodec<RegistryFriendlyByteBuf, HolderSet<Item>> HOLDER_SET_STREAM_CODEC = ByteBufCodecs.holderSet(Registries.ITEM);
@@ -167,10 +167,10 @@ public class Items {
             this.items = registerable.lookup(Registries.ITEM);
             this.entityTypes = registerable.lookup(Registries.ENTITY_TYPE);
             this.blocks = registerable.lookup(Registries.BLOCK);
-            this.dispenseBehaviors = registerable.lookup(ItematicRegistryKeys.DISPENSE_BEHAVIOR);
+            this.dispenseBehaviors = registerable.lookup(ItematicRegistries.DISPENSE_BEHAVIOR);
             this.soundEvents = registerable.lookup(Registries.SOUND_EVENT);
             this.fluids = registerable.lookup(Registries.FLUID);
-            this.actions = registerable.lookup(ItematicRegistryKeys.ACTION);
+            this.actions = registerable.lookup(ItematicRegistries.ACTION);
             this.decoratedPotPatterns = registerable.lookup(Registries.DECORATED_POT_PATTERN);
             this.statusEffects = registerable.lookup(Registries.MOB_EFFECT);
             this.potions = registerable.lookup(Registries.POTION);

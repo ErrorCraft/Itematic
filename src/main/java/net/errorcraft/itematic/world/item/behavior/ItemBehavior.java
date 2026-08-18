@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.behavior;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.serialization.SetMapCodec;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public interface ItemBehavior<T extends ItemBehavior<T>> {
-    SetMapCodec<ItemBehaviorType<?>, ItemBehavior<?>> SET_MAP_CODEC = SetMapCodec.ofRegistry(ItematicRegistries.ITEM_BEHAVIOR_TYPE, ItemBehaviorType::codec, ItemBehavior::codec, ItemBehavior::type);
+    SetMapCodec<ItemBehaviorType<?>, ItemBehavior<?>> SET_MAP_CODEC = SetMapCodec.ofRegistry(ItematicBuiltInRegistries.ITEM_BEHAVIOR_TYPE, ItemBehaviorType::codec, ItemBehavior::codec, ItemBehavior::type);
     Codec<Set<ItemBehavior<?>>> SET_CODEC = SET_MAP_CODEC.codec();
 
     ItemBehaviorType<T> type();

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record InvokeItemEventAction(ItemEvent event) implements Action<InvokeItemEventAction> {
     public static final MapCodec<InvokeItemEventAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItematicRegistries.ITEM_EVENT.byNameCodec().fieldOf("event").forGetter(InvokeItemEventAction::event)
+        ItematicBuiltInRegistries.ITEM_EVENT.byNameCodec().fieldOf("event").forGetter(InvokeItemEventAction::event)
     ).apply(instance, InvokeItemEventAction::new));
 
     public static InvokeItemEventAction of(ItemEvent event) {

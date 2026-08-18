@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 
@@ -51,6 +51,6 @@ public class ActionTypeKeys {
     private ActionTypeKeys() {}
 
     private static ResourceKey<ActionType<?>> of(String id) {
-        return ResourceKey.create(ItematicRegistryKeys.ACTION_TYPE, Identifier.withDefaultNamespace(id));
+        return ResourceKey.create(ItematicRegistries.ACTION_TYPE, Identifier.withDefaultNamespace(id));
     }
 }

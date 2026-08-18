@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.tags;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
@@ -21,6 +21,6 @@ public class ItemGroupEntryProviderTags {
     private ItemGroupEntryProviderTags() {}
 
     private static TagKey<ItemGroupEntryProvider> of(String id) {
-        return TagKey.create(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, Identifier.withDefaultNamespace(id));
+        return TagKey.create(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, Identifier.withDefaultNamespace(id));
     }
 }

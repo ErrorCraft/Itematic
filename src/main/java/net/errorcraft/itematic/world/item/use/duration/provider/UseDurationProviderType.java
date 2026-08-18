@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.use.duration.provider;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.*;
 import net.minecraft.core.Registry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -54,6 +54,6 @@ public record UseDurationProviderType<T extends UseDurationProvider>(MapCodec<T>
     public static void init() {}
 
     private static <T extends UseDurationProvider> UseDurationProviderType<T> register(String id, UseDurationProviderType<T> type) {
-        return Registry.register(ItematicRegistries.USE_DURATION_PROVIDER_TYPE, id, type);
+        return Registry.register(ItematicBuiltInRegistries.USE_DURATION_PROVIDER_TYPE, id, type);
     }
 }

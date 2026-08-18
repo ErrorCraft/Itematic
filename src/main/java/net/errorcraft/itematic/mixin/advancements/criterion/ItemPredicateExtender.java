@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.advancements.criterion.ItemPredicateAccess;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.advancements.criterion.ItemPredicate;
@@ -40,7 +40,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
     private static Codec<ItemPredicate> addExtraMapCodecFields(Codec<ItemPredicate> original) {
         return RecordCodecBuilder.create(instance -> instance.group(
             MapCodec.assumeMapUnsafe(original).forGetter(Function.identity()),
-            SetCodec.forRegistry(ItematicRegistries.ITEM_BEHAVIOR_TYPE).optionalFieldOf("behavior").forGetter(ItemPredicate::itematic$behavior)
+            SetCodec.forRegistry(ItematicBuiltInRegistries.ITEM_BEHAVIOR_TYPE).optionalFieldOf("behavior").forGetter(ItemPredicate::itematic$behavior)
         ).apply(instance, ItemPredicateExtender::setBehavior));
     }
 

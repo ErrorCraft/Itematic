@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.group.entry;
 
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.tags.ItemGroupItemTags;
 import net.errorcraft.itematic.village.raid.RaidUtil;
 import net.errorcraft.itematic.world.item.group.entry.entries.*;
@@ -505,7 +505,7 @@ public class ItemGroupEntryProviders {
     }
 
     private static ResourceKey<ItemGroupEntryProvider> of(String id) {
-        return ResourceKey.create(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, Identifier.withDefaultNamespace(id));
+        return ResourceKey.create(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, Identifier.withDefaultNamespace(id));
     }
 
     private static ItemGroupEntry<?>[] flightDuration(Holder<Item> item) {

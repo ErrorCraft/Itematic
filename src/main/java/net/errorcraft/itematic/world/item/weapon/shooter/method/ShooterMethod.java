@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.weapon.shooter.method;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.world.InteractionHand;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.OptionalInt;
 
 public interface ShooterMethod {
-    Codec<ShooterMethod> CODEC = ItematicRegistries.SHOOTER_METHOD_TYPE.byNameCodec()
+    Codec<ShooterMethod> CODEC = ItematicBuiltInRegistries.SHOOTER_METHOD_TYPE.byNameCodec()
         .dispatch(ShooterMethod::type, ShooterMethodType::codec);
 
     ShooterMethodType<?> type();

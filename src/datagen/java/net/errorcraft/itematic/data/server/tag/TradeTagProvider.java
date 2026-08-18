@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.data.server.tag;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.TradeTags;
 import net.errorcraft.itematic.village.trade.Trades;
@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class TradeTagProvider extends FabricTagProvider<Trade> {
     public TradeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, ItematicRegistryKeys.TRADE, registriesFuture);
+        super(output, ItematicRegistries.TRADE, registriesFuture);
     }
 
     @Override

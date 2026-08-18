@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.holder.rule;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.rules.RejectItemHolderRule;
@@ -26,6 +26,6 @@ public record ItemHolderRuleType<T extends ItemHolderRule>(MapCodec<T> codec, St
     public static void init() {}
 
     private static <T extends ItemHolderRule> ItemHolderRuleType<T> register(String id, ItemHolderRuleType<T> type) {
-        return Registry.register(ItematicRegistries.ITEM_HOLDER_RULE_TYPE, id, type);
+        return Registry.register(ItematicBuiltInRegistries.ITEM_HOLDER_RULE_TYPE, id, type);
     }
 }

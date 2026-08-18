@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.world.entity.npc.wanderingtrader;
 
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.mixin.world.entity.npc.villager.AbstractVillagerExtender;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.TradeTags;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
@@ -86,7 +86,7 @@ public abstract class WanderingTraderExtender extends AbstractVillagerExtender {
 
     @Override
     protected void fillRecipes(LootContext context) {
-        Registry<Trade> trades = context.getLevel().registryAccess().lookupOrThrow(ItematicRegistryKeys.TRADE);
+        Registry<Trade> trades = context.getLevel().registryAccess().lookupOrThrow(ItematicRegistries.TRADE);
         for (TagKey<Trade> trade : TRADE_TO_AMOUNT.keySet()) {
             this.fillRecipesFromPool(trades.getOrThrow(trade), TRADE_TO_AMOUNT.getInt(trade), context);
         }

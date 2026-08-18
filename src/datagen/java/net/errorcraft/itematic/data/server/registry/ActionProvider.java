@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.data.server.registry;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
@@ -13,7 +13,7 @@ public class ActionProvider extends FabricDynamicRegistryProvider {
 
     @Override
     protected void configure(HolderLookup.Provider registries, Entries entries) {
-        DynamicRegistryProviderUtil.addAll(entries, registries.lookupOrThrow(ItematicRegistryKeys.ACTION));
+        DynamicRegistryProviderUtil.addAll(entries, registries.lookupOrThrow(ItematicRegistries.ACTION));
     }
 
     @Override

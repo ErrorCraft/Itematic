@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.world.entity.npc.villager;
 
 import com.google.common.collect.ImmutableSet;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.world.entity.npc.villager.Villagers;
 import net.minecraft.core.Registry;
@@ -114,7 +114,7 @@ public abstract class VillagerExtender extends AbstractVillagerExtender {
 
         Registry<Trade> trades = context.getLevel()
             .registryAccess()
-            .lookupOrThrow(ItematicRegistryKeys.TRADE);
+            .lookupOrThrow(ItematicRegistries.TRADE);
         this.fillRecipesFromPool(trades.getOrThrow(tag), 2, context);
     }
 

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.data.registries;
 
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.village.trade.Trades;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.item.Items;
@@ -21,9 +21,9 @@ public class VanillaRegistriesExtender {
 
     static {
         BUILDER.add(Registries.ITEM, Items::bootstrap)
-            .add(ItematicRegistryKeys.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProviders::bootstrap)
-            .add(ItematicRegistryKeys.TRADE, Trades::bootstrap)
-            .add(ItematicRegistryKeys.ACTION, Actions::bootstrap)
-            .add(ItematicRegistryKeys.DISPENSE_BEHAVIOR, DispenseBehaviors::bootstrap);
+            .add(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProviders::bootstrap)
+            .add(ItematicRegistries.TRADE, Trades::bootstrap)
+            .add(ItematicRegistries.ACTION, Actions::bootstrap)
+            .add(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehaviors::bootstrap);
     }
 }

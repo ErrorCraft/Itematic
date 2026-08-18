@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.village.trade;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 
@@ -77,6 +77,6 @@ public class TradeTags {
     private TradeTags() {}
 
     private static TagKey<Trade> of(String id) {
-        return TagKey.create(ItematicRegistryKeys.TRADE, Identifier.withDefaultNamespace(id));
+        return TagKey.create(ItematicRegistries.TRADE, Identifier.withDefaultNamespace(id));
     }
 }

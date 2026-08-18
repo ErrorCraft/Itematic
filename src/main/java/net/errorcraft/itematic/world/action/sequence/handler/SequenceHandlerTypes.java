@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.sequence.handler;
 
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.*;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -17,6 +17,6 @@ public class SequenceHandlerTypes {
     public static void init() {}
 
     private static <T extends SequenceHandler<T>> SequenceHandlerType<T> register(ResourceKey<SequenceHandlerType<?>> id, SequenceHandlerType<T> type) {
-        return Registry.register(ItematicRegistries.SEQUENCE_HANDLER_TYPE, id, type);
+        return Registry.register(ItematicBuiltInRegistries.SEQUENCE_HANDLER_TYPE, id, type);
     }
 }

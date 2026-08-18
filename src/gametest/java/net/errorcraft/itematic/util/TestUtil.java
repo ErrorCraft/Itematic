@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.util;
 
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.BlockPos;
@@ -62,7 +62,7 @@ public class TestUtil {
         return stack.itematic$getBehavior(type)
             .orElseThrow(() -> helper.assertionException(
                 "test.error.item.expected_item_behavior",
-                ItematicRegistries.ITEM_BEHAVIOR_TYPE.getId(type)
+                ItematicBuiltInRegistries.ITEM_BEHAVIOR_TYPE.getId(type)
             ));
     }
 

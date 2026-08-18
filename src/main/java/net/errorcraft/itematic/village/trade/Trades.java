@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.village.trade;
 
 import net.errorcraft.itematic.advancements.criterion.VillagerPredicate;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.mixin.world.entity.npc.villager.VillagerTradesAccessor;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
 import net.errorcraft.itematic.references.PotionIds;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.tags.PotionTags;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.EnchantWithLevelsTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.ItemFromTypeTradeModifier;
@@ -997,6 +997,6 @@ public class Trades {
     }
 
     private static ResourceKey<Trade> of(String id) {
-        return ResourceKey.create(ItematicRegistryKeys.TRADE, Identifier.withDefaultNamespace(id));
+        return ResourceKey.create(ItematicRegistries.TRADE, Identifier.withDefaultNamespace(id));
     }
 }

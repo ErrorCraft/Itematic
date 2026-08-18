@@ -1,14 +1,11 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.registry.RecursionValidator;
 import net.errorcraft.itematic.world.action.Action;
-import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
-import net.minecraft.core.Holder;
 
 public record SequenceAction(SequenceHandler<?> handler) implements Action<SequenceAction> {
     public static final MapCodec<SequenceAction> CODEC = SequenceHandler.CODEC.xmap(SequenceAction::new, SequenceAction::handler);
@@ -28,25 +25,10 @@ public record SequenceAction(SequenceHandler<?> handler) implements Action<Seque
 
     @Override
     public boolean execute(ActionContext context) {
-        return this.handler.handle(context);
-    }
-
-    public void validate(RecursionValidator validator) {
-        for (Holder<ActionEntry> entry : this.handler.iterateEntries()) {
-            validateEntry(validator, entry);
+        try {
+            return this.handler.handle(context);
+        } catch (StackOverflowError e) {
+            return false;
         }
-    }
-
-    private static void validateEntry(RecursionValidator validator, Holder<ActionEntry> entry) {
-        if (!(entry instanceof Holder.Reference<ActionEntry> referenceEntry)) {
-            return;
-        }
-
-        validator.add(referenceEntry);
-        if (referenceEntry.value().action() instanceof SequenceAction action) {
-            action.validate(validator);
-        }
-
-        validator.remove(referenceEntry);
     }
 }

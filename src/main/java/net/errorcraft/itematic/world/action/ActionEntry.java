@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.action;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
@@ -19,8 +19,8 @@ public record ActionEntry(Action<?> action, Optional<LootItemCondition> requirem
         Action.CODEC.fieldOf("action").forGetter(ActionEntry::action),
         LootItemCondition.DIRECT_CODEC.optionalFieldOf("requirements").forGetter(ActionEntry::requirements)
     ).apply(instance, ActionEntry::new));
-    public static final Codec<Holder<ActionEntry>> REGISTRY_CODEC = RegistryFileCodec.create(ItematicRegistryKeys.ACTION, CODEC);
-    public static final Codec<HolderSet<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.homogeneousList(ItematicRegistryKeys.ACTION, CODEC, true);
+    public static final Codec<Holder<ActionEntry>> REGISTRY_CODEC = RegistryFileCodec.create(ItematicRegistries.ACTION, CODEC);
+    public static final Codec<HolderSet<ActionEntry>> REGISTRY_ENTRY_LIST_CODEC = RegistryCodecs.homogeneousList(ItematicRegistries.ACTION, CODEC, true);
 
     public static ActionEntry of(Action<?> action) {
         return new ActionEntry(action, Optional.empty());

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 
@@ -11,6 +11,6 @@ public class ActionTags {
     private ActionTags() {}
 
     private static TagKey<ActionEntry> of(String id) {
-        return TagKey.create(ItematicRegistryKeys.ACTION, Identifier.withDefaultNamespace(id));
+        return TagKey.create(ItematicRegistries.ACTION, Identifier.withDefaultNamespace(id));
     }
 }

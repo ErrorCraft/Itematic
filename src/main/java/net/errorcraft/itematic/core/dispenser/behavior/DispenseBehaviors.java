@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.core.dispenser.behavior;
 
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.references.EntityTypeIds;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
 import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
@@ -163,7 +163,7 @@ public class DispenseBehaviors {
     }
 
     private static ResourceKey<DispenseBehavior> of(String id) {
-        return ResourceKey.create(ItematicRegistryKeys.DISPENSE_BEHAVIOR, Identifier.withDefaultNamespace(id));
+        return ResourceKey.create(ItematicRegistries.DISPENSE_BEHAVIOR, Identifier.withDefaultNamespace(id));
     }
     
     private static PassingSequenceHandler.Builder shootProjectile(float power, float uncertainty) {

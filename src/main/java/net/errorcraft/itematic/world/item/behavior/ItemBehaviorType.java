@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.world.item.behavior;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.registry.ItematicRegistries;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.item.behavior.behaviors.*;
 import net.minecraft.core.Registry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -10,7 +10,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
-    public static final StreamCodec<RegistryFriendlyByteBuf, ItemBehaviorType<?>> STREAM_CODEC = ByteBufCodecs.registry(ItematicRegistryKeys.ITEM_BEHAVIOR_TYPE);
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemBehaviorType<?>> STREAM_CODEC = ByteBufCodecs.registry(ItematicRegistries.ITEM_BEHAVIOR_TYPE);
     public static final ItemBehaviorType<UseableItemBehavior> USEABLE = register(
         "useable",
         UseableItemBehavior.CODEC
@@ -223,6 +223,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static void init() {}
 
     private static <T extends ItemBehavior<T>> ItemBehaviorType<T> register(String id, Codec<T> type) {
-        return Registry.register(ItematicRegistries.ITEM_BEHAVIOR_TYPE, id, new ItemBehaviorType<>(type));
+        return Registry.register(ItematicBuiltInRegistries.ITEM_BEHAVIOR_TYPE, id, new ItemBehaviorType<>(type));
     }
 }

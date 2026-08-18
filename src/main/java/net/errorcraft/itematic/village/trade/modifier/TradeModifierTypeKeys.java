@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.village.trade.modifier;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 
@@ -12,6 +12,6 @@ public class TradeModifierTypeKeys {
     private TradeModifierTypeKeys() {}
 
     private static ResourceKey<TradeModifierType<?>> of(String key) {
-        return ResourceKey.create(ItematicRegistryKeys.TRADE_MODIFIER_TYPE, Identifier.withDefaultNamespace(key));
+        return ResourceKey.create(ItematicRegistries.TRADE_MODIFIER_TYPE, Identifier.withDefaultNamespace(key));
     }
 }

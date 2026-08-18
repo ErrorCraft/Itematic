@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.entity.spawn.rule;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.AlignYawEntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.DiscardEntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.FitsInVolumeEntitySpawnRule;
@@ -29,6 +29,6 @@ public record EntitySpawnRuleType<T extends EntitySpawnRule<T>>(MapCodec<T> code
     public static void init() {}
 
     private static <T extends EntitySpawnRule<T>> EntitySpawnRuleType<T> register(String id, EntitySpawnRuleType<T> type) {
-        return Registry.register(ItematicRegistries.ENTITY_SPAWN_RULE_TYPE, id, type);
+        return Registry.register(ItematicBuiltInRegistries.ENTITY_SPAWN_RULE_TYPE, id, type);
     }
 }

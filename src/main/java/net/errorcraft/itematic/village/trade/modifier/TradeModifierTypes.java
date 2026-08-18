@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.village.trade.modifier;
 
-import net.errorcraft.itematic.registry.ItematicRegistries;
+import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.EnchantWithLevelsTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.ItemFromTypeTradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.modifiers.SingleEnchantmentTradeModifier;
@@ -17,6 +17,6 @@ public class TradeModifierTypes {
     public static void init() {}
 
     private static <T extends TradeModifier<T>> TradeModifierType<T> register(ResourceKey<TradeModifierType<?>> id, TradeModifierType<T> type) {
-        return Registry.register(ItematicRegistries.TRADE_MODIFIER_TYPE, id, type);
+        return Registry.register(ItematicBuiltInRegistries.TRADE_MODIFIER_TYPE, id, type);
     }
 }

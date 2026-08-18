@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.world.entity.npc.villager;
 
 import net.errorcraft.itematic.access.world.entity.npc.villager.VillagerDataAccess;
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
@@ -43,7 +43,7 @@ public class VillagerDataExtender implements VillagerDataAccess {
             .orElseThrow()
             .identifier()
             .withPath(path -> path + "_" + this.levelName());
-        return TagKey.create(ItematicRegistryKeys.TRADE, tag);
+        return TagKey.create(ItematicRegistries.TRADE, tag);
     }
 
     @Unique
