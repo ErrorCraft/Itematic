@@ -1,14 +1,17 @@
-package net.errorcraft.itematic.predicate.entity;
+package net.errorcraft.itematic.advancements.criterion;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 
-public class ItematicEntitySubPredicateTypes {
-    public static final MapCodec<VillagerEntitySubPredicate> VILLAGER = register("villager", VillagerEntitySubPredicate.CODEC);
+public class ItematicEntitySubPredicates {
+    public static final MapCodec<VillagerPredicate> VILLAGER = register(
+        "villager",
+        VillagerPredicate.CODEC
+    );
 
-    private ItematicEntitySubPredicateTypes() {}
+    private ItematicEntitySubPredicates() {}
 
     public static void init() {}
 

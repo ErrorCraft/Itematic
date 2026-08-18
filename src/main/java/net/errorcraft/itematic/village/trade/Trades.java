@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.village.trade;
 
+import net.errorcraft.itematic.advancements.criterion.VillagerPredicate;
 import net.errorcraft.itematic.mixin.world.entity.npc.villager.VillagerTradesAccessor;
-import net.errorcraft.itematic.predicate.entity.VillagerEntitySubPredicate;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
 import net.errorcraft.itematic.references.PotionIds;
@@ -870,7 +870,7 @@ public class Trades {
                 LootItemEntityPropertyCondition.hasProperties(
                     LootContext.EntityTarget.THIS,
                     EntityPredicate.Builder.entity()
-                        .subPredicate(VillagerEntitySubPredicate.of(
+                        .subPredicate(VillagerPredicate.of(
                             HolderSet.direct(BuiltInRegistries.VILLAGER_TYPE::getOrThrow, types)
                         ))
                 )
@@ -978,7 +978,7 @@ public class Trades {
                 LootItemEntityPropertyCondition.hasProperties(
                     LootContext.EntityTarget.THIS,
                     EntityPredicate.Builder.entity()
-                        .subPredicate(VillagerEntitySubPredicate.of(
+                        .subPredicate(VillagerPredicate.of(
                             HolderSet.direct(BuiltInRegistries.VILLAGER_TYPE::getOrThrow, types)
                         ))
                 )

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.item.holder.rule;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.predicate.item.ItemPredicates;
+import net.errorcraft.itematic.advancements.criterion.ItemPredicates;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -66,7 +66,7 @@ public record ItemHolderRules(List<Rule> rules) {
             ItemHolderRule.CODEC.forGetter(Rule::rule)
         ).apply(instance, Rule::new));
         public static final StreamCodec<RegistryFriendlyByteBuf, Rule> STREAM_CODEC = StreamCodec.composite(
-            ItemPredicates.PACKET_CODEC.apply(ByteBufCodecs::optional), Rule::condition,
+            ItemPredicates.STREAM_CODEC.apply(ByteBufCodecs::optional), Rule::condition,
             ItemHolderRule.STREAM_CODEC, Rule::rule,
             Rule::new
         );

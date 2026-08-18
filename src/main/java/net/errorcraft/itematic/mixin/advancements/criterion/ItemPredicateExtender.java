@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.advancements.criterion.ItemPredicateAccess;
-import net.errorcraft.itematic.predicate.item.ItemPredicates;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
@@ -42,7 +41,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         return RecordCodecBuilder.create(instance -> instance.group(
             MapCodec.assumeMapUnsafe(original).forGetter(Function.identity()),
             SetCodec.forRegistry(ItematicRegistries.ITEM_BEHAVIOR_TYPE).optionalFieldOf("behavior").forGetter(ItemPredicate::itematic$behavior)
-        ).apply(instance, ItemPredicates::setBehavior));
+        ).apply(instance, ItemPredicateExtender::setBehavior));
     }
 
     @ModifyReturnValue(
@@ -75,6 +74,12 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
     @Override
     public void itematic$setBehavior(Optional<Set<ItemBehaviorType<?>>> behavior) {
         this.behavior = behavior;
+    }
+
+    @Unique
+    private static ItemPredicate setBehavior(ItemPredicate predicate, Optional<Set<ItemBehaviorType<?>>> behavior) {
+        predicate.itematic$setBehavior(behavior);
+        return predicate;
     }
 
     @Mixin(ItemPredicate.Builder.class)

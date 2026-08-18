@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.item.weapon.melee;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.predicate.item.ItemPredicates;
+import net.errorcraft.itematic.advancements.criterion.ItemPredicates;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderSet;
@@ -57,7 +57,7 @@ public record WeaponAttackDamage(List<Rule> rules, double defaultDamage) {
         ).apply(instance, Rule::new));
         public static final StreamCodec<RegistryFriendlyByteBuf, Rule> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.holderSet(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional), Rule::entities,
-            ItemPredicates.PACKET_CODEC.apply(ByteBufCodecs::optional), Rule::item,
+            ItemPredicates.STREAM_CODEC.apply(ByteBufCodecs::optional), Rule::item,
             ByteBufCodecs.DOUBLE.apply(ByteBufCodecs::optional), Rule::damage,
             ByteBufCodecs.BOOL.apply(ByteBufCodecs::optional), Rule::addBase,
             Rule::new

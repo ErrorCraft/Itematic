@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.predicate.entity;
+package net.errorcraft.itematic.advancements.criterion;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -13,13 +13,13 @@ import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public record VillagerEntitySubPredicate(HolderSet<VillagerType> variant) implements EntitySubPredicate {
-    public static final MapCodec<VillagerEntitySubPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryCodecs.homogeneousList(Registries.VILLAGER_TYPE).fieldOf("variant").forGetter(VillagerEntitySubPredicate::variant)
-    ).apply(instance, VillagerEntitySubPredicate::new));
+public record VillagerPredicate(HolderSet<VillagerType> variant) implements EntitySubPredicate {
+    public static final MapCodec<VillagerPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        RegistryCodecs.homogeneousList(Registries.VILLAGER_TYPE).fieldOf("variant").forGetter(VillagerPredicate::variant)
+    ).apply(instance, VillagerPredicate::new));
 
-    public static VillagerEntitySubPredicate of(HolderSet<VillagerType> variant) {
-        return new VillagerEntitySubPredicate(variant);
+    public static VillagerPredicate of(HolderSet<VillagerType> variant) {
+        return new VillagerPredicate(variant);
     }
 
     @Override
@@ -29,8 +29,8 @@ public record VillagerEntitySubPredicate(HolderSet<VillagerType> variant) implem
 
     @Override
     public boolean matches(Entity entity, ServerLevel world, @Nullable Vec3 pos) {
-        if (entity instanceof VillagerDataHolder villagerDataContainer) {
-            return this.variant.contains(villagerDataContainer.getVillagerData().type());
+        if (entity instanceof VillagerDataHolder villagerDataHolder) {
+            return this.variant.contains(villagerDataHolder.getVillagerData().type());
         }
 
         return false;

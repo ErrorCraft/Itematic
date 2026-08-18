@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.world.item.component.ToolAccess;
-import net.errorcraft.itematic.predicate.item.ItemPredicates;
+import net.errorcraft.itematic.advancements.criterion.ItemPredicates;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.HolderSet;
@@ -189,7 +189,7 @@ public class ToolExtender implements ToolAccess {
         private static StreamCodec<RegistryFriendlyByteBuf, Tool.Rule> addExtraCompositeStreamCodecEntries(StreamCodec<RegistryFriendlyByteBuf, Tool.Rule> original) {
             return StreamCodec.composite(
                 original, Function.identity(),
-                ItemPredicates.PACKET_CODEC.apply(ByteBufCodecs::optional), Tool.Rule::itematic$item,
+                ItemPredicates.STREAM_CODEC.apply(ByteBufCodecs::optional), Tool.Rule::itematic$item,
                 RuleExtender::setItem
             );
         }

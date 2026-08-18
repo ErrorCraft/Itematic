@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.predicate.item;
+package net.errorcraft.itematic.advancements.criterion;
 
 import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class ItemPredicates {
-    public static final StreamCodec<RegistryFriendlyByteBuf, ItemPredicate> PACKET_CODEC = StreamCodec.recursive(c -> StreamCodec.composite(
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemPredicate> STREAM_CODEC = StreamCodec.recursive(c -> StreamCodec.composite(
         ByteBufCodecs.holderSet(Registries.ITEM).apply(ByteBufCodecs::optional), ItemPredicate::items,
         MinMaxBounds.Ints.STREAM_CODEC, ItemPredicate::count,
         DataComponentMatchers.STREAM_CODEC, ItemPredicate::components,
@@ -25,11 +25,6 @@ public class ItemPredicates {
     ));
 
     private ItemPredicates() {}
-
-    public static ItemPredicate setBehavior(ItemPredicate predicate, Optional<Set<ItemBehaviorType<?>>> behavior) {
-        predicate.itematic$setBehavior(behavior);
-        return predicate;
-    }
 
     private static ItemPredicate create(Optional<HolderSet<Item>> items, MinMaxBounds.Ints count, DataComponentMatchers components, Optional<Set<ItemBehaviorType<?>>> behavior) {
         ItemPredicate predicate = new ItemPredicate(items, count, components);

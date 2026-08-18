@@ -1,7 +1,7 @@
 package net.errorcraft.itematic;
 
+import net.errorcraft.itematic.advancements.criterion.ItematicEntitySubPredicates;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.predicate.entity.ItematicEntitySubPredicateTypes;
 import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
 import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
@@ -49,7 +49,7 @@ public class Itematic implements ModInitializer {
         ItematicRecipeBookCategories.init();
         ItematicRecipeDisplaySerializers.init();
         ItematicSlotDisplaySerializers.init();
-        ItematicEntitySubPredicateTypes.init();
+        ItematicEntitySubPredicates.init();
         WorldModificationTypes.init();
         EntitySpawnRuleType.init();
         MeleeWeaponComponents.init();

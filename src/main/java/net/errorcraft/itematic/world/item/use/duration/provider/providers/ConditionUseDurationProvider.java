@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.item.use.duration.provider.providers;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.predicate.item.ItemPredicates;
+import net.errorcraft.itematic.advancements.criterion.ItemPredicates;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.minecraft.advancements.criterion.ItemPredicate;
@@ -20,7 +20,7 @@ public record ConditionUseDurationProvider(UseDurationProvider amount, ItemPredi
     ).apply(instance, ConditionUseDurationProvider::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, ConditionUseDurationProvider> STREAM_CODEC = StreamCodec.composite(
         UseDurationProvider.STREAM_CODEC, ConditionUseDurationProvider::amount,
-        ItemPredicates.PACKET_CODEC, ConditionUseDurationProvider::condition,
+        ItemPredicates.STREAM_CODEC, ConditionUseDurationProvider::condition,
         ConditionUseDurationProvider::new
     );
 
