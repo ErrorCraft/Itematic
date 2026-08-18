@@ -4,8 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.JsonOps;
 import net.errorcraft.itematic.access.commands.arguments.ObjectiveCriteriaArgumentAccess;
-import net.errorcraft.itematic.scoreboard.ScoreboardCriterionUtil;
 import net.errorcraft.itematic.stat.StatUtil;
+import net.errorcraft.itematic.world.scores.criteria.ItematicObjectiveCriteria;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
 import net.minecraft.core.Holder;
@@ -33,7 +33,7 @@ public class ObjectiveCriteriaArgumentExtender implements ObjectiveCriteriaArgum
         )
     )
     private Optional<ObjectiveCriteria> useDynamicRegistry(String name) {
-        return ScoreboardCriterionUtil.byName(name, this.context.createSerializationContext(JsonOps.INSTANCE));
+        return ItematicObjectiveCriteria.byName(name, this.context.createSerializationContext(JsonOps.INSTANCE));
     }
 
     @ModifyExpressionValue(

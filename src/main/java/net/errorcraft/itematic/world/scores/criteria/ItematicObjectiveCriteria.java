@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.scoreboard;
+package net.errorcraft.itematic.world.scores.criteria;
 
 import net.errorcraft.itematic.mixin.world.scores.criteria.ObjectiveCriteriaAccessor;
 import net.minecraft.core.Registry;
@@ -11,15 +11,15 @@ import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import java.util.Map;
 import java.util.Optional;
 
-public class ScoreboardCriterionUtil {
+public class ItematicObjectiveCriteria {
     private static final Map<String, ObjectiveCriteria> CRITERIA_CACHE = ObjectiveCriteriaAccessor.criteriaCache();
 
-    private ScoreboardCriterionUtil() {}
+    private ItematicObjectiveCriteria() {}
 
     public static Optional<ObjectiveCriteria> byName(String name, RegistryOps<?> ops) {
-        ObjectiveCriteria customCriterion = CRITERIA_CACHE.get(name);
-        if (customCriterion != null) {
-            return Optional.of(customCriterion);
+        ObjectiveCriteria cachedCriterion = CRITERIA_CACHE.get(name);
+        if (cachedCriterion != null) {
+            return Optional.of(cachedCriterion);
         }
 
         int separatorIndex = name.indexOf(':');
@@ -36,9 +36,9 @@ public class ScoreboardCriterionUtil {
     }
 
     private static <T> Optional<ObjectiveCriteria> getStat(StatType<T> statType, Identifier id, RegistryOps<?> ops) {
-        ResourceKey<? extends Registry<T>> registryKey = statType.getRegistry().key();
-        return ops.getter(registryKey)
-            .flatMap(lookup -> lookup.get(ResourceKey.create(registryKey, id)))
+        ResourceKey<? extends Registry<T>> registryId = statType.getRegistry().key();
+        return ops.getter(registryId)
+            .flatMap(registry -> registry.get(ResourceKey.create(registryId, id)))
             .map(statType::itematic$get);
     }
 }

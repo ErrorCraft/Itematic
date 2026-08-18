@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.PrimitiveCodec;
 import net.errorcraft.itematic.access.world.scores.criteria.ObjectiveCriteriaAccess;
-import net.errorcraft.itematic.scoreboard.ScoreboardCriterionUtil;
 import net.errorcraft.itematic.serialization.RegistryMapperCodec;
+import net.errorcraft.itematic.world.scores.criteria.ItematicObjectiveCriteria;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,7 +34,7 @@ public class ObjectiveCriteriaExtender implements ObjectiveCriteriaAccess {
     private static Codec<ObjectiveCriteria> useDynamicRegistry(PrimitiveCodec<String> instance, Function<String, DataResult<ObjectiveCriteria>> to, Function<ObjectiveCriteria, String> from) {
         return RegistryMapperCodec.of(
             instance,
-            ScoreboardCriterionUtil::byName,
+            ItematicObjectiveCriteria::byName,
             ObjectiveCriteria::getName
         );
     }
