@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.references.BlockIds;
-import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
@@ -96,12 +96,12 @@ public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>
                         0.38f,
                         damageMultiplier,
                         Optional.of(material == ToolMaterial.WOOD
-                            ? soundEvents.getOrThrow(SoundEventKeys.SPEAR_WOOD_USE)
-                            : soundEvents.getOrThrow(SoundEventKeys.SPEAR_USE)
+                            ? soundEvents.getOrThrow(SoundEventIds.SPEAR_WOOD_USE)
+                            : soundEvents.getOrThrow(SoundEventIds.SPEAR_USE)
                         ),
                         Optional.of(material == ToolMaterial.WOOD
-                            ? soundEvents.getOrThrow(SoundEventKeys.SPEAR_WOOD_HIT)
-                            : soundEvents.getOrThrow(SoundEventKeys.SPEAR_HIT)
+                            ? soundEvents.getOrThrow(SoundEventIds.SPEAR_WOOD_HIT)
+                            : soundEvents.getOrThrow(SoundEventIds.SPEAR_HIT)
                         )
                     ))
                 )
@@ -111,12 +111,12 @@ public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>
                         true,
                         false,
                         Optional.of(material == ToolMaterial.WOOD
-                            ? soundEvents.getOrThrow(SoundEventKeys.SPEAR_WOOD_ATTACK)
-                            : soundEvents.getOrThrow(SoundEventKeys.SPEAR_ATTACK)
+                            ? soundEvents.getOrThrow(SoundEventIds.SPEAR_WOOD_ATTACK)
+                            : soundEvents.getOrThrow(SoundEventIds.SPEAR_ATTACK)
                         ),
                         Optional.of(material == ToolMaterial.WOOD
-                            ? soundEvents.getOrThrow(SoundEventKeys.SPEAR_WOOD_HIT)
-                            : soundEvents.getOrThrow(SoundEventKeys.SPEAR_HIT)
+                            ? soundEvents.getOrThrow(SoundEventIds.SPEAR_WOOD_HIT)
+                            : soundEvents.getOrThrow(SoundEventIds.SPEAR_HIT)
                         )
                     ))
                 )

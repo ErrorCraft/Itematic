@@ -4,7 +4,7 @@ import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.references.EntityTypeIds;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.actions.*;
@@ -144,7 +144,7 @@ public class DispenseBehaviors {
                 .add(DecrementItemAction.of(1))
                 .add(PlaySoundAction.of(
                     PositionTarget.INTERACTED,
-                    soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED),
+                    soundEvents.getOrThrow(SoundEventIds.TNT_PRIMED),
                     SoundSource.BLOCKS
                 ))
         ).build());

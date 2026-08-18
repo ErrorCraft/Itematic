@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.world.item.BundleItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
-import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
@@ -78,9 +78,9 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
                             .build())
                         .build())
                     .build(),
-                soundEvents.getOrThrow(SoundEventKeys.BUNDLE_INSERT),
-                soundEvents.getOrThrow(SoundEventKeys.BUNDLE_REMOVE_ONE),
-                soundEvents.getOrThrow(SoundEventKeys.BUNDLE_DROP_CONTENTS)
+                soundEvents.getOrThrow(SoundEventIds.BUNDLE_INSERT),
+                soundEvents.getOrThrow(SoundEventIds.BUNDLE_REMOVE_ONE),
+                soundEvents.getOrThrow(SoundEventIds.BUNDLE_DROP_CONTENTS)
             )
         };
     }

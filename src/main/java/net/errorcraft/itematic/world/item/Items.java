@@ -10,7 +10,6 @@ import net.errorcraft.itematic.mixin.world.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
 import net.errorcraft.itematic.references.*;
-import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.errorcraft.itematic.util.Vec3dProvider;
@@ -250,7 +249,7 @@ public class Items {
                             )
                         ),
                         UncheckedSequenceHandler.builder()
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.GENERIC_SPLASH), SoundSource.BLOCKS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.GENERIC_SPLASH), SoundSource.BLOCKS))
                             .add(ExchangeItemAction.of(this.items.getOrThrow(ItemIds.GLASS_BOTTLE)))
                             .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SPLASH)
                                 .count(5)
@@ -261,7 +260,7 @@ public class Items {
                                 ))
                                 .speed(1.0d)
                                 .build())
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_EMPTY), SoundSource.BLOCKS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.BOTTLE_EMPTY), SoundSource.BLOCKS))
                             .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockIds.MUD)))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
@@ -277,7 +276,7 @@ public class Items {
                     .with(OminousEffectProviderItemBehavior.INSTANCE)
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.OMINOUS_BOTTLE_DISPOSE))))
+                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.OMINOUS_BOTTLE_DISPOSE))))
                     .build()
             ));
         }
@@ -730,7 +729,7 @@ public class Items {
                         .useAnimation(ItemUseAnimation.DRINK)
                         .remainder(this.items.getOrThrow(ItemIds.GLASS_BOTTLE))
                         .noConsumeParticles()
-                        .consumeSound(this.soundEvents.getOrThrow(SoundEventKeys.HONEY_BOTTLE_DRINK))
+                        .consumeSound(this.soundEvents.getOrThrow(SoundEventIds.HONEY_BOTTLE_DRINK))
                         .build())
                     .build(),
                 ActionEventMap.Builder.item()
@@ -6112,7 +6111,7 @@ public class Items {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DamageItemAction.of(1))
-                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.FLINT_AND_STEEL_USE), SoundSource.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.FLINT_AND_STEEL_USE), SoundSource.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -6143,9 +6142,9 @@ public class Items {
                     .with(WeaponItemBehavior.builder(1, 5.0d, 0.15d)
                         .type(MeleeWeaponComponents.SMASHING, SmashingMeleeWeapon.of(SmashingWeapon.of(
                             SmashingWeapon.HitSounds.of(
-                                this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_AIR),
-                                this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_GROUND),
-                                this.soundEvents.getOrThrow(SoundEventKeys.MACE_SMASH_GROUND_HEAVY)
+                                this.soundEvents.getOrThrow(SoundEventIds.MACE_SMASH_AIR),
+                                this.soundEvents.getOrThrow(SoundEventIds.MACE_SMASH_GROUND),
+                                this.soundEvents.getOrThrow(SoundEventIds.MACE_SMASH_GROUND_HEAVY)
                             ),
                             MaceItem.SMASH_ATTACK_FALL_THRESHOLD,
                             MaceItemAccessor.heavySmashAttackFallDistance(),
@@ -6442,7 +6441,7 @@ public class Items {
                             )
                             .spawnRule(FitsInVolumeEntitySpawnRule.entityDimensions())
                             .spawnRule(AlignYawEntitySpawnRule.of(8))
-                            .spawnSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_STAND_PLACE))
+                            .spawnSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_STAND_PLACE))
                             .build(),
                         this.dispenseBehaviors
                     ))
@@ -8098,7 +8097,7 @@ public class Items {
                     ))
                     .with(EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.CHEST)
                         .setSwappable(true)
-                        .setEquipSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_ELYTRA))
+                        .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_ELYTRA))
                         .setAsset(EquipmentAssets.ELYTRA)
                         .build()))
                     .with(RepairableItemBehavior.of(HolderSet.direct(
@@ -8125,11 +8124,11 @@ public class Items {
                         ),
                         new BlocksAttacks.ItemDamageFunction(3.0f, 1.0f, 1.0f),
                         Optional.of(DamageTypeTags.BYPASSES_SHIELD),
-                        Optional.of(this.soundEvents.getOrThrow(SoundEventKeys.SHIELD_BLOCK)),
-                        Optional.of(this.soundEvents.getOrThrow(SoundEventKeys.SHIELD_BREAK))
+                        Optional.of(this.soundEvents.getOrThrow(SoundEventIds.SHIELD_BLOCK)),
+                        Optional.of(this.soundEvents.getOrThrow(SoundEventIds.SHIELD_BREAK))
                     )))
                     .with(EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.OFFHAND)
-                        .setEquipSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_GENERIC))
+                        .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_GENERIC))
                         .setSwappable(false)
                         .build()
                     ))
@@ -8510,7 +8509,7 @@ public class Items {
                     .with(StackableItemBehavior.of(1))
                     .with(DamageableItemBehavior.of(
                         ArmorType.BODY.getDurability(ArmorMaterials.ARMADILLO_SCUTE.durability()),
-                        this.soundEvents.getOrThrow(SoundEventKeys.WOLF_ARMOR_BREAK)
+                        this.soundEvents.getOrThrow(SoundEventIds.WOLF_ARMOR_BREAK)
                     ))
                     .with(RepairableItemBehavior.of(
                         this.items.getOrThrow(ArmorMaterials.ARMADILLO_SCUTE.repairIngredient())
@@ -8522,7 +8521,7 @@ public class Items {
                             this.entityTypes.getOrThrow(EntityTypeIds.WOLF)
                         ))
                         .setCanBeSheared(true)
-                        .setShearingSound(this.soundEvents.getOrThrow(SoundEventKeys.ARMOR_UNEQUIP_WOLF))
+                        .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_WOLF))
                         .build()
                     ))
                     .with(DyeableItemBehavior.INSTANCE)
@@ -10695,7 +10694,7 @@ public class Items {
                                 .build())
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.END_PORTAL_FRAME_FILL), SoundSource.BLOCKS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.END_PORTAL_FRAME_FILL), SoundSource.BLOCKS))
                             .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SMOKE)
                                 .count(16)
                                 .offset(Vec3dProvider.of(
@@ -10706,7 +10705,7 @@ public class Items {
                             .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED))
                     ))
                     .add(ItemEvent.THROW_PROJECTILE, ActionEntry.of(
-                        PlaySoundAction.builder(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.ENDER_EYE_LAUNCH), SoundSource.NEUTRAL)
+                        PlaySoundAction.builder(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.ENDER_EYE_LAUNCH), SoundSource.NEUTRAL)
                             .pitch(0.33f, 0.5f)
                             .build()
                     ))
@@ -10737,7 +10736,7 @@ public class Items {
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DecrementItemAction.of(1))
-                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventKeys.FIRE_CHARGE_USE), SoundSource.BLOCKS)
+                            .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.FIRE_CHARGE_USE), SoundSource.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
                     ))
@@ -11108,60 +11107,60 @@ public class Items {
             this.registerable.register(ItemIds.WATER_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.WATER_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluid(this.fluids.getOrThrow(FluidIds.WATER), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
+                    .with(BucketItemBehavior.placeFluid(this.fluids.getOrThrow(FluidIds.WATER), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemIds.LAVA_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.LAVA_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluid(this.fluids.getOrThrow(FluidIds.LAVA), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
+                    .with(BucketItemBehavior.placeFluid(this.fluids.getOrThrow(FluidIds.LAVA), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
                     .with(FuelItemBehavior.of(FuelTimes.LAVA, this.items.getOrThrow(ItemIds.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemIds.POWDER_SNOW_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.POWDER_SNOW_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeBlock(this.blocks.getOrThrow(BlockIds.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_POWDER_SNOW), this.items, this.dispenseBehaviors))
+                    .with(BucketItemBehavior.placeBlock(this.blocks.getOrThrow(BlockIds.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_POWDER_SNOW), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemIds.PUFFERFISH_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.PUFFERFISH_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .with(FoodItemBehavior.of(Foods.PUFFERFISH))
                     .build()
             ));
             this.registerable.register(ItemIds.SALMON_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.SALMON_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.SALMON), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.SALMON), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .with(FoodItemBehavior.of(Foods.SALMON))
                     .build()
             ));
             this.registerable.register(ItemIds.COD_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.COD_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.COD), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.COD), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .with(FoodItemBehavior.of(Foods.COD))
                     .build()
             ));
             this.registerable.register(ItemIds.TROPICAL_FISH_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.TROPICAL_FISH_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
                     .with(FoodItemBehavior.of(Foods.TROPICAL_FISH))
                     .build()
             ));
             this.registerable.register(ItemIds.AXOLOTL_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.AXOLOTL_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.AXOLOTL), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_AXOLOTL), this.items, this.dispenseBehaviors))
+                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.AXOLOTL), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_AXOLOTL), this.items, this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemIds.TADPOLE_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.TADPOLE_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.TADPOLE), this.soundEvents.getOrThrow(SoundEventKeys.BUCKET_EMPTY_TADPOLE), this.items, this.dispenseBehaviors))
+                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.TADPOLE), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_TADPOLE), this.items, this.dispenseBehaviors))
                     .build()
             ));
         }
@@ -11907,12 +11906,12 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(1))
                     .with(EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.SADDLE)
-                        .setEquipSound(this.soundEvents.getOrThrow(SoundEventKeys.HORSE_SADDLE))
+                        .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.HORSE_SADDLE))
                         .setAsset(EquipmentAssets.SADDLE)
                         .setAllowedEntities(this.entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_SADDLE))
                         .setEquipOnInteract(true)
                         .setCanBeSheared(true)
-                        .setShearingSound(this.soundEvents.getOrThrow(SoundEventKeys.SADDLE_UNEQUIP))
+                        .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.SADDLE_UNEQUIP))
                         .build()
                     ))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -12027,7 +12026,7 @@ public class Items {
                             ))
                             .add(PlaySoundAction.of(
                                 PositionTarget.INTERACTED,
-                                this.soundEvents.getOrThrow(SoundEventKeys.LODESTONE_COMPASS_LOCK),
+                                this.soundEvents.getOrThrow(SoundEventIds.LODESTONE_COMPASS_LOCK),
                                 SoundSource.PLAYERS
                             ))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
@@ -12188,7 +12187,7 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.SPYGLASS).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(1))
-                    .with(ZoomItemBehavior.of(SpyglassItem.ZOOM_FOV_MODIFIER, this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventKeys.SPYGLASS_STOP_USING)))
+                    .with(ZoomItemBehavior.of(SpyglassItem.ZOOM_FOV_MODIFIER, this.soundEvents.getOrThrow(SoundEventIds.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventIds.SPYGLASS_STOP_USING)))
                     .with(UseableItemBehavior.builder()
                         .useFor(SpyglassItem.USE_DURATION)
                         .animation(ItemUseAnimation.SPYGLASS)
@@ -12298,7 +12297,7 @@ public class Items {
                                     .set(DataComponents.POTION_CONTENTS, new PotionContents(this.potions.getOrThrow(PotionIds.WATER)))
                                     .build()))
                             .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
-                            .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventKeys.BOTTLE_FILL), SoundSource.NEUTRAL))
+                            .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.BOTTLE_FILL), SoundSource.NEUTRAL))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()

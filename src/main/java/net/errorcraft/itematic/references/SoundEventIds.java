@@ -1,11 +1,11 @@
-package net.errorcraft.itematic.sound;
+package net.errorcraft.itematic.references;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 
-public class SoundEventKeys {
+public class SoundEventIds {
     public static final ResourceKey<SoundEvent> ARMOR_EQUIP_ELYTRA = of("item.armor.equip_elytra");
     public static final ResourceKey<SoundEvent> ARMOR_EQUIP_GENERIC = of("item.armor.equip_generic");
     public static final ResourceKey<SoundEvent> ARMOR_STAND_PLACE = of("entity.armor_stand.place");
@@ -75,7 +75,7 @@ public class SoundEventKeys {
     public static final ResourceKey<SoundEvent> TNT_PRIMED = of("entity.tnt.primed");
     public static final ResourceKey<SoundEvent> WOLF_ARMOR_BREAK = of("item.wolf_armor.break");
 
-    private SoundEventKeys() {}
+    private SoundEventIds() {}
 
     private static ResourceKey<SoundEvent> of(String id) {
         return ResourceKey.create(Registries.SOUND_EVENT, Identifier.withDefaultNamespace(id));

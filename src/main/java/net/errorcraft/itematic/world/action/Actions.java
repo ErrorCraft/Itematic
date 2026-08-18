@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.action;
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.actions.*;
@@ -63,7 +63,7 @@ public class Actions {
                 .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
                 .add(DamageItemAction.of(1))
                 .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.HOE_TILL), SoundSource.BLOCKS))
+                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventIds.HOE_TILL), SoundSource.BLOCKS))
         ));
         registerable.register(TILL_DIRT, ActionEntry.of(
             setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND)),
@@ -97,7 +97,7 @@ public class Actions {
             setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockIds.DIRT_PATH)))
-                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.SHOVEL_FLATTEN), SoundSource.BLOCKS))
+                .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventIds.SHOVEL_FLATTEN), SoundSource.BLOCKS))
         ));
         registerable.register(EXTINGUISH_CAMPFIRE, ActionEntry.of(
             LocationCheckPredicates.builder(
@@ -112,7 +112,7 @@ public class Actions {
                 .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
                     .property(BlockStateProperties.LIT, false)
                     .build())
-                .add(PlaySoundAction.builder(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.FIRE_EXTINGUISH), SoundSource.BLOCKS)
+                .add(PlaySoundAction.builder(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventIds.FIRE_EXTINGUISH), SoundSource.BLOCKS)
                     .volume(0.5f)
                     .pitch(1.8f, 3.4f)
                     .build())
@@ -162,7 +162,7 @@ public class Actions {
                         ),
                         PassingSequenceHandler.builder()
                             .add(PrimeTntAction.of(PositionTarget.INTERACTED))
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventKeys.TNT_PRIMED), SoundSource.BLOCKS))
+                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventIds.TNT_PRIMED), SoundSource.BLOCKS))
                     )
                     .add(PlaceBlockAction.of(blocks.getOrThrow(BlockIds.FIRE), PositionTarget.INTERACTED)))
                 .addOptional(SwingHandAction.of(LootContext.EntityTarget.THIS))

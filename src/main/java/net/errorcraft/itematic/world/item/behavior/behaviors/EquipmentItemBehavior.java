@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
-import net.errorcraft.itematic.sound.SoundEventKeys;
+import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -44,12 +44,12 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
 
     public static EquipmentItemBehavior ofHorseArmor(ArmorMaterial material, HolderGetter<SoundEvent> soundEvents, HolderGetter<EntityType<?>> entityTypes) {
         return of(Equippable.builder(EquipmentSlot.BODY)
-            .setEquipSound(soundEvents.getOrThrow(SoundEventKeys.HORSE_ARMOR))
+            .setEquipSound(soundEvents.getOrThrow(SoundEventIds.HORSE_ARMOR))
             .setAsset(material.assetId())
             .setAllowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_HORSE_ARMOR))
             .setDamageOnHurt(false)
             .setCanBeSheared(true)
-            .setShearingSound(soundEvents.getOrThrow(SoundEventKeys.HORSE_ARMOR_UNEQUIP))
+            .setShearingSound(soundEvents.getOrThrow(SoundEventIds.HORSE_ARMOR_UNEQUIP))
             .build()
         );
     }
@@ -57,12 +57,12 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
     public static ItemBehavior<?>[] ofHarness(DyeColor color, HolderGetter<SoundEvent> soundEvents, HolderGetter<EntityType<?>> entityTypes, HolderGetter<DispenseBehavior> dispenseBehaviors) {
         return new ItemBehavior<?>[] {
             of(Equippable.builder(EquipmentSlot.BODY)
-                .setEquipSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_EQUIP))
+                .setEquipSound(soundEvents.getOrThrow(SoundEventIds.HAPPY_GHAST_EQUIP))
                 .setAsset(EquipmentAssets.HARNESSES.get(color))
                 .setAllowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
                 .setEquipOnInteract(true)
                 .setCanBeSheared(true)
-                .setShearingSound(soundEvents.getOrThrow(SoundEventKeys.HAPPY_GHAST_UNEQUIP))
+                .setShearingSound(soundEvents.getOrThrow(SoundEventIds.HAPPY_GHAST_UNEQUIP))
                 .build()),
             DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
         };
@@ -72,13 +72,13 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
         return new ItemBehavior<?>[] {
             StackableItemBehavior.of(1),
             of(Equippable.builder(EquipmentSlot.BODY)
-                .setEquipSound(soundEvents.getOrThrow(SoundEventKeys.ARMOR_EQUIP_NAUTILUS))
+                .setEquipSound(soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_NAUTILUS))
                 .setAsset(material.assetId())
                 .setAllowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_NAUTILUS_ARMOR))
                 .setDamageOnHurt(false)
                 .setEquipOnInteract(true)
                 .setCanBeSheared(true)
-                .setShearingSound(soundEvents.getOrThrow(SoundEventKeys.ARMOR_UNEQUIP_NAUTILUS))
+                .setShearingSound(soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_NAUTILUS))
                 .build()),
             DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
         };
