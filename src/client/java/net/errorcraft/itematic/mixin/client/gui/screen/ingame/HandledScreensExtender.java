@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.ingame;
 
 import net.errorcraft.itematic.client.gui.screen.ingame.BrewingStandScreenDelegate;
-import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
+import net.errorcraft.itematic.world.inventory.BrewingStandMenuDelegate;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.BrewingStandScreen;
 import net.minecraft.world.inventory.BrewingStandMenu;

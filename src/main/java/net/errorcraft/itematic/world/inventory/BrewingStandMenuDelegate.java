@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.screen;
+package net.errorcraft.itematic.world.inventory;
 
 import net.errorcraft.itematic.mixin.world.inventory.BrewingStandMenuAccessor;
 import net.errorcraft.itematic.world.item.crafting.BrewingRecipe;

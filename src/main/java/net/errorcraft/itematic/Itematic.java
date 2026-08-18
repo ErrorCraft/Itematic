@@ -8,6 +8,7 @@ import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleType;
+import net.errorcraft.itematic.world.inventory.ItematicMenuTypes;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.crafting.ItematicRecipeBookCategories;
@@ -53,5 +54,6 @@ public class Itematic implements ModInitializer {
         WorldModificationTypes.init();
         EntitySpawnRuleType.init();
         MeleeWeaponComponents.init();
+        ItematicMenuTypes.init();
     }
 }

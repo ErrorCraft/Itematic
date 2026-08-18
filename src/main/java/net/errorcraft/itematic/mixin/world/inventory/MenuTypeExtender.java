@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.world.inventory;
 
-import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
-import net.errorcraft.itematic.screen.ItematicScreenHandlerTypes;
+import net.errorcraft.itematic.world.inventory.BrewingStandMenuDelegate;
+import net.errorcraft.itematic.world.inventory.ItematicMenuTypes;
 import net.minecraft.world.inventory.BrewingStandMenu;
 import net.minecraft.world.inventory.MenuType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,6 +26,6 @@ public class MenuTypeExtender {
         )
     )
     private static MenuType<BrewingStandMenuDelegate> useDelegatingBrewingStandMenu(String id, MenuType.MenuSupplier<BrewingStandMenu> factory) {
-        return ItematicScreenHandlerTypes.BREWING_STAND;
+        return ItematicMenuTypes.BREWING_STAND;
     }
 }

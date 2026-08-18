@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.client.gui.screen.recipebook;
 
 import net.errorcraft.itematic.mixin.client.gui.screen.recipebook.GhostRecipeAccessor;
-import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
+import net.errorcraft.itematic.world.inventory.BrewingStandMenuDelegate;
 import net.errorcraft.itematic.world.item.crafting.ItematicRecipeBookCategories;
 import net.errorcraft.itematic.world.item.crafting.display.BrewingRecipeDisplay;
 import net.minecraft.client.gui.components.WidgetSprites;

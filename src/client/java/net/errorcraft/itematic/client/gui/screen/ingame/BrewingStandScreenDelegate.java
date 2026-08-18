@@ -3,7 +3,7 @@ package net.errorcraft.itematic.client.gui.screen.ingame;
 import net.errorcraft.itematic.client.gui.screen.recipebook.BrewingRecipeBookWidget;
 import net.errorcraft.itematic.mixin.client.gui.screen.ingame.BrewingStandScreenAccessor;
 import net.errorcraft.itematic.mixin.client.gui.screen.ingame.HandledScreenAccessor;
-import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
+import net.errorcraft.itematic.world.inventory.BrewingStandMenuDelegate;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
