@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.recipe.display.slot;
+package net.errorcraft.itematic.world.item.crafting.display;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -31,27 +31,27 @@ public record PotionSlotDisplay(Holder<Potion> potion) implements SlotDisplay {
     );
 
     @Override
-    public <T> Stream<T> resolve(ContextMap parameters, DisplayContentsFactory<T> factory) {
-        if (!(factory instanceof DisplayContentsFactory.ForStacks<T> fromStack)) {
+    public <T> Stream<T> resolve(ContextMap context, DisplayContentsFactory<T> builder) {
+        if (!(builder instanceof DisplayContentsFactory.ForStacks<T> stacks)) {
             return Stream.empty();
         }
 
-        HolderLookup.Provider lookup = parameters.getOptional(SlotDisplayContext.REGISTRIES);
-        if (lookup == null) {
+        HolderLookup.Provider registries = context.getOptional(SlotDisplayContext.REGISTRIES);
+        if (registries == null) {
             return Stream.empty();
         }
 
-        return lookup.lookupOrThrow(Registries.ITEM)
+        return registries.lookupOrThrow(Registries.ITEM)
             .get(ItematicItemTags.BREWING_INPUTS)
             .stream()
             .flatMap(HolderSet.ListBacked::stream)
             .map(ItemStack::new)
             .map(stack -> PotionContentsUtil.setPotion(stack, this.potion))
-            .map(fromStack::forStack);
+            .map(stacks::forStack);
     }
 
     @Override
     public Type<? extends SlotDisplay> type() {
-        return ItematicSlotDisplaySerializers.POTION;
+        return ItematicSlotDisplays.POTION;
     }
 }

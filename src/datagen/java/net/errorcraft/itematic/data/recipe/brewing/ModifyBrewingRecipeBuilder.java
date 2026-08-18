@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.data.recipe.brewing;
 
-import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
-import net.errorcraft.itematic.recipe.brewing.ModifyBrewingRecipe;
+import net.errorcraft.itematic.world.item.crafting.BrewingRecipe;
+import net.errorcraft.itematic.world.item.crafting.ModifyBrewingRecipe;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.resources.Identifier;

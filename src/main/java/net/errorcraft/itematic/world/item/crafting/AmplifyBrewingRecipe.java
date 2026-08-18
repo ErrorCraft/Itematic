@@ -1,12 +1,9 @@
-package net.errorcraft.itematic.recipe.brewing;
+package net.errorcraft.itematic.world.item.crafting;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.recipe.ItematicRecipeSerializers;
-import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
-import net.errorcraft.itematic.recipe.display.BrewingRecipeDisplay;
-import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
+import net.errorcraft.itematic.world.item.crafting.display.BrewingRecipeDisplay;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;

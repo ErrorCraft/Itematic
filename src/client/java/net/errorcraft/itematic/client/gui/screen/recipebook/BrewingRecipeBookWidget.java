@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.client.gui.screen.recipebook;
 
 import net.errorcraft.itematic.mixin.client.gui.screen.recipebook.GhostRecipeAccessor;
-import net.errorcraft.itematic.recipe.book.ItematicRecipeBookCategories;
-import net.errorcraft.itematic.recipe.display.BrewingRecipeDisplay;
 import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
+import net.errorcraft.itematic.world.item.crafting.ItematicRecipeBookCategories;
+import net.errorcraft.itematic.world.item.crafting.display.BrewingRecipeDisplay;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.recipebook.GhostSlots;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
+
 import java.util.List;
 
 public class BrewingRecipeBookWidget extends RecipeBookComponent<BrewingStandMenuDelegate> {

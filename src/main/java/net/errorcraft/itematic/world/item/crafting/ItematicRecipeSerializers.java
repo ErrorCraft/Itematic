@@ -1,7 +1,5 @@
-package net.errorcraft.itematic.recipe;
+package net.errorcraft.itematic.world.item.crafting;
 
-import net.errorcraft.itematic.recipe.brewing.AmplifyBrewingRecipe;
-import net.errorcraft.itematic.recipe.brewing.ModifyBrewingRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public class ItematicRecipeSerializers {

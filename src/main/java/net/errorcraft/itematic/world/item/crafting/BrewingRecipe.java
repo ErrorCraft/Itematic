@@ -1,12 +1,10 @@
-package net.errorcraft.itematic.recipe.brewing;
+package net.errorcraft.itematic.world.item.crafting;
 
 import com.mojang.datafixers.util.Function5;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.world.item.crafting.RecipeAccess;
-import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
-import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;

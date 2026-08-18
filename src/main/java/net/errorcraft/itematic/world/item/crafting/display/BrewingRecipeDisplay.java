@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.recipe.display;
+package net.errorcraft.itematic.world.item.crafting.display;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -24,6 +24,6 @@ public record BrewingRecipeDisplay(SlotDisplay base, SlotDisplay reagent, SlotDi
 
     @Override
     public Type<? extends RecipeDisplay> type() {
-        return ItematicRecipeDisplaySerializers.BREWING;
+        return ItematicRecipeDisplays.BREWING;
     }
 }

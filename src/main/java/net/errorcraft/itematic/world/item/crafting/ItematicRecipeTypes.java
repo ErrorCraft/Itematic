@@ -1,6 +1,5 @@
-package net.errorcraft.itematic.recipe;
+package net.errorcraft.itematic.world.item.crafting;
 
-import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class ItematicRecipeTypes {

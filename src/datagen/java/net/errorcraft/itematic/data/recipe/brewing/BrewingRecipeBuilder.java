@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.data.recipe.brewing;
 
-import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
+import net.errorcraft.itematic.world.item.crafting.BrewingRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;

@@ -7,7 +7,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.stats.RecipeBookSettingsAccess;
-import net.errorcraft.itematic.recipe.book.ItematicRecipeBookOptions;
+import net.errorcraft.itematic.stats.ItematicRecipeBookSettings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.stats.RecipeBookSettings;
@@ -52,7 +52,7 @@ public class RecipeBookSettingsExtender implements RecipeBookSettingsAccess {
     private static MapCodec<RecipeBookSettings> addExtraMapCodecFields(MapCodec<RecipeBookSettings> original) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
             original.forGetter(Function.identity()),
-            ItematicRecipeBookOptions.BREWING_CODEC.forGetter(RecipeBookSettings::itematic$brewing)
+            ItematicRecipeBookSettings.BREWING_MAP_CODEC.forGetter(RecipeBookSettings::itematic$brewing)
         ).apply(instance, RecipeBookSettingsExtender::setBrewing));
     }
 

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.recipebook;
 
 import com.google.common.collect.ImmutableList;
-import net.errorcraft.itematic.recipe.display.BrewingRecipeDisplay;
+import net.errorcraft.itematic.world.item.crafting.display.BrewingRecipeDisplay;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.recipebook.OverlayRecipeComponent;
 import net.minecraft.network.chat.Component;

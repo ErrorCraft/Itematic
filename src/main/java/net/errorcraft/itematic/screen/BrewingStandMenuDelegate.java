@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.screen;
 
 import net.errorcraft.itematic.mixin.world.inventory.BrewingStandMenuAccessor;
-import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
-import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
+import net.errorcraft.itematic.world.item.crafting.BrewingRecipe;
+import net.errorcraft.itematic.world.item.crafting.BrewingRecipeInput;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.HashedStack;
 import net.minecraft.recipebook.ServerPlaceRecipe;

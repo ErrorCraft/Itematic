@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.recipe.book;
+package net.errorcraft.itematic.world.item.crafting;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
