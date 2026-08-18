@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.core.component;
 
-import net.errorcraft.itematic.network.codec.PacketCodecUtil;
+import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
@@ -73,7 +73,7 @@ public class ItematicDataComponents {
     public static final DataComponentType<Fraction> ITEM_HOLDER_CAPACITY = register(
         "item_holder_capacity",
         builder -> builder.persistent(ItemHolderItemBehavior.CAPACITY_CODEC)
-            .networkSynchronized(PacketCodecUtil.FRACTION)
+            .networkSynchronized(ItematicStreamCodecs.FRACTION)
             .cacheEncoding()
     );
     public static final DataComponentType<ItemHolderRules> ITEM_HOLDER_RULES = register(

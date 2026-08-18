@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.access.network.protocol.game;
 
-import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
+import net.errorcraft.itematic.network.protocol.game.ClientboundTwirlPacket;
 
 public interface ClientGamePacketListenerAccess {
-    default void itematic$onTwirl(TwirlS2CPacket packet) {}
+    default void itematic$handleTwirl(ClientboundTwirlPacket packet) {}
 }

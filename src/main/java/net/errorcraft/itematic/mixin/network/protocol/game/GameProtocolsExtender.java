@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.network.protocol.game;
 
-import net.errorcraft.itematic.network.packet.ItematicPlayPackets;
-import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
+import net.errorcraft.itematic.network.protocol.game.ClientboundTwirlPacket;
+import net.errorcraft.itematic.network.protocol.game.ItematicGamePacketTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.ProtocolInfoBuilder;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -19,6 +19,6 @@ public class GameProtocolsExtender {
         at = @At("TAIL")
     )
     private static void registerCustomClientboundPackets(ProtocolInfoBuilder<ClientGamePacketListener, RegistryFriendlyByteBuf, Unit> builder, CallbackInfo info) {
-        builder.addPacket(ItematicPlayPackets.TWIRL, TwirlS2CPacket.CODEC);
+        builder.addPacket(ItematicGamePacketTypes.TWIRL, ClientboundTwirlPacket.STREAM_CODEC);
     }
 }

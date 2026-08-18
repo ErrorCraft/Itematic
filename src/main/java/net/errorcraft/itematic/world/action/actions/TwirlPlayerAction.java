@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
+import net.errorcraft.itematic.network.protocol.game.ClientboundTwirlPacket;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -52,7 +52,7 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
-            serverPlayer.connection.send(new TwirlS2CPacket(spinAttackStrength));
+            serverPlayer.connection.send(new ClientboundTwirlPacket(spinAttackStrength));
         }
 
         execute(spinAttackStrength, player, context.world(), stack);

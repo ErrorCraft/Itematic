@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.client.network;
 
 import net.errorcraft.itematic.access.network.protocol.game.ClientGamePacketListenerAccess;
 import net.errorcraft.itematic.mixin.world.item.CreativeModeTabsAccessor;
-import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
+import net.errorcraft.itematic.network.protocol.game.ClientboundTwirlPacket;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
 import net.errorcraft.itematic.world.item.ItemEvent;
@@ -67,7 +67,7 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonPacke
 
     @Override
     @SuppressWarnings("DataFlowIssue")
-    public void itematic$onTwirl(TwirlS2CPacket packet) {
+    public void itematic$handleTwirl(ClientboundTwirlPacket packet) {
         TwirlPlayerAction.execute(packet.spinAttackStrength(), this.minecraft.player, this.level, this.minecraft.player.getUseItem());
     }
 }
