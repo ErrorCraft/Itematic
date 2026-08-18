@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
-import net.errorcraft.itematic.mixin.item.DecorationItemAccessor;
-import net.errorcraft.itematic.mixin.item.ItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.HangingEntityItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
 import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.ItemResult;
@@ -65,7 +65,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
         Codec.BOOL.optionalFieldOf("allow_spawner_modification", false).forGetter(EntityItemBehavior::allowSpawnerModification),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityItemBehavior::passes)
     ).apply(instance, EntityItemBehavior::new));
-    private static final Component RANDOM_TEXT = DecorationItemAccessor.randomText();
+    private static final Component RANDOM_VARIANT_TOOLTIP = HangingEntityItemAccessor.randomVariantTooltip();
 
     public static EntityItemBehavior of(Holder<EntityType<?>> entity) {
         return new EntityItemBehavior(
@@ -173,7 +173,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
             return ItemResult.SUCCEED;
         }
 
-        BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, ClipContext.Fluid.SOURCE_ONLY);
+        BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
         }
@@ -198,7 +198,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag type) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag tooltipFlag) {
         if (this.entity.entity().value() != EntityType.PAINTING) {
             return;
         }
@@ -208,8 +208,8 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
             paintingVariant.value().title().ifPresent(builder);
             paintingVariant.value().author().ifPresent(builder);
             builder.accept(Component.translatable("painting.dimensions", paintingVariant.value().width(), paintingVariant.value().height()));
-        } else if (type.isCreative()) {
-            builder.accept(RANDOM_TEXT);
+        } else if (tooltipFlag.isCreative()) {
+            builder.accept(RANDOM_VARIANT_TOOLTIP);
         }
     }
 

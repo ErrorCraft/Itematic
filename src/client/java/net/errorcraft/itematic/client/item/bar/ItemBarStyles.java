@@ -3,7 +3,7 @@ package net.errorcraft.itematic.client.item.bar;
 import net.errorcraft.itematic.client.item.bar.color.provider.FirstToPassConditionColorProvider;
 import net.errorcraft.itematic.client.item.bar.color.provider.HueShiftColorProvider;
 import net.errorcraft.itematic.client.item.bar.progress.ProgressProvider;
-import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.BundleItemAccessor;
 import net.errorcraft.itematic.references.ItemBarStyleIds;
 import net.minecraft.resources.Identifier;
 

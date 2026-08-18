@@ -18,6 +18,6 @@ public class WitchEntityRendererExtender {
         )
     )
     private boolean isOfForPotionUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemIds.POTION);
+        return instance.itematic$is(ItemIds.POTION);
     }
 }

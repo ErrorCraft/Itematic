@@ -18,6 +18,6 @@ public class DrownedEntityRendererExtender {
         )
     )
     private boolean isOfForTridentUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemIds.TRIDENT);
+        return instance.itematic$is(ItemIds.TRIDENT);
     }
 }

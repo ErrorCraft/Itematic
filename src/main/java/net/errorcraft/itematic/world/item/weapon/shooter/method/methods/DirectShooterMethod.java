@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.item.weapon.shooter.method.methods;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.mixin.item.RangedWeaponItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.ProjectileWeaponItemAccessor;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
@@ -70,7 +70,7 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
             return false;
         }
 
-        List<ItemStack> projectiles = RangedWeaponItemAccessor.load(stack, ammunition, user);
+        List<ItemStack> projectiles = ProjectileWeaponItemAccessor.draw(stack, ammunition, user);
         if (world instanceof ServerLevel serverWorld && !projectiles.isEmpty()) {
             shooter.shoot(serverWorld, user, user.getUsedItemHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
         }
@@ -81,7 +81,7 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
         }
 
         if (user instanceof Player playerEntity) {
-            playerEntity.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+            playerEntity.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
         }
 
         return true;
@@ -90,7 +90,7 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
     @Override
     public void initializeProjectile(LivingEntity user, Projectile projectile, int index, float power, float uncertainty, float angle, boolean critical, @Nullable LivingEntity target) {
         ShooterMethod.super.initializeProjectile(user, projectile, index, power, uncertainty, angle, critical, target);
-        ((RangedWeaponItemAccessor) DUMMY).shoot(user, projectile, index, power, uncertainty, angle, target);
+        ((ProjectileWeaponItemAccessor) DUMMY).itematic$shootProjectile(user, projectile, index, power, uncertainty, angle, target);
     }
 
     @Override

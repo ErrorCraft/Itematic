@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.network;
 
-import net.errorcraft.itematic.access.network.listener.ClientPlayPacketListenerAccess;
-import net.errorcraft.itematic.mixin.item.ItemGroupsAccessor;
+import net.errorcraft.itematic.access.network.protocol.game.ClientGamePacketListenerAccess;
+import net.errorcraft.itematic.mixin.world.item.CreativeModeTabsAccessor;
 import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
-public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonPacketListenerImpl implements ClientPlayPacketListenerAccess {
+public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonPacketListenerImpl implements ClientGamePacketListenerAccess {
     @Shadow
     private ClientLevel level;
 
@@ -40,7 +40,7 @@ public abstract class ClientPlayNetworkHandlerExtender extends ClientCommonPacke
         )
     )
     private static void resetItemGroupDisplayContext(CallbackInfo info) {
-        ItemGroupsAccessor.setDisplayContext(null);
+        CreativeModeTabsAccessor.setCachedParameters(null);
     }
 
     @Redirect(

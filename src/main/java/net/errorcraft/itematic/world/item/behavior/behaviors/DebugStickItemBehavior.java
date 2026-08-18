@@ -2,11 +2,11 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.mixin.world.item.DebugStickItemAccessor;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.mixin.item.DebugStickItemAccessor;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -51,7 +51,7 @@ public class DebugStickItemBehavior implements ItemBehavior<DebugStickItemBehavi
         }
 
         BlockPos pos = context.getClickedPos();
-        if (!DUMMY.itematic$use(player, world.getBlockState(pos), world, pos, true, context.getItemInHand())) {
+        if (!DUMMY.itematic$handleInteraction(player, world.getBlockState(pos), world, pos, true, context.getItemInHand())) {
             return ItemResult.PASS;
         }
 
@@ -65,7 +65,7 @@ public class DebugStickItemBehavior implements ItemBehavior<DebugStickItemBehavi
 
     public void use(LivingEntity user, BlockState state, LevelAccessor world, BlockPos pos, ItemStack stack) {
         if (!world.isClientSide() && user instanceof Player playerUser) {
-            DUMMY.itematic$use(playerUser, state, world, pos, false, stack);
+            DUMMY.itematic$handleInteraction(playerUser, state, world, pos, false, stack);
         }
     }
 }

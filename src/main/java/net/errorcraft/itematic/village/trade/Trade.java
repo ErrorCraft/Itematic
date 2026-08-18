@@ -2,7 +2,7 @@ package net.errorcraft.itematic.village.trade;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.mixin.village.TradeOffersAccessor;
+import net.errorcraft.itematic.mixin.world.entity.npc.villager.VillagerTradesAccessor;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.Range;
@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
     public static final Codec<Integer> WANTED_INDEX_CODEC = ItematicCodecs.index(Trade.MAX_WANTED_ENTRIES);
     private static final int MAX_WANTED_ENTRIES = 2;
 
+    @Nullable
     public MerchantOffer createTradeOffer(LootContext context) {
         if (!this.test(context)) {
             return null;
@@ -77,7 +79,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         return of(List.of(firstBuy), sell, maxUses, tradeExperience, priceMultiplier, null, null);
     }
 
-    public static Trade of(List<Entry> wants, Entry gives, int maxUses, int tradeExperience, float priceMultiplier, TradeModifier<?> tradeModifier, LootItemCondition merchantPredicate) {
+    public static Trade of(List<Entry> wants, Entry gives, int maxUses, int tradeExperience, float priceMultiplier, @Nullable TradeModifier<?> tradeModifier, @Nullable LootItemCondition merchantPredicate) {
         if (wants.size() > MAX_WANTED_ENTRIES) {
             throw new IllegalArgumentException("Wanted entries must not be more than " + MAX_WANTED_ENTRIES);
         }
@@ -96,10 +98,12 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
     public static class Builder {
         private final List<Entry> wants = new ArrayList<>();
         private final Entry gives;
-        private int maxUses = TradeOffersAccessor.defaultMaxUses();
+        private int maxUses = VillagerTradesAccessor.defaultMaxUses();
         private int tradeExperience;
-        private float priceMultiplier = TradeOffersAccessor.lowPriceMultiplier();
+        private float priceMultiplier = VillagerTradesAccessor.lowPriceMultiplier();
+        @Nullable
         private TradeModifier<?> tradeModifier;
+        @Nullable
         private LootItemCondition merchantPredicate;
 
         public Builder(Entry gives) {
@@ -201,7 +205,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
             return of(item, count, null);
         }
 
-        public static Entry of(Holder<Item> item, int count, LootItemFunction itemModifier) {
+        public static Entry of(Holder<Item> item, int count, @Nullable LootItemFunction itemModifier) {
             return new Entry(item, Range.IntegerRange.of(count), Optional.ofNullable(itemModifier));
         }
 

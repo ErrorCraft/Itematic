@@ -24,6 +24,7 @@ public record UseDuration(UseDurationProvider ticks) {
         UseDuration::new,
         UseDuration::ticks
     );
+    public static final int NONE = 0;
     public static final int INDEFINITE = -1;
 
     private UseDuration(int ticks) {
@@ -31,12 +32,12 @@ public record UseDuration(UseDurationProvider ticks) {
     }
 
     public int ticks(ItemStack stack, LivingEntity user) {
-        return this.ticks.get(stack, user).orElse(0);
+        return this.ticks.get(stack, user).orElse(NONE);
     }
 
     public boolean startUsing(ItemStack stack, LivingEntity user, InteractionHand hand) {
         int ticks = this.ticks(stack, user);
-        if (ticks == 0) {
+        if (ticks == NONE) {
             return false;
         }
 

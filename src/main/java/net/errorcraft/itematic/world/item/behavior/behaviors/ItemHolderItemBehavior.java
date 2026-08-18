@@ -3,18 +3,18 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.mixin.world.item.BundleItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
+import net.errorcraft.itematic.serialization.ItematicCodecs;
+import net.errorcraft.itematic.sound.SoundEventKeys;
 import net.errorcraft.itematic.tags.ItematicItemTags;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.rules.RejectItemHolderRule;
-import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
-import net.errorcraft.itematic.mixin.item.BundleItemAccessor;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.errorcraft.itematic.sound.SoundEventKeys;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.advancements.criterion.DataComponentMatchers;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.Holder;
@@ -69,7 +69,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
                     .rule(RejectItemHolderRule.INSTANCE, ItemPredicate.Builder.item()
                         .itematic$items(items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
                         .build())
-                    .rule(OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsComponentAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.item()
+                    .rule(OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsAccessor.nestedBundleOccupancy()), ItemPredicate.Builder.item()
                         .itematic$behavior(ItemBehaviorType.ITEM_HOLDER)
                         .build())
                     .rule(FractionItemHolderRule.of(Fraction.ONE), ItemPredicate.Builder.item()
@@ -218,7 +218,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
         }
 
         BundleContents.Mutable newBuilder = new BundleContents.Mutable(existingBundleContents);
-        newBuilder.itematic$setExtraFields(existingBundleContents, capacity, rules);
+        newBuilder.itematic$setFields(existingBundleContents, capacity, rules);
         return newBuilder;
     }
 
@@ -259,7 +259,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
 
         player.drop(removedStack, true);
         player.playSound(this.emptySound.value(), 0.8f, 0.8f + player.level().getRandom().nextFloat() * 0.4f);
-        player.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+        player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
 
         stack.set(DataComponents.BUNDLE_CONTENTS, newBuilder.toImmutable());
     }

@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
-import net.errorcraft.itematic.mixin.item.BrushItemAccessor;
-import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
-import net.errorcraft.itematic.mixin.item.MaceItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.BrushItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
 import net.errorcraft.itematic.potion.PotionKeys;
 import net.errorcraft.itematic.references.*;
 import net.errorcraft.itematic.registry.ItematicRegistries;
@@ -6124,7 +6124,7 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(1))
                     .with(UseableItemBehavior.builder()
-                        .useFor(BrushItemAccessor.maxBrushTime())
+                        .useFor(BrushItemAccessor.useDuration())
                         .animation(ItemUseAnimation.BRUSH)
                         .passes(UseableItemBehavior.Pass.BLOCK)
                         .build())

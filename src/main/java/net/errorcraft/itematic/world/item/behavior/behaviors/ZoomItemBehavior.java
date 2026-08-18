@@ -2,11 +2,11 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
@@ -40,7 +40,7 @@ public record ZoomItemBehavior(float fieldOfViewMultiplier, Holder<SoundEvent> s
     @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         user.playSound(this.startUsingSound.value(), 1.0f, 1.0f);
-        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
         return ItemResult.PASS;
     }
 

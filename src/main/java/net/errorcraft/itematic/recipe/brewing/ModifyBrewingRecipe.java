@@ -57,7 +57,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
     }
 
     @Override
-    public PlacementInfo itematic$ingredientPlacement(HolderGetter<Item> items) {
+    public PlacementInfo itematic$placementInfo(HolderGetter<Item> items) {
         return PlacementInfo.createFromOptionals(List.of(
             items.get(ItematicItemTags.BREWING_INPUTS).map(Ingredient::of),
             Optional.of(this.reagent())
@@ -70,7 +70,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
     }
 
     @Override
-    public List<RecipeDisplay> itematic$displays(HolderGetter<Item> items) {
+    public List<RecipeDisplay> itematic$display(HolderGetter<Item> items) {
         return List.of(
             new BrewingRecipeDisplay(
                 new PotionSlotDisplay(this.base()),

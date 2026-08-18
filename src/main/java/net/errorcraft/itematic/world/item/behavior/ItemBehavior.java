@@ -1,9 +1,9 @@
 package net.errorcraft.itematic.world.item.behavior;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.registry.ItematicRegistries;
 import net.errorcraft.itematic.serialization.SetMapCodec;
+import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentMap;
@@ -69,5 +69,5 @@ public interface ItemBehavior<T extends ItemBehavior<T>> {
 
     default void addComponents(DataComponentMap.Builder builder) {}
 
-    default void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag type) {}
+    default void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag tooltipFlag) {}
 }

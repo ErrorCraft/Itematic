@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.predicate.item;
 
-import net.errorcraft.itematic.access.predicate.item.ItemPredicateAccess;
 import net.errorcraft.itematic.network.codec.PacketCodecUtil;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.advancements.criterion.DataComponentMatchers;
@@ -21,7 +20,7 @@ public class ItemPredicates {
         ByteBufCodecs.holderSet(Registries.ITEM).apply(ByteBufCodecs::optional), ItemPredicate::items,
         MinMaxBounds.Ints.STREAM_CODEC, ItemPredicate::count,
         DataComponentMatchers.STREAM_CODEC, ItemPredicate::components,
-        ItemBehaviorType.STREAM_CODEC.apply(PacketCodecUtil::set).apply(ByteBufCodecs::optional), ItemPredicateAccess::itematic$behavior,
+        ItemBehaviorType.STREAM_CODEC.apply(PacketCodecUtil::set).apply(ByteBufCodecs::optional), ItemPredicate::itematic$behavior,
         ItemPredicates::create
     ));
 

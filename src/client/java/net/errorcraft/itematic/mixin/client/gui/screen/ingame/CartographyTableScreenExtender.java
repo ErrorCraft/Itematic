@@ -28,7 +28,7 @@ public class CartographyTableScreenExtender {
         )
     )
     private boolean isOfForPaperUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemIds.PAPER);
+        return instance.itematic$is(ItemIds.PAPER);
     }
 
     @Redirect(
@@ -47,7 +47,7 @@ public class CartographyTableScreenExtender {
         )
     )
     private boolean isOfForMapUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemIds.MAP);
+        return instance.itematic$is(ItemIds.MAP);
     }
 
     @Redirect(
@@ -66,6 +66,6 @@ public class CartographyTableScreenExtender {
         )
     )
     private boolean isOfForGlassPaneUseRegistryKeyCheck(ItemStack instance, Item item) {
-        return instance.itematic$isOf(ItemIds.GLASS_PANE);
+        return instance.itematic$is(ItemIds.GLASS_PANE);
     }
 }

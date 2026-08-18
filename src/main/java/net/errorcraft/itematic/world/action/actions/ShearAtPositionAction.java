@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.mixin.block.dispenser.ShearsDispenserBehaviorAccessor;
+import net.errorcraft.itematic.mixin.core.dispenser.ShearsDispenseItemBehaviorAccessor;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -39,7 +39,7 @@ public record ShearAtPositionAction(PositionTarget position) implements Action<S
         }
 
         ItemStack tool = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
-        return ShearsDispenserBehaviorAccessor.tryShearBlock(world, tool, pos)
-            || ShearsDispenserBehaviorAccessor.tryShearEntity(world, pos, tool);
+        return ShearsDispenseItemBehaviorAccessor.tryShearBeehive(world, tool, pos)
+            || ShearsDispenseItemBehaviorAccessor.tryShearEntity(world, pos, tool);
     }
 }

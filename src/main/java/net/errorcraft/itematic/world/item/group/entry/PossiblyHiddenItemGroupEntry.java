@@ -13,6 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Collection;
 
 public abstract class PossiblyHiddenItemGroupEntry<T extends PossiblyHiddenItemGroupEntry<T>> implements ItemGroupEntry<T> {
+    private static final Codec<CreativeModeTab.TabVisibility> TAB_VISIBILITY_CODEC = StringRepresentable.fromEnum(CreativeModeTab.TabVisibility::values);
+
     private final CreativeModeTab.TabVisibility visibility;
     private final boolean requiresPermissions;
 
@@ -51,7 +53,7 @@ public abstract class PossiblyHiddenItemGroupEntry<T extends PossiblyHiddenItemG
 
     protected static <T extends PossiblyHiddenItemGroupEntry<T>> Products.P2<RecordCodecBuilder.Mu<T>, CreativeModeTab.TabVisibility, Boolean> codec(RecordCodecBuilder.Instance<T> instance) {
         return instance.group(
-            StringRepresentable.fromEnum(CreativeModeTab.TabVisibility::values).optionalFieldOf("visibility", CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS).forGetter(PossiblyHiddenItemGroupEntry::visibility),
+            TAB_VISIBILITY_CODEC.optionalFieldOf("visibility", CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS).forGetter(PossiblyHiddenItemGroupEntry::visibility),
             Codec.BOOL.optionalFieldOf("requires_permissions", false).forGetter(PossiblyHiddenItemGroupEntry::requiresPermissions)
         );
     }

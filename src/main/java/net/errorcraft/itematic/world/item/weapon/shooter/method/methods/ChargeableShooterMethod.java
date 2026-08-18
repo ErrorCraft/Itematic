@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.mixin.item.CrossbowItemAccessor;
-import net.errorcraft.itematic.mixin.item.RangedWeaponItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.ProjectileWeaponItemAccessor;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargingSounds;
@@ -131,7 +131,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             persistentProjectile.setSoundEvent(SoundEvents.CROSSBOW_HIT);
         }
 
-        ((RangedWeaponItemAccessor) DUMMY).shoot(user, projectile, index, power, uncertainty, angle, target);
+        ((ProjectileWeaponItemAccessor) DUMMY).itematic$shootProjectile(user, projectile, index, power, uncertainty, angle, target);
     }
 
     @Override
@@ -161,7 +161,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
         shooter.shoot(serverWorld, user, hand, stack, chargedProjectiles.getItems(), power, divergence, user instanceof Player, livingEntity);
         if (user instanceof ServerPlayer player) {
             CriteriaTriggers.SHOT_CROSSBOW.trigger(player, stack);
-            player.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+            player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
         }
     }
 
@@ -175,7 +175,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
     }
 
     private static boolean chargeProjectiles(LivingEntity user, ItemStack stack) {
-        List<ItemStack> projectiles = RangedWeaponItemAccessor.load(stack, user.itematic$getAmmunition(stack), user);
+        List<ItemStack> projectiles = ProjectileWeaponItemAccessor.draw(stack, user.itematic$getAmmunition(stack), user);
         if (projectiles.isEmpty()) {
             return false;
         }

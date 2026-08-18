@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.entity.spawn;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.mixin.entity.EntityAccessor;
+import net.errorcraft.itematic.mixin.world.entity.EntityAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
@@ -177,7 +177,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
     }
 
     private void applyComponents(Entity entity, ItemStack stack) {
-        ((EntityAccessor) entity).itematic$copyComponentsFrom(
+        ((EntityAccessor) entity).itematic$applyImplicitComponents(
             PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, this.components)
         );
     }

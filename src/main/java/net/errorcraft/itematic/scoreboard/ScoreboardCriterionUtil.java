@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.scoreboard;
 
-import net.errorcraft.itematic.mixin.scoreboard.ScoreboardCriterionAccessor;
+import net.errorcraft.itematic.mixin.world.scores.criteria.ObjectiveCriteriaAccessor;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -12,12 +12,12 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ScoreboardCriterionUtil {
-    private static final Map<String, ObjectiveCriteria> CUSTOM_CRITERIA = ScoreboardCriterionAccessor.customCriteria();
+    private static final Map<String, ObjectiveCriteria> CRITERIA_CACHE = ObjectiveCriteriaAccessor.criteriaCache();
 
     private ScoreboardCriterionUtil() {}
 
     public static Optional<ObjectiveCriteria> byName(String name, RegistryOps<?> ops) {
-        ObjectiveCriteria customCriterion = CUSTOM_CRITERIA.get(name);
+        ObjectiveCriteria customCriterion = CRITERIA_CACHE.get(name);
         if (customCriterion != null) {
             return Optional.of(customCriterion);
         }
@@ -39,6 +39,6 @@ public class ScoreboardCriterionUtil {
         ResourceKey<? extends Registry<T>> registryKey = statType.getRegistry().key();
         return ops.getter(registryKey)
             .flatMap(lookup -> lookup.get(ResourceKey.create(registryKey, id)))
-            .map(statType::itematic$getOrCreateStat);
+            .map(statType::itematic$get);
     }
 }

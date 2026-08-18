@@ -38,6 +38,6 @@ public interface BlockPicker<T extends BlockPicker<T>> {
     @Nullable
     BlockState placementState(BlockPlaceContext context);
     default BlockPlaceContext placementContext(BlockPlaceContext context) {
-        return this.defaultBlock().value().itematic$placementContext(context);
+        return this.defaultBlock().value().itematic$blockPlaceContext(context);
     }
 }

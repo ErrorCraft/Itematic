@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.assertion;
 
-import net.errorcraft.itematic.mixin.enchantment.EnchantmentHelperAccessor;
 import net.errorcraft.itematic.util.TestUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
@@ -12,6 +11,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +36,7 @@ public class ItemStackAssert {
     }
 
     public ItemStackAssert is(ResourceKey<Item> id) {
-        if (this.stack.itematic$isOf(id)) {
+        if (this.stack.itematic$is(id)) {
             return this;
         }
 
@@ -146,7 +147,7 @@ public class ItemStackAssert {
     }
 
     public ItemStackAssert hasEnchantments() {
-        return this.hasComponent(EnchantmentHelperAccessor.getComponentType(this.stack), enchantments -> {
+        return this.hasComponent(EnchantmentHelper.getComponentType(this.stack), enchantments -> {
             if (enchantments.isEmpty()) {
                 throw this.helper.assertionException(
                     "test.error.item_stack.expected_enchantments",
@@ -157,7 +158,7 @@ public class ItemStackAssert {
     }
 
     public ItemStackAssert hasNoEnchantments() {
-        return this.hasComponent(EnchantmentHelperAccessor.getComponentType(this.stack), enchantments -> {
+        return this.hasComponent(EnchantmentHelper.getComponentType(this.stack), enchantments -> {
             if (!enchantments.isEmpty()) {
                 throw this.helper.assertionException(
                     "test.error.item_stack.expected_no_enchantments",
@@ -169,7 +170,7 @@ public class ItemStackAssert {
 
     @SafeVarargs
     public final ItemStackAssert hasEnchantments(ResourceKey<Enchantment>... expected) {
-        return this.hasComponent(EnchantmentHelperAccessor.getComponentType(this.stack), enchantments -> {
+        return this.hasComponent(EnchantmentHelper.getComponentType(this.stack), enchantments -> {
             Set<ResourceKey<Enchantment>> remaining = new HashSet<>(List.of(expected));
             for (Holder<Enchantment> enchantment : enchantments.keySet()) {
                 enchantment.unwrapKey().ifPresent(remaining::remove);

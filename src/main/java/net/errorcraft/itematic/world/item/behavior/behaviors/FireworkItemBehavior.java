@@ -3,9 +3,9 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -19,6 +19,7 @@ import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
 import java.util.List;
 
 public class FireworkItemBehavior implements ItemBehavior<FireworkItemBehavior> {
@@ -51,7 +52,7 @@ public class FireworkItemBehavior implements ItemBehavior<FireworkItemBehavior> 
         FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(world, stack, user);
         world.addFreshEntity(fireworkRocketEntity);
         stack.consume(1, user);
-        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
         return ItemResult.CONSUME;
     }
 

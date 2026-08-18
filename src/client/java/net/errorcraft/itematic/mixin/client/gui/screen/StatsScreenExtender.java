@@ -141,8 +141,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                         continue;
                     }
 
-                    ResourceKey<Item> itemKey = entry.value().itematic$asItemKey();
-                    items.get(itemKey).ifPresent(entries::add);
+                    ResourceKey<Item> itemId = entry.value().itematic$asItemId();
+                    items.get(itemId).ifPresent(entries::add);
                     break;
                 }
             }
@@ -153,11 +153,11 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
 
         @Unique
         private <T> boolean hasNoStatFor(StatType<T> statType, Holder<T> entry, StatsCounter statHandler) {
-            if (!statType.itematic$hasStat(entry)) {
+            if (!statType.itematic$contains(entry)) {
                 return true;
             }
 
-            return statHandler.getValue(statType.itematic$getOrCreateStat(entry)) <= 0;
+            return statHandler.getValue(statType.itematic$get(entry)) <= 0;
         }
 
         @Mixin(targets = "net.minecraft.client.gui.screens.achievement.StatsScreen$ItemStatisticsList$ItemRowComparator")
@@ -241,7 +241,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 )
             )
             private <T> int getStatForFirstBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T stat, @Share("firstBlock") LocalRef<BlockItemBehavior> firstBlock) {
-                return instance.getValue(type.itematic$getOrCreateStat(firstBlock.get().block().defaultBlock()));
+                return instance.getValue(type.itematic$get(firstBlock.get().block().defaultBlock()));
             }
 
             @Redirect(
@@ -265,7 +265,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 )
             )
             private <T> int getStatForSecondBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T stat, @Share("secondBlock") LocalRef<BlockItemBehavior> secondBlock) {
-                return instance.getValue(type.itematic$getOrCreateStat(secondBlock.get().block().defaultBlock()));
+                return instance.getValue(type.itematic$get(secondBlock.get().block().defaultBlock()));
             }
 
             @Redirect(
@@ -284,7 +284,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 )
             )
             private <T> int getStatForFirstItemUseRegistryEntry(StatsCounter instance, StatType<Item> type, T stat, StatsScreen.ItemStatisticsList.ItemRow first) {
-                return instance.getValue(type.itematic$getOrCreateStat(first.itematic$registryEntry()));
+                return instance.getValue(type.itematic$get(first.itematic$registryEntry()));
             }
 
             @Redirect(
@@ -303,7 +303,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 )
             )
             private <T> int getStatForSecondItemUseRegistryEntry(StatsCounter instance, StatType<Item> type, T stat, StatsScreen.ItemStatisticsList.ItemRow first, StatsScreen.ItemStatisticsList.ItemRow second) {
-                return instance.getValue(type.itematic$getOrCreateStat(second.itematic$registryEntry()));
+                return instance.getValue(type.itematic$get(second.itematic$registryEntry()));
             }
 
             @Redirect(
@@ -402,7 +402,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 )
             )
             private <T> Stat<Block> getOrCreateStatForBlockUseItemBehavior(StatType<Block> instance, T key, @Share("block") LocalRef<BlockItemBehavior> block) {
-                return instance.itematic$getOrCreateStat(block.get().block().defaultBlock());
+                return instance.itematic$get(block.get().block().defaultBlock());
             }
 
             @Redirect(
@@ -421,7 +421,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 )
             )
             private <T> Stat<Item> getOrCreateStatForItemUseItemBehavior(StatType<Item> instance, T key) {
-                return instance.itematic$getOrCreateStat(this.item);
+                return instance.itematic$get(this.item);
             }
 
             @Override

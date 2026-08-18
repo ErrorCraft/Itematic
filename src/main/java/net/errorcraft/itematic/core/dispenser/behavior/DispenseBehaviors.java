@@ -20,8 +20,6 @@ import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
@@ -34,8 +32,6 @@ import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
 
 public class DispenseBehaviors {
-    public static final DispenseItemBehavior FALLBACK = new DefaultDispenseItemBehavior();
-
     public static final ResourceKey<DispenseBehavior> BRUSH = of("brush");
     public static final ResourceKey<DispenseBehavior> CHARGE_RESPAWN_ANCHOR = of("charge_respawn_anchor");
     public static final ResourceKey<DispenseBehavior> EQUIP_CHEST = of("equip_chest");

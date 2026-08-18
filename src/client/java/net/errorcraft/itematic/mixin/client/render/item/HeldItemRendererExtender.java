@@ -93,7 +93,7 @@ public class HeldItemRendererExtender {
         )
     )
     private int useDifferenceForCrossbow(AbstractClientPlayer instance, @Share("useDuration") LocalIntRef useDuration) {
-        return useDuration.get() - instance.itematic$itemUsedTicks();
+        return useDuration.get() - instance.itematic$usedItemTicks();
     }
 
     @Redirect(
@@ -123,7 +123,7 @@ public class HeldItemRendererExtender {
         )
     )
     private int getUseTimeLeftForCrossbowUseNegatedUsedTicks(AbstractClientPlayer instance) {
-        return -instance.itematic$itemUsedTicks();
+        return -instance.itematic$usedItemTicks();
     }
 
     @Redirect(
@@ -142,7 +142,7 @@ public class HeldItemRendererExtender {
         )
     )
     private int getUseTimeLeftForUseAnimationCheckUseUsedTicks(AbstractClientPlayer instance) {
-        return instance.itematic$itemUsedTicks();
+        return instance.itematic$usedItemTicks();
     }
 
     @Redirect(
@@ -159,7 +159,7 @@ public class HeldItemRendererExtender {
         )
     )
     private int getUseTimeLeftForBowAndSpearUseNegatedUsedTicks(AbstractClientPlayer instance) {
-        return -instance.itematic$itemUsedTicks();
+        return -instance.itematic$usedItemTicks();
     }
 
     @Redirect(

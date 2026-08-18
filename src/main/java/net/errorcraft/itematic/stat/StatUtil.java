@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.stat;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.mixin.stat.StatAccessor;
+import net.errorcraft.itematic.mixin.stats.StatAccessor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -17,6 +17,6 @@ public class StatUtil {
     private StatUtil() {}
 
     public static <T> String statName(StatType<T> stat, Holder<T> entry) {
-        return StatAccessor.getName(BuiltInRegistries.STAT_TYPE.getKey(stat)) + Identifier.NAMESPACE_SEPARATOR + StatAccessor.getName(entry.unwrapKey().map(ResourceKey::identifier).orElse(UNKNOWN));
+        return StatAccessor.locationToKey(BuiltInRegistries.STAT_TYPE.getKey(stat)) + Identifier.NAMESPACE_SEPARATOR + StatAccessor.locationToKey(entry.unwrapKey().map(ResourceKey::identifier).orElse(UNKNOWN));
     }
 }

@@ -56,7 +56,7 @@ public class CustomizeFlatLevelScreenExtender implements CustomizeFlatLevelScree
             )
             private ItemStack createItemStackUseRegistryEntry(@Coerce Object instance, BlockState state) {
                 HolderLookup.RegistryLookup<Item> itemLookup = ((CustomizeFlatLevelScreenSuperflatLayersListWidgetAccess) this.field_18739).itematic$itemLookup();
-                return itemLookup.get(state.getBlock().itematic$asItemKey())
+                return itemLookup.get(state.getBlock().itematic$asItemId())
                     .map(ItemStack::new)
                     .orElse(ItemStack.EMPTY);
             }

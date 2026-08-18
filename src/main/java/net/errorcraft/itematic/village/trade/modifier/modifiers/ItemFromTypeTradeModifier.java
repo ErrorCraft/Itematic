@@ -47,7 +47,7 @@ public record ItemFromTypeTradeModifier(Map<Holder<VillagerType>, Holder<Item>> 
             return Optional.empty();
         }
 
-        ItemStack givesActual = gives.itematic$copyWithItem(this.types.get(type));
+        ItemStack givesActual = gives.itematic$transmuteCopy(this.types.get(type));
         return Optional.of(new ItemCost(givesActual.getItemHolder(), givesActual.getCount(), DataComponentExactPredicate.allOf(givesActual.getComponents())));
     }
 }

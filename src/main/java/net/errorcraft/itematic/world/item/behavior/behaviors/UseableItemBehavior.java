@@ -3,15 +3,15 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.ConstantUseDurationProvider;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.IndefiniteUseDurationProvider;
-import net.errorcraft.itematic.serialization.SetCodec;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -26,6 +26,7 @@ import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.Set;
@@ -110,8 +111,10 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
     }
 
     public static class Builder {
+        @Nullable
         private UseDurationProvider ticks;
         private ItemUseAnimation animation = ItemUseAnimation.NONE;
+        @Nullable
         private Holder<Item> remainder;
         private Set<Pass> passes = Pass.DEFAULT_PASSES;
         private UseEffects effects = UseEffects.DEFAULT;
@@ -148,7 +151,7 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
             return this;
         }
 
-        public Builder remainder(Holder<Item> remainder) {
+        public Builder remainder(@Nullable Holder<Item> remainder) {
             this.remainder = remainder;
             return this;
         }

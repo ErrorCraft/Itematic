@@ -2,13 +2,14 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.mixin.component.type.ConsumableComponentAccessor;
+import net.errorcraft.itematic.mixin.world.item.component.ConsumableAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Holder;
@@ -28,7 +29,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,7 +43,7 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
         Codec.BOOL.optionalFieldOf("has_consume_particles", true).forGetter(ConsumableItemBehavior::hasConsumeParticles),
         SoundEvent.CODEC.optionalFieldOf("sound", SoundEvents.GENERIC_EAT).forGetter(ConsumableItemBehavior::sound)
     ).apply(instance, ConsumableItemBehavior::new));
-    private static final float CONSUME_EFFECTS_THRESHOLD = ConsumableComponentAccessor.consumeEffectsThreshold();
+    private static final float CONSUME_EFFECTS_THRESHOLD = ConsumableAccessor.consumeEffectsThreshold();
 
     public static ConsumableItemBehavior of(boolean hasConsumeParticles, Holder<SoundEvent> sound) {
         return new ConsumableItemBehavior(hasConsumeParticles, sound);
@@ -64,6 +67,16 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
     }
 
     @Override
+    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (stack.getUseDuration(user) != UseDuration.NONE) {
+            return ItemResult.PASS;
+        }
+
+        this.consume(user, stack, stackExchanger, world, hand);
+        return ItemResult.CONSUME;
+    }
+
+    @Override
     public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
         Consumable consumable = stack.get(DataComponents.CONSUMABLE);
         if (consumable != null && shouldSpawnParticlesAndPlaySounds(usedTicks, remainingUseTicks)) {
@@ -76,9 +89,18 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
         builder.set(DataComponents.CONSUMABLE, new Consumable(0.0f, ItemUseAnimation.NONE, this.sound, this.hasConsumeParticles, List.of()));
     }
 
-    public void consume(LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger, Level world, InteractionHand hand) {
-        if (world instanceof ServerLevel serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld)
+    public void consume(LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger, Level level, InteractionHand hand) {
+        Consumable consumable = stack.get(DataComponents.CONSUMABLE);
+        if (consumable != null) {
+            consumable.emitParticlesAndSounds(user.getRandom(), user, stack, 16);
+        }
+
+        if (user instanceof Player player) {
+            this.consumeForPlayer(player, stack);
+        }
+
+        if (level instanceof ServerLevel serverLevel) {
+            ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())
@@ -88,10 +110,12 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
             stack.itematic$invokeEvent(ItemEvent.CONSUME_ITEM, context);
         }
 
+        user.gameEvent(
+            consumable != null && consumable.animation() == ItemUseAnimation.DRINK
+                ? GameEvent.DRINK
+                : GameEvent.EAT
+        );
         stack.consume(1, user);
-        if (user instanceof Player player) {
-            this.consumeForPlayer(player, stack);
-        }
     }
 
     private void consumeForPlayer(Player player, ItemStack stack) {
@@ -99,7 +123,7 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
             CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
         }
 
-        player.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+        player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
     }
 
     private static boolean shouldSpawnParticlesAndPlaySounds(int usedTicks, int remainingUseTicks) {
@@ -109,8 +133,10 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
 
     public static class Builder {
         private final int useDuration;
-        private ItemUseAnimation useAnimation;
+        private ItemUseAnimation useAnimation = ItemUseAnimation.NONE;
+        @Nullable
         private FoodItemBehavior food;
+        @Nullable
         private Holder<Item> remainder;
         private boolean hasConsumeParticles = true;
         private Holder<SoundEvent> consumeSound = SoundEvents.GENERIC_EAT;

@@ -24,7 +24,7 @@ public class CraftPlanksTutorialStepHandlerExtender {
     )
     private static Iterable<Holder<Item>> iterateEntriesUseDynamicRegistry(DefaultedRegistry<Item> instance, TagKey<Item> tag, LocalPlayer player) {
         return player.level()
-            .itematic$getItemAccess()
+            .itematic$itemAccess()
             .iterateTag(tag);
     }
 
@@ -36,6 +36,6 @@ public class CraftPlanksTutorialStepHandlerExtender {
         )
     )
     private static <T> Stat<Item> getOrCreateStatUseRegistryEntry(StatType<Item> instance, T key, @Local Holder<Item> entry) {
-        return instance.itematic$getOrCreateStat(entry);
+        return instance.itematic$get(entry);
     }
 }

@@ -3,9 +3,9 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -41,7 +41,7 @@ public record WritableItemBehavior(Holder<Item> transformsInto) implements ItemB
     @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         user.openItemGui(stack, hand);
-        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
         return ItemResult.SUCCEED;
     }
 

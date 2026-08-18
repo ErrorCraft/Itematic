@@ -27,7 +27,7 @@ public class RecipeGroupButtonWidgetExtender {
             return ItemStack.EMPTY;
         }
 
-        return ((RecipeBookWidgetTabAccess)(Object) instance).itematic$primaryIconItem(world.itematic$getItemAccess());
+        return ((RecipeBookWidgetTabAccess)(Object) instance).itematic$primaryIconItem(world.itematic$itemAccess());
     }
 
     @Redirect(
@@ -43,6 +43,6 @@ public class RecipeGroupButtonWidgetExtender {
             return Optional.empty();
         }
 
-        return ((RecipeBookWidgetTabAccess)(Object) instance).itematic$secondaryIconItem(world.itematic$getItemAccess());
+        return ((RecipeBookWidgetTabAccess)(Object) instance).itematic$secondaryIconItem(world.itematic$itemAccess());
     }
 }

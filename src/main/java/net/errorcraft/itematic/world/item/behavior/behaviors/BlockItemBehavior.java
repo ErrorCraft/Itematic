@@ -2,18 +2,18 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
+import net.errorcraft.itematic.serialization.SetCodec;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.placement.block.BlockPlacer;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.world.item.placement.block.picker.pickers.AttachedToSideBlockPicker;
 import net.errorcraft.itematic.world.item.placement.block.picker.pickers.SimpleBlockPicker;
-import net.errorcraft.itematic.mixin.item.ItemAccessor;
-import net.errorcraft.itematic.serialization.SetCodec;
-import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
-import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
@@ -35,6 +35,7 @@ import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+
 import java.util.Set;
 
 public record BlockItemBehavior(BlockPicker<?> block, boolean operatorOnly, Set<Pass> passes) implements ItemBehavior<BlockItemBehavior> {
@@ -80,7 +81,7 @@ public record BlockItemBehavior(BlockPicker<?> block, boolean operatorOnly, Set<
             return ItemResult.PASS;
         }
 
-        BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, ClipContext.Fluid.SOURCE_ONLY);
+        BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
         }

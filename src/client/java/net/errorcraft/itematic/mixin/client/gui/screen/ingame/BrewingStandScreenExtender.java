@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.ingame;
 
-import net.errorcraft.itematic.access.screen.BrewingStandScreenHandlerAccess;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.BrewingStandScreen;
 import net.minecraft.network.chat.Component;
@@ -34,6 +33,6 @@ public abstract class BrewingStandScreenExtender extends AbstractContainerScreen
         )
     )
     private float useRecipeForBrewingTime(float original) {
-        return ((BrewingStandScreenHandlerAccess) this.menu).itematic$maxBrewingTime();
+        return this.menu.itematic$maxBrewingTime();
     }
 }

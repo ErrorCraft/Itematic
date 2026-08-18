@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.client.gui.screen.recipebook;
 
-import net.errorcraft.itematic.access.recipe.RecipeFinderAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.world.entity.player.StackedItemContents;
@@ -22,6 +21,6 @@ public class RecipeBookWidgetExtender {
         at = @At("HEAD")
     )
     private void recipeFinderSetWorld(int parentWidth, int parentHeight, Minecraft client, boolean narrow, CallbackInfo info) {
-        ((RecipeFinderAccess) this.stackedContents).itematic$setWorld(client.level);
+        this.stackedContents.itematic$setLevel(client.level);
     }
 }

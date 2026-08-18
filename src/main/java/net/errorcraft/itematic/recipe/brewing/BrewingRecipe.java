@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Function5;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.access.recipe.RecipeAccess;
+import net.errorcraft.itematic.access.world.item.crafting.RecipeAccess;
 import net.errorcraft.itematic.recipe.ItematicRecipeTypes;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
 import net.minecraft.core.Holder;

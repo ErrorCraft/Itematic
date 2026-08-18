@@ -2,12 +2,12 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.world.ItemResult;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -61,7 +61,7 @@ public record SteeringItemBehavior(Holder<EntityType<?>> target, int damagePerUs
             return ItemResult.SUCCEED;
         }
 
-        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
         return ItemResult.PASS;
     }
 

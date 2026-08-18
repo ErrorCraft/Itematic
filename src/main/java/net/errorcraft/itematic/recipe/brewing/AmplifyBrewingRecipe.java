@@ -39,7 +39,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
 
     @Override
     protected ItemStack assemble(ItemStack base) {
-        return base.split(1).itematic$copyWithItem(this.result());
+        return base.split(1).itematic$transmuteCopy(this.result());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
     }
 
     @Override
-    public List<RecipeDisplay> itematic$displays(HolderGetter<Item> items) {
+    public List<RecipeDisplay> itematic$display(HolderGetter<Item> items) {
         return List.of(
             new BrewingRecipeDisplay(
                 new SlotDisplay.ItemStackSlotDisplay(displayStack(this.base())),

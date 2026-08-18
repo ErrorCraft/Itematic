@@ -37,7 +37,7 @@ public class CrossbowTestSuite {
                     );
                 Assert.isTrue(
                     context,
-                    player.getInventory().contains(s -> s.itematic$isOf(ItemIds.ARROW)),
+                    player.getInventory().contains(s -> s.itematic$is(ItemIds.ARROW)),
                     () -> "Expected Player to have an Arrow in their inventory"
                 );
             })

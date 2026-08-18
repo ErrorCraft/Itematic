@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.item.group.entry.entries;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.mixin.item.ItemGroupsAccessor;
+import net.errorcraft.itematic.mixin.world.item.CreativeModeTabsAccessor;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.world.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.advancements.criterion.TagPredicate;
@@ -24,7 +24,7 @@ public class PaintingVariantItemGroupEntry extends PossiblyHiddenItemGroupEntry<
         RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(entry -> entry.item),
         TagPredicate.codec(Registries.PAINTING_VARIANT).fieldOf("tag").forGetter(entry -> entry.tag)
     )).apply(instance, PaintingVariantItemGroupEntry::new));
-    private static final Comparator<Holder<PaintingVariant>> PAINTING_VARIANT_COMPARATOR = ItemGroupsAccessor.paintingVariantComparator();
+    private static final Comparator<Holder<PaintingVariant>> PAINTING_VARIANT_COMPARATOR = CreativeModeTabsAccessor.paintingVariantComparator();
 
     private final Holder<Item> item;
     private final TagPredicate<PaintingVariant> tag;

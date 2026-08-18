@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.item;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.mixin.item.ItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
 import net.errorcraft.itematic.references.ItemBarStyleIds;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -41,8 +41,8 @@ public record ItemDisplay(String translationKey, Identifier model, Rarity rarity
     }
 
     public static class Builder {
-        private static final DependantName<Item, String> ITEM_NAME_SUPPLIER = ItemAccessor.SettingsAccessor.itemNameSupplier();
-        private static final DependantName<Item, String> BLOCK_NAME_SUPPLIER = ItemAccessor.SettingsAccessor.blockNameSupplier();
+        private static final DependantName<Item, String> ITEM_NAME_SUPPLIER = ItemAccessor.PropertiesAccessor.itemNameSupplier();
+        private static final DependantName<Item, String> BLOCK_NAME_SUPPLIER = ItemAccessor.PropertiesAccessor.blockNameSupplier();
 
         private final String translationKey;
         private final Identifier model;

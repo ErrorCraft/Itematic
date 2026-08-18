@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.screen;
 
-import net.errorcraft.itematic.mixin.screen.BrewingStandScreenHandlerAccessor;
+import net.errorcraft.itematic.mixin.world.inventory.BrewingStandMenuAccessor;
 import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
 import net.errorcraft.itematic.recipe.input.BrewingRecipeInput;
 import net.minecraft.core.NonNullList;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.OptionalInt;
 
 public class BrewingStandMenuDelegate extends RecipeBookMenu {
-    public static final int FIRST_INPUT_SLOT = BrewingStandScreenHandlerAccessor.inputSlotStart();
-    public static final int INGREDIENT_SLOT = BrewingStandScreenHandlerAccessor.ingredientSlot();
+    public static final int FIRST_INPUT_SLOT = BrewingStandMenuAccessor.inputSlotStart();
+    public static final int INGREDIENT_SLOT = BrewingStandMenuAccessor.ingredientSlot();
 
     private final BrewingStandMenu delegate;
     private final Container inventory;
@@ -32,7 +32,7 @@ public class BrewingStandMenuDelegate extends RecipeBookMenu {
     public BrewingStandMenuDelegate(BrewingStandMenu delegate) {
         super(delegate.getType(), delegate.containerId);
         this.delegate = delegate;
-        this.inventory = ((BrewingStandScreenHandlerAccessor) delegate).itematic$inventory();
+        this.inventory = ((BrewingStandMenuAccessor) delegate).itematic$inventory();
         delegate.slots.forEach(this::addSlot);
     }
 

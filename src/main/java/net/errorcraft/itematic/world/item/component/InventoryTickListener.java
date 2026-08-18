@@ -7,5 +7,5 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public interface InventoryTickListener {
-    void itematic$onInventoryTick(ServerLevel world, ItemStack stack, Entity owner, @Nullable EquipmentSlot slot);
+    void itematic$onInventoryTick(ServerLevel level, ItemStack stack, Entity owner, @Nullable EquipmentSlot slot);
 }

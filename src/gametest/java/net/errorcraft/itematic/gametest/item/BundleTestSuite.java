@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.mixin.component.type.BundleContentsComponentAccessor;
+import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
@@ -95,7 +95,7 @@ public class BundleTestSuite {
             Assert.areEqual(
                 context,
                 TestUtil.getItemBehavior(context, bundle, ItemBehaviorType.ITEM_HOLDER).occupancy(bundle),
-                BundleContentsComponentAccessor.nestedBundleOccupancy(),
+                BundleContentsAccessor.nestedBundleOccupancy(),
                 "occupancy"
             );
         });

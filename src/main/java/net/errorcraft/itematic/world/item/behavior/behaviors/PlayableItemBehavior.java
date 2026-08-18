@@ -2,12 +2,12 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.mixin.world.item.InstrumentItemAccessor;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.PlayableUseDurationProvider;
-import net.errorcraft.itematic.mixin.item.GoatHornItemAccessor;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.InstrumentComponent;
 import net.minecraft.world.level.Level;
+
 import java.util.Optional;
 
 public record PlayableItemBehavior(Holder<Instrument> defaultInstrument) implements ItemBehavior<PlayableItemBehavior> {
@@ -56,9 +57,9 @@ public record PlayableItemBehavior(Holder<Instrument> defaultInstrument) impleme
         return this.instrument(stack, user.registryAccess())
             .map(Holder::value)
             .map(instrument -> {
-                GoatHornItemAccessor.playSound(world, user, instrument);
+                InstrumentItemAccessor.playSound(world, user, instrument);
                 user.getCooldowns().addCooldown(stack, Mth.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND));
-                user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+                user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
                 return ItemResult.CONSUME;
             }).orElse(ItemResult.PASS);
     }

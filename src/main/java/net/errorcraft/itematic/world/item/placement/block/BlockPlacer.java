@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.item.placement.block;
 
-import net.errorcraft.itematic.mixin.block.BlockItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.BlockItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.ItemEvent;
@@ -83,7 +83,7 @@ public class BlockPlacer {
             blockEntity.itematic$placedFromItemStack(world, playerPlacer, blockState, pos, stack);
         }
 
-        BlockItemAccessor.copyComponentsToBlockEntity(world, pos, stack);
+        BlockItemAccessor.updateBlockEntityComponents(world, pos, stack);
         blockState.getBlock().setPlacedBy(world, pos, blockState, placer, stack);
         if (placer instanceof ServerPlayer playerPlacer) {
             CriteriaTriggers.PLACED_BLOCK.trigger(playerPlacer, pos, stack);

@@ -66,7 +66,7 @@ public abstract class CreativeInventoryScreenExtender extends AbstractContainerS
     )
     @SuppressWarnings("ConstantConditions")
     private ItemStack getIconUseDynamicRegistry(CreativeModeTab instance, GuiGraphics context) {
-        return instance.itematic$icon(this.minecraft.level.itematic$getItemAccess());
+        return instance.itematic$icon(this.minecraft.level.itematic$itemAccess());
     }
 
     @Redirect(

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.item.smithing.template.templates;
 
-import net.errorcraft.itematic.mixin.item.SmithingTemplateItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.SmithingTemplateItemAccessor;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;

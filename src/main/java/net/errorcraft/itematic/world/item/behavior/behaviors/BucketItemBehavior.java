@@ -2,21 +2,21 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.world.ItemResult;
-import net.errorcraft.itematic.world.item.ItemStacks;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
-import net.errorcraft.itematic.world.item.placement.EntityPlacer;
-import net.errorcraft.itematic.world.item.placement.block.picker.pickers.SimpleBlockPicker;
-import net.errorcraft.itematic.mixin.item.ItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
+import net.errorcraft.itematic.world.item.ItemStacks;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.placement.EntityPlacer;
+import net.errorcraft.itematic.world.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.world.modification.WorldModification;
 import net.errorcraft.itematic.world.modification.type.DrainFluidWorldModification;
 import net.errorcraft.itematic.world.modification.type.PlaceBlockWorldModification;
@@ -107,7 +107,7 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
 
     @Override
     public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        BlockHitResult blockHitResult = ItemAccessor.raycast(world, user, this.modification().fluidHandling());
+        BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(world, user, this.modification().fluidHandling());
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
         }

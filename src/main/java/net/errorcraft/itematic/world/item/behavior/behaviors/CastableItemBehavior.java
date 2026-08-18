@@ -3,10 +3,10 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.world.ItemResult;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.SharedConstants;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -75,7 +75,7 @@ public class CastableItemBehavior implements ItemBehavior<CastableItemBehavior> 
             Projectile.spawnProjectile(new FishingHook(user, world, luck, speed), serverWorld, stack);
         }
 
-        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
         user.gameEvent(GameEvent.ITEM_INTERACT_START);
     }
 }

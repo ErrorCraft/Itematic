@@ -2,16 +2,16 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.world.ItemResult;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.TridentUseDurationProvider;
 import net.errorcraft.itematic.serialization.ItematicCodecs;
 import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.TridentUseDurationProvider;
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+
 import java.util.Optional;
 
 public record ThrowableItemBehavior(float speed, float angleOffset, Optional<MinMaxBounds.Ints> drawDuration) implements ItemBehavior<ThrowableItemBehavior> {
@@ -79,7 +80,7 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
         if (this.drawDuration.filter(drawDuration -> drawDuration.matches(usedTicks)).isPresent()) {
             this.createEntity(world, user, stack, stackExchanger);
             if (user instanceof Player player) {
-                player.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+                player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
             }
 
             return true;

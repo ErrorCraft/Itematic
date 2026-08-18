@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.item;
 
-import net.errorcraft.itematic.mixin.item.SmithingTemplateItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.SmithingTemplateItemAccessor;
 import net.errorcraft.itematic.util.Util;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;

@@ -2,11 +2,11 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.mixin.world.item.MapItemAccessor;
 import net.errorcraft.itematic.world.ItemResult;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.mixin.item.FilledMapItemAccessor;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -46,7 +46,7 @@ public record MappableItemBehavior(Holder<Item> transformsInto) implements ItemB
             return ItemResult.SUCCEED;
         }
 
-        user.awardStat(Stats.ITEM_USED.itematic$getOrCreateStat(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
         world.playSound(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundSource(), 1.0f, 1.0f);
         ItemStack resultStack = this.createStack(serverWorld, user.getBlockX(), user.getBlockZ(), 0, true, false);
         stack.consume(1, user);
@@ -56,7 +56,7 @@ public record MappableItemBehavior(Holder<Item> transformsInto) implements ItemB
 
     public ItemStack createStack(ServerLevel world, int x, int z, int scale, boolean showIcons, boolean unlimitedTracking) {
         ItemStack resultStack = new ItemStack(this.transformsInto);
-        MapId mapId = FilledMapItemAccessor.allocateMapId(world, x, z, scale, showIcons, unlimitedTracking, world.dimension());
+        MapId mapId = MapItemAccessor.createNewSavedData(world, x, z, scale, showIcons, unlimitedTracking, world.dimension());
         resultStack.set(DataComponents.MAP_ID, mapId);
         return resultStack;
     }

@@ -37,7 +37,7 @@ public class ShooterItemComponentTestSuite {
                     );
                 Assert.isFalse(
                     context,
-                    player.getInventory().contains(s -> s.itematic$isOf(ItemIds.ARROW)),
+                    player.getInventory().contains(s -> s.itematic$is(ItemIds.ARROW)),
                     () -> "Expected Player not to have any Arrows in their inventory"
                 );
             }
