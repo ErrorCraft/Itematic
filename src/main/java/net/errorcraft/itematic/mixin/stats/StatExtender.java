@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.stats;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.errorcraft.itematic.access.stats.StatAccess;
-import net.errorcraft.itematic.stat.StatUtil;
+import net.errorcraft.itematic.stats.ItematicStats;
 import net.minecraft.core.Holder;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
@@ -46,6 +46,6 @@ public abstract class StatExtender<T> extends ObjectiveCriteria implements StatA
     @Override
     public void itematic$setEntry(Holder<T> entry) {
         this.entry = entry;
-        this.itematic$setName(StatUtil.statName(this.type, entry));
+        this.itematic$setName(ItematicStats.statName(this.type, entry));
     }
 }

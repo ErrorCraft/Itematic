@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.stat.StatUtil;
+import net.errorcraft.itematic.stats.ItematicStats;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 public record IncrementStatAction(LootContext.EntityTarget entity, Stat<?> stat) implements Action<IncrementStatAction> {
     public static final MapCodec<IncrementStatAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(IncrementStatAction::entity),
-        StatUtil.CODEC.fieldOf("stat").forGetter(IncrementStatAction::stat)
+        ItematicStats.CODEC.fieldOf("stat").forGetter(IncrementStatAction::stat)
     ).apply(instance, IncrementStatAction::new));
 
     public static IncrementStatAction of(LootContext.EntityTarget entity, Stat<?> stat) {

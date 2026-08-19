@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.commands.arguments;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.commands.arguments.ObjectiveCriteriaArgumentAccess;
-import net.errorcraft.itematic.stat.StatUtil;
+import net.errorcraft.itematic.stats.ItematicStats;
 import net.errorcraft.itematic.world.scores.criteria.ItematicObjectiveCriteria;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.arguments.ObjectiveCriteriaArgument;
@@ -63,7 +63,7 @@ public class ObjectiveCriteriaArgumentExtender implements ObjectiveCriteriaArgum
     )
     @SuppressWarnings("unchecked")
     private <T> String getStatNameUseRegistryEntry(ObjectiveCriteriaArgument instance, StatType<T> stat, Object value) {
-        return StatUtil.statName(stat, (Holder.Reference<T>) value);
+        return ItematicStats.statName(stat, (Holder.Reference<T>) value);
     }
 
     @Override
