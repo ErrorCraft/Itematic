@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.level.storage.loot.predicates;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.SetCodec;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -26,6 +26,6 @@ public record SideCheckPredicate(Set<Direction> sides) implements LootItemCondit
 
     @Override
     public boolean test(LootContext context) {
-        return this.sides.contains(context.getOptionalParameter(ItematicContextParameters.SIDE));
+        return this.sides.contains(context.getOptionalParameter(ItematicContextKeys.SIDE));
     }
 }

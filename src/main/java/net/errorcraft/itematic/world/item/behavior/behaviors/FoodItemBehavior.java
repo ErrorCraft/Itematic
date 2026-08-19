@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.ItemEvent;
@@ -52,7 +52,7 @@ public record FoodItemBehavior(int nutrition, float saturation, boolean alwaysEd
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())
                 .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextParameters.HAND, user.getUsedItemHand())
+                .add(ItematicContextKeys.HAND, user.getUsedItemHand())
                 .build();
             stack.itematic$invokeEvent(ItemEvent.EAT_ITEM, context);
         }

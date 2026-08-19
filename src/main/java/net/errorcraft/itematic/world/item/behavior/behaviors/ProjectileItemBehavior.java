@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
@@ -53,7 +53,7 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
             .add(LootContextParams.TOOL, stack)
             .add(LootContextParams.THIS_ENTITY, user)
             .add(LootContextParams.ORIGIN, user.position())
-            .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePosition().add(0.0d, -0.1d, 0.0d))
+            .add(ItematicContextKeys.INTERACTED_POSITION, user.getEyePosition().add(0.0d, -0.1d, 0.0d))
             .build();
         return this.spawnEntity(context, PositionTarget.INTERACTED, angleOffset, speed, 1.0f);
     }
@@ -86,7 +86,7 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
         if (user != null) {
             initializeProjectile(projectileEntity, user, angleOffset, speed, uncertainty);
         } else {
-            initializeProjectile(projectileEntity, context.getOrDefault(ItematicContextParameters.SIDE, Direction.UP), speed, uncertainty);
+            initializeProjectile(projectileEntity, context.getOrDefault(ItematicContextKeys.SIDE, Direction.UP), speed, uncertainty);
         }
 
         if (context.world() instanceof ServerLevel serverWorld) {

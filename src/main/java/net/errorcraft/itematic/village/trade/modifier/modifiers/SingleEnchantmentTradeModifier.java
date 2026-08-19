@@ -3,7 +3,7 @@ package net.errorcraft.itematic.village.trade.modifier.modifiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.util.Range;
+import net.errorcraft.itematic.util.RandomRange;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
@@ -22,18 +22,18 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.level.storage.loot.LootContext;
 import java.util.Optional;
 
-public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, HolderSet<Enchantment> enchantments, Range.IntegerRange levels) implements TradeModifier<SingleEnchantmentTradeModifier> {
+public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, HolderSet<Enchantment> enchantments, RandomRange.Integers levels) implements TradeModifier<SingleEnchantmentTradeModifier> {
     public static final MapCodec<SingleEnchantmentTradeModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Trade.WANTED_INDEX_CODEC.fieldOf("index").forGetter(SingleEnchantmentTradeModifier::index),
         Codec.INT.fieldOf("base_random_cost").forGetter(SingleEnchantmentTradeModifier::baseRandomCost),
         Codec.INT.fieldOf("per_level_random_cost").forGetter(SingleEnchantmentTradeModifier::perLevelRandomCost),
         Codec.INT.fieldOf("per_level_cost").forGetter(SingleEnchantmentTradeModifier::perLevelCost),
         RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).fieldOf("enchantments").forGetter(SingleEnchantmentTradeModifier::enchantments),
-        Range.INT_CODEC.fieldOf("levels").forGetter(SingleEnchantmentTradeModifier::levels)
+        RandomRange.Integers.CODEC.fieldOf("levels").forGetter(SingleEnchantmentTradeModifier::levels)
     ).apply(instance, SingleEnchantmentTradeModifier::new));
 
     public static SingleEnchantmentTradeModifier of(int index, int baseRandomCost, int perLevelRandomCost, int perLevelCost, HolderSet<Enchantment> enchantments) {
-        return new SingleEnchantmentTradeModifier(index, baseRandomCost, perLevelRandomCost, perLevelCost, enchantments, Range.IntegerRange.atLeast(1));
+        return new SingleEnchantmentTradeModifier(index, baseRandomCost, perLevelRandomCost, perLevelCost, enchantments, RandomRange.Integers.atLeast(1));
     }
 
     @Override

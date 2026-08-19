@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.entity.initializer.initializers;
 
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
 import net.minecraft.core.BlockPos;
@@ -29,8 +29,8 @@ public record ThrownBallEntityInitializer<T extends AbstractHurtingProjectile>(O
             return this.spawnFromUser(level, user);
         }
 
-        Direction side = context.get(ItematicContextParameters.SIDE);
-        Vec3 position = context.get(ItematicContextParameters.INTERACTED_POSITION);
+        Direction side = context.get(ItematicContextKeys.SIDE);
+        Vec3 position = context.get(ItematicContextKeys.INTERACTED_POSITION);
         if (side != null && position != null) {
             return this.spawnFromSide(level, side, position);
         }

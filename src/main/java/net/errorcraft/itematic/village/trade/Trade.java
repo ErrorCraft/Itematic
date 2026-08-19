@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.mixin.world.entity.npc.villager.VillagerTradesAccessor;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.ItematicCodecs;
-import net.errorcraft.itematic.util.Range;
+import net.errorcraft.itematic.util.RandomRange;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -181,10 +181,10 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         }
     }
 
-    public record Entry(Holder<Item> item, Range.IntegerRange count, Optional<LootItemFunction> itemModifier) {
+    public record Entry(Holder<Item> item, RandomRange.Integers count, Optional<LootItemFunction> itemModifier) {
         public static final Codec<Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(Entry::item),
-            Range.INT_CODEC.optionalFieldOf("count", Range.IntegerRange.of(1)).forGetter(Entry::count),
+            RandomRange.Integers.CODEC.optionalFieldOf("count", RandomRange.Integers.exactly(1)).forGetter(Entry::count),
             LootItemFunctions.ROOT_CODEC.optionalFieldOf("item_modifier").forGetter(Entry::itemModifier)
         ).apply(instance, Entry::new));
 
@@ -206,7 +206,7 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         }
 
         public static Entry of(Holder<Item> item, int count, @Nullable LootItemFunction itemModifier) {
-            return new Entry(item, Range.IntegerRange.of(count), Optional.ofNullable(itemModifier));
+            return new Entry(item, RandomRange.Integers.exactly(count), Optional.ofNullable(itemModifier));
         }
 
         public static Entry ofEmerald(HolderGetter<Item> items) {

@@ -2,8 +2,8 @@ package net.errorcraft.itematic;
 
 import net.errorcraft.itematic.advancements.criterion.ItematicEntitySubPredicates;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
-import net.errorcraft.itematic.util.context.ItematicContextTypes;
+import net.errorcraft.itematic.util.context.ItematicContextKeySets;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
@@ -33,10 +33,10 @@ public class Itematic implements ModInitializer {
         ItemBehaviorType.init();
         ItemEvent.init();
         ActionTypes.init();
-        ItematicContextTypes.init();
+        ItematicContextKeySets.init();
         SequenceHandlerTypes.init();
         ItematicPredicateTypes.init();
-        ItematicContextParameters.init();
+        ItematicContextKeys.init();
         SmithingTemplates.init();
         BlockPickerType.init();
         ItematicItemModifierTypes.init();

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.level.material;
 
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -38,7 +38,7 @@ public class FluidUtil {
             return false;
         }
 
-        Direction direction = context.getOrDefault(ItematicContextParameters.SIDE, Direction.UP);
+        Direction direction = context.getOrDefault(ItematicContextKeys.SIDE, Direction.UP);
         return !(placer instanceof Player player) ||
             player.mayUseItemAt(
                 pos.relative(direction),

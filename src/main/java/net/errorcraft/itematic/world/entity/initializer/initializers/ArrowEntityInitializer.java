@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.entity.initializer.initializers;
 
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -33,7 +33,7 @@ public record ArrowEntityInitializer<T extends AbstractArrow>(OwnerCreator<T> ow
             );
         }
 
-        Vec3 pos = context.get(ItematicContextParameters.INTERACTED_POSITION);
+        Vec3 pos = context.get(ItematicContextKeys.INTERACTED_POSITION);
         if (pos == null) {
             return null;
         }

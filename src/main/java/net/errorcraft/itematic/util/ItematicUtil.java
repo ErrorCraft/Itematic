@@ -1,16 +1,17 @@
 package net.errorcraft.itematic.util;
 
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Util {
-    private Util() {}
+public class ItematicUtil {
+    private ItematicUtil() {}
 
     public static String descriptionKey(String prefix, Identifier id, String suffix) {
-        return net.minecraft.util.Util.makeDescriptionId(prefix, id) + "." + suffix;
+        return Util.makeDescriptionId(prefix, id) + "." + suffix;
     }
 
     public static String stackTraceMessage(String message) {

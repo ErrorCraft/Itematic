@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.ItematicCodecs;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.ItemEvent;
@@ -74,10 +74,10 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
             .add(LootContextParams.ATTACKING_ENTITY, attacker)
             .add(LootContextParams.ORIGIN, attacker.position())
             .add(LootContextParams.TARGET_ENTITY, target)
-            .add(ItematicContextParameters.INTERACTED_POSITION, target.position())
+            .add(ItematicContextKeys.INTERACTED_POSITION, target.position())
             .add(LootContextParams.TOOL, stack)
-            .add(ItematicContextParameters.HAND, usedHand)
-            .add(ItematicContextParameters.EQUIPMENT_SLOT, usedHand.asEquipmentSlot())
+            .add(ItematicContextKeys.HAND, usedHand)
+            .add(ItematicContextKeys.EQUIPMENT_SLOT, usedHand.asEquipmentSlot())
             .build();
         stack.itematic$invokeEvent(ItemEvent.USE_WEAPON, context);
         Weapon weapon = stack.get(DataComponents.WEAPON);

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.world.entity.npc.villager;
 
 import com.google.common.collect.Lists;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.util.context.ItematicContextTypes;
+import net.errorcraft.itematic.util.context.ItematicContextKeySets;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -53,7 +53,7 @@ public abstract class AbstractVillagerExtender extends MobExtender {
         LootParams set = new LootParams.Builder(world)
             .withParameter(LootContextParams.THIS_ENTITY, this)
             .withParameter(LootContextParams.ORIGIN, this.position())
-            .create(ItematicContextTypes.TRADE);
+            .create(ItematicContextKeySets.TRADE);
         LootContext context = new LootContext.Builder(set).create(Optional.empty());
         this.fillRecipes(context);
     }

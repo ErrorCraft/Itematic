@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.item.placement;
 
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
@@ -42,7 +42,7 @@ public class EntityPlacer {
         }
 
         BlockState state = world.getBlockState(pos);
-        Direction side = context.get(ItematicContextParameters.SIDE);
+        Direction side = context.get(ItematicContextKeys.SIDE);
         BlockPos truePos = state.getCollisionShape(world, pos).isEmpty() || side == null
             ? pos
             : pos.relative(side);

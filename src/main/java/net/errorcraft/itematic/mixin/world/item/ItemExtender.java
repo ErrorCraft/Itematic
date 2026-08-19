@@ -8,7 +8,7 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.world.item.ItemAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.ActionEventMap;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -168,7 +168,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())
                 .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextParameters.HAND, hand)
+                .add(ItematicContextKeys.HAND, hand)
                 .build();
             if (this.itematic$invokeEvent(ItemEvent.USE, context)) {
                 result = result.max(ItemResult.CONSUME);
@@ -202,10 +202,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .stackExchanger(stackExchanger)
                 .addOptional(LootContextParams.THIS_ENTITY, context.getPlayer())
                 .addOptional(LootContextParams.ORIGIN, context.getPlayer(), Entity::position)
-                .add(ItematicContextParameters.INTERACTED_POSITION, context.getClickedPos().getCenter())
+                .add(ItematicContextKeys.INTERACTED_POSITION, context.getClickedPos().getCenter())
                 .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextParameters.HAND, context.getHand())
-                .add(ItematicContextParameters.SIDE, context.getClickedFace())
+                .add(ItematicContextKeys.HAND, context.getHand())
+                .add(ItematicContextKeys.SIDE, context.getClickedFace())
                 .build();
             if (this.itematic$invokeEvent(ItemEvent.USE_ON_BLOCK, actionContext)) {
                 result = result.max(ItemResult.CONSUME);
@@ -240,9 +240,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())
                 .add(LootContextParams.TARGET_ENTITY, entity)
-                .add(ItematicContextParameters.INTERACTED_POSITION, entity.position())
+                .add(ItematicContextKeys.INTERACTED_POSITION, entity.position())
                 .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextParameters.HAND, hand)
+                .add(ItematicContextKeys.HAND, hand)
                 .build();
             if (this.itematic$invokeEvent(ItemEvent.USE_ON_ENTITY, context)) {
                 result = result.max(ItemResult.CONSUME);
@@ -275,9 +275,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.THIS_ENTITY, attacker)
                 .add(LootContextParams.ORIGIN, attacker.position())
                 .add(LootContextParams.TARGET_ENTITY, target)
-                .add(ItematicContextParameters.INTERACTED_POSITION, target.position())
+                .add(ItematicContextKeys.INTERACTED_POSITION, target.position())
                 .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
+                .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
             this.itematic$invokeEvent(ItemEvent.HIT_ENTITY, context);
         }
@@ -311,9 +311,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .stackExchanger(stackExchanger)
                 .add(LootContextParams.THIS_ENTITY, miner)
                 .add(LootContextParams.ORIGIN, miner.position())
-                .add(ItematicContextParameters.INTERACTED_POSITION, pos.getCenter())
+                .add(ItematicContextKeys.INTERACTED_POSITION, pos.getCenter())
                 .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
+                .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
             this.itematic$invokeEvent(ItemEvent.BROKE_BLOCK, context);
         }
@@ -364,7 +364,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())
                 .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextParameters.HAND, user.getUsedItemHand())
+                .add(ItematicContextKeys.HAND, user.getUsedItemHand())
                 .build();
             this.itematic$invokeEvent(ItemEvent.STOPPED_USING, context);
         }
@@ -389,7 +389,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.THIS_ENTITY, entity)
                 .add(LootContextParams.ORIGIN, entity.position())
                 .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextParameters.HAND, entity.getUsedItemHand())
+                .add(ItematicContextKeys.HAND, entity.getUsedItemHand())
                 .build();
             this.itematic$invokeEvent(ItemEvent.FINISHED_USING, context);
         }

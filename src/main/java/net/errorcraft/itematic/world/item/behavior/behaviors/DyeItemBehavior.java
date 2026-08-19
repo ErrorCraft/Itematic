@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.actions.ModifySignAction;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -41,7 +41,7 @@ public record DyeItemBehavior(DyeColor color) implements ItemBehavior<DyeItemBeh
             .possibleStackExchanger(player, stack)
             .addOptional(LootContextParams.THIS_ENTITY, player)
             .addOptional(LootContextParams.ORIGIN, player, Entity::position)
-            .add(ItematicContextParameters.INTERACTED_POSITION, context.getClickedPos().getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, context.getClickedPos().getCenter())
             .add(LootContextParams.TOOL, stack)
             .build();
         ModifySignAction action = ModifySignAction.dye(PositionTarget.INTERACTED, this.color);

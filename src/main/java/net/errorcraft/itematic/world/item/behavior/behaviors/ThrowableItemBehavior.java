@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.ItematicCodecs;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
@@ -91,7 +91,7 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
                 .add(LootContextParams.TOOL, stack)
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())
-                .add(ItematicContextParameters.INTERACTED_POSITION, user.getEyePosition().add(0.0d, -0.1d, 0.0d))
+                .add(ItematicContextKeys.INTERACTED_POSITION, user.getEyePosition().add(0.0d, -0.1d, 0.0d))
                 .build();
             this.createEntity(context, serverWorld, stack);
         }
@@ -115,8 +115,8 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
         }
 
         ActionContext spawnedContext = context.extend()
-            .add(ItematicContextParameters.SPAWNED_ENTITY, projectileEntity)
-            .add(ItematicContextParameters.SPAWNED_POSITION, projectileEntity.position())
+            .add(ItematicContextKeys.SPAWNED_ENTITY, projectileEntity)
+            .add(ItematicContextKeys.SPAWNED_POSITION, projectileEntity.position())
             .build();
         stack.itematic$invokeEvent(ItemEvent.THROW_PROJECTILE, spawnedContext);
     }

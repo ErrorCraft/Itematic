@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.placement.fluid;
 
 import net.errorcraft.itematic.references.FluidIds;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.level.material.FluidUtil;
@@ -50,7 +50,7 @@ public class FluidPlacer {
             return this.tryPlaceFluid(pos);
         }
 
-        Direction direction = this.context.get(ItematicContextParameters.SIDE);
+        Direction direction = this.context.get(ItematicContextKeys.SIDE);
         if (direction == null) {
             return false;
         }

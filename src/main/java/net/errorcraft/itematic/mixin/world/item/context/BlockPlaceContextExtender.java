@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.world.item.context;
 
 import net.errorcraft.itematic.access.world.item.context.BlockPlaceContextAccess;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.minecraft.world.InteractionHand;
@@ -32,10 +32,10 @@ public class BlockPlaceContextExtender extends UseOnContext implements BlockPlac
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, this.getPlayer())
             .addOptional(LootContextParams.ORIGIN, this.getPlayer(), Entity::position)
-            .add(ItematicContextParameters.INTERACTED_POSITION, this.getClickedPos().getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, this.getClickedPos().getCenter())
             .add(LootContextParams.TOOL, this.getItemInHand())
-            .add(ItematicContextParameters.HAND, this.getHand())
-            .add(ItematicContextParameters.SIDE, this.getClickedFace())
+            .add(ItematicContextKeys.HAND, this.getHand())
+            .add(ItematicContextKeys.SIDE, this.getClickedFace())
             .build();
     }
 }

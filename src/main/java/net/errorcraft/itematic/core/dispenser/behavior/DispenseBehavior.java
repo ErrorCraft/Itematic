@@ -2,7 +2,7 @@ package net.errorcraft.itematic.core.dispenser.behavior;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.actions.SequenceAction;
@@ -58,8 +58,8 @@ public class DispenseBehavior extends OptionalDispenseItemBehavior {
         ActionContext context = ActionContext.builder(pointer.level())
             .stackExchanger(side, outputPos, stack)
             .add(LootContextParams.ORIGIN, pointer.center())
-            .add(ItematicContextParameters.INTERACTED_POSITION, outputPos)
-            .add(ItematicContextParameters.SIDE, side)
+            .add(ItematicContextKeys.INTERACTED_POSITION, outputPos)
+            .add(ItematicContextKeys.SIDE, side)
             .add(LootContextParams.TOOL, stack)
             .add(LootContextParams.BLOCK_ENTITY, pointer.blockEntity())
             .build();

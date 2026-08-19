@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.entity.initializer.initializers;
 
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
 import net.minecraft.core.BlockPos;
@@ -20,12 +20,12 @@ public record HangingEntityInitializer<T extends HangingEntity>(Creator<T> creat
 
     @Override
     public @Nullable T create(ActionContext context, EntitySpawnReason reason) {
-        BlockPos pos = context.get(ItematicContextParameters.INTERACTED_POSITION, BlockPos::containing);
+        BlockPos pos = context.get(ItematicContextKeys.INTERACTED_POSITION, BlockPos::containing);
         if (pos == null) {
             return null;
         }
 
-        Direction facing = context.getOrDefault(ItematicContextParameters.SIDE, Direction.UP);
+        Direction facing = context.getOrDefault(ItematicContextKeys.SIDE, Direction.UP);
         if (!this.mayPlace(context, pos, facing)) {
             return null;
         }

@@ -8,8 +8,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.access.world.item.ItemStackAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.util.Util;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.ItematicUtil;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.Items;
@@ -204,7 +204,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     )
     private void checkItemValue(@Nullable ItemLike item, int count, PatchedDataComponentMap components, CallbackInfo info) {
         if (item != null) {
-            LOGGER.warn(Util.stackTraceMessage("Tried to create an item stack from an item or item-like value directly. This is no longer supported and should be modified to use a holder instead."));
+            LOGGER.warn(ItematicUtil.stackTraceMessage("Tried to create an item stack from an item or item-like value directly. This is no longer supported and should be modified to use a holder instead."));
         }
     }
 
@@ -872,7 +872,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
 
     @Unique
     private void onItemBroken(Item item, @Nullable LivingEntity entity, ActionContext context) {
-        EquipmentSlot slot = context.get(ItematicContextParameters.EQUIPMENT_SLOT);
+        EquipmentSlot slot = context.get(ItematicContextKeys.EQUIPMENT_SLOT);
         if (slot != null && entity != null) {
             entity.onEquippedItemBroken(item, slot);
         }

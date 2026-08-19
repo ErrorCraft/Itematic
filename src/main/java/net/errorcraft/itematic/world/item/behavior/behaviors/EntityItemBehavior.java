@@ -7,7 +7,7 @@ import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.mixin.world.item.HangingEntityItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
 import net.errorcraft.itematic.util.SetCodec;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
@@ -237,10 +237,10 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, context.getPlayer())
             .addOptional(LootContextParams.ORIGIN, context.getPlayer(), Entity::position)
-            .add(ItematicContextParameters.INTERACTED_POSITION, context.getClickedPos().getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, context.getClickedPos().getCenter())
             .add(LootContextParams.TOOL, context.getItemInHand())
-            .add(ItematicContextParameters.HAND, context.getHand())
-            .add(ItematicContextParameters.SIDE, context.getClickedFace())
+            .add(ItematicContextKeys.HAND, context.getHand())
+            .add(ItematicContextKeys.SIDE, context.getClickedFace())
             .build();
         return this.place(actionContext, PositionTarget.INTERACTED) != null;
     }

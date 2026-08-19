@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.ItemEvent;
@@ -78,9 +78,9 @@ public record ToolItemBehavior(Tool tool) implements ItemBehavior<ToolItemBehavi
             .stackExchanger(stackExchanger)
             .add(LootContextParams.THIS_ENTITY, miner)
             .add(LootContextParams.ORIGIN, miner.position())
-            .add(ItematicContextParameters.INTERACTED_POSITION, pos.getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, pos.getCenter())
             .add(LootContextParams.TOOL, stack)
-            .add(ItematicContextParameters.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
+            .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
             .build();
         stack.itematic$invokeEvent(ItemEvent.USE_TOOL, context);
         stack.itematic$damage(tool.damagePerBlock(), context);

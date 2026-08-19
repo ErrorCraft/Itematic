@@ -3,7 +3,7 @@ package net.errorcraft.itematic.village.trade.modifier.modifiers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.util.Range;
+import net.errorcraft.itematic.util.RandomRange;
 import net.errorcraft.itematic.village.trade.Trade;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
 import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
@@ -21,15 +21,15 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.level.storage.loot.LootContext;
 import java.util.Optional;
 
-public record EnchantWithLevelsTradeModifier(int index, Range.IntegerRange level, boolean treasure) implements TradeModifier<EnchantWithLevelsTradeModifier> {
+public record EnchantWithLevelsTradeModifier(int index, RandomRange.Integers level, boolean treasure) implements TradeModifier<EnchantWithLevelsTradeModifier> {
     public static final MapCodec<EnchantWithLevelsTradeModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Trade.WANTED_INDEX_CODEC.fieldOf("index").forGetter(EnchantWithLevelsTradeModifier::index),
-        Range.INT_CODEC.fieldOf("level").forGetter(EnchantWithLevelsTradeModifier::level),
+        RandomRange.Integers.CODEC.fieldOf("level").forGetter(EnchantWithLevelsTradeModifier::level),
         Codec.BOOL.optionalFieldOf("treasure", false).forGetter(EnchantWithLevelsTradeModifier::treasure)
     ).apply(instance, EnchantWithLevelsTradeModifier::new));
 
     public static EnchantWithLevelsTradeModifier of(int index, int minLevel, int maxLevel) {
-        return new EnchantWithLevelsTradeModifier(index, Range.IntegerRange.of(minLevel, maxLevel), false);
+        return new EnchantWithLevelsTradeModifier(index, RandomRange.Integers.of(minLevel, maxLevel), false);
     }
 
     @Override

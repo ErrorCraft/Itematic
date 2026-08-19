@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.action.actions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.util.Range;
+import net.errorcraft.itematic.util.RandomRange;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -20,13 +20,13 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
 
-public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound, Optional<SoundSource> category, Range.FloatRange volume, Range.FloatRange pitch, boolean fromEntity) implements Action<PlaySoundAction> {
+public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound, Optional<SoundSource> category, RandomRange.Floats volume, RandomRange.Floats pitch, boolean fromEntity) implements Action<PlaySoundAction> {
     public static final MapCodec<PlaySoundAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(PlaySoundAction::position),
         SoundEvent.CODEC.fieldOf("sound").forGetter(PlaySoundAction::sound),
         StringRepresentable.fromEnum(SoundSource::values).optionalFieldOf("category").forGetter(PlaySoundAction::category),
-        Range.FLOAT_CODEC.fieldOf("volume").forGetter(PlaySoundAction::volume),
-        Range.FLOAT_CODEC.fieldOf("pitch").forGetter(PlaySoundAction::pitch),
+        RandomRange.Floats.CODEC.fieldOf("volume").forGetter(PlaySoundAction::volume),
+        RandomRange.Floats.CODEC.fieldOf("pitch").forGetter(PlaySoundAction::pitch),
         Codec.BOOL.optionalFieldOf("from_entity", false).forGetter(PlaySoundAction::fromEntity)
     ).apply(instance, PlaySoundAction::new));
 
@@ -39,8 +39,8 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
             position,
             sound,
             Optional.empty(),
-            Range.FloatRange.of(1.0f),
-            Range.FloatRange.of(1.0f),
+            RandomRange.Floats.exactly(1.0f),
+            RandomRange.Floats.exactly(1.0f),
             false
         );
     }
@@ -50,8 +50,8 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
             position,
             sound,
             Optional.of(category),
-            Range.FloatRange.of(1.0f),
-            Range.FloatRange.of(1.0f),
+            RandomRange.Floats.exactly(1.0f),
+            RandomRange.Floats.exactly(1.0f),
             false
         );
     }
@@ -102,8 +102,8 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
         private final PositionTarget position;
         private final Holder<SoundEvent> sound;
         private final SoundSource category;
-        private Range.FloatRange volume = Range.FloatRange.of(1.0f);
-        private Range.FloatRange pitch = Range.FloatRange.of(1.0f);
+        private RandomRange.Floats volume = RandomRange.Floats.exactly(1.0f);
+        private RandomRange.Floats pitch = RandomRange.Floats.exactly(1.0f);
 
         private Builder(PositionTarget position, Holder<SoundEvent> sound, SoundSource category) {
             this.position = position;
@@ -116,22 +116,22 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
         }
 
         public Builder volume(float volume) {
-            this.volume = Range.FloatRange.of(volume);
+            this.volume = RandomRange.Floats.exactly(volume);
             return this;
         }
 
         public Builder volume(float min, float max) {
-            this.volume = Range.FloatRange.of(min, max);
+            this.volume = RandomRange.Floats.of(min, max);
             return this;
         }
 
         public Builder pitch(float pitch) {
-            this.pitch = Range.FloatRange.of(pitch);
+            this.pitch = RandomRange.Floats.exactly(pitch);
             return this;
         }
 
         public Builder pitch(float min, float max) {
-            this.pitch = Range.FloatRange.of(min, max);
+            this.pitch = RandomRange.Floats.of(min, max);
             return this;
         }
     }

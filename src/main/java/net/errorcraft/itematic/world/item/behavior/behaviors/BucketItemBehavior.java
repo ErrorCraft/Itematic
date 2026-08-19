@@ -6,7 +6,7 @@ import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
 import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
@@ -111,10 +111,10 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, user)
             .addOptional(LootContextParams.ORIGIN, user, Entity::position)
-            .add(ItematicContextParameters.INTERACTED_POSITION, blockHitResult.getBlockPos().getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, blockHitResult.getBlockPos().getCenter())
             .add(LootContextParams.TOOL, stack)
-            .add(ItematicContextParameters.HAND, hand)
-            .add(ItematicContextParameters.SIDE, blockHitResult.getDirection())
+            .add(ItematicContextKeys.HAND, hand)
+            .add(ItematicContextKeys.SIDE, blockHitResult.getDirection())
             .build();
         if (this.use(context, PositionTarget.INTERACTED, !blockHitResult.isInside())) {
             return ItemResult.CONSUME;

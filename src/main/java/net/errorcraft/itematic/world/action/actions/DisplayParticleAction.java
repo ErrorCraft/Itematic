@@ -4,12 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.ItematicCodecs;
-import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.phys.Vec3Provider;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -17,13 +17,13 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
-public record DisplayParticleAction(PositionTarget position, ParticleOptions particle, int count, Vec3dProvider offset, Vec3dProvider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
+public record DisplayParticleAction(PositionTarget position, ParticleOptions particle, int count, Vec3Provider offset, Vec3Provider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
     public static final MapCodec<DisplayParticleAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(DisplayParticleAction::position),
         ParticleTypes.CODEC.fieldOf("particle").forGetter(DisplayParticleAction::particle),
         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("count").forGetter(DisplayParticleAction::count),
-        Vec3dProvider.CODEC.optionalFieldOf("offset", Vec3dProvider.ZERO).forGetter(DisplayParticleAction::offset),
-        Vec3dProvider.CODEC.fieldOf("delta").forGetter(DisplayParticleAction::delta),
+        Vec3Provider.CODEC.optionalFieldOf("offset", Vec3Provider.ZERO).forGetter(DisplayParticleAction::offset),
+        Vec3Provider.CODEC.fieldOf("delta").forGetter(DisplayParticleAction::delta),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("speed").forGetter(DisplayParticleAction::speed),
         Codec.BOOL.optionalFieldOf("force", false).forGetter(DisplayParticleAction::force)
     ).apply(instance, DisplayParticleAction::new));
@@ -79,8 +79,8 @@ public record DisplayParticleAction(PositionTarget position, ParticleOptions par
         private final PositionTarget position;
         private final ParticleOptions particle;
         private int count = 0;
-        private Vec3dProvider offset = Vec3dProvider.ZERO;
-        private Vec3dProvider delta = Vec3dProvider.ZERO;
+        private Vec3Provider offset = Vec3Provider.ZERO;
+        private Vec3Provider delta = Vec3Provider.ZERO;
         private double speed = 0.0d;
         private boolean force = false;
 
@@ -98,12 +98,12 @@ public record DisplayParticleAction(PositionTarget position, ParticleOptions par
             return this;
         }
 
-        public Builder offset(Vec3dProvider offset) {
+        public Builder offset(Vec3Provider offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder delta(Vec3dProvider delta) {
+        public Builder delta(Vec3Provider delta) {
             this.delta = delta;
             return this;
         }

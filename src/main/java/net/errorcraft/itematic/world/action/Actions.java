@@ -5,7 +5,6 @@ import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
-import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
@@ -13,6 +12,7 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSeq
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
+import net.errorcraft.itematic.world.phys.Vec3Provider;
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
@@ -234,22 +234,22 @@ public class Actions {
         return UncheckedSequenceHandler.builder()
             .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, type)
                 .count(20)
-                .offset(Vec3dProvider.of(
+                .offset(Vec3Provider.of(
                     -1.0d / 3.0d, 1.0d / 3.0d,
                     -1.0d, 1.0d,
                     -1.0d / 3.0d, 1.0d / 3.0d
                 ))
-                .delta(Vec3dProvider.of(0.0d, 0.07d, 0.0d))
+                .delta(Vec3Provider.exactly(0.0d, 0.07d, 0.0d))
                 .force()
                 .build())
             .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, type)
                 .count(20)
-                .offset(Vec3dProvider.of(
+                .offset(Vec3Provider.of(
                     -0.25d, 0.25d,
                     0.4d, 0.4d,
                     -0.25d, 0.25d
                 ))
-                .delta(Vec3dProvider.of(0.0d, 0.005d, 0.0d))
+                .delta(Vec3Provider.exactly(0.0d, 0.005d, 0.0d))
                 .build());
     }
 

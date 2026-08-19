@@ -12,7 +12,6 @@ import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
 import net.errorcraft.itematic.references.*;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.errorcraft.itematic.tags.ItematicItemTags;
-import net.errorcraft.itematic.util.Vec3dProvider;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionEventMap;
 import net.errorcraft.itematic.world.action.Actions;
@@ -40,6 +39,7 @@ import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointer
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
+import net.errorcraft.itematic.world.phys.Vec3Provider;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentPatch;
@@ -253,7 +253,7 @@ public class Items {
                             .add(ExchangeItemAction.of(this.items.getOrThrow(ItemIds.GLASS_BOTTLE)))
                             .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SPLASH)
                                 .count(5)
-                                .offset(Vec3dProvider.of(
+                                .offset(Vec3Provider.of(
                                     -0.5d, 0.5d,
                                     1.0d, 1.0d,
                                     -0.5d, 0.5d
@@ -10697,7 +10697,7 @@ public class Items {
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.END_PORTAL_FRAME_FILL), SoundSource.BLOCKS))
                             .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SMOKE)
                                 .count(16)
-                                .offset(Vec3dProvider.of(
+                                .offset(Vec3Provider.of(
                                     -0.1875d, 0.1875d,
                                     0.8125d, 0.8125d,
                                     -0.1875d, 0.1875d))

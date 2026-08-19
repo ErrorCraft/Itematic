@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.access.stats.StatTypeAccess;
-import net.errorcraft.itematic.util.Util;
+import net.errorcraft.itematic.util.ItematicUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -102,7 +102,7 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
     )
     private void checkDynamicRegistry(T key, CallbackInfoReturnable<Boolean> info) {
         if (Objects.equals(this.registry.key(), Registries.ITEM)) {
-            LOGGER.warn(Util.stackTraceMessage("Tried to check for a stat for an item from a value directly. This is no longer supported and should be modified to use a holder instead."));
+            LOGGER.warn(ItematicUtil.stackTraceMessage("Tried to check for a stat for an item from a value directly. This is no longer supported and should be modified to use a holder instead."));
         }
     }
 
@@ -112,7 +112,7 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
     @Nullable
     private Stat<T> checkDynamicRegistry(T object, StatFormatter formatter, Operation<Stat<T>> original) {
         if (Objects.equals(this.registry.key(), Registries.ITEM)) {
-            LOGGER.warn(Util.stackTraceMessage("Tried to get a stat for an item from a value directly. This is no longer supported and should be modified to use a holder instead."));
+            LOGGER.warn(ItematicUtil.stackTraceMessage("Tried to get a stat for an item from a value directly. This is no longer supported and should be modified to use a holder instead."));
             return null;
         }
 

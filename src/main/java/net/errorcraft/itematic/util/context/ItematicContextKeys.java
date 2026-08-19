@@ -7,7 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.phys.Vec3;
 
-public class ItematicContextParameters {
+public class ItematicContextKeys {
     public static final ContextKey<Direction> SIDE = ContextKey.vanilla("side");
     public static final ContextKey<Vec3> INTERACTED_POSITION = ContextKey.vanilla("interacted_position");
     public static final ContextKey<EquipmentSlot> EQUIPMENT_SLOT = ContextKey.vanilla("equipment_slot");
@@ -15,7 +15,7 @@ public class ItematicContextParameters {
     public static final ContextKey<Entity> SPAWNED_ENTITY = ContextKey.vanilla("spawned_entity");
     public static final ContextKey<Vec3> SPAWNED_POSITION = ContextKey.vanilla("spawned_position");
 
-    private ItematicContextParameters() {}
+    private ItematicContextKeys() {}
 
     public static void init() {}
 }

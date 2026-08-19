@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.references.SoundEventIds;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
@@ -138,7 +138,7 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())
                 .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextParameters.HAND, hand)
+                .add(ItematicContextKeys.HAND, hand)
                 .build();
             stack.itematic$invokeEvent(ItemEvent.EQUIP_ITEM, context);
         }

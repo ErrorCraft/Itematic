@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -37,7 +37,7 @@ public record DropItemFromBlockAction(PositionTarget position, ItemStack item) i
             return false;
         }
 
-        Direction side = context.get(ItematicContextParameters.SIDE);
+        Direction side = context.get(ItematicContextKeys.SIDE);
         if (side == null) {
             return false;
         }

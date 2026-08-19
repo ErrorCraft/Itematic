@@ -4,13 +4,13 @@ import net.errorcraft.itematic.mixin.world.level.storage.loot.parameters.LootCon
 import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public class ItematicContextTypes {
+public class ItematicContextKeySets {
     public static final ContextKeySet TRADE = LootContextParamSetsAccessor.register("trade", builder ->
         builder.required(LootContextParams.THIS_ENTITY)
             .required(LootContextParams.ORIGIN)
     );
 
-    private ItematicContextTypes() {}
+    private ItematicContextKeySets() {}
 
     public static void init() {}
 }

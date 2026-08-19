@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.entity.initializer.initializers;
 
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -60,7 +60,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
             return entity.blockPosition();
         }
 
-        return context.get(ItematicContextParameters.INTERACTED_POSITION, BlockPos::containing);
+        return context.get(ItematicContextKeys.INTERACTED_POSITION, BlockPos::containing);
     }
 
     private Vec3 getPosition(ActionContext context) {
@@ -69,7 +69,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
             return new Vec3(entity.getX(), entity.getY(0.5d), entity.getZ());
         }
 
-        return context.get(ItematicContextParameters.INTERACTED_POSITION);
+        return context.get(ItematicContextKeys.INTERACTED_POSITION);
     }
 
     private EyeOfEnder createEntity(ServerLevel level, Vec3 pos, ItemStack stack, BlockPos strongholdPos) {

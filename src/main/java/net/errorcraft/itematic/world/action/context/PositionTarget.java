@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.action.context;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.level.storage.loot.LootContextArg;
@@ -10,8 +10,8 @@ import net.minecraft.world.phys.Vec3;
 
 public enum PositionTarget implements StringRepresentable, LootContextArg.SimpleGetter<Vec3> {
     ORIGIN("origin", LootContextParams.ORIGIN),
-    INTERACTED("interacted", ItematicContextParameters.INTERACTED_POSITION),
-    SPAWNED("spawned", ItematicContextParameters.SPAWNED_POSITION);
+    INTERACTED("interacted", ItematicContextKeys.INTERACTED_POSITION),
+    SPAWNED("spawned", ItematicContextKeys.SPAWNED_POSITION);
 
     public static final Codec<PositionTarget> CODEC = StringRepresentable.fromEnum(PositionTarget::values);
 

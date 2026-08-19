@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.entity.spawn;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.mixin.world.entity.EntityAccessor;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
 import net.errorcraft.itematic.world.entity.spawn.rule.ConditionedEntitySpawnRule;
@@ -76,7 +76,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
         }
 
         ActionContext spawnActionContext = context.extend()
-            .add(ItematicContextParameters.INTERACTED_POSITION, initialPos)
+            .add(ItematicContextKeys.INTERACTED_POSITION, initialPos)
             .build();
         if (!this.applyRules(spawnActionContext, spawnContext)) {
             return null;
@@ -125,8 +125,8 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
         ServerLevel level = spawnContext.level();
         level.addFreshEntityWithPassengers(entity);
         ActionContext spawnedActionContext = spawnActionContext.extend()
-            .add(ItematicContextParameters.SPAWNED_ENTITY, entity)
-            .add(ItematicContextParameters.SPAWNED_POSITION, entity.position())
+            .add(ItematicContextKeys.SPAWNED_ENTITY, entity)
+            .add(ItematicContextKeys.SPAWNED_POSITION, entity.position())
             .build();
         this.spawned(entity, level, spawnedActionContext);
         return entity;

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
@@ -33,7 +33,7 @@ public record SwingHandAction(LootContext.EntityTarget entity) implements Action
             return false;
         }
 
-        InteractionHand hand = context.get(ItematicContextParameters.HAND);
+        InteractionHand hand = context.get(ItematicContextKeys.HAND);
         if (hand == null) {
             return false;
         }

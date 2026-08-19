@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.world.action.context;
 
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
@@ -123,7 +123,7 @@ public class ActionContext {
             return null;
         }
 
-        Direction side = this.get(ItematicContextParameters.SIDE);
+        Direction side = this.get(ItematicContextKeys.SIDE);
         if (side == null) {
             return null;
         }
@@ -139,7 +139,7 @@ public class ActionContext {
             return new BlockPlaceContext(
                 this.world,
                 entity instanceof Player player ? player : null,
-                this.get(ItematicContextParameters.HAND),
+                this.get(ItematicContextKeys.HAND),
                 this.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY),
                 new BlockHitResult(
                     pos,

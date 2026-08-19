@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
@@ -137,7 +137,7 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
             .add(LootContextParams.THIS_ENTITY, shooter)
             .add(LootContextParams.ORIGIN, shooter.position())
             .add(LootContextParams.TOOL, stack)
-            .add(ItematicContextParameters.HAND, hand)
+            .add(ItematicContextKeys.HAND, hand)
             .build();
         stack.itematic$damage(damage, context);
     }
