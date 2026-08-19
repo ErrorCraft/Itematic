@@ -34,7 +34,7 @@ public class FluidUtil {
             return true;
         }
 
-        if (!context.world().mayInteract(placer, pos)) {
+        if (!context.level().mayInteract(placer, pos)) {
             return false;
         }
 

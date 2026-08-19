@@ -16,7 +16,7 @@ import net.errorcraft.itematic.world.item.trading.Trade;
 import net.errorcraft.itematic.world.item.trading.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
-import net.errorcraft.itematic.world.modification.WorldModificationType;
+import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.Identifier;

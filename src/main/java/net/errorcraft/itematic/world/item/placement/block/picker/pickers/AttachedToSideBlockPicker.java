@@ -13,7 +13,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record AttachedToSideBlockPicker(Holder<Block> attachedBlock, Holder<Block> otherBlock, Direction attachedSide) implements BlockPicker<AttachedToSideBlockPicker> {
     public static final MapCodec<AttachedToSideBlockPicker> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

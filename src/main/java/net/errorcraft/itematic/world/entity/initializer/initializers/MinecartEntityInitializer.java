@@ -16,7 +16,7 @@ import org.jspecify.annotations.Nullable;
 public record MinecartEntityInitializer<T extends AbstractMinecart>(EntityType<T> type) implements EntityInitializer<T> {
     @Override
     public @Nullable T create(ActionContext context, EntitySpawnReason reason) {
-        Level level = context.world();
+        Level level = context.level();
         T entity = this.type.create(level, reason);
         if (entity == null) {
             return null;

@@ -9,6 +9,7 @@ import net.minecraft.server.ServerFunctionManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.context.ContextMap;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,34 +22,33 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class ActionContext {
-    private final Level world;
+    private final Level level;
     private final ContextMap parameters;
     private final ItemStackExchanger stackExchanger;
 
-    private ActionContext(Level world, ContextMap parameters, ItemStackExchanger stackExchanger) {
-        this.world = world;
+    private ActionContext(Level level, ContextMap parameters, ItemStackExchanger stackExchanger) {
+        this.level = level;
         this.parameters = parameters;
         this.stackExchanger = stackExchanger;
     }
 
-    public static Builder builder(Level world) {
-        return new Builder(world);
+    public static Builder builder(Level level) {
+        return new Builder(level);
     }
 
     public Builder extend() {
         return new Builder(this);
     }
 
-    public Level world() {
-        return this.world;
+    public Level level() {
+        return this.level;
     }
 
     @Nullable
@@ -67,7 +67,7 @@ public class ActionContext {
     }
 
     @Nullable
-    public <T, U> U get(ContextKey<T> parameter, Function<@NotNull T, U> mapper) {
+    public <T, U> U get(ContextKey<T> parameter, Function<T, U> mapper) {
         T value = this.get(parameter);
         if (value == null) {
             return null;
@@ -90,17 +90,17 @@ public class ActionContext {
 
     @Nullable
     public LootContext lootContext() {
-        if (!(this.world instanceof ServerLevel serverWorld)) {
+        if (!(this.level instanceof ServerLevel serverLevel)) {
             return null;
         }
 
-        LootParams context = new LootParams(
-            serverWorld,
+        LootParams params = new LootParams(
+            serverLevel,
             this.parameters,
             Map.of(),
             0.0f
         );
-        return new LootContext.Builder(context).create(Optional.empty());
+        return new LootContext.Builder(params).create(Optional.empty());
     }
 
     public CommandSourceStack commandSource(ServerFunctionManager functionManager, Optional<LootContext.EntityTarget> entity, Optional<PositionTarget> position) {
@@ -137,9 +137,9 @@ public class ActionContext {
         Entity entity = this.get(LootContextParams.THIS_ENTITY);
         if (entity != null) {
             return new BlockPlaceContext(
-                this.world,
+                this.level,
                 entity instanceof Player player ? player : null,
-                this.get(ItematicContextKeys.HAND),
+                this.getOrDefault(ItematicContextKeys.HAND, InteractionHand.MAIN_HAND),
                 this.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY),
                 new BlockHitResult(
                     pos,
@@ -150,9 +150,9 @@ public class ActionContext {
             );
         }
 
-        Direction useSide = this.world.isEmptyBlock(blockPos.below()) ? side : Direction.UP;
+        Direction useSide = this.level.isEmptyBlock(blockPos.below()) ? side : Direction.UP;
         return new DirectionalPlaceContext(
-            this.world,
+            this.level,
             blockPos,
             side,
             this.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY),
@@ -161,23 +161,23 @@ public class ActionContext {
     }
 
     public static class Builder {
-        private final Level world;
+        private final Level level;
         private ItemStackExchanger stackExchanger = ItemStackExchanger.EMPTY;
         private final ContextMap.Builder parameters = new ContextMap.Builder();
 
-        private Builder(Level world) {
-            this.world = world;
+        private Builder(Level level) {
+            this.level = level;
         }
 
         private Builder(ActionContext currentContext) {
-            this.world = currentContext.world;
+            this.level = currentContext.level;
             this.stackExchanger = currentContext.stackExchanger;
             this.parameters.itematic$copy(currentContext.parameters);
         }
 
         public ActionContext build() {
             return new ActionContext(
-                this.world,
+                this.level,
                 this.parameters.itematic$build(),
                 this.stackExchanger
             );
@@ -202,7 +202,7 @@ public class ActionContext {
         }
 
         public Builder stackExchanger(Direction side, Vec3 pos, ItemStack initialStack) {
-            this.stackExchanger = ItemStackExchanger.forDispenser(this.world, side, pos, initialStack);
+            this.stackExchanger = ItemStackExchanger.forDispenser(this.level, side, pos, initialStack);
             return this;
         }
 
@@ -216,7 +216,7 @@ public class ActionContext {
             return this;
         }
 
-        public <T, U> Builder addOptional(ContextKey<T> parameter, @Nullable U value, Function<@NotNull U, T> mapper) {
+        public <T, U> Builder addOptional(ContextKey<T> parameter, @Nullable U value, Function<U, T> mapper) {
             if (value == null) {
                 return this;
             }

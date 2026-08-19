@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +21,7 @@ public record InvokeItemEventAction(ItemEvent event) implements Action<InvokeIte
 
     @Override
     public ActionType<InvokeItemEventAction> type() {
-        return ActionTypes.INVOKE_ITEM_EVENT;
+        return ActionType.INVOKE_ITEM_EVENT;
     }
 
     @Override

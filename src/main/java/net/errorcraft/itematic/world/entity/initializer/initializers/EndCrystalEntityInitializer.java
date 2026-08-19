@@ -17,14 +17,14 @@ public class EndCrystalEntityInitializer implements EntityInitializer<EndCrystal
 
     @Override
     public @Nullable EndCrystal create(ActionContext context, EntitySpawnReason reason) {
-        Level level = context.world();
+        Level level = context.level();
         EndCrystal entity = EntityType.END_CRYSTAL.create(level, reason);
         if (entity == null) {
             return null;
         }
 
         entity.setShowBottom(false);
-        if (context.world() instanceof ServerLevel serverLevel) {
+        if (context.level() instanceof ServerLevel serverLevel) {
             this.tryRespawnEnderDragon(serverLevel);
         }
 

@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -25,7 +24,7 @@ public record TakeHoneyAction(PositionTarget position) implements Action<TakeHon
 
     @Override
     public ActionType<TakeHoneyAction> type() {
-        return ActionTypes.TAKE_HONEY;
+        return ActionType.TAKE_HONEY;
     }
 
     @Override
@@ -35,7 +34,7 @@ public record TakeHoneyAction(PositionTarget position) implements Action<TakeHon
             return false;
         }
 
-        BlockState state = context.world().getBlockState(pos);
+        BlockState state = context.level().getBlockState(pos);
         if (!state.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
             return false;
         }
@@ -49,7 +48,7 @@ public record TakeHoneyAction(PositionTarget position) implements Action<TakeHon
         }
 
         beehiveBlock.releaseBeesAndResetHoneyLevel(
-            context.world(),
+            context.level(),
             state,
             pos,
             context.get(LootContextParams.THIS_ENTITY) instanceof Player player ? player : null,

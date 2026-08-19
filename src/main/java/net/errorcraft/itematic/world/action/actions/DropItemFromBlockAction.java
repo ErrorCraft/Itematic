@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -27,7 +26,7 @@ public record DropItemFromBlockAction(PositionTarget position, ItemStack item) i
 
     @Override
     public ActionType<DropItemFromBlockAction> type() {
-        return ActionTypes.DROP_ITEM_FROM_BLOCK;
+        return ActionType.DROP_ITEM_FROM_BLOCK;
     }
 
     @Override
@@ -42,7 +41,7 @@ public record DropItemFromBlockAction(PositionTarget position, ItemStack item) i
             return false;
         }
 
-        Block.popResourceFromFace(context.world(), pos, side, this.item.copy());
+        Block.popResourceFromFace(context.level(), pos, side, this.item.copy());
         return true;
     }
 }

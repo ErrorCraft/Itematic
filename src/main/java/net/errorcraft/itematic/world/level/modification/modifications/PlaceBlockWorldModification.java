@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.world.modification.type;
+package net.errorcraft.itematic.world.level.modification.modifications;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -6,9 +6,8 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.placement.block.BlockPlacer;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
-import net.errorcraft.itematic.world.modification.WorldModification;
-import net.errorcraft.itematic.world.modification.WorldModificationType;
-import net.errorcraft.itematic.world.modification.WorldModificationTypes;
+import net.errorcraft.itematic.world.level.modification.WorldModification;
+import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
@@ -28,7 +27,7 @@ public record PlaceBlockWorldModification(BlockPicker<?> block, Holder<SoundEven
 
     @Override
     public WorldModificationType<?> type() {
-        return WorldModificationTypes.PLACE_BLOCK;
+        return WorldModificationType.PLACE_BLOCK;
     }
 
     @Override

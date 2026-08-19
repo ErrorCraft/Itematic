@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -27,7 +26,7 @@ public record WaxBlockAction(PositionTarget position) implements Action<WaxBlock
 
     @Override
     public ActionType<WaxBlockAction> type() {
-        return ActionTypes.WAX_BLOCK;
+        return ActionType.WAX_BLOCK;
     }
 
     @Override
@@ -37,7 +36,7 @@ public record WaxBlockAction(PositionTarget position) implements Action<WaxBlock
             return false;
         }
 
-        Level world = context.world();
+        Level world = context.level();
         return HoneycombItem.getWaxed(world.getBlockState(pos))
             .map(state -> {
                 Entity entity = context.get(LootContextParams.THIS_ENTITY);

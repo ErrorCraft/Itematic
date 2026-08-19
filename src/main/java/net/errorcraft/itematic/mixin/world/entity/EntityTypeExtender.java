@@ -443,7 +443,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
     @Override
     public @Nullable T itematic$create(ActionContext context, EntitySpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
-        if (!(context.world() instanceof ServerLevel level)) {
+        if (!(context.level() instanceof ServerLevel level)) {
             return null;
         }
 
@@ -468,7 +468,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
         return appendDefaultStackConfig(
             callback == null ?entity -> {} : entity -> callback.accept(entity, stack),
-            context.world(),
+            context.level(),
             stack,
             context.get(LootContextParams.THIS_ENTITY, LivingEntity.class)
         );

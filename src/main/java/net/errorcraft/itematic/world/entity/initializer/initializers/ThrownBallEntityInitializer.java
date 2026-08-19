@@ -23,7 +23,7 @@ public record ThrownBallEntityInitializer<T extends AbstractHurtingProjectile>(O
 
     @Override
     public @Nullable T create(ActionContext context, EntitySpawnReason reason) {
-        Level level = context.world();
+        Level level = context.level();
         Player user = context.get(LootContextParams.THIS_ENTITY, Player.class);
         if (user != null) {
             return this.spawnFromUser(level, user);

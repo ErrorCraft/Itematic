@@ -1,6 +1,7 @@
-package net.errorcraft.itematic.world.action;
+package net.errorcraft.itematic.tags;
 
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
+import net.errorcraft.itematic.world.action.ActionEntry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 

@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.commands.CommandResultCallback;
@@ -27,12 +26,12 @@ public record RunFunctionAction(Identifier function, Optional<LootContext.Entity
 
     @Override
     public ActionType<RunFunctionAction> type() {
-        return ActionTypes.RUN_FUNCTION;
+        return ActionType.RUN_FUNCTION;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        MinecraftServer server = context.world().getServer();
+        MinecraftServer server = context.level().getServer();
         if (server == null) {
             return false;
         }

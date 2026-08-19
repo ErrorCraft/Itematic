@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.ItemStacks;
@@ -27,7 +26,7 @@ public record MarkBannerOnItemAction(PositionTarget position) implements Action<
 
     @Override
     public ActionType<MarkBannerOnItemAction> type() {
-        return ActionTypes.MARK_BANNER_ON_ITEM;
+        return ActionType.MARK_BANNER_ON_ITEM;
     }
 
     @Override
@@ -37,7 +36,7 @@ public record MarkBannerOnItemAction(PositionTarget position) implements Action<
             return false;
         }
 
-        Level world = context.world();
+        Level world = context.level();
         if (!world.getBlockState(pos).is(BlockTags.BANNERS)) {
             return false;
         }

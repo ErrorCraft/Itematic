@@ -23,7 +23,7 @@ public class FireworkRocketEntityInitializer implements EntityInitializer<Firewo
         }
 
         return new FireworkRocketEntity(
-            context.world(),
+            context.level(),
             pos.x(),
             pos.y(),
             pos.z(),

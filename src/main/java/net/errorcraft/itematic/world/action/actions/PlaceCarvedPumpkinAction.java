@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -26,7 +25,7 @@ public record PlaceCarvedPumpkinAction(PositionTarget position) implements Actio
 
     @Override
     public ActionType<PlaceCarvedPumpkinAction> type() {
-        return ActionTypes.PLACE_CARVED_PUMPKIN;
+        return ActionType.PLACE_CARVED_PUMPKIN;
     }
 
     @Override
@@ -36,7 +35,7 @@ public record PlaceCarvedPumpkinAction(PositionTarget position) implements Actio
             return false;
         }
 
-        Level world = context.world();
+        Level world = context.level();
         if (!world.isEmptyBlock(pos)) {
             return false;
         }

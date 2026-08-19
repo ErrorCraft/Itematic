@@ -4,6 +4,7 @@ import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.references.SoundEventIds;
+import net.errorcraft.itematic.tags.ActionTags;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.errorcraft.itematic.world.action.actions.*;
 import net.errorcraft.itematic.world.action.context.PositionTarget;

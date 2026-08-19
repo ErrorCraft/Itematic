@@ -1,13 +1,12 @@
-package net.errorcraft.itematic.world.modification.type;
+package net.errorcraft.itematic.world.level.modification.modifications;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.placement.fluid.FluidPlacer;
-import net.errorcraft.itematic.world.modification.WorldModification;
-import net.errorcraft.itematic.world.modification.WorldModificationType;
-import net.errorcraft.itematic.world.modification.WorldModificationTypes;
+import net.errorcraft.itematic.world.level.modification.WorldModification;
+import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
@@ -28,7 +27,7 @@ public record PlaceFluidWorldModification(Holder<Fluid> fluid, Holder<SoundEvent
 
     @Override
     public WorldModificationType<?> type() {
-        return WorldModificationTypes.PLACE_FLUID;
+        return WorldModificationType.PLACE_FLUID;
     }
 
     @Override

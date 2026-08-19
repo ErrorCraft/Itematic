@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.mixin.core.dispenser.ShearsDispenseItemBehaviorAccessor;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -24,12 +23,12 @@ public record ShearAtPositionAction(PositionTarget position) implements Action<S
 
     @Override
     public ActionType<ShearAtPositionAction> type() {
-        return ActionTypes.SHEAR_AT_POSITION;
+        return ActionType.SHEAR_AT_POSITION;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.world() instanceof ServerLevel world)) {
+        if (!(context.level() instanceof ServerLevel world)) {
             return false;
         }
 

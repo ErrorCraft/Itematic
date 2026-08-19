@@ -777,7 +777,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
 
     @Override
     public void itematic$damage(int amount, ActionContext context) {
-        if (!(context.world() instanceof ServerLevel world)) {
+        if (!(context.level() instanceof ServerLevel world)) {
             return;
         }
 

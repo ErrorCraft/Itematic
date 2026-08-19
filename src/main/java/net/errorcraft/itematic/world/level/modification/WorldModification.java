@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.world.modification;
+package net.errorcraft.itematic.world.level.modification;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;

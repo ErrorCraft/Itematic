@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +22,7 @@ public record AddStatusEffectsAction(List<MobEffectInstance> effects, LootContex
 
     @Override
     public ActionType<AddStatusEffectsAction> type() {
-        return ActionTypes.ADD_STATUS_EFFECTS;
+        return ActionType.ADD_STATUS_EFFECTS;
     }
 
     @Override

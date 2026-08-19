@@ -89,7 +89,7 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
             initializeProjectile(projectileEntity, context.getOrDefault(ItematicContextKeys.SIDE, Direction.UP), speed, uncertainty);
         }
 
-        if (context.world() instanceof ServerLevel serverWorld) {
+        if (context.level() instanceof ServerLevel serverWorld) {
             projectileEntity.applyOnProjectileSpawned(
                 serverWorld,
                 context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)

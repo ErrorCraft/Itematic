@@ -20,12 +20,12 @@ public class ItemStackExchanger {
 
     private final Predicate<ItemStack> shouldDrop;
     private final Consumer<ItemStack> dropper;
-    private ItemStack currentStack;
+    private ItemStack result;
 
     private ItemStackExchanger(Predicate<ItemStack> shouldDrop, Consumer<ItemStack> dropper, ItemStack initialStack) {
         this.shouldDrop = Objects.requireNonNull(shouldDrop);
         this.dropper = Objects.requireNonNull(dropper);
-        this.currentStack = Objects.requireNonNull(initialStack);
+        this.result = Objects.requireNonNull(initialStack);
     }
 
     public static ItemStackExchanger forEntity(LivingEntity entity, ItemStack initialStack) {
@@ -45,12 +45,12 @@ public class ItemStackExchanger {
     }
 
     public ItemStack result() {
-        return this.currentStack;
+        return this.result;
     }
 
     public void exchange(ItemStack stack) {
         Objects.requireNonNull(stack);
-        if (stack == this.currentStack) {
+        if (stack == this.result) {
             return;
         }
 
@@ -58,8 +58,8 @@ public class ItemStackExchanger {
             return;
         }
 
-        if (this.currentStack.isEmpty()) {
-            this.currentStack = stack;
+        if (this.result.isEmpty()) {
+            this.result = stack;
         } else {
             this.dropper.accept(stack);
         }

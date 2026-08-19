@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.Entity;
@@ -25,7 +24,7 @@ public record DecrementItemAction(int amount, boolean ignoreGameMode) implements
 
     @Override
     public ActionType<DecrementItemAction> type() {
-        return ActionTypes.DECREMENT_ITEM;
+        return ActionType.DECREMENT_ITEM;
     }
 
     @Override

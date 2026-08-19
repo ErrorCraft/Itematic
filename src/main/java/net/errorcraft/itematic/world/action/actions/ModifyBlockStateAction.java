@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -30,7 +29,7 @@ public record ModifyBlockStateAction(PositionTarget position, BlockItemStateProp
 
     @Override
     public ActionType<ModifyBlockStateAction> type() {
-        return ActionTypes.MODIFY_BLOCK_STATE;
+        return ActionType.MODIFY_BLOCK_STATE;
     }
 
     @Override
@@ -40,7 +39,7 @@ public record ModifyBlockStateAction(PositionTarget position, BlockItemStateProp
             return false;
         }
 
-        Level world = context.world();
+        Level world = context.level();
         BlockState currentState = world.getBlockState(pos);
         BlockState newState = this.properties.apply(currentState);
         if (newState == currentState) {

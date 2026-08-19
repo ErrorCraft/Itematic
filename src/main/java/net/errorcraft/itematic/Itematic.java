@@ -4,8 +4,8 @@ import net.errorcraft.itematic.advancements.criterion.ItematicEntitySubPredicate
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.context.ItematicContextKeySets;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
-import net.errorcraft.itematic.world.action.ActionTypes;
-import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
+import net.errorcraft.itematic.world.action.ActionType;
+import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleType;
 import net.errorcraft.itematic.world.inventory.ItematicMenuTypes;
 import net.errorcraft.itematic.world.item.ItemEvent;
@@ -22,9 +22,9 @@ import net.errorcraft.itematic.world.item.trading.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.errorcraft.itematic.world.level.storage.loot.functions.ItematicItemModifierTypes;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.ItematicPredicateTypes;
-import net.errorcraft.itematic.world.modification.WorldModificationTypes;
 import net.fabricmc.api.ModInitializer;
 
 public class Itematic implements ModInitializer {
@@ -32,9 +32,9 @@ public class Itematic implements ModInitializer {
     public void onInitialize() {
         ItemBehaviorType.init();
         ItemEvent.init();
-        ActionTypes.init();
+        ActionType.init();
         ItematicContextKeySets.init();
-        SequenceHandlerTypes.init();
+        SequenceHandlerType.init();
         ItematicPredicateTypes.init();
         ItematicContextKeys.init();
         SmithingTemplates.init();
@@ -51,7 +51,7 @@ public class Itematic implements ModInitializer {
         ItematicRecipeDisplays.init();
         ItematicSlotDisplays.init();
         ItematicEntitySubPredicates.init();
-        WorldModificationTypes.init();
+        WorldModificationType.init();
         EntitySpawnRuleType.init();
         MeleeWeaponComponents.init();
         ItematicMenuTypes.init();

@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class BlockPlacer {
     private final ActionContext context;
@@ -66,7 +66,7 @@ public class BlockPlacer {
             return false;
         }
 
-        if (!this.context.world().setBlock(pos, blockState, Block.UPDATE_ALL_IMMEDIATE)) {
+        if (!this.context.level().setBlock(pos, blockState, Block.UPDATE_ALL_IMMEDIATE)) {
             return false;
         }
 
@@ -75,7 +75,7 @@ public class BlockPlacer {
     }
 
     private void placed(BlockState blockState, BlockPos pos, @Nullable LivingEntity placer) {
-        Level world = this.context.world();
+        Level world = this.context.level();
         ItemStack stack = this.context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
         blockState = this.placeFromNbt(blockState, pos, stack);
         BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -119,7 +119,7 @@ public class BlockPlacer {
         }
 
         CollisionContext shapeContext = CollisionContexts.ofNullable(placer);
-        Level world = this.context.world();
+        Level world = this.context.level();
         return state.canSurvive(world, pos) &&
             world.isUnobstructed(state, pos, shapeContext);
     }
@@ -132,7 +132,7 @@ public class BlockPlacer {
 
         BlockState modifiedState = blockStateProperties.apply(state);
         if (modifiedState != state) {
-            this.context.world().setBlock(pos, modifiedState, Block.UPDATE_CLIENTS);
+            this.context.level().setBlock(pos, modifiedState, Block.UPDATE_CLIENTS);
         }
 
         return modifiedState;

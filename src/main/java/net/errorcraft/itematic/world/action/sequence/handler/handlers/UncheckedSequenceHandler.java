@@ -5,22 +5,24 @@ import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
-import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public record UncheckedSequenceHandler(HolderSet<ActionEntry> entries) implements SequenceHandler<UncheckedSequenceHandler> {
-    public static final Codec<UncheckedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(UncheckedSequenceHandler::new, UncheckedSequenceHandler::entries);
+    public static final Codec<UncheckedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(
+        UncheckedSequenceHandler::new,
+        UncheckedSequenceHandler::entries
+    );
 
-    public static net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler.Builder builder() {
-        return new net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler.Builder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
     public SequenceHandlerType<UncheckedSequenceHandler> type() {
-        return SequenceHandlerTypes.UNCHECKED;
+        return SequenceHandlerType.UNCHECKED;
     }
 
     @Override
@@ -33,12 +35,7 @@ public record UncheckedSequenceHandler(HolderSet<ActionEntry> entries) implement
         return result;
     }
 
-    @Override
-    public Iterable<Holder<ActionEntry>> iterateEntries() {
-        return this.entries;
-    }
-
-    public static class Builder implements SequenceHandler.Builder<UncheckedSequenceHandler, net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler.Builder> {
+    public static class Builder implements SequenceHandler.Builder<UncheckedSequenceHandler, Builder> {
         private final List<Holder<ActionEntry>> entries = new ArrayList<>();
 
         @Override
@@ -47,7 +44,7 @@ public record UncheckedSequenceHandler(HolderSet<ActionEntry> entries) implement
         }
 
         @Override
-        public net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler.Builder add(Holder<ActionEntry> entry) {
+        public Builder add(Holder<ActionEntry> entry) {
             this.entries.add(entry);
             return this;
         }

@@ -87,7 +87,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
 
     @Nullable
     private EntitySpawnContext createSpawnContext(ActionContext context, Vec3 initialPos) {
-        if (!(context.world() instanceof ServerLevel level)) {
+        if (!(context.level() instanceof ServerLevel level)) {
             return null;
         }
 

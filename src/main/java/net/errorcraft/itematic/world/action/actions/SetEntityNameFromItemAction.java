@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -26,7 +25,7 @@ public record SetEntityNameFromItemAction(LootContext.EntityTarget entity) imple
 
     @Override
     public ActionType<SetEntityNameFromItemAction> type() {
-        return ActionTypes.SET_ENTITY_NAME_FROM_ITEM;
+        return ActionType.SET_ENTITY_NAME_FROM_ITEM;
     }
 
     @Override

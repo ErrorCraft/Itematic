@@ -6,7 +6,6 @@ import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
-import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.util.ExtraCodecs;
@@ -23,22 +22,17 @@ public record RandomizeSequenceHandler(HolderSet<ActionEntry> entries, Optional<
 
     @Override
     public SequenceHandlerType<RandomizeSequenceHandler> type() {
-        return SequenceHandlerTypes.RANDOMIZE;
+        return SequenceHandlerType.RANDOMIZE;
     }
 
     @Override
     public boolean handle(ActionContext context) {
         boolean result = false;
-        for (Holder<ActionEntry> entry : this.randomEntries(context.world().getRandom())) {
+        for (Holder<ActionEntry> entry : this.randomEntries(context.level().getRandom())) {
             result |= entry.value().execute(context).orElse(false);
         }
 
         return result;
-    }
-
-    @Override
-    public Iterable<Holder<ActionEntry>> iterateEntries() {
-        return this.entries;
     }
 
     private Iterable<Holder<ActionEntry>> randomEntries(RandomSource random) {

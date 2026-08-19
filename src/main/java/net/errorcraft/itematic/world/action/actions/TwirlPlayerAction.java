@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.network.protocol.game.ClientboundTwirlPacket;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.Holder;
@@ -31,7 +30,7 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
 
     @Override
     public ActionType<TwirlPlayerAction> type() {
-        return ActionTypes.TWIRL_PLAYER;
+        return ActionType.TWIRL_PLAYER;
     }
 
     @Override
@@ -55,7 +54,7 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
             serverPlayer.connection.send(new ClientboundTwirlPacket(spinAttackStrength));
         }
 
-        execute(spinAttackStrength, player, context.world(), stack);
+        execute(spinAttackStrength, player, context.level(), stack);
         return true;
     }
 

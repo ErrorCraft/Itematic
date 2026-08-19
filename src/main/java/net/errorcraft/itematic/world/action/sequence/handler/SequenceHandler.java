@@ -14,7 +14,6 @@ public interface SequenceHandler<T extends SequenceHandler<T>> {
 
     SequenceHandlerType<T> type();
     boolean handle(ActionContext context);
-    Iterable<Holder<ActionEntry>> iterateEntries();
 
     interface Builder<T extends SequenceHandler<T>, S extends Builder<T, S>> {
         T build();

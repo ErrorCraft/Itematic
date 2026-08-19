@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.ItemStacks;
@@ -28,7 +27,7 @@ public record EquipHorseWithChestAtPositionAction(PositionTarget position) imple
 
     @Override
     public ActionType<EquipHorseWithChestAtPositionAction> type() {
-        return ActionTypes.EQUIP_HORSE_WITH_CHEST_AT_POSITION;
+        return ActionType.EQUIP_HORSE_WITH_CHEST_AT_POSITION;
     }
 
     @Override
@@ -43,7 +42,7 @@ public record EquipHorseWithChestAtPositionAction(PositionTarget position) imple
             return false;
         }
 
-        List<AbstractChestedHorse> donkeys = context.world().getEntitiesOfClass(
+        List<AbstractChestedHorse> donkeys = context.level().getEntitiesOfClass(
             AbstractChestedHorse.class,
             new AABB(pos),
             donkey -> donkey.isAlive() && !donkey.hasChest()

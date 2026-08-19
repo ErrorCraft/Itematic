@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -25,7 +24,7 @@ public record AttachLeashedEntitiesOnBlockAction(PositionTarget position) implem
 
     @Override
     public ActionType<AttachLeashedEntitiesOnBlockAction> type() {
-        return ActionTypes.ATTACH_LEASHED_ENTITIES_ON_BLOCK;
+        return ActionType.ATTACH_LEASHED_ENTITIES_ON_BLOCK;
     }
 
     @Override
@@ -35,7 +34,7 @@ public record AttachLeashedEntitiesOnBlockAction(PositionTarget position) implem
             return false;
         }
 
-        Level world = context.world();
+        Level world = context.level();
         if (!world.getBlockState(pos).is(BlockTags.FENCES)) {
             return false;
         }

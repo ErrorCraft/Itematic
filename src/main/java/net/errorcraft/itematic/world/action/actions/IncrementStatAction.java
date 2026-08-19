@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.stats.ItematicStats;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.entity.player.Player;
@@ -23,7 +22,7 @@ public record IncrementStatAction(LootContext.EntityTarget entity, Stat<?> stat)
 
     @Override
     public ActionType<IncrementStatAction> type() {
-        return ActionTypes.INCREMENT_STAT;
+        return ActionType.INCREMENT_STAT;
     }
 
     @Override

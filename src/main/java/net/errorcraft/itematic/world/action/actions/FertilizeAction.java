@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -26,7 +25,7 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
 
     @Override
     public ActionType<FertilizeAction> type() {
-        return ActionTypes.FERTILIZE;
+        return ActionType.FERTILIZE;
     }
 
     @Override
@@ -37,7 +36,7 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
         }
 
         BlockPos blockPos = BlockPos.containing(pos);
-        Level world = context.world();
+        Level world = context.level();
         if (BoneMealItem.growCrop(null, world, blockPos)) {
             fertilized(world, blockPos);
             return true;

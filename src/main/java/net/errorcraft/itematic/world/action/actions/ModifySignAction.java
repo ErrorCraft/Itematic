@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -38,7 +37,7 @@ public record ModifySignAction(PositionTarget position, Optional<DyeColor> color
 
     @Override
     public ActionType<ModifySignAction> type() {
-        return ActionTypes.MODIFY_SIGN;
+        return ActionType.MODIFY_SIGN;
     }
 
     @Override
@@ -49,7 +48,7 @@ public record ModifySignAction(PositionTarget position, Optional<DyeColor> color
         }
 
         BlockPos blockPos = BlockPos.containing(pos);
-        if (!(context.world().getBlockEntity(blockPos) instanceof SignBlockEntity blockEntity)) {
+        if (!(context.level().getBlockEntity(blockPos) instanceof SignBlockEntity blockEntity)) {
             return false;
         }
 

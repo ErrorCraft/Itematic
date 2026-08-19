@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.level.storage.loot.ItemStackTargets;
@@ -37,7 +36,7 @@ public record ModifyItemAction(LootContext.ItemStackTarget stack, LootItemFuncti
 
     @Override
     public ActionType<ModifyItemAction> type() {
-        return ActionTypes.MODIFY_ITEM;
+        return ActionType.MODIFY_ITEM;
     }
 
     @Override

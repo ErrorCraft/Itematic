@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
@@ -25,7 +24,7 @@ public record PlaceBlockFromItemAction(PositionTarget position, boolean decremen
 
     @Override
     public ActionType<PlaceBlockFromItemAction> type() {
-        return ActionTypes.PLACE_BLOCK_FROM_ITEM;
+        return ActionType.PLACE_BLOCK_FROM_ITEM;
     }
 
     @Override

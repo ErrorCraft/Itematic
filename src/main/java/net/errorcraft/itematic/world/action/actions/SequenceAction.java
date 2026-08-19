@@ -3,7 +3,6 @@ package net.errorcraft.itematic.world.action.actions;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 
@@ -20,7 +19,7 @@ public record SequenceAction(SequenceHandler<?> handler) implements Action<Seque
 
     @Override
     public ActionType<SequenceAction> type() {
-        return ActionTypes.SEQUENCE;
+        return ActionType.SEQUENCE;
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -27,7 +26,7 @@ public record RemoveStatusEffectsAction(HolderSet<MobEffect> effects, LootContex
 
     @Override
     public ActionType<RemoveStatusEffectsAction> type() {
-        return ActionTypes.REMOVE_STATUS_EFFECTS;
+        return ActionType.REMOVE_STATUS_EFFECTS;
     }
 
     @Override

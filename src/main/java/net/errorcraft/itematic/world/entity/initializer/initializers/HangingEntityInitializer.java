@@ -30,7 +30,7 @@ public record HangingEntityInitializer<T extends HangingEntity>(Creator<T> creat
             return null;
         }
 
-        T entity = this.creator.create(context.world(), pos, facing);
+        T entity = this.creator.create(context.level(), pos, facing);
         if (entity == null) {
             return null;
         }
@@ -44,7 +44,7 @@ public record HangingEntityInitializer<T extends HangingEntity>(Creator<T> creat
     }
 
     private boolean mayPlace(ActionContext context, BlockPos pos, Direction facing) {
-        if (context.world().isOutsideBuildHeight(pos)) {
+        if (context.level().isOutsideBuildHeight(pos)) {
             return false;
         }
 

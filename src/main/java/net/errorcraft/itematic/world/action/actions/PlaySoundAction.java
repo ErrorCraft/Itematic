@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.RandomRange;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.Holder;
@@ -58,7 +57,7 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
 
     @Override
     public ActionType<PlaySoundAction> type() {
-        return ActionTypes.PLAY_SOUND;
+        return ActionType.PLAY_SOUND;
     }
 
     @Override
@@ -69,7 +68,7 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
             return false;
         }
 
-        Level world = context.world();
+        Level world = context.level();
         RandomSource random = world.getRandom();
         float volume = this.volume.get(random);
         float pitch = this.pitch.get(random);

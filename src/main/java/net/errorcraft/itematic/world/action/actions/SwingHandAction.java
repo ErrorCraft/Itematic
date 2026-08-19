@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -23,7 +22,7 @@ public record SwingHandAction(LootContext.EntityTarget entity) implements Action
 
     @Override
     public ActionType<SwingHandAction> type() {
-        return ActionTypes.SWING_HAND;
+        return ActionType.SWING_HAND;
     }
 
     @Override

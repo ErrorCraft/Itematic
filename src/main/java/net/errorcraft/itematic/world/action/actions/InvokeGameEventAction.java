@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.Holder;
@@ -28,7 +27,7 @@ public record InvokeGameEventAction(Holder<GameEvent> event, PositionTarget posi
 
     @Override
     public ActionType<InvokeGameEventAction> type() {
-        return ActionTypes.INVOKE_GAME_EVENT;
+        return ActionType.INVOKE_GAME_EVENT;
     }
 
     @Override
@@ -41,7 +40,7 @@ public record InvokeGameEventAction(Holder<GameEvent> event, PositionTarget posi
         Entity entity = this.entity.map(LootContext.EntityTarget::contextParam)
             .map(context::get)
             .orElse(null);
-        context.world().gameEvent(entity, this.event, pos);
+        context.level().gameEvent(entity, this.event, pos);
         return true;
     }
 }

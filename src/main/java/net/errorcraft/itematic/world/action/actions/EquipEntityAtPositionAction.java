@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.ItemStacks;
@@ -29,7 +28,7 @@ public record EquipEntityAtPositionAction(PositionTarget position) implements Ac
 
     @Override
     public ActionType<EquipEntityAtPositionAction> type() {
-        return ActionTypes.EQUIP_ENTITY_AT_POSITION;
+        return ActionType.EQUIP_ENTITY_AT_POSITION;
     }
 
     @Override
@@ -44,7 +43,7 @@ public record EquipEntityAtPositionAction(PositionTarget position) implements Ac
             return false;
         }
 
-        List<LivingEntity> entities = context.world().getEntitiesOfClass(
+        List<LivingEntity> entities = context.level().getEntitiesOfClass(
             LivingEntity.class,
             new AABB(pos),
             entity -> entity.canEquipWithDispenser(equipment)

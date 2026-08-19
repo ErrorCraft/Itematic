@@ -2,9 +2,7 @@ package net.errorcraft.itematic.core.registries;
 
 import net.errorcraft.itematic.mixin.core.registries.BuiltInRegistriesAccessor;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
-import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleType;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
@@ -17,8 +15,7 @@ import net.errorcraft.itematic.world.item.trading.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
-import net.errorcraft.itematic.world.modification.WorldModificationType;
-import net.errorcraft.itematic.world.modification.WorldModificationTypes;
+import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -35,11 +32,11 @@ public class ItematicBuiltInRegistries {
     );
     public static final Registry<ActionType<?>> ACTION_TYPE = register(
         ItematicRegistries.ACTION_TYPE,
-        r -> ActionTypes.MODIFY_ITEM
+        r -> ActionType.MODIFY_ITEM
     );
     public static final Registry<SequenceHandlerType<?>> SEQUENCE_HANDLER_TYPE = register(
         ItematicRegistries.SEQUENCE_HANDLER_TYPE,
-        r -> SequenceHandlerTypes.UNCHECKED
+        r -> SequenceHandlerType.UNCHECKED
     );
     public static final Registry<SmithingTemplate> SMITHING_TEMPLATE = register(
         ItematicRegistries.SMITHING_TEMPLATE,
@@ -67,7 +64,7 @@ public class ItematicBuiltInRegistries {
     );
     public static final Registry<WorldModificationType<?>> WORLD_MODIFICATION_TYPE = register(
         ItematicRegistries.WORLD_MODIFICATION_TYPE,
-        r -> WorldModificationTypes.DRAIN_FLUID
+        r -> WorldModificationType.DRAIN_FLUID
     );
     public static final Registry<EntitySpawnRuleType<?>> ENTITY_SPAWN_RULE_TYPE = register(
         ItematicRegistries.ENTITY_SPAWN_RULE_TYPE,

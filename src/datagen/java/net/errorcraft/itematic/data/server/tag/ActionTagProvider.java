@@ -1,12 +1,13 @@
 package net.errorcraft.itematic.data.server.tag;
 
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
+import net.errorcraft.itematic.tags.ActionTags;
 import net.errorcraft.itematic.world.action.ActionEntry;
-import net.errorcraft.itematic.world.action.ActionTags;
 import net.errorcraft.itematic.world.action.Actions;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
+
 import java.util.concurrent.CompletableFuture;
 
 public class ActionTagProvider extends FabricTagProvider<ActionEntry> {

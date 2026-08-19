@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -30,12 +29,12 @@ public record TeleportAction(int distance, LootContext.EntityTarget entity) impl
 
     @Override
     public ActionType<TeleportAction> type() {
-        return ActionTypes.TELEPORT;
+        return ActionType.TELEPORT;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.world() instanceof ServerLevel world)) {
+        if (!(context.level() instanceof ServerLevel world)) {
             return false;
         }
 

@@ -29,7 +29,7 @@ public class ThrownTridentEntityInitializer implements EntityInitializer<ThrownT
         }
 
         stack.itematic$damage(1, context);
-        ThrownTrident entity = this.create(context.world(), user, stack);
+        ThrownTrident entity = this.create(context.level(), user, stack);
         stack.consume(1, context.get(LootContextParams.THIS_ENTITY, Player.class));
         entity.pickup = AbstractArrow.Pickup.ALLOWED;
         return entity;

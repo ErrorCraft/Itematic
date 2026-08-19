@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
@@ -27,7 +26,7 @@ public record BrushArmadilloAtPositionAction(PositionTarget position) implements
 
     @Override
     public ActionType<BrushArmadilloAtPositionAction> type() {
-        return ActionTypes.BRUSH_ARMADILLO_AT_POSITION;
+        return ActionType.BRUSH_ARMADILLO_AT_POSITION;
     }
 
     @Override
@@ -37,7 +36,7 @@ public record BrushArmadilloAtPositionAction(PositionTarget position) implements
             return false;
         }
 
-        List<Armadillo> armadillos = context.world().getEntitiesOfClass(
+        List<Armadillo> armadillos = context.level().getEntitiesOfClass(
             Armadillo.class,
             new AABB(pos),
             EntitySelector.NO_SPECTATORS

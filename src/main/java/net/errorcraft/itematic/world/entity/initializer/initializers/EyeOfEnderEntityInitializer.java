@@ -24,7 +24,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
 
     @Override
     public @Nullable EyeOfEnder create(ActionContext context, EntitySpawnReason reason) {
-        if (!(context.world() instanceof ServerLevel level)) {
+        if (!(context.level() instanceof ServerLevel level)) {
             return null;
         }
 

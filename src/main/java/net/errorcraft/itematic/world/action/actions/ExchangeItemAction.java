@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
@@ -32,7 +31,7 @@ public record ExchangeItemAction(ItemStack item, boolean decrementCount) impleme
 
     @Override
     public ActionType<ExchangeItemAction> type() {
-        return ActionTypes.EXCHANGE_ITEM;
+        return ActionType.EXCHANGE_ITEM;
     }
 
     @Override

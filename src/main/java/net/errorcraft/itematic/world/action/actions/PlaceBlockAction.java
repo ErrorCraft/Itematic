@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.placement.block.BlockPlacer;
@@ -29,7 +28,7 @@ public record PlaceBlockAction(BlockPicker<?> block, PositionTarget position, Op
 
     @Override
     public ActionType<PlaceBlockAction> type() {
-        return ActionTypes.PLACE_BLOCK;
+        return ActionType.PLACE_BLOCK;
     }
 
     @Override

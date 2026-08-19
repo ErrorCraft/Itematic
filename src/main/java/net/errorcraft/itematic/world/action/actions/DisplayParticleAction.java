@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.phys.Vec3Provider;
@@ -34,12 +33,12 @@ public record DisplayParticleAction(PositionTarget position, ParticleOptions par
 
     @Override
     public ActionType<DisplayParticleAction> type() {
-        return ActionTypes.DISPLAY_PARTICLE;
+        return ActionType.DISPLAY_PARTICLE;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.world() instanceof ServerLevel world)) {
+        if (!(context.level() instanceof ServerLevel world)) {
             return false;
         }
 

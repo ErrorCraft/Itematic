@@ -26,7 +26,7 @@ public record ArrowEntityInitializer<T extends AbstractArrow>(OwnerCreator<T> ow
             }
 
             return this.ownerCreator.create(
-                context.world(),
+                context.level(),
                 entity,
                 context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY).copyWithCount(1),
                 shooter
@@ -39,7 +39,7 @@ public record ArrowEntityInitializer<T extends AbstractArrow>(OwnerCreator<T> ow
         }
 
         T entity = this.simpleCreator.create(
-            context.world(),
+            context.level(),
             pos.x(),
             pos.y(),
             pos.z(),

@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class FluidDrainer {
     private final ActionContext context;
@@ -35,7 +35,7 @@ public class FluidDrainer {
             return null;
         }
 
-        Level world = this.context.world();
+        Level world = this.context.level();
         BlockState state = world.getBlockState(pos);
         if (!(state.getBlock() instanceof BucketPickup fluidDrainable)) {
             return null;

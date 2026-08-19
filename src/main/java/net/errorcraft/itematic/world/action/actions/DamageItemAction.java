@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +21,7 @@ public record DamageItemAction(int amount) implements Action<DamageItemAction> {
 
     @Override
     public ActionType<DamageItemAction> type() {
-        return ActionTypes.DAMAGE_ITEM;
+        return ActionType.DAMAGE_ITEM;
     }
 
     @Override

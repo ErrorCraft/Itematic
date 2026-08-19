@@ -10,7 +10,7 @@ import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record SimpleBlockPicker(Holder<Block> block) implements BlockPicker<SimpleBlockPicker> {
     public static final MapCodec<SimpleBlockPicker> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
