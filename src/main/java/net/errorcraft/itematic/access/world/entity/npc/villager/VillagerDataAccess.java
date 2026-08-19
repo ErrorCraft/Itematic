@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.access.world.entity.npc.villager;
 
-import net.errorcraft.itematic.village.trade.Trade;
+import net.errorcraft.itematic.world.item.trading.Trade;
 import net.minecraft.tags.TagKey;
 import org.jspecify.annotations.Nullable;
 

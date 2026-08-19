@@ -1,8 +1,8 @@
-package net.errorcraft.itematic.village.trade.modifier;
+package net.errorcraft.itematic.world.item.trading.modifier;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
-import net.errorcraft.itematic.village.trade.Trade;
+import net.errorcraft.itematic.world.item.trading.Trade;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.level.storage.loot.LootContext;

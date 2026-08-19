@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.world.entity.npc.villager;
 import com.google.common.collect.Lists;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
 import net.errorcraft.itematic.util.context.ItematicContextKeySets;
-import net.errorcraft.itematic.village.trade.Trade;
+import net.errorcraft.itematic.world.item.trading.Trade;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.server.level.ServerLevel;
@@ -62,17 +62,17 @@ public abstract class AbstractVillagerExtender extends MobExtender {
     protected void fillRecipesFromPool(HolderSet.Named<Trade> entries, int count, LootContext context) {
         int actualCount = Math.min(count, entries.size());
         ArrayList<Holder<Trade>> pool = Lists.newArrayList(entries);
-        MerchantOffers recipeList = this.getOffers();
+        MerchantOffers offers = this.getOffers();
         int addedTrades = 0;
         while (addedTrades < actualCount && !pool.isEmpty()) {
-            MerchantOffer tradeOffer = pool.remove(this.random.nextInt(pool.size()))
+            MerchantOffer merchantOffer = pool.remove(this.random.nextInt(pool.size()))
                 .value()
-                .createTradeOffer(context);
-            if (tradeOffer == null) {
+                .createMerchantOffer(context);
+            if (merchantOffer == null) {
                 continue;
             }
 
-            recipeList.add(tradeOffer);
+            offers.add(merchantOffer);
             addedTrades++;
         }
     }

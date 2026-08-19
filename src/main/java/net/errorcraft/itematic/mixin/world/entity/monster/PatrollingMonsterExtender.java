@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.entity.monster;
 
-import net.errorcraft.itematic.village.raid.RaidUtil;
+import net.errorcraft.itematic.world.entity.raid.ItematicRaids;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -21,6 +21,6 @@ public class PatrollingMonsterExtender {
         )
     )
     private void setOminousBannerForLaterUse(ServerLevelAccessor world, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> info) {
-        RaidUtil.createOminousBanner(world);
+        ItematicRaids.createOminousBanner(world);
     }
 }

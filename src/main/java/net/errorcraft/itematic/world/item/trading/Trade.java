@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.village.trade;
+package net.errorcraft.itematic.world.item.trading;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -6,7 +6,7 @@ import net.errorcraft.itematic.mixin.world.entity.npc.villager.VillagerTradesAcc
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.util.RandomRange;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentExactPredicate;
@@ -28,8 +28,10 @@ import java.util.List;
 import java.util.Optional;
 
 public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperience, float priceMultiplier, Optional<TradeModifier<?>> tradeModifier, Optional<LootItemCondition> merchantPredicate) {
+    private static final int MAX_WANTED_ENTRIES = 2;
+    public static final Codec<Integer> WANTED_INDEX_CODEC = ItematicCodecs.index(MAX_WANTED_ENTRIES);
     public static final Codec<Trade> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Entry.CODEC.listOf(1, Trade.MAX_WANTED_ENTRIES).fieldOf("wants").forGetter(Trade::wants),
+        Entry.CODEC.listOf(1, MAX_WANTED_ENTRIES).fieldOf("wants").forGetter(Trade::wants),
         Entry.CODEC.fieldOf("gives").forGetter(Trade::gives),
         ExtraCodecs.POSITIVE_INT.fieldOf("max_uses").forGetter(Trade::maxUses),
         Codec.INT.optionalFieldOf("trade_experience", 1).forGetter(Trade::tradeExperience),
@@ -37,35 +39,6 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
         TradeModifier.CODEC.optionalFieldOf("trade_modifier").forGetter(Trade::tradeModifier),
         LootItemCondition.DIRECT_CODEC.optionalFieldOf("merchant_predicate").forGetter(Trade::merchantPredicate)
     ).apply(instance, Trade::new));
-    public static final Codec<Integer> WANTED_INDEX_CODEC = ItematicCodecs.index(Trade.MAX_WANTED_ENTRIES);
-    private static final int MAX_WANTED_ENTRIES = 2;
-
-    @Nullable
-    public MerchantOffer createTradeOffer(LootContext context) {
-        if (!this.test(context)) {
-            return null;
-        }
-
-        Input wants = this.createWantedStacks(context);
-        ItemCost gives = this.createGivenStack(wants, context);
-        return new MerchantOffer(wants.getTradedItem(0).orElseThrow(), wants.getTradedItem(1), gives.itemStack(), this.maxUses, this.tradeExperience, this.priceMultiplier);
-    }
-
-    private boolean test(LootContext context) {
-        return this.merchantPredicate.map(merchantPredicate -> merchantPredicate.test(context))
-            .orElse(true);
-    }
-
-    private Input createWantedStacks(LootContext context) {
-        List<ItemStack> stacks = this.wants.stream().map(entry -> entry.createStack(context)).toList();
-        return new Input(stacks);
-    }
-
-    private ItemCost createGivenStack(Input wants, LootContext context) {
-        ItemStack gives = this.gives.createStack(context);
-        return this.tradeModifier.flatMap(tradeModifier -> tradeModifier.apply(wants, gives, context))
-            .orElseGet(() -> new ItemCost(gives.getItemHolder(), gives.getCount(), DataComponentExactPredicate.allOf(gives.getComponents())));
-    }
 
     public static Builder builder(Entry gives) {
         return new Builder(gives);
@@ -93,6 +66,40 @@ public record Trade(List<Entry> wants, Entry gives, int maxUses, int tradeExperi
             Optional.ofNullable(tradeModifier),
             Optional.ofNullable(merchantPredicate)
         );
+    }
+
+    @Nullable
+    public MerchantOffer createMerchantOffer(LootContext context) {
+        if (!this.test(context)) {
+            return null;
+        }
+
+        Input wants = this.createWantedStacks(context);
+        ItemCost gives = this.createGivenStack(wants, context);
+        return new MerchantOffer(
+            wants.getTradedItem(0).orElseThrow(),
+            wants.getTradedItem(1),
+            gives.itemStack(),
+            this.maxUses,
+            this.tradeExperience,
+            this.priceMultiplier
+        );
+    }
+
+    private boolean test(LootContext context) {
+        return this.merchantPredicate.map(merchantPredicate -> merchantPredicate.test(context))
+            .orElse(true);
+    }
+
+    private Input createWantedStacks(LootContext context) {
+        List<ItemStack> stacks = this.wants.stream().map(entry -> entry.createStack(context)).toList();
+        return new Input(stacks);
+    }
+
+    private ItemCost createGivenStack(Input wants, LootContext context) {
+        ItemStack gives = this.gives.createStack(context);
+        return this.tradeModifier.flatMap(tradeModifier -> tradeModifier.apply(wants, gives, context))
+            .orElseGet(() -> new ItemCost(gives.getItemHolder(), gives.getCount(), DataComponentExactPredicate.allOf(gives.getComponents())));
     }
 
     public static class Builder {

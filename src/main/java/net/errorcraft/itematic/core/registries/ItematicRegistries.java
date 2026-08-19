@@ -1,8 +1,6 @@
 package net.errorcraft.itematic.core.registries;
 
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
-import net.errorcraft.itematic.village.trade.Trade;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
@@ -14,6 +12,8 @@ import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
+import net.errorcraft.itematic.world.item.trading.Trade;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.world.modification.WorldModificationType;

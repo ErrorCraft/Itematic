@@ -1,6 +1,7 @@
-package net.errorcraft.itematic.village.trade;
+package net.errorcraft.itematic.tags;
 
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
+import net.errorcraft.itematic.world.item.trading.Trade;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 

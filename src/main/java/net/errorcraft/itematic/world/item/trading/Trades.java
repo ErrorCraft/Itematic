@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.village.trade;
+package net.errorcraft.itematic.world.item.trading;
 
 import net.errorcraft.itematic.advancements.criterion.VillagerPredicate;
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
@@ -7,9 +7,9 @@ import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
 import net.errorcraft.itematic.references.PotionIds;
 import net.errorcraft.itematic.tags.PotionTags;
-import net.errorcraft.itematic.village.trade.modifier.modifiers.EnchantWithLevelsTradeModifier;
-import net.errorcraft.itematic.village.trade.modifier.modifiers.ItemFromTypeTradeModifier;
-import net.errorcraft.itematic.village.trade.modifier.modifiers.SingleEnchantmentTradeModifier;
+import net.errorcraft.itematic.world.item.trading.modifier.modifiers.EnchantWithLevelsTradeModifier;
+import net.errorcraft.itematic.world.item.trading.modifier.modifiers.ItemFromTypeTradeModifier;
+import net.errorcraft.itematic.world.item.trading.modifier.modifiers.SingleEnchantmentTradeModifier;
 import net.errorcraft.itematic.world.level.storage.loot.functions.DyeItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SetRandomPotionItemModifier;
 import net.minecraft.advancements.criterion.EntityPredicate;

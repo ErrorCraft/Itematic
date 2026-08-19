@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.entity.raid;
 
-import net.errorcraft.itematic.village.raid.RaidUtil;
+import net.errorcraft.itematic.world.entity.raid.ItematicRaids;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.PatrollingMonster;
@@ -28,7 +28,7 @@ public class RaiderExtender extends PatrollingMonster {
         )
     )
     private void setOminousBannerForLaterUse(CallbackInfoReturnable<Boolean> info) {
-        RaidUtil.createOminousBanner(this.level());
+        ItematicRaids.createOminousBanner(this.level());
     }
 
     @Inject(
@@ -39,7 +39,7 @@ public class RaiderExtender extends PatrollingMonster {
         )
     )
     private void setOminousBannerForLaterUse(CallbackInfo info) {
-        RaidUtil.createOminousBanner(this.level());
+        ItematicRaids.createOminousBanner(this.level());
     }
 
     @Inject(
@@ -50,7 +50,7 @@ public class RaiderExtender extends PatrollingMonster {
         )
     )
     private static void setOminousBannerForLaterUse(ItemEntity itemEntity, CallbackInfoReturnable<Boolean> info) {
-        RaidUtil.createOminousBanner(itemEntity.level());
+        ItematicRaids.createOminousBanner(itemEntity.level());
     }
 
     @Mixin(Raider.ObtainRaidLeaderBannerGoal.class)
@@ -67,7 +67,7 @@ public class RaiderExtender extends PatrollingMonster {
             )
         )
         private void setOminousBannerForLaterUse(CallbackInfoReturnable<Boolean> info) {
-            RaidUtil.createOminousBanner(this.mob.level());
+            ItematicRaids.createOminousBanner(this.mob.level());
         }
     }
 }

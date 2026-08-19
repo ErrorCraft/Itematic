@@ -3,7 +3,7 @@ package net.errorcraft.itematic.world.item.group.entry;
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.tags.ItemGroupItemTags;
-import net.errorcraft.itematic.village.raid.RaidUtil;
+import net.errorcraft.itematic.world.entity.raid.ItematicRaids;
 import net.errorcraft.itematic.world.item.group.entry.entries.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -181,7 +181,7 @@ public class ItemGroupEntryProviders {
             .add(ItemGroupItemTags.BEDS)
             .add(ItemGroupItemTags.CANDLES)
             .add(ItemGroupItemTags.BANNERS)
-            .add(StackItemGroupEntry.fromStack(RaidUtil.getOminousBanner(items, bannerPatterns)))
+            .add(StackItemGroupEntry.fromStack(ItematicRaids.getOminousBanner(items, bannerPatterns)))
             .add(ItemGroupItemTags.HEADS)
             .add(items.getOrThrow(ItemIds.DRAGON_EGG))
             .add(items.getOrThrow(ItemIds.END_PORTAL_FRAME))

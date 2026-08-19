@@ -4,7 +4,6 @@ import net.errorcraft.itematic.advancements.criterion.ItematicEntitySubPredicate
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.context.ItematicContextKeySets;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleType;
@@ -19,6 +18,7 @@ import net.errorcraft.itematic.world.item.crafting.display.ItematicSlotDisplays;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
@@ -40,7 +40,7 @@ public class Itematic implements ModInitializer {
         SmithingTemplates.init();
         BlockPickerType.init();
         ItematicItemModifierTypes.init();
-        TradeModifierTypes.init();
+        TradeModifierType.init();
         ItematicDataComponents.init();
         UseDurationProviderType.init();
         ItemHolderRuleType.init();

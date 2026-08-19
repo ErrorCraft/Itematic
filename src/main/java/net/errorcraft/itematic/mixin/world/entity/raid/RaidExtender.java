@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.world.entity.raid;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Cancellable;
-import net.errorcraft.itematic.village.raid.RaidUtil;
+import net.errorcraft.itematic.world.entity.raid.ItematicRaids;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
@@ -24,8 +24,8 @@ public abstract class RaidExtender {
         )
     )
     private static ItemStack newItemStackForWhiteBannerUseHolder(ItemLike item, Operation<ItemStack> original, @Cancellable CallbackInfoReturnable<ItemStack> info) {
-        ItemStack stack = RaidUtil.ominousBanner();
-        if (stack == ItemStack.EMPTY) {
+        ItemStack stack = ItematicRaids.ominousBanner();
+        if (stack.isEmpty()) {
             info.setReturnValue(ItemStack.EMPTY);
         }
 
@@ -40,6 +40,6 @@ public abstract class RaidExtender {
         )
     )
     private void setOminousBannerForLaterUse(int wave, Raider entity, CallbackInfo info) {
-        RaidUtil.createOminousBanner(entity.level());
+        ItematicRaids.createOminousBanner(entity.level());
     }
 }

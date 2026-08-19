@@ -1,8 +1,6 @@
 package net.errorcraft.itematic.core.registries;
 
 import net.errorcraft.itematic.mixin.core.registries.BuiltInRegistriesAccessor;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
@@ -15,6 +13,7 @@ import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifierType;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
@@ -52,7 +51,7 @@ public class ItematicBuiltInRegistries {
     );
     public static final Registry<TradeModifierType<?>> TRADE_MODIFIER_TYPE = register(
         ItematicRegistries.TRADE_MODIFIER_TYPE,
-        r -> TradeModifierTypes.ENCHANT_WITH_LEVELS
+        r -> TradeModifierType.ENCHANT_WITH_LEVELS
     );
     public static final Registry<UseDurationProviderType<?>> USE_DURATION_PROVIDER_TYPE = register(
         ItematicRegistries.USE_DURATION_PROVIDER_TYPE,

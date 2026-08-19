@@ -1,13 +1,12 @@
-package net.errorcraft.itematic.village.trade.modifier.modifiers;
+package net.errorcraft.itematic.world.item.trading.modifier.modifiers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.RandomRange;
-import net.errorcraft.itematic.village.trade.Trade;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
+import net.errorcraft.itematic.world.item.trading.Trade;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifier;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifierType;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentExactPredicate;
@@ -34,18 +33,24 @@ public record EnchantWithLevelsTradeModifier(int index, RandomRange.Integers lev
 
     @Override
     public TradeModifierType<EnchantWithLevelsTradeModifier> type() {
-        return TradeModifierTypes.ENCHANT_WITH_LEVELS;
+        return TradeModifierType.ENCHANT_WITH_LEVELS;
     }
 
     @Override
     public Optional<ItemCost> apply(Trade.Input wants, ItemStack gives, LootContext context) {
         RandomSource random = context.getRandom();
         int level = Math.max(1, this.level.get(random));
-        RegistryAccess registryManager = context.getLevel().registryAccess();
-        Optional<HolderSet.Named<Enchantment>> enchantments = registryManager.lookupOrThrow(Registries.ENCHANTMENT)
+        RegistryAccess registries = context.getLevel().registryAccess();
+        Optional<HolderSet.Named<Enchantment>> enchantments = registries.lookupOrThrow(Registries.ENCHANTMENT)
             .get(EnchantmentTags.ON_TRADED_EQUIPMENT);
-        ItemStack givesActual = EnchantmentHelper.enchantItem(random, gives, level, registryManager, enchantments);
+        ItemStack givesActual = EnchantmentHelper.enchantItem(random, gives, level, registries, enchantments);
         wants.getStack(this.index).itematic$tryIncrement(level);
-        return Optional.of(new ItemCost(givesActual.getItemHolder(), givesActual.getCount(), DataComponentExactPredicate.allOf(givesActual.getComponents())));
+        return Optional.of(
+            new ItemCost(
+                givesActual.getItemHolder(),
+                givesActual.getCount(),
+                DataComponentExactPredicate.allOf(givesActual.getComponents())
+            )
+        );
     }
 }

@@ -1,12 +1,11 @@
-package net.errorcraft.itematic.village.trade.modifier.modifiers;
+package net.errorcraft.itematic.world.item.trading.modifier.modifiers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.village.trade.Trade;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
+import net.errorcraft.itematic.world.item.trading.Trade;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifier;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifierType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -33,21 +32,27 @@ public record ItemFromTypeTradeModifier(Map<Holder<VillagerType>, Holder<Item>> 
 
     @Override
     public TradeModifierType<ItemFromTypeTradeModifier> type() {
-        return TradeModifierTypes.ITEM_FROM_TYPE;
+        return TradeModifierType.ITEM_FROM_TYPE;
     }
 
     @Override
     public Optional<ItemCost> apply(Trade.Input wants, ItemStack gives, LootContext context) {
-        if (!(context.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof VillagerDataHolder container)) {
+        if (!(context.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof VillagerDataHolder villagerDataHolder)) {
             return Optional.empty();
         }
 
-        Holder<VillagerType> type = container.getVillagerData().type();
+        Holder<VillagerType> type = villagerDataHolder.getVillagerData().type();
         if (!this.types.containsKey(type)) {
             return Optional.empty();
         }
 
         ItemStack givesActual = gives.itematic$transmuteCopy(this.types.get(type));
-        return Optional.of(new ItemCost(givesActual.getItemHolder(), givesActual.getCount(), DataComponentExactPredicate.allOf(givesActual.getComponents())));
+        return Optional.of(
+            new ItemCost(
+                givesActual.getItemHolder(),
+                givesActual.getCount(),
+                DataComponentExactPredicate.allOf(givesActual.getComponents())
+            )
+        );
     }
 }

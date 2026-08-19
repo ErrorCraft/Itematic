@@ -1,13 +1,12 @@
-package net.errorcraft.itematic.village.trade.modifier.modifiers;
+package net.errorcraft.itematic.world.item.trading.modifier.modifiers;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.util.RandomRange;
-import net.errorcraft.itematic.village.trade.Trade;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifier;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierType;
-import net.errorcraft.itematic.village.trade.modifier.TradeModifierTypes;
+import net.errorcraft.itematic.world.item.trading.Trade;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifier;
+import net.errorcraft.itematic.world.item.trading.modifier.TradeModifierType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
@@ -38,15 +37,21 @@ public record SingleEnchantmentTradeModifier(int index, int baseRandomCost, int 
 
     @Override
     public TradeModifierType<SingleEnchantmentTradeModifier> type() {
-        return TradeModifierTypes.SINGLE_ENCHANTMENT;
+        return TradeModifierType.SINGLE_ENCHANTMENT;
     }
 
     @Override
     public Optional<ItemCost> apply(Trade.Input wants, ItemStack gives, LootContext context) {
         RandomSource random = context.getRandom();
         this.enchantments.getRandomElement(random)
-            .ifPresent(entry -> this.apply(wants.getStack(this.index), gives, random, entry));
-        return Optional.of(new ItemCost(gives.getItemHolder(), gives.getCount(), DataComponentExactPredicate.allOf(gives.getComponents())));
+            .ifPresent(enchantment -> this.apply(wants.getStack(this.index), gives, random, enchantment));
+        return Optional.of(
+            new ItemCost(
+                gives.getItemHolder(),
+                gives.getCount(),
+                DataComponentExactPredicate.allOf(gives.getComponents())
+            )
+        );
     }
 
     private void apply(ItemStack wants, ItemStack gives, RandomSource random, Holder<Enchantment> enchantment) {
