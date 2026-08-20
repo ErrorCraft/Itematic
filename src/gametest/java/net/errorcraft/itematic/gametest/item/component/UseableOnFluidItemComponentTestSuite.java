@@ -29,94 +29,94 @@ public class UseableOnFluidItemComponentTestSuite {
     private static final BlockPos LOOK_AT_AIR_POSITION_IN_WATER = SPAWN_POSITION_IN_WATER.offset(0, 3, 0);
 
     @GameTest(structure = "itematic:item.component.useable_on_fluid.water_hole")
-    public void usingLilyPadWhileLookingAtWaterPlacesLilyPad(GameTestHelper context) {
-        Player player = TestUtil.createMockPlayer(context, GameType.SURVIVAL, SPAWN_POSITION_ON_LAND);
+    public void usingLilyPadWhileLookingAtWaterPlacesLilyPad(GameTestHelper helper) {
+        Player player = TestUtil.createMockPlayer(helper, GameType.SURVIVAL, SPAWN_POSITION_ON_LAND);
         player.lookAt(
             EntityAnchorArgument.Anchor.EYES,
-            Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_WATER_POSITION_ON_LAND))
+            Vec3.atBottomCenterOf(helper.absolutePos(LOOK_AT_WATER_POSITION_ON_LAND))
         );
-        ServerLevel world = context.getLevel();
-        ItemStack lilyPad = world.itematic$createStack(ItemIds.LILY_PAD);
+        ServerLevel level = helper.getLevel();
+        ItemStack lilyPad = level.itematic$createStack(ItemIds.LILY_PAD);
         player.setItemInHand(InteractionHand.MAIN_HAND, lilyPad);
-        context.succeedIf(() -> {
-            InteractionResult result = lilyPad.use(world, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> {
+            InteractionResult result = lilyPad.use(level, player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected Lily Pad usage to be successful"
             );
-            Assert.blockState(context, ABOVE_LOOK_AT_WATER_POSITION_ON_LAND)
+            Assert.blockState(helper, ABOVE_LOOK_AT_WATER_POSITION_ON_LAND)
                 .is(Blocks.LILY_PAD);
         });
     }
 
     @GameTest(structure = "itematic:item.component.useable_on_fluid.water_hole")
-    public void usingPigSpawnEggWhileLookingAtWaterSpawnsPigAtWater(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION_ON_LAND);
-        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_WATER_POSITION_ON_LAND)));
-        ServerLevel world = context.getLevel();
-        ItemStack pigSpawnEgg = world.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
+    public void usingPigSpawnEggWhileLookingAtWaterSpawnsPigAtWater(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION_ON_LAND);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(helper.absolutePos(LOOK_AT_WATER_POSITION_ON_LAND)));
+        ServerLevel level = helper.getLevel();
+        ItemStack pigSpawnEgg = level.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
-        context.succeedIf(() -> {
-            InteractionResult result = pigSpawnEgg.use(world, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> {
+            InteractionResult result = pigSpawnEgg.use(level, player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected Pig Spawn Egg usage to be successful"
             );
-            context.assertEntityPresent(EntityType.PIG, LOOK_AT_WATER_POSITION_ON_LAND);
+            helper.assertEntityPresent(EntityType.PIG, LOOK_AT_WATER_POSITION_ON_LAND);
         });
     }
 
     @GameTest(structure = "itematic:item.component.useable_on_fluid.water_hole")
-    public void usingPigSpawnEggWhileLookingAtAirDoesNotSpawnPig(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION_ON_LAND);
-        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_AIR_POSITION_ON_LAND)));
-        ServerLevel world = context.getLevel();
-        ItemStack pigSpawnEgg = world.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
+    public void usingPigSpawnEggWhileLookingAtAirDoesNotSpawnPig(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION_ON_LAND);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(helper.absolutePos(LOOK_AT_AIR_POSITION_ON_LAND)));
+        ServerLevel level = helper.getLevel();
+        ItemStack pigSpawnEgg = level.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
-        context.succeedIf(() -> {
-            InteractionResult result = pigSpawnEgg.use(world, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> {
+            InteractionResult result = pigSpawnEgg.use(level, player, InteractionHand.MAIN_HAND);
             Assert.isFalse(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected Pig Spawn Egg usage to be unsuccessful"
             );
-            context.assertEntityNotPresent(EntityType.PIG);
+            helper.assertEntityNotPresent(EntityType.PIG);
         });
     }
 
     @GameTest(structure = "itematic:item.component.useable_on_fluid.water_hole")
-    public void usingPigSpawnEggWhileLookingAtGroundUnderWaterSpawnsPigOnGroundUnderWater(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION_IN_WATER);
-        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_WATER_POSITION_IN_WATER)));
-        ServerLevel world = context.getLevel();
-        ItemStack pigSpawnEgg = world.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
+    public void usingPigSpawnEggWhileLookingAtGroundUnderWaterSpawnsPigOnGroundUnderWater(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION_IN_WATER);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(helper.absolutePos(LOOK_AT_WATER_POSITION_IN_WATER)));
+        ServerLevel level = helper.getLevel();
+        ItemStack pigSpawnEgg = level.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
-        TestUtil.useStackOnBlockInside(context, player, pigSpawnEgg, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER, Direction.DOWN);
-        context.succeedIf(() -> context.assertEntityPresent(EntityType.PIG, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER));
+        TestUtil.useStackOnBlockInside(helper, player, pigSpawnEgg, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER, Direction.DOWN);
+        helper.succeedIf(() -> helper.assertEntityPresent(EntityType.PIG, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER));
     }
 
     @GameTest(structure = "itematic:item.component.useable_on_fluid.water_hole")
-    public void usingPigSpawnEggWhileLookingAtWaterUnderWaterSpawnsPigAtPlayerEyes(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION_IN_WATER);
-        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(LOOK_AT_AIR_POSITION_IN_WATER)));
-        ServerLevel world = context.getLevel();
-        ItemStack pigSpawnEgg = world.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
+    public void usingPigSpawnEggWhileLookingAtWaterUnderWaterSpawnsPigAtPlayerEyes(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION_IN_WATER);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(helper.absolutePos(LOOK_AT_AIR_POSITION_IN_WATER)));
+        ServerLevel level = helper.getLevel();
+        ItemStack pigSpawnEgg = level.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
-        InteractionResult result = pigSpawnEgg.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> {
+        InteractionResult result = pigSpawnEgg.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> {
             Assert.isTrue(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected Pig Spawn Egg usage to be successful"
             );
             BlockPos eyeBlockPos = SPAWN_POSITION_IN_WATER.offset(0, (int) player.getEyeHeight(), 0);
-            context.assertEntityPresent(EntityType.PIG, eyeBlockPos);
+            helper.assertEntityPresent(EntityType.PIG, eyeBlockPos);
         });
     }
 }

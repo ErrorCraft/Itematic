@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.gametest.entity.passive;
+package net.errorcraft.itematic.gametest.entity.animal;
 
 import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.references.ItemIds;
@@ -12,22 +12,26 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.goat.Goat;
 import net.minecraft.world.entity.player.Player;
+
 import java.util.Optional;
 
-public class GoatEntityTestSuite {
+public class GoatTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:entity.platform")
     @SuppressWarnings("removal")
-    public void holdingWheatTemptsGoat(GameTestHelper context) {
-        Goat goat = context.spawn(EntityType.GOAT, SPAWN_POSITION);
-        ServerPlayer player = context.makeMockServerPlayerInLevel();
-        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemIds.WHEAT));
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
-        context.succeedWhen(() -> {
+    public void holdingWheatTemptsGoat(GameTestHelper helper) {
+        Goat goat = helper.spawn(EntityType.GOAT, SPAWN_POSITION);
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            helper.getLevel().itematic$createStack(ItemIds.WHEAT)
+        );
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
+        helper.succeedWhen(() -> {
             Optional<Player> temptingPlayer = goat.getBrain().getMemory(MemoryModuleType.TEMPTING_PLAYER);
-            Assert.isTrue(context, temptingPlayer.isPresent(), () -> "Goat was not tempted by a Player");
-            Assert.areEqual(context, temptingPlayer.get(), player, "Goat was not tempted by the expected Player");
+            Assert.isTrue(helper, temptingPlayer.isPresent(), () -> "Goat was not tempted by a Player");
+            Assert.areEqual(helper, temptingPlayer.get(), player, () -> "Goat was not tempted by the expected Player");
         });
     }
 }

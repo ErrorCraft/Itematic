@@ -12,19 +12,19 @@ import net.minecraft.world.level.GameType;
 
 public class BeetrootSoupTestSuite {
     @GameTest(maxTicks = 100)
-    public void eatingBeetrootSoupLeavesBowlAfterConsuming(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void eatingBeetrootSoupLeavesBowlAfterConsuming(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.getFoodData().setFoodLevel(0);
-        ServerLevel world = context.getLevel();
-        ItemStack beetrootSoup = world.itematic$createStack(ItemIds.BEETROOT_SOUP);
+        ServerLevel level = helper.getLevel();
+        ItemStack beetrootSoup = level.itematic$createStack(ItemIds.BEETROOT_SOUP);
         player.setItemInHand(InteractionHand.MAIN_HAND, beetrootSoup);
-        world.addFreshEntity(player);
-        context.startSequence()
-            .thenExecute(() -> beetrootSoup.use(world, player, InteractionHand.MAIN_HAND))
+        level.addFreshEntity(player);
+        helper.startSequence()
+            .thenExecute(() -> beetrootSoup.use(level, player, InteractionHand.MAIN_HAND))
             .thenExecuteAfter(
                 beetrootSoup.getUseDuration(player),
                 () -> Assert.isTrue(
-                    context,
+                    helper,
                     player.getInventory().contains(stack -> stack.itematic$is(ItemIds.BOWL)),
                     () -> "Expected Player to have a Bowl in their inventory"
                 )

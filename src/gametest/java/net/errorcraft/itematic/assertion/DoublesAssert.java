@@ -3,7 +3,6 @@ package net.errorcraft.itematic.assertion;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.util.Mth;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class DoublesAssert {
@@ -12,9 +11,9 @@ public class DoublesAssert {
     private final String name;
 
     DoublesAssert(GameTestHelper helper, double value, String name) {
-        this.helper = Objects.requireNonNull(helper);
+        this.helper = helper;
         this.value = value;
-        this.name = Objects.requireNonNull(name);
+        this.name = name;
     }
 
     public DoublesAssert congruent(double modulus, Consumer<DoublesAssert> congruentAssertion) {

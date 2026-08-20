@@ -1,7 +1,6 @@
-package net.errorcraft.itematic.mixin.gametest;
+package net.errorcraft.itematic.mixin.gametest.framework;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.errorcraft.itematic.access.gametest.GameTestStateAccess;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.GameTestInfo;
 import net.minecraft.network.chat.Component;
@@ -15,7 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(GameTestHelper.class)
-public abstract class TestContextExtender {
+public abstract class GameTestHelperExtender {
     @Shadow
     @Final
     private GameTestInfo testInfo;
@@ -38,7 +37,7 @@ public abstract class TestContextExtender {
         at = @At("TAIL")
     )
     private ServerPlayer removePlayerWhenFinished(ServerPlayer original) {
-        ((GameTestStateAccess) this.testInfo).itematic$whenFinished(() -> original.connection.disconnect(Component.empty()));
+        this.testInfo.itematic$whenFinished(() -> original.connection.disconnect(Component.empty()));
         return original;
     }
 }

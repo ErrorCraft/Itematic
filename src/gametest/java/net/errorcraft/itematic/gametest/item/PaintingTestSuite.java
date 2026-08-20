@@ -18,35 +18,44 @@ public class PaintingTestSuite {
     private static final BlockPos PAINTING_POSITION = BLOCK_POSITION.offset(0, 0, -1);
 
     @GameTest(structure = "itematic:item.painting.platform")
-    public void usingPaintingOnVerticalSidePlacesPainting(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.PAINTING));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.NORTH);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.PAINTING)
+    public void usingPaintingOnVerticalSidePlacesPainting(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.PAINTING)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, BLOCK_POSITION, player, Direction.NORTH);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.PAINTING)
             .existsAt(PAINTING_POSITION));
     }
 
     @GameTest(structure = "itematic:item.painting.platform")
-    public void usingPaintingOnTopSideDoesNotPlacePainting(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.PAINTING));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.PAINTING)
+    public void usingPaintingOnTopSideDoesNotPlacePainting(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.PAINTING)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.PAINTING)
             .doesNotExist());
     }
 
     @GameTest(structure = "itematic:item.painting.platform")
-    public void usingPaintingOnBottomSideDoesNotPlacePainting(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.PAINTING));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.DOWN);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.PAINTING)
+    public void usingPaintingOnBottomSideDoesNotPlacePainting(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.PAINTING)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, BLOCK_POSITION, player, Direction.DOWN);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.PAINTING)
             .doesNotExist());
     }
 }

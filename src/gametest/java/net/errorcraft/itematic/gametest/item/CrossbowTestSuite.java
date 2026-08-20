@@ -15,29 +15,29 @@ import net.minecraft.world.level.GameType;
 
 public class CrossbowTestSuite {
     @GameTest(maxTicks = 100)
-    public void usingCrossbowWithInfinityChargesArrowFromInventoryButDoesNotConsumeTheArrow(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack crossbow = TestUtil.createItemStackWithEnchantment(world, ItemIds.CROSSBOW, Enchantments.INFINITY);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void usingCrossbowWithInfinityChargesArrowFromInventoryButDoesNotConsumeTheArrow(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack crossbow = TestUtil.createItemStackWithEnchantment(level, ItemIds.CROSSBOW, Enchantments.INFINITY);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
-        player.getInventory().add(world.itematic$createStack(ItemIds.ARROW));
-        world.addFreshEntity(player);
-        context.startSequence()
-            .thenExecute(() -> crossbow.use(world, player, InteractionHand.MAIN_HAND))
+        player.getInventory().add(level.itematic$createStack(ItemIds.ARROW));
+        level.addFreshEntity(player);
+        helper.startSequence()
+            .thenExecute(() -> crossbow.use(level, player, InteractionHand.MAIN_HAND))
             .thenExecuteAfter(crossbow.getUseDuration(player), () -> {
                 player.releaseUsingItem();
-                Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .hasComponent(
                         DataComponents.CHARGED_PROJECTILES,
                         component -> Assert.isTrue(
-                            context,
+                            helper,
                             component.itematic$contains(ItemIds.ARROW),
                             () -> "Expected item stack to have an Arrow as a charged projectile"
                         )
                     );
                 Assert.isTrue(
-                    context,
-                    player.getInventory().contains(s -> s.itematic$is(ItemIds.ARROW)),
+                    helper,
+                    player.getInventory().contains(stack -> stack.itematic$is(ItemIds.ARROW)),
                     () -> "Expected Player to have an Arrow in their inventory"
                 );
             })

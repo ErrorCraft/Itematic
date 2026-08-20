@@ -14,13 +14,13 @@ import net.minecraft.world.level.GameType;
 
 public class TotemOfUndyingTestSuite {
     @GameTest
-    public void holdingTotemOfUndyingSavesHolderFromDeath(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        ItemStack totemOfUndying = world.itematic$createStack(ItemIds.TOTEM_OF_UNDYING);
+    public void holdingTotemOfUndyingSavesHolderFromDeath(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack totemOfUndying = level.itematic$createStack(ItemIds.TOTEM_OF_UNDYING);
         player.setItemInHand(InteractionHand.MAIN_HAND, totemOfUndying);
-        player.hurtServer(world, world.damageSources().fall(), Float.MAX_VALUE);
-        context.succeedIf(() -> Assert.livingEntity(context, player)
+        player.hurtServer(level, level.damageSources().fall(), Float.MAX_VALUE);
+        helper.succeedIf(() -> Assert.livingEntity(helper, player)
             .hasHealth(health -> health.equals(1.0f))
             .hasEffect(MobEffects.REGENERATION, 1)
             .hasEffect(MobEffects.ABSORPTION, 1)

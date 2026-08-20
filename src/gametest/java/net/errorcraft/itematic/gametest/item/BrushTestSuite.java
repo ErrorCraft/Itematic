@@ -18,46 +18,46 @@ public class BrushTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 0);
 
     @GameTest(structure = "itematic:item.brush.platform")
-    public void usingBrushDoesNotStartBrushing(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack brush = world.itematic$createStack(ItemIds.BRUSH);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void usingBrushDoesNotStartBrushing(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack brush = level.itematic$createStack(ItemIds.BRUSH);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, brush);
-        brush.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> Assert.isFalse(
-            context,
+        brush.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> Assert.isFalse(
+            helper,
             player.isUsingItem(),
             () -> "Expected Player not to have started using a Brush"
         ));
     }
 
     @GameTest(structure = "itematic:item.brush.platform.suspicious_sand")
-    public void usingBrushOnBlockStartsBrushing(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack brush = world.itematic$createStack(ItemIds.BRUSH);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
+    public void usingBrushOnBlockStartsBrushing(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack brush = level.itematic$createStack(ItemIds.BRUSH);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, brush);
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.isTrue(
-            context,
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.isTrue(
+            helper,
             player.isUsingItem(),
             () -> "Expected Player to have started using a Brush"
         ));
     }
 
     @GameTest(structure = "itematic:item.brush.platform.short_grass")
-    public void usingBrushOnIntangibleBlockDoesNotStartBrushing(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack brush = world.itematic$createStack(ItemIds.BRUSH);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
+    public void usingBrushOnIntangibleBlockDoesNotStartBrushing(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack brush = level.itematic$createStack(ItemIds.BRUSH);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, brush);
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.UP);
-        context.succeedOnTickWhen(1, () -> Assert.isFalse(
-            context,
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        helper.succeedOnTickWhen(1, () -> Assert.isFalse(
+            helper,
             player.isUsingItem(),
             () -> "Expected Player not to have started using a Brush"
         ));

@@ -15,28 +15,36 @@ import net.minecraft.world.level.GameType;
 
 public class IronSwordTestSuite {
     @GameTest
-    public void attackingEntityWhileInSurvivalModeDamagesIronSword(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.IRON_SWORD));
-        Pig pig = TestUtil.createEntity(context, EntityType.PIG, entity -> {});
-        context.succeedIf(() -> {
+    public void attackingEntityWhileInSurvivalModeDamagesIronSword(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.IRON_SWORD)
+        );
+        Pig pig = TestUtil.createEntity(helper, EntityType.PIG, entity -> {
+        });
+        helper.succeedIf(() -> {
             player.attack(pig);
-            Assert.itemStack(context, player.getMainHandItem())
+            Assert.itemStack(helper, player.getMainHandItem())
                 .isDamaged();
         });
     }
 
     @GameTest
     @SuppressWarnings("removal")
-    public void attackingEntityWhileInCreativeModeDoesNotDamageIronSword(GameTestHelper context) {
-        ServerPlayer player = context.makeMockServerPlayerInLevel();
-        ServerLevel world = context.getLevel();
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.IRON_SWORD));
-        Pig pig = TestUtil.createEntity(context, EntityType.PIG, entity -> {});
-        context.succeedIf(() -> {
+    public void attackingEntityWhileInCreativeModeDoesNotDamageIronSword(GameTestHelper helper) {
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerLevel level = helper.getLevel();
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.IRON_SWORD)
+        );
+        Pig pig = TestUtil.createEntity(helper, EntityType.PIG, entity -> {
+        });
+        helper.succeedIf(() -> {
             player.attack(pig);
-            Assert.itemStack(context, player.getMainHandItem())
+            Assert.itemStack(helper, player.getMainHandItem())
                 .isNotDamaged();
         });
     }

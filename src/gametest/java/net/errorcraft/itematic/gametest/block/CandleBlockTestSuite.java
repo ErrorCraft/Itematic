@@ -20,26 +20,26 @@ public class CandleBlockTestSuite {
     private static final BlockPos PLACED_BLOCK_POSITION = GROUND_POSITION.offset(0, 1, 0);
 
     @GameTest(structure = "itematic:block.white_candle")
-    public void usingSameCandleOnCandleBlockIncreasesCandles(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack whiteCandle = world.itematic$createStack(ItemIds.WHITE_CANDLE);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void usingSameCandleOnCandleBlockIncreasesCandles(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack whiteCandle = level.itematic$createStack(ItemIds.WHITE_CANDLE);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, whiteCandle);
-        world.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, whiteCandle, GROUND_POSITION, Direction.UP);
-        context.succeedIf(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+        level.addFreshEntity(player);
+        TestUtil.useStackOnBlockInside(helper, player, whiteCandle, GROUND_POSITION, Direction.UP);
+        helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .hasProperty(CandleBlock.CANDLES, 2));
     }
 
     @GameTest(structure = "itematic:block.white_candle")
-    public void usingDifferentlyColoredCandleOnCandleBlockDoesNotReplaceBlock(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack whiteCandle = world.itematic$createStack(ItemIds.WHITE_CANDLE);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void usingDifferentlyColoredCandleOnCandleBlockDoesNotReplaceBlock(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack whiteCandle = level.itematic$createStack(ItemIds.WHITE_CANDLE);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, whiteCandle);
-        world.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(context, player, whiteCandle, GROUND_POSITION, Direction.UP);
-        context.succeedIf(() -> Assert.blockState(context, PLACED_BLOCK_POSITION)
+        level.addFreshEntity(player);
+        TestUtil.useStackOnBlockInside(helper, player, whiteCandle, GROUND_POSITION, Direction.UP);
+        helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.WHITE_CANDLE));
     }
 }

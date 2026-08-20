@@ -23,53 +23,53 @@ public class ItemHolderItemComponentTestSuite {
     private static final int SLOT = 0;
 
     @GameTest
-    public void rightClickingOnStackWithItemHolderAddsStackToItemHolder(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
+    public void rightClickingOnStackWithItemHolderAddsStackToItemHolder(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
         Inventory inventory = player.getInventory();
-        ItemStack bundle = world.itematic$createStack(ItemIds.BUNDLE);
-        inventory.add(SLOT, world.itematic$createStack(ItemIds.STICK));
+        ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
+        inventory.add(SLOT, level.itematic$createStack(ItemIds.STICK));
         Slot slot = new Slot(inventory, SLOT, 0, 0);
-        world.addFreshEntity(player);
-        context.succeedIf(() -> {
+        level.addFreshEntity(player);
+        helper.succeedIf(() -> {
             boolean success = bundle.overrideStackedOnOther(slot, ClickAction.SECONDARY, player);
             Assert.isTrue(
-                context,
+                helper,
                 success,
                 () -> "Expected right clicking on slot with item holder to be successful"
             );
-            Assert.itemStack(context, inventory.getItem(SLOT))
+            Assert.itemStack(helper, inventory.getItem(SLOT))
                 .isEmpty();
-            Assert.itemStack(context, bundle)
+            Assert.itemStack(helper, bundle)
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
-                    component -> Assert.itemStack(context, component.getItemUnsafe(0))
+                    component -> Assert.itemStack(helper, component.getItemUnsafe(0))
                         .is(ItemIds.STICK)
                 );
         });
     }
 
     @GameTest
-    public void rightClickingOnEmptySlotPlacesLastStackFromItemHolderInSlot(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
+    public void rightClickingOnEmptySlotPlacesLastStackFromItemHolderInSlot(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
         Inventory inventory = player.getInventory();
-        ItemStack bundle = world.itematic$createStack(ItemIds.BUNDLE);
-        addToBundleContentsComponent(context, bundle, world.itematic$createStack(ItemIds.STICK));
+        ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
+        addToBundleContentsComponent(helper, bundle, level.itematic$createStack(ItemIds.STICK));
         Slot slot = new Slot(inventory, SLOT, 0, 0);
-        world.addFreshEntity(player);
-        context.succeedIf(() -> {
+        level.addFreshEntity(player);
+        helper.succeedIf(() -> {
             boolean success = bundle.overrideStackedOnOther(slot, ClickAction.SECONDARY, player);
             Assert.isTrue(
-                context,
+                helper,
                 success,
                 () -> "Expected right clicking on slot with item holder to be successful"
             );
-            Assert.itemStack(context, inventory.getItem(SLOT))
+            Assert.itemStack(helper, inventory.getItem(SLOT))
                 .is(ItemIds.STICK);
-            Assert.itemStack(context, bundle)
+            Assert.itemStack(helper, bundle)
                 .hasComponent(DataComponents.BUNDLE_CONTENTS, component -> Assert.isTrue(
-                    context,
+                    helper,
                     component.isEmpty(),
                     () -> "Expected item holder contents to be empty"
                 ));
@@ -77,56 +77,56 @@ public class ItemHolderItemComponentTestSuite {
     }
 
     @GameTest
-    public void rightClickingOnItemHolderWithStackAddsStackToItemHolder(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel level = context.getLevel();
+    public void rightClickingOnItemHolderWithStackAddsStackToItemHolder(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
         Slot inventorySlot = new Slot(player.getInventory(), SLOT, 0, 0);
         inventorySlot.setByPlayer(level.itematic$createStack(ItemIds.BUNDLE));
         SlotAccess carriedSlot = Objects.requireNonNull(player.getSlot(Player.HELD_ITEM_SLOT));
         carriedSlot.set(level.itematic$createStack(ItemIds.STICK));
-        context.succeedIf(() -> {
+        helper.succeedIf(() -> {
             boolean success = inventorySlot.getItem()
                 .overrideOtherStackedOnMe(carriedSlot.get(), inventorySlot, ClickAction.SECONDARY, player, carriedSlot);
             Assert.isTrue(
-                context,
+                helper,
                 success,
                 () -> "Expected right clicking on item holder to be successful"
             );
-            Assert.itemStack(context, carriedSlot.get())
+            Assert.itemStack(helper, carriedSlot.get())
                 .isEmpty();
-            Assert.itemStack(context, player.getInventory().getItem(SLOT))
+            Assert.itemStack(helper, player.getInventory().getItem(SLOT))
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
-                    component -> Assert.itemStack(context, component.getItemUnsafe(0))
+                    component -> Assert.itemStack(helper, component.getItemUnsafe(0))
                         .is(ItemIds.STICK)
                 );
         });
     }
 
     @GameTest
-    public void rightClickingOnItemHolderWithNoStackRemovesStackFromItemHolder(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel level = context.getLevel();
+    public void rightClickingOnItemHolderWithNoStackRemovesStackFromItemHolder(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
         ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
-        addToBundleContentsComponent(context, bundle, level.itematic$createStack(ItemIds.STICK));
+        addToBundleContentsComponent(helper, bundle, level.itematic$createStack(ItemIds.STICK));
         Slot inventorySlot = new Slot(player.getInventory(), SLOT, 0, 0);
         inventorySlot.setByPlayer(bundle);
         SlotAccess carriedSlot = Objects.requireNonNull(player.getSlot(Player.HELD_ITEM_SLOT));
-        context.succeedIf(() -> {
+        helper.succeedIf(() -> {
             boolean success = inventorySlot.getItem()
                 .overrideOtherStackedOnMe(carriedSlot.get(), inventorySlot, ClickAction.SECONDARY, player, carriedSlot);
             Assert.isTrue(
-                context,
+                helper,
                 success,
                 () -> "Expected right clicking on item holder to be successful"
             );
-            Assert.itemStack(context, carriedSlot.get())
+            Assert.itemStack(helper, carriedSlot.get())
                 .is(ItemIds.STICK);
-            Assert.itemStack(context, player.getInventory().getItem(SLOT))
+            Assert.itemStack(helper, player.getInventory().getItem(SLOT))
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
                     component -> Assert.isTrue(
-                        context,
+                        helper,
                         component.isEmpty(),
                         () -> "Expected item holder to be empty"
                     )

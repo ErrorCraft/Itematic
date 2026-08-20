@@ -17,49 +17,49 @@ import net.minecraft.world.level.GameType;
 
 public class EquipmentItemComponentTestSuite {
     @GameTest
-    public void usingItemEquipsStack(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        ItemStack leatherHelmet = world.itematic$createStack(ItemIds.LEATHER_HELMET);
+    public void usingItemEquipsStack(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack leatherHelmet = level.itematic$createStack(ItemIds.LEATHER_HELMET);
         player.setItemInHand(InteractionHand.MAIN_HAND, leatherHelmet);
-        Equippable equippable = TestUtil.getDataComponent(context, leatherHelmet, DataComponents.EQUIPPABLE);
-        leatherHelmet.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> Assert.itemStack(context, player.getItemBySlot(equippable.slot()))
+        Equippable equippable = TestUtil.getDataComponent(helper, leatherHelmet, DataComponents.EQUIPPABLE);
+        leatherHelmet.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> Assert.itemStack(helper, player.getItemBySlot(equippable.slot()))
             .is(ItemIds.LEATHER_HELMET)
         );
     }
 
     @GameTest
-    public void usingItemThatIsNotSwappableDoesNotEquipStack(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        ItemStack shield = world.itematic$createStack(ItemIds.SHIELD);
+    public void usingItemThatIsNotSwappableDoesNotEquipStack(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack shield = level.itematic$createStack(ItemIds.SHIELD);
         player.setItemInHand(InteractionHand.MAIN_HAND, shield);
-        Equippable equippable = TestUtil.getDataComponent(context, shield, DataComponents.EQUIPPABLE);
-        shield.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> Assert.itemStack(context, player.getItemBySlot(equippable.slot()))
+        Equippable equippable = TestUtil.getDataComponent(helper, shield, DataComponents.EQUIPPABLE);
+        shield.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> Assert.itemStack(helper, player.getItemBySlot(equippable.slot()))
             .isEmpty()
         );
     }
 
     @GameTest
-    public void usingItemWithAlreadyEquippedStackSwapsStacks(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        player.setItemSlot(EquipmentSlot.HEAD, world.itematic$createStack(ItemIds.IRON_HELMET));
-        ItemStack leatherHelmet = world.itematic$createStack(ItemIds.LEATHER_HELMET);
+    public void usingItemWithAlreadyEquippedStackSwapsStacks(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        player.setItemSlot(EquipmentSlot.HEAD, level.itematic$createStack(ItemIds.IRON_HELMET));
+        ItemStack leatherHelmet = level.itematic$createStack(ItemIds.LEATHER_HELMET);
         player.setItemInHand(InteractionHand.MAIN_HAND, leatherHelmet);
-        context.succeedIf(() -> {
-            InteractionResult result = leatherHelmet.use(world, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> {
+            InteractionResult result = leatherHelmet.use(level, player, InteractionHand.MAIN_HAND);
             Assert.isInstance(
-                context,
+                helper,
                 result,
                 InteractionResult.Success.class,
                 () -> "Expected equipment item usage to be successful",
-                success -> Assert.itemStack(context, success.heldItemTransformedTo())
+                success -> Assert.itemStack(helper, success.heldItemTransformedTo())
                     .is(ItemIds.IRON_HELMET)
             );
-            Assert.itemStack(context, player.getItemBySlot(EquipmentSlot.HEAD))
+            Assert.itemStack(helper, player.getItemBySlot(EquipmentSlot.HEAD))
                 .is(ItemIds.LEATHER_HELMET);
         });
     }

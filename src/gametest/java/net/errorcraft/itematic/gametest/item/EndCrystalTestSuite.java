@@ -19,19 +19,22 @@ public class EndCrystalTestSuite {
     private static final BlockPos PLACED_ENTITY_POSITION = GROUND_POSITION.offset(0, 1, 0);
 
     @GameTest(structure = "itematic:item.end_crystal.platform")
-    public void usingEndCrystalOnGroundPlacesEndCrystal(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.END_CRYSTAL));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.END_CRYSTAL)
+    public void usingEndCrystalOnGroundPlacesEndCrystal(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.END_CRYSTAL)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.END_CRYSTAL)
             .existsAt(
                 PLACED_ENTITY_POSITION,
                 endCrystal -> endCrystal.test(
                     EndCrystal::showsBottom,
                     shouldShowBottom -> Assert.isFalse(
-                        context,
+                        helper,
                         shouldShowBottom,
                         () -> "Expected End Crystal not to show its bottom"
                     )
@@ -40,35 +43,44 @@ public class EndCrystalTestSuite {
     }
 
     @GameTest(structure = "itematic:item.end_crystal.platform.unsupported")
-    public void usingEndCrystalOnUnsupportedBlockDoesNotPlaceEndCrystal(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.END_CRYSTAL));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.END_CRYSTAL)
+    public void usingEndCrystalOnUnsupportedBlockDoesNotPlaceEndCrystal(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.END_CRYSTAL)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.END_CRYSTAL)
             .doesNotExist());
     }
 
     @GameTest(structure = "itematic:item.end_crystal.platform.without_air")
-    public void usingEndCrystalWithoutAirBlockDoesNotPlaceEndCrystal(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.END_CRYSTAL));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.END_CRYSTAL)
+    public void usingEndCrystalWithoutAirBlockDoesNotPlaceEndCrystal(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.END_CRYSTAL)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.END_CRYSTAL)
             .doesNotExist());
     }
 
     @GameTest(structure = "itematic:item.end_crystal.platform.not_enough_room_from_interfering_entity")
-    public void usingEndCrystalOnGroundWithNotEnoughRoomFromInterferingEntityDoesNotPlaceEndCrystal(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.END_CRYSTAL));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.END_CRYSTAL)
+    public void usingEndCrystalOnGroundWithNotEnoughRoomFromInterferingEntityDoesNotPlaceEndCrystal(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.END_CRYSTAL)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.END_CRYSTAL)
             .doesNotExist());
     }
 }

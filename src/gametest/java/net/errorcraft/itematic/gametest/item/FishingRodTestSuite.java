@@ -14,29 +14,29 @@ import net.minecraft.world.level.GameType;
 
 public class FishingRodTestSuite {
     @GameTest
-    public void usingFishingRodCastsFishingRod(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        ItemStack fishingRod = world.itematic$createStack(ItemIds.FISHING_ROD);
+    public void usingFishingRodCastsFishingRod(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack fishingRod = level.itematic$createStack(ItemIds.FISHING_ROD);
         player.setItemInHand(InteractionHand.MAIN_HAND, fishingRod);
-        fishingRod.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> Assert.isTrue(
-            context,
+        fishingRod.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> Assert.isTrue(
+            helper,
             player.fishing != null,
             () -> "Expected Player to have cast a Fishing Rod"
         ));
     }
 
     @GameTest
-    public void usingCastFishingRodRetractsFishingRod(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        ItemStack fishingRod = world.itematic$createStack(ItemIds.FISHING_ROD);
+    public void usingCastFishingRodRetractsFishingRod(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack fishingRod = level.itematic$createStack(ItemIds.FISHING_ROD);
         player.setItemInHand(InteractionHand.MAIN_HAND, fishingRod);
-        Projectile.spawnProjectile(new FishingHook(player, world, 0, 0), world, fishingRod);
-        fishingRod.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> Assert.isTrue(
-            context,
+        Projectile.spawnProjectile(new FishingHook(player, level, 0, 0), level, fishingRod);
+        fishingRod.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> Assert.isTrue(
+            helper,
             player.fishing == null,
             () -> "Expected Player to have retracted a Fishing Rod"
         ));

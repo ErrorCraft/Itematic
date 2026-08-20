@@ -17,69 +17,69 @@ public class AnvilBlockTestSuite {
     private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:block.anvil")
-    public void combiningEnchantedItemsWithSameIdInAnvilCombinesEnchantments(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
+    public void combiningEnchantedItemsWithSameIdInAnvilCombinesEnchantments(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.EFFICIENCY));
-        context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.IRON_PICKAXE, Enchantments.EFFICIENCY));
+        helper.succeedIf(() -> Assert.itemStack(helper, anvilMenu.getSlot(2).getItem())
             .is(ItemIds.IRON_PICKAXE)
             .hasEnchantments(Enchantments.UNBREAKING, Enchantments.EFFICIENCY));
     }
 
     @GameTest(structure = "itematic:block.anvil")
-    public void combiningEnchantedItemsWithDifferentIdsInAnvilRejectsCombination(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
+    public void combiningEnchantedItemsWithDifferentIdsInAnvilRejectsCombination(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.DIAMOND_PICKAXE, Enchantments.EFFICIENCY));
-        context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.DIAMOND_PICKAXE, Enchantments.EFFICIENCY));
+        helper.succeedIf(() -> Assert.itemStack(helper, anvilMenu.getSlot(2).getItem())
             .isEmpty());
     }
 
     @GameTest(structure = "itematic:block.anvil")
-    public void combiningItemWithEnchantedBookInAnvilAddsEnchantment(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
+    public void combiningItemWithEnchantedBookInAnvilAddsEnchantment(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.ENCHANTED_BOOK, Enchantments.EFFICIENCY));
-        context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.ENCHANTED_BOOK, Enchantments.EFFICIENCY));
+        helper.succeedIf(() -> Assert.itemStack(helper, anvilMenu.getSlot(2).getItem())
             .is(ItemIds.IRON_PICKAXE)
             .hasEnchantments(Enchantments.UNBREAKING, Enchantments.EFFICIENCY));
     }
 
     @GameTest(structure = "itematic:block.anvil")
-    public void combiningItemWithEnchantedBookWithIncompatibleEnchantmentInAnvilRejectsCombination(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
+    public void combiningItemWithEnchantedBookWithIncompatibleEnchantmentInAnvilRejectsCombination(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.ENCHANTED_BOOK, Enchantments.SHARPNESS));
-        context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.ENCHANTED_BOOK, Enchantments.SHARPNESS));
+        helper.succeedIf(() -> Assert.itemStack(helper, anvilMenu.getSlot(2).getItem())
             .isEmpty());
     }
 
     @GameTest(structure = "itematic:block.anvil")
-    public void combiningEnchantedBooksInAnvilCombinesEnchantments(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.ANVIL);
+    public void combiningEnchantedBooksInAnvilCombinesEnchantments(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        AnvilMenu anvilMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ANVIL);
         anvilMenu.getSlot(0)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.ENCHANTED_BOOK, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.ENCHANTED_BOOK, Enchantments.UNBREAKING));
         anvilMenu.getSlot(1)
-            .setByPlayer(TestUtil.createItemStackWithEnchantment(world, ItemIds.ENCHANTED_BOOK, Enchantments.EFFICIENCY));
-        context.succeedIf(() -> Assert.itemStack(context, anvilMenu.getSlot(2).getItem())
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.ENCHANTED_BOOK, Enchantments.EFFICIENCY));
+        helper.succeedIf(() -> Assert.itemStack(helper, anvilMenu.getSlot(2).getItem())
             .is(ItemIds.ENCHANTED_BOOK)
             .hasEnchantments(Enchantments.UNBREAKING, Enchantments.EFFICIENCY));
     }

@@ -17,27 +17,27 @@ public class WaterCauldronBlockTestSuite {
     private static final BlockPos WATER_CAULDRON_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:block.water_cauldron")
-    public void usingColoredShulkerBoxOnWaterCauldronClearsColor(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        ItemStack whiteShulkerBox = world.itematic$createStack(ItemIds.WHITE_SHULKER_BOX);
+    public void usingColoredShulkerBoxOnWaterCauldronClearsColor(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack whiteShulkerBox = level.itematic$createStack(ItemIds.WHITE_SHULKER_BOX);
         player.setItemInHand(InteractionHand.MAIN_HAND, whiteShulkerBox);
-        world.addFreshEntity(player);
-        context.useBlock(WATER_CAULDRON_POSITION, player);
-        context.succeedIf(() -> Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
+        level.addFreshEntity(player);
+        helper.useBlock(WATER_CAULDRON_POSITION, player);
+        helper.succeedIf(() -> Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
             .is(ItemIds.SHULKER_BOX));
     }
 
     @GameTest(structure = "itematic:block.water_cauldron")
-    public void usingColoredWolfArmorOnWaterCauldronClearsColor(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        ItemStack wolfArmor = world.itematic$createStack(ItemIds.WOLF_ARMOR);
+    public void usingColoredWolfArmorOnWaterCauldronClearsColor(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack wolfArmor = level.itematic$createStack(ItemIds.WOLF_ARMOR);
         wolfArmor.set(DataComponents.DYED_COLOR, new DyedItemColor(0xffffff));
         player.setItemInHand(InteractionHand.MAIN_HAND, wolfArmor);
-        world.addFreshEntity(player);
-        context.useBlock(WATER_CAULDRON_POSITION, player);
-        context.succeedIf(() -> Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
+        level.addFreshEntity(player);
+        helper.useBlock(WATER_CAULDRON_POSITION, player);
+        helper.succeedIf(() -> Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
             .doesNotHaveComponent(DataComponents.DYED_COLOR));
     }
 }

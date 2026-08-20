@@ -22,48 +22,57 @@ public class ArmorStandTestSuite {
     private static final float SPAWNED_ENTITY_ANGLE = USER_ANGLE - 180.0f;
 
     @GameTest(structure = "itematic:item.armor_stand.platform")
-    public void usingArmorStandOnGroundPlacesArmorStand(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack stack = world.itematic$createStack(ItemIds.ARMOR_STAND);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void usingArmorStandOnGroundPlacesArmorStand(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack stack = level.itematic$createStack(ItemIds.ARMOR_STAND);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, stack);
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.ARMOR_STAND)
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
             .existsAt(PLACED_ENTITY_POSITION));
     }
 
     @GameTest(structure = "itematic:item.armor_stand.platform.high")
-    public void usingArmorStandOnCeilingDoesNotPlaceArmorStand(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.ARMOR_STAND));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, HIGH_POSITION, player, Direction.DOWN);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.ARMOR_STAND)
+    public void usingArmorStandOnCeilingDoesNotPlaceArmorStand(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.ARMOR_STAND)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, HIGH_POSITION, player, Direction.DOWN);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
             .doesNotExist());
     }
 
     @GameTest(structure = "itematic:item.armor_stand.platform.not_enough_room")
-    public void usingArmorStandOnGroundWithNotEnoughRoomDoesNotPlaceArmorStand(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.ARMOR_STAND));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.ARMOR_STAND)
+    public void usingArmorStandOnGroundWithNotEnoughRoomDoesNotPlaceArmorStand(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.ARMOR_STAND)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
             .doesNotExist());
     }
 
     @GameTest(structure = "itematic:item.armor_stand.platform")
-    public void usingArmorStandOnGroundWhileRotatedPlacesArmorStandRotated(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.ARMOR_STAND));
+    public void usingArmorStandOnGroundWhileRotatedPlacesArmorStandRotated(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.ARMOR_STAND)
+        );
         player.setYRot(USER_ANGLE);
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.ARMOR_STAND)
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
             .existsAt(
                 PLACED_ENTITY_POSITION,
                 armorStand -> armorStand.yaw(yaw -> yaw.equals(SPAWNED_ENTITY_ANGLE))

@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.mixin.gametest;
+package net.errorcraft.itematic.mixin.gametest.framework;
 
 import net.minecraft.gametest.framework.GameTestServer;
 import net.minecraft.world.flag.FeatureFlagRegistry;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(GameTestServer.class)
-public class TestServerExtender {
+public class GameTestServerExtender {
     @Redirect(
         method = "<clinit>",
         at = @At(

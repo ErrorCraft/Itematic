@@ -14,21 +14,24 @@ public class ComposterBlockTestSuite {
     private static final BlockPos COMPOSTER_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:block.composter.empty")
-    public void usingCompostableItemOnComposterIncreasesLevel(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemIds.PUMPKIN_PIE));
-        context.useBlock(COMPOSTER_POSITION, player);
-        context.succeedIf(() -> Assert.blockState(context, COMPOSTER_POSITION)
+    public void usingCompostableItemOnComposterIncreasesLevel(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            helper.getLevel().itematic$createStack(ItemIds.PUMPKIN_PIE)
+        );
+        helper.useBlock(COMPOSTER_POSITION, player);
+        helper.succeedIf(() -> Assert.blockState(helper, COMPOSTER_POSITION)
             .hasProperty(BlockStateProperties.LEVEL_COMPOSTER, 1, () -> "Expected Composter level to increase to 1"));
     }
 
     @GameTest(structure = "itematic:block.composter.full")
-    public void usingBlockOnFullComposterEmptiesComposterAndSpawnsBoneMeal(GameTestHelper context) {
-        context.useBlock(COMPOSTER_POSITION);
-        context.succeedIf(() -> {
-            Assert.blockState(context, COMPOSTER_POSITION)
+    public void usingBlockOnFullComposterEmptiesComposterAndSpawnsBoneMeal(GameTestHelper helper) {
+        helper.useBlock(COMPOSTER_POSITION);
+        helper.succeedIf(() -> {
+            Assert.blockState(helper, COMPOSTER_POSITION)
                 .hasProperty(BlockStateProperties.LEVEL_COMPOSTER, 0, () -> "Expected Composter to be emptied");
-            context.assertItemEntityPresent(context.getLevel().itematic$getItem(ItemIds.BONE_MEAL).value());
+            helper.assertItemEntityPresent(helper.getLevel().itematic$getItem(ItemIds.BONE_MEAL).value());
         });
     }
 }

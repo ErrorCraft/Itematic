@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+
 import java.util.function.Consumer;
 
 public class EntityTypeAssert<E extends Entity> {

@@ -14,19 +14,19 @@ import net.minecraft.world.level.GameType;
 
 public class HoneyBottleTestSuite {
     @GameTest(maxTicks = 100)
-    public void consumingHoneyBottleRemovesPoisonStatusEffect(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void consumingHoneyBottleRemovesPoisonStatusEffect(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.getFoodData().setFoodLevel(0);
         player.addEffect(new MobEffectInstance(MobEffects.POISON, MobEffectInstance.INFINITE_DURATION));
-        ServerLevel world = context.getLevel();
-        ItemStack honeyBottle = world.itematic$createStack(ItemIds.HONEY_BOTTLE);
+        ServerLevel level = helper.getLevel();
+        ItemStack honeyBottle = level.itematic$createStack(ItemIds.HONEY_BOTTLE);
         player.setItemInHand(InteractionHand.MAIN_HAND, honeyBottle);
-        world.addFreshEntity(player);
-        context.startSequence()
-            .thenExecute(() -> honeyBottle.use(world, player, InteractionHand.MAIN_HAND))
+        level.addFreshEntity(player);
+        helper.startSequence()
+            .thenExecute(() -> honeyBottle.use(level, player, InteractionHand.MAIN_HAND))
             .thenExecuteAfter(
                 honeyBottle.getUseDuration(player) + 1,
-                () -> Assert.livingEntity(context, player)
+                () -> Assert.livingEntity(helper, player)
                     .doesNotHaveEffect(MobEffects.POISON)
             )
             .thenSucceed();

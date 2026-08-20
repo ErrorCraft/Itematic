@@ -18,26 +18,26 @@ public class BowTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:item.bow.platform")
-    public void usingBowWithMultishotSpawnsMultipleArrows(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack bow = world.itematic$createStack(ItemIds.BOW);
+    public void usingBowWithMultishotSpawnsMultipleArrows(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack bow = level.itematic$createStack(ItemIds.BOW);
         bow.enchant(
-            world.registryAccess()
+            level.registryAccess()
                 .lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(Enchantments.MULTISHOT),
             1
         );
-        ItemStack ammunition = world.itematic$createStack(ItemIds.ARROW);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
+        ItemStack ammunition = level.itematic$createStack(ItemIds.ARROW);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
         player.setItemInHand(InteractionHand.MAIN_HAND, bow);
         player.getInventory().add(ammunition);
-        world.addFreshEntity(player);
-        context.startSequence()
-            .thenExecute(() -> bow.use(world, player, InteractionHand.MAIN_HAND))
+        level.addFreshEntity(player);
+        helper.startSequence()
+            .thenExecute(() -> bow.use(level, player, InteractionHand.MAIN_HAND))
             .thenExecuteAfter(20, () -> {
                 player.releaseUsingItem();
-                context.assertEntitiesPresent(EntityType.ARROW, 3);
+                helper.assertEntitiesPresent(EntityType.ARROW, 3);
             })
             .thenSucceed();
     }

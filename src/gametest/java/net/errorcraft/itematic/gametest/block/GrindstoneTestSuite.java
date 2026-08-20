@@ -17,59 +17,59 @@ public class GrindstoneTestSuite {
     private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:block.grindstone")
-    public void placingEnchantedItemInGrindstoneDisenchantsItem(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        GrindstoneMenu grindstoneMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.GRINDSTONE);
+    public void placingEnchantedItemInGrindstoneDisenchantsItem(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        GrindstoneMenu grindstoneMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.GRINDSTONE);
         grindstoneMenu.getSlot(0).setByPlayer(
-            TestUtil.createItemStackWithEnchantment(world, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING)
+            TestUtil.createItemStackWithEnchantment(level, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING)
         );
-        context.succeedIf(() -> Assert.itemStack(context, grindstoneMenu.getSlot(2).getItem())
+        helper.succeedIf(() -> Assert.itemStack(helper, grindstoneMenu.getSlot(2).getItem())
             .is(ItemIds.IRON_PICKAXE)
             .hasNoEnchantments());
     }
 
     @GameTest(structure = "itematic:block.grindstone")
-    public void placingEnchantedBookInGrindstoneTransformsItemIntoBook(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        GrindstoneMenu grindstoneMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.GRINDSTONE);
+    public void placingEnchantedBookInGrindstoneTransformsItemIntoBook(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        GrindstoneMenu grindstoneMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.GRINDSTONE);
         grindstoneMenu.getSlot(0).setByPlayer(
-            TestUtil.createItemStackWithEnchantment(world, ItemIds.ENCHANTED_BOOK, Enchantments.UNBREAKING)
+            TestUtil.createItemStackWithEnchantment(level, ItemIds.ENCHANTED_BOOK, Enchantments.UNBREAKING)
         );
-        context.succeedIf(() -> Assert.itemStack(context, grindstoneMenu.getSlot(2).getItem())
+        helper.succeedIf(() -> Assert.itemStack(helper, grindstoneMenu.getSlot(2).getItem())
             .is(ItemIds.BOOK)
             .hasNoEnchantments());
     }
 
     @GameTest(structure = "itematic:block.grindstone")
-    public void placingDamageableItemsWithSameIsInGrindstoneRepairsItem(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        GrindstoneMenu grindstoneMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.GRINDSTONE);
+    public void placingDamageableItemsWithSameIsInGrindstoneRepairsItem(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        GrindstoneMenu grindstoneMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.GRINDSTONE);
         grindstoneMenu.getSlot(0).setByPlayer(
-            TestUtil.createItemStackWithSlightDamage(world, ItemIds.IRON_PICKAXE)
+            TestUtil.createItemStackWithSlightDamage(level, ItemIds.IRON_PICKAXE)
         );
         grindstoneMenu.getSlot(1).setByPlayer(
-            TestUtil.createItemStackWithSlightDamage(world, ItemIds.IRON_PICKAXE)
+            TestUtil.createItemStackWithSlightDamage(level, ItemIds.IRON_PICKAXE)
         );
-        context.succeedIf(() -> Assert.itemStack(context, grindstoneMenu.getSlot(2).getItem())
+        helper.succeedIf(() -> Assert.itemStack(helper, grindstoneMenu.getSlot(2).getItem())
             .is(ItemIds.IRON_PICKAXE)
             .isNotDamaged());
     }
 
     @GameTest(structure = "itematic:block.grindstone")
-    public void placingDamageableItemsWithDifferentIdsInGrindstoneRejectsRepair(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        GrindstoneMenu grindstoneMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, MenuType.GRINDSTONE);
+    public void placingDamageableItemsWithDifferentIdsInGrindstoneRejectsRepair(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        GrindstoneMenu grindstoneMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.GRINDSTONE);
         grindstoneMenu.getSlot(0).setByPlayer(
-            TestUtil.createItemStackWithSlightDamage(world, ItemIds.IRON_PICKAXE)
+            TestUtil.createItemStackWithSlightDamage(level, ItemIds.IRON_PICKAXE)
         );
         grindstoneMenu.getSlot(1).setByPlayer(
-            TestUtil.createItemStackWithSlightDamage(world, ItemIds.DIAMOND_PICKAXE)
+            TestUtil.createItemStackWithSlightDamage(level, ItemIds.DIAMOND_PICKAXE)
         );
-        context.succeedIf(() -> Assert.itemStack(context, grindstoneMenu.getSlot(2).getItem())
+        helper.succeedIf(() -> Assert.itemStack(helper, grindstoneMenu.getSlot(2).getItem())
             .isEmpty());
     }
 }

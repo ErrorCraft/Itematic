@@ -19,40 +19,40 @@ import java.util.List;
 
 public class FoodItemComponentTestSuite {
     @GameTest(maxTicks = 100)
-    public void eatingFoodItemAddsNutrition(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack apple = world.itematic$createStack(ItemIds.APPLE);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void eatingFoodItemAddsNutrition(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack apple = level.itematic$createStack(ItemIds.APPLE);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.getFoodData().setFoodLevel(0);
         player.setItemInHand(InteractionHand.MAIN_HAND, apple);
-        world.addFreshEntity(player);
-        FoodProperties food = TestUtil.getDataComponent(context, apple, DataComponents.FOOD);
-        apple.use(world, player, InteractionHand.MAIN_HAND);
-        context.startSequence().thenExecuteAfter(
+        level.addFreshEntity(player);
+        FoodProperties food = TestUtil.getDataComponent(helper, apple, DataComponents.FOOD);
+        apple.use(level, player, InteractionHand.MAIN_HAND);
+        helper.startSequence().thenExecuteAfter(
             apple.getUseDuration(player),
             () -> {
-                Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .isEmpty();
-                Assert.ints(context, player.getFoodData().getFoodLevel(), "nutrition")
+                Assert.ints(helper, player.getFoodData().getFoodLevel(), "nutrition")
                     .equals(food.nutrition());
             }
         ).thenSucceed();
     }
 
     @GameTest(maxTicks = 100)
-    public void eatingSuspiciousStewAddsSuspiciousEffects(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack suspiciousStew = world.itematic$createStack(ItemIds.SUSPICIOUS_STEW);
-        List<SuspiciousStewEffects.Entry> effects = TestUtil.getItemBehavior(context, world.itematic$createStack(ItemIds.DANDELION), ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT)
+    public void eatingSuspiciousStewAddsSuspiciousEffects(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack suspiciousStew = level.itematic$createStack(ItemIds.SUSPICIOUS_STEW);
+        List<SuspiciousStewEffects.Entry> effects = TestUtil.getItemBehavior(helper, level.itematic$createStack(ItemIds.DANDELION), ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT)
             .effects();
         suspiciousStew.set(DataComponents.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffects(effects));
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, suspiciousStew);
-        world.addFreshEntity(player);
-        suspiciousStew.use(world, player, InteractionHand.MAIN_HAND);
-        context.startSequence().thenExecuteAfter(
+        level.addFreshEntity(player);
+        suspiciousStew.use(level, player, InteractionHand.MAIN_HAND);
+        helper.startSequence().thenExecuteAfter(
             suspiciousStew.getUseDuration(player),
-            () -> Assert.livingEntity(context, player)
+            () -> Assert.livingEntity(helper, player)
                 .hasEffects(effects)
                 .hasStackInHand(InteractionHand.MAIN_HAND, stack -> stack.is(ItemIds.BOWL))
         ).thenSucceed();

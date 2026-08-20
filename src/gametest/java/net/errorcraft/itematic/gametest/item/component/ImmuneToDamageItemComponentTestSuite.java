@@ -13,62 +13,62 @@ public class ImmuneToDamageItemComponentTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest
-    public void explodingNetherStarKeepsItemAlive(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
+    public void explodingNetherStarKeepsItemAlive(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
         ItemEntity netherStar = new ItemEntity(
-            world,
+            level,
             0.0d,
             0.0d,
             0.0d,
-            world.itematic$createStack(ItemIds.NETHER_STAR)
+            level.itematic$createStack(ItemIds.NETHER_STAR)
         );
-        TestUtil.spawnEntity(context, netherStar, SPAWN_POSITION);
-        netherStar.hurtServer(world, world.damageSources().explosion(null), Float.MAX_VALUE);
-        context.succeedIf(() -> context.assertEntityPresent(EntityType.ITEM));
+        TestUtil.spawnEntity(helper, netherStar, SPAWN_POSITION);
+        netherStar.hurtServer(level, level.damageSources().explosion(null), Float.MAX_VALUE);
+        helper.succeedIf(() -> helper.assertEntityPresent(EntityType.ITEM));
     }
 
     @GameTest
-    public void explodingStickDestroysItem(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
+    public void explodingStickDestroysItem(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
         ItemEntity stick = new ItemEntity(
-            world,
+            level,
             0.0d,
             0.0d,
             0.0d,
-            world.itematic$createStack(ItemIds.STICK)
+            level.itematic$createStack(ItemIds.STICK)
         );
-        TestUtil.spawnEntity(context, stick, SPAWN_POSITION);
-        stick.hurtServer(world, world.damageSources().explosion(null), Float.MAX_VALUE);
-        context.succeedIf(() -> context.assertEntityNotPresent(EntityType.ITEM));
+        TestUtil.spawnEntity(helper, stick, SPAWN_POSITION);
+        stick.hurtServer(level, level.damageSources().explosion(null), Float.MAX_VALUE);
+        helper.succeedIf(() -> helper.assertEntityNotPresent(EntityType.ITEM));
     }
 
     @GameTest
-    public void settingNetheriteIngotOnFireKeepsItemAlive(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
+    public void settingNetheriteIngotOnFireKeepsItemAlive(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
         ItemEntity netheriteIngot = new ItemEntity(
-            world,
+            level,
             0.0d,
             0.0d,
             0.0d,
-            world.itematic$createStack(ItemIds.NETHERITE_INGOT)
+            level.itematic$createStack(ItemIds.NETHERITE_INGOT)
         );
-        TestUtil.spawnEntity(context, netheriteIngot, SPAWN_POSITION);
-        netheriteIngot.hurtServer(world, world.damageSources().inFire(), Float.MAX_VALUE);
-        context.succeedIf(() -> context.assertEntityPresent(EntityType.ITEM));
+        TestUtil.spawnEntity(helper, netheriteIngot, SPAWN_POSITION);
+        netheriteIngot.hurtServer(level, level.damageSources().inFire(), Float.MAX_VALUE);
+        helper.succeedIf(() -> helper.assertEntityPresent(EntityType.ITEM));
     }
 
     @GameTest
-    public void settingStickOnFireDestroysItem(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
+    public void settingStickOnFireDestroysItem(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
         ItemEntity stick = new ItemEntity(
-            world,
+            level,
             0.0d,
             0.0d,
             0.0d,
-            world.itematic$createStack(ItemIds.STICK)
+            level.itematic$createStack(ItemIds.STICK)
         );
-        TestUtil.spawnEntity(context, stick, SPAWN_POSITION);
-        stick.hurtServer(world, world.damageSources().inFire(), Float.MAX_VALUE);
-        context.succeedIf(() -> context.assertEntityNotPresent(EntityType.ITEM));
+        TestUtil.spawnEntity(helper, stick, SPAWN_POSITION);
+        stick.hurtServer(level, level.damageSources().inFire(), Float.MAX_VALUE);
+        helper.succeedIf(() -> helper.assertEntityNotPresent(EntityType.ITEM));
     }
 }

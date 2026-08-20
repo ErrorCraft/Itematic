@@ -13,31 +13,31 @@ import net.minecraft.world.level.GameType;
 
 public class ShooterItemComponentTestSuite {
     @GameTest(maxTicks = 100)
-    public void usingCrossbowChargesArrowFromInventory(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        ItemStack crossbow = world.itematic$createStack(ItemIds.CROSSBOW);
-        ItemStack ammunition = world.itematic$createStack(ItemIds.ARROW);
+    public void usingCrossbowChargesArrowFromInventory(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack crossbow = level.itematic$createStack(ItemIds.CROSSBOW);
+        ItemStack ammunition = level.itematic$createStack(ItemIds.ARROW);
         player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
         player.getInventory().add(ammunition);
-        world.addFreshEntity(player);
-        crossbow.use(world, player, InteractionHand.MAIN_HAND);
-        context.startSequence().thenExecuteAfter(
+        level.addFreshEntity(player);
+        crossbow.use(level, player, InteractionHand.MAIN_HAND);
+        helper.startSequence().thenExecuteAfter(
             crossbow.getUseDuration(player),
             () -> {
-                crossbow.releaseUsing(world, player, player.getUseItemRemainingTicks());
-                Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
+                crossbow.releaseUsing(level, player, player.getUseItemRemainingTicks());
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .hasComponent(
                         DataComponents.CHARGED_PROJECTILES,
                         chargedProjectiles -> Assert.isTrue(
-                            context,
+                            helper,
                             chargedProjectiles.itematic$contains(ItemIds.ARROW),
                             () -> "Expected item stack to have an Arrow as a charged projectile"
                         )
                     );
                 Assert.isFalse(
-                    context,
-                    player.getInventory().contains(s -> s.itematic$is(ItemIds.ARROW)),
+                    helper,
+                    player.getInventory().contains(stack -> stack.itematic$is(ItemIds.ARROW)),
                     () -> "Expected Player not to have any Arrows in their inventory"
                 );
             }
@@ -45,29 +45,29 @@ public class ShooterItemComponentTestSuite {
     }
 
     @GameTest(maxTicks = 100)
-    public void usingCrossbowChargesFireworkRocketFromOffhand(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
-        ItemStack crossbow = world.itematic$createStack(ItemIds.CROSSBOW);
-        ItemStack ammunition = world.itematic$createStack(ItemIds.FIREWORK_ROCKET);
+    public void usingCrossbowChargesFireworkRocketFromOffhand(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack crossbow = level.itematic$createStack(ItemIds.CROSSBOW);
+        ItemStack ammunition = level.itematic$createStack(ItemIds.FIREWORK_ROCKET);
         player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
         player.setItemInHand(InteractionHand.OFF_HAND, ammunition);
-        world.addFreshEntity(player);
-        crossbow.use(world, player, InteractionHand.MAIN_HAND);
-        context.startSequence().thenExecuteAfter(
+        level.addFreshEntity(player);
+        crossbow.use(level, player, InteractionHand.MAIN_HAND);
+        helper.startSequence().thenExecuteAfter(
             crossbow.getUseDuration(player),
             () -> {
-                crossbow.releaseUsing(world, player, player.getUseItemRemainingTicks());
-                Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
+                crossbow.releaseUsing(level, player, player.getUseItemRemainingTicks());
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .hasComponent(
                         DataComponents.CHARGED_PROJECTILES,
                         chargedProjectiles -> Assert.isTrue(
-                            context,
+                            helper,
                             chargedProjectiles.itematic$contains(ItemIds.FIREWORK_ROCKET),
                             () -> "Expected item stack to have a Firework Rocket as a charged projectile"
                         )
                     );
-                Assert.itemStack(context, player.getItemInHand(InteractionHand.OFF_HAND))
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.OFF_HAND))
                     .isEmpty();
             }
         ).thenSucceed();

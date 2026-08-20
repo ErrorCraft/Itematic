@@ -3,6 +3,7 @@ package net.errorcraft.itematic.assertion;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -27,8 +28,13 @@ public abstract class BaseEntityAssert<A extends BaseEntityAssert<A, E>, E exten
         return (A) this;
     }
 
-    public <P> A test(Function<E, P> propertySupplier, Consumer<P> propertyConsumer) {
-        propertyConsumer.accept(propertySupplier.apply(this.entity));
+    public <P> A test(Function<E, @Nullable P> propertySupplier, Consumer<P> propertyConsumer) {
+        P property = Assert.isNotNull(
+            this.helper,
+            propertySupplier.apply(this.entity),
+            "entity property"
+        );
+        propertyConsumer.accept(property);
         return (A) this;
     }
 }

@@ -24,19 +24,22 @@ public class SignTestSuite {
     private static final BlockPos ABOVE_PLACED_BLOCK_POSITION = PLACED_BLOCK_POSITION.offset(0, 1, 0);
 
     @GameTest(structure = "itematic:item.sign.platform")
-    public void placingSignOpensSignMenu(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void placingSignOpensSignMenu(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setXRot(90.0f);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.OAK_SIGN));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
-        context.succeedIf(() -> {
-            Assert.blockState(context, PLACED_BLOCK_POSITION)
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.OAK_SIGN)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> {
+            Assert.blockState(helper, PLACED_BLOCK_POSITION)
                 .is(Blocks.OAK_SIGN);
-            Assert.blockEntity(context, PLACED_BLOCK_POSITION, BlockEntityType.SIGN,
+            Assert.blockEntity(helper, PLACED_BLOCK_POSITION, BlockEntityType.SIGN,
                 blockEntity -> Assert.isTrue(
-                    context,
+                    helper,
                     player.getUUID().equals(blockEntity.getPlayerWhoMayEdit()),
                     () -> "Sign menu was not opened by the Player"
                 )
@@ -45,11 +48,11 @@ public class SignTestSuite {
     }
 
     @GameTest(structure = "itematic:item.sign.platform")
-    public void placingSignWithBlockEntityDataDoesNotOpenSignMenu(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void placingSignWithBlockEntityDataDoesNotOpenSignMenu(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setXRot(90.0f);
-        ItemStack oakSign = world.itematic$createStack(ItemIds.OAK_SIGN);
+        ItemStack oakSign = level.itematic$createStack(ItemIds.OAK_SIGN);
         oakSign.set(
             DataComponents.BLOCK_ENTITY_DATA,
             TypedEntityData.of(
@@ -58,14 +61,14 @@ public class SignTestSuite {
             )
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, oakSign);
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, GROUND_POSITION, player, Direction.UP);
-        context.succeedOnTickWhen(1, () -> {
-            Assert.blockState(context, PLACED_BLOCK_POSITION)
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        helper.succeedOnTickWhen(1, () -> {
+            Assert.blockState(helper, PLACED_BLOCK_POSITION)
                 .is(Blocks.OAK_SIGN);
-            Assert.blockEntity(context, PLACED_BLOCK_POSITION, BlockEntityType.SIGN,
+            Assert.blockEntity(helper, PLACED_BLOCK_POSITION, BlockEntityType.SIGN,
                 blockEntity -> Assert.isFalse(
-                    context,
+                    helper,
                     player.getUUID().equals(blockEntity.getPlayerWhoMayEdit()),
                     () -> "Sign menu was opened by the Player"
                 )
@@ -74,19 +77,22 @@ public class SignTestSuite {
     }
 
     @GameTest(structure = "itematic:item.sign.platform.ceiling")
-    public void placingHangingSignOpensSignMenu(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void placingHangingSignOpensSignMenu(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setXRot(-90.0f);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.OAK_HANGING_SIGN));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
-        context.succeedIf(() -> {
-            Assert.blockState(context, PLACED_BLOCK_POSITION)
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.OAK_HANGING_SIGN)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
+        helper.succeedIf(() -> {
+            Assert.blockState(helper, PLACED_BLOCK_POSITION)
                 .is(Blocks.OAK_HANGING_SIGN);
-            Assert.blockEntity(context, PLACED_BLOCK_POSITION, BlockEntityType.HANGING_SIGN,
+            Assert.blockEntity(helper, PLACED_BLOCK_POSITION, BlockEntityType.HANGING_SIGN,
                 blockEntity -> Assert.isTrue(
-                    context,
+                    helper,
                     player.getUUID().equals(blockEntity.getPlayerWhoMayEdit()),
                     () -> "Sign menu was not opened by the Player"
                 )
@@ -95,11 +101,11 @@ public class SignTestSuite {
     }
 
     @GameTest(structure = "itematic:item.sign.platform.ceiling")
-    public void placingHangingSignWithBlockEntityDataDoesNotOpenSignMenu(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void placingHangingSignWithBlockEntityDataDoesNotOpenSignMenu(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setXRot(-90.0f);
-        ItemStack oakHangingSign = world.itematic$createStack(ItemIds.OAK_HANGING_SIGN);
+        ItemStack oakHangingSign = level.itematic$createStack(ItemIds.OAK_HANGING_SIGN);
         oakHangingSign.set(
             DataComponents.BLOCK_ENTITY_DATA,
             TypedEntityData.of(
@@ -108,14 +114,14 @@ public class SignTestSuite {
             )
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, oakHangingSign);
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
-        context.succeedOnTickWhen(1, () -> {
-            Assert.blockState(context, PLACED_BLOCK_POSITION)
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
+        helper.succeedOnTickWhen(1, () -> {
+            Assert.blockState(helper, PLACED_BLOCK_POSITION)
                 .is(Blocks.OAK_HANGING_SIGN);
-            Assert.blockEntity(context, PLACED_BLOCK_POSITION, BlockEntityType.HANGING_SIGN,
+            Assert.blockEntity(helper, PLACED_BLOCK_POSITION, BlockEntityType.HANGING_SIGN,
                 blockEntity -> Assert.isFalse(
-                    context,
+                    helper,
                     player.getUUID().equals(blockEntity.getPlayerWhoMayEdit()),
                     () -> "Sign menu was opened by the Player"
                 )

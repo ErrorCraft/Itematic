@@ -21,28 +21,28 @@ public class ShearsTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:item.shears.platform")
-    public void usingShearsOnSaddledPigRemovesSaddle(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
+    public void usingShearsOnSaddledPigRemovesSaddle(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
-        Pig target = context.spawn(EntityType.PIG, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.SADDLE, world.itematic$createStack(ItemIds.SADDLE));
-        context.succeedIf(() -> {
+        Pig target = helper.spawn(EntityType.PIG, SPAWN_POSITION);
+        target.setItemSlot(EquipmentSlot.SADDLE, level.itematic$createStack(ItemIds.SADDLE));
+        helper.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected Shears usage on Pig to be successful"
             );
-            Assert.itemStack(context, shears)
+            Assert.itemStack(helper, shears)
                 .isDamaged();
             Assert.isFalse(
-                context,
+                helper,
                 target.isSaddled(),
                 () -> "Expected Pig not to be saddled"
             );
-            Assert.entityType(context, EntityType.ITEM)
+            Assert.entityType(helper, EntityType.ITEM)
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
@@ -52,28 +52,28 @@ public class ShearsTestSuite {
     }
 
     @GameTest(structure = "itematic:item.shears.platform")
-    public void usingShearsOnSaddledHorseRemovesSaddle(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
+    public void usingShearsOnSaddledHorseRemovesSaddle(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
-        Horse target = context.spawn(EntityType.HORSE, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.SADDLE, world.itematic$createStack(ItemIds.SADDLE));
-        context.succeedIf(() -> {
+        Horse target = helper.spawn(EntityType.HORSE, SPAWN_POSITION);
+        target.setItemSlot(EquipmentSlot.SADDLE, level.itematic$createStack(ItemIds.SADDLE));
+        helper.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected Shears usage on Horse to be successful"
             );
-            Assert.itemStack(context, shears)
+            Assert.itemStack(helper, shears)
                 .isDamaged();
             Assert.isFalse(
-                context,
+                helper,
                 target.isSaddled(),
                 () -> "Expected Horse not to be saddled"
             );
-            Assert.entityType(context, EntityType.ITEM)
+            Assert.entityType(helper, EntityType.ITEM)
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
@@ -83,28 +83,28 @@ public class ShearsTestSuite {
     }
 
     @GameTest(structure = "itematic:item.shears.platform")
-    public void usingShearsOnHorseWithHorseArmorRemovesHorseArmor(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
+    public void usingShearsOnHorseWithHorseArmorRemovesHorseArmor(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
-        Horse target = context.spawn(EntityType.HORSE, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.BODY, world.itematic$createStack(ItemIds.IRON_HORSE_ARMOR));
-        context.succeedIf(() -> {
+        Horse target = helper.spawn(EntityType.HORSE, SPAWN_POSITION);
+        target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.IRON_HORSE_ARMOR));
+        helper.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected Shears usage on Horse to be successful"
             );
-            Assert.itemStack(context, shears)
+            Assert.itemStack(helper, shears)
                 .isDamaged();
             Assert.isFalse(
-                context,
+                helper,
                 target.isWearingBodyArmor(),
                 () -> "Expected Horse not to be wearing Horse Armor"
             );
-            Assert.entityType(context, EntityType.ITEM)
+            Assert.entityType(helper, EntityType.ITEM)
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
@@ -114,29 +114,29 @@ public class ShearsTestSuite {
     }
 
     @GameTest(structure = "itematic:item.shears.platform")
-    public void usingShearsOnWolfWithCorrectOwnerRemovesWolfArmor(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
+    public void usingShearsOnWolfWithCorrectOwnerRemovesWolfArmor(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
-        Wolf target = context.spawn(EntityType.WOLF, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.BODY, world.itematic$createStack(ItemIds.WOLF_ARMOR));
+        Wolf target = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
+        target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.WOLF_ARMOR));
         target.setOwner(player);
-        context.succeedIf(() -> {
+        helper.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected Shears usage on Wolf to be successful"
             );
-            Assert.itemStack(context, shears)
+            Assert.itemStack(helper, shears)
                 .isDamaged();
             Assert.isFalse(
-                context,
+                helper,
                 target.isWearingBodyArmor(),
                 () -> "Expected Wolf not to be wearing Wolf Armor"
             );
-            Assert.entityType(context, EntityType.ITEM)
+            Assert.entityType(helper, EntityType.ITEM)
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
@@ -146,28 +146,28 @@ public class ShearsTestSuite {
     }
 
     @GameTest(structure = "itematic:item.shears.platform")
-    public void usingShearsOnWolfWithIncorrectOwnerDoesNotRemoveWolfArmor(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = world.itematic$createStack(ItemIds.SHEARS);
+    public void usingShearsOnWolfWithIncorrectOwnerDoesNotRemoveWolfArmor(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
         player.setItemInHand(InteractionHand.MAIN_HAND, shears);
-        Wolf target = context.spawn(EntityType.WOLF, SPAWN_POSITION);
-        target.setItemSlot(EquipmentSlot.BODY, world.itematic$createStack(ItemIds.WOLF_ARMOR));
-        context.succeedIf(() -> {
+        Wolf target = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
+        target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.WOLF_ARMOR));
+        helper.succeedIf(() -> {
             InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
             Assert.isFalse(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected Shears usage on Wolf to be unsuccessful"
             );
-            Assert.itemStack(context, shears)
+            Assert.itemStack(helper, shears)
                 .isNotDamaged();
             Assert.isTrue(
-                context,
+                helper,
                 target.isWearingBodyArmor(),
                 () -> "Expected Wolf to be wearing Wolf Armor"
             );
-            Assert.entityType(context, EntityType.ITEM)
+            Assert.entityType(helper, EntityType.ITEM)
                 .doesNotExist();
         });
     }

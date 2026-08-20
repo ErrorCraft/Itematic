@@ -1,6 +1,6 @@
-package net.errorcraft.itematic.mixin.gametest;
+package net.errorcraft.itematic.mixin.gametest.framework;
 
-import net.errorcraft.itematic.access.gametest.GameTestStateAccess;
+import net.errorcraft.itematic.access.gametest.framework.GameTestInfoAccess;
 import net.minecraft.gametest.framework.GameTestInfo;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(GameTestInfo.class)
-public class GameTestStateExtender implements GameTestStateAccess {
+public class GameTestInfoExtender implements GameTestInfoAccess {
     @Unique
     private final List<Runnable> whenFinished = new ArrayList<>();
 

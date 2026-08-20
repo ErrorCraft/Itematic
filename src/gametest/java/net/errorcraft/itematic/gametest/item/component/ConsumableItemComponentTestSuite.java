@@ -12,18 +12,18 @@ import net.minecraft.world.level.GameType;
 
 public class ConsumableItemComponentTestSuite {
     @GameTest(maxTicks = 100)
-    public void consumingHoneyBottleReplacesItemWithGlassBottle(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void consumingHoneyBottleReplacesItemWithGlassBottle(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.getFoodData().setFoodLevel(0);
-        ServerLevel world = context.getLevel();
-        ItemStack honeyBottle = world.itematic$createStack(ItemIds.HONEY_BOTTLE);
+        ServerLevel level = helper.getLevel();
+        ItemStack honeyBottle = level.itematic$createStack(ItemIds.HONEY_BOTTLE);
         player.setItemInHand(InteractionHand.MAIN_HAND, honeyBottle);
-        world.addFreshEntity(player);
-        context.startSequence()
-            .thenExecute(() -> honeyBottle.use(world, player, InteractionHand.MAIN_HAND))
+        level.addFreshEntity(player);
+        helper.startSequence()
+            .thenExecute(() -> honeyBottle.use(level, player, InteractionHand.MAIN_HAND))
             .thenExecuteAfter(
                 honeyBottle.getUseDuration(player),
-                () -> Assert.itemStack(context, player.getItemInHand(InteractionHand.MAIN_HAND))
+                () -> Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .is(ItemIds.GLASS_BOTTLE)
             )
             .thenSucceed();

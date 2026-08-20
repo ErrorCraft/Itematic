@@ -24,27 +24,30 @@ public class ItemFrameTestSuite {
     private static final BlockPos ITEM_FRAME_POSITION = BLOCK_POSITION.offset(0, 1, 0);
 
     @GameTest(structure = "itematic:item.item_frame.platform")
-    public void usingItemFrameOnGroundPlacesItemFrame(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, world.itematic$createStack(ItemIds.ITEM_FRAME));
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.ITEM_FRAME)
+    public void usingItemFrameOnGroundPlacesItemFrame(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.ITEM_FRAME)
+        );
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ITEM_FRAME)
             .existsAt(ITEM_FRAME_POSITION));
     }
 
     @GameTest(structure = "itematic:item.item_frame.platform")
-    public void usingItemFrameWithEntityDataPlacesItemFrameWithSpecifiedData(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack itemFrame = world.itematic$createStack(ItemIds.ITEM_FRAME);
+    public void usingItemFrameWithEntityDataPlacesItemFrameWithSpecifiedData(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack itemFrame = level.itematic$createStack(ItemIds.ITEM_FRAME);
         CompoundTag entityData = new CompoundTag();
         entityData.put(
             "Item",
             ItemStack.CODEC.encodeStart(
-                context.getLevel().registryAccess().createSerializationContext(NbtOps.INSTANCE),
-                world.itematic$createStack(ItemIds.STICK)
+                helper.getLevel().registryAccess().createSerializationContext(NbtOps.INSTANCE),
+                level.itematic$createStack(ItemIds.STICK)
             ).getOrThrow()
         );
         itemFrame.set(
@@ -55,12 +58,12 @@ public class ItemFrameTestSuite {
             )
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, itemFrame);
-        world.addFreshEntity(player);
-        TestUtil.useBlock(context, BLOCK_POSITION, player, Direction.UP);
-        context.succeedIf(() -> Assert.entityType(context, EntityType.ITEM_FRAME)
+        level.addFreshEntity(player);
+        TestUtil.useBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ITEM_FRAME)
             .existsAt(ITEM_FRAME_POSITION, itemFrameAssert -> itemFrameAssert.test(
                 ItemFrame::getItem,
-                stack -> Assert.itemStack(context, stack)
+                stack -> Assert.itemStack(helper, stack)
                     .is(ItemIds.STICK)
             )));
     }

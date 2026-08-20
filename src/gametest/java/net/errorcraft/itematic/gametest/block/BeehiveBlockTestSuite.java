@@ -13,22 +13,22 @@ public class BeehiveBlockTestSuite {
     private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:block.beehive")
-    public void breakingBeehiveWithHoneyInCreativeModeDropsBeehive(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.CREATIVE);
-        ServerLevel world = context.getLevel();
-        BlockState state = context.getBlockState(BLOCK_POSITION);
-        BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
-        state.getBlock().playerWillDestroy(world, absolutePos, state, player);
-        context.succeedIf(() -> context.assertItemEntityPresent(context.getLevel().itematic$getItem(ItemIds.BEEHIVE).value()));
+    public void breakingBeehiveWithHoneyInCreativeModeDropsBeehive(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
+        ServerLevel level = helper.getLevel();
+        BlockState state = helper.getBlockState(BLOCK_POSITION);
+        BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
+        state.getBlock().playerWillDestroy(level, absolutePos, state, player);
+        helper.succeedIf(() -> helper.assertItemEntityPresent(helper.getLevel().itematic$getItem(ItemIds.BEEHIVE).value()));
     }
 
     @GameTest(structure = "itematic:block.bee_nest")
-    public void breakingBeeNestWithHoneyInCreativeModeDropsBeeNest(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.CREATIVE);
-        ServerLevel world = context.getLevel();
-        BlockState state = context.getBlockState(BLOCK_POSITION);
-        BlockPos absolutePos = context.absolutePos(BLOCK_POSITION);
-        state.getBlock().playerWillDestroy(world, absolutePos, state, player);
-        context.succeedIf(() -> context.assertItemEntityPresent(context.getLevel().itematic$getItem(ItemIds.BEE_NEST).value()));
+    public void breakingBeeNestWithHoneyInCreativeModeDropsBeeNest(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
+        ServerLevel level = helper.getLevel();
+        BlockState state = helper.getBlockState(BLOCK_POSITION);
+        BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
+        state.getBlock().playerWillDestroy(level, absolutePos, state, player);
+        helper.succeedIf(() -> helper.assertItemEntityPresent(helper.getLevel().itematic$getItem(ItemIds.BEE_NEST).value()));
     }
 }

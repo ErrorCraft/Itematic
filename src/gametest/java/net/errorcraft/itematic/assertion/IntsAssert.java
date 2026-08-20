@@ -2,17 +2,15 @@ package net.errorcraft.itematic.assertion;
 
 import net.minecraft.gametest.framework.GameTestHelper;
 
-import java.util.Objects;
-
 public class IntsAssert {
     private final GameTestHelper helper;
     private final int value;
     private final String name;
 
     IntsAssert(GameTestHelper helper, int value, String name) {
-        this.helper = Objects.requireNonNull(helper);
+        this.helper = helper;
         this.value = value;
-        this.name = Objects.requireNonNull(name);
+        this.name = name;
     }
 
     public IntsAssert equals(int expected) {

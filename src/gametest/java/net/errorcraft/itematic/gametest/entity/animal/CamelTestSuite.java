@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.gametest.entity.passive;
+package net.errorcraft.itematic.gametest.entity.animal;
 
 import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.references.ItemIds;
@@ -12,22 +12,26 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.camel.Camel;
 import net.minecraft.world.entity.player.Player;
+
 import java.util.Optional;
 
-public class CamelEntityTestSuite {
+public class CamelTestSuite {
     private static final BlockPos SPAWN_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:entity.platform")
     @SuppressWarnings("removal")
-    public void holdingCactusTemptsCamel(GameTestHelper context) {
-        Camel camel = context.spawn(EntityType.CAMEL, SPAWN_POSITION);
-        ServerPlayer player = context.makeMockServerPlayerInLevel();
-        player.setItemInHand(InteractionHand.MAIN_HAND, context.getLevel().itematic$createStack(ItemIds.CACTUS));
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
-        context.succeedWhen(() -> {
+    public void holdingCactusTemptsCamel(GameTestHelper helper) {
+        Camel camel = helper.spawn(EntityType.CAMEL, SPAWN_POSITION);
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            helper.getLevel().itematic$createStack(ItemIds.CACTUS)
+        );
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
+        helper.succeedWhen(() -> {
             Optional<Player> temptingPlayer = camel.getBrain().getMemory(MemoryModuleType.TEMPTING_PLAYER);
-            Assert.isTrue(context, temptingPlayer.isPresent(), () -> "Camel was not tempted by a Player");
-            Assert.areEqual(context, temptingPlayer.get(), player, "Camel was not tempted by the expected Player");
+            Assert.isTrue(helper, temptingPlayer.isPresent(), () -> "Camel was not tempted by a Player");
+            Assert.areEqual(helper, temptingPlayer.get(), player, () -> "Camel was not tempted by the expected Player");
         });
     }
 }

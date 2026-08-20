@@ -15,7 +15,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -30,9 +29,9 @@ public class ItemStackAssert {
     }
 
     ItemStackAssert(GameTestHelper helper, ItemStack stack, String name) {
-        this.helper = Objects.requireNonNull(helper);
+        this.helper = helper;
         this.stack = Assert.isNotNull(this.helper, stack, name);
-        this.name = Objects.requireNonNull(name);
+        this.name = name;
     }
 
     public ItemStackAssert is(ResourceKey<Item> id) {

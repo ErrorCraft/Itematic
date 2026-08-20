@@ -1,7 +1,8 @@
-package net.errorcraft.itematic.mixin.gametest.structure;
+package net.errorcraft.itematic.mixin.world.level.levelgen.structure.templatesystem;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -15,6 +16,7 @@ import java.nio.file.Paths;
 @Mixin(StructureTemplateManager.class)
 public class StructureTemplateManagerExtender {
     @Unique
+    @Nullable
     private static final String STRUCTURE_OUTPUT_DIRECTORY = System.getProperty("itematic.gametest.structure-output-directory");
 
     @ModifyExpressionValue(

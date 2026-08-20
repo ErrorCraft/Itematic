@@ -20,22 +20,23 @@ public class LeadTestSuite {
     private static final BlockPos PLACED_ENTITY_POSITION = new BlockPos(1, 1, 0);
 
     @GameTest(structure = "itematic:item.lead.platform")
-    public void usingLeadOnHorseLeashesHorse(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack lead = world.itematic$createStack(ItemIds.LEAD);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void usingLeadOnHorseLeashesHorse(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack lead = level.itematic$createStack(ItemIds.LEAD);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, lead);
-        world.addFreshEntity(player);
-        Horse horse = TestUtil.createEntityAt(context, EntityType.HORSE, PLACED_ENTITY_POSITION, entity -> {});
-        context.succeedIf(() -> {
+        level.addFreshEntity(player);
+        Horse horse = TestUtil.createEntityAt(helper, EntityType.HORSE, PLACED_ENTITY_POSITION, entity -> {
+        });
+        helper.succeedIf(() -> {
             InteractionResult result = horse.interact(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected interaction with Horse to be successful"
             );
             Assert.isTrue(
-                context,
+                helper,
                 horse.isLeashed(),
                 () -> "Expected Horse to be leashed"
             );
@@ -43,22 +44,23 @@ public class LeadTestSuite {
     }
 
     @GameTest(structure = "itematic:item.lead.platform")
-    public void usingLeadOnBoatLeashesBoat(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack lead = world.itematic$createStack(ItemIds.LEAD);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void usingLeadOnBoatLeashesBoat(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack lead = level.itematic$createStack(ItemIds.LEAD);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, lead);
-        world.addFreshEntity(player);
-        Boat boat = TestUtil.createEntityAt(context, EntityType.OAK_BOAT, PLACED_ENTITY_POSITION, entity -> {});
-        context.succeedIf(() -> {
+        level.addFreshEntity(player);
+        Boat boat = TestUtil.createEntityAt(helper, EntityType.OAK_BOAT, PLACED_ENTITY_POSITION, entity -> {
+        });
+        helper.succeedIf(() -> {
             InteractionResult result = boat.interact(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
-                context,
+                helper,
                 result.consumesAction(),
                 () -> "Expected interaction with Oak Boat to be successful"
             );
             Assert.isTrue(
-                context,
+                helper,
                 boat.isLeashed(),
                 () -> "Expected Oak Boat to be leashed"
             );

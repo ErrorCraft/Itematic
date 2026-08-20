@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -21,24 +23,30 @@ public class Assert {
     private Assert() {}
 
     public static void isTrue(GameTestHelper helper, boolean condition, Supplier<String> message) {
-        if (!condition) {
-            throw helper.assertionException(Component.literal(message.get()));
+        if (condition) {
+            return;
         }
+
+        throw helper.assertionException(Component.literal(message.get()));
     }
 
     public static void isFalse(GameTestHelper helper, boolean condition, Supplier<String> message) {
-        isTrue(helper, !condition, message);
-    }
-
-    public static <T> T isNotNull(GameTestHelper helper, T object, String name) {
-        if (object == null) {
-            throw helper.assertionException(
-                "test.error.expected_not_null",
-                name
-            );
+        if (!condition) {
+            return;
         }
 
-        return object;
+        throw helper.assertionException(Component.literal(message.get()));
+    }
+
+    public static <T> T isNotNull(GameTestHelper helper, @Nullable T object, String name) {
+        if (object != null) {
+            return object;
+        }
+
+        throw helper.assertionException(
+            "test.error.expected_not_null",
+            name
+        );
     }
 
     public static <T> void areEqual(GameTestHelper helper, T value, T expected, String type) {
@@ -52,6 +60,14 @@ public class Assert {
             value,
             expected
         );
+    }
+
+    public static <T> void areEqual(GameTestHelper helper, T value, T expected, Supplier<String> message) {
+        if (Objects.equals(value, expected)) {
+            return;
+        }
+
+        throw helper.assertionException(Component.literal(message.get()));
     }
 
     public static <T, U extends T> void isInstance(GameTestHelper helper, T value, Class<U> expectedClass, Supplier<String> message, Consumer<U> assertion) {

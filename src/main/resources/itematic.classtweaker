@@ -30,6 +30,7 @@ inject-interface    net/minecraft/client/gui/screens/recipebook/RecipeBookCompon
 inject-interface    net/minecraft/commands/arguments/ObjectiveCriteriaArgument    net/errorcraft/itematic/access/commands/arguments/ObjectiveCriteriaArgumentAccess
 inject-interface    net/minecraft/core/Holder    net/errorcraft/itematic/access/core/HolderAccess<TT;>
 inject-interface    net/minecraft/core/HolderSet    net/errorcraft/itematic/access/core/HolderSetAccess<TT;>
+inject-interface    net/minecraft/gametest/framework/GameTestInfo    net/errorcraft/itematic/access/gametest/framework/GameTestInfoAccess
 inject-interface    net/minecraft/network/protocol/game/ClientGamePacketListener    net/errorcraft/itematic/access/network/protocol/game/ClientGamePacketListenerAccess
 inject-interface    net/minecraft/sounds/SoundSource    net/minecraft/util/StringRepresentable
 inject-interface    net/minecraft/stats/RecipeBookSettings    net/errorcraft/itematic/access/stats/RecipeBookSettingsAccess

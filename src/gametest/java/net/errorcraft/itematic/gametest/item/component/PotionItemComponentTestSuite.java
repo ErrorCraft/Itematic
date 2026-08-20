@@ -14,19 +14,19 @@ import net.minecraft.world.level.GameType;
 
 public class PotionItemComponentTestSuite {
     @GameTest(maxTicks = 100)
-    public void drinkingPotionItemAddsEffects(GameTestHelper context) {
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        ServerLevel world = context.getLevel();
+    public void drinkingPotionItemAddsEffects(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
         ItemStack potion = PotionContentsUtil.setPotion(
-            world.itematic$createStack(ItemIds.POTION),
+            level.itematic$createStack(ItemIds.POTION),
             Potions.LEAPING
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, potion);
-        world.addFreshEntity(player);
-        potion.use(world, player, InteractionHand.MAIN_HAND);
-        context.startSequence().thenExecuteAfter(
+        level.addFreshEntity(player);
+        potion.use(level, player, InteractionHand.MAIN_HAND);
+        helper.startSequence().thenExecuteAfter(
             potion.getUseDuration(player),
-            () -> Assert.livingEntity(context, player)
+            () -> Assert.livingEntity(helper, player)
                 .hasEffects(Potions.LEAPING)
         ).thenSucceed();
     }

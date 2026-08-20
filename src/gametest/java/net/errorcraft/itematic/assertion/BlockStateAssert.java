@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -18,7 +17,7 @@ public class BlockStateAssert {
     private final BlockState state;
 
     BlockStateAssert(GameTestHelper helper, BlockState state) {
-        this.helper = Objects.requireNonNull(helper);
+        this.helper = helper;
         this.state = Assert.isNotNull(this.helper, state, "block state");
     }
 

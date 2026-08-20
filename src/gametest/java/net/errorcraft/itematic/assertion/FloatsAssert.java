@@ -2,17 +2,15 @@ package net.errorcraft.itematic.assertion;
 
 import net.minecraft.gametest.framework.GameTestHelper;
 
-import java.util.Objects;
-
 public class FloatsAssert {
     private final GameTestHelper helper;
     private final float value;
     private final String name;
 
     FloatsAssert(GameTestHelper helper, float value, String name) {
-        this.helper = Objects.requireNonNull(helper);
+        this.helper = helper;
         this.value = value;
-        this.name = Objects.requireNonNull(name);
+        this.name = name;
     }
 
     public FloatsAssert equals(float expected) {

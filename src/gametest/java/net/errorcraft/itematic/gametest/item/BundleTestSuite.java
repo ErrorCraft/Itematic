@@ -20,81 +20,81 @@ public class BundleTestSuite {
     private static final int SLOT_INDEX = 0;
 
     @GameTest
-    public void addingNormalItemToBundleAddsIt(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack bundleStack = world.itematic$createStack(ItemIds.BUNDLE);
-        ItemStack addedStack = world.itematic$createStack(ItemIds.STICK);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void addingNormalItemToBundleAddsIt(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack bundleStack = level.itematic$createStack(ItemIds.BUNDLE);
+        ItemStack addedStack = level.itematic$createStack(ItemIds.STICK);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         Inventory inventory = player.getInventory();
         inventory.add(SLOT_INDEX, addedStack);
         Slot slot = new Slot(inventory, SLOT_INDEX, 0, 0);
-        context.succeedIf(() -> {
+        helper.succeedIf(() -> {
             Assert.isTrue(
-                context,
+                helper,
                 bundleStack.overrideStackedOnOther(slot, ClickAction.SECONDARY, player),
                 () -> "Expected right clicking on slot with Bundle to be successful"
             );
-            Assert.itemStack(context, slot.getItem())
+            Assert.itemStack(helper, slot.getItem())
                 .isEmpty();
-            Assert.itemStack(context, bundleStack)
+            Assert.itemStack(helper, bundleStack)
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
-                    bundleContents -> Assert.itemStack(context, bundleContents.getItemUnsafe(0))
+                    bundleContents -> Assert.itemStack(helper, bundleContents.getItemUnsafe(0))
                         .is(ItemIds.STICK)
                 );
         });
     }
 
     @GameTest
-    public void addingShulkerBoxToBundleRejectsIt(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack bundleStack = world.itematic$createStack(ItemIds.BUNDLE);
-        ItemStack addedStack = world.itematic$createStack(ItemIds.SHULKER_BOX);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void addingShulkerBoxToBundleRejectsIt(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack bundleStack = level.itematic$createStack(ItemIds.BUNDLE);
+        ItemStack addedStack = level.itematic$createStack(ItemIds.SHULKER_BOX);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         Inventory inventory = player.getInventory();
         inventory.add(SLOT_INDEX, addedStack);
         Slot slot = new Slot(inventory, SLOT_INDEX, 0, 0);
-        context.succeedIf(() -> {
+        helper.succeedIf(() -> {
             Assert.isTrue(
-                context,
+                helper,
                 bundleStack.overrideStackedOnOther(slot, ClickAction.SECONDARY, player),
                 () -> "Expected right clicking on slot with Bundle to be successful"
             );
-            Assert.itemStack(context, slot.getItem())
+            Assert.itemStack(helper, slot.getItem())
                 .isNotEmpty();
-            Assert.itemStack(context, bundleStack)
+            Assert.itemStack(helper, bundleStack)
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
-                    bundleContents -> Assert.isTrue(context, bundleContents.isEmpty(), () -> "Expected Bundle to be empty")
+                    bundleContents -> Assert.isTrue(helper, bundleContents.isEmpty(), () -> "Expected Bundle to be empty")
                 );
         });
     }
 
     @GameTest
-    public void addingBundleToBundleAddsItWithPenalty(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack bundle = world.itematic$createStack(ItemIds.BUNDLE);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
+    public void addingBundleToBundleAddsItWithPenalty(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         Inventory inventory = player.getInventory();
-        inventory.add(SLOT_INDEX, world.itematic$createStack(ItemIds.BUNDLE));
+        inventory.add(SLOT_INDEX, level.itematic$createStack(ItemIds.BUNDLE));
         Slot slot = new Slot(inventory, SLOT_INDEX, 0, 0);
-        context.succeedIf(() -> {
+        helper.succeedIf(() -> {
             Assert.isTrue(
-                context,
+                helper,
                 bundle.overrideStackedOnOther(slot, ClickAction.SECONDARY, player),
                 () -> "Expected right clicking on slot with Bundle to be successful"
             );
-            Assert.itemStack(context, slot.getItem())
+            Assert.itemStack(helper, slot.getItem())
                 .isEmpty();
-            Assert.itemStack(context, bundle)
+            Assert.itemStack(helper, bundle)
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
-                    bundleContents -> Assert.itemStack(context, bundleContents.getItemUnsafe(0))
+                    bundleContents -> Assert.itemStack(helper, bundleContents.getItemUnsafe(0))
                         .is(ItemIds.BUNDLE)
                 );
             Assert.areEqual(
-                context,
-                TestUtil.getItemBehavior(context, bundle, ItemBehaviorType.ITEM_HOLDER).occupancy(bundle),
+                helper,
+                TestUtil.getItemBehavior(helper, bundle, ItemBehaviorType.ITEM_HOLDER).occupancy(bundle),
                 BundleContentsAccessor.nestedBundleOccupancy(),
                 "occupancy"
             );

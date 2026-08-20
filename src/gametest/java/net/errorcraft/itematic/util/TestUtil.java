@@ -12,6 +12,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -39,8 +40,8 @@ import java.util.function.Consumer;
 public class TestUtil {
     private TestUtil() {}
 
-    public static ItemStack createItemStackWithSlightDamage(ServerLevel world, ResourceKey<Item> item) {
-        ItemStack stack = world.itematic$createStack(item);
+    public static ItemStack createItemStackWithSlightDamage(ServerLevel level, ResourceKey<Item> item) {
+        ItemStack stack = level.itematic$createStack(item);
         if (!stack.isDamageableItem()) {
             throw new AssertionError("Item " + item.identifier() + " is not damageable");
         }
@@ -49,9 +50,9 @@ public class TestUtil {
         return stack;
     }
 
-    public static ItemStack createItemStackWithEnchantment(ServerLevel world, ResourceKey<Item> item, ResourceKey<Enchantment> enchantment) {
-        ItemStack stack = world.itematic$createStack(item);
-        Holder<Enchantment> enchantmentEntry = world.registryAccess()
+    public static ItemStack createItemStackWithEnchantment(ServerLevel level, ResourceKey<Item> item, ResourceKey<Enchantment> enchantment) {
+        ItemStack stack = level.itematic$createStack(item);
+        Holder<Enchantment> enchantmentEntry = level.registryAccess()
             .lookupOrThrow(Registries.ENCHANTMENT)
             .getOrThrow(enchantment);
         stack.enchant(enchantmentEntry, 1);
@@ -79,26 +80,26 @@ public class TestUtil {
         );
     }
 
-    public static <T extends BlockEntity> T getBlockEntity(GameTestHelper context, BlockPos pos, BlockEntityType<T> type) {
-        return context.getLevel().getBlockEntity(context.absolutePos(pos), type)
-            .orElseThrow(() -> context.assertionException(
+    public static <T extends BlockEntity> T getBlockEntity(GameTestHelper helper, BlockPos pos, BlockEntityType<T> type) {
+        return helper.getLevel().getBlockEntity(helper.absolutePos(pos), type)
+            .orElseThrow(() -> helper.assertionException(
                 pos,
                 "test.error.block_entity.expected_block_entity_type",
-                BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(type)
+                Util.getRegisteredName(BuiltInRegistries.BLOCK_ENTITY_TYPE, type)
             ));
     }
 
-    public static <E extends Entity> E getSingleEntity(GameTestHelper context, EntityType<E> type) {
-        List<E> entities = context.getEntities(type);
+    public static <E extends Entity> E getSingleEntity(GameTestHelper helper, EntityType<E> type) {
+        List<E> entities = helper.getEntities(type);
         if (entities.isEmpty()) {
-            throw context.assertionException(
+            throw helper.assertionException(
                 "test.error.expected_entity",
                 type.getDescription()
             );
         }
 
         if (entities.size() > 1) {
-            throw context.assertionException(
+            throw helper.assertionException(
                 "test.error.entity.too_many_entities",
                 type.toShortString(),
                 entities.size()
@@ -108,10 +109,10 @@ public class TestUtil {
         return entities.getFirst();
     }
 
-    public static <E extends Entity> E getSingleEntityAt(GameTestHelper context, EntityType<E> type, BlockPos pos) {
-        List<E> entities = getEntitiesAt(context, type, pos);
+    public static <E extends Entity> E getSingleEntityAt(GameTestHelper helper, EntityType<E> type, BlockPos pos) {
+        List<E> entities = getEntitiesAt(helper, type, pos);
         if (entities.isEmpty()) {
-            throw context.assertionException(
+            throw helper.assertionException(
                 "test.error.expected_entity_around",
                 type.getDescription(),
                 pos.getX(),
@@ -121,7 +122,7 @@ public class TestUtil {
         }
 
         if (entities.size() > 1) {
-            throw context.assertionException(
+            throw helper.assertionException(
                 "test.error.too_many_entities",
                 type.toShortString(),
                 pos.getX(),
@@ -134,51 +135,52 @@ public class TestUtil {
         return entities.getFirst();
     }
 
-    public static <E extends Entity> List<E> getEntitiesAt(GameTestHelper context, EntityType<E> type, BlockPos pos) {
-        return context.getLevel().getEntities(type, new AABB(context.absolutePos(pos)), Entity::isAlive);
+    public static <E extends Entity> List<E> getEntitiesAt(GameTestHelper helper, EntityType<E> type, BlockPos pos) {
+        return helper.getLevel().getEntities(type, new AABB(helper.absolutePos(pos)), Entity::isAlive);
     }
 
-    public static Player createMockPlayer(GameTestHelper context, GameType gameMode, BlockPos pos) {
-        Player player = context.makeMockPlayer(gameMode);
-        setEntityPos(context, player, pos);
+    public static Player createMockPlayer(GameTestHelper helper, GameType gameMode, BlockPos pos) {
+        Player player = helper.makeMockPlayer(gameMode);
+        setEntityPos(helper, player, pos);
         return player;
     }
 
-    public static <T extends Entity> T createEntity(GameTestHelper context, EntityType<T> type, Consumer<T> initializer) {
-        return createEntityAt(context, type, BlockPos.ZERO, initializer);
+    public static <T extends Entity> T createEntity(GameTestHelper helper, EntityType<T> type, Consumer<T> initializer) {
+        return createEntityAt(helper, type, BlockPos.ZERO, initializer);
     }
 
-    public static <T extends Entity> T createEntityAt(GameTestHelper context, EntityType<T> type, BlockPos pos, Consumer<T> initializer) {
-        T entity = type.create(context.getLevel(), EntitySpawnReason.COMMAND);
+    public static <T extends Entity> T createEntityAt(GameTestHelper helper, EntityType<T> type, BlockPos pos, Consumer<T> initializer) {
+        T entity = type.create(helper.getLevel(), EntitySpawnReason.COMMAND);
         if (entity == null) {
-            throw context.assertionException(
+            throw helper.assertionException(
                 "test.error.entity_type.cannot_create_entity",
                 type.getDescription()
             );
         }
 
-        setEntityPos(context, entity, pos);
+        setEntityPos(helper, entity, pos);
         initializer.accept(entity);
         return entity;
     }
 
-    public static <T extends Entity> void spawnEntity(GameTestHelper context, T entity, BlockPos pos) {
-        spawnEntity(context, entity, Vec3.atBottomCenterOf(pos));
+    public static <T extends Entity> void spawnEntity(GameTestHelper helper, T entity, BlockPos pos) {
+        spawnEntity(helper, entity, Vec3.atBottomCenterOf(pos));
     }
 
-    public static <T extends Entity> void spawnEntity(GameTestHelper context, T entity, Vec3 pos) {
-        Vec3 absolutePos = context.absoluteVec(pos);
+    public static <T extends Entity> void spawnEntity(GameTestHelper helper, T entity, Vec3 pos) {
+        Vec3 absolutePos = helper.absoluteVec(pos);
         entity.snapTo(absolutePos);
-        context.getLevel().addFreshEntity(entity);
+        helper.getLevel().addFreshEntity(entity);
     }
 
-    public static void setEntityPos(GameTestHelper context, Entity entity, BlockPos pos) {
-        BlockPos absolutePos = context.absolutePos(pos);
+    public static void setEntityPos(GameTestHelper helper, Entity entity, BlockPos pos) {
+        BlockPos absolutePos = helper.absolutePos(pos);
         entity.setPos(Vec3.atBottomCenterOf(absolutePos));
     }
 
-    public static Optional<ItemStack> useStackOnBlockInside(GameTestHelper context, Player player, ItemStack stack, BlockPos pos, Direction direction) {
-        BlockPos absolutePos = context.absolutePos(pos);
+    // TODO: mgirate UNLESS this is about scaffoldings!!! -> renamem ethod?
+    public static Optional<ItemStack> useStackOnBlockInside(GameTestHelper helper, Player player, ItemStack stack, BlockPos pos, Direction direction) {
+        BlockPos absolutePos = helper.absolutePos(pos);
         InteractionResult result = stack.useOn(
             new UseOnContext(
                 player,
@@ -198,9 +200,9 @@ public class TestUtil {
         return Optional.empty();
     }
 
-    public static void useBlock(GameTestHelper context, BlockPos pos, Player player, Direction direction) {
-        BlockPos absolutePos = context.absolutePos(pos);
-        context.useBlock(
+    public static void useBlock(GameTestHelper helper, BlockPos pos, Player player, Direction direction) {
+        BlockPos absolutePos = helper.absolutePos(pos);
+        helper.useBlock(
             pos,
             player,
             new BlockHitResult(
@@ -213,16 +215,16 @@ public class TestUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends AbstractContainerMenu> T getMenuFromBlock(GameTestHelper context, BlockPos pos, Player player, MenuType<T> type) {
-        BlockPos absolutePos = context.absolutePos(pos);
-        MenuProvider factory = context.getBlockState(pos).getMenuProvider(context.getLevel(), absolutePos);
+    public static <T extends AbstractContainerMenu> T getMenuFromBlock(GameTestHelper helper, BlockPos pos, Player player, MenuType<T> type) {
+        BlockPos absolutePos = helper.absolutePos(pos);
+        MenuProvider factory = helper.getBlockState(pos).getMenuProvider(helper.getLevel(), absolutePos);
         if (factory == null) {
-            throw context.assertionException(pos, "test.error.menu.does_not_provide_menu");
+            throw helper.assertionException(pos, "test.error.menu.does_not_provide_menu");
         }
 
         AbstractContainerMenu menu = factory.createMenu(-1, player.getInventory(), player);
         if (menu == null) {
-            throw context.assertionException(pos, "test.error.menu.does_not_create_menu");
+            throw helper.assertionException(pos, "test.error.menu.does_not_create_menu");
         }
 
         try {
@@ -231,14 +233,14 @@ public class TestUtil {
                 return (T) menu;
             }
 
-            throw context.assertionException(
+            throw helper.assertionException(
                 pos,
                 "test.error.menu.has_incorrect_menu_type",
-                BuiltInRegistries.MENU.getKey(actualType),
-                BuiltInRegistries.MENU.getKey(type)
+                Util.getRegisteredName(BuiltInRegistries.MENU, actualType),
+                Util.getRegisteredName(BuiltInRegistries.MENU, type)
             );
-        } catch (UnsupportedOperationException ignored) {
-            throw context.assertionException(pos, "test.error.menu.does_not_create_menu_by_type");
+        } catch (UnsupportedOperationException e) {
+            throw helper.assertionException(pos, "test.error.menu.does_not_create_menu_by_type");
         }
     }
 }

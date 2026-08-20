@@ -24,95 +24,95 @@ public class BucketItemComponentTestSuite {
     private static final BlockPos PLACED_POSITION = FACE_POSITION;
 
     @GameTest(structure = "itematic:item.component.bucket.platform.water")
-    public void usingBucketOnWaterTakesWaterAndGivesWaterBucket(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack bucket = world.itematic$createStack(ItemIds.BUCKET);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
-        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));
+    public void usingBucketOnWaterTakesWaterAndGivesWaterBucket(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack bucket = level.itematic$createStack(ItemIds.BUCKET);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(helper.absolutePos(FACE_POSITION)));
         player.setItemInHand(InteractionHand.MAIN_HAND, bucket);
-        world.addFreshEntity(player);
-        InteractionResult result = bucket.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> {
-            Assert.fluidState(context, PLACED_POSITION)
+        level.addFreshEntity(player);
+        InteractionResult result = bucket.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> {
+            Assert.fluidState(helper, PLACED_POSITION)
                 .is(Fluids.EMPTY);
             Assert.isInstance(
-                context,
+                helper,
                 result,
                 InteractionResult.Success.class,
                 () -> "Expected Bucket usage to be successful",
-                success -> Assert.itemStack(context, success.heldItemTransformedTo())
+                success -> Assert.itemStack(helper, success.heldItemTransformedTo())
                     .is(ItemIds.WATER_BUCKET)
             );
         });
     }
 
     @GameTest(structure = "itematic:item.component.bucket.platform.powder_snow")
-    public void usingBucketOnPowderSnowTakesWaterAndGivesPowderSnowBucket(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack bucket = world.itematic$createStack(ItemIds.BUCKET);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
-        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));
+    public void usingBucketOnPowderSnowTakesWaterAndGivesPowderSnowBucket(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack bucket = level.itematic$createStack(ItemIds.BUCKET);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(helper.absolutePos(FACE_POSITION)));
         player.setItemInHand(InteractionHand.MAIN_HAND, bucket);
-        world.addFreshEntity(player);
-        InteractionResult result = bucket.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> {
-            Assert.fluidState(context, PLACED_POSITION)
+        level.addFreshEntity(player);
+        InteractionResult result = bucket.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> {
+            Assert.fluidState(helper, PLACED_POSITION)
                 .is(Fluids.EMPTY);
             Assert.isInstance(
-                context,
+                helper,
                 result,
                 InteractionResult.Success.class,
                 () -> "Expected Bucket usage to be successful",
-                success -> Assert.itemStack(context, success.heldItemTransformedTo())
+                success -> Assert.itemStack(helper, success.heldItemTransformedTo())
                     .is(ItemIds.POWDER_SNOW_BUCKET)
             );
         });
     }
 
     @GameTest(structure = "itematic:item.component.bucket.platform")
-    public void usingWaterBucketOnGroundPlacesWater(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack waterBucket = world.itematic$createStack(ItemIds.WATER_BUCKET);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
-        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));
+    public void usingWaterBucketOnGroundPlacesWater(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack waterBucket = level.itematic$createStack(ItemIds.WATER_BUCKET);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(helper.absolutePos(FACE_POSITION)));
         player.setItemInHand(InteractionHand.MAIN_HAND, waterBucket);
-        world.addFreshEntity(player);
-        waterBucket.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> Assert.fluidState(context, PLACED_POSITION)
+        level.addFreshEntity(player);
+        waterBucket.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> Assert.fluidState(helper, PLACED_POSITION)
             .is(Fluids.WATER));
     }
 
     @GameTest(structure = "itematic:item.component.bucket.platform")
-    public void usingPowderSnowBucketOnGroundPlacesPowderSnow(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack powderSnowBucket = world.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
-        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));
+    public void usingPowderSnowBucketOnGroundPlacesPowderSnow(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack powderSnowBucket = level.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(helper.absolutePos(FACE_POSITION)));
         player.setItemInHand(InteractionHand.MAIN_HAND, powderSnowBucket);
-        world.addFreshEntity(player);
-        powderSnowBucket.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> Assert.blockState(context, PLACED_POSITION)
+        level.addFreshEntity(player);
+        powderSnowBucket.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> Assert.blockState(helper, PLACED_POSITION)
             .is(Blocks.POWDER_SNOW));
     }
 
     @GameTest(structure = "itematic:item.component.bucket.platform")
-    public void usingPufferfishBucketOnGroundPlacesWaterAndPufferfish(GameTestHelper context) {
-        ServerLevel world = context.getLevel();
-        ItemStack pufferfishBucket = world.itematic$createStack(ItemIds.PUFFERFISH_BUCKET);
-        Player player = context.makeMockPlayer(GameType.SURVIVAL);
-        TestUtil.setEntityPos(context, player, SPAWN_POSITION);
-        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(context.absolutePos(FACE_POSITION)));
+    public void usingPufferfishBucketOnGroundPlacesWaterAndPufferfish(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack pufferfishBucket = level.itematic$createStack(ItemIds.PUFFERFISH_BUCKET);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, SPAWN_POSITION);
+        player.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atBottomCenterOf(helper.absolutePos(FACE_POSITION)));
         player.setItemInHand(InteractionHand.MAIN_HAND, pufferfishBucket);
-        world.addFreshEntity(player);
-        pufferfishBucket.use(world, player, InteractionHand.MAIN_HAND);
-        context.succeedIf(() -> {
-            Assert.fluidState(context, PLACED_POSITION)
+        level.addFreshEntity(player);
+        pufferfishBucket.use(level, player, InteractionHand.MAIN_HAND);
+        helper.succeedIf(() -> {
+            Assert.fluidState(helper, PLACED_POSITION)
                 .is(Fluids.WATER);
-            context.assertEntityPresent(EntityType.PUFFERFISH, PLACED_POSITION);
+            helper.assertEntityPresent(EntityType.PUFFERFISH, PLACED_POSITION);
         });
     }
 }
