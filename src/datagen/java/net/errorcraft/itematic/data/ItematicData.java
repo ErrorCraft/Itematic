@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.data;
 
 import net.errorcraft.itematic.data.client.ItemBarStyleProvider;
+import net.errorcraft.itematic.data.server.ItematicRecipeProvider;
 import net.errorcraft.itematic.data.server.ModifiedRecipeProvider;
-import net.errorcraft.itematic.data.server.RecipeProvider;
 import net.errorcraft.itematic.data.server.registry.*;
 import net.errorcraft.itematic.data.server.tag.*;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
@@ -33,6 +33,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(PotionTagProvider::new);
         pack.addProvider(DispenseBehaviorProvider::new);
         pack.addProvider(ItemBarStyleProvider::new);
-        pack.addProvider(RecipeProvider::new);
+        pack.addProvider(ItematicRecipeProvider::new);
     }
 }

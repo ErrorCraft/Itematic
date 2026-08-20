@@ -17,12 +17,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Optional;
 
 public abstract class BrewingRecipeBuilder<T> {
     protected final Holder<T> base;
     private final HolderSet<Item> reagent;
     protected final Holder<T> result;
+    @Nullable
     private Holder<Item> remainder;
     private final Identifier name;
 

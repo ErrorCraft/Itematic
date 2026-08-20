@@ -12,6 +12,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -20,14 +21,14 @@ import net.minecraft.world.item.alchemy.Potion;
 
 import java.util.concurrent.CompletableFuture;
 
-public class RecipeProvider extends FabricRecipeProvider {
-    public RecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+public class ItematicRecipeProvider extends FabricRecipeProvider {
+    public ItematicRecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
-    protected net.minecraft.data.recipes.RecipeProvider createRecipeProvider(HolderLookup.Provider wrapperLookup, RecipeOutput recipeExporter) {
-        return new Generator(wrapperLookup, recipeExporter);
+    protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+        return new Provider(registries, output);
     }
 
     @Override
@@ -40,12 +41,12 @@ public class RecipeProvider extends FabricRecipeProvider {
         return identifier;
     }
 
-    public static class Generator extends net.minecraft.data.recipes.RecipeProvider {
+    public static class Provider extends RecipeProvider {
         private final HolderGetter<Item> items;
         private final HolderGetter<Potion> potions;
 
-        protected Generator(HolderLookup.Provider registries, RecipeOutput exporter) {
-            super(registries, exporter);
+        private Provider(HolderLookup.Provider registries, RecipeOutput output) {
+            super(registries, output);
             this.items = registries.lookupOrThrow(Registries.ITEM);
             this.potions = registries.lookupOrThrow(Registries.POTION);
         }
