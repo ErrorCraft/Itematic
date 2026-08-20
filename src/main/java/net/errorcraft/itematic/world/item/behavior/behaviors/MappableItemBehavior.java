@@ -36,22 +36,22 @@ public record MappableItemBehavior(Holder<Item> transformsInto) implements ItemB
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (!(world instanceof ServerLevel serverWorld)) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return ItemResult.SUCCEED;
         }
 
         user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
-        world.playSound(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundSource(), 1.0f, 1.0f);
-        ItemStack resultStack = this.createStack(serverWorld, user.getBlockX(), user.getBlockZ(), 0, true, false);
+        level.playSound(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundSource(), 1.0f, 1.0f);
+        ItemStack resultStack = this.createStack(serverLevel, user.getBlockX(), user.getBlockZ(), 0, true, false);
         stack.consume(1, user);
         stackExchanger.exchange(resultStack);
         return ItemResult.CONSUME;
     }
 
-    public ItemStack createStack(ServerLevel world, int x, int z, int scale, boolean showIcons, boolean unlimitedTracking) {
+    public ItemStack createStack(ServerLevel level, int x, int z, int scale, boolean showIcons, boolean unlimitedTracking) {
         ItemStack resultStack = new ItemStack(this.transformsInto);
-        MapId mapId = MapItemAccessor.createNewSavedData(world, x, z, scale, showIcons, unlimitedTracking, world.dimension());
+        MapId mapId = MapItemAccessor.createNewSavedData(level, x, z, scale, showIcons, unlimitedTracking, level.dimension());
         resultStack.set(DataComponents.MAP_ID, mapId);
         return resultStack;
     }

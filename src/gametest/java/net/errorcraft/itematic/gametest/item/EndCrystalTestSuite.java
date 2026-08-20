@@ -27,7 +27,7 @@ public class EndCrystalTestSuite {
             level.itematic$createStack(ItemIds.END_CRYSTAL)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.END_CRYSTAL)
             .existsAt(
                 PLACED_ENTITY_POSITION,
@@ -51,7 +51,7 @@ public class EndCrystalTestSuite {
             level.itematic$createStack(ItemIds.END_CRYSTAL)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.END_CRYSTAL)
             .doesNotExist());
     }
@@ -65,7 +65,7 @@ public class EndCrystalTestSuite {
             level.itematic$createStack(ItemIds.END_CRYSTAL)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.END_CRYSTAL)
             .doesNotExist());
     }
@@ -79,7 +79,7 @@ public class EndCrystalTestSuite {
             level.itematic$createStack(ItemIds.END_CRYSTAL)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.END_CRYSTAL)
             .doesNotExist());
     }

@@ -10,7 +10,7 @@ public interface LivingEntityAccess {
     default boolean itematic$hasStackInInventory(ItemStack stack) {
         return false;
     }
-    default boolean itematic$isHolding(ResourceKey<Item> key) {
+    default boolean itematic$isHolding(ResourceKey<Item> item) {
         return false;
     }
     default ItemStack itematic$getHeldItem(HolderSet<Item> items) {

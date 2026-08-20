@@ -20,7 +20,7 @@ public class PatrollingMonsterExtender {
             target = "Lnet/minecraft/world/entity/raid/Raid;getOminousBannerInstance(Lnet/minecraft/core/HolderGetter;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private void setOminousBannerForLaterUse(ServerLevelAccessor world, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> info) {
-        ItematicRaids.createOminousBanner(world);
+    private void setOminousBannerForLaterUse(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> info) {
+        ItematicRaids.createOminousBanner(level);
     }
 }

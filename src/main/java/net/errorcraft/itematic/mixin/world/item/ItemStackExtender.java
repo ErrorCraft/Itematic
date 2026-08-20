@@ -91,7 +91,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     public abstract boolean isEmpty();
 
     @Shadow
-    public abstract void hurtAndBreak(int amount, ServerLevel world, @Nullable ServerPlayer player, Consumer<Item> breakCallback);
+    public abstract void hurtAndBreak(int amount, ServerLevel level, @Nullable ServerPlayer player, Consumer<Item> breakCallback);
 
     @Shadow
     public abstract int getDamageValue();
@@ -777,7 +777,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
 
     @Override
     public void itematic$damage(int amount, ActionContext context) {
-        if (!(context.level() instanceof ServerLevel world)) {
+        if (!(context.level() instanceof ServerLevel level)) {
             return;
         }
 
@@ -785,7 +785,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         LivingEntity entity = context.get(LootContextParams.THIS_ENTITY, LivingEntity.class);
         this.hurtAndBreak(
             amount,
-            world,
+            level,
             entity instanceof ServerPlayer player ? player : null,
             item -> this.onItemBroken(item, entity, context)
         );
@@ -833,12 +833,12 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     }
 
     @Override
-    public boolean itematic$mayStartUsing(Level world, Player user, InteractionHand hand, ItemStack stack) {
+    public boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
         if (this.item == null) {
             return false;
         }
 
-        return this.item.value().itematic$mayStartUsing(world, user, hand, stack);
+        return this.item.value().itematic$mayStartUsing(level, user, hand, stack);
     }
 
     @Override

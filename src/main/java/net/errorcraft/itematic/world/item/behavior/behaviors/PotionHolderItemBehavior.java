@@ -28,7 +28,7 @@ public record PotionHolderItemBehavior(float durationMultiplier) implements Item
     }
 
     @Override
-    public void finishUsing(Level world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
+    public void finishUsing(Level level, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
         PotionContents potionContents = stack.get(DataComponents.POTION_CONTENTS);
         if (potionContents != null) {
             potionContents.applyToLivingEntity(user, stack.getOrDefault(DataComponents.POTION_DURATION_SCALE, 1.0f));

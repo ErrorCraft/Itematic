@@ -36,13 +36,13 @@ public record WaxBlockAction(PositionTarget position) implements Action<WaxBlock
             return false;
         }
 
-        Level world = context.level();
-        return HoneycombItem.getWaxed(world.getBlockState(pos))
+        Level level = context.level();
+        return HoneycombItem.getWaxed(level.getBlockState(pos))
             .map(state -> {
                 Entity entity = context.get(LootContextParams.THIS_ENTITY);
-                world.setBlock(pos, state, Block.UPDATE_ALL_IMMEDIATE);
-                world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, state));
-                world.levelEvent(LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
+                level.setBlock(pos, state, Block.UPDATE_ALL_IMMEDIATE);
+                level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, state));
+                level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
                 return true;
             })
             .orElse(false);

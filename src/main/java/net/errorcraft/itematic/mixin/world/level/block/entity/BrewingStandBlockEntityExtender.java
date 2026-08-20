@@ -258,11 +258,11 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
     }
 
     @Unique
-    private int brewTime(ServerLevel world) {
+    private int brewTime(ServerLevel level) {
         ItemStack reagent = this.items.get(INGREDIENT_SLOT);
         for (int i = 0; i < 3; i++) {
             BrewingRecipeInput input = new BrewingRecipeInput(this.items.get(i), reagent);
-            Optional<RecipeHolder<BrewingRecipe<?>>> optionalRecipe = this.quickCheck.getRecipeFor(input, world);
+            Optional<RecipeHolder<BrewingRecipe<?>>> optionalRecipe = this.quickCheck.getRecipeFor(input, level);
             if (optionalRecipe.isPresent()) {
                 return optionalRecipe.get()
                     .value()

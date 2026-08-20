@@ -389,7 +389,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     )
     private static EntityType.Builder<SmallFireball> setSmallFireballInitializer(EntityType.Builder<SmallFireball> builder) {
         builder.itematic$initializer(ThrownBallEntityInitializer.of(
-            (player, world, x, y, z) -> new SmallFireball(world, player, new Vec3(x, y, z)),
+            (player, level, x, y, z) -> new SmallFireball(level, player, new Vec3(x, y, z)),
             SmallFireball::new
         ));
         return builder;

@@ -41,16 +41,16 @@ public abstract class AbstractVillagerExtender extends MobExtender {
             target = "Lnet/minecraft/world/entity/npc/villager/AbstractVillager;updateTrades(Lnet/minecraft/server/level/ServerLevel;)V"
         )
     )
-    private void fillRecipesUseDynamicRegistry(AbstractVillager instance, ServerLevel serverWorld) {
-        this.fillRecipesFromContext(serverWorld);
+    private void fillRecipesUseDynamicRegistry(AbstractVillager instance, ServerLevel level) {
+        this.fillRecipesFromContext(level);
     }
 
     @Unique
     protected void fillRecipes(LootContext context) {}
 
     @Unique
-    protected void fillRecipesFromContext(ServerLevel world) {
-        LootParams set = new LootParams.Builder(world)
+    protected void fillRecipesFromContext(ServerLevel level) {
+        LootParams set = new LootParams.Builder(level)
             .withParameter(LootContextParams.THIS_ENTITY, this)
             .withParameter(LootContextParams.ORIGIN, this.position())
             .create(ItematicContextKeySets.TRADE);

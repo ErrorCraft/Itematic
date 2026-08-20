@@ -62,8 +62,8 @@ public abstract class VillagerExtender extends AbstractVillagerExtender {
             target = "Lnet/minecraft/world/entity/npc/villager/Villager;updateTrades(Lnet/minecraft/server/level/ServerLevel;)V"
         )
     )
-    private void fillRecipesUseDynamicRegistry(Villager instance, ServerLevel world) {
-        this.fillRecipesFromContext(world);
+    private void fillRecipesUseDynamicRegistry(Villager instance, ServerLevel level) {
+        this.fillRecipesFromContext(level);
     }
 
     @Redirect(

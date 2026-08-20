@@ -61,19 +61,19 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.drawDuration.isPresent()) {
             return ItemResult.PASS;
         }
 
-        this.createEntity(world, user, stack, stackExchanger);
+        this.createEntity(level, user, stack, stackExchanger);
         return ItemResult.SUCCEED;
     }
 
     @Override
-    public boolean stopUsing(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
+    public boolean stopUsing(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         if (this.drawDuration.filter(drawDuration -> drawDuration.matches(usedTicks)).isPresent()) {
-            this.createEntity(world, user, stack, stackExchanger);
+            this.createEntity(level, user, stack, stackExchanger);
             if (user instanceof Player player) {
                 player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
             }
@@ -84,20 +84,20 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
         return false;
     }
 
-    private void createEntity(Level world, LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (world instanceof ServerLevel serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld)
+    private void createEntity(Level level, LivingEntity user, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (level instanceof ServerLevel serverLevel) {
+            ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParams.TOOL, stack)
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())
                 .add(ItematicContextKeys.INTERACTED_POSITION, user.getEyePosition().add(0.0d, -0.1d, 0.0d))
                 .build();
-            this.createEntity(context, serverWorld, stack);
+            this.createEntity(context, stack);
         }
     }
 
-    private void createEntity(ActionContext context, ServerLevel world, ItemStack stack) {
+    private void createEntity(ActionContext context, ItemStack stack) {
         ProjectileItemBehavior projectile = stack.itematic$getBehavior(ItemBehaviorType.PROJECTILE).orElse(null);
         if (projectile == null) {
             return;

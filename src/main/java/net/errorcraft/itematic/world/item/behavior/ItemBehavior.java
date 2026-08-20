@@ -29,7 +29,7 @@ public interface ItemBehavior<T extends ItemBehavior<T>> {
     );
 
     ItemBehaviorType<T> type();
-    default ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    default ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         return ItemResult.PASS;
     }
     default ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
@@ -40,21 +40,21 @@ public interface ItemBehavior<T extends ItemBehavior<T>> {
     }
     default void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackExchanger stackExchanger) {
     }
-    default boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
+    default boolean postMine(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
         return false;
     }
-    default void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {}
-    default boolean stopUsing(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
+    default void using(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks) {}
+    default boolean stopUsing(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         return false;
     }
-    default void finishUsing(Level world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {}
+    default void finishUsing(Level level, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {}
     default boolean clickOnSlot(ItemStack stack, Slot slot, ClickAction clickType, Player user) {
         return false;
     }
     default boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickAction clickType, Player user, ItemStackExchanger stackExchanger) {
         return false;
     }
-    default void onCraft(ItemStack stack, Level world) {}
+    default void onCraft(ItemStack stack, Level level) {}
     default void addComponents(DataComponentMap.Builder builder) {}
     default void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag tooltipFlag) {}
 }

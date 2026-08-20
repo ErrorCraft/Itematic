@@ -19,7 +19,7 @@ public class RemoveBlockGoalExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForEggUseCreateStack(ItemLike item, @Local Level world) {
-        return world.itematic$createStack(ItemIds.EGG);
+    private ItemStack newItemStackForEggUseCreateStack(ItemLike item, @Local Level level) {
+        return level.itematic$createStack(ItemIds.EGG);
     }
 }

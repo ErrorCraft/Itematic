@@ -71,17 +71,17 @@ public record BlockItemBehavior(BlockPicker<?> block, boolean operatorOnly, Set<
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.FLUID)) {
             return ItemResult.PASS;
         }
 
-        BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
+        BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(level, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
         }
 
-        UseOnContext context = new UseOnContext(world, user, hand, stack, blockHitResult);
+        UseOnContext context = new UseOnContext(level, user, hand, stack, blockHitResult);
         return this.place(context, stackExchanger);
     }
 

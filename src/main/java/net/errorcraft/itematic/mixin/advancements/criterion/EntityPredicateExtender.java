@@ -48,7 +48,7 @@ public class EntityPredicateExtender implements EntityPredicateAccess {
         method = "matches(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/entity/Entity;)Z",
         at = @At("TAIL")
     )
-    private boolean testExtraFields(boolean original, ServerLevel world, Vec3 pos, Entity entity) {
+    private boolean testExtraFields(boolean original, ServerLevel level, Vec3 pos, Entity entity) {
         if (!original) {
             return false;
         }

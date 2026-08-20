@@ -30,7 +30,7 @@ public record PrimeTntAction(PositionTarget position) implements Action<PrimeTnt
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.level() instanceof ServerLevel world)) {
+        if (!(context.level() instanceof ServerLevel level)) {
             return false;
         }
 
@@ -40,12 +40,12 @@ public record PrimeTntAction(PositionTarget position) implements Action<PrimeTnt
         }
 
         Player player = context.get(LootContextParams.THIS_ENTITY, Player.class);
-        if (TntBlockAccessor.prime(world, pos, player)) {
-            world.removeBlock(pos, false);
+        if (TntBlockAccessor.prime(level, pos, player)) {
+            level.removeBlock(pos, false);
             return true;
         }
 
-        if (player != null && !world.getGameRules().get(GameRules.TNT_EXPLODES)) {
+        if (player != null && !level.getGameRules().get(GameRules.TNT_EXPLODES)) {
             player.displayClientMessage(Component.translatable("block.minecraft.tnt.disabled"), true);
         }
 

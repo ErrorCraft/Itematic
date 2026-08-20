@@ -27,7 +27,7 @@ public class CompassTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, compass);
         level.addFreshEntity(player);
-        ItemStack resultStack = TestUtil.useStackOnBlockInside(helper, player, compass, LODESTONE_POSITION, Direction.UP)
+        ItemStack resultStack = TestUtil.useStackOnBlock(helper, player, compass, LODESTONE_POSITION, Direction.UP)
             .orElseThrow();
         helper.succeedIf(() -> Assert.itemStack(helper, resultStack)
             .hasComponent(DataComponents.LODESTONE_TRACKER, lodestoneTracker -> {
@@ -64,7 +64,7 @@ public class CompassTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, compass);
         level.addFreshEntity(player);
-        ItemStack resultStack = TestUtil.useStackOnBlockInside(helper, player, compass, LODESTONE_POSITION, Direction.UP)
+        ItemStack resultStack = TestUtil.useStackOnBlock(helper, player, compass, LODESTONE_POSITION, Direction.UP)
             .orElseThrow();
         helper.destroyBlock(LODESTONE_POSITION);
         helper.startSequence()

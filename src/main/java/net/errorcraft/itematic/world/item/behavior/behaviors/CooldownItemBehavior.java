@@ -35,7 +35,7 @@ public record CooldownItemBehavior(Optional<Identifier> group, int ticks) implem
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         UseCooldown useCooldown = stack.get(DataComponents.USE_COOLDOWN);
         if (useCooldown != null) {
             useCooldown.apply(stack, user);

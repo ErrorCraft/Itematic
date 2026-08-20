@@ -51,9 +51,9 @@ public record ToolItemBehavior(Tool tool) implements ItemBehavior<ToolItemBehavi
     }
 
     @Override
-    public boolean postMine(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
-        if (!world.isClientSide() && state.getDestroySpeed(world, pos) != 0.0f) {
-            this.useTool(stack, world, pos, miner, stackExchanger);
+    public boolean postMine(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
+        if (!level.isClientSide() && state.getDestroySpeed(level, pos) != 0.0f) {
+            this.useTool(stack, level, pos, miner, stackExchanger);
         }
 
         return true;
@@ -64,8 +64,8 @@ public record ToolItemBehavior(Tool tool) implements ItemBehavior<ToolItemBehavi
         builder.set(DataComponents.TOOL, this.tool);
     }
 
-    private void useTool(ItemStack stack, Level world, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
-        if (!(world instanceof ServerLevel serverWorld)) {
+    private void useTool(ItemStack stack, Level level, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
 
@@ -74,7 +74,7 @@ public record ToolItemBehavior(Tool tool) implements ItemBehavior<ToolItemBehavi
             return;
         }
 
-        ActionContext context = ActionContext.builder(serverWorld)
+        ActionContext context = ActionContext.builder(serverLevel)
             .stackExchanger(stackExchanger)
             .add(LootContextParams.THIS_ENTITY, miner)
             .add(LootContextParams.ORIGIN, miner.position())

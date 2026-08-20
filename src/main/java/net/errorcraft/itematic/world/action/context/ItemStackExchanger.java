@@ -36,10 +36,10 @@ public class ItemStackExchanger {
         );
     }
 
-    public static ItemStackExchanger forDispenser(Level world, Direction side, Vec3 pos, ItemStack initialStack) {
+    public static ItemStackExchanger forDispenser(Level level, Direction side, Vec3 pos, ItemStack initialStack) {
         return new ItemStackExchanger(
             stack -> true,
-            stack -> DefaultDispenseItemBehavior.spawnItem(world, stack, 6, side, pos),
+            stack -> DefaultDispenseItemBehavior.spawnItem(level, stack, 6, side, pos),
             initialStack
         );
     }

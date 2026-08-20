@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public abstract class EntityExtender implements EntityAccess {
     @Shadow
     @Nullable
-    public abstract ItemEntity spawnAtLocation(ServerLevel world, ItemStack stack);
+    public abstract ItemEntity spawnAtLocation(ServerLevel level, ItemStack stack);
 
     @Redirect(
         method = "interact",
@@ -96,7 +96,7 @@ public abstract class EntityExtender implements EntityAccess {
     }
 
     @Override
-    public @Nullable ItemEntity itematic$spawnAtLocation(ServerLevel world, ResourceKey<Item> key) {
-        return this.spawnAtLocation(world, world.itematic$createStack(key));
+    public @Nullable ItemEntity itematic$spawnAtLocation(ServerLevel level, ResourceKey<Item> item) {
+        return this.spawnAtLocation(level, level.itematic$createStack(item));
     }
 }

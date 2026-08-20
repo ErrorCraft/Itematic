@@ -34,13 +34,13 @@ public record AttachLeashedEntitiesOnBlockAction(PositionTarget position) implem
             return false;
         }
 
-        Level world = context.level();
-        if (!world.getBlockState(pos).is(BlockTags.FENCES)) {
+        Level level = context.level();
+        if (!level.getBlockState(pos).is(BlockTags.FENCES)) {
             return false;
         }
 
         if (context.get(LootContextParams.THIS_ENTITY) instanceof Player player) {
-            return LeadItem.bindPlayerMobs(player, world, pos).consumesAction();
+            return LeadItem.bindPlayerMobs(player, level, pos).consumesAction();
         }
 
         return false;

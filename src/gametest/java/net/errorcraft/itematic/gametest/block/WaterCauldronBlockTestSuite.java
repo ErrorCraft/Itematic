@@ -20,8 +20,10 @@ public class WaterCauldronBlockTestSuite {
     public void usingColoredShulkerBoxOnWaterCauldronClearsColor(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel level = helper.getLevel();
-        ItemStack whiteShulkerBox = level.itematic$createStack(ItemIds.WHITE_SHULKER_BOX);
-        player.setItemInHand(InteractionHand.MAIN_HAND, whiteShulkerBox);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.WHITE_SHULKER_BOX)
+        );
         level.addFreshEntity(player);
         helper.useBlock(WATER_CAULDRON_POSITION, player);
         helper.succeedIf(() -> Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))

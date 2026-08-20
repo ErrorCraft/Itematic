@@ -35,14 +35,14 @@ public record AttachedToSideBlockPicker(Holder<Block> attachedBlock, Holder<Bloc
     @Override
     public @Nullable BlockState placementState(BlockPlaceContext context) {
         BlockState state = this.otherBlock.value().getStateForPlacement(context);
-        Level world = context.getLevel();
+        Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         for (Direction direction : context.getNearestLookingDirections()) {
             if (direction == this.attachedSide.getOpposite()) {
                 continue;
             }
             BlockState actualState = direction == this.attachedSide ? this.attachedBlock.value().getStateForPlacement(context) : state;
-            if (actualState != null && actualState.canSurvive(world, pos)) {
+            if (actualState != null && actualState.canSurvive(level, pos)) {
                 return actualState;
             }
         }

@@ -58,7 +58,7 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
         return true;
     }
 
-    public static void execute(float spinAttackStrength, Player player, Level world, ItemStack usedStack) {
+    public static void execute(float spinAttackStrength, Player player, Level level, ItemStack usedStack) {
         float yaw = player.getYRot();
         float pitch = player.getXRot();
         double x = -Math.sin(yaw * (Math.PI / 180.0d)) * Math.cos(pitch * (Math.PI / 180.0d));
@@ -73,6 +73,6 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
 
         Holder<SoundEvent> sound = EnchantmentHelper.pickHighestLevel(usedStack, EnchantmentEffectComponents.TRIDENT_SOUND)
             .orElse(SoundEvents.TRIDENT_THROW);
-        world.playSound(null, player, sound.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
+        level.playSound(null, player, sound.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 }

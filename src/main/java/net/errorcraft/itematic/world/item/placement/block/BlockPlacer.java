@@ -75,24 +75,24 @@ public class BlockPlacer {
     }
 
     private void placed(BlockState blockState, BlockPos pos, @Nullable LivingEntity placer) {
-        Level world = this.context.level();
+        Level level = this.context.level();
         ItemStack stack = this.context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
         blockState = this.placeFromNbt(blockState, pos, stack);
-        BlockEntity blockEntity = world.getBlockEntity(pos);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null && placer instanceof Player playerPlacer) {
-            blockEntity.itematic$placedFromItemStack(world, playerPlacer, blockState, pos, stack);
+            blockEntity.itematic$placedFromItemStack(level, playerPlacer, blockState, pos, stack);
         }
 
-        BlockItemAccessor.updateBlockEntityComponents(world, pos, stack);
-        blockState.getBlock().setPlacedBy(world, pos, blockState, placer, stack);
+        BlockItemAccessor.updateBlockEntityComponents(level, pos, stack);
+        blockState.getBlock().setPlacedBy(level, pos, blockState, placer, stack);
         if (placer instanceof ServerPlayer playerPlacer) {
             CriteriaTriggers.PLACED_BLOCK.trigger(playerPlacer, pos, stack);
         }
 
         stack.itematic$invokeEvent(ItemEvent.PLACED_BLOCK, this.context);
         SoundType blockSoundGroup = blockState.getSoundType();
-        world.playSound(placer, pos, this.placeSound(blockSoundGroup), SoundSource.BLOCKS, (blockSoundGroup.getVolume() + 1.0F) / 2.0F, blockSoundGroup.getPitch() * 0.8F);
-        world.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(placer, blockState));
+        level.playSound(placer, pos, this.placeSound(blockSoundGroup), SoundSource.BLOCKS, (blockSoundGroup.getVolume() + 1.0F) / 2.0F, blockSoundGroup.getPitch() * 0.8F);
+        level.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(placer, blockState));
     }
 
     private SoundEvent placeSound(SoundType group) {
@@ -119,9 +119,9 @@ public class BlockPlacer {
         }
 
         CollisionContext shapeContext = CollisionContexts.ofNullable(placer);
-        Level world = this.context.level();
-        return state.canSurvive(world, pos) &&
-            world.isUnobstructed(state, pos, shapeContext);
+        Level level = this.context.level();
+        return state.canSurvive(level, pos) &&
+            level.isUnobstructed(state, pos, shapeContext);
     }
 
     private BlockState placeFromNbt(BlockState state, BlockPos pos, ItemStack stack) {

@@ -113,9 +113,9 @@ public class MaceItemExtender {
             target = "Lnet/minecraft/world/item/MaceItem;knockback(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V"
         )
     )
-    private void temporarilyStoreSmashingWeapon(Level world, Entity attacker, Entity attacked, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+    private void temporarilyStoreSmashingWeapon(Level level, Entity attacker, Entity attacked, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
         usedStackSmashingWeapon = smashingWeaponReference.get();
-        original.call(world, attacker, attacker);
+        original.call(level, attacker, attacker);
         usedStackSmashingWeapon = null;
     }
 

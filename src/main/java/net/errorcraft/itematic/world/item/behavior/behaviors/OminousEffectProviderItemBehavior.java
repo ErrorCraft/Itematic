@@ -23,10 +23,10 @@ public class OminousEffectProviderItemBehavior implements ItemBehavior<OminousEf
     }
 
     @Override
-    public void finishUsing(Level world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
+    public void finishUsing(Level level, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
         OminousBottleAmplifier ominousAmplifier = stack.get(DataComponents.OMINOUS_BOTTLE_AMPLIFIER);
         if (ominousAmplifier != null) {
-            ominousAmplifier.onConsume(world, user, stack, null);
+            ominousAmplifier.onConsume(level, user, stack, null);
         }
     }
 }

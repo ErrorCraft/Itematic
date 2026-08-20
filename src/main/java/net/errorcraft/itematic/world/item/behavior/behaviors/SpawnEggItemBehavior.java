@@ -27,7 +27,7 @@ public class SpawnEggItemBehavior implements ItemBehavior<SpawnEggItemBehavior> 
         return ItemBehaviorType.SPAWN_EGG;
     }
 
-    public Optional<Mob> spawnBaby(Player user, Mob entity, EntityType<? extends Mob> entityType, ServerLevel world, Vec3 pos, ItemStack stack) {
+    public Optional<Mob> spawnBaby(Player user, Mob entity, EntityType<? extends Mob> entityType, ServerLevel level, Vec3 pos, ItemStack stack) {
         Optional<EntityItemBehavior> entityBehavior = stack.itematic$getBehavior(ItemBehaviorType.ENTITY);
         if (entityBehavior.isEmpty()) {
             return Optional.empty();
@@ -37,7 +37,7 @@ public class SpawnEggItemBehavior implements ItemBehavior<SpawnEggItemBehavior> 
             return Optional.empty();
         }
 
-        Mob child = this.createEntity(entity, entityType, world);
+        Mob child = this.createEntity(entity, entityType, level);
         if (child == null) {
             return Optional.empty();
         }
@@ -52,16 +52,16 @@ public class SpawnEggItemBehavior implements ItemBehavior<SpawnEggItemBehavior> 
             child.setCustomName(customName);
         }
 
-        world.addFreshEntityWithPassengers(child);
+        level.addFreshEntityWithPassengers(child);
         stack.consume(1, user);
         return Optional.of(child);
     }
 
-    private Mob createEntity(Mob entity, EntityType<? extends Mob> entityType, ServerLevel world) {
+    private Mob createEntity(Mob entity, EntityType<? extends Mob> entityType, ServerLevel level) {
         if (entity instanceof AgeableMob passiveEntity) {
-            return passiveEntity.getBreedOffspring(world, passiveEntity);
+            return passiveEntity.getBreedOffspring(level, passiveEntity);
         }
 
-        return entityType.create(world, EntitySpawnReason.SPAWN_ITEM_USE);
+        return entityType.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
     }
 }

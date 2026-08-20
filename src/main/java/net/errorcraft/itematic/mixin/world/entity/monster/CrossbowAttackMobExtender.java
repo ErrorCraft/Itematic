@@ -64,9 +64,9 @@ public interface CrossbowAttackMobExtender {
             target = "Lnet/minecraft/world/item/CrossbowItem;performShooting(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;FFLnet/minecraft/world/entity/LivingEntity;)V"
         )
     )
-    private void performShootingUseItemBehavior(CrossbowItem instance, Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack, float speed, float divergence, LivingEntity livingEntity, @Share("shooter") LocalRef<ShooterItemBehavior> shooterReference) {
-        if (shooterReference.get().method() instanceof ChargeableShooterMethod chargeableShooterMethod) {
-            chargeableShooterMethod.shoot(shooterReference.get(), world, shooter, hand, stack, speed, divergence, livingEntity);
+    private void performShootingUseItemBehavior(CrossbowItem instance, Level level, LivingEntity shooter, InteractionHand hand, ItemStack weapon, float power, float uncertainty, LivingEntity targetOverride, @Share("shooter") LocalRef<ShooterItemBehavior> shooterReference) {
+        if (shooterReference.get().method() instanceof ChargeableShooterMethod chargeable) {
+            chargeable.shoot(shooterReference.get(), level, shooter, hand, weapon, power, uncertainty, targetOverride);
         }
     }
 }

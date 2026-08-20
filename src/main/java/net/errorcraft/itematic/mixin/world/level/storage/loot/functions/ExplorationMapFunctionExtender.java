@@ -36,7 +36,7 @@ public class ExplorationMapFunctionExtender {
             target = "Lnet/minecraft/world/item/MapItem;create(Lnet/minecraft/server/level/ServerLevel;IIBZZ)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack createUseItemBehavior(ServerLevel world, int x, int z, byte scale, boolean showIcons, boolean unlimitedTracking, @Share("mappable") LocalRef<MappableItemBehavior> mappable) {
-        return mappable.get().createStack(world, x, z, scale, showIcons, unlimitedTracking);
+    private ItemStack createUseItemBehavior(ServerLevel level, int originX, int originZ, byte scale, boolean trackPosition, boolean unlimitedTracking, @Share("mappable") LocalRef<MappableItemBehavior> mappable) {
+        return mappable.get().createStack(level, originX, originZ, scale, trackPosition, unlimitedTracking);
     }
 }

@@ -28,7 +28,7 @@ public record ShearAtPositionAction(PositionTarget position) implements Action<S
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.level() instanceof ServerLevel world)) {
+        if (!(context.level() instanceof ServerLevel level)) {
             return false;
         }
 
@@ -38,7 +38,7 @@ public record ShearAtPositionAction(PositionTarget position) implements Action<S
         }
 
         ItemStack tool = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
-        return ShearsDispenseItemBehaviorAccessor.tryShearBeehive(world, tool, pos)
-            || ShearsDispenseItemBehaviorAccessor.tryShearEntity(world, pos, tool);
+        return ShearsDispenseItemBehaviorAccessor.tryShearBeehive(level, tool, pos)
+            || ShearsDispenseItemBehaviorAccessor.tryShearEntity(level, pos, tool);
     }
 }

@@ -49,7 +49,7 @@ public interface ItemStackAccess {
     default boolean itematic$hasEventListener(ItemEvent event) {
         return false;
     }
-    default boolean itematic$mayStartUsing(Level world, Player user, InteractionHand hand, ItemStack stack) {
+    default boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
         return false;
     }
     default double itematic$attackSpeedMultiplier() {

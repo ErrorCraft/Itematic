@@ -72,7 +72,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
     }
 
     @Override
-    public boolean tryShoot(ShooterItemBehavior component, ItemStack stack, Level world, LivingEntity user, InteractionHand hand) {
+    public boolean tryShoot(ShooterItemBehavior component, ItemStack stack, Level level, LivingEntity user, InteractionHand hand) {
         if (!CrossbowItem.isCharged(stack)) {
             return false;
         }
@@ -82,13 +82,13 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             return false;
         }
 
-        this.shoot(component, world, user, hand, stack, chargedPowerRules.power(stack), 1.0f, null);
+        this.shoot(component, level, user, hand, stack, chargedPowerRules.power(stack), 1.0f, null);
         return true;
     }
 
     @Override
-    public void hold(ShooterItemBehavior shooter, ItemStack stack, Level world, LivingEntity user, int usedTicks) {
-        if (world.isClientSide()) {
+    public void hold(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks) {
+        if (level.isClientSide()) {
             return;
         }
 
@@ -99,17 +99,17 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
 
         CrossbowItem.ChargingSounds chargingSounds = this.chargingSounds(stack);
         if (usedTicks == getChargeTimeAt(chargeTime, START_SOUND_PROGRESS)) {
-            chargingSounds.start().ifPresent(sound -> world.playSound(null, user.getX(), user.getY(), user.getZ(), sound.value(), user.getSoundSource(), 0.5f, 1.0f));
+            chargingSounds.start().ifPresent(sound -> level.playSound(null, user.getX(), user.getY(), user.getZ(), sound.value(), user.getSoundSource(), 0.5f, 1.0f));
             return;
         }
 
         if (usedTicks == getChargeTimeAt(chargeTime, MID_SOUND_PROGRESS)) {
-            chargingSounds.mid().ifPresent(sound -> world.playSound(null, user.getX(), user.getY(), user.getZ(), sound.value(), user.getSoundSource(), 0.5f, 1.0f));
+            chargingSounds.mid().ifPresent(sound -> level.playSound(null, user.getX(), user.getY(), user.getZ(), sound.value(), user.getSoundSource(), 0.5f, 1.0f));
         }
     }
 
     @Override
-    public boolean stop(ShooterItemBehavior shooter, ItemStack stack, Level world, LivingEntity user, int usedTicks) {
+    public boolean stop(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks) {
         if (usedTicks < CrossbowItem.getChargeDuration(stack, user)) {
             return false;
         }
@@ -119,8 +119,8 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
         }
 
         CrossbowItem.ChargingSounds chargingSounds = this.chargingSounds(stack);
-        float pitch = Mth.lerp(world.getRandom().nextFloat(), 0.87f, 1.2f);
-        chargingSounds.end().ifPresent(sound -> world.playSound(null, user.getX(), user.getY(), user.getZ(), sound.value(), user.getSoundSource(), 1.0f, pitch));
+        float pitch = Mth.lerp(level.getRandom().nextFloat(), 0.87f, 1.2f);
+        chargingSounds.end().ifPresent(sound -> level.playSound(null, user.getX(), user.getY(), user.getZ(), sound.value(), user.getSoundSource(), 1.0f, pitch));
         return true;
     }
 
@@ -148,8 +148,8 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
         return ((float)usedTicks) / CrossbowItem.getChargeDuration(stack, user);
     }
 
-    public void shoot(ShooterItemBehavior shooter, Level world, LivingEntity user, InteractionHand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity livingEntity) {
-        if (!(world instanceof ServerLevel serverWorld)) {
+    public void shoot(ShooterItemBehavior shooter, Level level, LivingEntity user, InteractionHand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity livingEntity) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
 
@@ -158,7 +158,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             return;
         }
 
-        shooter.shoot(serverWorld, user, hand, stack, chargedProjectiles.getItems(), power, divergence, user instanceof Player, livingEntity);
+        shooter.shoot(serverLevel, user, hand, stack, chargedProjectiles.getItems(), power, divergence, user instanceof Player, livingEntity);
         if (user instanceof ServerPlayer player) {
             CriteriaTriggers.SHOT_CROSSBOW.trigger(player, stack);
             player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));

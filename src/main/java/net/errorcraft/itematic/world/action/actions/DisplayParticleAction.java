@@ -38,18 +38,18 @@ public record DisplayParticleAction(PositionTarget position, ParticleOptions par
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.level() instanceof ServerLevel world)) {
+        if (!(context.level() instanceof ServerLevel level)) {
             return false;
         }
 
-        RandomSource random = world.getRandom();
+        RandomSource random = level.getRandom();
         Vec3 pos = this.position(context, random);
         if (pos == null) {
             return false;
         }
 
         Vec3 delta = this.delta.get(random);
-        int amountOfPlayersShown = world.sendParticles(
+        int amountOfPlayersShown = level.sendParticles(
             this.particle,
             this.force,
             false,

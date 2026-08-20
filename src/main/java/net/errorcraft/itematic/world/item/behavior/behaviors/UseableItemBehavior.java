@@ -50,12 +50,12 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.NORMAL)) {
             return ItemResult.PASS;
         }
 
-        return tryStartUsing(world, user, hand, stack);
+        return tryStartUsing(level, user, hand, stack);
     }
 
     @Override
@@ -88,8 +88,8 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
         return !this.passes.contains(pass);
     }
 
-    private static ItemResult tryStartUsing(Level world, Player user, InteractionHand hand, ItemStack stack) {
-        if (!stack.itematic$mayStartUsing(world, user, hand, stack)) {
+    private static ItemResult tryStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
+        if (!stack.itematic$mayStartUsing(level, user, hand, stack)) {
             return ItemResult.PASS;
         }
 

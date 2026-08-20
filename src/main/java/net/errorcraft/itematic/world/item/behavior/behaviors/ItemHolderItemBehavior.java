@@ -91,8 +91,8 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
     }
 
     @Override
-    public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
-        if (world.isClientSide() || !(user instanceof Player player)) {
+    public void using(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks) {
+        if (level.isClientSide() || !(user instanceof Player player)) {
             return;
         }
 

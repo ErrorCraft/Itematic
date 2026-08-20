@@ -32,8 +32,8 @@ public class UseBonemealExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, ServerLevel world) {
-        return world.itematic$createStack(ItemIds.BONE_MEAL);
+    private ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, ServerLevel level) {
+        return level.itematic$createStack(ItemIds.BONE_MEAL);
     }
 
     @Redirect(

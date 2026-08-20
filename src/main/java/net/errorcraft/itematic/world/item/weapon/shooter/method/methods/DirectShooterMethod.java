@@ -51,15 +51,15 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
     }
 
     @Override
-    public boolean tryShoot(ShooterItemBehavior component, ItemStack stack, Level world, LivingEntity user, InteractionHand hand) {
+    public boolean tryShoot(ShooterItemBehavior component, ItemStack stack, Level level, LivingEntity user, InteractionHand hand) {
         return false;
     }
 
     @Override
-    public void hold(ShooterItemBehavior shooter, ItemStack stack, Level world, LivingEntity user, int usedTicks) {}
+    public void hold(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks) {}
 
     @Override
-    public boolean stop(ShooterItemBehavior shooter, ItemStack stack, Level world, LivingEntity user, int usedTicks) {
+    public boolean stop(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks) {
         ItemStack ammunition = user.itematic$getAmmunition(stack);
         if (ammunition.isEmpty()) {
             return false;
@@ -71,13 +71,13 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
         }
 
         List<ItemStack> projectiles = ProjectileWeaponItemAccessor.draw(stack, ammunition, user);
-        if (world instanceof ServerLevel serverWorld && !projectiles.isEmpty()) {
-            shooter.shoot(serverWorld, user, user.getUsedItemHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
+        if (level instanceof ServerLevel serverLevel && !projectiles.isEmpty()) {
+            shooter.shoot(serverLevel, user, user.getUsedItemHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
         }
 
         Holder<SoundEvent> shootSound = stack.get(ItematicDataComponents.SHOOTER_SHOOT_SOUND);
         if (shootSound != null) {
-            world.playSound(null, user.getX(), user.getY(), user.getZ(), shootSound.value(), SoundSource.PLAYERS, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
+            level.playSound(null, user.getX(), user.getY(), user.getZ(), shootSound.value(), SoundSource.PLAYERS, 1.0f, 1.0f / (level.getRandom().nextFloat() * 0.4f + 1.2f) + pullProgress * 0.5f);
         }
 
         if (user instanceof Player playerEntity) {

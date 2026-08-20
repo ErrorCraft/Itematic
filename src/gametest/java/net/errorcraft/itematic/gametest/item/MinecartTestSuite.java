@@ -32,7 +32,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .doesNotExist());
     }
@@ -46,7 +46,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -65,7 +65,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -84,7 +84,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -103,7 +103,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -122,7 +122,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -141,7 +141,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -160,7 +160,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -179,7 +179,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -198,7 +198,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -217,7 +217,7 @@ public class MinecartTestSuite {
             level.itematic$createStack(ItemIds.MINECART)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecart -> minecart.y(
                 y -> y.congruent(
@@ -236,7 +236,7 @@ public class MinecartTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, minecart);
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, RAIL_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, RAIL_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.MINECART)
             .existsAt(PLACED_ENTITY_POSITION, minecartEntity -> minecartEntity.test(
                 Entity::getCustomName,

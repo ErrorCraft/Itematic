@@ -23,8 +23,8 @@ public class BrushItemBehavior implements ItemBehavior<BrushItemBehavior> {
     }
 
     @Override
-    public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+    public void using(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks) {
         DUMMY.itematic$setUsedTicks(usedTicks);
-        DUMMY.onUseTick(world, user, stack, remainingUseTicks);
+        DUMMY.onUseTick(level, user, stack, remainingUseTicks);
     }
 }

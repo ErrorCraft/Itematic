@@ -119,13 +119,13 @@ public class DyeColorExtender implements DyeColorAccess {
             target = "Lnet/minecraft/world/item/DyeColor;makeCraftColorInput(Lnet/minecraft/world/item/DyeColor;Lnet/minecraft/world/item/DyeColor;)Lnet/minecraft/world/item/crafting/CraftingInput;"
         )
     )
-    private static CraftingInput newItemStackForCraftingInputUseCreateStack(DyeColor firstColor, DyeColor secondColor, ServerLevel world) {
+    private static CraftingInput newItemStackForCraftingInputUseCreateStack(DyeColor firstColor, DyeColor secondColor, ServerLevel level) {
         return CraftingInput.of(
             2,
             1,
             List.of(
-                world.itematic$createStack(firstColor.itematic$itemId()),
-                world.itematic$createStack(secondColor.itematic$itemId())
+                level.itematic$createStack(firstColor.itematic$itemId()),
+                level.itematic$createStack(secondColor.itematic$itemId())
             )
         );
     }

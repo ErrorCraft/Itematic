@@ -39,18 +39,18 @@ public record ModifyBlockStateAction(PositionTarget position, BlockItemStateProp
             return false;
         }
 
-        Level world = context.level();
-        BlockState currentState = world.getBlockState(pos);
+        Level level = context.level();
+        BlockState currentState = level.getBlockState(pos);
         BlockState newState = this.properties.apply(currentState);
         if (newState == currentState) {
             return false;
         }
 
         if (this.pushEntitiesUpwards) {
-            Block.pushEntitiesUp(currentState, newState, world, pos);
+            Block.pushEntitiesUp(currentState, newState, level, pos);
         }
 
-        world.setBlockAndUpdate(pos, newState);
+        level.setBlockAndUpdate(pos, newState);
         return true;
     }
 

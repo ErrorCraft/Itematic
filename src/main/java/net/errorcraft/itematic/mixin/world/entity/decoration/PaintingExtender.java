@@ -28,8 +28,8 @@ public abstract class PaintingExtender extends HangingEntity {
         )
     )
     @Nullable
-    private ItemEntity spawnPaintingUseId(Painting instance, ServerLevel world, ItemLike item) {
-        return this.itematic$spawnAtLocation(world, ItemIds.PAINTING);
+    private ItemEntity spawnPaintingUseId(Painting instance, ServerLevel level, ItemLike item) {
+        return this.itematic$spawnAtLocation(level, ItemIds.PAINTING);
     }
 
     @Redirect(

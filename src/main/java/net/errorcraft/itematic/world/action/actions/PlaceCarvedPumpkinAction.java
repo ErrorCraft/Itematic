@@ -35,17 +35,17 @@ public record PlaceCarvedPumpkinAction(PositionTarget position) implements Actio
             return false;
         }
 
-        Level world = context.level();
-        if (!world.isEmptyBlock(pos)) {
+        Level level = context.level();
+        if (!level.isEmptyBlock(pos)) {
             return false;
         }
 
-        if (!((CarvedPumpkinBlock) Blocks.CARVED_PUMPKIN).canSpawnGolem(world, pos)) {
+        if (!((CarvedPumpkinBlock) Blocks.CARVED_PUMPKIN).canSpawnGolem(level, pos)) {
             return false;
         }
 
-        world.setBlock(pos, Blocks.CARVED_PUMPKIN.defaultBlockState(), Block.UPDATE_ALL);
-        world.gameEvent(context.get(LootContextParams.THIS_ENTITY), GameEvent.BLOCK_PLACE, pos);
+        level.setBlock(pos, Blocks.CARVED_PUMPKIN.defaultBlockState(), Block.UPDATE_ALL);
+        level.gameEvent(context.get(LootContextParams.THIS_ENTITY), GameEvent.BLOCK_PLACE, pos);
         return true;
     }
 }

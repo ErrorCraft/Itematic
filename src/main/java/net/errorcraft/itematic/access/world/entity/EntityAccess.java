@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 
 public interface EntityAccess {
     @Nullable
-    default ItemEntity itematic$spawnAtLocation(ServerLevel world, ResourceKey<Item> key) {
+    default ItemEntity itematic$spawnAtLocation(ServerLevel level, ResourceKey<Item> item) {
         return null;
     }
 }

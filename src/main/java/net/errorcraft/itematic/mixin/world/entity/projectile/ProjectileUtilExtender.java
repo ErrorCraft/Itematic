@@ -22,14 +22,14 @@ public class ProjectileUtilExtender {
             target = "Lnet/minecraft/world/item/ArrowItem;createArrow(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/projectile/arrow/AbstractArrow;"
         )
     )
-    private static AbstractArrow createArrowUseItemBehavior(ArrowItem instance, Level world, ItemStack projectile, LivingEntity shooter, ItemStack shotFrom) {
+    private static AbstractArrow createArrowUseItemBehavior(ArrowItem instance, Level level, ItemStack projectile, LivingEntity shooter, ItemStack shotFrom) {
         Entity entity = projectile.itematic$getBehavior(ItemBehaviorType.PROJECTILE)
-            .map(projectileBehavior -> projectileBehavior.spawnEntity(world, shooter, projectile, 1.0f, 1.0f))
+            .map(projectileBehavior -> projectileBehavior.spawnEntity(level, shooter, projectile, 1.0f, 1.0f))
             .orElse(null);
         if (entity instanceof AbstractArrow abstractArrow) {
             return abstractArrow;
         }
 
-        return new Arrow(world, shooter, projectile.copyWithCount(1), shotFrom);
+        return new Arrow(level, shooter, projectile.copyWithCount(1), shotFrom);
     }
 }

@@ -31,8 +31,8 @@ public class EntityPlacer {
     }
 
     public Entity place(ActionContext context, PositionTarget position, EntitySpawnReason spawnReason) {
-        Level world = context.level();
-        if (world.isClientSide()) {
+        Level level = context.level();
+        if (level.isClientSide()) {
             return null;
         }
 
@@ -41,9 +41,9 @@ public class EntityPlacer {
             return null;
         }
 
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
         Direction side = context.get(ItematicContextKeys.SIDE);
-        BlockPos truePos = state.getCollisionShape(world, pos).isEmpty() || side == null
+        BlockPos truePos = state.getCollisionShape(level, pos).isEmpty() || side == null
             ? pos
             : pos.relative(side);
         return this.spawner.spawn(

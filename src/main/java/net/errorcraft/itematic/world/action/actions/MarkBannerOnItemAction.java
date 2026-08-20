@@ -36,8 +36,8 @@ public record MarkBannerOnItemAction(PositionTarget position) implements Action<
             return false;
         }
 
-        Level world = context.level();
-        if (!world.getBlockState(pos).is(BlockTags.BANNERS)) {
+        Level level = context.level();
+        if (!level.getBlockState(pos).is(BlockTags.BANNERS)) {
             return false;
         }
 
@@ -46,7 +46,7 @@ public record MarkBannerOnItemAction(PositionTarget position) implements Action<
             return false;
         }
 
-        MapItemSavedData state = MapItem.getSavedData(stack, world);
-        return state == null || state.toggleBanner(world, pos);
+        MapItemSavedData state = MapItem.getSavedData(stack, level);
+        return state == null || state.toggleBanner(level, pos);
     }
 }

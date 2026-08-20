@@ -113,7 +113,7 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         Equippable equippable = stack.get(DataComponents.EQUIPPABLE);
         if (equippable == null) {
             return ItemResult.PASS;
@@ -132,8 +132,8 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
             stackExchanger.exchange(success.heldItemTransformedTo());
         }
 
-        if (world instanceof ServerLevel serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld)
+        if (level instanceof ServerLevel serverLevel) {
+            ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())

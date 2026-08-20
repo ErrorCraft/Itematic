@@ -420,8 +420,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     }
 
     @Override
-    public boolean itematic$isHolding(ResourceKey<Item> key) {
-        return this.isHolding(stack -> stack.itematic$is(key));
+    public boolean itematic$isHolding(ResourceKey<Item> item) {
+        return this.isHolding(stack -> stack.itematic$is(item));
     }
 
     @Override

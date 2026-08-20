@@ -67,14 +67,14 @@ public class FluidPlacer {
             return true;
         }
 
-        Level world = this.context.level();
-        BlockState state = world.getBlockState(pos);
+        Level level = this.context.level();
+        BlockState state = level.getBlockState(pos);
         if (!(state.getBlock() instanceof LiquidBlockContainer fluidFillable)) {
             return true;
         }
 
         LivingEntity filler = this.context.get(LootContextParams.THIS_ENTITY, LivingEntity.class);
-        return !fluidFillable.canPlaceLiquid(filler, world, pos, state, this.fluid.value());
+        return !fluidFillable.canPlaceLiquid(filler, level, pos, state, this.fluid.value());
     }
 
     private boolean tryPlaceFluid(BlockPos pos) {
@@ -95,8 +95,8 @@ public class FluidPlacer {
     }
 
     private boolean tryEvaporate(BlockPos pos) {
-        Level world = this.context.level();
-        if (!world.environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, pos)) {
+        Level level = this.context.level();
+        if (!level.environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, pos)) {
             return false;
         }
 
@@ -104,16 +104,16 @@ public class FluidPlacer {
             return false;
         }
 
-        world.playSound(
+        level.playSound(
             this.context.get(LootContextParams.THIS_ENTITY),
             pos,
             SoundEvents.FIRE_EXTINGUISH,
             SoundSource.BLOCKS,
             0.5f,
-            2.6f + (world.random.nextFloat() - world.random.nextFloat()) * 0.8f
+            2.6f + (level.random.nextFloat() - level.random.nextFloat()) * 0.8f
         );
         for (int i = 0; i < 8; i++) {
-            world.addParticle(
+            level.addParticle(
                 ParticleTypes.LARGE_SMOKE,
                 pos.getX() + Math.random(),
                 pos.getY() + Math.random(),
@@ -147,12 +147,12 @@ public class FluidPlacer {
             return false;
         }
 
-        Level world = this.context.level();
+        Level level = this.context.level();
         if (!state.isAir() && !state.liquid()) {
-            world.destroyBlock(pos, true);
+            level.destroyBlock(pos, true);
         }
 
-        if (world.setBlock(pos, fluid.defaultFluidState().createLegacyBlock(), Block.UPDATE_ALL_IMMEDIATE) || state.getFluidState().isSource()) {
+        if (level.setBlock(pos, fluid.defaultFluidState().createLegacyBlock(), Block.UPDATE_ALL_IMMEDIATE) || state.getFluidState().isSource()) {
             this.playPlaceSound(pos);
             return true;
         }
@@ -165,9 +165,9 @@ public class FluidPlacer {
             return;
         }
 
-        Level world = this.context.level();
+        Level level = this.context.level();
         Entity possiblePlacer = this.context.get(LootContextParams.THIS_ENTITY);
-        world.playSound(possiblePlacer, pos, this.placeSound.value(), SoundSource.BLOCKS, 1.0f, 1.0f);
-        world.gameEvent(possiblePlacer, GameEvent.FLUID_PLACE, pos);
+        level.playSound(possiblePlacer, pos, this.placeSound.value(), SoundSource.BLOCKS, 1.0f, 1.0f);
+        level.gameEvent(possiblePlacer, GameEvent.FLUID_PLACE, pos);
     }
 }

@@ -12,7 +12,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.InteractionHand;
@@ -40,12 +39,12 @@ public record SteeringItemBehavior(Holder<EntityType<?>> target, int damagePerUs
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (world.isClientSide()) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (level.isClientSide()) {
             return ItemResult.PASS;
         }
 
-        ActionContext context = ActionContext.builder((ServerLevel) world)
+        ActionContext context = ActionContext.builder(level)
             .stackExchanger(stackExchanger)
             .add(LootContextParams.THIS_ENTITY, user)
             .add(LootContextParams.ORIGIN, user.position())

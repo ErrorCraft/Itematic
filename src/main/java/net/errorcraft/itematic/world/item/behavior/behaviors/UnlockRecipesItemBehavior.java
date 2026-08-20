@@ -30,8 +30,8 @@ public class UnlockRecipesItemBehavior implements ItemBehavior<UnlockRecipesItem
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        return DUMMY.use(world, user, hand).consumesAction() ? ItemResult.SUCCEED : ItemResult.PASS;
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        return DUMMY.use(level, user, hand).consumesAction() ? ItemResult.SUCCEED : ItemResult.PASS;
     }
 
     @Override

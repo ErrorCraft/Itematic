@@ -159,21 +159,21 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (this.isUnuseable(Pass.FLUID)) {
             return ItemResult.PASS;
         }
 
-        if (world.isClientSide()) {
+        if (level.isClientSide()) {
             return ItemResult.SUCCEED;
         }
 
-        BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
+        BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(level, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
         }
 
-        UseOnContext itemUsageContext = new UseOnContext(world, user, hand, stack, blockHitResult);
+        UseOnContext itemUsageContext = new UseOnContext(level, user, hand, stack, blockHitResult);
         this.modifyOrPlace(itemUsageContext, stackExchanger);
         return ItemResult.CONSUME;
     }
@@ -224,8 +224,8 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     }
 
     private boolean tryModifyOrPlace(UseOnContext context, ItemStackExchanger stackExchanger) {
-        Level world = context.getLevel();
-        if (world.isClientSide()) {
+        Level level = context.getLevel();
+        if (level.isClientSide()) {
             return false;
         }
 
@@ -233,7 +233,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
             return true;
         }
 
-        ActionContext actionContext = ActionContext.builder(world)
+        ActionContext actionContext = ActionContext.builder(level)
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, context.getPlayer())
             .addOptional(LootContextParams.ORIGIN, context.getPlayer(), Entity::position)
@@ -251,27 +251,27 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
         }
 
         BlockPos pos = context.getClickedPos();
-        Level world = context.getLevel();
-        BlockState state = world.getBlockState(pos);
+        Level level = context.getLevel();
+        BlockState state = level.getBlockState(pos);
         if (!state.is(Blocks.SPAWNER)) {
             return false;
         }
 
-        Optional<SpawnerBlockEntity> blockEntity = world.getBlockEntity(pos, BlockEntityType.MOB_SPAWNER);
+        Optional<SpawnerBlockEntity> blockEntity = level.getBlockEntity(pos, BlockEntityType.MOB_SPAWNER);
         if (blockEntity.isEmpty()) {
             return false;
         }
 
-        this.modifySpawner(context, world, blockEntity.get(), pos, state);
+        this.modifySpawner(context, level, blockEntity.get(), pos, state);
         return true;
     }
 
-    private void modifySpawner(UseOnContext context, Level world, SpawnerBlockEntity blockEntity, BlockPos pos, BlockState state) {
+    private void modifySpawner(UseOnContext context, Level level, SpawnerBlockEntity blockEntity, BlockPos pos, BlockState state) {
         EntityType<?> type = this.entity.entityType(context.getItemInHand());
-        blockEntity.setEntityId(type, world.getRandom());
+        blockEntity.setEntityId(type, level.getRandom());
         blockEntity.setChanged();
-        world.sendBlockUpdated(pos, state, state, Block.UPDATE_ALL);
-        world.gameEvent(
+        level.sendBlockUpdated(pos, state, state, Block.UPDATE_ALL);
+        level.gameEvent(
             context.getPlayer(),
             GameEvent.BLOCK_CHANGE,
             pos

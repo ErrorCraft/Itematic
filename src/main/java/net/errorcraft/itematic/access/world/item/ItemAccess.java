@@ -49,7 +49,7 @@ public interface ItemAccess {
         return false;
     }
     default void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag tooltipFlag) {}
-    default boolean itematic$mayStartUsing(Level world, Player user, InteractionHand hand, ItemStack stack) {
+    default boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
         return true;
     }
 }

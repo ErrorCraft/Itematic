@@ -34,8 +34,8 @@ public abstract class LevelExtender implements LevelReaderAccess, LevelAccess {
         method = "<init>",
         at = @At("TAIL")
     )
-    private void constructorSetItemAccess(WritableLevelData properties, ResourceKey<Level> registryRef, RegistryAccess registryManager, Holder<DimensionType> dimensionEntry, boolean isClient, boolean debugWorld, long seed, int maxChainedNeighborUpdates, CallbackInfo info) {
-        this.itemAccess = new ItemAccess(registryManager);
+    private void constructorSetItemAccess(WritableLevelData levelData, ResourceKey<Level> dimension, RegistryAccess registryAccess, Holder<DimensionType> dimensionTypeRegistration, boolean isClientSide, boolean isDebug, long biomeZoomSeed, int maxChainedNeighborUpdates, CallbackInfo info) {
+        this.itemAccess = new ItemAccess(registryAccess);
     }
 
     @Override

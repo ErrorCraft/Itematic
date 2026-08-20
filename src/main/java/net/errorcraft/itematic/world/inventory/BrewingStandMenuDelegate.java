@@ -50,13 +50,13 @@ public class BrewingStandMenuDelegate extends RecipeBookMenu {
 
     @Override
     @SuppressWarnings("unchecked")
-    public PostPlaceAction handlePlacement(boolean craftAll, boolean creative, RecipeHolder<?> recipe, ServerLevel world, Inventory inventory) {
+    public PostPlaceAction handlePlacement(boolean craftAll, boolean creative, RecipeHolder<?> recipe, ServerLevel level, Inventory inventory) {
         final List<Slot> slots = List.of(
             this.getSlot(FIRST_INPUT_SLOT),
             this.getSlot(INGREDIENT_SLOT)
         );
         return ServerPlaceRecipe.placeRecipe(
-            new BrewingRecipeHandler(slots, world),
+            new BrewingRecipeCraftingMenuAccess(slots, level),
             1,
             2,
             List.of(
@@ -228,13 +228,13 @@ public class BrewingStandMenuDelegate extends RecipeBookMenu {
         return this.delegate.incrementStateId();
     }
 
-    private class BrewingRecipeHandler implements ServerPlaceRecipe.CraftingMenuAccess<BrewingRecipe<?>> {
+    private class BrewingRecipeCraftingMenuAccess implements ServerPlaceRecipe.CraftingMenuAccess<BrewingRecipe<?>> {
         private final List<Slot> slots;
-        private final ServerLevel world;
+        private final ServerLevel level;
 
-        private BrewingRecipeHandler(List<Slot> slots, ServerLevel world) {
+        private BrewingRecipeCraftingMenuAccess(List<Slot> slots, ServerLevel level) {
             this.slots = slots;
-            this.world = world;
+            this.level = level;
         }
 
         @Override
@@ -253,7 +253,7 @@ public class BrewingStandMenuDelegate extends RecipeBookMenu {
                 BrewingStandMenuDelegate.this.inventory.getItem(FIRST_INPUT_SLOT),
                 BrewingStandMenuDelegate.this.inventory.getItem(INGREDIENT_SLOT)
             );
-            return entry.value().matches(input, this.world);
+            return entry.value().matches(input, this.level);
         }
     }
 }

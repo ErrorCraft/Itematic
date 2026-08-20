@@ -22,20 +22,25 @@ public class EntityItemComponentTestSuite {
         ServerLevel level = helper.getLevel();
         ItemStack oakBoat = level.itematic$createStack(ItemIds.OAK_BOAT);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, oakBoat);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.OAK_BOAT)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, oakBoat, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> helper.assertEntityPresent(EntityType.OAK_BOAT, PLACED_ENTITY_POSITION));
     }
 
     @GameTest(structure = "itematic:item.component.entity.platform")
     public void usingPigSpawnEggOnGroundPlacesPig(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack pigSpawnEgg = level.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.PIG_SPAWN_EGG)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, pigSpawnEgg, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> helper.assertEntityPresent(EntityType.PIG, PLACED_ENTITY_POSITION));
     }
 }

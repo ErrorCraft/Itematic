@@ -10,7 +10,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CandleBlock;
@@ -22,11 +21,13 @@ public class CandleBlockTestSuite {
     @GameTest(structure = "itematic:block.white_candle")
     public void usingSameCandleOnCandleBlockIncreasesCandles(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack whiteCandle = level.itematic$createStack(ItemIds.WHITE_CANDLE);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, whiteCandle);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.WHITE_CANDLE)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, whiteCandle, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .hasProperty(CandleBlock.CANDLES, 2));
     }
@@ -34,11 +35,13 @@ public class CandleBlockTestSuite {
     @GameTest(structure = "itematic:block.white_candle")
     public void usingDifferentlyColoredCandleOnCandleBlockDoesNotReplaceBlock(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack whiteCandle = level.itematic$createStack(ItemIds.WHITE_CANDLE);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, whiteCandle);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.WHITE_CANDLE)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, whiteCandle, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.WHITE_CANDLE));
     }

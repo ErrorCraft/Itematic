@@ -35,17 +35,17 @@ public class FireworkItemBehavior implements ItemBehavior<FireworkItemBehavior> 
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (!user.isFallFlying()) {
             return ItemResult.PASS;
         }
 
-        if (world.isClientSide()) {
+        if (level.isClientSide()) {
             return ItemResult.SUCCEED;
         }
 
-        FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(world, stack, user);
-        world.addFreshEntity(fireworkRocketEntity);
+        FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(level, stack, user);
+        level.addFreshEntity(fireworkRocketEntity);
         stack.consume(1, user);
         user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
         return ItemResult.CONSUME;
@@ -58,14 +58,14 @@ public class FireworkItemBehavior implements ItemBehavior<FireworkItemBehavior> 
             return ItemResult.PASS;
         }
 
-        Level world = context.getLevel();
+        Level level = context.getLevel();
         ItemStack stack = context.getItemInHand();
-        if (world.isClientSide()) {
+        if (level.isClientSide()) {
             return ItemResult.SUCCEED;
         }
 
-        FireworkRocketEntity entity = createFireworkEntity(world, stack, context);
-        world.addFreshEntity(entity);
+        FireworkRocketEntity entity = createFireworkEntity(level, stack, context);
+        level.addFreshEntity(entity);
         stack.shrink(1);
         return ItemResult.CONSUME;
     }
@@ -75,13 +75,13 @@ public class FireworkItemBehavior implements ItemBehavior<FireworkItemBehavior> 
         builder.set(DataComponents.FIREWORKS, DEFAULT_DATA_COMPONENT);
     }
 
-    private static FireworkRocketEntity createFireworkEntity(Level world, ItemStack stack, UseOnContext context) {
+    private static FireworkRocketEntity createFireworkEntity(Level level, ItemStack stack, UseOnContext context) {
         Direction direction = context.getClickedFace();
         Vec3 position = context.getClickLocation().add(
             direction.getStepX() * FireworkRocketItem.ROCKET_PLACEMENT_OFFSET,
             direction.getStepY() * FireworkRocketItem.ROCKET_PLACEMENT_OFFSET,
             direction.getStepZ() * FireworkRocketItem.ROCKET_PLACEMENT_OFFSET
         );
-        return new FireworkRocketEntity(world, context.getPlayer(), position.x(), position.y(), position.z(), stack);
+        return new FireworkRocketEntity(level, context.getPlayer(), position.x(), position.y(), position.z(), stack);
     }
 }

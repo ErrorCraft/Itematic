@@ -39,15 +39,15 @@ public record FoodItemBehavior(int nutrition, float saturation, boolean alwaysEd
     }
 
     @Override
-    public void finishUsing(Level world, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
+    public void finishUsing(Level level, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
         FoodProperties food = stack.get(DataComponents.FOOD);
         if (user instanceof Player player) {
             player.getFoodData().eat(food);
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5f, Mth.randomBetween(user.getRandom(), 0.9f, 1.0f));
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5f, Mth.randomBetween(user.getRandom(), 0.9f, 1.0f));
         }
 
-        if (world instanceof ServerLevel serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld)
+        if (level instanceof ServerLevel serverLevel) {
+            ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())

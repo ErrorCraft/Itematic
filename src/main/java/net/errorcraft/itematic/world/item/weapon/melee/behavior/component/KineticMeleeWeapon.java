@@ -24,8 +24,8 @@ public record KineticMeleeWeapon(KineticWeapon kineticWeapon) implements MeleeWe
         builder.set(DataComponents.KINETIC_WEAPON, this.kineticWeapon);
     }
 
-    public void hold(ItemStack stack, Level world, LivingEntity user, int usedTicks) {
-        if (world.isClientSide()) {
+    public void hold(ItemStack stack, Level level, LivingEntity user, int usedTicks) {
+        if (level.isClientSide()) {
             return;
         }
 

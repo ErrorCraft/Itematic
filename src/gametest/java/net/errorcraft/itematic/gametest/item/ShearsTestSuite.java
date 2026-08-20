@@ -14,7 +14,6 @@ import net.minecraft.world.entity.animal.equine.Horse;
 import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 
 public class ShearsTestSuite {
@@ -24,8 +23,10 @@ public class ShearsTestSuite {
     public void usingShearsOnSaddledPigRemovesSaddle(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
-        player.setItemInHand(InteractionHand.MAIN_HAND, shears);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SHEARS)
+        );
         Pig target = helper.spawn(EntityType.PIG, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.SADDLE, level.itematic$createStack(ItemIds.SADDLE));
         helper.succeedIf(() -> {
@@ -35,7 +36,7 @@ public class ShearsTestSuite {
                 result.consumesAction(),
                 () -> "Expected Shears usage on Pig to be successful"
             );
-            Assert.itemStack(helper, shears)
+            Assert.itemStack(helper, player.getMainHandItem())
                 .isDamaged();
             Assert.isFalse(
                 helper,
@@ -55,8 +56,10 @@ public class ShearsTestSuite {
     public void usingShearsOnSaddledHorseRemovesSaddle(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
-        player.setItemInHand(InteractionHand.MAIN_HAND, shears);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SHEARS)
+        );
         Horse target = helper.spawn(EntityType.HORSE, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.SADDLE, level.itematic$createStack(ItemIds.SADDLE));
         helper.succeedIf(() -> {
@@ -66,7 +69,7 @@ public class ShearsTestSuite {
                 result.consumesAction(),
                 () -> "Expected Shears usage on Horse to be successful"
             );
-            Assert.itemStack(helper, shears)
+            Assert.itemStack(helper, player.getMainHandItem())
                 .isDamaged();
             Assert.isFalse(
                 helper,
@@ -86,8 +89,10 @@ public class ShearsTestSuite {
     public void usingShearsOnHorseWithHorseArmorRemovesHorseArmor(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
-        player.setItemInHand(InteractionHand.MAIN_HAND, shears);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SHEARS)
+        );
         Horse target = helper.spawn(EntityType.HORSE, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.IRON_HORSE_ARMOR));
         helper.succeedIf(() -> {
@@ -97,7 +102,7 @@ public class ShearsTestSuite {
                 result.consumesAction(),
                 () -> "Expected Shears usage on Horse to be successful"
             );
-            Assert.itemStack(helper, shears)
+            Assert.itemStack(helper, player.getMainHandItem())
                 .isDamaged();
             Assert.isFalse(
                 helper,
@@ -117,8 +122,10 @@ public class ShearsTestSuite {
     public void usingShearsOnWolfWithCorrectOwnerRemovesWolfArmor(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
-        player.setItemInHand(InteractionHand.MAIN_HAND, shears);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SHEARS)
+        );
         Wolf target = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.WOLF_ARMOR));
         target.setOwner(player);
@@ -129,7 +136,7 @@ public class ShearsTestSuite {
                 result.consumesAction(),
                 () -> "Expected Shears usage on Wolf to be successful"
             );
-            Assert.itemStack(helper, shears)
+            Assert.itemStack(helper, player.getMainHandItem())
                 .isDamaged();
             Assert.isFalse(
                 helper,
@@ -149,8 +156,10 @@ public class ShearsTestSuite {
     public void usingShearsOnWolfWithIncorrectOwnerDoesNotRemoveWolfArmor(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        ItemStack shears = level.itematic$createStack(ItemIds.SHEARS);
-        player.setItemInHand(InteractionHand.MAIN_HAND, shears);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SHEARS)
+        );
         Wolf target = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.WOLF_ARMOR));
         helper.succeedIf(() -> {
@@ -160,7 +169,7 @@ public class ShearsTestSuite {
                 result.consumesAction(),
                 () -> "Expected Shears usage on Wolf to be unsuccessful"
             );
-            Assert.itemStack(helper, shears)
+            Assert.itemStack(helper, player.getMainHandItem())
                 .isNotDamaged();
             Assert.isTrue(
                 helper,

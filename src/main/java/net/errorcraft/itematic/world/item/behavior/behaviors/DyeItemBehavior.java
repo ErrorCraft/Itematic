@@ -31,13 +31,13 @@ public record DyeItemBehavior(DyeColor color) implements ItemBehavior<DyeItemBeh
 
     @Override
     public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
-        if (!(context.getLevel() instanceof ServerLevel world)) {
+        if (!(context.getLevel() instanceof ServerLevel level)) {
             return ItemResult.SUCCEED;
         }
 
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
-        ActionContext actionContext = ActionContext.builder(world)
+        ActionContext actionContext = ActionContext.builder(level)
             .possibleStackExchanger(player, stack)
             .addOptional(LootContextParams.THIS_ENTITY, player)
             .addOptional(LootContextParams.ORIGIN, player, Entity::position)

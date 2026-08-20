@@ -34,26 +34,26 @@ public record TeleportAction(int distance, LootContext.EntityTarget entity) impl
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.level() instanceof ServerLevel world)) {
+        if (!(context.level() instanceof ServerLevel level)) {
             return false;
         }
 
         Entity entity = context.get(this.entity.contextParam());
         if (entity instanceof LivingEntity target) {
-            return this.teleport(target, world);
+            return this.teleport(target, level);
         }
 
         return false;
     }
 
-    private boolean teleport(LivingEntity target, ServerLevel world) {
+    private boolean teleport(LivingEntity target, ServerLevel level) {
         Vec3 position = target.position();
         for (int i = 0; i < MAX_TELEPORT_ATTEMPTS; i++) {
             double newX = position.x() + (target.getRandom().nextDouble() - 0.5d) * this.distance;
             double newY = Math.clamp(
                 position.y() + (target.getRandom().nextDouble() - 0.5d) * this.distance,
-                world.getMinY(),
-                world.getMinY() + world.getLogicalHeight() - 1
+                level.getMinY(),
+                level.getMinY() + level.getLogicalHeight() - 1
             );
             double newZ = position.z() + (target.getRandom().nextDouble() - 0.5d) * this.distance;
             if (target.isPassenger()) {
@@ -61,7 +61,7 @@ public record TeleportAction(int distance, LootContext.EntityTarget entity) impl
             }
 
             if (target.randomTeleport(newX, newY, newZ, true)) {
-                teleported(target, world, position);
+                teleported(target, level, position);
                 return true;
             }
         }
@@ -69,10 +69,10 @@ public record TeleportAction(int distance, LootContext.EntityTarget entity) impl
         return false;
     }
 
-    private static void teleported(LivingEntity target, ServerLevel world, Vec3 position) {
-        world.gameEvent(GameEvent.TELEPORT, position, GameEvent.Context.of(target));
+    private static void teleported(LivingEntity target, ServerLevel level, Vec3 position) {
+        level.gameEvent(GameEvent.TELEPORT, position, GameEvent.Context.of(target));
         SoundEvent soundEvent = soundEvent(target);
-        world.itematic$playSound(null, position, soundEvent, target.getSoundSource(), 1.0f, 1.0f);
+        level.itematic$playSound(null, position, soundEvent, target.getSoundSource(), 1.0f, 1.0f);
         target.playSound(soundEvent, 1.0f, 1.0f);
         target.resetFallDistance();
     }

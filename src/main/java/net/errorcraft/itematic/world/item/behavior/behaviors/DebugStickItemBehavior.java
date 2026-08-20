@@ -35,8 +35,8 @@ public class DebugStickItemBehavior implements ItemBehavior<DebugStickItemBehavi
 
     @Override
     public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
-        Level world = context.getLevel();
-        if (world.isClientSide()) {
+        Level level = context.getLevel();
+        if (level.isClientSide()) {
             return ItemResult.PASS;
         }
 
@@ -46,7 +46,7 @@ public class DebugStickItemBehavior implements ItemBehavior<DebugStickItemBehavi
         }
 
         BlockPos pos = context.getClickedPos();
-        if (!DUMMY.itematic$handleInteraction(player, world.getBlockState(pos), world, pos, true, context.getItemInHand())) {
+        if (!DUMMY.itematic$handleInteraction(player, level.getBlockState(pos), level, pos, true, context.getItemInHand())) {
             return ItemResult.PASS;
         }
 
@@ -58,9 +58,9 @@ public class DebugStickItemBehavior implements ItemBehavior<DebugStickItemBehavi
         builder.set(DataComponents.DEBUG_STICK_STATE, DebugStickState.EMPTY);
     }
 
-    public void use(LivingEntity user, BlockState state, LevelAccessor world, BlockPos pos, ItemStack stack) {
-        if (!world.isClientSide() && user instanceof Player playerUser) {
-            DUMMY.itematic$handleInteraction(playerUser, state, world, pos, false, stack);
+    public void use(LivingEntity user, BlockState state, LevelAccessor level, BlockPos pos, ItemStack stack) {
+        if (!level.isClientSide() && user instanceof Player playerUser) {
+            DUMMY.itematic$handleInteraction(playerUser, state, level, pos, false, stack);
         }
     }
 }

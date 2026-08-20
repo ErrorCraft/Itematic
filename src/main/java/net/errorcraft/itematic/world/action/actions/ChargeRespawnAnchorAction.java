@@ -34,8 +34,8 @@ public record ChargeRespawnAnchorAction(PositionTarget position) implements Acti
             return false;
         }
 
-        Level world = context.level();
-        BlockState state = world.getBlockState(pos);
+        Level level = context.level();
+        BlockState state = level.getBlockState(pos);
         if (!state.is(Blocks.RESPAWN_ANCHOR)) {
             return false;
         }
@@ -44,7 +44,7 @@ public record ChargeRespawnAnchorAction(PositionTarget position) implements Acti
             return false;
         }
 
-        RespawnAnchorBlock.charge(context.get(LootContextParams.THIS_ENTITY), world, pos, state);
+        RespawnAnchorBlock.charge(context.get(LootContextParams.THIS_ENTITY), level, pos, state);
         return true;
     }
 }

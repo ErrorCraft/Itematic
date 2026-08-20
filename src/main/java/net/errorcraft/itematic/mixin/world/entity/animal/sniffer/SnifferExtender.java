@@ -29,8 +29,8 @@ public abstract class SnifferExtender extends MobExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForSnifferEggUseCreateStack(ItemLike item, ServerLevel world) {
-        return world.itematic$createStack(ItemIds.SNIFFER_EGG);
+    private ItemStack newItemStackForSnifferEggUseCreateStack(ItemLike item, ServerLevel level) {
+        return level.itematic$createStack(ItemIds.SNIFFER_EGG);
     }
 
     @Override

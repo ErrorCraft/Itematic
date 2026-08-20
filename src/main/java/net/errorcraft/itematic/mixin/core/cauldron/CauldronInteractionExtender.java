@@ -49,8 +49,8 @@ public interface CauldronInteractionExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack transmuteCopyForShulkerBoxUseHolder(ItemStack instance, ItemLike item, int count, @Local(argsOnly = true) Level world) {
-        return instance.itematic$transmuteCopy(world.itematic$getItem(ItemIds.SHULKER_BOX), count);
+    private static ItemStack transmuteCopyForShulkerBoxUseHolder(ItemStack instance, ItemLike item, int count, @Local(argsOnly = true) Level level) {
+        return instance.itematic$transmuteCopy(level.itematic$getItem(ItemIds.SHULKER_BOX), count);
     }
 
     @Redirect(
@@ -74,8 +74,8 @@ public interface CauldronInteractionExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemIds.GLASS_BOTTLE);
+    private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+        return level.itematic$createStack(ItemIds.GLASS_BOTTLE);
     }
 
     @Redirect(
@@ -85,8 +85,8 @@ public interface CauldronInteractionExtender {
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion, @Local(argsOnly = true) Level world) {
-        return PotionContentsUtil.setPotion(world.itematic$createStack(ItemIds.POTION), potion);
+    private static ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion, @Local(argsOnly = true) Level level) {
+        return PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), potion);
     }
 
     @Redirect(
@@ -96,8 +96,8 @@ public interface CauldronInteractionExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemIds.WATER_BUCKET);
+    private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+        return level.itematic$createStack(ItemIds.WATER_BUCKET);
     }
 
     @Redirect(
@@ -107,8 +107,8 @@ public interface CauldronInteractionExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemIds.LAVA_BUCKET);
+    private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+        return level.itematic$createStack(ItemIds.LAVA_BUCKET);
     }
 
     @Redirect(
@@ -118,8 +118,8 @@ public interface CauldronInteractionExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
+    private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+        return level.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
     }
 
     @Redirect(
@@ -129,8 +129,8 @@ public interface CauldronInteractionExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level world) {
-        return world.itematic$createStack(ItemIds.BUCKET);
+    private static ItemStack newItemStackForBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+        return level.itematic$createStack(ItemIds.BUCKET);
     }
 
     @ModifyArg(

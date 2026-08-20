@@ -62,17 +62,17 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (stack.getUseDuration(user) != UseDuration.NONE) {
             return ItemResult.PASS;
         }
 
-        this.consume(user, stack, stackExchanger, world, hand);
+        this.consume(user, stack, stackExchanger, level, hand);
         return ItemResult.CONSUME;
     }
 
     @Override
-    public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+    public void using(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks) {
         Consumable consumable = stack.get(DataComponents.CONSUMABLE);
         if (consumable != null && shouldSpawnParticlesAndPlaySounds(usedTicks, remainingUseTicks)) {
             consumable.emitParticlesAndSounds(user.getRandom(), user, stack, 5);

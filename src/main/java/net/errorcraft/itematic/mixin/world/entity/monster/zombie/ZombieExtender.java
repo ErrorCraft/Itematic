@@ -53,12 +53,12 @@ public abstract class ZombieExtender extends MobExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseCreateStack(ItemLike item, ServerLevelAccessor world, @Share("jackOLanternChance") LocalFloatRef jackOLanternChance) {
+    private ItemStack newItemStackUseCreateStack(ItemLike item, ServerLevelAccessor level, @Share("jackOLanternChance") LocalFloatRef jackOLanternChance) {
         if (jackOLanternChance.get() < 0.1f) {
-            return world.itematic$createStack(ItemIds.JACK_O_LANTERN);
+            return level.itematic$createStack(ItemIds.JACK_O_LANTERN);
         }
 
-        return world.itematic$createStack(ItemIds.CARVED_PUMPKIN);
+        return level.itematic$createStack(ItemIds.CARVED_PUMPKIN);
     }
 
     @Redirect(

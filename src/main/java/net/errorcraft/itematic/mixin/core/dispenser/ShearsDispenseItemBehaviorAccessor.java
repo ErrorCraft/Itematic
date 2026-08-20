@@ -10,12 +10,12 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(ShearsDispenseItemBehavior.class)
 public interface ShearsDispenseItemBehaviorAccessor {
     @Invoker("tryShearBeehive")
-    static boolean tryShearBeehive(ServerLevel world, ItemStack itemStack, BlockPos blockPos) {
+    static boolean tryShearBeehive(ServerLevel level, ItemStack tool, BlockPos pos) {
         throw new AssertionError();
     }
 
     @Invoker("tryShearEntity")
-    static boolean tryShearEntity(ServerLevel world, BlockPos pos, ItemStack shears) {
+    static boolean tryShearEntity(ServerLevel level, BlockPos pos, ItemStack tool) {
         throw new AssertionError();
     }
 }

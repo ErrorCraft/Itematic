@@ -29,8 +29,8 @@ public abstract class ZombieHorseExtender extends MobExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForIronSpearUseCreateStack(ItemLike item, ServerLevelAccessor world) {
-        return world.itematic$createStack(ItemIds.IRON_SPEAR);
+    private ItemStack newItemStackForIronSpearUseCreateStack(ItemLike item, ServerLevelAccessor level) {
+        return level.itematic$createStack(ItemIds.IRON_SPEAR);
     }
 
     @Override

@@ -61,7 +61,7 @@ public abstract class BrewingRecipe<T> implements Recipe<BrewingRecipeInput>, Re
     }
 
     @Override
-    public boolean matches(BrewingRecipeInput input, Level world) {
+    public boolean matches(BrewingRecipeInput input, Level level) {
         return this.reagent.test(input.reagent()) && this.matches(input.base());
     }
 

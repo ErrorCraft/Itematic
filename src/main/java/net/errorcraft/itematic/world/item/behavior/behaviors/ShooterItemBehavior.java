@@ -67,8 +67,8 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (this.method.tryShoot(this, stack, world, user, hand)) {
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (this.method.tryShoot(this, stack, level, user, hand)) {
             return ItemResult.CONSUME;
         }
 
@@ -76,13 +76,13 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
     }
 
     @Override
-    public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
-        this.method.hold(this, stack, world, user, usedTicks);
+    public void using(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks) {
+        this.method.hold(this, stack, level, user, usedTicks);
     }
 
     @Override
-    public boolean stopUsing(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
-        return this.method.stop(this, stack, world, user, usedTicks);
+    public boolean stopUsing(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
+        return this.method.stop(this, stack, level, user, usedTicks);
     }
 
     @Override
@@ -97,8 +97,8 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
         return this.method.type() == type;
     }
 
-    public void shoot(ServerLevel world, LivingEntity shooter, InteractionHand hand, ItemStack shooterStack, List<ItemStack> projectiles, float power, float divergence, boolean critical, @Nullable LivingEntity target) {
-        float maxAngle = EnchantmentHelper.processProjectileSpread(world, shooterStack, shooter, 0.0f);
+    public void shoot(ServerLevel level, LivingEntity shooter, InteractionHand hand, ItemStack shooterStack, List<ItemStack> projectiles, float power, float divergence, boolean critical, @Nullable LivingEntity target) {
+        float maxAngle = EnchantmentHelper.processProjectileSpread(level, shooterStack, shooter, 0.0f);
         float angleStep = projectiles.size() == 1 ?
             0.0f :
             2.0f * maxAngle / (projectiles.size() - 1);
@@ -112,8 +112,8 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
 
             float angle = angleOffset + direction * ((i + 1) / 2.0f) * angleStep;
             direction *= -1;
-            this.damageItem(shooterStack, world, hand, shooter);
-            this.createProjectile(projectile, world, shooter, power, divergence, angle, i, critical, target);
+            this.damageItem(shooterStack, level, hand, shooter);
+            this.createProjectile(projectile, level, shooter, power, divergence, angle, i, critical, target);
         }
     }
 
@@ -121,7 +121,7 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
         return this.method.useDuration(stack, user);
     }
 
-    private void damageItem(ItemStack stack, ServerLevel world, InteractionHand hand, LivingEntity shooter) {
+    private void damageItem(ItemStack stack, ServerLevel level, InteractionHand hand, LivingEntity shooter) {
         ItemDamageRules rules = stack.get(ItematicDataComponents.SHOOTER_DAMAGE_RULES);
         if (rules == null) {
             return;
@@ -132,7 +132,7 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
             return;
         }
 
-        ActionContext context = ActionContext.builder(world)
+        ActionContext context = ActionContext.builder(level)
             .stackExchanger(shooter, stack)
             .add(LootContextParams.THIS_ENTITY, shooter)
             .add(LootContextParams.ORIGIN, shooter.position())
@@ -142,9 +142,9 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
         stack.itematic$damage(damage, context);
     }
 
-    private void createProjectile(ItemStack projectile, ServerLevel world, LivingEntity shooter, float power, float divergence, float angle, int index, boolean critical, @Nullable LivingEntity target) {
+    private void createProjectile(ItemStack projectile, ServerLevel level, LivingEntity shooter, float power, float divergence, float angle, int index, boolean critical, @Nullable LivingEntity target) {
         Optional<Entity> optionalEntity = projectile.itematic$getBehavior(ItemBehaviorType.PROJECTILE)
-            .map(projectileComponent -> projectileComponent.spawnEntity(world, shooter, projectile, 0.0f, power));
+            .map(projectileComponent -> projectileComponent.spawnEntity(level, shooter, projectile, 0.0f, power));
         if (optionalEntity.isEmpty()) {
             return;
         }

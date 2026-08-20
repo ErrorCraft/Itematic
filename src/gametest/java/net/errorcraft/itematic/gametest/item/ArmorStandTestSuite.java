@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 
 public class ArmorStandTestSuite {
@@ -24,11 +23,13 @@ public class ArmorStandTestSuite {
     @GameTest(structure = "itematic:item.armor_stand.platform")
     public void usingArmorStandOnGroundPlacesArmorStand(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack stack = level.itematic$createStack(ItemIds.ARMOR_STAND);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.ARMOR_STAND)
+        );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
             .existsAt(PLACED_ENTITY_POSITION));
     }
@@ -42,7 +43,7 @@ public class ArmorStandTestSuite {
             level.itematic$createStack(ItemIds.ARMOR_STAND)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, HIGH_POSITION, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, HIGH_POSITION, player, Direction.DOWN);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
             .doesNotExist());
     }
@@ -56,7 +57,7 @@ public class ArmorStandTestSuite {
             level.itematic$createStack(ItemIds.ARMOR_STAND)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
             .doesNotExist());
     }
@@ -71,7 +72,7 @@ public class ArmorStandTestSuite {
         );
         player.setYRot(USER_ANGLE);
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
             .existsAt(
                 PLACED_ENTITY_POSITION,

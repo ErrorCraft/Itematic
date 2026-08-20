@@ -28,7 +28,7 @@ public record VillagerPredicate(HolderSet<VillagerType> variant) implements Enti
     }
 
     @Override
-    public boolean matches(Entity entity, ServerLevel world, @Nullable Vec3 pos) {
+    public boolean matches(Entity entity, ServerLevel level, @Nullable Vec3 pos) {
         if (entity instanceof VillagerDataHolder villagerDataHolder) {
             return this.variant.contains(villagerDataHolder.getVillagerData().type());
         }

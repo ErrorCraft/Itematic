@@ -30,17 +30,17 @@ public record SetBlockStateAction(PositionTarget position, BlockState state) imp
 
     @Override
     public boolean execute(ActionContext context) {
-        Level world = context.level();
+        Level level = context.level();
         BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        if (!world.setBlock(pos, this.state, Block.UPDATE_ALL_IMMEDIATE)) {
+        if (!level.setBlock(pos, this.state, Block.UPDATE_ALL_IMMEDIATE)) {
             return false;
         }
 
-        world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(this.state));
+        level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(this.state));
         return true;
     }
 }

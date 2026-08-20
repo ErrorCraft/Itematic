@@ -35,8 +35,8 @@ public class FluidDrainer {
             return null;
         }
 
-        Level world = this.context.level();
-        BlockState state = world.getBlockState(pos);
+        Level level = this.context.level();
+        BlockState state = level.getBlockState(pos);
         if (!(state.getBlock() instanceof BucketPickup fluidDrainable)) {
             return null;
         }
@@ -44,7 +44,7 @@ public class FluidDrainer {
         Entity placer = this.context.get(LootContextParams.THIS_ENTITY);
         ItemStack drainedItemStack = fluidDrainable.pickupBlock(
             placer instanceof LivingEntity livingPlacer ? livingPlacer : null,
-            world,
+            level,
             pos,
             state
         );
@@ -56,7 +56,7 @@ public class FluidDrainer {
             this.applyPlayerEffects(playerPlacer, fluidDrainable, drainedItemStack);
         }
 
-        world.gameEvent(placer, GameEvent.FLUID_PICKUP, pos);
+        level.gameEvent(placer, GameEvent.FLUID_PICKUP, pos);
         return drainedItemStack;
     }
 

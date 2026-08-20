@@ -68,13 +68,13 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
             return false;
         }
 
-        Level world = context.level();
-        RandomSource random = world.getRandom();
+        Level level = context.level();
+        RandomSource random = level.getRandom();
         float volume = this.volume.get(random);
         float pitch = this.pitch.get(random);
         long seed = random.nextLong();
         if (this.fromEntity && entity != null) {
-            world.playSeededSound(null, entity, this.sound, category, volume, pitch, seed);
+            level.playSeededSound(null, entity, this.sound, category, volume, pitch, seed);
             return true;
         }
 
@@ -83,7 +83,7 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
             return false;
         }
 
-        world.playSeededSound(null, pos.x(), pos.y(), pos.z(), this.sound, category, volume, pitch, seed);
+        level.playSeededSound(null, pos.x(), pos.y(), pos.z(), this.sound, category, volume, pitch, seed);
         return true;
     }
 

@@ -17,12 +17,12 @@ public class ItemAccess {
         this.registry = registryAccess.lookupOrThrow(Registries.ITEM);
     }
 
-    public Holder.Reference<Item> getOrThrow(ResourceKey<Item> key) {
-        return this.registry.getOrThrow(key);
+    public Holder.Reference<Item> getOrThrow(ResourceKey<Item> item) {
+        return this.registry.getOrThrow(item);
     }
 
-    public Optional<Holder.Reference<Item>> get(ResourceKey<Item> key) {
-        return this.registry.get(key);
+    public Optional<Holder.Reference<Item>> get(ResourceKey<Item> item) {
+        return this.registry.get(item);
     }
 
     public Iterable<Holder<Item>> iterateTag(TagKey<Item> tag) {

@@ -32,7 +32,7 @@ public class ItemFrameTestSuite {
             level.itematic$createStack(ItemIds.ITEM_FRAME)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.ITEM_FRAME)
             .existsAt(ITEM_FRAME_POSITION));
     }
@@ -59,7 +59,7 @@ public class ItemFrameTestSuite {
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, itemFrame);
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.entityType(helper, EntityType.ITEM_FRAME)
             .existsAt(ITEM_FRAME_POSITION, itemFrameAssert -> itemFrameAssert.test(
                 ItemFrame::getItem,

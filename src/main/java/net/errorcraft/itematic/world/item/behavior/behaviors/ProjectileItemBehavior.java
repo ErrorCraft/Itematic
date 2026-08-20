@@ -43,12 +43,12 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
         return ItemBehaviorType.PROJECTILE;
     }
 
-    public Entity spawnEntity(Level world, LivingEntity user, ItemStack stack, float angleOffset, float speed) {
-        if (world.isClientSide()) {
+    public Entity spawnEntity(Level level, LivingEntity user, ItemStack stack, float angleOffset, float speed) {
+        if (level.isClientSide()) {
             return null;
         }
 
-        ActionContext context = ActionContext.builder(world)
+        ActionContext context = ActionContext.builder(level)
             .stackExchanger(user, stack)
             .add(LootContextParams.TOOL, stack)
             .add(LootContextParams.THIS_ENTITY, user)
@@ -89,9 +89,9 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
             initializeProjectile(projectileEntity, context.getOrDefault(ItematicContextKeys.SIDE, Direction.UP), speed, uncertainty);
         }
 
-        if (context.level() instanceof ServerLevel serverWorld) {
+        if (context.level() instanceof ServerLevel serverLevel) {
             projectileEntity.applyOnProjectileSpawned(
-                serverWorld,
+                serverLevel,
                 context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
             );
         }

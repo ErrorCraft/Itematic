@@ -10,6 +10,7 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.phys.Vec3;
@@ -36,9 +37,9 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
         }
 
         BlockPos blockPos = BlockPos.containing(pos);
-        Level world = context.level();
-        if (BoneMealItem.growCrop(null, world, blockPos)) {
-            fertilized(world, blockPos);
+        Level level = context.level();
+        if (BoneMealItem.growCrop(ItemStack.EMPTY, level, blockPos)) {
+            fertilized(level, blockPos);
             return true;
         }
 
@@ -48,15 +49,15 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
         }
 
         BlockPos offsetBlockPos = blockPos.relative(side);
-        if (world.getBlockState(blockPos).isFaceSturdy(world, blockPos, side) && BoneMealItem.growWaterPlant(null, world, offsetBlockPos, side)) {
-            fertilized(world, offsetBlockPos);
+        if (level.getBlockState(blockPos).isFaceSturdy(level, blockPos, side) && BoneMealItem.growWaterPlant(null, level, offsetBlockPos, side)) {
+            fertilized(level, offsetBlockPos);
             return true;
         }
 
         return false;
     }
 
-    private static void fertilized(Level world, BlockPos pos) {
-        world.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 15);
+    private static void fertilized(Level level, BlockPos pos) {
+        level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 15);
     }
 }

@@ -68,12 +68,12 @@ public class AbstractSkeletonExtender extends Monster {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseCreateStack(ItemLike item, ServerLevelAccessor world, @Share("randomFloat") LocalFloatRef randomFloat) {
+    private ItemStack newItemStackUseCreateStack(ItemLike item, ServerLevelAccessor level, @Share("randomFloat") LocalFloatRef randomFloat) {
         if (randomFloat.get() < 0.1f) {
-            return world.itematic$createStack(ItemIds.JACK_O_LANTERN);
+            return level.itematic$createStack(ItemIds.JACK_O_LANTERN);
         }
 
-        return world.itematic$createStack(ItemIds.CARVED_PUMPKIN);
+        return level.itematic$createStack(ItemIds.CARVED_PUMPKIN);
     }
 
     @Redirect(
@@ -117,8 +117,8 @@ public class AbstractSkeletonExtender extends Monster {
             target = "Lnet/minecraft/world/entity/projectile/Projectile;spawnProjectileUsingShoot(Lnet/minecraft/world/entity/projectile/Projectile;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;DDDFF)Lnet/minecraft/world/entity/projectile/Projectile;"
         )
     )
-    private <T extends Projectile> T onlySetSpeed(T projectile, ServerLevel world, ItemStack projectileStack, double velocityX, double velocityY, double velocityZ, float power, float divergence) {
-        projectile.shoot(velocityX, velocityY, velocityZ, power, divergence);
+    private <T extends Projectile> T onlySetSpeed(T projectile, ServerLevel level, ItemStack stack, double targetX, double targetY, double targetZ, float pow, float uncertainty) {
+        projectile.shoot(targetX, targetY, targetZ, pow, uncertainty);
         return projectile;
     }
 }

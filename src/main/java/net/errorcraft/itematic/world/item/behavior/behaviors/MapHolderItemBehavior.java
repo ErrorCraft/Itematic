@@ -32,7 +32,7 @@ public class MapHolderItemBehavior implements ItemBehavior<MapHolderItemBehavior
     }
 
     @Override
-    public void onCraft(ItemStack stack, Level world) {
-        DUMMY.onCraftedPostProcess(stack, world);
+    public void onCraft(ItemStack stack, Level level) {
+        DUMMY.onCraftedPostProcess(stack, level);
     }
 }

@@ -87,10 +87,10 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
     }
 
     @Override
-    public void using(ItemStack stack, Level world, LivingEntity user, int usedTicks, int remainingUseTicks) {
+    public void using(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks) {
         KineticMeleeWeapon kinetic = this.types.get(MeleeWeaponComponents.KINETIC);
         if (kinetic != null) {
-            kinetic.hold(stack, world, user, usedTicks);
+            kinetic.hold(stack, level, user, usedTicks);
         }
     }
 

@@ -66,10 +66,10 @@ public abstract class ServerPlayerExtender extends Player {
         )
     )
     private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key) {
-        Holder<Item> itemEntry = this.level()
+        Holder<Item> item = this.level()
             .registryAccess()
             .lookupOrThrow(Registries.ITEM)
             .wrapAsHolder((Item) key);
-        return instance.itematic$get(itemEntry);
+        return instance.itematic$get(item);
     }
 }

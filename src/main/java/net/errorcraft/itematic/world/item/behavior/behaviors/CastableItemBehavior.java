@@ -34,21 +34,21 @@ public class CastableItemBehavior implements ItemBehavior<CastableItemBehavior> 
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (!this.tryRetract(world, user, stack, stackExchanger)) {
-            this.cast(world, user, stack);
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (!this.tryRetract(level, user, stack, stackExchanger)) {
+            this.cast(level, user, stack);
         }
 
         return ItemResult.SUCCEED;
     }
 
-    private boolean tryRetract(Level world, Player user, ItemStack stack, ItemStackExchanger stackExchanger) {
+    private boolean tryRetract(Level level, Player user, ItemStack stack, ItemStackExchanger stackExchanger) {
         if (user.fishing == null) {
             return false;
         }
 
-        if (world instanceof ServerLevel serverWorld) {
-            ActionContext context = ActionContext.builder(serverWorld)
+        if (level instanceof ServerLevel serverLevel) {
+            ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
                 .add(LootContextParams.THIS_ENTITY, user)
                 .add(LootContextParams.ORIGIN, user.position())
@@ -57,17 +57,17 @@ public class CastableItemBehavior implements ItemBehavior<CastableItemBehavior> 
             stack.itematic$damage(user.fishing.retrieve(stack), context);
         }
 
-        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
+        level.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1.0F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
         user.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
         return true;
     }
 
-    private void cast(Level world, Player user, ItemStack stack) {
-        world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (world.getRandom().nextFloat() * 0.4F + 0.8F));
-        if (world instanceof ServerLevel serverWorld) {
-            int luck = EnchantmentHelper.getFishingLuckBonus(serverWorld, stack, user);
-            int speed = (int) (EnchantmentHelper.getFishingTimeReduction(serverWorld, stack, user) * SharedConstants.TICKS_PER_SECOND);
-            Projectile.spawnProjectile(new FishingHook(user, world, luck, speed), serverWorld, stack);
+    private void cast(Level level, Player user, ItemStack stack) {
+        level.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+        if (level instanceof ServerLevel serverLevel) {
+            int luck = EnchantmentHelper.getFishingLuckBonus(serverLevel, stack, user);
+            int speed = (int) (EnchantmentHelper.getFishingTimeReduction(serverLevel, stack, user) * SharedConstants.TICKS_PER_SECOND);
+            Projectile.spawnProjectile(new FishingHook(user, level, luck, speed), serverLevel, stack);
         }
 
         user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));

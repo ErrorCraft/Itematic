@@ -178,8 +178,7 @@ public class TestUtil {
         entity.setPos(Vec3.atBottomCenterOf(absolutePos));
     }
 
-    // TODO: mgirate UNLESS this is about scaffoldings!!! -> renamem ethod?
-    public static Optional<ItemStack> useStackOnBlockInside(GameTestHelper helper, Player player, ItemStack stack, BlockPos pos, Direction direction) {
+    public static Optional<ItemStack> useStackOnBlock(GameTestHelper helper, Player player, ItemStack stack, BlockPos pos, Direction direction) {
         BlockPos absolutePos = helper.absolutePos(pos);
         InteractionResult result = stack.useOn(
             new UseOnContext(
@@ -200,7 +199,7 @@ public class TestUtil {
         return Optional.empty();
     }
 
-    public static void useBlock(GameTestHelper helper, BlockPos pos, Player player, Direction direction) {
+    public static void interactWithBlock(GameTestHelper helper, BlockPos pos, Player player, Direction direction) {
         BlockPos absolutePos = helper.absolutePos(pos);
         helper.useBlock(
             pos,

@@ -10,7 +10,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ScaffoldingBlock;
@@ -32,11 +31,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform")
     public void usingStoneOnGroundPlacesStone(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack stone = level.itematic$createStack(ItemIds.STONE);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, stone);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.STONE)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, stone, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.STONE));
     }
@@ -44,11 +45,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform")
     public void usingOakSlabOnGroundPlacesOakSlab(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack oakSlab = level.itematic$createStack(ItemIds.OAK_SLAB);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, oakSlab);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.OAK_SLAB)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, oakSlab, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .hasProperty(BlockStateProperties.SLAB_TYPE, SlabType.BOTTOM, () -> "Expected placed Oak Slab to be of bottom type"));
     }
@@ -56,11 +59,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.oak_slab.lower")
     public void usingOakSlabOnLowerOakSlabPlacesDoubleOakSlab(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack oakSlab = level.itematic$createStack(ItemIds.OAK_SLAB);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, oakSlab);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.OAK_SLAB)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, oakSlab, PLACED_BLOCK_POSITION, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.DOWN);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .hasProperty(BlockStateProperties.SLAB_TYPE, SlabType.DOUBLE, () -> "Expected placed Oak Slab to be of double type"));
     }
@@ -68,11 +73,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.oak_slab.upper")
     public void usingOakSlabOnUpperOakSlabPlacesDoubleOakSlab(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack oakSlab = level.itematic$createStack(ItemIds.OAK_SLAB);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, oakSlab);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.OAK_SLAB)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, oakSlab, PLACED_BLOCK_POSITION, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.DOWN);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .hasProperty(BlockStateProperties.SLAB_TYPE, SlabType.DOUBLE, () -> "Expected placed Oak Slab to be of double type"));
     }
@@ -80,11 +87,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform.grass_block")
     public void usingTallGrassOnGroundPlacesTallGrass(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack tallGrass = level.itematic$createStack(ItemIds.TALL_GRASS);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, tallGrass);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.TALL_GRASS)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, tallGrass, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> {
             Assert.blockState(helper, PLACED_BLOCK_POSITION)
                 .hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER, () -> "Expected lower half of Tall Grass to be placed");
@@ -96,11 +105,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform.grass_block.blocked_off_above")
     public void usingTallGrassOnGroundWhileBlockedOffDoesNotPlaceTallGrass(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack tallGrass = level.itematic$createStack(ItemIds.TALL_GRASS);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, tallGrass);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.TALL_GRASS)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, tallGrass, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .isNot(Blocks.TALL_GRASS));
     }
@@ -115,7 +126,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(ItemIds.SKELETON_SKULL)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.SKELETON_SKULL));
     }
@@ -123,11 +134,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform.wall")
     public void usingSkeletonSkullOnWallPlacesSkeletonWallSkull(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack skeletonSkull = level.itematic$createStack(ItemIds.SKELETON_SKULL);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, skeletonSkull);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SKELETON_SKULL)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, skeletonSkull, WALL_POSITION, Direction.NORTH);
+        TestUtil.interactWithBlock(helper, WALL_POSITION, player, Direction.NORTH);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.SKELETON_WALL_SKULL));
     }
@@ -142,7 +155,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(ItemIds.OAK_HANGING_SIGN)
         );
         level.addFreshEntity(player);
-        TestUtil.useBlock(helper, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.OAK_HANGING_SIGN));
     }
@@ -150,11 +163,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform.wall")
     public void usingOakHangingSignOnWallPlacesOakWallHangingSign(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack oakHangingSign = level.itematic$createStack(ItemIds.OAK_HANGING_SIGN);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, oakHangingSign);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.OAK_HANGING_SIGN)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, oakHangingSign, WALL_POSITION, Direction.NORTH);
+        TestUtil.interactWithBlock(helper, WALL_POSITION, player, Direction.NORTH);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.OAK_WALL_HANGING_SIGN));
     }
@@ -162,11 +177,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform")
     public void usingScaffoldingOnGroundPlacesScaffolding(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack scaffolding = level.itematic$createStack(ItemIds.SCAFFOLDING);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, scaffolding);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SCAFFOLDING)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, scaffolding, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.SCAFFOLDING));
     }
@@ -174,11 +191,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.scaffolding.single_block")
     public void usingScaffoldingOnTopFaceOfScaffoldingPlacesScaffoldingHorizontally(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack scaffolding = level.itematic$createStack(ItemIds.SCAFFOLDING);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, scaffolding);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SCAFFOLDING)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, scaffolding, PLACED_BLOCK_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, HORIZONTAL_SCAFFOLDING_OFFSET)
             .is(Blocks.SCAFFOLDING));
     }
@@ -186,12 +205,14 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.scaffolding.single_block")
     public void usingScaffoldingOnTopFaceOfBlockBelowScaffoldingPlacesScaffoldingHorizontally(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack scaffolding = level.itematic$createStack(ItemIds.SCAFFOLDING);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, scaffolding);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SCAFFOLDING)
+        );
         player.setYRot(0.0f);
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, scaffolding, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, HORIZONTAL_SCAFFOLDING_OFFSET)
             .is(Blocks.SCAFFOLDING));
     }
@@ -199,11 +220,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.scaffolding.single_block")
     public void usingScaffoldingOnSideFaceOfScaffoldingPlacesScaffoldingVertically(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack scaffolding = level.itematic$createStack(ItemIds.SCAFFOLDING);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, scaffolding);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SCAFFOLDING)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, scaffolding, PLACED_BLOCK_POSITION, Direction.SOUTH);
+        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.SOUTH);
         helper.succeedIf(() -> Assert.blockState(helper, VERTICAL_SCAFFOLDING_OFFSET)
             .is(Blocks.SCAFFOLDING));
     }
@@ -211,11 +234,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.scaffolding.horizontal.max_distance")
     public void usingScaffoldingForHorizontalPlacementFailsAfterReachingMaxDistance(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack scaffolding = level.itematic$createStack(ItemIds.SCAFFOLDING);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, scaffolding);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SCAFFOLDING)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, scaffolding, PLACED_BLOCK_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, HORIZONTAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET)
             .isNot(Blocks.SCAFFOLDING));
     }
@@ -223,11 +248,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.scaffolding.vertical.max_distance")
     public void usingScaffoldingForVerticalPlacementIgnoresMaxDistance(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack scaffolding = level.itematic$createStack(ItemIds.SCAFFOLDING);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, scaffolding);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.SCAFFOLDING)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, scaffolding, PLACED_BLOCK_POSITION, Direction.SOUTH);
+        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.SOUTH);
         helper.succeedIf(() -> Assert.blockState(helper, VERTICAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET)
             .is(Blocks.SCAFFOLDING));
     }
@@ -235,11 +262,13 @@ public class BlockItemComponentTestSuite {
     @GameTest(structure = "itematic:item.component.block.platform")
     public void usingCommandBlockInSurvivalModeOnGroundDoesNotPlaceCommandBlock(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ItemStack commandBlock = level.itematic$createStack(ItemIds.COMMAND_BLOCK);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.setItemInHand(InteractionHand.MAIN_HAND, commandBlock);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            level.itematic$createStack(ItemIds.COMMAND_BLOCK)
+        );
         level.addFreshEntity(player);
-        TestUtil.useStackOnBlockInside(helper, player, commandBlock, GROUND_POSITION, Direction.UP);
+        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .isNot(Blocks.COMMAND_BLOCK));
     }

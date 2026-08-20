@@ -160,8 +160,8 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseHolder(ItemLike item, @Share("item") LocalRef<Holder<Item>> itemEntry) {
-        return new ItemStack(itemEntry.get());
+    private ItemStack newItemStackUseHolder(ItemLike item, @Share("item") LocalRef<Holder<Item>> itemReference) {
+        return new ItemStack(itemReference.get());
     }
 
     @Redirect(
@@ -190,12 +190,12 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
     @Overwrite
     @Nullable
     public ItemStack getPickResult() {
-        ResourceKey<Item> key = this.pickBlockKey();
-        if (key == null) {
+        ResourceKey<Item> itemId = this.pickBlockKey();
+        if (itemId == null) {
             return null;
         }
 
-        return this.level().itematic$createStack(key);
+        return this.level().itematic$createStack(itemId);
     }
 
     @Unique

@@ -101,13 +101,13 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
     }
 
     @Override
-    public ItemResult use(Level world, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(world, user, this.modification().fluidHandling());
+    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(level, user, this.modification().fluidHandling());
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return ItemResult.PASS;
         }
 
-        ActionContext context = ActionContext.builder(world)
+        ActionContext context = ActionContext.builder(level)
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, user)
             .addOptional(LootContextParams.ORIGIN, user, Entity::position)

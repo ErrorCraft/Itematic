@@ -36,9 +36,9 @@ public record LightEndPortalAction(PositionTarget position) implements Action<Li
             return false;
         }
 
-        Level world = context.level();
+        Level level = context.level();
         BlockPattern.BlockPatternMatch result = EndPortalFrameBlock.getOrCreatePortalShape()
-            .find(world, pos);
+            .find(level, pos);
         if (result == null) {
             return false;
         }
@@ -46,11 +46,11 @@ public record LightEndPortalAction(PositionTarget position) implements Action<Li
         BlockPos endPortalStartPos = result.getFrontTopLeft().offset(-PORTAL_SIZE, 0, -PORTAL_SIZE);
         for (int x = 0; x < PORTAL_SIZE; x++) {
             for (int z = 0; z < PORTAL_SIZE; z++) {
-                world.setBlock(endPortalStartPos.offset(x, 0, z), Blocks.END_PORTAL.defaultBlockState(), Block.UPDATE_CLIENTS);
+                level.setBlock(endPortalStartPos.offset(x, 0, z), Blocks.END_PORTAL.defaultBlockState(), Block.UPDATE_CLIENTS);
             }
         }
 
-        world.globalLevelEvent(LevelEvent.SOUND_END_PORTAL_SPAWN, endPortalStartPos.offset(1, 0, 1), 0);
+        level.globalLevelEvent(LevelEvent.SOUND_END_PORTAL_SPAWN, endPortalStartPos.offset(1, 0, 1), 0);
         return true;
     }
 }

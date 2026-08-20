@@ -10,17 +10,20 @@ public interface LevelReaderAccess {
     default ItemAccess itematic$itemAccess() {
         throw new AssertionError("Implemented via mixin");
     }
-    default Holder<Item> itematic$getItem(ResourceKey<Item> key) {
-        return this.itematic$itemAccess().getOrThrow(key);
+    default Holder<Item> itematic$getItem(ResourceKey<Item> item) {
+        return this.itematic$itemAccess()
+            .getOrThrow(item);
     }
-    default ItemStack itematic$createStack(ResourceKey<Item> key) {
-        return this.itematic$itemAccess().get(key)
+    default ItemStack itematic$createStack(ResourceKey<Item> item) {
+        return this.itematic$itemAccess()
+            .get(item)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);
     }
-    default ItemStack itematic$createStack(ResourceKey<Item> key, int count) {
-        return this.itematic$itemAccess().get(key)
-            .map(entry -> new ItemStack(entry, count))
+    default ItemStack itematic$createStack(ResourceKey<Item> item, int count) {
+        return this.itematic$itemAccess()
+            .get(item)
+            .map(itemHolder -> new ItemStack(itemHolder, count))
             .orElse(ItemStack.EMPTY);
     }
 }

@@ -20,9 +20,9 @@ public interface ShooterMethod {
 
     ShooterMethodType<?> type();
     void addComponents(DataComponentMap.Builder builder);
-    boolean tryShoot(ShooterItemBehavior component, ItemStack stack, Level world, LivingEntity user, InteractionHand hand);
-    void hold(ShooterItemBehavior shooter, ItemStack stack, Level world, LivingEntity user, int usedTicks);
-    boolean stop(ShooterItemBehavior shooter, ItemStack stack, Level world, LivingEntity user, int usedTicks);
+    boolean tryShoot(ShooterItemBehavior component, ItemStack stack, Level level, LivingEntity user, InteractionHand hand);
+    void hold(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks);
+    boolean stop(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks);
     default void initializeProjectile(LivingEntity user, Projectile projectile, int index, float power, float uncertainty, float angle, boolean critical, @Nullable LivingEntity target) {
         if (critical && projectile instanceof AbstractArrow persistentProjectile) {
             persistentProjectile.setCritArrow(true);
