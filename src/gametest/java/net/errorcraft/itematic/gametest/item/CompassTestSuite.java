@@ -1,19 +1,19 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 
 import java.util.Optional;
 
@@ -21,67 +21,67 @@ public class CompassTestSuite {
     private static final BlockPos LODESTONE_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:item.compass.platform.lodestone")
-    public void usingCompassOnLodestoneSetsTrackedDataFromBlock(TestContext context) {
-        ServerWorld world = context.getWorld();
-        ItemStack compass = world.itematic$createStack(ItemKeys.COMPASS);
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, compass);
-        world.spawnEntity(player);
-        ItemStack resultStack = TestUtil.useStackOnBlockInside(context, player, compass, LODESTONE_POSITION, Direction.UP)
+    public void usingCompassOnLodestoneSetsTrackedDataFromBlock(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack compass = level.itematic$createStack(ItemIds.COMPASS);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(InteractionHand.MAIN_HAND, compass);
+        level.addFreshEntity(player);
+        ItemStack resultStack = TestUtil.useStackOnBlock(helper, player, compass, LODESTONE_POSITION, Direction.UP)
             .orElseThrow();
-        context.addFinalTask(() -> Assert.itemStack(context, resultStack)
-            .hasComponent(DataComponentTypes.LODESTONE_TRACKER, lodestoneTracker -> {
+        helper.succeedIf(() -> Assert.itemStack(helper, resultStack)
+            .hasComponent(DataComponents.LODESTONE_TRACKER, lodestoneTracker -> {
                 Assert.isTrue(
-                    context,
+                    helper,
                     lodestoneTracker.tracked(),
                     () -> "Expected Lodestone Compass to be tracked"
                 );
                 Optional<GlobalPos> target = lodestoneTracker.target();
                 Assert.isTrue(
-                    context,
+                    helper,
                     target.isPresent(),
                     () -> "Expected Lodestone Compass to have a target"
                 );
                 Assert.areEqual(
-                    context,
+                    helper,
                     target.get().dimension(),
-                    context.getWorld().getRegistryKey(),
+                    helper.getLevel().dimension(),
                     "Lodestone dimension"
                 );
                 Assert.areEqual(
-                    context,
+                    helper,
                     target.get().pos(),
-                    context.getAbsolutePos(LODESTONE_POSITION),
+                    helper.absolutePos(LODESTONE_POSITION),
                     "Lodestone position"
                 );
             }));
     }
 
     @GameTest(structure = "itematic:item.compass.platform.lodestone")
-    public void destroyingLodestoneRemovesTrackedDataFromLodestoneCompass(TestContext context) {
-        ServerWorld world = context.getWorld();
-        ItemStack compass = world.itematic$createStack(ItemKeys.COMPASS);
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, compass);
-        world.spawnEntity(player);
-        ItemStack resultStack = TestUtil.useStackOnBlockInside(context, player, compass, LODESTONE_POSITION, Direction.UP)
+    public void destroyingLodestoneRemovesTrackedDataFromLodestoneCompass(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack compass = level.itematic$createStack(ItemIds.COMPASS);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(InteractionHand.MAIN_HAND, compass);
+        level.addFreshEntity(player);
+        ItemStack resultStack = TestUtil.useStackOnBlock(helper, player, compass, LODESTONE_POSITION, Direction.UP)
             .orElseThrow();
-        context.removeBlock(LODESTONE_POSITION);
-        context.createTimedTaskRunner()
-            .expectMinDurationAndRun(1, () -> Assert.itemStack(context, resultStack)
-                .hasComponent(DataComponentTypes.LODESTONE_TRACKER, lodestoneTracker -> {
+        helper.destroyBlock(LODESTONE_POSITION);
+        helper.startSequence()
+            .thenExecuteAfter(1, () -> Assert.itemStack(helper, resultStack)
+                .hasComponent(DataComponents.LODESTONE_TRACKER, lodestoneTracker -> {
                     Assert.isTrue(
-                        context,
+                        helper,
                         lodestoneTracker.tracked(),
                         () -> "Expected Lodestone Compass to be tracked"
                     );
                     Assert.isTrue(
-                        context,
+                        helper,
                         lodestoneTracker.target().isEmpty(),
                         () -> "Expected Lodestone Compass not to have a target"
                     );
                 })
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 }

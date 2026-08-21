@@ -1,51 +1,51 @@
 {
   "entries": [
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/wool"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/wool_carpets"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/terracotta"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/concrete"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/concrete_powder"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/glazed_terracotta"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/glass"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/glass_panes"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/shulker_boxes"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/beds"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/candles"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/banners"
     }
   ]

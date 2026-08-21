@@ -1,15 +1,15 @@
 package net.errorcraft.itematic.data.recipe.brewing;
 
-import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
-import net.errorcraft.itematic.recipe.brewing.ModifyBrewingRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.potion.Potion;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.util.Identifier;
+import net.errorcraft.itematic.world.item.crafting.BrewingRecipe;
+import net.errorcraft.itematic.world.item.crafting.ModifyBrewingRecipe;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
 
 public class ModifyBrewingRecipeBuilder extends BrewingRecipeBuilder<Potion> {
-    public ModifyBrewingRecipeBuilder(RegistryEntry<Potion> base, RegistryEntryList<Item> reagent, RegistryEntry<Potion> result, Identifier name) {
+    public ModifyBrewingRecipeBuilder(Holder<Potion> base, HolderSet<Item> reagent, Holder<Potion> result, Identifier name) {
         super(base, reagent, result, name);
     }
 

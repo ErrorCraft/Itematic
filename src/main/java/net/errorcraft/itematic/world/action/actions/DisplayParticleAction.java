@@ -3,71 +3,72 @@ package net.errorcraft.itematic.world.action.actions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.serialization.ItematicCodecs;
-import net.errorcraft.itematic.util.Vec3dProvider;
+import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.errorcraft.itematic.world.phys.Vec3Provider;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
-public record DisplayParticleAction(PositionTarget position, ParticleEffect particle, int count, Vec3dProvider offset, Vec3dProvider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
+public record DisplayParticleAction(PositionTarget position, ParticleOptions particle, int count, Vec3Provider offset, Vec3Provider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
     public static final MapCodec<DisplayParticleAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(DisplayParticleAction::position),
-        ParticleTypes.TYPE_CODEC.fieldOf("particle").forGetter(DisplayParticleAction::particle),
-        Codecs.NON_NEGATIVE_INT.fieldOf("count").forGetter(DisplayParticleAction::count),
-        Vec3dProvider.CODEC.optionalFieldOf("offset", Vec3dProvider.ZERO).forGetter(DisplayParticleAction::offset),
-        Vec3dProvider.CODEC.fieldOf("delta").forGetter(DisplayParticleAction::delta),
+        ParticleTypes.CODEC.fieldOf("particle").forGetter(DisplayParticleAction::particle),
+        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("count").forGetter(DisplayParticleAction::count),
+        Vec3Provider.CODEC.optionalFieldOf("offset", Vec3Provider.ZERO).forGetter(DisplayParticleAction::offset),
+        Vec3Provider.CODEC.fieldOf("delta").forGetter(DisplayParticleAction::delta),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("speed").forGetter(DisplayParticleAction::speed),
         Codec.BOOL.optionalFieldOf("force", false).forGetter(DisplayParticleAction::force)
     ).apply(instance, DisplayParticleAction::new));
 
-    public static Builder builder(PositionTarget position, ParticleEffect particle) {
+    public static Builder builder(PositionTarget position, ParticleOptions particle) {
         return new Builder(position, particle);
     }
 
     @Override
     public ActionType<DisplayParticleAction> type() {
-        return ActionTypes.DISPLAY_PARTICLE;
+        return ActionType.DISPLAY_PARTICLE;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        if (!(context.world() instanceof ServerWorld world)) {
+        if (!(context.level() instanceof ServerLevel level)) {
             return false;
         }
 
-        Random random = world.getRandom();
-        Vec3d pos = this.position(context, random);
+        RandomSource random = level.getRandom();
+        Vec3 pos = this.position(context, random);
         if (pos == null) {
             return false;
         }
 
-        Vec3d delta = this.delta.get(random);
-        int amountOfPlayersShown = world.spawnParticles(
+        Vec3 delta = this.delta.get(random);
+        int amountOfPlayersShown = level.sendParticles(
             this.particle,
             this.force,
             false,
-            pos.getX(),
-            pos.getY(),
-            pos.getZ(),
+            pos.x(),
+            pos.y(),
+            pos.z(),
             this.count,
-            delta.getX(),
-            delta.getY(),
-            delta.getZ(),
+            delta.x(),
+            delta.y(),
+            delta.z(),
             this.speed
         );
         return amountOfPlayersShown > 0;
     }
 
-    private Vec3d position(ActionContext context, Random random) {
-        Vec3d pos = context.get(this.position.contextParam());
+    @Nullable
+    private Vec3 position(ActionContext context, RandomSource random) {
+        Vec3 pos = context.get(this.position.contextParam());
         if (pos == null) {
             return null;
         }
@@ -77,14 +78,14 @@ public record DisplayParticleAction(PositionTarget position, ParticleEffect part
 
     public static class Builder {
         private final PositionTarget position;
-        private final ParticleEffect particle;
+        private final ParticleOptions particle;
         private int count = 0;
-        private Vec3dProvider offset = Vec3dProvider.ZERO;
-        private Vec3dProvider delta = Vec3dProvider.ZERO;
+        private Vec3Provider offset = Vec3Provider.ZERO;
+        private Vec3Provider delta = Vec3Provider.ZERO;
         private double speed = 0.0d;
         private boolean force = false;
 
-        private Builder(PositionTarget position, ParticleEffect particle) {
+        private Builder(PositionTarget position, ParticleOptions particle) {
             this.position = position;
             this.particle = particle;
         }
@@ -98,12 +99,12 @@ public record DisplayParticleAction(PositionTarget position, ParticleEffect part
             return this;
         }
 
-        public Builder offset(Vec3dProvider offset) {
+        public Builder offset(Vec3Provider offset) {
             this.offset = offset;
             return this;
         }
 
-        public Builder delta(Vec3dProvider delta) {
+        public Builder delta(Vec3Provider delta) {
             this.delta = delta;
             return this;
         }

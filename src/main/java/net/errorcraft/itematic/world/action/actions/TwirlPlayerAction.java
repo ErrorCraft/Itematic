@@ -1,27 +1,26 @@
 package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.item.ItemStackUtil;
-import net.errorcraft.itematic.network.packet.s2c.play.TwirlS2CPacket;
+import net.errorcraft.itematic.network.protocol.game.ClientboundTwirlPacket;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.component.EnchantmentEffectComponentTypes;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MovementType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.TridentItem;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.errorcraft.itematic.world.item.ItemStacks;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 
 public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
     public static final TwirlPlayerAction INSTANCE = new TwirlPlayerAction();
@@ -31,18 +30,18 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
 
     @Override
     public ActionType<TwirlPlayerAction> type() {
-        return ActionTypes.TWIRL_PLAYER;
+        return ActionType.TWIRL_PLAYER;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
-        if (!(entity instanceof PlayerEntity player)) {
+        Entity entity = context.get(LootContextParams.THIS_ENTITY);
+        if (!(entity instanceof Player player)) {
             return false;
         }
 
-        ItemStack stack = context.get(LootContextParameters.TOOL);
-        if (ItemStackUtil.isNullOrEmpty(stack)) {
+        ItemStack stack = context.get(LootContextParams.TOOL);
+        if (ItemStacks.isNullOrEmpty(stack)) {
             return false;
         }
 
@@ -51,29 +50,29 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
             return false;
         }
 
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            serverPlayer.networkHandler.sendPacket(new TwirlS2CPacket(spinAttackStrength));
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.connection.send(new ClientboundTwirlPacket(spinAttackStrength));
         }
 
-        execute(spinAttackStrength, player, context.world(), stack);
+        execute(spinAttackStrength, player, context.level(), stack);
         return true;
     }
 
-    public static void execute(float spinAttackStrength, PlayerEntity player, World world, ItemStack usedStack) {
-        float yaw = player.getYaw();
-        float pitch = player.getPitch();
+    public static void execute(float spinAttackStrength, Player player, Level level, ItemStack usedStack) {
+        float yaw = player.getYRot();
+        float pitch = player.getXRot();
         double x = -Math.sin(yaw * (Math.PI / 180.0d)) * Math.cos(pitch * (Math.PI / 180.0d));
         double y = -Math.sin(pitch * (Math.PI / 180.0d));
         double z = Math.cos(yaw * (Math.PI / 180)) * Math.cos(pitch * (Math.PI / 180.0d));
         double distance = Math.sqrt(x * x + y * y + z * z);
-        player.addVelocity(x * spinAttackStrength / distance, y * spinAttackStrength / distance, z * spinAttackStrength / distance);
-        player.useRiptide(20, TridentItem.ATTACK_DAMAGE, usedStack);
-        if (player.isOnGround()) {
-            player.move(MovementType.SELF, new Vec3d(0.0d, 1.2d, 0.0d));
+        player.push(x * spinAttackStrength / distance, y * spinAttackStrength / distance, z * spinAttackStrength / distance);
+        player.startAutoSpinAttack(20, TridentItem.BASE_DAMAGE, usedStack);
+        if (player.onGround()) {
+            player.move(MoverType.SELF, new Vec3(0.0d, 1.2d, 0.0d));
         }
 
-        RegistryEntry<SoundEvent> sound = EnchantmentHelper.getEffect(usedStack, EnchantmentEffectComponentTypes.TRIDENT_SOUND)
-            .orElse(SoundEvents.ITEM_TRIDENT_THROW);
-        world.playSoundFromEntity(null, player, sound.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
+        Holder<SoundEvent> sound = EnchantmentHelper.pickHighestLevel(usedStack, EnchantmentEffectComponents.TRIDENT_SOUND)
+            .orElse(SoundEvents.TRIDENT_THROW);
+        level.playSound(null, player, sound.value(), SoundSource.PLAYERS, 1.0f, 1.0f);
     }
 }

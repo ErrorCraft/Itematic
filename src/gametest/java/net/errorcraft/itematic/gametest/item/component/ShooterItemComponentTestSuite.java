@@ -1,75 +1,75 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 
 public class ShooterItemComponentTestSuite {
     @GameTest(maxTicks = 100)
-    public void usingCrossbowChargesArrowFromInventory(TestContext context) {
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        ServerWorld world = context.getWorld();
-        ItemStack crossbow = world.itematic$createStack(ItemKeys.CROSSBOW);
-        ItemStack ammunition = world.itematic$createStack(ItemKeys.ARROW);
-        player.setStackInHand(Hand.MAIN_HAND, crossbow);
-        player.getInventory().insertStack(ammunition);
-        world.spawnEntity(player);
-        crossbow.use(world, player, Hand.MAIN_HAND);
-        context.createTimedTaskRunner().expectMinDurationAndRun(
-            crossbow.getMaxUseTime(player),
+    public void usingCrossbowChargesArrowFromInventory(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack crossbow = level.itematic$createStack(ItemIds.CROSSBOW);
+        ItemStack ammunition = level.itematic$createStack(ItemIds.ARROW);
+        player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
+        player.getInventory().add(ammunition);
+        level.addFreshEntity(player);
+        crossbow.use(level, player, InteractionHand.MAIN_HAND);
+        helper.startSequence().thenExecuteAfter(
+            crossbow.getUseDuration(player),
             () -> {
-                crossbow.onStoppedUsing(world, player, player.getItemUseTimeLeft());
-                Assert.itemStack(context, player.getStackInHand(Hand.MAIN_HAND))
+                crossbow.releaseUsing(level, player, player.getUseItemRemainingTicks());
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .hasComponent(
-                        DataComponentTypes.CHARGED_PROJECTILES,
+                        DataComponents.CHARGED_PROJECTILES,
                         chargedProjectiles -> Assert.isTrue(
-                            context,
-                            chargedProjectiles.itematic$contains(ItemKeys.ARROW),
+                            helper,
+                            chargedProjectiles.itematic$contains(ItemIds.ARROW),
                             () -> "Expected item stack to have an Arrow as a charged projectile"
                         )
                     );
                 Assert.isFalse(
-                    context,
-                    player.getInventory().contains(s -> s.itematic$isOf(ItemKeys.ARROW)),
+                    helper,
+                    player.getInventory().contains(stack -> stack.itematic$is(ItemIds.ARROW)),
                     () -> "Expected Player not to have any Arrows in their inventory"
                 );
             }
-        ).completeIfSuccessful();
+        ).thenSucceed();
     }
 
     @GameTest(maxTicks = 100)
-    public void usingCrossbowChargesFireworkRocketFromOffhand(TestContext context) {
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        ServerWorld world = context.getWorld();
-        ItemStack crossbow = world.itematic$createStack(ItemKeys.CROSSBOW);
-        ItemStack ammunition = world.itematic$createStack(ItemKeys.FIREWORK_ROCKET);
-        player.setStackInHand(Hand.MAIN_HAND, crossbow);
-        player.setStackInHand(Hand.OFF_HAND, ammunition);
-        world.spawnEntity(player);
-        crossbow.use(world, player, Hand.MAIN_HAND);
-        context.createTimedTaskRunner().expectMinDurationAndRun(
-            crossbow.getMaxUseTime(player),
+    public void usingCrossbowChargesFireworkRocketFromOffhand(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ServerLevel level = helper.getLevel();
+        ItemStack crossbow = level.itematic$createStack(ItemIds.CROSSBOW);
+        ItemStack ammunition = level.itematic$createStack(ItemIds.FIREWORK_ROCKET);
+        player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
+        player.setItemInHand(InteractionHand.OFF_HAND, ammunition);
+        level.addFreshEntity(player);
+        crossbow.use(level, player, InteractionHand.MAIN_HAND);
+        helper.startSequence().thenExecuteAfter(
+            crossbow.getUseDuration(player),
             () -> {
-                crossbow.onStoppedUsing(world, player, player.getItemUseTimeLeft());
-                Assert.itemStack(context, player.getStackInHand(Hand.MAIN_HAND))
+                crossbow.releaseUsing(level, player, player.getUseItemRemainingTicks());
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .hasComponent(
-                        DataComponentTypes.CHARGED_PROJECTILES,
+                        DataComponents.CHARGED_PROJECTILES,
                         chargedProjectiles -> Assert.isTrue(
-                            context,
-                            chargedProjectiles.itematic$contains(ItemKeys.FIREWORK_ROCKET),
+                            helper,
+                            chargedProjectiles.itematic$contains(ItemIds.FIREWORK_ROCKET),
                             () -> "Expected item stack to have a Firework Rocket as a charged projectile"
                         )
                     );
-                Assert.itemStack(context, player.getStackInHand(Hand.OFF_HAND))
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.OFF_HAND))
                     .isEmpty();
             }
-        ).completeIfSuccessful();
+        ).thenSucceed();
     }
 }

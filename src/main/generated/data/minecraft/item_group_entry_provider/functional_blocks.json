@@ -1,19 +1,19 @@
 {
   "entries": [
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/torches"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/lanterns"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/chains"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/light_emitting_blocks"
     },
     "minecraft:crafting_table",
@@ -49,7 +49,7 @@
     "minecraft:suspicious_sand",
     "minecraft:suspicious_gravel",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/lightning_rods"
     },
     "minecraft:flower_pot",
@@ -59,7 +59,7 @@
     "minecraft:glow_item_frame",
     "minecraft:painting",
     {
-      "type": "painting_variant",
+      "type": "minecraft:painting_variant",
       "item": "minecraft:painting",
       "tag": {
         "id": "minecraft:placeable",
@@ -69,37 +69,37 @@
     "minecraft:bookshelf",
     "minecraft:chiseled_bookshelf",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/shelves"
     },
     "minecraft:lectern",
     "minecraft:tinted_glass",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/signs"
     },
     "minecraft:chest",
     "minecraft:barrel",
     "minecraft:ender_chest",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/shulker_boxes"
     },
     "minecraft:respawn_anchor",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/beds"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/candles"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/banners"
     },
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:banner_patterns": [
           {
@@ -148,7 +148,7 @@
       "item": "minecraft:white_banner"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/heads"
     },
     "minecraft:dragon_egg",
@@ -156,11 +156,11 @@
     "minecraft:ender_eye",
     "minecraft:vault",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/copper_golems"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/infested_blocks"
     }
   ]

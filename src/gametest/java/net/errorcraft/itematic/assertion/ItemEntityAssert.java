@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.assertion;
 
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.test.TestContext;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.item.ItemEntity;
 
 import java.util.function.Consumer;
 
 public class ItemEntityAssert extends BaseEntityAssert<ItemEntityAssert, ItemEntity> {
-    ItemEntityAssert(TestContext helper, ItemEntity entity) {
+    ItemEntityAssert(GameTestHelper helper, ItemEntity entity) {
         super(helper, entity);
     }
 
     public ItemEntityAssert itemStack(Consumer<ItemStackAssert> stackAssertion) {
-        stackAssertion.accept(Assert.itemStack(this.helper, this.entity.getStack()));
+        stackAssertion.accept(Assert.itemStack(this.helper, this.entity.getItem()));
         return this;
     }
 }

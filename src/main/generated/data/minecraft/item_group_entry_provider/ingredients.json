@@ -13,7 +13,7 @@
     "minecraft:amethyst_shard",
     "minecraft:resin_clump",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/nuggets"
     },
     "minecraft:iron_ingot",
@@ -30,7 +30,7 @@
     "minecraft:feather",
     "minecraft:snowball",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/eggs"
     },
     "minecraft:leather",
@@ -58,7 +58,7 @@
     "minecraft:echo_shard",
     "minecraft:disc_fragment_5",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/dyes"
     },
     "minecraft:bowl",
@@ -69,26 +69,26 @@
     "minecraft:book",
     "minecraft:firework_star",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/brewing_ingredients"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/banner_patterns"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:decorated_pot_sherds"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/smithing_templates"
     },
     "minecraft:experience_bottle",
     "minecraft:trial_key",
     "minecraft:ominous_trial_key",
     {
-      "type": "enchantment",
+      "type": "minecraft:enchantment",
       "item": "minecraft:enchanted_book"
     }
   ]

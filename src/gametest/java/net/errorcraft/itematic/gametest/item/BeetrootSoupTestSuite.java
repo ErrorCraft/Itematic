@@ -1,34 +1,34 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
-import net.minecraft.world.GameMode;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 
 public class BeetrootSoupTestSuite {
     @GameTest(maxTicks = 100)
-    public void eatingBeetrootSoupLeavesBowlAfterConsuming(TestContext context) {
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.getHungerManager().setFoodLevel(0);
-        ServerWorld world = context.getWorld();
-        ItemStack beetrootSoup = world.itematic$createStack(ItemKeys.BEETROOT_SOUP);
-        player.setStackInHand(Hand.MAIN_HAND, beetrootSoup);
-        world.spawnEntity(player);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> beetrootSoup.use(world, player, Hand.MAIN_HAND))
-            .expectMinDurationAndRun(
-                beetrootSoup.getMaxUseTime(player),
+    public void eatingBeetrootSoupLeavesBowlAfterConsuming(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.getFoodData().setFoodLevel(0);
+        ServerLevel level = helper.getLevel();
+        ItemStack beetrootSoup = level.itematic$createStack(ItemIds.BEETROOT_SOUP);
+        player.setItemInHand(InteractionHand.MAIN_HAND, beetrootSoup);
+        level.addFreshEntity(player);
+        helper.startSequence()
+            .thenExecute(() -> beetrootSoup.use(level, player, InteractionHand.MAIN_HAND))
+            .thenExecuteAfter(
+                beetrootSoup.getUseDuration(player),
                 () -> Assert.isTrue(
-                    context,
-                    player.getInventory().contains(stack -> stack.itematic$isOf(ItemKeys.BOWL)),
+                    helper,
+                    player.getInventory().contains(stack -> stack.itematic$is(ItemIds.BOWL)),
                     () -> "Expected Player to have a Bowl in their inventory"
                 )
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 }

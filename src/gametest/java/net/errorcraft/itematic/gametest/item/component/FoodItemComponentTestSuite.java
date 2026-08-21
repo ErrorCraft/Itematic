@@ -1,60 +1,60 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
-import net.errorcraft.itematic.item.component.components.FoodItemComponent;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.SuspiciousStewEffectsComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SuspiciousStewEffects;
+import net.minecraft.world.level.GameType;
 
 import java.util.List;
 
 public class FoodItemComponentTestSuite {
     @GameTest(maxTicks = 100)
-    public void eatingFoodItemAddsNutrition(TestContext context) {
-        ServerWorld world = context.getWorld();
-        ItemStack apple = world.itematic$createStack(ItemKeys.APPLE);
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.getHungerManager().setFoodLevel(0);
-        player.setStackInHand(Hand.MAIN_HAND, apple);
-        world.spawnEntity(player);
-        FoodItemComponent component = TestUtil.getItemBehavior(context, apple, ItemComponentTypes.FOOD);
-        apple.use(world, player, Hand.MAIN_HAND);
-        context.createTimedTaskRunner().expectMinDurationAndRun(
-            apple.getMaxUseTime(player),
+    public void eatingFoodItemAddsNutrition(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack apple = level.itematic$createStack(ItemIds.APPLE);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.getFoodData().setFoodLevel(0);
+        player.setItemInHand(InteractionHand.MAIN_HAND, apple);
+        level.addFreshEntity(player);
+        FoodProperties food = TestUtil.getDataComponent(helper, apple, DataComponents.FOOD);
+        apple.use(level, player, InteractionHand.MAIN_HAND);
+        helper.startSequence().thenExecuteAfter(
+            apple.getUseDuration(player),
             () -> {
-                Assert.itemStack(context, player.getStackInHand(Hand.MAIN_HAND))
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .isEmpty();
-                Assert.ints(context, player.getHungerManager().getFoodLevel(), "nutrition")
-                    .equals(component.nutrition());
+                Assert.ints(helper, player.getFoodData().getFoodLevel(), "nutrition")
+                    .equals(food.nutrition());
             }
-        ).completeIfSuccessful();
+        ).thenSucceed();
     }
 
     @GameTest(maxTicks = 100)
-    public void eatingSuspiciousStewAddsSuspiciousEffects(TestContext context) {
-        ServerWorld world = context.getWorld();
-        ItemStack suspiciousStew = world.itematic$createStack(ItemKeys.SUSPICIOUS_STEW);
-        List<SuspiciousStewEffectsComponent.StewEffect> effects = TestUtil.getItemBehavior(context, world.itematic$createStack(ItemKeys.DANDELION), ItemComponentTypes.SUSPICIOUS_EFFECT_INGREDIENT)
+    public void eatingSuspiciousStewAddsSuspiciousEffects(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack suspiciousStew = level.itematic$createStack(ItemIds.SUSPICIOUS_STEW);
+        List<SuspiciousStewEffects.Entry> effects = TestUtil.getItemBehavior(helper, level.itematic$createStack(ItemIds.DANDELION), ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT)
             .effects();
-        suspiciousStew.set(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffectsComponent(effects));
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, suspiciousStew);
-        world.spawnEntity(player);
-        suspiciousStew.use(world, player, Hand.MAIN_HAND);
-        context.createTimedTaskRunner().expectMinDurationAndRun(
-            suspiciousStew.getMaxUseTime(player),
-            () -> Assert.livingEntity(context, player)
+        suspiciousStew.set(DataComponents.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffects(effects));
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(InteractionHand.MAIN_HAND, suspiciousStew);
+        level.addFreshEntity(player);
+        suspiciousStew.use(level, player, InteractionHand.MAIN_HAND);
+        helper.startSequence().thenExecuteAfter(
+            suspiciousStew.getUseDuration(player),
+            () -> Assert.livingEntity(helper, player)
                 .hasEffects(effects)
-                .hasStackInHand(Hand.MAIN_HAND, stack -> stack.is(ItemKeys.BOWL))
-        ).completeIfSuccessful();
+                .hasStackInHand(InteractionHand.MAIN_HAND, stack -> stack.is(ItemIds.BOWL))
+        ).thenSucceed();
     }
 }

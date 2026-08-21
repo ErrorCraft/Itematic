@@ -2,14 +2,13 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.component.ItemComponentTypes;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record UseBucketAction(PositionTarget position) implements Action<UseBucketAction> {
     public static final MapCodec<UseBucketAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -22,13 +21,13 @@ public record UseBucketAction(PositionTarget position) implements Action<UseBuck
 
     @Override
     public ActionType<UseBucketAction> type() {
-        return ActionTypes.USE_BUCKET;
+        return ActionType.USE_BUCKET;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.getOrDefault(LootContextParameters.TOOL, ItemStack.EMPTY);
-        return stack.itematic$getBehavior(ItemComponentTypes.BUCKET)
+        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        return stack.itematic$getBehavior(ItemBehaviorType.BUCKET)
             .map(bucket -> bucket.use(context, this.position, false))
             .orElse(false);
     }

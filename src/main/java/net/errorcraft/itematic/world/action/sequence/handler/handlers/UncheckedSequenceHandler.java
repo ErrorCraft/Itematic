@@ -5,15 +5,16 @@ import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
-import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerTypes;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) implements SequenceHandler<UncheckedSequenceHandler> {
-    public static final Codec<UncheckedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(UncheckedSequenceHandler::new, UncheckedSequenceHandler::entries);
+public record UncheckedSequenceHandler(HolderSet<ActionEntry> entries) implements SequenceHandler<UncheckedSequenceHandler> {
+    public static final Codec<UncheckedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(
+        UncheckedSequenceHandler::new,
+        UncheckedSequenceHandler::entries
+    );
 
     public static Builder builder() {
         return new Builder();
@@ -21,34 +22,29 @@ public record UncheckedSequenceHandler(RegistryEntryList<ActionEntry> entries) i
 
     @Override
     public SequenceHandlerType<UncheckedSequenceHandler> type() {
-        return SequenceHandlerTypes.UNCHECKED;
+        return SequenceHandlerType.UNCHECKED;
     }
 
     @Override
     public boolean handle(ActionContext context) {
         boolean result = false;
-        for (RegistryEntry<ActionEntry> entry : this.entries) {
+        for (Holder<ActionEntry> entry : this.entries) {
             result |= entry.value().execute(context).orElse(false);
         }
 
         return result;
     }
 
-    @Override
-    public Iterable<RegistryEntry<ActionEntry>> iterateEntries() {
-        return this.entries;
-    }
-
     public static class Builder implements SequenceHandler.Builder<UncheckedSequenceHandler, Builder> {
-        private final List<RegistryEntry<ActionEntry>> entries = new ArrayList<>();
+        private final List<Holder<ActionEntry>> entries = new ArrayList<>();
 
         @Override
         public UncheckedSequenceHandler build() {
-            return new UncheckedSequenceHandler(RegistryEntryList.of(this.entries));
+            return new UncheckedSequenceHandler(HolderSet.direct(this.entries));
         }
 
         @Override
-        public Builder add(RegistryEntry<ActionEntry> entry) {
+        public Builder add(Holder<ActionEntry> entry) {
             this.entries.add(entry);
             return this;
         }

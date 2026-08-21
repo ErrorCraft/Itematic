@@ -3,7 +3,7 @@
     "#minecraft:coal_ores",
     "#minecraft:iron_ores",
     "#minecraft:copper_ores",
-    "#minecraft:gold_overworld_ores",
+    "#minecraft:item_group/gold_overworld_ores",
     "#minecraft:redstone_ores",
     "#minecraft:emerald_ores",
     "#minecraft:lapis_ores",

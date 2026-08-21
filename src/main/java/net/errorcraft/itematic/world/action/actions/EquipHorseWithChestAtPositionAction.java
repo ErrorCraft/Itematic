@@ -2,18 +2,18 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.item.ItemStackUtil;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
+import net.errorcraft.itematic.world.item.ItemStacks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.animal.equine.AbstractChestedHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
@@ -28,28 +28,31 @@ public record EquipHorseWithChestAtPositionAction(PositionTarget position) imple
 
     @Override
     public ActionType<EquipHorseWithChestAtPositionAction> type() {
-        return ActionTypes.EQUIP_HORSE_WITH_CHEST_AT_POSITION;
+        return ActionType.EQUIP_HORSE_WITH_CHEST_AT_POSITION;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.get(LootContextParameters.TOOL);
-        if (ItemStackUtil.isNullOrEmpty(stack)) {
+        ItemStack stack = context.get(LootContextParams.TOOL);
+        if (ItemStacks.isNullOrEmpty(stack)) {
             return false;
         }
 
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        List<AbstractDonkeyEntity> donkeys = context.world().getEntitiesByClass(
-            AbstractDonkeyEntity.class,
-            new Box(pos),
-            donkey -> donkey.isAlive() && !donkey.hasChest()
+        List<AbstractChestedHorse> chestedHorses = context.level().getEntitiesOfClass(
+            AbstractChestedHorse.class,
+            new AABB(pos),
+            chestedHorse -> chestedHorse.isAlive()
+                && chestedHorse.isTamed()
+                && !chestedHorse.hasChest()
         );
-        for (AbstractDonkeyEntity donkey : donkeys) {
-            if (donkey.isTame() && donkey.getStackReference(AbstractHorseEntity.field_30414).set(stack.copy())) {
+        for (AbstractChestedHorse chestedHorse : chestedHorses) {
+            SlotAccess slot = chestedHorse.getSlot(AbstractHorse.CHEST_SLOT_OFFSET);
+            if (slot != null && slot.set(stack.copy())) {
                 return true;
             }
         }

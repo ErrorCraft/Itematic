@@ -4,31 +4,30 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.loot.context.LootContext;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.storage.loot.LootContext;
 
-public record ClearStatusEffectsAction(LootContext.EntityReference entity) implements Action<ClearStatusEffectsAction> {
+public record ClearStatusEffectsAction(LootContext.EntityTarget entity) implements Action<ClearStatusEffectsAction> {
     public static final MapCodec<ClearStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        LootContext.EntityReference.CODEC.fieldOf("entity").forGetter(ClearStatusEffectsAction::entity)
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(ClearStatusEffectsAction::entity)
     ).apply(instance, ClearStatusEffectsAction::new));
 
-    public static ClearStatusEffectsAction of(LootContext.EntityReference entity) {
+    public static ClearStatusEffectsAction of(LootContext.EntityTarget entity) {
         return new ClearStatusEffectsAction(entity);
     }
 
     @Override
     public ActionType<ClearStatusEffectsAction> type() {
-        return ActionTypes.CLEAR_STATUS_EFFECTS;
+        return ActionType.CLEAR_STATUS_EFFECTS;
     }
 
     @Override
     public boolean execute(ActionContext context) {
         Entity entity = context.get(this.entity.contextParam());
         if (entity instanceof LivingEntity target) {
-            return target.clearStatusEffects();
+            return target.removeAllEffects();
         }
 
         return false;

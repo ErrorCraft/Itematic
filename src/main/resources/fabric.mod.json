@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "itematic",
   "version": "${version}",
-
   "name": "Itematic",
   "description": "A mod that adds data-driven items to Minecraft.",
   "authors": [
@@ -13,10 +12,8 @@
     "issues": "https://github.com/ErrorCraft/Itematic/issues",
     "sources": "https://github.com/ErrorCraft/Itematic"
   },
-
   "license": "Apache-2.0",
   "icon": "assets/itematic/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -34,98 +31,10 @@
     }
   ],
   "accessWidener": "itematic.classtweaker",
-  "custom": {
-    "loom:injected_interfaces": {
-      "net/minecraft/class_1297": [
-        "net/errorcraft/itematic/access/entity/EntityAccess"
-      ],
-      "net/minecraft/class_1308": [
-        "net/errorcraft/itematic/access/entity/mob/MobEntityAccess"
-      ],
-      "net/minecraft/class_1309": [
-        "net/errorcraft/itematic/access/entity/LivingEntityAccess"
-      ],
-      "net/minecraft/class_1761": [
-        "net/errorcraft/itematic/access/item/ItemGroupAccess"
-      ],
-      "net/minecraft/class_1761\u0024class_7705": [
-        "net/minecraft/util/StringIdentifiable"
-      ],
-      "net/minecraft/class_1792": [
-        "net/errorcraft/itematic/access/item/ItemAccess"
-      ],
-      "net/minecraft/class_1799": [
-        "net/errorcraft/itematic/access/item/ItemStackAccess"
-      ],
-      "net/minecraft/class_1914": [
-        "net/errorcraft/itematic/access/village/TradeOfferAccess"
-      ],
-      "net/minecraft/class_1937": [
-        "net/errorcraft/itematic/access/world/WorldAccess"
-      ],
-      "net/minecraft/class_2048": [
-        "net/errorcraft/itematic/access/predicate/EntityPredicateAccess"
-      ],
-      "net/minecraft/class_2048\u0024class_2049": [
-        "net/errorcraft/itematic/access/predicate/EntityPredicateBuilderAccess"
-      ],
-      "net/minecraft/class_2302": [
-        "net/errorcraft/itematic/access/block/CropBlockAccess"
-      ],
-      "net/minecraft/class_2602": [
-        "net/errorcraft/itematic/access/network/listener/ClientPlayPacketListenerAccess"
-      ],
-      "net/minecraft/class_3419": [
-        "net/minecraft/util/StringIdentifiable"
-      ],
-      "net/minecraft/class_3445": [
-        "net/errorcraft/itematic/access/stat/StatAccess<TT;>"
-      ],
-      "net/minecraft/class_3448": [
-        "net/errorcraft/itematic/access/stat/StatTypeAccess<TT;>"
-      ],
-      "net/minecraft/class_3611": [
-        "net/errorcraft/itematic/access/fluid/FluidAccess"
-      ],
-      "net/minecraft/class_4538": [
-        "net/errorcraft/itematic/access/world/WorldViewAccess"
-      ],
-      "net/minecraft/class_6880": [
-        "net/errorcraft/itematic/access/registry/entry/RegistryEntryAccess<TT;>"
-      ],
-      "net/minecraft/class_6885": [
-        "net/errorcraft/itematic/access/registry/entry/RegistryEntryListAccess<TT;>"
-      ],
-      "net/minecraft/class_8162": [
-        "net/errorcraft/itematic/access/item/BrushItemAccess"
-      ],
-      "net/minecraft/class_8526": [
-        "net/errorcraft/itematic/access/block/entity/SherdsAccess"
-      ],
-      "net/minecraft/class_9276": [
-        "net/errorcraft/itematic/access/component/type/BundleContentsComponentAccess"
-      ],
-      "net/minecraft/class_9276\u0024class_9277": [
-        "net/errorcraft/itematic/access/component/type/BundleContentsComponentBuilderAccess"
-      ],
-      "net/minecraft/class_9278": [
-        "net/errorcraft/itematic/access/component/type/ChargedProjectilesComponentAccess"
-      ],
-      "net/minecraft/class_9424": [
-        "net/errorcraft/itematic/access/component/type/ToolComponentAccess"
-      ],
-      "net/minecraft/class_9424\u0024class_9425": [
-        "net/errorcraft/itematic/access/component/type/ToolComponentRuleAccess"
-      ]
-    }
-  },
-
   "depends": {
     "fabricloader": ">=0.19.2",
     "fabric-api": "*",
     "minecraft": "~1.21-",
     "java": ">=21"
-  },
-  "suggests": {
   }
 }

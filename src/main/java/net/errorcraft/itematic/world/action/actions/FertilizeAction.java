@@ -2,18 +2,18 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.util.context.ItematicContextParameters;
+import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.item.BoneMealItem;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.phys.Vec3;
 
 public record FertilizeAction(PositionTarget position) implements Action<FertilizeAction> {
     public static final MapCodec<FertilizeAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -26,38 +26,38 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
 
     @Override
     public ActionType<FertilizeAction> type() {
-        return ActionTypes.FERTILIZE;
+        return ActionType.FERTILIZE;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        Vec3d pos = context.get(this.position.contextParam());
+        Vec3 pos = context.get(this.position.contextParam());
         if (pos == null) {
             return false;
         }
 
-        BlockPos blockPos = BlockPos.ofFloored(pos);
-        World world = context.world();
-        if (BoneMealItem.useOnFertilizable(null, world, blockPos)) {
-            fertilized(world, blockPos);
+        BlockPos blockPos = BlockPos.containing(pos);
+        Level level = context.level();
+        if (BoneMealItem.growCrop(ItemStack.EMPTY, level, blockPos)) {
+            fertilized(level, blockPos);
             return true;
         }
 
-        Direction side = context.get(ItematicContextParameters.SIDE);
+        Direction side = context.get(ItematicContextKeys.SIDE);
         if (side == null) {
             return false;
         }
 
-        BlockPos offsetBlockPos = blockPos.offset(side);
-        if (world.getBlockState(blockPos).isSideSolidFullSquare(world, blockPos, side) && BoneMealItem.useOnGround(null, world, offsetBlockPos, side)) {
-            fertilized(world, offsetBlockPos);
+        BlockPos offsetBlockPos = blockPos.relative(side);
+        if (level.getBlockState(blockPos).isFaceSturdy(level, blockPos, side) && BoneMealItem.growWaterPlant(ItemStack.EMPTY, level, offsetBlockPos, side)) {
+            fertilized(level, offsetBlockPos);
             return true;
         }
 
         return false;
     }
 
-    private static void fertilized(World world, BlockPos pos) {
-        world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, pos, 15);
+    private static void fertilized(Level level, BlockPos pos) {
+        level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 15);
     }
 }

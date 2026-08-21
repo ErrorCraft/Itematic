@@ -1,34 +1,37 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.property.Properties;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class ComposterBlockTestSuite {
     private static final BlockPos COMPOSTER_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:block.composter.empty")
-    public void usingCompostableItemOnComposterIncreasesLevel(TestContext context) {
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, context.getWorld().itematic$createStack(ItemKeys.PUMPKIN_PIE));
-        context.useBlock(COMPOSTER_POSITION, player);
-        context.addFinalTask(() -> Assert.blockState(context, COMPOSTER_POSITION)
-            .hasProperty(Properties.LEVEL_8, 1, () -> "Expected Composter level to increase to 1"));
+    public void usingCompostableItemOnComposterIncreasesLevel(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(
+            InteractionHand.MAIN_HAND,
+            helper.getLevel().itematic$createStack(ItemIds.PUMPKIN_PIE)
+        );
+        helper.useBlock(COMPOSTER_POSITION, player);
+        helper.succeedIf(() -> Assert.blockState(helper, COMPOSTER_POSITION)
+            .hasProperty(BlockStateProperties.LEVEL_COMPOSTER, 1, () -> "Expected Composter level to increase to 1"));
     }
 
     @GameTest(structure = "itematic:block.composter.full")
-    public void usingBlockOnFullComposterEmptiesComposterAndSpawnsBoneMeal(TestContext context) {
-        context.useBlock(COMPOSTER_POSITION);
-        context.addFinalTask(() -> {
-            Assert.blockState(context, COMPOSTER_POSITION)
-                .hasProperty(Properties.LEVEL_8, 0, () -> "Expected Composter to be emptied");
-            context.expectItem(context.getWorld().itematic$getItem(ItemKeys.BONE_MEAL).value());
+    public void usingBlockOnFullComposterEmptiesComposterAndSpawnsBoneMeal(GameTestHelper helper) {
+        helper.useBlock(COMPOSTER_POSITION);
+        helper.succeedIf(() -> {
+            Assert.blockState(helper, COMPOSTER_POSITION)
+                .hasProperty(BlockStateProperties.LEVEL_COMPOSTER, 0, () -> "Expected Composter to be emptied");
+            helper.assertItemEntityPresent(helper.getLevel().itematic$getItem(ItemIds.BONE_MEAL).value());
         });
     }
 }

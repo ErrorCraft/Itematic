@@ -1,22 +1,22 @@
 package net.errorcraft.itematic.data.server.tag;
 
-import net.errorcraft.itematic.registry.ItematicRegistryKeys;
-import net.errorcraft.itematic.village.trade.Trade;
-import net.errorcraft.itematic.village.trade.TradeTags;
-import net.errorcraft.itematic.village.trade.Trades;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
+import net.errorcraft.itematic.tags.TradeTags;
+import net.errorcraft.itematic.world.item.trading.Trade;
+import net.errorcraft.itematic.world.item.trading.Trades;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
 
 import java.util.concurrent.CompletableFuture;
 
 public class TradeTagProvider extends FabricTagProvider<Trade> {
-    public TradeTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
-        super(output, ItematicRegistryKeys.TRADE, registriesFuture);
+    public TradeTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, ItematicRegistries.TRADE, registriesFuture);
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup lookup) {
+    protected void addTags(HolderLookup.Provider lookup) {
         this.builder(TradeTags.FARMER_NOVICE)
             .add(Trades.BUY_WHEAT)
             .add(Trades.BUY_POTATO)

@@ -1,0 +1,39 @@
+package net.errorcraft.itematic.mixin.gametest.framework;
+
+import net.errorcraft.itematic.access.gametest.framework.GameTestInfoAccess;
+import net.minecraft.gametest.framework.GameTestInfo;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Mixin(GameTestInfo.class)
+public class GameTestInfoExtender implements GameTestInfoAccess {
+    @Unique
+    private final List<Runnable> whenFinished = new ArrayList<>();
+
+    @Inject(
+        method = "finish",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/gametest/framework/GameTestInfo;done:Z",
+            opcode = Opcodes.PUTFIELD,
+            shift = At.Shift.AFTER
+        )
+    )
+    private void callWhenFinishedActions(CallbackInfo info) {
+        for (Runnable runnable : this.whenFinished) {
+            runnable.run();
+        }
+    }
+
+    @Override
+    public void itematic$whenFinished(Runnable action) {
+        this.whenFinished.add(action);
+    }
+}

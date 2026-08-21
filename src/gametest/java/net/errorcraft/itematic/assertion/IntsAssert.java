@@ -1,18 +1,16 @@
 package net.errorcraft.itematic.assertion;
 
-import net.minecraft.test.TestContext;
-
-import java.util.Objects;
+import net.minecraft.gametest.framework.GameTestHelper;
 
 public class IntsAssert {
-    private final TestContext helper;
+    private final GameTestHelper helper;
     private final int value;
     private final String name;
 
-    IntsAssert(TestContext helper, int value, String name) {
-        this.helper = Objects.requireNonNull(helper);
+    IntsAssert(GameTestHelper helper, int value, String name) {
+        this.helper = helper;
         this.value = value;
-        this.name = Objects.requireNonNull(name);
+        this.name = name;
     }
 
     public IntsAssert equals(int expected) {
@@ -20,7 +18,7 @@ public class IntsAssert {
             return this;
         }
 
-        throw this.helper.createError(
+        throw this.helper.assertionException(
             "test.error.value_not_equal",
             this.name,
             expected,

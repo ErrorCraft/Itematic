@@ -1,920 +1,924 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FacingBlock;
-import net.minecraft.block.RespawnAnchorBlock;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.DispenserBlockEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potions;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.property.Properties;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.animal.equine.Horse;
+import net.minecraft.world.entity.animal.equine.Llama;
+import net.minecraft.world.entity.animal.equine.Mule;
+import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.entity.animal.sheep.Sheep;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.RespawnAnchorBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.DispenserBlockEntity;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 
 public class DispenserBehaviorTestSuite {
     private static final BlockPos DISPENSER_POSITION = new BlockPos(2, 1, 3);
-    private static final BlockPos BUTTON_POSITION = DISPENSER_POSITION.add(0, 1, 0);
-    private static final BlockPos OUTPUT_POSITION = DISPENSER_POSITION.add(0, 0, -1);
-    private static final BlockPos ABOVE_OUTPUT_POSITION = OUTPUT_POSITION.add(0, 1, 0);
+    private static final BlockPos BUTTON_POSITION = DISPENSER_POSITION.offset(0, 1, 0);
+    private static final BlockPos OUTPUT_POSITION = DISPENSER_POSITION.offset(0, 0, -1);
+    private static final BlockPos ABOVE_OUTPUT_POSITION = OUTPUT_POSITION.offset(0, 1, 0);
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingArrowSpawnsArrow(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.ARROW));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectEntity(EntityType.ARROW);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingArrowSpawnsArrow(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.ARROW));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertEntityPresent(EntityType.ARROW);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingExperienceBottleSpawnsExperienceBottle(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.EXPERIENCE_BOTTLE));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectEntity(EntityType.EXPERIENCE_BOTTLE);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingExperienceBottleSpawnsExperienceBottle(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.EXPERIENCE_BOTTLE));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertEntityPresent(EntityType.EXPERIENCE_BOTTLE);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingFireworkRocketSpawnsFireworkRocket(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.FIREWORK_ROCKET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectEntity(EntityType.FIREWORK_ROCKET);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingFireworkRocketSpawnsFireworkRocket(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.FIREWORK_ROCKET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertEntityPresent(EntityType.FIREWORK_ROCKET);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingFireChargeSpawnsEntity(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.FIRE_CHARGE));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectEntity(EntityType.SMALL_FIREBALL);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingFireChargeSpawnsEntity(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.FIRE_CHARGE));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertEntityPresent(EntityType.SMALL_FIREBALL);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingPigSpawnEggSpawnsPig(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.PIG_SPAWN_EGG));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectEntity(EntityType.PIG);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingPigSpawnEggSpawnsPig(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.PIG_SPAWN_EGG));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertEntityPresent(EntityType.PIG);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingArmorStandSpawnsArmorStand(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.ARMOR_STAND));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectEntity(EntityType.ARMOR_STAND);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingArmorStandSpawnsArmorStand(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.ARMOR_STAND));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertEntityPresent(EntityType.ARMOR_STAND);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingSpruceBoatSpawnsSpruceBoat(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.SPRUCE_BOAT));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectEntityAt(EntityType.SPRUCE_BOAT, OUTPUT_POSITION);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingSpruceBoatSpawnsSpruceBoat(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.SPRUCE_BOAT));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertEntityPresent(EntityType.SPRUCE_BOAT, OUTPUT_POSITION);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.grass_block")
-    public void dispensingBoneMealFertilizesBlock(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.BONE_MEAL));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, ABOVE_OUTPUT_POSITION)
+    public void dispensingBoneMealFertilizesBlock(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.BONE_MEAL));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, ABOVE_OUTPUT_POSITION)
                     .isNot(Blocks.AIR);
-                Assert.itemStack(context, blockEntity.getStack(0))
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.bedrock")
-    public void dispensingBoneMealOnInvalidBlockKeepsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.BONE_MEAL));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, ABOVE_OUTPUT_POSITION)
+    public void dispensingBoneMealOnInvalidBlockKeepsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.BONE_MEAL));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, ABOVE_OUTPUT_POSITION)
                     .is(Blocks.AIR);
-                context.dontExpectItem(world.itematic$getItem(ItemKeys.BONE_MEAL).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.BONE_MEAL);
+                helper.assertItemEntityNotPresent(level.itematic$getItem(ItemIds.BONE_MEAL).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.BONE_MEAL);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingEquipmentEquipsEntity(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        TestUtil.setEntityPos(context, player, OUTPUT_POSITION);
-        world.spawnEntity(player);
-        ItemStack stack = world.itematic$createStack(ItemKeys.IRON_HELMET);
-        blockEntity.addToFirstFreeSlot(stack);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.itemStack(context, player.getEquippedStack(EquipmentSlot.HEAD))
-                    .is(ItemKeys.IRON_HELMET);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingEquipmentEquipsEntity(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, OUTPUT_POSITION);
+        level.addFreshEntity(player);
+        ItemStack stack = level.itematic$createStack(ItemIds.IRON_HELMET);
+        blockEntity.insertItem(stack);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.itemStack(helper, player.getItemBySlot(EquipmentSlot.HEAD))
+                    .is(ItemIds.IRON_HELMET);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingEquipmentWithNoEntityDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.IRON_HELMET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.IRON_HELMET).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingEquipmentWithNoEntityDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.IRON_HELMET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.IRON_HELMET).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingHeadEquipsEntity(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        TestUtil.setEntityPos(context, player, OUTPUT_POSITION);
-        world.spawnEntity(player);
-        ItemStack stack = world.itematic$createStack(ItemKeys.SKELETON_SKULL);
-        blockEntity.addToFirstFreeSlot(stack);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.itemStack(context, player.getEquippedStack(EquipmentSlot.HEAD))
-                    .is(ItemKeys.SKELETON_SKULL);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingHeadEquipsEntity(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, OUTPUT_POSITION);
+        level.addFreshEntity(player);
+        ItemStack stack = level.itematic$createStack(ItemIds.SKELETON_SKULL);
+        blockEntity.insertItem(stack);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.itemStack(helper, player.getItemBySlot(EquipmentSlot.HEAD))
+                    .is(ItemIds.SKELETON_SKULL);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingHeadWithNoEntityKeepsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.SKELETON_SKULL));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.dontExpectItem(world.itematic$getItem(ItemKeys.SKELETON_SKULL).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.SKELETON_SKULL);
+    public void dispensingHeadWithNoEntityKeepsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.SKELETON_SKULL));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityNotPresent(level.itematic$getItem(ItemIds.SKELETON_SKULL).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.SKELETON_SKULL);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingWaterBucketPlacesWater(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.WATER_BUCKET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.fluidState(context, OUTPUT_POSITION)
+    public void dispensingWaterBucketPlacesWater(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.WATER_BUCKET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.fluidState(helper, OUTPUT_POSITION)
                     .is(FluidTags.WATER);
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.BUCKET);
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.BUCKET);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.bedrock")
-    public void dispensingWaterBucketWithObstructedBlockDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.WATER_BUCKET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.WATER_BUCKET).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingWaterBucketWithObstructedBlockDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.WATER_BUCKET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.WATER_BUCKET).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingPowderSnowBucketPlacesPowderSnow(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, OUTPUT_POSITION)
+    public void dispensingPowderSnowBucketPlacesPowderSnow(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.POWDER_SNOW_BUCKET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, OUTPUT_POSITION)
                     .is(Blocks.POWDER_SNOW);
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.BUCKET);
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.BUCKET);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.bedrock")
-    public void dispensingPowderSnowBucketWithObstructedBlockDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.POWDER_SNOW_BUCKET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.POWDER_SNOW_BUCKET).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingPowderSnowBucketWithObstructedBlockDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.POWDER_SNOW_BUCKET).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingSalmonBucketPlacesWaterAndSpawnsSalmon(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.SALMON_BUCKET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.fluidState(context, OUTPUT_POSITION)
+    public void dispensingSalmonBucketPlacesWaterAndSpawnsSalmon(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.SALMON_BUCKET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.fluidState(helper, OUTPUT_POSITION)
                     .is(FluidTags.WATER);
-                context.expectEntity(EntityType.SALMON);
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.BUCKET);
+                helper.assertEntityPresent(EntityType.SALMON);
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.BUCKET);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.bedrock")
-    public void dispensingSalmonBucketWithObstructedBlockDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.SALMON_BUCKET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.SALMON_BUCKET).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingSalmonBucketWithObstructedBlockDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.SALMON_BUCKET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.SALMON_BUCKET).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.water")
-    public void dispensingBucketPicksUpFluid(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.BUCKET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.fluidState(context, OUTPUT_POSITION)
+    public void dispensingBucketPicksUpFluid(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.BUCKET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.fluidState(helper, OUTPUT_POSITION)
                     .is(Fluids.EMPTY);
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.WATER_BUCKET);
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.WATER_BUCKET);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingBucketWithNothingToPickUpDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.BUCKET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.BUCKET).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingBucketWithNothingToPickUpDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.BUCKET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.BUCKET).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.dirt")
-    public void dispensingWaterBottleConvertsBlockToMud(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        ItemStack stack = PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER);
-        blockEntity.addToFirstFreeSlot(stack);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, OUTPUT_POSITION)
+    public void dispensingWaterBottleConvertsBlockToMud(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        ItemStack stack = PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.WATER);
+        blockEntity.insertItem(stack);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, OUTPUT_POSITION)
                     .is(Blocks.MUD);
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.GLASS_BOTTLE);
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.GLASS_BOTTLE);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.bedrock")
-    public void dispensingWaterBottleOnInvalidBlockDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        ItemStack stack = PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER);
-        blockEntity.addToFirstFreeSlot(stack);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.POTION).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingWaterBottleOnInvalidBlockDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        ItemStack stack = PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.WATER);
+        blockEntity.insertItem(stack);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.POTION).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.beehive")
-    public void dispensingGlassBottleOnBeehiveFillsBottleWithHoney(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.GLASS_BOTTLE));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, OUTPUT_POSITION)
-                    .hasProperty(Properties.HONEY_LEVEL, 0, () -> "Expected honey level to be reset");
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.HONEY_BOTTLE);
+    public void dispensingGlassBottleOnBeehiveFillsBottleWithHoney(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.GLASS_BOTTLE));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, OUTPUT_POSITION)
+                    .hasProperty(BlockStateProperties.LEVEL_HONEY, 0, () -> "Expected honey level to be reset");
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.HONEY_BOTTLE);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.water")
-    public void dispensingGlassBottleOnWaterFillsBottleWithWater(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.GLASS_BOTTLE));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> Assert.itemStack(context, blockEntity.getStack(0))
-                .is(ItemKeys.POTION)
+    public void dispensingGlassBottleOnWaterFillsBottleWithWater(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.GLASS_BOTTLE));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> Assert.itemStack(helper, blockEntity.getItem(0))
+                .is(ItemIds.POTION)
                 .hasPotion(Potions.WATER))
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.bedrock")
-    public void dispensingGlassBottleOnInvalidBlockDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.GLASS_BOTTLE));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.GLASS_BOTTLE).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingGlassBottleOnInvalidBlockDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.GLASS_BOTTLE));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.GLASS_BOTTLE).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingHorseArmorOnHorseEquipsHorse(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.IRON_HORSE_ARMOR));
-        HorseEntity horse = TestUtil.createEntity(context, EntityType.HORSE, entity -> {
-            TestUtil.setEntityPos(context, entity, OUTPUT_POSITION);
-            entity.setTame(true);
+    public void dispensingHorseArmorOnHorseEquipsHorse(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.IRON_HORSE_ARMOR));
+        Horse horse = TestUtil.createEntity(helper, EntityType.HORSE, entity -> {
+            TestUtil.setEntityPos(helper, entity, OUTPUT_POSITION);
+            entity.setTamed(true);
         });
-        world.spawnEntity(horse);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.itemStack(context, horse.getBodyArmor())
-                    .is(ItemKeys.IRON_HORSE_ARMOR);
-                Assert.itemStack(context, blockEntity.getStack(0))
+        level.addFreshEntity(horse);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.itemStack(helper, horse.getBodyArmorItem())
+                    .is(ItemIds.IRON_HORSE_ARMOR);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingHorseArmorWithNoEntityDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.IRON_HORSE_ARMOR));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.IRON_HORSE_ARMOR).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingHorseArmorWithNoEntityDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.IRON_HORSE_ARMOR));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.IRON_HORSE_ARMOR).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingCarpetOnLlamaEquipsLlama(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.WHITE_CARPET));
-        LlamaEntity llama = TestUtil.createEntity(context, EntityType.LLAMA, entity -> {
-            TestUtil.setEntityPos(context, entity, OUTPUT_POSITION);
-            entity.setTame(true);
+    public void dispensingCarpetOnLlamaEquipsLlama(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.WHITE_CARPET));
+        Llama llama = TestUtil.createEntity(helper, EntityType.LLAMA, entity -> {
+            TestUtil.setEntityPos(helper, entity, OUTPUT_POSITION);
+            entity.setTamed(true);
         });
-        world.spawnEntity(llama);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.itemStack(context, llama.getBodyArmor())
-                    .is(ItemKeys.WHITE_CARPET);
-                Assert.itemStack(context, blockEntity.getStack(0))
+        level.addFreshEntity(llama);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.itemStack(helper, llama.getBodyArmorItem())
+                    .is(ItemIds.WHITE_CARPET);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingCarpetWithNoEntityDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.WHITE_CARPET));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.WHITE_CARPET).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingCarpetWithNoEntityDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.WHITE_CARPET));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.WHITE_CARPET).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingChestOnMuleEquipsMuleWithChest(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.CHEST));
-        MuleEntity mule = TestUtil.createEntity(context, EntityType.MULE, entity -> {
-            TestUtil.setEntityPos(context, entity, OUTPUT_POSITION);
-            entity.setTame(true);
+    public void dispensingChestOnMuleEquipsMuleWithChest(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.CHEST));
+        Mule mule = TestUtil.createEntity(helper, EntityType.MULE, entity -> {
+            TestUtil.setEntityPos(helper, entity, OUTPUT_POSITION);
+            entity.setTamed(true);
         });
-        world.spawnEntity(mule);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
+        level.addFreshEntity(mule);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
                 Assert.isTrue(
-                    context,
+                    helper,
                     mule.hasChest(),
                     () -> "Expected Mule to have a chest"
                 );
-                Assert.itemStack(context, blockEntity.getStack(0))
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingChestOnLlamaEquipsLlamaWithChest(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.CHEST));
-        LlamaEntity llama = TestUtil.createEntity(context, EntityType.LLAMA, entity -> {
-            TestUtil.setEntityPos(context, entity, OUTPUT_POSITION);
-            entity.setTame(true);
+    public void dispensingChestOnLlamaEquipsLlamaWithChest(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.CHEST));
+        Llama llama = TestUtil.createEntity(helper, EntityType.LLAMA, entity -> {
+            TestUtil.setEntityPos(helper, entity, OUTPUT_POSITION);
+            entity.setTamed(true);
         });
-        world.spawnEntity(llama);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
+        level.addFreshEntity(llama);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
                 Assert.isTrue(
-                    context,
+                    helper,
                     llama.hasChest(),
                     () -> "Expected Llama to have a chest"
                 );
-                Assert.itemStack(context, blockEntity.getStack(0))
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingChestWithNoEntityDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.CHEST));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.CHEST).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingChestWithNoEntityDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.CHEST));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.CHEST).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingShulkerBoxWithBlockBelowOutputPlacesShulkerBoxFacingUp(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.SHULKER_BOX));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, OUTPUT_POSITION)
-                    .hasProperty(FacingBlock.FACING, Direction.UP);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingShulkerBoxWithBlockBelowOutputPlacesShulkerBoxFacingUp(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.SHULKER_BOX));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, OUTPUT_POSITION)
+                    .hasProperty(DirectionalBlock.FACING, Direction.UP);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.gap_below_output")
-    public void dispensingShulkerBoxWithoutBlockBelowOutputPlacesShulkerBoxWithDispenserDirection(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.SHULKER_BOX));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Direction dispenserDirection = context.getBlockState(DISPENSER_POSITION).get(FacingBlock.FACING);
-                Assert.blockState(context, OUTPUT_POSITION)
-                    .hasProperty(FacingBlock.FACING, dispenserDirection);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingShulkerBoxWithoutBlockBelowOutputPlacesShulkerBoxWithDispenserDirection(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.SHULKER_BOX));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Direction dispenserDirection = helper.getBlockState(DISPENSER_POSITION).getValue(DirectionalBlock.FACING);
+                Assert.blockState(helper, OUTPUT_POSITION)
+                    .hasProperty(DirectionalBlock.FACING, dispenserDirection);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.bedrock")
-    public void dispensingShulkerBoxWithObstructedBlockKeepsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.SHULKER_BOX));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.dontExpectItem(world.itematic$getItem(ItemKeys.SHULKER_BOX).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.SHULKER_BOX);
+    public void dispensingShulkerBoxWithObstructedBlockKeepsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.SHULKER_BOX));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityNotPresent(level.itematic$getItem(ItemIds.SHULKER_BOX).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.SHULKER_BOX);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingTntSpawnsTnt(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.TNT));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectEntity(EntityType.TNT);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingTntSpawnsTnt(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.TNT));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertEntityPresent(EntityType.TNT);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingCarvedPumpkinEquipsEntity(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        TestUtil.setEntityPos(context, player, OUTPUT_POSITION);
-        world.spawnEntity(player);
-        ItemStack stack = world.itematic$createStack(ItemKeys.CARVED_PUMPKIN);
-        blockEntity.addToFirstFreeSlot(stack);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.itemStack(context, player.getEquippedStack(EquipmentSlot.HEAD))
-                    .is(ItemKeys.CARVED_PUMPKIN);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingCarvedPumpkinEquipsEntity(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        TestUtil.setEntityPos(helper, player, OUTPUT_POSITION);
+        level.addFreshEntity(player);
+        ItemStack stack = level.itematic$createStack(ItemIds.CARVED_PUMPKIN);
+        blockEntity.insertItem(stack);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.itemStack(helper, player.getItemBySlot(EquipmentSlot.HEAD))
+                    .is(ItemIds.CARVED_PUMPKIN);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.iron_golem_structure")
-    public void dispensingCarvedPumpkinPlacesCarvedPumpkinOnIronGolemStructure(TestContext context) {
+    public void dispensingCarvedPumpkinPlacesCarvedPumpkinOnIronGolemStructure(GameTestHelper helper) {
         BlockPos offset = new BlockPos(0, 2, 0);
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION.add(offset), BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.CARVED_PUMPKIN));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION.add(offset)))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectEntity(EntityType.IRON_GOLEM);
-                Assert.itemStack(context, blockEntity.getStack(0))
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION.offset(offset), BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.CARVED_PUMPKIN));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION.offset(offset)))
+            .thenExecuteAfter(4, () -> {
+                helper.assertEntityPresent(EntityType.IRON_GOLEM);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingCarvedPumpkinWithNoValidTargetKeepsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.CARVED_PUMPKIN));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.dontExpectItem(world.itematic$getItem(ItemKeys.CARVED_PUMPKIN).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.CARVED_PUMPKIN);
+    public void dispensingCarvedPumpkinWithNoValidTargetKeepsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.CARVED_PUMPKIN));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityNotPresent(level.itematic$getItem(ItemIds.CARVED_PUMPKIN).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.CARVED_PUMPKIN);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.respawn_anchor")
-    public void dispensingGlowstoneOnRespawnAnchorChargesRespawnAnchor(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.GLOWSTONE));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, OUTPUT_POSITION)
-                    .hasProperty(RespawnAnchorBlock.CHARGES, 1);
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingGlowstoneOnRespawnAnchorChargesRespawnAnchor(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.GLOWSTONE));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, OUTPUT_POSITION)
+                    .hasProperty(RespawnAnchorBlock.CHARGE, 1);
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.respawn_anchor.full")
-    public void dispensingGlowstoneOnFullRespawnAnchorKeepsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.GLOWSTONE));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.dontExpectItem(world.itematic$getItem(ItemKeys.GLOWSTONE).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.GLOWSTONE);
+    public void dispensingGlowstoneOnFullRespawnAnchorKeepsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.GLOWSTONE));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityNotPresent(level.itematic$getItem(ItemIds.GLOWSTONE).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.GLOWSTONE);
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingGlowstoneOnInvalidBlockDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.GLOWSTONE));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.GLOWSTONE).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingGlowstoneOnInvalidBlockDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.GLOWSTONE));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.GLOWSTONE).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingShearsOnSheepShearsSheep(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.SHEARS));
-        SheepEntity sheep = context.spawnEntity(EntityType.SHEEP, OUTPUT_POSITION);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
+    public void dispensingShearsOnSheepShearsSheep(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.SHEARS));
+        Sheep sheep = helper.spawn(EntityType.SHEEP, OUTPUT_POSITION);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
                 Assert.isTrue(
-                    context,
+                    helper,
                     sheep.isSheared(),
                     () -> "Expected Sheep to be sheared"
                 );
-                context.expectItem(world.itematic$getItem(ItemKeys.WHITE_WOOL).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.WHITE_WOOL).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isDamaged();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.beehive")
-    public void dispensingShearsOnBeehiveWithHoneyShearsBeehive(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.SHEARS));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, OUTPUT_POSITION)
+    public void dispensingShearsOnBeehiveWithHoneyShearsBeehive(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.SHEARS));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, OUTPUT_POSITION)
                     .hasProperty(BeehiveBlock.HONEY_LEVEL, 0);
-                context.expectItem(world.itematic$getItem(ItemKeys.HONEYCOMB).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.HONEYCOMB).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isDamaged();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingShearsWithNoValidTargetKeepsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.SHEARS));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.dontExpectItem(world.itematic$getItem(ItemKeys.SHEARS).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.SHEARS)
+    public void dispensingShearsWithNoValidTargetKeepsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.SHEARS));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityNotPresent(level.itematic$getItem(ItemIds.SHEARS).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.SHEARS)
                     .isNotDamaged();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingSaddleOnPigEquipsPig(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.SADDLE));
-        PigEntity pig = context.spawnEntity(EntityType.PIG, OUTPUT_POSITION);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.livingEntity(context, pig)
-                    .hasEquippedStack(EquipmentSlot.SADDLE, stack -> stack.is(ItemKeys.SADDLE));
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingSaddleOnPigEquipsPig(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.SADDLE));
+        Pig pig = helper.spawn(EntityType.PIG, OUTPUT_POSITION);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.livingEntity(helper, pig)
+                    .hasEquippedStack(EquipmentSlot.SADDLE, stack -> stack.is(ItemIds.SADDLE));
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingSaddleOnHorseEquipsHorse(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.SADDLE));
-        HorseEntity horse = TestUtil.createEntity(context, EntityType.HORSE, entity -> {
-            TestUtil.setEntityPos(context, entity, OUTPUT_POSITION);
-            entity.setTame(true);
+    public void dispensingSaddleOnHorseEquipsHorse(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.SADDLE));
+        Horse horse = TestUtil.createEntity(helper, EntityType.HORSE, entity -> {
+            TestUtil.setEntityPos(helper, entity, OUTPUT_POSITION);
+            entity.setTamed(true);
         });
-        world.spawnEntity(horse);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.livingEntity(context, horse)
-                    .hasEquippedStack(EquipmentSlot.SADDLE, stack -> stack.is(ItemKeys.SADDLE));
-                Assert.itemStack(context, blockEntity.getStack(0))
+        level.addFreshEntity(horse);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.livingEntity(helper, horse)
+                    .hasEquippedStack(EquipmentSlot.SADDLE, stack -> stack.is(ItemIds.SADDLE));
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingSaddleWithNoEntityDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.SADDLE));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.SADDLE).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingSaddleWithNoEntityDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.SADDLE));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.SADDLE).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingFlintAndSteelPlacesFire(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.FLINT_AND_STEEL));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, OUTPUT_POSITION)
+    public void dispensingFlintAndSteelPlacesFire(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.FLINT_AND_STEEL));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, OUTPUT_POSITION)
                     .is(Blocks.FIRE);
-                Assert.itemStack(context, blockEntity.getStack(0))
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isDamaged();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.gap_below_output")
-    public void dispensingFlintAndSteelOnInvalidBlockKeepsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.FLINT_AND_STEEL));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.dontExpectItem(world.itematic$getItem(ItemKeys.FLINT_AND_STEEL).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.FLINT_AND_STEEL)
+    public void dispensingFlintAndSteelOnInvalidBlockKeepsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.FLINT_AND_STEEL));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityNotPresent(level.itematic$getItem(ItemIds.FLINT_AND_STEEL).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.FLINT_AND_STEEL)
                     .isNotDamaged();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingBrushDropsArmadilloScute(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.BRUSH));
-        context.spawnEntity(EntityType.ARMADILLO, OUTPUT_POSITION);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.ARMADILLO_SCUTE).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingBrushDropsArmadilloScute(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.BRUSH));
+        helper.spawn(EntityType.ARMADILLO, OUTPUT_POSITION);
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.ARMADILLO_SCUTE).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isDamaged();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingBrushWithNoEntityKeepsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.BRUSH));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.dontExpectItem(world.itematic$getItem(ItemKeys.BRUSH).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
-                    .is(ItemKeys.BRUSH)
+    public void dispensingBrushWithNoEntityKeepsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.BRUSH));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityNotPresent(level.itematic$getItem(ItemIds.BRUSH).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
+                    .is(ItemIds.BRUSH)
                     .isNotDamaged();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser.copper_block")
-    public void dispensingHoneycombWaxesBlock(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        blockEntity.addToFirstFreeSlot(context.getWorld().itematic$createStack(ItemKeys.HONEYCOMB));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                Assert.blockState(context, OUTPUT_POSITION)
+    public void dispensingHoneycombWaxesBlock(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        blockEntity.insertItem(helper.getLevel().itematic$createStack(ItemIds.HONEYCOMB));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                Assert.blockState(helper, OUTPUT_POSITION)
                     .is(Blocks.WAXED_COPPER_BLOCK);
-                Assert.itemStack(context, blockEntity.getStack(0))
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.dispenser")
-    public void dispensingHoneycombOnInvalidBlockDropsItem(TestContext context) {
-        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(context, DISPENSER_POSITION, BlockEntityType.DISPENSER);
-        ServerWorld world = context.getWorld();
-        blockEntity.addToFirstFreeSlot(world.itematic$createStack(ItemKeys.HONEYCOMB));
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> context.pushButton(BUTTON_POSITION))
-            .expectMinDurationAndRun(4, () -> {
-                context.expectItem(world.itematic$getItem(ItemKeys.HONEYCOMB).value());
-                Assert.itemStack(context, blockEntity.getStack(0))
+    public void dispensingHoneycombOnInvalidBlockDropsItem(GameTestHelper helper) {
+        DispenserBlockEntity blockEntity = TestUtil.getBlockEntity(helper, DISPENSER_POSITION, BlockEntityType.DISPENSER);
+        ServerLevel level = helper.getLevel();
+        blockEntity.insertItem(level.itematic$createStack(ItemIds.HONEYCOMB));
+        helper.startSequence()
+            .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
+            .thenExecuteAfter(4, () -> {
+                helper.assertItemEntityPresent(level.itematic$getItem(ItemIds.HONEYCOMB).value());
+                Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 }

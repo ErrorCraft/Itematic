@@ -1,31 +1,31 @@
 {
   "entries": [
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/swords"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/spears"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/axes"
     },
     "minecraft:trident",
     "minecraft:mace",
     "minecraft:shield",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/armor"
     },
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/horse_armor"
     },
     "minecraft:wolf_armor",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/nautilus_armor"
     },
     "minecraft:totem_of_undying",
@@ -33,14 +33,14 @@
     "minecraft:end_crystal",
     "minecraft:snowball",
     {
-      "type": "tag",
+      "type": "minecraft:tag",
       "tag": "minecraft:item_group/eggs"
     },
     "minecraft:wind_charge",
     "minecraft:bow",
     "minecraft:crossbow",
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 1
@@ -49,7 +49,7 @@
       "item": "minecraft:firework_rocket"
     },
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 2
@@ -58,7 +58,7 @@
       "item": "minecraft:firework_rocket"
     },
     {
-      "type": "stack",
+      "type": "minecraft:stack",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 3
@@ -69,7 +69,7 @@
     "minecraft:arrow",
     "minecraft:spectral_arrow",
     {
-      "type": "potion",
+      "type": "minecraft:potion",
       "item": "minecraft:tipped_arrow"
     }
   ]

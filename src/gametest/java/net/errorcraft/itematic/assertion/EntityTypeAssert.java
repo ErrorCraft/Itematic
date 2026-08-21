@@ -1,18 +1,18 @@
 package net.errorcraft.itematic.assertion;
 
 import net.errorcraft.itematic.util.TestUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 
 import java.util.function.Consumer;
 
 public class EntityTypeAssert<E extends Entity> {
-    private final TestContext helper;
+    private final GameTestHelper helper;
     private final EntityType<? extends E> entityType;
 
-    EntityTypeAssert(TestContext helper, EntityType<? extends E> entityType) {
+    EntityTypeAssert(GameTestHelper helper, EntityType<? extends E> entityType) {
         this.helper = helper;
         this.entityType = entityType;
     }
@@ -43,12 +43,12 @@ public class EntityTypeAssert<E extends Entity> {
     }
 
     public EntityTypeAssert<E> doesNotExist() {
-        this.helper.dontExpectEntity(this.entityType);
+        this.helper.assertEntityNotPresent(this.entityType);
         return this;
     }
 
     @FunctionalInterface
     public interface AssertionSupplier<A extends BaseEntityAssert<A, ? extends E>, E extends Entity> {
-        A get(TestContext helper, E entity);
+        A get(GameTestHelper helper, E entity);
     }
 }

@@ -1,66 +1,68 @@
 package net.errorcraft.itematic.data.recipe.brewing;
 
-import net.errorcraft.itematic.recipe.brewing.BrewingRecipe;
-import net.minecraft.advancement.Advancement;
-import net.minecraft.advancement.AdvancementRequirements;
-import net.minecraft.advancement.AdvancementRewards;
-import net.minecraft.advancement.criterion.InventoryChangedCriterion;
-import net.minecraft.advancement.criterion.RecipeUnlockedCriterion;
-import net.minecraft.data.recipe.RecipeExporter;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.util.Identifier;
+import net.errorcraft.itematic.world.item.crafting.BrewingRecipe;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
 public abstract class BrewingRecipeBuilder<T> {
-    protected final RegistryEntry<T> base;
-    private final RegistryEntryList<Item> reagent;
-    protected final RegistryEntry<T> result;
-    private RegistryEntry<Item> remainder;
+    protected final Holder<T> base;
+    private final HolderSet<Item> reagent;
+    protected final Holder<T> result;
+    @Nullable
+    private Holder<Item> remainder;
     private final Identifier name;
 
-    protected BrewingRecipeBuilder(RegistryEntry<T> base, RegistryEntryList<Item> reagent, RegistryEntry<T> result, Identifier name) {
+    protected BrewingRecipeBuilder(Holder<T> base, HolderSet<Item> reagent, Holder<T> result, Identifier name) {
         this.base = base;
         this.reagent = reagent;
         this.result = result;
         this.name = name;
     }
 
-    public BrewingRecipeBuilder<T> remainder(RegistryEntry<Item> remainder) {
+    public BrewingRecipeBuilder<T> remainder(Holder<Item> remainder) {
         this.remainder = remainder;
         return this;
     }
 
-    public void save(RecipeExporter exporter) {
-        RegistryKey<Recipe<?>> key = RegistryKey.of(RegistryKeys.RECIPE, this.name);
-        Advancement.Builder advancementBuilder = exporter.getAdvancementBuilder()
-            .criterion("has_the_recipe", RecipeUnlockedCriterion.create(key))
-            .criterion("has_reagent", InventoryChangedCriterion.Conditions.items(
-                ItemPredicate.Builder.create()
+    public void save(RecipeOutput exporter) {
+        ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, this.name);
+        Advancement.Builder advancementBuilder = exporter.advancement()
+            .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(key))
+            .addCriterion("has_reagent", InventoryChangeTrigger.TriggerInstance.hasItems(
+                ItemPredicate.Builder.item()
                     .itematic$items(this.reagent)
             ))
-            .criteriaMerger(AdvancementRequirements.CriterionMerger.OR)
+            .requirements(AdvancementRequirements.Strategy.OR)
             .rewards(AdvancementRewards.Builder.recipe(key));
         BrewingRecipe<T> recipe = this.createRecipe();
         exporter.accept(
             key,
             recipe,
-            advancementBuilder.build(key.getValue().withPrefixedPath("recipes/brewing/"))
+            advancementBuilder.build(key.identifier().withPrefix("recipes/brewing/"))
         );
     }
 
     protected abstract BrewingRecipe<T> createRecipe();
 
     protected Ingredient reagent() {
-        Ingredient reagent = Ingredient.ofTag(this.reagent);
+        Ingredient reagent = Ingredient.of(this.reagent);
         reagent.itematic$setRemainder(Optional.ofNullable(this.remainder).map(ItemStack::new));
         return reagent;
     }

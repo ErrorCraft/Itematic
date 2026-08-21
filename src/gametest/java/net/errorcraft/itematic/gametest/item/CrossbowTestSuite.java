@@ -1,46 +1,46 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameType;
 
 public class CrossbowTestSuite {
     @GameTest(maxTicks = 100)
-    public void usingCrossbowWithInfinityChargesArrowFromInventoryButDoesNotConsumeTheArrow(TestContext context) {
-        ServerWorld world = context.getWorld();
-        ItemStack crossbow = TestUtil.createItemStackWithEnchantment(world, ItemKeys.CROSSBOW, Enchantments.INFINITY);
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        player.setStackInHand(Hand.MAIN_HAND, crossbow);
-        player.getInventory().insertStack(world.itematic$createStack(ItemKeys.ARROW));
-        world.spawnEntity(player);
-        context.createTimedTaskRunner()
-            .createAndAddReported(() -> crossbow.use(world, player, Hand.MAIN_HAND))
-            .expectMinDurationAndRun(crossbow.getMaxUseTime(player), () -> {
-                player.stopUsingItem();
-                Assert.itemStack(context, player.getStackInHand(Hand.MAIN_HAND))
+    public void usingCrossbowWithInfinityChargesArrowFromInventoryButDoesNotConsumeTheArrow(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack crossbow = TestUtil.createItemStackWithEnchantment(level, ItemIds.CROSSBOW, Enchantments.INFINITY);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setItemInHand(InteractionHand.MAIN_HAND, crossbow);
+        player.getInventory().add(level.itematic$createStack(ItemIds.ARROW));
+        level.addFreshEntity(player);
+        helper.startSequence()
+            .thenExecute(() -> crossbow.use(level, player, InteractionHand.MAIN_HAND))
+            .thenExecuteAfter(crossbow.getUseDuration(player), () -> {
+                player.releaseUsingItem();
+                Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
                     .hasComponent(
-                        DataComponentTypes.CHARGED_PROJECTILES,
+                        DataComponents.CHARGED_PROJECTILES,
                         component -> Assert.isTrue(
-                            context,
-                            component.itematic$contains(ItemKeys.ARROW),
+                            helper,
+                            component.itematic$contains(ItemIds.ARROW),
                             () -> "Expected item stack to have an Arrow as a charged projectile"
                         )
                     );
                 Assert.isTrue(
-                    context,
-                    player.getInventory().contains(s -> s.itematic$isOf(ItemKeys.ARROW)),
+                    helper,
+                    player.getInventory().contains(stack -> stack.itematic$is(ItemIds.ARROW)),
                     () -> "Expected Player to have an Arrow in their inventory"
                 );
             })
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 }

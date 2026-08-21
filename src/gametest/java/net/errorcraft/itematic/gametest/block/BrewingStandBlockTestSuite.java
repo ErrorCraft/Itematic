@@ -1,230 +1,230 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.component.PotionContentsComponentUtil;
-import net.errorcraft.itematic.item.ItemKeys;
-import net.errorcraft.itematic.screen.BrewingStandMenuDelegate;
-import net.errorcraft.itematic.screen.ItematicScreenHandlerTypes;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
+import net.errorcraft.itematic.world.inventory.BrewingStandMenuDelegate;
+import net.errorcraft.itematic.world.inventory.ItematicMenuTypes;
+import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potions;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.GameType;
 
 public class BrewingStandBlockTestSuite {
     private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
-    public void brewingWaterBottleWithNetherWartTurnsItIntoAwkwardPotion(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
+    public void brewingWaterBottleWithNetherWartTurnsItIntoAwkwardPotion(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.WATER));
         brewingStandMenu.getSlot(3)
-            .setStack(world.itematic$createStack(ItemKeys.NETHER_WART));
+            .setByPlayer(level.itematic$createStack(ItemIds.NETHER_WART));
         brewingStandMenu.getSlot(4)
-            .setStack(world.itematic$createStack(ItemKeys.BLAZE_POWDER));
-        context.createTimedTaskRunner()
-            .expectMinDurationAndRun(
+            .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
+        helper.startSequence()
+            .thenExecuteAfter(
                 401,
-                () -> Assert.itemStack(context, brewingStandMenu.getSlot(0).getStack())
-                    .is(ItemKeys.POTION)
+                () -> Assert.itemStack(helper, brewingStandMenu.getSlot(0).getItem())
+                    .is(ItemIds.POTION)
                     .hasPotion(Potions.AWKWARD)
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
-    public void brewingAwkwardPotionWithSugarTurnsItIntoSwiftnessPotion(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
+    public void brewingAwkwardPotionWithSugarTurnsItIntoSwiftnessPotion(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.AWKWARD));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.AWKWARD));
         brewingStandMenu.getSlot(3)
-            .setStack(world.itematic$createStack(ItemKeys.SUGAR));
+            .setByPlayer(level.itematic$createStack(ItemIds.SUGAR));
         brewingStandMenu.getSlot(4)
-            .setStack(world.itematic$createStack(ItemKeys.BLAZE_POWDER));
-        context.createTimedTaskRunner()
-            .expectMinDurationAndRun(
+            .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
+        helper.startSequence()
+            .thenExecuteAfter(
                 401,
                 () -> {
-                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStack(context, resultPotion)
-                        .is(ItemKeys.POTION)
+                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getItem();
+                    Assert.itemStack(helper, resultPotion)
+                        .is(ItemIds.POTION)
                         .hasPotion(Potions.SWIFTNESS);
                 }
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
-    public void brewingSwiftnessPotionWithGlowstoneDustTurnsItIntoStrongSwiftnessPotion(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
+    public void brewingSwiftnessPotionWithGlowstoneDustTurnsItIntoStrongSwiftnessPotion(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
-            .setStack(world.itematic$createStack(ItemKeys.GLOWSTONE_DUST));
+            .setByPlayer(level.itematic$createStack(ItemIds.GLOWSTONE_DUST));
         brewingStandMenu.getSlot(4)
-            .setStack(world.itematic$createStack(ItemKeys.BLAZE_POWDER));
-        context.createTimedTaskRunner()
-            .expectMinDurationAndRun(
+            .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
+        helper.startSequence()
+            .thenExecuteAfter(
                 401,
                 () -> {
-                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStack(context, resultPotion)
-                        .is(ItemKeys.POTION)
+                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getItem();
+                    Assert.itemStack(helper, resultPotion)
+                        .is(ItemIds.POTION)
                         .hasPotion(Potions.STRONG_SWIFTNESS);
                 }
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
-    public void brewingSwiftnessPotionWithRedstoneTurnsItIntoLongSwiftnessPotion(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
+    public void brewingSwiftnessPotionWithRedstoneTurnsItIntoLongSwiftnessPotion(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
-            .setStack(world.itematic$createStack(ItemKeys.REDSTONE));
+            .setByPlayer(level.itematic$createStack(ItemIds.REDSTONE));
         brewingStandMenu.getSlot(4)
-            .setStack(world.itematic$createStack(ItemKeys.BLAZE_POWDER));
-        context.createTimedTaskRunner()
-            .expectMinDurationAndRun(
+            .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
+        helper.startSequence()
+            .thenExecuteAfter(
                 401,
                 () -> {
-                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStack(context, resultPotion)
-                        .is(ItemKeys.POTION)
+                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getItem();
+                    Assert.itemStack(helper, resultPotion)
+                        .is(ItemIds.POTION)
                         .hasPotion(Potions.LONG_SWIFTNESS);
                 }
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
-    public void brewingSwiftnessPotionWithGunpowderTurnsItIntoSwiftnessSplashPotion(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
+    public void brewingSwiftnessPotionWithGunpowderTurnsItIntoSwiftnessSplashPotion(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
-            .setStack(world.itematic$createStack(ItemKeys.GUNPOWDER));
+            .setByPlayer(level.itematic$createStack(ItemIds.GUNPOWDER));
         brewingStandMenu.getSlot(4)
-            .setStack(world.itematic$createStack(ItemKeys.BLAZE_POWDER));
-        context.createTimedTaskRunner()
-            .expectMinDurationAndRun(
+            .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
+        helper.startSequence()
+            .thenExecuteAfter(
                 401,
                 () -> {
-                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStack(context, resultPotion)
-                        .is(ItemKeys.SPLASH_POTION)
+                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getItem();
+                    Assert.itemStack(helper, resultPotion)
+                        .is(ItemIds.SPLASH_POTION)
                         .hasPotion(Potions.SWIFTNESS);
                 }
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
-    public void brewingSwiftnessSplashPotionWithDragonBreathTurnsItIntoSwiftnessLingeringPotionAndLeavesGlassBottle(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
+    public void brewingSwiftnessSplashPotionWithDragonBreathTurnsItIntoSwiftnessLingeringPotionAndLeavesGlassBottle(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.SPLASH_POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.SPLASH_POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
-            .setStack(world.itematic$createStack(ItemKeys.DRAGON_BREATH));
+            .setByPlayer(level.itematic$createStack(ItemIds.DRAGON_BREATH));
         brewingStandMenu.getSlot(4)
-            .setStack(world.itematic$createStack(ItemKeys.BLAZE_POWDER));
-        context.createTimedTaskRunner()
-            .expectMinDurationAndRun(
+            .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
+        helper.startSequence()
+            .thenExecuteAfter(
                 401,
                 () -> {
-                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStack(context, resultPotion)
-                        .is(ItemKeys.LINGERING_POTION)
+                    ItemStack resultPotion = brewingStandMenu.getSlot(0).getItem();
+                    Assert.itemStack(helper, resultPotion)
+                        .is(ItemIds.LINGERING_POTION)
                         .hasPotion(Potions.SWIFTNESS);
-                    ItemStack ingredientRemainder = brewingStandMenu.getSlot(3).getStack();
-                    Assert.itemStack(context, ingredientRemainder)
-                        .is(ItemKeys.GLASS_BOTTLE);
+                    ItemStack ingredientRemainder = brewingStandMenu.getSlot(3).getItem();
+                    Assert.itemStack(helper, ingredientRemainder)
+                        .is(ItemIds.GLASS_BOTTLE);
                 }
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
-    public void brewingDifferentPotionsOnlyModifiesCorrectTargets(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
+    public void brewingDifferentPotionsOnlyModifiesCorrectTargets(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.SWIFTNESS));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(1)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.WATER));
         brewingStandMenu.getSlot(2)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.LEAPING));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.LEAPING));
         brewingStandMenu.getSlot(3)
-            .setStack(world.itematic$createStack(ItemKeys.NETHER_WART));
+            .setByPlayer(level.itematic$createStack(ItemIds.NETHER_WART));
         brewingStandMenu.getSlot(4)
-            .setStack(world.itematic$createStack(ItemKeys.BLAZE_POWDER));
-        context.createTimedTaskRunner()
-            .expectMinDurationAndRun(
+            .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
+        helper.startSequence()
+            .thenExecuteAfter(
                 401,
                 () -> {
-                    ItemStack firstPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStack(context, firstPotion)
-                        .is(ItemKeys.POTION)
+                    ItemStack firstPotion = brewingStandMenu.getSlot(0).getItem();
+                    Assert.itemStack(helper, firstPotion)
+                        .is(ItemIds.POTION)
                         .hasPotion(Potions.SWIFTNESS);
-                    ItemStack secondPotion = brewingStandMenu.getSlot(1).getStack();
-                    Assert.itemStack(context, secondPotion)
-                        .is(ItemKeys.POTION)
+                    ItemStack secondPotion = brewingStandMenu.getSlot(1).getItem();
+                    Assert.itemStack(helper, secondPotion)
+                        .is(ItemIds.POTION)
                         .hasPotion(Potions.AWKWARD);
-                    ItemStack thirdPotion = brewingStandMenu.getSlot(2).getStack();
-                    Assert.itemStack(context, thirdPotion)
-                        .is(ItemKeys.POTION)
+                    ItemStack thirdPotion = brewingStandMenu.getSlot(2).getItem();
+                    Assert.itemStack(helper, thirdPotion)
+                        .is(ItemIds.POTION)
                         .hasPotion(Potions.LEAPING);
                 }
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 
     @GameTest(structure = "itematic:block.brewing_stand", maxTicks = 401)
-    public void brewingPotionsTargetingMultipleValidRecipesModifiesBoth(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ItematicScreenHandlerTypes.BREWING_STAND);
+    public void brewingPotionsTargetingMultipleValidRecipesModifiesBoth(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
         brewingStandMenu.getSlot(0)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.WATER));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.WATER));
         brewingStandMenu.getSlot(1)
-            .setStack(PotionContentsComponentUtil.setPotion(world.itematic$createStack(ItemKeys.POTION), Potions.AWKWARD));
+            .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.AWKWARD));
         brewingStandMenu.getSlot(3)
-            .setStack(world.itematic$createStack(ItemKeys.SUGAR));
+            .setByPlayer(level.itematic$createStack(ItemIds.SUGAR));
         brewingStandMenu.getSlot(4)
-            .setStack(world.itematic$createStack(ItemKeys.BLAZE_POWDER));
-        context.createTimedTaskRunner()
-            .expectMinDurationAndRun(
+            .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
+        helper.startSequence()
+            .thenExecuteAfter(
                 401,
                 () -> {
-                    ItemStack firstPotion = brewingStandMenu.getSlot(0).getStack();
-                    Assert.itemStack(context, firstPotion)
-                        .is(ItemKeys.POTION)
+                    ItemStack firstPotion = brewingStandMenu.getSlot(0).getItem();
+                    Assert.itemStack(helper, firstPotion)
+                        .is(ItemIds.POTION)
                         .hasPotion(Potions.MUNDANE);
-                    ItemStack secondPotion = brewingStandMenu.getSlot(1).getStack();
-                    Assert.itemStack(context, secondPotion)
-                        .is(ItemKeys.POTION)
+                    ItemStack secondPotion = brewingStandMenu.getSlot(1).getItem();
+                    Assert.itemStack(helper, secondPotion)
+                        .is(ItemIds.POTION)
                         .hasPotion(Potions.SWIFTNESS);
                 }
             )
-            .completeIfSuccessful();
+            .thenSucceed();
     }
 }

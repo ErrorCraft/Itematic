@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.PiglinEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.Hand;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 
 import java.util.Objects;
 
@@ -19,92 +19,99 @@ public class WeaponItemComponentTestSuite {
     private static final double MAX_HEALTH_VICTIM = 100.0d;
 
     @GameTest
-    public void zombieAttackingUnarmedDealsDamageFromTrueBaseValueAttackDamageAttribute(TestContext context) {
-        ServerWorld world = context.getWorld();
-        ZombieEntity zombie = TestUtil.createEntity(context, EntityType.ZOMBIE, entity -> {});
-        world.spawnEntity(zombie);
-        PigEntity victim = spawnVictim(context);
-        context.createTimedTaskRunner().expectMinDurationAndRun(1, () -> {
+    public void zombieAttackingUnarmedDealsDamageFromTrueBaseValueAttackDamageAttribute(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Zombie zombie = TestUtil.createEntity(helper, EntityType.ZOMBIE, entity -> {
+        });
+        level.addFreshEntity(zombie);
+        Pig victim = spawnVictim(helper);
+        helper.startSequence().thenExecuteAfter(1, () -> {
             Assert.isTrue(
-                context,
-                zombie.tryAttack(world, victim),
+                helper,
+                zombie.doHurtTarget(level, victim),
                 () -> "Expected attack to be successful"
             );
-            Assert.doubles(context, victim.getHealth(), "health")
+            Assert.doubles(helper, victim.getHealth(), "health")
                 .equals(MAX_HEALTH_VICTIM - zombie.itematic$getAttackDamage());
-        }).completeIfSuccessful();
+        }).thenSucceed();
     }
 
     @GameTest
-    public void zombieAttackingWithIronSwordDealsCorrectDamage(TestContext context) {
-        ServerWorld world = context.getWorld();
-        ZombieEntity zombie = TestUtil.createEntity(
-            context,
+    public void zombieAttackingWithIronSwordDealsCorrectDamage(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Zombie zombie = TestUtil.createEntity(
+            helper,
             EntityType.ZOMBIE,
-            entity -> entity.setStackInHand(Hand.MAIN_HAND, world.itematic$createStack(ItemKeys.IRON_SWORD))
+            entity -> entity.setItemInHand(
+                InteractionHand.MAIN_HAND,
+                level.itematic$createStack(ItemIds.IRON_SWORD)
+            )
         );
-        world.spawnEntity(zombie);
-        PigEntity victim = spawnVictim(context);
-        context.createTimedTaskRunner().expectMinDurationAndRun(1, () -> {
+        level.addFreshEntity(zombie);
+        Pig victim = spawnVictim(helper);
+        helper.startSequence().thenExecuteAfter(1, () -> {
             Assert.isTrue(
-                context,
-                zombie.tryAttack(world, victim),
+                helper,
+                zombie.doHurtTarget(level, victim),
                 () -> "Expected attack to be successful"
             );
-            Assert.doubles(context, victim.getHealth(), "health")
+            Assert.doubles(helper, victim.getHealth(), "health")
                 .equals(MAX_HEALTH_VICTIM - zombie.itematic$getAttackDamage());
-        }).completeIfSuccessful();
+        }).thenSucceed();
     }
 
     @GameTest
-    public void piglinAttackingWithIronSwordDealsCorrectDamage(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PiglinEntity piglin = TestUtil.createEntity(
-            context,
+    public void piglinAttackingWithIronSwordDealsCorrectDamage(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Piglin piglin = TestUtil.createEntity(
+            helper,
             EntityType.PIGLIN,
-            entity -> world.itematic$createStack(ItemKeys.IRON_SWORD)
+            entity -> level.itematic$createStack(ItemIds.IRON_SWORD)
         );
-        world.spawnEntity(piglin);
-        PigEntity victim = spawnVictim(context);
-        context.createTimedTaskRunner().expectMinDurationAndRun(1, () -> {
+        level.addFreshEntity(piglin);
+        Pig victim = spawnVictim(helper);
+        helper.startSequence().thenExecuteAfter(1, () -> {
             Assert.isTrue(
-                context,
-                piglin.tryAttack(world, victim),
+                helper,
+                piglin.doHurtTarget(level, victim),
                 () -> "Expected attack to be successful"
             );
-            Assert.doubles(context, victim.getHealth(), "health")
+            Assert.doubles(helper, victim.getHealth(), "health")
                 .equals(MAX_HEALTH_VICTIM - piglin.itematic$getAttackDamage());
-        }).completeIfSuccessful();
+        }).thenSucceed();
     }
 
     @GameTest
-    public void piglinAttackingWithGoldenSwordDealsCorrectDamage(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PiglinEntity piglin = TestUtil.createEntity(
-            context,
+    public void piglinAttackingWithGoldenSwordDealsCorrectDamage(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Piglin piglin = TestUtil.createEntity(
+            helper,
             EntityType.PIGLIN,
-            entity -> entity.setStackInHand(Hand.MAIN_HAND, world.itematic$createStack(ItemKeys.GOLDEN_SWORD))
+            entity -> entity.setItemInHand(
+                InteractionHand.MAIN_HAND,
+                level.itematic$createStack(ItemIds.GOLDEN_SWORD)
+            )
         );
-        world.spawnEntity(piglin);
-        PigEntity victim = spawnVictim(context);
-        context.createTimedTaskRunner().expectMinDurationAndRun(1, () -> {
+        level.addFreshEntity(piglin);
+        Pig victim = spawnVictim(helper);
+        helper.startSequence().thenExecuteAfter(1, () -> {
             Assert.isTrue(
-                context,
-                piglin.tryAttack(world, victim),
+                helper,
+                piglin.doHurtTarget(level, victim),
                 () -> "Expected attack to be successful"
             );
-            Assert.doubles(context, victim.getHealth(), "health")
+            Assert.doubles(helper, victim.getHealth(), "health")
                 .equals(MAX_HEALTH_VICTIM - piglin.itematic$getAttackDamage());
-        }).completeIfSuccessful();
+        }).thenSucceed();
     }
 
-    private static PigEntity spawnVictim(TestContext context) {
-        PigEntity victim = TestUtil.createEntity(context, EntityType.PIG, entity -> {
-            Objects.requireNonNull(entity.getAttributes().getCustomInstance(EntityAttributes.MAX_HEALTH))
+    private static Pig spawnVictim(GameTestHelper helper) {
+        Pig victim = TestUtil.createEntity(helper, EntityType.PIG, entity -> {
+            Objects.requireNonNull(entity.getAttributes().getInstance(Attributes.MAX_HEALTH))
                 .setBaseValue(MAX_HEALTH_VICTIM);
             entity.setHealth((float) MAX_HEALTH_VICTIM);
         });
-        context.getWorld().spawnEntity(victim);
+        helper.getLevel().addFreshEntity(victim);
         return victim;
     }
 }

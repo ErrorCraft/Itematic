@@ -1,108 +1,108 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.item.ItemKeys;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.screen.EnchantmentScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.test.TestContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.EnchantmentMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameType;
 
 public class EnchantingTableTestSuite {
     private static final BlockPos BLOCK_POSITION = new BlockPos(1, 1, 1);
 
     @GameTest(structure = "itematic:block.enchanting_table")
-    public void placingEnchantableItemWithoutEnchantmentsSuggestsEnchantments(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        EnchantmentScreenHandler enchantmentMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ScreenHandlerType.ENCHANTMENT);
+    public void placingEnchantableItemWithoutEnchantmentsSuggestsEnchantments(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        EnchantmentMenu enchantmentMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ENCHANTMENT);
         enchantmentMenu.getSlot(0)
-            .setStack(world.itematic$createStack(ItemKeys.IRON_PICKAXE));
+            .setByPlayer(level.itematic$createStack(ItemIds.IRON_PICKAXE));
         enchantmentMenu.getSlot(1)
-            .setStack(world.itematic$createStack(ItemKeys.LAPIS_LAZULI));
-        context.addFinalTask(() -> Assert.isTrue(
-            context,
-            enchantmentMenu.enchantmentPower[0] > 0,
+            .setByPlayer(level.itematic$createStack(ItemIds.LAPIS_LAZULI));
+        helper.succeedIf(() -> Assert.isTrue(
+            helper,
+            enchantmentMenu.costs[0] > 0,
             () -> "Expected enchantments to be suggested"
         ));
     }
 
     @GameTest(structure = "itematic:block.enchanting_table")
-    public void placingUnenchantableItemInEnchantingTableDoesNotSuggestEnchantments(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        EnchantmentScreenHandler enchantmentMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ScreenHandlerType.ENCHANTMENT);
+    public void placingUnenchantableItemInEnchantingTableDoesNotSuggestEnchantments(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        EnchantmentMenu enchantmentMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ENCHANTMENT);
         enchantmentMenu.getSlot(0)
-            .setStack(world.itematic$createStack(ItemKeys.STICK));
+            .setByPlayer(level.itematic$createStack(ItemIds.STICK));
         enchantmentMenu.getSlot(1)
-            .setStack(world.itematic$createStack(ItemKeys.LAPIS_LAZULI));
-        context.addFinalTask(() -> Assert.isTrue(
-            context,
-            enchantmentMenu.enchantmentPower[0] == 0,
+            .setByPlayer(level.itematic$createStack(ItemIds.LAPIS_LAZULI));
+        helper.succeedIf(() -> Assert.isTrue(
+            helper,
+            enchantmentMenu.costs[0] == 0,
             () -> "Expected no enchantments to be suggested"
         ));
     }
 
     @GameTest(structure = "itematic:block.enchanting_table")
-    public void placingEnchantableItemWithEnchantmentsInEnchantingTableDoesNotSuggestEnchantments(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
-        EnchantmentScreenHandler enchantmentMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ScreenHandlerType.ENCHANTMENT);
+    public void placingEnchantableItemWithEnchantmentsInEnchantingTableDoesNotSuggestEnchantments(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        EnchantmentMenu enchantmentMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ENCHANTMENT);
         enchantmentMenu.getSlot(0)
-            .setStack(TestUtil.createItemStackWithEnchantment(world, ItemKeys.IRON_PICKAXE, Enchantments.UNBREAKING));
+            .setByPlayer(TestUtil.createItemStackWithEnchantment(level, ItemIds.IRON_PICKAXE, Enchantments.UNBREAKING));
         enchantmentMenu.getSlot(1)
-            .setStack(world.itematic$createStack(ItemKeys.LAPIS_LAZULI));
-        context.addFinalTask(() -> Assert.isTrue(
-            context,
-            enchantmentMenu.enchantmentPower[0] == 0,
+            .setByPlayer(level.itematic$createStack(ItemIds.LAPIS_LAZULI));
+        helper.succeedIf(() -> Assert.isTrue(
+            helper,
+            enchantmentMenu.costs[0] == 0,
             () -> "Expected no enchantments to be suggested"
         ));
     }
 
     @GameTest(structure = "itematic:block.enchanting_table")
-    public void enchantingEnchantableItemInEnchantingTableAddsEnchantments(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
+    public void enchantingEnchantableItemInEnchantingTableAddsEnchantments(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.experienceLevel = 1000;
-        EnchantmentScreenHandler enchantmentMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ScreenHandlerType.ENCHANTMENT);
+        EnchantmentMenu enchantmentMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ENCHANTMENT);
         enchantmentMenu.getSlot(0)
-            .setStack(world.itematic$createStack(ItemKeys.IRON_PICKAXE));
+            .setByPlayer(level.itematic$createStack(ItemIds.IRON_PICKAXE));
         enchantmentMenu.getSlot(1)
-            .setStack(world.itematic$createStack(ItemKeys.LAPIS_LAZULI));
-        enchantmentMenu.onButtonClick(player, 0);
-        context.addFinalTask(() -> Assert.itemStack(context, enchantmentMenu.getSlot(0).getStack())
-            .is(ItemKeys.IRON_PICKAXE)
+            .setByPlayer(level.itematic$createStack(ItemIds.LAPIS_LAZULI));
+        enchantmentMenu.clickMenuButton(player, 0);
+        helper.succeedIf(() -> Assert.itemStack(helper, enchantmentMenu.getSlot(0).getItem())
+            .is(ItemIds.IRON_PICKAXE)
             .hasEnchantments());
     }
 
     @GameTest(structure = "itematic:block.enchanting_table")
-    public void enchantingBookInEnchantingTableTransformsItemIntoEnchantedBookAndAddsEnchantmentsToStoredEnchantments(TestContext context) {
-        ServerWorld world = context.getWorld();
-        PlayerEntity player = context.createMockPlayer(GameMode.SURVIVAL);
+    public void enchantingBookInEnchantingTableTransformsItemIntoEnchantedBookAndAddsEnchantmentsToStoredEnchantments(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.experienceLevel = 1000;
-        EnchantmentScreenHandler enchantmentMenu = TestUtil.getMenuFromBlock(context, BLOCK_POSITION, player, ScreenHandlerType.ENCHANTMENT);
+        EnchantmentMenu enchantmentMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.ENCHANTMENT);
         enchantmentMenu.getSlot(0)
-            .setStack(world.itematic$createStack(ItemKeys.BOOK));
+            .setByPlayer(level.itematic$createStack(ItemIds.BOOK));
         enchantmentMenu.getSlot(1)
-            .setStack(world.itematic$createStack(ItemKeys.LAPIS_LAZULI));
-        enchantmentMenu.onButtonClick(player, 0);
-        context.addFinalTask(() -> Assert.itemStack(context, enchantmentMenu.getSlot(0).getStack())
-            .is(ItemKeys.ENCHANTED_BOOK)
-            .hasComponent(DataComponentTypes.ENCHANTMENTS, enchantments -> Assert.isTrue(
-                context,
+            .setByPlayer(level.itematic$createStack(ItemIds.LAPIS_LAZULI));
+        enchantmentMenu.clickMenuButton(player, 0);
+        helper.succeedIf(() -> Assert.itemStack(helper, enchantmentMenu.getSlot(0).getItem())
+            .is(ItemIds.ENCHANTED_BOOK)
+            .hasComponent(DataComponents.ENCHANTMENTS, enchantments -> Assert.isTrue(
+                helper,
                 enchantments.isEmpty(),
-                () -> "Expected enchantments not to be added to " + DataComponentTypes.ENCHANTMENTS
+                () -> "Expected enchantments not to be added to " + DataComponents.ENCHANTMENTS
             ))
-            .hasComponent(DataComponentTypes.STORED_ENCHANTMENTS, storedEnchantments -> Assert.isFalse(
-                context,
+            .hasComponent(DataComponents.STORED_ENCHANTMENTS, storedEnchantments -> Assert.isFalse(
+                helper,
                 storedEnchantments.isEmpty(),
-                () -> "Expected enchantments to be added to " + DataComponentTypes.STORED_ENCHANTMENTS
+                () -> "Expected enchantments to be added to " + DataComponents.STORED_ENCHANTMENTS
             )));
     }
 }

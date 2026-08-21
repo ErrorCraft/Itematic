@@ -4,16 +4,15 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
-import net.errorcraft.itematic.world.action.ActionTypes;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CarvedPumpkinBlock;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CarvedPumpkinBlock;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record PlaceCarvedPumpkinAction(PositionTarget position) implements Action<PlaceCarvedPumpkinAction> {
     public static final MapCodec<PlaceCarvedPumpkinAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -26,27 +25,27 @@ public record PlaceCarvedPumpkinAction(PositionTarget position) implements Actio
 
     @Override
     public ActionType<PlaceCarvedPumpkinAction> type() {
-        return ActionTypes.PLACE_CARVED_PUMPKIN;
+        return ActionType.PLACE_CARVED_PUMPKIN;
     }
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockPos pos = context.get(this.position.contextParam(), BlockPos::ofFloored);
+        BlockPos pos = context.get(this.position.contextParam(), BlockPos::containing);
         if (pos == null) {
             return false;
         }
 
-        World world = context.world();
-        if (!world.isAir(pos)) {
+        Level level = context.level();
+        if (!level.isEmptyBlock(pos)) {
             return false;
         }
 
-        if (!((CarvedPumpkinBlock) Blocks.CARVED_PUMPKIN).canDispense(world, pos)) {
+        if (!((CarvedPumpkinBlock) Blocks.CARVED_PUMPKIN).canSpawnGolem(level, pos)) {
             return false;
         }
 
-        world.setBlockState(pos, Blocks.CARVED_PUMPKIN.getDefaultState(), Block.NOTIFY_ALL);
-        world.emitGameEvent(context.get(LootContextParameters.THIS_ENTITY), GameEvent.BLOCK_PLACE, pos);
+        level.setBlock(pos, Blocks.CARVED_PUMPKIN.defaultBlockState(), Block.UPDATE_ALL);
+        level.gameEvent(context.get(LootContextParams.THIS_ENTITY), GameEvent.BLOCK_PLACE, pos);
         return true;
     }
 }
