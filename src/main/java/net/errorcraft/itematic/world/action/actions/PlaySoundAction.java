@@ -17,6 +17,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Optional;
 
 public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound, Optional<SoundSource> category, RandomRange.Floats volume, RandomRange.Floats pitch, boolean fromEntity) implements Action<PlaySoundAction> {
@@ -87,7 +89,8 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
         return true;
     }
 
-    private SoundSource category(Entity entity) {
+    @Nullable
+    private SoundSource category(@Nullable Entity entity) {
         return this.category.orElseGet(() -> {
             if (entity == null) {
                 return null;

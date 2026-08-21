@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 public record DisplayParticleAction(PositionTarget position, ParticleOptions particle, int count, Vec3Provider offset, Vec3Provider delta, double speed, boolean force) implements Action<DisplayParticleAction> {
     public static final MapCodec<DisplayParticleAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -65,6 +66,7 @@ public record DisplayParticleAction(PositionTarget position, ParticleOptions par
         return amountOfPlayersShown > 0;
     }
 
+    @Nullable
     private Vec3 position(ActionContext context, RandomSource random) {
         Vec3 pos = context.get(this.position.contextParam());
         if (pos == null) {

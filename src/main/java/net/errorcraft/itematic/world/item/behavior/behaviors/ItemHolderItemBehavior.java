@@ -37,6 +37,7 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.math.Fraction;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -166,6 +167,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
         return Optional.of(data);
     }
 
+    @Nullable
     public Fraction occupancy(ItemStack stack) {
         BundleContents bundleContents = stack.get(DataComponents.BUNDLE_CONTENTS);
         if (bundleContents == null) {
@@ -192,7 +194,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
         }
     }
 
-    public BundleContents.Mutable createBuilder(ItemStack stack) {
+    public BundleContents.@Nullable Mutable createBuilder(ItemStack stack) {
         BundleContents existingBundleContents = stack.get(DataComponents.BUNDLE_CONTENTS);
         if (existingBundleContents == null) {
             return null;
@@ -201,7 +203,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
         return this.createBuilder(stack, existingBundleContents);
     }
 
-    public BundleContents.Mutable createBuilder(ItemStack stack, BundleContents existingBundleContents) {
+    public BundleContents.@Nullable Mutable createBuilder(ItemStack stack, BundleContents existingBundleContents) {
         Fraction capacity = stack.get(ItematicDataComponents.ITEM_HOLDER_CAPACITY);
         if (capacity == null) {
             return null;

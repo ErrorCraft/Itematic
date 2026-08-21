@@ -49,7 +49,7 @@ public record FertilizeAction(PositionTarget position) implements Action<Fertili
         }
 
         BlockPos offsetBlockPos = blockPos.relative(side);
-        if (level.getBlockState(blockPos).isFaceSturdy(level, blockPos, side) && BoneMealItem.growWaterPlant(null, level, offsetBlockPos, side)) {
+        if (level.getBlockState(blockPos).isFaceSturdy(level, blockPos, side) && BoneMealItem.growWaterPlant(ItemStack.EMPTY, level, offsetBlockPos, side)) {
             fertilized(level, offsetBlockPos);
             return true;
         }

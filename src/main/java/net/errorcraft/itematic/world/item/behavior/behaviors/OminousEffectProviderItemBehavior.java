@@ -23,6 +23,7 @@ public class OminousEffectProviderItemBehavior implements ItemBehavior<OminousEf
     }
 
     @Override
+    @SuppressWarnings("DataFlowIssue")
     public void finishUsing(Level level, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
         OminousBottleAmplifier ominousAmplifier = stack.get(DataComponents.OMINOUS_BOTTLE_AMPLIFIER);
         if (ominousAmplifier != null) {

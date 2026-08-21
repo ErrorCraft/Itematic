@@ -8,9 +8,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BannerPattern;
+import org.jspecify.annotations.Nullable;
 
 public class ItematicRaids {
-    private static ItemStack ominousBanner = null;
+    @Nullable
+    private static ItemStack ominousBanner;
 
     private ItematicRaids() {}
 

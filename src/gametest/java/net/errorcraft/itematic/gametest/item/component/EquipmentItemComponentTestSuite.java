@@ -51,14 +51,8 @@ public class EquipmentItemComponentTestSuite {
         player.setItemInHand(InteractionHand.MAIN_HAND, leatherHelmet);
         helper.succeedIf(() -> {
             InteractionResult result = leatherHelmet.use(level, player, InteractionHand.MAIN_HAND);
-            Assert.isInstance(
-                helper,
-                result,
-                InteractionResult.Success.class,
-                () -> "Expected equipment item usage to be successful",
-                success -> Assert.itemStack(helper, success.heldItemTransformedTo())
-                    .is(ItemIds.IRON_HELMET)
-            );
+            Assert.interactionResult(helper, result, "equipment item usage")
+                .resultStack(stack -> stack.is(ItemIds.IRON_HELMET));
             Assert.itemStack(helper, player.getItemBySlot(EquipmentSlot.HEAD))
                 .is(ItemIds.LEATHER_HELMET);
         });

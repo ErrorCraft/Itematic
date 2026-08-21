@@ -35,7 +35,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEvent> sound) implements ItemBehavior<ConsumableItemBehavior> {
@@ -167,7 +166,7 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
         }
 
         public Builder remainder(Holder<Item> resultItem) {
-            this.remainder = Objects.requireNonNull(resultItem);
+            this.remainder = resultItem;
             return this;
         }
 
@@ -177,7 +176,7 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
         }
 
         public Builder consumeSound(Holder<SoundEvent> consumeSound) {
-            this.consumeSound = Objects.requireNonNull(consumeSound);
+            this.consumeSound = consumeSound;
             return this;
         }
 

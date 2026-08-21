@@ -69,7 +69,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
     }
 
     @Nullable
-    public Entity spawn(ActionContext context, Vec3 initialPos, EntitySpawnReason spawnReason, EntitySpawnCallback spawnCallback, boolean invertY) {
+    public Entity spawn(ActionContext context, Vec3 initialPos, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
         EntitySpawnContext spawnContext = this.createSpawnContext(context, initialPos);
         if (spawnContext == null) {
             return null;
@@ -116,7 +116,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
     }
 
     @Nullable
-    private Entity spawn(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, EntitySpawnCallback spawnCallback, boolean invertY) {
+    private Entity spawn(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
         Entity entity = this.createEntity(spawnContext, spawnActionContext, spawnReason, spawnCallback, invertY);
         if (entity == null) {
             return null;

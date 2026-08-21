@@ -37,7 +37,7 @@ import net.minecraft.world.item.component.ChargedProjectiles;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -148,7 +148,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
         return ((float)usedTicks) / CrossbowItem.getChargeDuration(stack, user);
     }
 
-    public void shoot(ShooterItemBehavior shooter, Level level, LivingEntity user, InteractionHand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity livingEntity) {
+    public void shoot(ShooterItemBehavior shooter, Level level, LivingEntity user, InteractionHand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity targetOverride) {
         if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
@@ -158,7 +158,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             return;
         }
 
-        shooter.shoot(serverLevel, user, hand, stack, chargedProjectiles.getItems(), power, divergence, user instanceof Player, livingEntity);
+        shooter.shoot(serverLevel, user, hand, stack, chargedProjectiles.getItems(), power, divergence, user instanceof Player, targetOverride);
         if (user instanceof ServerPlayer player) {
             CriteriaTriggers.SHOT_CROSSBOW.trigger(player, stack);
             player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));

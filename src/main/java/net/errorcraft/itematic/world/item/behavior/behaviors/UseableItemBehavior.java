@@ -64,7 +64,12 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
             return ItemResult.PASS;
         }
 
-        return tryStartUsing(context.getLevel(), context.getPlayer(), context.getHand(), context.getItemInHand());
+        Player player = context.getPlayer();
+        if (player == null) {
+            return ItemResult.PASS;
+        }
+
+        return tryStartUsing(context.getLevel(), player, context.getHand(), context.getItemInHand());
     }
 
     @Override

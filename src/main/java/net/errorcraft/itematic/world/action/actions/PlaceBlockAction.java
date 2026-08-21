@@ -33,12 +33,14 @@ public record PlaceBlockAction(BlockPicker<?> block, PositionTarget position, Op
 
     @Override
     public boolean execute(ActionContext context) {
-        return BlockPlacer.of(
+        BlockPlacer placer = BlockPlacer.of(
             context,
             this.position,
             this.block,
             false,
             this.placeSound.orElse(null)
-        ).place();
+        );
+
+        return placer != null && placer.place();
     }
 }

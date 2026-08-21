@@ -145,11 +145,15 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
     public static class Builder {
         private final int itemDamagePerAttack;
         private final DataComponentMap.Builder types = DataComponentMap.builder();
+        @Nullable
         private Holder<DamageType> damageType;
+        @Nullable
         private SwingAnimation swingAnimation;
         private final double attackDamage;
         private final double attackSpeed;
+        @Nullable
         private AttackRange attackRange;
+        @Nullable
         private Float minimumAttackCharge;
 
         private Builder(int itemDamagePerAttack, double attackDamage, double attackSpeed) {

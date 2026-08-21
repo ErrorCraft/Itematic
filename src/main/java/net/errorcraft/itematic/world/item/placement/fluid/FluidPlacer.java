@@ -161,10 +161,6 @@ public class FluidPlacer {
     }
 
     private void playPlaceSound(BlockPos pos) {
-        if (this.placeSound == null) {
-            return;
-        }
-
         Level level = this.context.level();
         Entity possiblePlacer = this.context.get(LootContextParams.THIS_ENTITY);
         level.playSound(possiblePlacer, pos, this.placeSound.value(), SoundSource.BLOCKS, 1.0f, 1.0f);

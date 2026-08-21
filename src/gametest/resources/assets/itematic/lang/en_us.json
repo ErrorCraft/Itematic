@@ -3,6 +3,7 @@
   "test.error.expected_value_greater_than": "Expected %s to be greater than %s, got %s instead",
   "test.error.invalid_modulus": "Modulus must not be 0",
   "test.error.expected_type": "Expected %s to be %s, got %s instead",
+  "test.error.expected_success": "Expected %s to be successful",
   "test.error.did_not_expect_type": "Expected %s not to be %s",
   "test.error.expected_tag": "Expected %s to be #%s",
   "test.error.block_entity.expected_block_entity_type": "Expected block entity type to be %s",

@@ -31,37 +31,43 @@ import org.jspecify.annotations.Nullable;
 public class BlockPlacer {
     private final ActionContext context;
     private final BlockPicker<?> block;
-    private final BlockPlaceContext placementContext;
+    private final BlockPlaceContext placeContext;
     private final boolean operatorOnly;
     @Nullable
     private final Holder<SoundEvent> placeSound;
 
-    private BlockPlacer(ActionContext context, BlockPicker<?> block, BlockPlaceContext placementContext, boolean operatorOnly, @Nullable Holder<SoundEvent> placeSound) {
+    private BlockPlacer(ActionContext context, BlockPicker<?> block, BlockPlaceContext placeContext, boolean operatorOnly, @Nullable Holder<SoundEvent> placeSound) {
         this.context = context;
         this.block = block;
-        this.placementContext = placementContext;
+        this.placeContext = placeContext;
         this.operatorOnly = operatorOnly;
         this.placeSound = placeSound;
     }
 
-    public static BlockPlacer of(ActionContext context, PositionTarget position, BlockPicker<?> block, boolean operatorOnly, Holder<SoundEvent> placeSound) {
+    @Nullable
+    public static BlockPlacer of(ActionContext context, PositionTarget position, BlockPicker<?> block, boolean operatorOnly, @Nullable Holder<SoundEvent> placeSound) {
+        BlockPlaceContext placeContext = context.blockPlaceContext(position, block);
+        if (placeContext == null) {
+            return null;
+        }
+
         return new BlockPlacer(
             context,
             block,
-            context.blockPlaceContext(position, block),
+            placeContext,
             operatorOnly,
             placeSound
         );
     }
 
     public boolean place() {
-        if (!this.placementContext.canPlace()) {
+        if (!this.placeContext.canPlace()) {
             return false;
         }
 
-        BlockPos pos = this.placementContext.getClickedPos();
+        BlockPos pos = this.placeContext.getClickedPos();
         LivingEntity placer = this.context.get(LootContextParams.THIS_ENTITY, LivingEntity.class);
-        BlockState blockState = this.getPlacementState(pos, placer);
+        BlockState blockState = this.placementState(pos, placer);
         if (blockState == null) {
             return false;
         }
@@ -104,16 +110,16 @@ public class BlockPlacer {
     }
 
     @Nullable
-    private BlockState getPlacementState(BlockPos pos, @Nullable LivingEntity placer) {
+    private BlockState placementState(BlockPos pos, @Nullable LivingEntity placer) {
         if (this.operatorOnly && placer instanceof Player playerPlacer && !playerPlacer.canUseGameMasterBlocks()) {
             return null;
         }
 
-        BlockState state = this.block.placementState(this.placementContext);
+        BlockState state = this.block.placementState(this.placeContext);
         return this.canPlace(state, pos, placer) ? state : null;
     }
 
-    private boolean canPlace(BlockState state, BlockPos pos, @Nullable LivingEntity placer) {
+    private boolean canPlace(@Nullable BlockState state, BlockPos pos, @Nullable LivingEntity placer) {
         if (state == null) {
             return false;
         }

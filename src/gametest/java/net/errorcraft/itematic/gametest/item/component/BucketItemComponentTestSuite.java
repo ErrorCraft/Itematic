@@ -34,16 +34,10 @@ public class BucketItemComponentTestSuite {
         level.addFreshEntity(player);
         InteractionResult result = bucket.use(level, player, InteractionHand.MAIN_HAND);
         helper.succeedIf(() -> {
+            Assert.interactionResult(helper, result, "Bucket usage")
+                .resultStack(stack -> stack.is(ItemIds.WATER_BUCKET));
             Assert.fluidState(helper, PLACED_POSITION)
                 .is(Fluids.EMPTY);
-            Assert.isInstance(
-                helper,
-                result,
-                InteractionResult.Success.class,
-                () -> "Expected Bucket usage to be successful",
-                success -> Assert.itemStack(helper, success.heldItemTransformedTo())
-                    .is(ItemIds.WATER_BUCKET)
-            );
         });
     }
 
@@ -58,16 +52,10 @@ public class BucketItemComponentTestSuite {
         level.addFreshEntity(player);
         InteractionResult result = bucket.use(level, player, InteractionHand.MAIN_HAND);
         helper.succeedIf(() -> {
+            Assert.interactionResult(helper, result, "Bucket usage")
+                .resultStack(stack -> stack.is(ItemIds.POWDER_SNOW_BUCKET));
             Assert.fluidState(helper, PLACED_POSITION)
                 .is(Fluids.EMPTY);
-            Assert.isInstance(
-                helper,
-                result,
-                InteractionResult.Success.class,
-                () -> "Expected Bucket usage to be successful",
-                success -> Assert.itemStack(helper, success.heldItemTransformedTo())
-                    .is(ItemIds.POWDER_SNOW_BUCKET)
-            );
         });
     }
 

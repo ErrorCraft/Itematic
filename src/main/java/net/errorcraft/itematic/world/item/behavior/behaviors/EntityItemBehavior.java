@@ -54,6 +54,7 @@ import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemConditi
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.Set;
@@ -278,6 +279,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
         );
     }
 
+    @Nullable
     public Entity place(ActionContext context, PositionTarget position) {
         return EntityPlacer.of(this.entity, null)
             .place(context, position, EntitySpawnReason.SPAWN_ITEM_USE);

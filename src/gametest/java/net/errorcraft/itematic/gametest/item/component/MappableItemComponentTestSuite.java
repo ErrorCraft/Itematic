@@ -20,15 +20,11 @@ public class MappableItemComponentTestSuite {
         ItemStack map = level.itematic$createStack(ItemIds.MAP);
         player.setItemInHand(InteractionHand.MAIN_HAND, map);
         level.addFreshEntity(player);
-        InteractionResult result = map.use(level, player, InteractionHand.MAIN_HAND);
-        helper.succeedIf(() -> Assert.isInstance(
-            helper,
-            result,
-            InteractionResult.Success.class,
-            () -> "Expected mappable item usage to be successful",
-            success -> Assert.itemStack(helper, success.heldItemTransformedTo())
-                .is(ItemIds.FILLED_MAP)
-                .hasComponent(DataComponents.MAP_ID)
-        ));
+        helper.succeedIf(() -> {
+            InteractionResult result = map.use(level, player, InteractionHand.MAIN_HAND);
+            Assert.interactionResult(helper, result, "mappable item usage")
+                .resultStack(stack -> stack.is(ItemIds.FILLED_MAP)
+                    .hasComponent(DataComponents.MAP_ID));
+        });
     }
 }

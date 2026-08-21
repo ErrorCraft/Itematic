@@ -34,6 +34,7 @@ import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import org.jspecify.annotations.Nullable;
 
 public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavior<EquipmentItemBehavior> {
     public static final Codec<EquipmentItemBehavior> CODEC = Equippable.CODEC.xmap(EquipmentItemBehavior::new, EquipmentItemBehavior::equippable);
@@ -129,7 +130,7 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
         }
 
         if (result instanceof InteractionResult.Success success) {
-            stackExchanger.exchange(success.heldItemTransformedTo());
+            this.tryExchangeResultStack(stackExchanger, success.heldItemTransformedTo());
         }
 
         if (level instanceof ServerLevel serverLevel) {
@@ -149,5 +150,11 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.EQUIPPABLE, this.equippable);
+    }
+
+    private void tryExchangeResultStack(ItemStackExchanger stackExchanger, @Nullable ItemStack stack) {
+        if (stack != null) {
+            stackExchanger.exchange(stack);
+        }
     }
 }

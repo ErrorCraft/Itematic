@@ -14,6 +14,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Optional;
 
 public class SpawnEggItemBehavior implements ItemBehavior<SpawnEggItemBehavior> {
@@ -57,6 +59,7 @@ public class SpawnEggItemBehavior implements ItemBehavior<SpawnEggItemBehavior> 
         return Optional.of(child);
     }
 
+    @Nullable
     private Mob createEntity(Mob entity, EntityType<? extends Mob> entityType, ServerLevel level) {
         if (entity instanceof AgeableMob passiveEntity) {
             return passiveEntity.getBreedOffspring(level, passiveEntity);

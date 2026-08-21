@@ -20,8 +20,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-import java.util.Objects;
-
 @Mixin(MaceItem.class)
 public class MaceItemExtender {
     @Unique
@@ -143,7 +141,7 @@ public class MaceItemExtender {
         )
     )
     private boolean canSmashAttackUseDataComponent(LivingEntity attacker, Operation<Boolean> original) {
-        SmashingWeapon smashingWeapon = Objects.requireNonNull(attacker.getWeaponItem())
+        SmashingWeapon smashingWeapon = attacker.getWeaponItem()
             .get(ItematicDataComponents.SMASHING_WEAPON);
         if (smashingWeapon == null) {
             return false;

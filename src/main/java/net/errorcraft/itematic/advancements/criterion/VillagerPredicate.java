@@ -11,7 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.villager.VillagerDataHolder;
 import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public record VillagerPredicate(HolderSet<VillagerType> variant) implements EntitySubPredicate {
     public static final MapCodec<VillagerPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

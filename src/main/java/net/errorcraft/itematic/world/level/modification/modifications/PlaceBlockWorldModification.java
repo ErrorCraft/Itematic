@@ -40,7 +40,7 @@ public record PlaceBlockWorldModification(BlockPicker<?> block, Holder<SoundEven
             this.placeSound
         );
 
-        if (!placer.place()) {
+        if (placer == null || !placer.place()) {
             return Optional.empty();
         }
 

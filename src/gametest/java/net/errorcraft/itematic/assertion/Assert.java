@@ -4,6 +4,7 @@ import net.errorcraft.itematic.util.TestUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -49,7 +50,7 @@ public class Assert {
         );
     }
 
-    public static <T> void areEqual(GameTestHelper helper, T value, T expected, String type) {
+    public static <T> void areEqual(GameTestHelper helper, @Nullable T value, @Nullable T expected, String type) {
         if (Objects.equals(value, expected)) {
             return;
         }
@@ -57,8 +58,8 @@ public class Assert {
         throw helper.assertionException(
             "test.error.expected_type",
             type,
-            value,
-            expected
+            String.valueOf(value),
+            String.valueOf(expected)
         );
     }
 
@@ -89,6 +90,10 @@ public class Assert {
 
     public static DoublesAssert doubles(GameTestHelper helper, double value, String name) {
         return new DoublesAssert(helper, value, name);
+    }
+
+    public static InteractionResultAssert interactionResult(GameTestHelper helper, InteractionResult interactionResult, String name) {
+        return new InteractionResultAssert(helper, interactionResult, name);
     }
 
     public static BlockStateAssert blockState(GameTestHelper helper, BlockPos pos) {

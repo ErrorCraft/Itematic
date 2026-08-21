@@ -41,6 +41,10 @@ public record FoodItemBehavior(int nutrition, float saturation, boolean alwaysEd
     @Override
     public void finishUsing(Level level, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
         FoodProperties food = stack.get(DataComponents.FOOD);
+        if (food == null) {
+            return;
+        }
+
         if (user instanceof Player player) {
             player.getFoodData().eat(food);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5f, Mth.randomBetween(user.getRandom(), 0.9f, 1.0f));

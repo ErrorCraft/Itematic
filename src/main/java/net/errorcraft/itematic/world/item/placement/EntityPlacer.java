@@ -30,6 +30,7 @@ public class EntityPlacer {
         return new EntityPlacer(entity, spawnCallback);
     }
 
+    @Nullable
     public Entity place(ActionContext context, PositionTarget position, EntitySpawnReason spawnReason) {
         Level level = context.level();
         if (level.isClientSide()) {

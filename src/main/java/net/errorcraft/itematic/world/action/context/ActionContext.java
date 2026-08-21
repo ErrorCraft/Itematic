@@ -129,7 +129,7 @@ public class ActionContext {
         }
 
         BlockPlaceContext placeContext = this.blockPlaceContext(pos, side);
-        return block.placementContext(placeContext);
+        return block.placeContext(placeContext);
     }
 
     private BlockPlaceContext blockPlaceContext(Vec3 pos, Direction side) {

@@ -122,7 +122,7 @@ public record BlockItemBehavior(BlockPicker<?> block, boolean operatorOnly, Set<
             this.operatorOnly,
             null
         );
-        if (!placer.place()) {
+        if (placer == null || !placer.place()) {
             return false;
         }
 

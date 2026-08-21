@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavior<ProjectileItemBehavior> {
     public static final Codec<ProjectileItemBehavior> CODEC = EntitySpawner.CODEC.xmap(
@@ -43,6 +44,7 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
         return ItemBehaviorType.PROJECTILE;
     }
 
+    @Nullable
     public Entity spawnEntity(Level level, LivingEntity user, ItemStack stack, float angleOffset, float speed) {
         if (level.isClientSide()) {
             return null;
@@ -58,6 +60,7 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
         return this.spawnEntity(context, PositionTarget.INTERACTED, angleOffset, speed, 1.0f);
     }
 
+    @Nullable
     public Entity spawnEntity(ActionContext context, PositionTarget position, float angleOffset, float speed, float uncertainty) {
         Vec3 pos = context.get(position.contextParam());
         if (pos == null) {

@@ -40,7 +40,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @Mixin(EntityType.class)
@@ -490,13 +489,12 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
         @Override
         public void itematic$initializer(EntityInitializer<T> initializer) {
-            Objects.requireNonNull(initializer);
             this.initializer = type -> initializer;
         }
 
         @Override
         public void itematic$initializer(EntityInitializerSupplier<T> initializer) {
-            this.initializer = Objects.requireNonNull(initializer);
+            this.initializer = initializer;
         }
     }
 }

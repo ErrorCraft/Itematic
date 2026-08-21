@@ -44,6 +44,10 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
         }
 
         Vec3 pos = this.getPosition(context);
+        if (pos == null) {
+            return null;
+        }
+
         EyeOfEnder entity = this.createEntity(level, pos, context.get(LootContextParams.TOOL), strongholdPos);
         Entity user = context.get(LootContextParams.THIS_ENTITY);
         level.gameEvent(GameEvent.PROJECTILE_SHOOT, pos, GameEvent.Context.of(user));
@@ -54,6 +58,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
         return entity;
     }
 
+    @Nullable
     private BlockPos getBlockPos(ActionContext context) {
         Entity entity = context.get(LootContextParams.THIS_ENTITY);
         if (entity != null) {
@@ -63,6 +68,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
         return context.get(ItematicContextKeys.INTERACTED_POSITION, BlockPos::containing);
     }
 
+    @Nullable
     private Vec3 getPosition(ActionContext context) {
         Entity entity = context.get(LootContextParams.THIS_ENTITY);
         if (entity != null) {
@@ -72,7 +78,7 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
         return context.get(ItematicContextKeys.INTERACTED_POSITION);
     }
 
-    private EyeOfEnder createEntity(ServerLevel level, Vec3 pos, ItemStack stack, BlockPos strongholdPos) {
+    private EyeOfEnder createEntity(ServerLevel level, Vec3 pos, @Nullable ItemStack stack, BlockPos strongholdPos) {
         EyeOfEnder entity = new EyeOfEnder(level, pos.x(), pos.y(), pos.z());
         if (stack != null) {
             entity.setItem(stack);

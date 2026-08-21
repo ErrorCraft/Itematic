@@ -8,6 +8,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.animal.equine.AbstractChestedHorse;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.item.ItemStack;
@@ -42,13 +43,16 @@ public record EquipHorseWithChestAtPositionAction(PositionTarget position) imple
             return false;
         }
 
-        List<AbstractChestedHorse> donkeys = context.level().getEntitiesOfClass(
+        List<AbstractChestedHorse> chestedHorses = context.level().getEntitiesOfClass(
             AbstractChestedHorse.class,
             new AABB(pos),
-            donkey -> donkey.isAlive() && !donkey.hasChest()
+            chestedHorse -> chestedHorse.isAlive()
+                && chestedHorse.isTamed()
+                && !chestedHorse.hasChest()
         );
-        for (AbstractChestedHorse donkey : donkeys) {
-            if (donkey.isTamed() && donkey.getSlot(AbstractHorse.CHEST_SLOT_OFFSET).set(stack.copy())) {
+        for (AbstractChestedHorse chestedHorse : chestedHorses) {
+            SlotAccess slot = chestedHorse.getSlot(AbstractHorse.CHEST_SLOT_OFFSET);
+            if (slot != null && slot.set(stack.copy())) {
                 return true;
             }
         }

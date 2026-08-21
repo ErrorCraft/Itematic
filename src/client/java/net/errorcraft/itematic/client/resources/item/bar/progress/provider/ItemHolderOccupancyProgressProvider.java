@@ -22,6 +22,6 @@ public class ItemHolderOccupancyProgressProvider implements ProgressProvider {
 
     private static Optional<Fraction> occupancy(ItemStack stack) {
         return stack.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .map(c -> c.occupancy(stack));
+            .map(itemHolder -> itemHolder.occupancy(stack));
     }
 }
