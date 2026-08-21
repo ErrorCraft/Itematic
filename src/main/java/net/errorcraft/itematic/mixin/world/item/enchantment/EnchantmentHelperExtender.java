@@ -25,7 +25,7 @@ public class EnchantmentHelperExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private static boolean isEnchantedBookCheckItemBehavior(ItemStack instance, Item item) {
+    private static boolean isEnchantedBookCheckEnchantmentHolderItemBehavior(ItemStack instance, Item item) {
         return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER);
     }
 

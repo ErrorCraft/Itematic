@@ -32,7 +32,7 @@ public class ServerGamePacketListenerImplExtender {
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private boolean alsoCheckItemBehavior(boolean original, @Local ItemStack stack) {
+    private boolean alsoCheckWritableItemBehavior(boolean original, @Local ItemStack stack) {
         return original && stack.itematic$hasBehavior(ItemBehaviorType.WRITABLE);
     }
 

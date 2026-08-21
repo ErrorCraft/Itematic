@@ -18,7 +18,7 @@ public abstract class PolarBearExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.POLAR_BEAR_SPAWN_EGG;
     }
 }

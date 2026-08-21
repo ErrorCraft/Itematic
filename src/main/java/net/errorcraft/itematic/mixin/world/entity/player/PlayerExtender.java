@@ -102,7 +102,7 @@ public abstract class PlayerExtender extends LivingEntityExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    private boolean isSpyglassCheckItemBehavior(ItemStack instance, Item item) {
+    private boolean isSpyglassCheckZoomItemBehavior(ItemStack instance, Item item) {
         return instance.itematic$hasBehavior(ItemBehaviorType.ZOOM);
     }
 

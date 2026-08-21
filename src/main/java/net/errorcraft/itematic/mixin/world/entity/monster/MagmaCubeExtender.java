@@ -18,7 +18,7 @@ public abstract class MagmaCubeExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.MAGMA_CUBE_SPAWN_EGG;
     }
 }

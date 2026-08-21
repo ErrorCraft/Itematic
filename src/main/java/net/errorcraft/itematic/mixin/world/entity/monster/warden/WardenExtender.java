@@ -18,7 +18,7 @@ public abstract class WardenExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.WARDEN_SPAWN_EGG;
     }
 }

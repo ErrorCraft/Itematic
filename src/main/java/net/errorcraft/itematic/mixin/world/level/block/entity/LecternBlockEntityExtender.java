@@ -17,7 +17,7 @@ public class LecternBlockEntityExtender {
     @WrapMethod(
         method = "hasBook"
     )
-    private boolean checkWritableAndTextHolderItemBehavior(Operation<Boolean> original) {
+    private boolean alsoCheckWritableAndTextHolderItemBehavior(Operation<Boolean> original) {
         if (!this.book.itematic$hasBehavior(ItemBehaviorType.WRITABLE) && !this.book.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             return false;
         }
@@ -28,7 +28,7 @@ public class LecternBlockEntityExtender {
     @WrapMethod(
         method = "resolveBook"
     )
-    private ItemStack checkTextHolderItemBehavior(ItemStack book, Player player, Operation<ItemStack> original) {
+    private ItemStack alsoCheckTextHolderItemBehavior(ItemStack book, Player player, Operation<ItemStack> original) {
         if (!this.book.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             return this.book;
         }

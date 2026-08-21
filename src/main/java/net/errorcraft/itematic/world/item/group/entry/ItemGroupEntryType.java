@@ -2,7 +2,13 @@ package net.errorcraft.itematic.world.item.group.entry;
 
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
-import net.errorcraft.itematic.world.item.group.entry.entries.*;
+import net.errorcraft.itematic.world.item.group.entry.entries.EnchantmentItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.InstrumentItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.PaintingVariantItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.PotionItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.StackItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.SuspiciousEffectIngredientItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.TagItemGroupEntry;
 import net.minecraft.core.Registry;
 
 public record ItemGroupEntryType<T extends ItemGroupEntry<T>>(MapCodec<T> codec) {

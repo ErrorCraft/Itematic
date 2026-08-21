@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.world.item;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -63,7 +62,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jspecify.annotations.Nullable;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -140,7 +143,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "getDefaultMaxStackSize"
     )
-    private int checkStackableItemBehavior(Operation<Integer> original) {
+    private int alsoCheckStackableItemBehavior(Operation<Integer> original) {
         if (!this.itematic$hasBehavior(ItemBehaviorType.STACKABLE)) {
             return Items.UNSTACKABLE_MAX_STACK_SIZE;
         }
@@ -148,12 +151,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return original.call();
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public InteractionResult use(Level level, Player user, InteractionHand hand) {
+    @WrapMethod(
+        method = "use"
+    )
+    public InteractionResult useItemBehavior(Level level, Player user, InteractionHand hand, Operation<InteractionResult> original) {
         ItemStack stack = user.getItemInHand(hand);
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
         ItemResult result = ItemResult.PASS;
@@ -183,12 +184,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return trueResult;
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public InteractionResult useOn(UseOnContext context) {
+    @WrapMethod(
+        method = "useOn"
+    )
+    public InteractionResult useItemBehavior(UseOnContext context, Operation<InteractionResult> original) {
         ItemStack stack = context.getItemInHand();
         ItemStackExchanger stackExchanger = context.itematic$stackExchanger();
         ItemResult result = ItemResult.PASS;
@@ -221,12 +220,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return trueResult;
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public InteractionResult interactLivingEntity(ItemStack stack, Player user, LivingEntity entity, InteractionHand hand) {
+    @WrapMethod(
+        method = "interactLivingEntity"
+    )
+    public InteractionResult useItemBehavior(ItemStack stack, Player user, LivingEntity entity, InteractionHand hand, Operation<InteractionResult> original) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
         ItemResult result = ItemResult.PASS;
         for (ItemBehavior<?> behavior : this.behavior) {
@@ -258,12 +255,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return trueResult;
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    @WrapMethod(
+        method = "hurtEnemy"
+    )
+    public void useItemBehavior(ItemStack stack, LivingEntity target, LivingEntity attacker, Operation<Void> original) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, stack);
         for (ItemBehavior<?> behavior : this.behavior) {
             behavior.postHit(stack, target, attacker, stackExchanger);
@@ -294,12 +289,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .ifPresent(weapon -> weapon.postDamageEntity(stack, target, attacker));
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner) {
+    @WrapMethod(
+        method = "mineBlock"
+    )
+    public boolean useItemBehavior(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner, Operation<Boolean> original) {
         boolean result = false;
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(miner, stack);
         for (ItemBehavior<?> behavior : this.behavior) {
@@ -322,12 +315,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return result;
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+    @WrapMethod(
+        method = "onUseTick"
+    )
+    public void useItemBehavior(Level level, LivingEntity user, ItemStack stack, int remainingUseTicks, Operation<Void> original) {
         int usedTicks = user.itematic$usedItemTicks();
         for (ItemBehavior<?> behavior : this.behavior) {
             behavior.using(stack, level, user, usedTicks, remainingUseTicks);
@@ -345,12 +336,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .ifPresent(c -> c.onDestroyed(entity));
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity user, int remainingUseTicks) {
+    @WrapMethod(
+        method = "releaseUsing"
+    )
+    public boolean useItemBehavior(ItemStack stack, Level level, LivingEntity user, int remainingUseTicks, Operation<Boolean> original) {
         boolean result = false;
         int usedTicks = user.itematic$usedItemTicks();
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
@@ -408,12 +397,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .forEach(inventoryTickListener -> inventoryTickListener.itematic$onInventoryTick(level, stack, entity, slot));
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction clickType, Player player) {
+    @WrapMethod(
+        method = "overrideStackedOnOther"
+    )
+    public boolean useItemBehavior(ItemStack stack, Slot slot, ClickAction clickType, Player player, Operation<Boolean> original) {
         boolean result = false;
         for (ItemBehavior<?> behavior : this.behavior) {
             result |= behavior.clickOnSlot(stack, slot, clickType, player);
@@ -421,12 +408,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return result;
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack otherStack, Slot slot, ClickAction clickType, Player player, SlotAccess cursorStackReference) {
+    @WrapMethod(
+        method = "overrideOtherStackedOnMe"
+    )
+    public boolean useItemBehavior(ItemStack stack, ItemStack otherStack, Slot slot, ClickAction clickType, Player player, SlotAccess cursorStackReference, Operation<Boolean> original) {
         boolean result = false;
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, otherStack);
         for (ItemBehavior<?> behavior : this.behavior) {
@@ -492,12 +477,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return instance.itematic$isCorrectForDrops(stack, state);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public boolean canFitInsideContainerItems() {
+    @WrapMethod(
+        method = "canFitInsideContainerItems"
+    )
+    public boolean useItemBehavior(Operation<Boolean> original) {
         return this.itematic$getBehavior(ItemBehaviorType.BLOCK)
             .map(BlockItemBehavior::canBeNested)
             .orElse(true);
@@ -514,12 +497,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return stack.getOrDefault(ItematicDataComponents.USE_ANIMATION, ItemUseAnimation.NONE);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public int getUseDuration(ItemStack stack, LivingEntity user) {
+    @WrapMethod(
+        method = "getUseDuration"
+    )
+    public int useItemBehavior(ItemStack stack, LivingEntity user, Operation<Integer> original) {
         if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
             return 0;
         }
@@ -532,13 +513,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return useDuration.ticks(stack, user);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemDisplay implementation for data-driven items.
-     */
-    @Overwrite
-    @VisibleForTesting
-    public final String getDescriptionId() {
+    @WrapMethod(
+        method = "getDescriptionId"
+    )
+    public final String useItemDisplay(Operation<String> original) {
         return this.display.translationKey();
     }
 
@@ -561,12 +539,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return original.call(stack);
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses the ItemBehavior implementation for data-driven items.
-     */
-    @Overwrite
-    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+    @WrapMethod(
+        method = "getTooltipImage"
+    )
+    public Optional<TooltipComponent> useItemBehavior(ItemStack stack, Operation<Optional<TooltipComponent>> original) {
         return this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
             .flatMap(c -> c.tooltipData(stack));
     }
@@ -574,7 +550,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "getName(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/network/chat/Component;"
     )
-    private Component checkTextHolderItemBehavior(ItemStack stack, Operation<Component> original) {
+    private Component alsoCheckTextHolderItemBehavior(ItemStack stack, Operation<Component> original) {
         if (!stack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             return original.call(stack);
         }

@@ -45,7 +45,7 @@ public abstract class IronGolemExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.IRON_GOLEM_SPAWN_EGG;
     }
 }

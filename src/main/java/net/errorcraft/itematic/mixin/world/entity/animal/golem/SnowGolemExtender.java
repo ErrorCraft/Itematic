@@ -32,7 +32,7 @@ public abstract class SnowGolemExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.SNOW_GOLEM_SPAWN_EGG;
     }
 }

@@ -28,7 +28,7 @@ public abstract class ServerPlayerExtender extends Player {
     @WrapMethod(
         method = "openItemGui"
     )
-    private void checkTextHolderItemBehavior(ItemStack stack, InteractionHand hand, Operation<Void> original) {
+    private void alsoCheckTextHolderItemBehavior(ItemStack stack, InteractionHand hand, Operation<Void> original) {
         if (!stack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             return;
         }

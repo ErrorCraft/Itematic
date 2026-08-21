@@ -93,7 +93,7 @@ public abstract class WanderingTraderExtender extends AbstractVillagerExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.WANDERING_TRADER_SPAWN_EGG;
     }
 }

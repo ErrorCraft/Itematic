@@ -34,7 +34,7 @@ public abstract class SnifferExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.SNIFFER_SPAWN_EGG;
     }
 }

@@ -21,7 +21,7 @@ public class GuiExtender {
         )
     )
     @Nullable
-    private Object getDataComponentCheckEquipmentItemBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
+    private Object alsoCheckEquipmentItemBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
         if (!instance.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return null;
         }

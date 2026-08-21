@@ -57,7 +57,7 @@ public abstract class WitchExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.WITCH_SPAWN_EGG;
     }
 }

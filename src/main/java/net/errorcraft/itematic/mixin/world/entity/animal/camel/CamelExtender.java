@@ -18,7 +18,7 @@ public abstract class CamelExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.CAMEL_SPAWN_EGG;
     }
 }

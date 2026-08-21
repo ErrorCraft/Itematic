@@ -44,7 +44,7 @@ public abstract class PiglinBruteExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.PIGLIN_BRUTE_SPAWN_EGG;
     }
 }

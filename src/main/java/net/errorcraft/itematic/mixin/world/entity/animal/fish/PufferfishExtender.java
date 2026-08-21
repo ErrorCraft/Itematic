@@ -33,7 +33,7 @@ public abstract class PufferfishExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.PUFFERFISH_SPAWN_EGG;
     }
 }

@@ -54,7 +54,7 @@ public abstract class GoatExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.GOAT_SPAWN_EGG;
     }
 }

@@ -33,7 +33,7 @@ public abstract class SlimeExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.SLIME_SPAWN_EGG;
     }
 }

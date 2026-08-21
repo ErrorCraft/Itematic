@@ -34,7 +34,7 @@ public abstract class PandaExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.PANDA_SPAWN_EGG;
     }
 }

@@ -18,7 +18,7 @@ public abstract class RavagerExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.RAVAGER_SPAWN_EGG;
     }
 }

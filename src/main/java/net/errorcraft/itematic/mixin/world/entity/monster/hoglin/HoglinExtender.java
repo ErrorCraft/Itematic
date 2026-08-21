@@ -18,7 +18,7 @@ public abstract class HoglinExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.HOGLIN_SPAWN_EGG;
     }
 }

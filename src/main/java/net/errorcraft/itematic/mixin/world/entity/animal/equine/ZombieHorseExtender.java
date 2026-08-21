@@ -34,7 +34,7 @@ public abstract class ZombieHorseExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.ZOMBIE_HORSE_SPAWN_EGG;
     }
 }

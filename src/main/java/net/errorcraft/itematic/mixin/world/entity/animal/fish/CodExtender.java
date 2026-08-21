@@ -33,7 +33,7 @@ public abstract class CodExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.COD_SPAWN_EGG;
     }
 }

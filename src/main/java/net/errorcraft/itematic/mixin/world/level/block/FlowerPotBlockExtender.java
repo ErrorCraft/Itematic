@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.minecraft.core.BlockPos;
@@ -14,18 +16,15 @@ import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(FlowerPotBlock.class)
 public abstract class FlowerPotBlockExtender extends BlockBehaviourExtender {
-    /**
-     * @author ErrorCraft
-     * @reason Uses the Action implementation for data-driven items.
-     */
-    @Overwrite
-    public InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    @WrapMethod(
+        method = "useItemOn"
+    )
+    public InteractionResult useAction(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, Operation<InteractionResult> original) {
         if (stack.is(ItematicItemTags.PREVENTS_TAKING_POTTED_ITEM_OUT)) {
             return InteractionResult.CONSUME;
         }

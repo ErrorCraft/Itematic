@@ -18,7 +18,7 @@ public abstract class EndermiteExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.ENDERMITE_SPAWN_EGG;
     }
 }

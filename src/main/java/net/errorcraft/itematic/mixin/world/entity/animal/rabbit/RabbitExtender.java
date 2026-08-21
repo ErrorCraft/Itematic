@@ -18,7 +18,7 @@ public abstract class RabbitExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.RABBIT_SPAWN_EGG;
     }
 }

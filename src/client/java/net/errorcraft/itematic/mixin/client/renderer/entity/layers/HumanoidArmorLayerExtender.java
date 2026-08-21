@@ -16,7 +16,7 @@ public class HumanoidArmorLayerExtender<S extends HumanoidRenderState> {
     @WrapMethod(
         method = "shouldRender(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/EquipmentSlot;)Z"
     )
-    private static boolean checkEquipmentItemBehavior(ItemStack stack, EquipmentSlot slot, Operation<Boolean> original) {
+    private static boolean alsoCheckEquipmentItemBehavior(ItemStack stack, EquipmentSlot slot, Operation<Boolean> original) {
         if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return false;
         }
@@ -27,7 +27,7 @@ public class HumanoidArmorLayerExtender<S extends HumanoidRenderState> {
     @WrapMethod(
         method = "renderArmorPiece"
     )
-    private void checkEquipmentItemBehavior(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, ItemStack stack, EquipmentSlot slot, int lightCoords, S state, Operation<Void> original) {
+    private void alsoCheckEquipmentItemBehavior(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, ItemStack stack, EquipmentSlot slot, int lightCoords, S state, Operation<Void> original) {
         if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return;
         }

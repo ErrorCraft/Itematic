@@ -60,7 +60,7 @@ public interface CauldronInteractionExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
-    private static boolean isDyeableCheckItemBehavior(ItemStack instance, TagKey<Item> tag) {
+    private static boolean isDyeableCheckDyeableItemBehavior(ItemStack instance, TagKey<Item> tag) {
         return instance.itematic$hasBehavior(ItemBehaviorType.DYEABLE);
     }
 

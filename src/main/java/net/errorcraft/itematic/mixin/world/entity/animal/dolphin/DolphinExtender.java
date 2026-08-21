@@ -18,7 +18,7 @@ public abstract class DolphinExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.DOLPHIN_SPAWN_EGG;
     }
 }

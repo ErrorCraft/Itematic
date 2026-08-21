@@ -82,7 +82,7 @@ public abstract class PillagerExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.PILLAGER_SPAWN_EGG;
     }
 }

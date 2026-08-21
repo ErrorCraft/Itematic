@@ -18,7 +18,7 @@ public abstract class SilverfishExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.SILVERFISH_SPAWN_EGG;
     }
 }

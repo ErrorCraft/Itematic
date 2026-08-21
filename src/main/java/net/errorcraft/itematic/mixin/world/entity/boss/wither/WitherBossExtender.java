@@ -35,7 +35,7 @@ public abstract class WitherBossExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.WITHER_SPAWN_EGG;
     }
 }

@@ -50,7 +50,7 @@ public class AnvilMenuExtender {
             )
         )
     )
-    private boolean isEnchantedBookCheckItemBehavior(ItemStack instance, Item item) {
+    private boolean isEnchantedBookCheckEnchantmentHolderItemBehavior(ItemStack instance, Item item) {
         return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER);
     }
 }

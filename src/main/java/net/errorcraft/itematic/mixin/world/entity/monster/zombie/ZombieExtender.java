@@ -123,7 +123,7 @@ public abstract class ZombieExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.ZOMBIE_SPAWN_EGG;
     }
 }

@@ -97,7 +97,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @WrapMethod(
         method = "getEquipmentSlotForItem"
     )
-    private EquipmentSlot checkEquipmentItemBehavior(ItemStack stack, Operation<EquipmentSlot> original) {
+    private EquipmentSlot alsoCheckEquipmentItemBehavior(ItemStack stack, Operation<EquipmentSlot> original) {
         if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return EquipmentSlot.MAINHAND;
         }
@@ -113,7 +113,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         ),
         cancellable = true
     )
-    private void checkEquipmentItemBehavior(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
+    private void alsoCheckEquipmentItemBehavior(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
         if (!newStack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.cancel();
         }
@@ -352,7 +352,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         ),
         cancellable = true
     )
-    private void checkEquipmentItemBehavior(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
+    private void alsoCheckEquipmentItemBehavior(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
         if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.setReturnValue(false);
         }
@@ -377,7 +377,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     @Nullable
-    private Object checkEquipmentItemBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
+    private Object alsoCheckEquipmentItemBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
         if (!instance.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return null;
         }

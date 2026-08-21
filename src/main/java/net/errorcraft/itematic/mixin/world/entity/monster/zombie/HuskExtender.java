@@ -18,7 +18,7 @@ public abstract class HuskExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.HUSK_SPAWN_EGG;
     }
 }

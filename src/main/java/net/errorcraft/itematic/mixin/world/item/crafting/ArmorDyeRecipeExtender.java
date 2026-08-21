@@ -12,7 +12,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.ArmorDyeRecipe;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
@@ -28,7 +33,7 @@ public class ArmorDyeRecipeExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
-    private boolean isDyeableCheckItemBehavior(ItemStack instance, TagKey<Item> tag) {
+    private boolean isDyeableCheckDyeableItemBehavior(ItemStack instance, TagKey<Item> tag) {
         return instance.itematic$hasBehavior(ItemBehaviorType.DYEABLE);
     }
 

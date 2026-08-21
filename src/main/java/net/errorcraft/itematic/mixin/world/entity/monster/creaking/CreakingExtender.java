@@ -18,7 +18,7 @@ public abstract class CreakingExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.CREAKING_SPAWN_EGG;
     }
 }

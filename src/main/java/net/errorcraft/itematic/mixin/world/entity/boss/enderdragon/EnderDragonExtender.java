@@ -18,7 +18,7 @@ public abstract class EnderDragonExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.ENDER_DRAGON_SPAWN_EGG;
     }
 }

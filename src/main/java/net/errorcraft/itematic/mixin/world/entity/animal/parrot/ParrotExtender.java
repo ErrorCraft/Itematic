@@ -18,7 +18,7 @@ public abstract class ParrotExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.PARROT_SPAWN_EGG;
     }
 }

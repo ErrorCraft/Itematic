@@ -54,7 +54,7 @@ public class GrindstoneMenuExtender {
                 target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"
             )
         )
-        private boolean isDamageableItemCheckItemBehavior(ItemStack instance) {
+        private boolean isDamageableItemCheckEnchantableItemBehavior(ItemStack instance) {
             return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTABLE);
         }
     }

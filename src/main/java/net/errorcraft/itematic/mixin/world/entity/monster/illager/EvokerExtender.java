@@ -18,7 +18,7 @@ public abstract class EvokerExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.EVOKER_SPAWN_EGG;
     }
 }

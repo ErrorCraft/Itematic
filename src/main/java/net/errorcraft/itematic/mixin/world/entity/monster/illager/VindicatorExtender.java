@@ -36,7 +36,7 @@ public abstract class VindicatorExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.VINDICATOR_SPAWN_EGG;
     }
 }

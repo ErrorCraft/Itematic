@@ -18,7 +18,7 @@ public abstract class OcelotExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.OCELOT_SPAWN_EGG;
     }
 }

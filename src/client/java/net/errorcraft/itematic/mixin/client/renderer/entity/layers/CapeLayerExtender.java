@@ -13,7 +13,7 @@ public class CapeLayerExtender {
     @WrapMethod(
         method = "hasLayer"
     )
-    private boolean checkEquipmentItemBehavior(ItemStack stack, EquipmentClientInfo.LayerType layerType, Operation<Boolean> original) {
+    private boolean alsoCheckEquipmentItemBehavior(ItemStack stack, EquipmentClientInfo.LayerType layerType, Operation<Boolean> original) {
         if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return false;
         }

@@ -33,7 +33,7 @@ public abstract class VexExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.VEX_SPAWN_EGG;
     }
 }

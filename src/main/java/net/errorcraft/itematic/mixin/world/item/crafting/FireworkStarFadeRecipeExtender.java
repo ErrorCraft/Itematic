@@ -14,7 +14,11 @@ import net.minecraft.world.item.crafting.FireworkStarFadeRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
@@ -40,7 +44,7 @@ public class FireworkStarFadeRecipeExtender {
             classValue = DyeItem.class
         )
     )
-    private boolean instanceOfDyeItemCheckItemBehavior(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack) {
+    private boolean instanceOfDyeItemCheckDyeItemBehavior(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack) {
         return inputStack.itematic$hasBehavior(ItemBehaviorType.DYE);
     }
 

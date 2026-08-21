@@ -119,7 +119,7 @@ public abstract class VillagerExtender extends AbstractVillagerExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.VILLAGER_SPAWN_EGG;
     }
 }

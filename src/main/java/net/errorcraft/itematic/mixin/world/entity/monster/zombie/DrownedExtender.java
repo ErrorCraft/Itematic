@@ -88,7 +88,7 @@ public abstract class DrownedExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.DROWNED_SPAWN_EGG;
     }
 

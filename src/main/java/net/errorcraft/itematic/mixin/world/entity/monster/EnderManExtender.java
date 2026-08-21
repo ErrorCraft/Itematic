@@ -33,7 +33,7 @@ public abstract class EnderManExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.ENDERMAN_SPAWN_EGG;
     }
 }

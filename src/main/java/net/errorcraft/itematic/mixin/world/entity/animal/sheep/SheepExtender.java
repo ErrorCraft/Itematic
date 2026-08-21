@@ -32,7 +32,7 @@ public abstract class SheepExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.SHEEP_SPAWN_EGG;
     }
 }

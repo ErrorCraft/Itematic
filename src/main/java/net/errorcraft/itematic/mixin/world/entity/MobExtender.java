@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.world.entity;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -28,10 +30,13 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.Map;
 import java.util.Optional;
@@ -183,24 +188,22 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
         return this.itematic$getAttackDamage();
     }
 
-    /**
-     * @author ErrorCraft
-     * @reason Uses item keys instead of direct items.
-     */
-    @Overwrite
+    @WrapMethod(
+        method = "getPickResult"
+    )
     @Nullable
-    public ItemStack getPickResult() {
-        ResourceKey<Item> itemId = this.pickBlockKey();
-        if (itemId == null) {
+    public ItemStack useItemId(Operation<ItemStack> original) {
+        ResourceKey<Item> item = this.pickResultItem();
+        if (item == null) {
             return null;
         }
 
-        return this.level().itematic$createStack(itemId);
+        return this.level().itematic$createStack(item);
     }
 
     @Unique
     @Nullable
-    protected ResourceKey<Item> pickBlockKey() {
+    protected ResourceKey<Item> pickResultItem() {
         return null;
     }
 

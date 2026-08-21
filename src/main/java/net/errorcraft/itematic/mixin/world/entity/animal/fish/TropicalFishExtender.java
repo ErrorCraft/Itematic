@@ -33,7 +33,7 @@ public abstract class TropicalFishExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.TROPICAL_FISH_SPAWN_EGG;
     }
 }

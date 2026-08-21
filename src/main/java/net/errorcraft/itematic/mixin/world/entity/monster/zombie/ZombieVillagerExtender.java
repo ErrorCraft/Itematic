@@ -32,7 +32,7 @@ public abstract class ZombieVillagerExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.ZOMBIE_VILLAGER_SPAWN_EGG;
     }
 }

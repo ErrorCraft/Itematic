@@ -14,7 +14,7 @@ public class WingsLayerExtender<S extends HumanoidRenderState> {
     @WrapMethod(
         method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/HumanoidRenderState;FF)V"
     )
-    private void checkEquipmentItemBehavior(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, S state, float yRot, float xRot, Operation<Void> original) {
+    private void alsoCheckEquipmentItemBehavior(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, S state, float yRot, float xRot, Operation<Void> original) {
         if (!state.chestEquipment.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return;
         }

@@ -17,7 +17,7 @@ public class AbstractFurnaceMenuExtender {
             target = "Lnet/minecraft/world/level/block/entity/FuelValues;isFuel(Lnet/minecraft/world/item/ItemStack;)Z"
         )
     )
-    private boolean isFuelCheckItemBehavior(FuelValues instance, ItemStack item) {
+    private boolean isFuelCheckFuelItemBehavior(FuelValues instance, ItemStack item) {
         return item.itematic$hasBehavior(ItemBehaviorType.FUEL);
     }
 }

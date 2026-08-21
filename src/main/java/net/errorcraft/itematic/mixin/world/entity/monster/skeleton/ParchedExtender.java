@@ -18,7 +18,7 @@ public abstract class ParchedExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.PARCHED_SPAWN_EGG;
     }
 }

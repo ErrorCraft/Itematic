@@ -18,7 +18,7 @@ public abstract class PhantomExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.PHANTOM_SPAWN_EGG;
     }
 }

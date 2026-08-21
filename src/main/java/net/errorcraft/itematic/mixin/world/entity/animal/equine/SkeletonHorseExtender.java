@@ -18,7 +18,7 @@ public abstract class SkeletonHorseExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.SKELETON_HORSE_SPAWN_EGG;
     }
 }

@@ -18,7 +18,7 @@ public abstract class ChickenExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.CHICKEN_SPAWN_EGG;
     }
 }

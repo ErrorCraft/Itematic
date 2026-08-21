@@ -18,7 +18,7 @@ public abstract class SpiderExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.SPIDER_SPAWN_EGG;
     }
 }

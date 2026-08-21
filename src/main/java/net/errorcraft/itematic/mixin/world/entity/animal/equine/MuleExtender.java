@@ -18,7 +18,7 @@ public abstract class MuleExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.MULE_SPAWN_EGG;
     }
 }

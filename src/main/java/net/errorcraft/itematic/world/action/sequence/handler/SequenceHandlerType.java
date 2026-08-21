@@ -3,7 +3,11 @@ package net.errorcraft.itematic.world.action.sequence.handler;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
-import net.errorcraft.itematic.world.action.sequence.handler.handlers.*;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToSucceedSequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.RandomizeSequenceHandler;
+import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.minecraft.core.Registry;
 
 public record SequenceHandlerType<T extends SequenceHandler<T>>(MapCodec<T> codec) {

@@ -18,7 +18,7 @@ public abstract class ElderGuardianExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.ELDER_GUARDIAN_SPAWN_EGG;
     }
 }

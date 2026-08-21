@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "itematic-gametest",
   "version": "1.0.0",
-
   "name": "Itematic Gametest",
   "environment": "*",
   "entrypoints": {

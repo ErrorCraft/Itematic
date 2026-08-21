@@ -18,7 +18,7 @@ public abstract class GhastExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.GHAST_SPAWN_EGG;
     }
 }

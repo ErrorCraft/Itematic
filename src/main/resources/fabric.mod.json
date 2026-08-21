@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "itematic",
   "version": "${version}",
-
   "name": "Itematic",
   "description": "A mod that adds data-driven items to Minecraft.",
   "authors": [
@@ -13,10 +12,8 @@
     "issues": "https://github.com/ErrorCraft/Itematic/issues",
     "sources": "https://github.com/ErrorCraft/Itematic"
   },
-
   "license": "Apache-2.0",
   "icon": "assets/itematic/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -34,13 +31,10 @@
     }
   ],
   "accessWidener": "itematic.classtweaker",
-
   "depends": {
     "fabricloader": ">=0.19.2",
     "fabric-api": "*",
     "minecraft": "~1.21-",
     "java": ">=21"
-  },
-  "suggests": {
   }
 }

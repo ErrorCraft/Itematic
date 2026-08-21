@@ -32,7 +32,7 @@ public abstract class CreeperExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.CREEPER_SPAWN_EGG;
     }
 }

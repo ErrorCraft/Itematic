@@ -20,7 +20,11 @@ import net.minecraft.world.level.ItemLike;
 import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +38,7 @@ public class FireworkStarRecipeExtender {
             target = "Ljava/util/Map;containsKey(Ljava/lang/Object;)Z"
         )
     )
-    private boolean containsKeyCheckItemBehavior(Map<Item, FireworkExplosion.Shape> instance, Object o, @Local ItemStack stack) {
+    private boolean containsKeyCheckFireworkShapeModifierItemBehavior(Map<Item, FireworkExplosion.Shape> instance, Object o, @Local ItemStack stack) {
         return stack.itematic$hasBehavior(ItemBehaviorType.FIREWORK_SHAPE_MODIFIER);
     }
 
@@ -122,7 +126,7 @@ public class FireworkStarRecipeExtender {
             classValue = DyeItem.class
         )
     )
-    private boolean instanceOfDyeItemCheckItemBehavior(Object reference, Class<DyeItem> clazz, @Local ItemStack itemStack) {
+    private boolean instanceOfDyeItemCheckDyeItemBehavior(Object reference, Class<DyeItem> clazz, @Local ItemStack itemStack) {
         return itemStack.itematic$hasBehavior(ItemBehaviorType.DYE);
     }
 

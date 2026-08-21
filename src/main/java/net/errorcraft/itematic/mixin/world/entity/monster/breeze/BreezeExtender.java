@@ -18,7 +18,7 @@ public abstract class BreezeExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.BREEZE_SPAWN_EGG;
     }
 }

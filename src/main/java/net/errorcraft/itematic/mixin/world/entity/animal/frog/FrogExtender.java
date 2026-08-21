@@ -18,7 +18,7 @@ public abstract class FrogExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.FROG_SPAWN_EGG;
     }
 }

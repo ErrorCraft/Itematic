@@ -18,7 +18,7 @@ public abstract class DonkeyExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.DONKEY_SPAWN_EGG;
     }
 }

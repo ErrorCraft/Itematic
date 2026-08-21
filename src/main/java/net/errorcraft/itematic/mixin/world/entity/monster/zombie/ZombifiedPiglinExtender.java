@@ -52,7 +52,7 @@ public abstract class ZombifiedPiglinExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.ZOMBIFIED_PIGLIN_SPAWN_EGG;
     }
 }

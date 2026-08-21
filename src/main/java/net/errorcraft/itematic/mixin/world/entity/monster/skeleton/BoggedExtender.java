@@ -32,7 +32,7 @@ public abstract class BoggedExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.BOGGED_SPAWN_EGG;
     }
 }

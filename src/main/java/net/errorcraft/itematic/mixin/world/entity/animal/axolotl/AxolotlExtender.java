@@ -55,7 +55,7 @@ public abstract class AxolotlExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.AXOLOTL_SPAWN_EGG;
     }
 }

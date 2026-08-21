@@ -14,7 +14,7 @@ public class WolfArmorLayerExtender {
     @WrapMethod(
         method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/WolfRenderState;FF)V"
     )
-    private void checkEquipmentItemBehavior(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, WolfRenderState state, float yRot, float xRot, Operation<Void> original) {
+    private void alsoCheckEquipmentItemBehavior(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, WolfRenderState state, float yRot, float xRot, Operation<Void> original) {
         if (!state.bodyArmorItem.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return;
         }

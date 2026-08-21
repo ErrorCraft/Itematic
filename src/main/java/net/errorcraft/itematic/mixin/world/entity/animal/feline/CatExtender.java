@@ -18,7 +18,7 @@ public abstract class CatExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.CAT_SPAWN_EGG;
     }
 }

@@ -61,7 +61,7 @@ public abstract class CopperGolemExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.COPPER_GOLEM_SPAWN_EGG;
     }
 }

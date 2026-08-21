@@ -28,7 +28,7 @@ public class ComposterBlockExtender {
             remap = false
         )
     )
-    private static boolean containsKeyCheckItemBehavior(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
+    private static boolean containsKeyCheckCompostableItemBehavior(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
         return stack.itematic$hasBehavior(ItemBehaviorType.COMPOSTABLE);
     }
 
@@ -78,7 +78,7 @@ public class ComposterBlockExtender {
                 remap = false
             )
         )
-        private boolean containsKeyCheckItemBehavior(Object2FloatMap<ItemLike> instance, Object o, int slot, ItemStack stack) {
+        private boolean containsKeyCheckCompostableItemBehavior(Object2FloatMap<ItemLike> instance, Object o, int slot, ItemStack stack) {
             return stack.itematic$hasBehavior(ItemBehaviorType.COMPOSTABLE);
         }
     }

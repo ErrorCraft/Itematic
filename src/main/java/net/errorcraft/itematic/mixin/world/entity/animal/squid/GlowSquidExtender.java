@@ -18,7 +18,7 @@ public abstract class GlowSquidExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.GLOW_SQUID_SPAWN_EGG;
     }
 }

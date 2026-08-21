@@ -139,7 +139,7 @@ public abstract class FoxExtender extends MobExtender {
     }
 
     @Override
-    protected @Nullable ResourceKey<Item> pickBlockKey() {
+    protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.FOX_SPAWN_EGG;
     }
 

@@ -8,7 +8,11 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DyeItemBehavior;
 import net.minecraft.world.inventory.LoomMenu;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +31,7 @@ public class LoomMenuExtender {
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private boolean alsoCheckItemBehavior(boolean original, @Local(ordinal = 1) ItemStack slotStack) {
+    private boolean alsoCheckBannerPatternHolderItemBehavior(boolean original, @Local(ordinal = 1) ItemStack slotStack) {
         return original && slotStack.itematic$hasBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER);
     }
 
@@ -92,7 +96,7 @@ public class LoomMenuExtender {
                 ordinal = 0
             )
         )
-        private boolean instanceOfDyeItemCheckItemBehavior(Object reference, Class<DyeItem> clazz, ItemStack stack) {
+        private boolean instanceOfDyeItemCheckDyeItemBehavior(Object reference, Class<DyeItem> clazz, ItemStack stack) {
             return stack.itematic$hasBehavior(ItemBehaviorType.DYE);
         }
     }
@@ -106,7 +110,7 @@ public class LoomMenuExtender {
                 target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
             )
         )
-        private boolean alsoCheckItemBehavior(boolean original, ItemStack stack) {
+        private boolean alsoCheckBannerPatternHolderItemBehavior(boolean original, ItemStack stack) {
             return original && stack.itematic$hasBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER);
         }
     }

@@ -17,7 +17,7 @@ public class StopHoldingItemIfNoLongerAdmiringExtender {
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private static boolean alsoCheckItemBehavior(boolean original, @Local(argsOnly = true) Piglin piglin) {
+    private static boolean alsoCheckAttackBlockingItemBehavior(boolean original, @Local(argsOnly = true) Piglin piglin) {
         return original && piglin.getOffhandItem().itematic$hasBehavior(ItemBehaviorType.ATTACK_BLOCKING);
     }
 }
