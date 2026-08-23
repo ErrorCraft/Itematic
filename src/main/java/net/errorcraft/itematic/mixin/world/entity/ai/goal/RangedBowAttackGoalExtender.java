@@ -31,7 +31,7 @@ public class RangedBowAttackGoalExtender {
             target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getWeaponHoldingHand(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/InteractionHand;"
         )
     )
-    private InteractionHand getHandForHeldBowUseId(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemIds.BOW);
+    private InteractionHand getHandForHeldBowUseId(LivingEntity mob, Item weaponItem) {
+        return ItematicProjectileUtil.getWeaponHoldingHand(mob, ItemIds.BOW);
     }
 }

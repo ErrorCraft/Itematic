@@ -31,8 +31,8 @@ public abstract class AbstractBoatExtender extends VehicleEntityExtender {
         method = "<init>",
         at = @At("TAIL")
     )
-    private void setItemId(EntityType<? extends AbstractBoat> type, Level level, Supplier<Item> itemSupplier, CallbackInfo info) {
-        this.itemId = BuiltInRegistries.ITEM.getResourceKey(itemSupplier.get()).orElseThrow();
+    private void setItemId(EntityType<? extends AbstractBoat> type, Level level, Supplier<Item> dropItem, CallbackInfo info) {
+        this.itemId = BuiltInRegistries.ITEM.getResourceKey(dropItem.get()).orElseThrow();
     }
 
     @Redirect(

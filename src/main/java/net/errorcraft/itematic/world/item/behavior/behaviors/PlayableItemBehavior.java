@@ -54,7 +54,7 @@ public record PlayableItemBehavior(Holder<Instrument> defaultInstrument) impleme
             .map(instrument -> {
                 InstrumentItemAccessor.playSound(level, user, instrument);
                 user.getCooldowns().addCooldown(stack, Mth.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND));
-                user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+                user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
                 return ItemResult.CONSUME;
             }).orElse(ItemResult.PASS);
     }

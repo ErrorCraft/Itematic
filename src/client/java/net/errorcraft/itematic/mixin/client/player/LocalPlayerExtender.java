@@ -13,11 +13,11 @@ public class LocalPlayerExtender {
     @WrapMethod(
         method = "openItemGui"
     )
-    private void alsoCheckTextHolderItemBehavior(ItemStack stack, InteractionHand hand, Operation<Void> original) {
-        if (!stack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
+    private void alsoCheckTextHolderItemBehavior(ItemStack itemStack, InteractionHand hand, Operation<Void> original) {
+        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             return;
         }
 
-        original.call(stack, hand);
+        original.call(itemStack, hand);
     }
 }

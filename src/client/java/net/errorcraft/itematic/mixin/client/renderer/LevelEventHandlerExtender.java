@@ -23,12 +23,12 @@ public class LevelEventHandlerExtender {
         method = "levelEvent",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/world/item/ItemStack"
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         ),
         slice = @Slice(
             from = @At(
                 value = "NEW",
-                target = "net/minecraft/core/particles/ItemParticleOption",
+                target = "(Lnet/minecraft/core/particles/ParticleType;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/core/particles/ItemParticleOption;",
                 ordinal = 1
             )
         )
@@ -41,7 +41,7 @@ public class LevelEventHandlerExtender {
         method = "levelEvent",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/world/item/ItemStack",
+            target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
             ordinal = 0
         ),
         slice = @Slice(

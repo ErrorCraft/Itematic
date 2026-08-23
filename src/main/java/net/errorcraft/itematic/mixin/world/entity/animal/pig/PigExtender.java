@@ -40,10 +40,10 @@ public abstract class PigExtender extends MobExtender {
             )
         )
     )
-    private void doNotAddCarrotOnAStickGoalSelector(GoalSelector instance, int priority, Goal goal) {}
+    private void doNotAddCarrotOnAStickGoalSelector(GoalSelector instance, int prio, Goal goal) {}
 
     @Redirect(
-        method = "method_58372",
+        method = "lambda$registerGoals$1",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"

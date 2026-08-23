@@ -25,7 +25,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private boolean testPaperCheckId(Ingredient instance, ItemStack input) {
-        return input.itematic$is(ItemIds.PAPER);
+        return input.is(ItemIds.PAPER);
     }
 
     @Redirect(
@@ -47,7 +47,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private boolean testGunpowderCheckId(Ingredient instance, ItemStack input) {
-        return input.itematic$is(ItemIds.GUNPOWDER);
+        return input.is(ItemIds.GUNPOWDER);
     }
 
     @Redirect(
@@ -69,7 +69,7 @@ public class FireworkRocketRecipeExtender {
         )
     )
     private boolean testFireworkStarCheckId(Ingredient instance, ItemStack input) {
-        return input.itematic$is(ItemIds.FIREWORK_STAR);
+        return input.is(ItemIds.FIREWORK_STAR);
     }
 
     @Redirect(
@@ -79,7 +79,7 @@ public class FireworkRocketRecipeExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireworkRocketUseHolder(ItemLike item, int count, @Local(argsOnly = true) HolderLookup.Provider registries) {
+    private ItemStack newItemStackForFireworkRocketUseHolder(ItemLike item, int count, @Local(name = "registries", argsOnly = true) HolderLookup.Provider registries) {
         return registries.lookupOrThrow(Registries.ITEM)
             .get(ItemIds.FIREWORK_ROCKET)
             .map(itemHolder -> new ItemStack(itemHolder, count))

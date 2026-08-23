@@ -14,13 +14,14 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(VillagerProfession.class)
 public class VillagerProfessionExtender implements VillagerProfessionAccess {
     @Unique
+    @Nullable
     private TagKey<Item> gatherableItems;
 
     @ModifyExpressionValue(
         method = "bootstrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/npc/villager/VillagerProfession;register(Lnet/minecraft/core/Registry;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceKey;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;)Lnet/minecraft/world/entity/npc/villager/VillagerProfession;"
+            target = "Lnet/minecraft/world/entity/npc/villager/VillagerProfession;register(Lnet/minecraft/core/Registry;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/resources/ResourceKey;Lcom/google/common/collect/ImmutableSet;Lcom/google/common/collect/ImmutableSet;Lnet/minecraft/sounds/SoundEvent;Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;)Lnet/minecraft/world/entity/npc/villager/VillagerProfession;"
         )
     )
     private static VillagerProfession setGatherableItemsTag(VillagerProfession original) {

@@ -110,7 +110,7 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
             ordinal = 0
         )
     )
-    private boolean instanceOfSpawnEggItemUseItemBehavior(Object reference, Class<SpawnEggItem> clazz, @Local ItemStack itemStack, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
+    private boolean instanceOfSpawnEggItemUseItemBehavior(Object reference, Class<SpawnEggItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
         Optional<SpawnEggItemBehavior> optionalSpawnEgg = itemStack.itematic$getBehavior(ItemBehaviorType.SPAWN_EGG);
         optionalSpawnEgg.ifPresent(spawnEgg::set);
         return optionalSpawnEgg.isPresent();
@@ -123,20 +123,20 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
             target = "Lnet/minecraft/world/item/SpawnEggItem;spawnOffspringFromSpawnEgg(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"
         )
     )
-    private Optional<Mob> spawnOffspringUseItemBehavior(SpawnEggItem instance, Player user, Mob entity, EntityType<? extends Mob> type, ServerLevel level, Vec3 pos, ItemStack stack, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
-        return spawnEgg.get().spawnBaby(user, entity, type, level, pos, stack);
+    private Optional<Mob> spawnOffspringUseItemBehavior(SpawnEggItem instance, Player player, Mob parent, EntityType<? extends Mob> type, ServerLevel level, Vec3 pos, ItemStack spawnEggStack, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
+        return spawnEgg.get().spawnBaby(player, parent, type, level, pos, spawnEggStack);
     }
 
     @Redirect(
         method = "checkAndHandleImportantInteractions",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         )
     )
-    private boolean isLeadCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.LEAD);
+    private boolean isLeadCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.LEAD);
     }
 
     @Redirect(
@@ -147,8 +147,8 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
         )
     )
     @Nullable
-    private Item getEquipmentForSlotUseId(EquipmentSlot equipmentSlot, int equipmentLevel, @Share("item") LocalRef<Holder<Item>> itemReference) {
-        ResourceKey<Item> itemId = LEVEL_TO_EQUIPMENT.get(equipmentLevel).get(equipmentSlot);
+    private Item getEquipmentForSlotUseId(EquipmentSlot slot, int type, @Share("item") LocalRef<Holder<Item>> itemReference) {
+        ResourceKey<Item> itemId = LEVEL_TO_EQUIPMENT.get(type).get(slot);
         Optional<Holder.Reference<Item>> item = this.level().itematic$itemAccess().get(itemId);
         if (item.isEmpty()) {
             return null;

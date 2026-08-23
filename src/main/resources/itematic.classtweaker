@@ -1,4 +1,4 @@
-classTweaker	v2	named
+classTweaker    v2    official
 
 accessible    class    net/minecraft/advancements/criterion/StatePropertiesPredicate$PropertyMatcher
 accessible    class    net/minecraft/advancements/criterion/StatePropertiesPredicate$RangedMatcher
@@ -46,7 +46,6 @@ inject-interface    net/minecraft/world/entity/Mob    net/errorcraft/itematic/ac
 inject-interface    net/minecraft/world/entity/ai/attributes/AttributeInstance    net/errorcraft/itematic/access/world/entity/ai/attributes/AttributeInstanceAccess
 inject-interface    net/minecraft/world/entity/ai/attributes/AttributeMap    net/errorcraft/itematic/access/world/entity/ai/attributes/AttributeMapAccess
 inject-interface    net/minecraft/world/entity/ai/attributes/AttributeSupplier    net/errorcraft/itematic/access/world/entity/ai/attributes/AttributeSupplierAccess
-inject-interface    net/minecraft/world/entity/npc/villager/VillagerData    net/errorcraft/itematic/access/world/entity/npc/villager/VillagerDataAccess
 inject-interface    net/minecraft/world/entity/npc/villager/VillagerProfession    net/errorcraft/itematic/access/world/entity/npc/villager/VillagerProfessionAccess
 inject-interface    net/minecraft/world/entity/player/StackedItemContents    net/errorcraft/itematic/access/world/entity/player/StackedItemContentsAccess
 inject-interface    net/minecraft/world/inventory/BrewingStandMenu    net/errorcraft/itematic/access/world/inventory/BrewingStandMenuAccess

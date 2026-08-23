@@ -32,8 +32,8 @@ public class ServerGamePacketListenerImplExtender {
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private boolean alsoCheckWritableItemBehavior(boolean original, @Local ItemStack stack) {
-        return original && stack.itematic$hasBehavior(ItemBehaviorType.WRITABLE);
+    private boolean alsoCheckWritableItemBehavior(boolean original, @Local(name = "carried") ItemStack carried) {
+        return original && carried.itematic$hasBehavior(ItemBehaviorType.WRITABLE);
     }
 
     @ModifyExpressionValue(
@@ -43,8 +43,8 @@ public class ServerGamePacketListenerImplExtender {
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private boolean alsoUseItemBehavior(boolean original, @Local ItemStack stack, @Share("writable") LocalRef<WritableItemBehavior> writable) {
-        Optional<WritableItemBehavior> optionalWritable = stack.itematic$getBehavior(ItemBehaviorType.WRITABLE);
+    private boolean alsoUseItemBehavior(boolean original, @Local(name = "carried") ItemStack carried, @Share("writable") LocalRef<WritableItemBehavior> writable) {
+        Optional<WritableItemBehavior> optionalWritable = carried.itematic$getBehavior(ItemBehaviorType.WRITABLE);
         optionalWritable.ifPresent(writable::set);
         return original && optionalWritable.isPresent();
     }
@@ -56,7 +56,7 @@ public class ServerGamePacketListenerImplExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack transmuteCopyForWrittenBookUseHolder(ItemStack instance, ItemLike item, @Share("writable") LocalRef<WritableItemBehavior> writable) {
+    private ItemStack transmuteCopyForWrittenBookUseHolder(ItemStack instance, ItemLike newItem, @Share("writable") LocalRef<WritableItemBehavior> writable) {
         return instance.itematic$transmuteCopy(writable.get().transformsInto());
     }
 

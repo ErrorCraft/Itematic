@@ -16,7 +16,7 @@ public abstract class AbstractCauldronBlockExtender {
             target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"
         )
     )
-    private Object useItemId(Object key, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$key();
+    private Object useItemId(Object key, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack) {
+        return itemStack.itematic$key();
     }
 }

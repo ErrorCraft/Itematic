@@ -5,7 +5,6 @@ import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.minecraft.world.inventory.BrewingStandMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import org.objectweb.asm.Opcodes;
@@ -59,7 +58,7 @@ public class BrewingStandMenuExtender implements BrewingStandMenuAccess {
                 target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;isIngredient(Lnet/minecraft/world/item/ItemStack;)Z"
             )
         )
-        private static boolean isAlwaysValidIngredient(PotionBrewing instance, ItemStack stack) {
+        private static boolean isAlwaysValidIngredient(PotionBrewing instance, ItemStack ingredient) {
             return true;
         }
     }
@@ -70,11 +69,11 @@ public class BrewingStandMenuExtender implements BrewingStandMenuAccess {
             method = "mayPlaceItem",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
                 ordinal = 0
             )
         )
-        private static boolean isPotionCheckTag(ItemStack instance, Item item) {
+        private static boolean isPotionCheckTag(ItemStack instance, Object o) {
             return instance.is(ItematicItemTags.BREWING_INPUTS);
         }
 
@@ -82,7 +81,7 @@ public class BrewingStandMenuExtender implements BrewingStandMenuAccess {
             method = "mayPlaceItem",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
             ),
             slice = @Slice(
                 from = @At(
@@ -97,7 +96,7 @@ public class BrewingStandMenuExtender implements BrewingStandMenuAccess {
                 )
             )
         )
-        private static boolean isRemainingItemReturnFalse(ItemStack instance, Item item) {
+        private static boolean isRemainingItemReturnFalse(ItemStack instance, Object o) {
             return false;
         }
 
@@ -105,7 +104,7 @@ public class BrewingStandMenuExtender implements BrewingStandMenuAccess {
             method = "mayPlaceItem",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
                 ordinal = 0
             ),
             slice = @Slice(
@@ -116,8 +115,8 @@ public class BrewingStandMenuExtender implements BrewingStandMenuAccess {
                 )
             )
         )
-        private static boolean isGlassBottleCheckId(ItemStack instance, Item item) {
-            return instance.itematic$is(ItemIds.GLASS_BOTTLE);
+        private static boolean isGlassBottleCheckId(ItemStack instance, Object o) {
+            return instance.is(ItemIds.GLASS_BOTTLE);
         }
     }
 }

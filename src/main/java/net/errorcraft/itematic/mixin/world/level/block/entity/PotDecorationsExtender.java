@@ -75,8 +75,7 @@ public abstract class PotDecorationsExtender implements PotDecorationsAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
-            remap = false
+            target = "Lcom/mojang/serialization/Codec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
         ),
         index = 0
     )
@@ -88,8 +87,7 @@ public abstract class PotDecorationsExtender implements PotDecorationsAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
-            remap = false
+            target = "Lcom/mojang/serialization/Codec;xmap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
         ),
         index = 1
     )
@@ -104,8 +102,8 @@ public abstract class PotDecorationsExtender implements PotDecorationsAccess {
             target = "Lnet/minecraft/network/codec/ByteBufCodecs;registry(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/network/codec/StreamCodec;"
         )
     )
-    private static StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<Item>>> doNotUseValueStreamCodec(ResourceKey<Registry<Item>> registry) {
-        return ByteBufCodecs.holderRegistry(registry).apply(ByteBufCodecs::optional);
+    private static StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<Item>>> doNotUseValueStreamCodec(ResourceKey<Registry<Item>> registryKey) {
+        return ByteBufCodecs.holderRegistry(registryKey).apply(ByteBufCodecs::optional);
     }
 
     @ModifyArg(
@@ -163,8 +161,8 @@ public abstract class PotDecorationsExtender implements PotDecorationsAccess {
             target = "Ljava/util/Optional;of(Ljava/lang/Object;)Ljava/util/Optional;"
         )
     )
-    private static <T> Optional<Holder<Item>> optionalUseValueFromList(T value, List<Optional<Holder<Item>>> potDecorations, int index) {
-        return potDecorations.get(index);
+    private static <T> Optional<Holder<Item>> optionalUseValueFromList(T value, List<Optional<Holder<Item>>> sherds, int i) {
+        return sherds.get(i);
     }
 
     @Redirect(
@@ -174,12 +172,12 @@ public abstract class PotDecorationsExtender implements PotDecorationsAccess {
             target = "Lnet/minecraft/world/level/block/entity/PotDecorations;addSideDetailsToTooltip(Ljava/util/function/Consumer;Ljava/util/Optional;)V"
         )
     )
-    private void appendSideDetailsToTooltipUseHolder(Consumer<Component> textConsumer, Optional<Holder<Item>> potDecoration) {
-        potDecoration.map(ItemStack::new)
+    private void appendSideDetailsToTooltipUseHolder(Consumer<Component> consumer, Optional<Holder<Item>> side) {
+        side.map(ItemStack::new)
             .map(ItemStack::getHoverName)
             .map(Component::plainCopy)
             .map(text -> text.withStyle(ChatFormatting.GRAY))
-            .ifPresent(textConsumer);
+            .ifPresent(consumer);
     }
 
     @Override

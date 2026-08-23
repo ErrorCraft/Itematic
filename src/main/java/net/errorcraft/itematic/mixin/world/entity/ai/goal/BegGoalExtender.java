@@ -2,7 +2,6 @@ package net.errorcraft.itematic.mixin.world.entity.ai.goal;
 
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.ai.goal.BegGoal;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,10 +13,10 @@ public class BegGoalExtender {
         method = "playerHoldingInteresting",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBoneCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.BONE);
+    private boolean isBoneCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.BONE);
     }
 }

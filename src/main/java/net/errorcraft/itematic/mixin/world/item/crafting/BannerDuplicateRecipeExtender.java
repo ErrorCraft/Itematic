@@ -29,8 +29,8 @@ public class BannerDuplicateRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBannerItemUseItemBehavior(Object reference, Class<BannerItem> clazz, @Local ItemStack inputStack, @Share("dyeColor") LocalRef<DyeColor> dyeColor) {
-        Optional<DyeColor> optionalDyeColor = inputStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+    private boolean instanceOfBannerItemUseItemBehavior(Object reference, Class<BannerItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("dyeColor") LocalRef<DyeColor> dyeColor) {
+        Optional<DyeColor> optionalDyeColor = itemStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
             .flatMap(BannerPatternHolderItemBehavior::color);
         optionalDyeColor.ifPresent(dyeColor::set);
         return optionalDyeColor.isPresent();
@@ -39,10 +39,10 @@ public class BannerDuplicateRecipeExtender {
     @ModifyVariable(
         method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
         at = @At("LOAD"),
-        ordinal = 0
+        name = "item"
     )
     @Nullable
-    private Item castToBannerItemUseNull(Item instance) {
+    private Item castToBannerItemUseNull(Item item) {
         return null;
     }
 

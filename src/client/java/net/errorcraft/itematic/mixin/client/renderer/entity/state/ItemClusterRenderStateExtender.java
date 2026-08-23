@@ -16,7 +16,7 @@ public class ItemClusterRenderStateExtender {
             target = "Lnet/minecraft/world/item/Item;getId(Lnet/minecraft/world/item/Item;)I"
         )
     )
-    private static int getRawIdUseRegistryEntry(Item item, ItemStack stack) {
-        return stack.getItemHolder().itematic$rawId();
+    private static int getRawIdUseRegistryEntry(Item item, ItemStack itemStack) {
+        return itemStack.typeHolder().itematic$rawId();
     }
 }

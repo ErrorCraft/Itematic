@@ -43,7 +43,7 @@ public class ScaffoldingBlockExtender extends Block implements BlockBehaviourAcc
         )
     )
     @Nullable
-    private Item getItemUseDynamicRegistry(Item item, @Local(argsOnly = true) BlockState state, @Local(argsOnly = true) BlockGetter level) {
+    private Item getItemUseDynamicRegistry(Item item, @Local(name = "state", argsOnly = true) BlockState state, @Local(name = "level", argsOnly = true) BlockGetter level) {
         if (level instanceof ItemAccess itemAccess) {
             return itemAccess.get(state.getBlock().itematic$asItemId())
                 .map(Holder::value)

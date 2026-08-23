@@ -19,27 +19,27 @@ import java.util.Optional;
 @Mixin(EnchantmentMenu.class)
 public class EnchantmentMenuExtender {
     @Redirect(
-        method = "method_17410",
+        method = "lambda$clickMenuButton$0",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBookUseItemBehavior(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+    private boolean isBookUseItemBehavior(ItemStack instance, Object o, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> item = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
             .flatMap(EnchantableItemBehavior::transformsInto);
-        optionalItem.ifPresent(transformsInto::set);
-        return optionalItem.isPresent();
+        item.ifPresent(transformsInto::set);
+        return item.isPresent();
     }
 
     @Redirect(
-        method = "method_17410",
+        method = "lambda$clickMenuButton$0",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack transmuteCopyForEnchantedBookUseHolder(ItemStack instance, ItemLike item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+    private ItemStack transmuteCopyForEnchantedBookUseHolder(ItemStack instance, ItemLike newItem, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
         return instance.itematic$transmuteCopy(transformsInto.get());
     }
 
@@ -47,10 +47,10 @@ public class EnchantmentMenuExtender {
         method = "getEnchantmentList",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBookUseItemBehavior(ItemStack instance, Item item) {
+    private boolean isBookUseItemBehavior(ItemStack instance, Object o) {
         return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
             .flatMap(EnchantableItemBehavior::transformsInto)
             .isPresent();
@@ -60,11 +60,11 @@ public class EnchantmentMenuExtender {
         method = "quickMoveStack",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isLapisLazuliCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.LAPIS_LAZULI);
+    private boolean isLapisLazuliCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.LAPIS_LAZULI);
     }
 
     @Mixin(targets = "net/minecraft/world/inventory/EnchantmentMenu$3")
@@ -73,11 +73,11 @@ public class EnchantmentMenuExtender {
             method = "mayPlace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
             )
         )
-        private boolean isLapisLazuliCheckId(ItemStack instance, Item item) {
-            return instance.itematic$is(ItemIds.LAPIS_LAZULI);
+        private boolean isLapisLazuliCheckId(ItemStack instance, Object o) {
+            return instance.is(ItemIds.LAPIS_LAZULI);
         }
     }
 }

@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "net.errorcraft.itematic.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "mixinextras": {
     "minVersion": "0.5.0"
   },
@@ -20,6 +20,7 @@
     "core.HolderSetExtender",
     "core.HolderSetExtender$ListBackedExtender",
     "core.MappedRegistryExtender",
+    "core.TypedInstanceExtender",
     "core.cauldron.CauldronInteractionExtender",
     "core.component.DataComponentsExtender",
     "core.dispenser.ShearsDispenseItemBehaviorAccessor",
@@ -177,16 +178,8 @@
     "world.entity.monster.zombie.ZombieExtender",
     "world.entity.monster.zombie.ZombieVillagerExtender",
     "world.entity.monster.zombie.ZombifiedPiglinExtender",
-    "world.entity.npc.villager.AbstractVillagerExtender",
-    "world.entity.npc.villager.VillagerDataExtender",
     "world.entity.npc.villager.VillagerExtender",
     "world.entity.npc.villager.VillagerProfessionExtender",
-    "world.entity.npc.villager.VillagerTradesAccessor",
-    "world.entity.npc.villager.VillagerTradesExtender",
-    "world.entity.npc.villager.VillagerTradesExtender$EnchantedItemForEmeraldsExtender",
-    "world.entity.npc.villager.VillagerTradesExtender$ItemsAndEmeraldsToItemsExtender",
-    "world.entity.npc.villager.VillagerTradesExtender$ItemsForEmeraldsExtender",
-    "world.entity.npc.villager.VillagerTradesExtender$TippedArrowForItemsAndEmeraldsExtender",
     "world.entity.npc.wanderingtrader.WanderingTraderExtender",
     "world.entity.player.InventoryExtender",
     "world.entity.player.PlayerExtender",
@@ -393,7 +386,6 @@
     "world.level.storage.loot.functions.SetEnchantmentsFunctionExtender",
     "world.level.storage.loot.functions.SetItemFunctionExtender",
     "world.level.storage.loot.functions.SetStewEffectFunctionExtender",
-    "world.level.storage.loot.parameters.LootContextParamSetsAccessor",
     "world.level.storage.loot.predicates.LocationCheckExtender",
     "world.scores.criteria.ObjectiveCriteriaAccessor",
     "world.scores.criteria.ObjectiveCriteriaExtender"

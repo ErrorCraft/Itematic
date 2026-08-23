@@ -39,8 +39,8 @@ public class ClientLevelExtender {
             target = "Ljava/util/Set;contains(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isMarkerParticleItemUseId(Set<Item> instance, Object o, @Local ItemStack stack) {
-        return MARKER_PARTICLE_ITEM_KEYS.contains(stack.itematic$key());
+    private boolean isMarkerParticleItemUseId(Set<Item> instance, Object o, @Local(name = "carriedItemStack") ItemStack carriedItemStack) {
+        return MARKER_PARTICLE_ITEM_KEYS.contains(carriedItemStack.itematic$key());
     }
 
     @ModifyConstant(
@@ -50,8 +50,8 @@ public class ClientLevelExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBlockItemUseItemBehavior(Object reference, Class<BlockItem> clazz, @Local ItemStack stack, @Share("block") LocalRef<BlockItemBehavior> blockReference) {
-        Optional<BlockItemBehavior> block = stack.itematic$getBehavior(ItemBehaviorType.BLOCK);
+    private boolean instanceOfBlockItemUseItemBehavior(Object reference, Class<BlockItem> clazz, @Local(name = "carriedItemStack") ItemStack carriedItemStack, @Share("block") LocalRef<BlockItemBehavior> blockReference) {
+        Optional<BlockItemBehavior> block = carriedItemStack.itematic$getBehavior(ItemBehaviorType.BLOCK);
         block.ifPresent(blockReference::set);
         return block.isPresent();
     }
@@ -59,10 +59,10 @@ public class ClientLevelExtender {
     @ModifyVariable(
         method = "getMarkerParticleTarget",
         at = @At("LOAD"),
-        ordinal = 0
+        name = "carriedItem"
     )
     @Nullable
-    private Item castToBlockItemUseNull(Item instance) {
+    private Item castToBlockItemUseNull(Item carriedItem) {
         return null;
     }
 

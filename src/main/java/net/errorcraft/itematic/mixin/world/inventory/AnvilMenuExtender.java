@@ -3,7 +3,6 @@ package net.errorcraft.itematic.mixin.world.inventory;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.inventory.AnvilMenu;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,12 +15,12 @@ public class AnvilMenuExtender {
         method = "createResult",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         )
     )
-    private boolean isItemCheckHolder(ItemStack instance, Item item, @Local(ordinal = 2) ItemStack secondaryInputItem) {
-        return instance.is(secondaryInputItem.getItemHolder());
+    private boolean isItemCheckHolder(ItemStack instance, Object o, @Local(name = "addition") ItemStack addition) {
+        return instance.is(addition.typeHolder());
     }
 
     @Redirect(
@@ -40,7 +39,7 @@ public class AnvilMenuExtender {
         method = "createResult",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -50,7 +49,7 @@ public class AnvilMenuExtender {
             )
         )
     )
-    private boolean isEnchantedBookCheckEnchantmentHolderItemBehavior(ItemStack instance, Item item) {
+    private boolean isEnchantedBookCheckEnchantmentHolderItemBehavior(ItemStack instance, Object o) {
         return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER);
     }
 }

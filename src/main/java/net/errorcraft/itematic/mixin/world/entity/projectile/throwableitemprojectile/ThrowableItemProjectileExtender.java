@@ -23,7 +23,7 @@ public abstract class ThrowableItemProjectileExtender extends ThrowableProjectil
     @Redirect(
         method = {
             "defineSynchedData",
-            "method_57319"
+            "lambda$readAdditionalSaveData$0"
         },
         at = @At(
             value = "NEW",

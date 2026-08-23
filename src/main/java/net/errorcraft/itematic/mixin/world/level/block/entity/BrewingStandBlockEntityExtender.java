@@ -19,7 +19,6 @@ import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.BrewingStandMenu;
 import net.minecraft.world.inventory.StackedContentsCompatible;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -62,8 +61,8 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             target = "Lnet/minecraft/world/level/block/entity/BrewingStandBlockEntity;isBrewable(Lnet/minecraft/world/item/alchemy/PotionBrewing;Lnet/minecraft/core/NonNullList;)Z"
         )
     )
-    private static boolean useRecipe(PotionBrewing potionBrewing, NonNullList<ItemStack> items, Level level, @Local(argsOnly = true) BrewingStandBlockEntity blockEntity) {
-        BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) blockEntity;
+    private static boolean useRecipe(PotionBrewing potionBrewing, NonNullList<ItemStack> items, Level level, @Local(name = "entity", argsOnly = true) BrewingStandBlockEntity entity) {
+        BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) entity;
         if (!blockEntityExtender.acceptsRecipes()) {
             return false;
         }
@@ -91,12 +90,12 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             target = "Lnet/minecraft/world/level/block/entity/BrewingStandBlockEntity;doBrew(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/NonNullList;)V"
         )
     )
-    private static void useRecipe(Level level, BlockPos pos, NonNullList<ItemStack> items, @Local(argsOnly = true) BrewingStandBlockEntity blockEntity) {
+    private static void useRecipe(Level level, BlockPos pos, NonNullList<ItemStack> items, @Local(name = "entity", argsOnly = true) BrewingStandBlockEntity entity) {
         if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
 
-        BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) blockEntity;
+        BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) entity;
         BrewingRecipe<?> recipe = null;
         ItemStack reagent = items.get(INGREDIENT_SLOT);
         for (int i = 0; i < 3; i++) {
@@ -135,9 +134,9 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             intValue = 400
         )
     )
-    private static int useRecipeForBrewingTime(int original, Level level, @Local(argsOnly = true) BrewingStandBlockEntity blockEntity) {
+    private static int useRecipeForBrewingTime(int original, Level level, @Local(name = "entity", argsOnly = true) BrewingStandBlockEntity entity) {
         if (level instanceof ServerLevel serverLevel) {
-            BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) blockEntity;
+            BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) entity;
             return blockEntityExtender.maxBrewingTime = blockEntityExtender.brewTime(serverLevel);
         }
 
@@ -151,7 +150,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;isIngredient(Lnet/minecraft/world/item/ItemStack;)Z"
         )
     )
-    private boolean acceptAllItemsForInput(PotionBrewing instance, ItemStack stack) {
+    private boolean acceptAllItemsForInput(PotionBrewing instance, ItemStack ingredient) {
         return true;
     }
 
@@ -159,7 +158,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
         method = "canPlaceItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -170,7 +169,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             )
         )
     )
-    private boolean isPotionCheckTag(ItemStack instance, Item item) {
+    private boolean isPotionCheckTag(ItemStack instance, Object o) {
         return instance.is(ItematicItemTags.BREWING_INPUTS);
     }
 
@@ -178,7 +177,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
         method = "canPlaceItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         ),
         slice = @Slice(
             from = @At(
@@ -193,7 +192,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             )
         )
     )
-    private boolean isRemainingItemReturnFalse(ItemStack instance, Item item) {
+    private boolean isRemainingItemReturnFalse(ItemStack instance, Object o) {
         return false;
     }
 
@@ -204,7 +203,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -215,8 +214,8 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             )
         )
     )
-    private boolean isGlassBottleCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GLASS_BOTTLE);
+    private boolean isGlassBottleCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GLASS_BOTTLE);
     }
 
     @ModifyReturnValue(
@@ -279,19 +278,19 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
 
     @Mixin(targets = "net/minecraft/world/level/block/entity/BrewingStandBlockEntity$1")
     public static class PropertyDelegateExtender {
-        @Unique
-        private static final int DATA_MAX_BREWING_TIME = 2;
-
         @Shadow
         @Final
-        BrewingStandBlockEntity field_17382;
+        BrewingStandBlockEntity this$0;
+
+        @Unique
+        private static final int DATA_MAX_BREWING_TIME = 2;
 
         @WrapMethod(
             method = "get"
         )
         private int getMaxBrewingTimeProperty(int dataId, Operation<Integer> original) {
             if (dataId == DATA_MAX_BREWING_TIME) {
-                return this.field_17382.itematic$maxBrewingTime();
+                return this.this$0.itematic$maxBrewingTime();
             }
 
             return original.call(dataId);
@@ -302,7 +301,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
         )
         private void setMaxBrewingTimeProperty(int dataId, int value, Operation<Void> original) {
             if (dataId == DATA_MAX_BREWING_TIME) {
-                this.field_17382.itematic$setMaxBrewingTime(value);
+                this.this$0.itematic$setMaxBrewingTime(value);
                 return;
             }
 

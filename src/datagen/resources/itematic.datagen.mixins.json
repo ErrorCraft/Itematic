@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.errorcraft.itematic.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixinextras": {
+    "minVersion": "0.5.0"
+  },
+  "mixins": [
+    "world.item.trading.VillagerTradesExtender"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -34,8 +34,8 @@ public class FireworkStarFadeRecipeExtender {
             target = "Lnet/minecraft/world/item/crafting/Ingredient;test(Lnet/minecraft/world/item/ItemStack;)Z"
         )
     )
-    private boolean testFireworkStarCheckId(Ingredient instance, ItemStack stack) {
-        return stack.itematic$is(ItemIds.FIREWORK_STAR);
+    private boolean testFireworkStarCheckId(Ingredient instance, ItemStack input) {
+        return input.is(ItemIds.FIREWORK_STAR);
     }
 
     @ModifyConstant(
@@ -44,8 +44,8 @@ public class FireworkStarFadeRecipeExtender {
             classValue = DyeItem.class
         )
     )
-    private boolean instanceOfDyeItemCheckDyeItemBehavior(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack) {
-        return inputStack.itematic$hasBehavior(ItemBehaviorType.DYE);
+    private boolean instanceOfDyeItemCheckDyeItemBehavior(Object reference, Class<DyeItem> clazz, @Local(name = "itemStack") ItemStack itemStack) {
+        return itemStack.itematic$hasBehavior(ItemBehaviorType.DYE);
     }
 
     @ModifyConstant(
@@ -55,8 +55,8 @@ public class FireworkStarFadeRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemBehavior(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack ingredient, @Share("dye") LocalRef<DyeItemBehavior> dye) {
-        Optional<DyeItemBehavior> optionalDye = ingredient.itematic$getBehavior(ItemBehaviorType.DYE);
+    private boolean instanceOfDyeItemUseItemBehavior(Object reference, Class<DyeItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        Optional<DyeItemBehavior> optionalDye = itemStack.itematic$getBehavior(ItemBehaviorType.DYE);
         optionalDye.ifPresent(dye::set);
         return optionalDye.isPresent();
     }
@@ -64,10 +64,10 @@ public class FireworkStarFadeRecipeExtender {
     @ModifyVariable(
         method = "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;",
         at = @At("LOAD"),
-        ordinal = 0
+        name = "item"
     )
     @Nullable
-    private Item castToDyeItemUseNull(Item instance) {
+    private Item castToDyeItemUseNull(Item item) {
         return null;
     }
 

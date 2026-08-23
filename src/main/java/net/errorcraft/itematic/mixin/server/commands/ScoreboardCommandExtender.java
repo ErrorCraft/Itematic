@@ -26,7 +26,7 @@ public class ScoreboardCommandExtender {
             )
         )
     )
-    private static <T> ArgumentType<T> setContextForObjectiveCriteriaArgument(ArgumentType<T> type, @Local(argsOnly = true) CommandBuildContext context) {
+    private static <T> ArgumentType<T> setContextForObjectiveCriteriaArgument(ArgumentType<T> type, @Local(name = "context", argsOnly = true) CommandBuildContext context) {
         ((ObjectiveCriteriaArgument) type).itematic$setContext(context);
         return type;
     }

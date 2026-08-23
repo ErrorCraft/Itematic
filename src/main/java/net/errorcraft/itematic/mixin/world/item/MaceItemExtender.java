@@ -111,7 +111,7 @@ public class MaceItemExtender {
             target = "Lnet/minecraft/world/item/MaceItem;knockback(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V"
         )
     )
-    private void temporarilyStoreSmashingWeapon(Level level, Entity attacker, Entity attacked, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+    private void temporarilyStoreSmashingWeapon(Level level, Entity attacker, Entity entity, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
         usedStackSmashingWeapon = smashingWeaponReference.get();
         original.call(level, attacker, attacker);
         usedStackSmashingWeapon = null;
@@ -124,8 +124,8 @@ public class MaceItemExtender {
             target = "Lnet/minecraft/world/item/MaceItem;canSmashAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"
         )
     )
-    private boolean canSmashAttackUseDataComponent(LivingEntity attacker, Operation<Boolean> original, ItemStack stack) {
-        SmashingWeapon smashingWeapon = stack.get(ItematicDataComponents.SMASHING_WEAPON);
+    private boolean canSmashAttackUseDataComponent(LivingEntity attacker, Operation<Boolean> original, ItemStack itemStack) {
+        SmashingWeapon smashingWeapon = itemStack.get(ItematicDataComponents.SMASHING_WEAPON);
         if (smashingWeapon == null) {
             return false;
         }
@@ -152,7 +152,7 @@ public class MaceItemExtender {
 
     @ModifyConstant(
         method = {
-            "method_58409",
+            "lambda$knockback$0",
             "getKnockbackPower"
         },
         constant = @Constant(

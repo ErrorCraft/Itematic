@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
 import net.errorcraft.itematic.references.ItemIds;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.block.TntBlock;
@@ -20,7 +19,7 @@ public class IgnitableBlockExtender {
         method = "useItemOn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -31,15 +30,15 @@ public class IgnitableBlockExtender {
             )
         )
     )
-    private boolean isFireChargeCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.FIRE_CHARGE);
+    private boolean isFireChargeCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.FIRE_CHARGE);
     }
 
     @Redirect(
         method = "useItemOn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -50,7 +49,7 @@ public class IgnitableBlockExtender {
             )
         )
     )
-    private boolean isFlintAndSteelCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.FLINT_AND_STEEL);
+    private boolean isFlintAndSteelCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.FLINT_AND_STEEL);
     }
 }

@@ -24,15 +24,15 @@ import java.util.List;
 public abstract class TransmuteRecipeExtender implements CraftingRecipe, RecipeAccess {
     @Shadow
     @Final
-    Ingredient input;
+    private Ingredient input;
 
     @Shadow
     @Final
-    Ingredient material;
+    private Ingredient material;
 
     @Shadow
     @Final
-    TransmuteResult result;
+    private TransmuteResult result;
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {

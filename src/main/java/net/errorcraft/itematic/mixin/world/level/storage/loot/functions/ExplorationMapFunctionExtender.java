@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavior;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,10 +19,10 @@ public class ExplorationMapFunctionExtender {
         method = "run",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isMapUseItemBehavior(ItemStack instance, Item item, @Share("mappable") LocalRef<MappableItemBehavior> mappable) {
+    private boolean isMapUseItemBehavior(ItemStack instance, Object o, @Share("mappable") LocalRef<MappableItemBehavior> mappable) {
         Optional<MappableItemBehavior> optionalMappable = instance.itematic$getBehavior(ItemBehaviorType.MAPPABLE);
         optionalMappable.ifPresent(mappable::set);
         return optionalMappable.isPresent();

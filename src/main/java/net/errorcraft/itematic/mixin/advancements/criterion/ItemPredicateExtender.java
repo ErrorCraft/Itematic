@@ -33,8 +33,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
-            remap = false
+            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
         )
     )
     private static Codec<ItemPredicate> addExtraMapCodecFields(Codec<ItemPredicate> original) {
@@ -48,7 +47,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         method = "test(Lnet/minecraft/world/item/ItemStack;)Z",
         at = @At("TAIL")
     )
-    private boolean testBehavior(boolean original, ItemStack stack) {
+    private boolean testBehavior(boolean original, ItemStack itemStack) {
         if (!original) {
             return false;
         }
@@ -58,7 +57,7 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         }
 
         for (ItemBehaviorType<?> type : this.behavior.get()) {
-            if (!stack.itematic$hasBehavior(type)) {
+            if (!itemStack.itematic$hasBehavior(type)) {
                 return false;
             }
         }

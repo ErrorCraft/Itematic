@@ -106,7 +106,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Redirect(
-        method = "method_65043",
+        method = "lambda$static$0",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/core/Holder;is(Lnet/minecraft/core/Holder;)Z"
@@ -154,20 +154,20 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "use"
     )
-    public InteractionResult useItemBehavior(Level level, Player user, InteractionHand hand, Operation<InteractionResult> original) {
-        ItemStack stack = user.getItemInHand(hand);
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
+    public InteractionResult useItemBehavior(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original) {
+        ItemStack stack = player.getItemInHand(hand);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, stack);
         ItemResult result = ItemResult.PASS;
         for (ItemBehavior<?> behavior : this.behavior) {
-            ItemResult newResult = behavior.use(level, user, hand, stack, stackExchanger);
+            ItemResult newResult = behavior.use(level, player, hand, stack, stackExchanger);
             result = result.max(newResult);
         }
 
         if (level instanceof ServerLevel serverLevel) {
             ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParams.THIS_ENTITY, user)
-                .add(LootContextParams.ORIGIN, user.position())
+                .add(LootContextParams.THIS_ENTITY, player)
+                .add(LootContextParams.ORIGIN, player.position())
                 .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextKeys.HAND, hand)
                 .build();
@@ -223,30 +223,30 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "interactLivingEntity"
     )
-    public InteractionResult useItemBehavior(ItemStack stack, Player user, LivingEntity entity, InteractionHand hand, Operation<InteractionResult> original) {
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
+    public InteractionResult useItemBehavior(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type, Operation<InteractionResult> original) {
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, itemStack);
         ItemResult result = ItemResult.PASS;
         for (ItemBehavior<?> behavior : this.behavior) {
-            ItemResult newResult = behavior.useOnEntity(user, entity, hand, stack, stackExchanger);
+            ItemResult newResult = behavior.useOnEntity(player, target, type, itemStack, stackExchanger);
             result = result.max(newResult);
         }
 
-        if (user.level() instanceof ServerLevel serverLevel) {
+        if (player.level() instanceof ServerLevel serverLevel) {
             ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParams.THIS_ENTITY, user)
-                .add(LootContextParams.ORIGIN, user.position())
-                .add(LootContextParams.TARGET_ENTITY, entity)
-                .add(ItematicContextKeys.INTERACTED_POSITION, entity.position())
-                .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextKeys.HAND, hand)
+                .add(LootContextParams.THIS_ENTITY, player)
+                .add(LootContextParams.ORIGIN, player.position())
+                .add(LootContextParams.TARGET_ENTITY, target)
+                .add(ItematicContextKeys.INTERACTED_POSITION, target.position())
+                .add(LootContextParams.TOOL, itemStack)
+                .add(ItematicContextKeys.HAND, type)
                 .build();
             if (this.itematic$invokeEvent(ItemEvent.USE_ON_ENTITY, context)) {
                 result = result.max(ItemResult.CONSUME);
             }
         }
 
-        tryUpdateItemStack(user, hand, stack, stackExchanger);
+        tryUpdateItemStack(player, type, itemStack, stackExchanger);
         InteractionResult trueResult = result.toActionResult();
         if (trueResult instanceof InteractionResult.Success success) {
             trueResult = success.heldItemTransformedTo(stackExchanger.result());
@@ -258,10 +258,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "hurtEnemy"
     )
-    public void useItemBehavior(ItemStack stack, LivingEntity target, LivingEntity attacker, Operation<Void> original) {
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, stack);
+    public void useItemBehavior(ItemStack itemStack, LivingEntity mob, LivingEntity attacker, Operation<Void> original) {
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, itemStack);
         for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.postHit(stack, target, attacker, stackExchanger);
+            behavior.postHit(itemStack, mob, attacker, stackExchanger);
         }
 
         if (attacker.level() instanceof ServerLevel serverLevel) {
@@ -269,59 +269,59 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .stackExchanger(stackExchanger)
                 .add(LootContextParams.THIS_ENTITY, attacker)
                 .add(LootContextParams.ORIGIN, attacker.position())
-                .add(LootContextParams.TARGET_ENTITY, target)
-                .add(ItematicContextKeys.INTERACTED_POSITION, target.position())
-                .add(LootContextParams.TOOL, stack)
+                .add(LootContextParams.TARGET_ENTITY, mob)
+                .add(ItematicContextKeys.INTERACTED_POSITION, mob.position())
+                .add(LootContextParams.TOOL, itemStack)
                 .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
             this.itematic$invokeEvent(ItemEvent.HIT_ENTITY, context);
         }
 
-        tryUpdateItemStack(attacker, InteractionHand.MAIN_HAND, stack, stackExchanger);
+        tryUpdateItemStack(attacker, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
     }
 
     @Inject(
         method = "postHurtEnemy",
         at = @At("HEAD")
     )
-    private void postDamageEntityUseItemBehavior(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfo info) {
+    private void postDamageEntityUseItemBehavior(ItemStack itemStack, LivingEntity mob, LivingEntity attacker, CallbackInfo info) {
         this.itematic$getBehavior(ItemBehaviorType.WEAPON)
-            .ifPresent(weapon -> weapon.postDamageEntity(stack, target, attacker));
+            .ifPresent(weapon -> weapon.postDamageEntity(itemStack, mob, attacker));
     }
 
     @WrapMethod(
         method = "mineBlock"
     )
-    public boolean useItemBehavior(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner, Operation<Boolean> original) {
+    public boolean useItemBehavior(ItemStack itemStack, Level level, BlockState state, BlockPos pos, LivingEntity owner, Operation<Boolean> original) {
         boolean result = false;
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(miner, stack);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(owner, itemStack);
         for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.postMine(stack, level, state, pos, miner, stackExchanger);
+            result |= behavior.postMine(itemStack, level, state, pos, owner, stackExchanger);
         }
 
         if (level instanceof ServerLevel serverLevel) {
             ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
-                .add(LootContextParams.THIS_ENTITY, miner)
-                .add(LootContextParams.ORIGIN, miner.position())
+                .add(LootContextParams.THIS_ENTITY, owner)
+                .add(LootContextParams.ORIGIN, owner.position())
                 .add(ItematicContextKeys.INTERACTED_POSITION, pos.getCenter())
-                .add(LootContextParams.TOOL, stack)
+                .add(LootContextParams.TOOL, itemStack)
                 .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
             this.itematic$invokeEvent(ItemEvent.BROKE_BLOCK, context);
         }
 
-        tryUpdateItemStack(miner, InteractionHand.MAIN_HAND, stack, stackExchanger);
+        tryUpdateItemStack(owner, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
         return result;
     }
 
     @WrapMethod(
         method = "onUseTick"
     )
-    public void useItemBehavior(Level level, LivingEntity user, ItemStack stack, int remainingUseTicks, Operation<Void> original) {
-        int usedTicks = user.itematic$usedItemTicks();
+    public void useItemBehavior(Level level, LivingEntity livingEntity, ItemStack itemStack, int ticksRemaining, Operation<Void> original) {
+        int usedTicks = livingEntity.itematic$usedItemTicks();
         for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.using(stack, level, user, usedTicks, remainingUseTicks);
+            behavior.using(itemStack, level, livingEntity, usedTicks, ticksRemaining);
         }
     }
 
@@ -329,47 +329,22 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "onDestroyed",
         at = @At("HEAD")
     )
-    private void onItemEntityDestroyedUseItemBehavior(ItemEntity entity, CallbackInfo info) {
+    private void onItemEntityDestroyedUseItemBehavior(ItemEntity itemEntity, CallbackInfo info) {
         this.itematic$getBehavior(ItemBehaviorType.BLOCK)
-            .ifPresent(c -> c.onDestroyed(entity));
+            .ifPresent(c -> c.onDestroyed(itemEntity));
         this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .ifPresent(c -> c.onDestroyed(entity));
+            .ifPresent(c -> c.onDestroyed(itemEntity));
     }
 
     @WrapMethod(
         method = "releaseUsing"
     )
-    public boolean useItemBehavior(ItemStack stack, Level level, LivingEntity user, int remainingUseTicks, Operation<Boolean> original) {
+    public boolean useItemBehavior(ItemStack itemStack, Level level, LivingEntity entity, int remainingTime, Operation<Boolean> original) {
         boolean result = false;
-        int usedTicks = user.itematic$usedItemTicks();
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(user, stack);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.stopUsing(stack, level, user, usedTicks, remainingUseTicks, stackExchanger);
-        }
-
-        if (level instanceof ServerLevel serverLevel) {
-            ActionContext context = ActionContext.builder(serverLevel)
-                .stackExchanger(stackExchanger)
-                .add(LootContextParams.THIS_ENTITY, user)
-                .add(LootContextParams.ORIGIN, user.position())
-                .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextKeys.HAND, user.getUsedItemHand())
-                .build();
-            this.itematic$invokeEvent(ItemEvent.STOPPED_USING, context);
-        }
-
-        tryUpdateItemStack(user, InteractionHand.MAIN_HAND, stack, stackExchanger);
-        return result;
-    }
-
-    @WrapMethod(
-        method = "finishUsingItem"
-    )
-    public ItemStack useItemBehavior(ItemStack stack, Level level, LivingEntity entity, Operation<ItemStack> original) {
         int usedTicks = entity.itematic$usedItemTicks();
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, stack);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, itemStack);
         for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.finishUsing(level, entity, stack, usedTicks, stackExchanger);
+            result |= behavior.stopUsing(itemStack, level, entity, usedTicks, remainingTime, stackExchanger);
         }
 
         if (level instanceof ServerLevel serverLevel) {
@@ -377,14 +352,39 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .stackExchanger(stackExchanger)
                 .add(LootContextParams.THIS_ENTITY, entity)
                 .add(LootContextParams.ORIGIN, entity.position())
-                .add(LootContextParams.TOOL, stack)
+                .add(LootContextParams.TOOL, itemStack)
+                .add(ItematicContextKeys.HAND, entity.getUsedItemHand())
+                .build();
+            this.itematic$invokeEvent(ItemEvent.STOPPED_USING, context);
+        }
+
+        tryUpdateItemStack(entity, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
+        return result;
+    }
+
+    @WrapMethod(
+        method = "finishUsingItem"
+    )
+    public ItemStack useItemBehavior(ItemStack itemStack, Level level, LivingEntity entity, Operation<ItemStack> original) {
+        int usedTicks = entity.itematic$usedItemTicks();
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, itemStack);
+        for (ItemBehavior<?> behavior : this.behavior) {
+            behavior.finishUsing(level, entity, itemStack, usedTicks, stackExchanger);
+        }
+
+        if (level instanceof ServerLevel serverLevel) {
+            ActionContext context = ActionContext.builder(serverLevel)
+                .stackExchanger(stackExchanger)
+                .add(LootContextParams.THIS_ENTITY, entity)
+                .add(LootContextParams.ORIGIN, entity.position())
+                .add(LootContextParams.TOOL, itemStack)
                 .add(ItematicContextKeys.HAND, entity.getUsedItemHand())
                 .build();
             this.itematic$invokeEvent(ItemEvent.FINISHED_USING, context);
         }
 
         this.itematic$getBehavior(ItemBehaviorType.CONSUMABLE)
-            .ifPresent(consumable -> consumable.consume(entity, stack, stackExchanger, level, entity.getUsedItemHand()));
+            .ifPresent(consumable -> consumable.consume(entity, itemStack, stackExchanger, level, entity.getUsedItemHand()));
         return stackExchanger.result();
     }
 
@@ -392,18 +392,18 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "inventoryTick",
         at = @At("HEAD")
     )
-    public void callInventoryTickListeners(ItemStack stack, ServerLevel level, Entity entity, EquipmentSlot slot, CallbackInfo info) {
-        stack.getAllOfType(InventoryTickListener.class)
-            .forEach(inventoryTickListener -> inventoryTickListener.itematic$onInventoryTick(level, stack, entity, slot));
+    public void callInventoryTickListeners(ItemStack itemStack, ServerLevel level, Entity owner, EquipmentSlot slot, CallbackInfo info) {
+        itemStack.getAllOfType(InventoryTickListener.class)
+            .forEach(inventoryTickListener -> inventoryTickListener.itematic$onInventoryTick(level, itemStack, owner, slot));
     }
 
     @WrapMethod(
         method = "overrideStackedOnOther"
     )
-    public boolean useItemBehavior(ItemStack stack, Slot slot, ClickAction clickType, Player player, Operation<Boolean> original) {
+    public boolean useItemBehavior(ItemStack self, Slot slot, ClickAction clickAction, Player player, Operation<Boolean> original) {
         boolean result = false;
         for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.clickOnSlot(stack, slot, clickType, player);
+            result |= behavior.clickOnSlot(self, slot, clickAction, player);
         }
         return result;
     }
@@ -411,14 +411,14 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "overrideOtherStackedOnMe"
     )
-    public boolean useItemBehavior(ItemStack stack, ItemStack otherStack, Slot slot, ClickAction clickType, Player player, SlotAccess cursorStackReference, Operation<Boolean> original) {
+    public boolean useItemBehavior(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, Operation<Boolean> original) {
         boolean result = false;
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, otherStack);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, other);
         for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.clickedOnWithStack(stack, otherStack, slot, clickType, player, stackExchanger);
+            result |= behavior.clickedOnWithStack(self, other, slot, clickAction, player, stackExchanger);
         }
 
-        cursorStackReference.set(stackExchanger.result());
+        carriedItem.set(stackExchanger.result());
         return result;
     }
 
@@ -426,9 +426,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "getAttackDamageBonus",
         at = @At("TAIL")
     )
-    private float getBonusAttackDamageUseItemBehavior(float original, Entity target, float baseAttackDamage, DamageSource damageSource) {
+    private float getBonusAttackDamageUseItemBehavior(float original, Entity victim, float damage, DamageSource damageSource) {
         return this.itematic$getBehavior(ItemBehaviorType.WEAPON)
-            .map(weapon -> weapon.bonusAttackDamage(target, baseAttackDamage, damageSource))
+            .map(weapon -> weapon.bonusAttackDamage(victim, damage, damageSource))
             .orElse(0.0f);
     }
 
@@ -436,9 +436,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "onCraftedPostProcess",
         at = @At("HEAD")
     )
-    public void onCraft(ItemStack stack, Level level, CallbackInfo info) {
+    public void onCraft(ItemStack itemStack, Level level, CallbackInfo info) {
         for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.onCraft(stack, level);
+            behavior.onCraft(itemStack, level);
         }
     }
 
@@ -462,8 +462,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             target = "Lnet/minecraft/world/item/component/Tool;getMiningSpeed(Lnet/minecraft/world/level/block/state/BlockState;)F"
         )
     )
-    private float getSpeedPassItemStack(Tool instance, BlockState state, ItemStack stack) {
-        return instance.itematic$getSpeed(stack, state);
+    private float getSpeedPassItemStack(Tool instance, BlockState state, ItemStack itemStack) {
+        return instance.itematic$getSpeed(itemStack, state);
     }
 
     @Redirect(
@@ -473,8 +473,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             target = "Lnet/minecraft/world/item/component/Tool;isCorrectForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z"
         )
     )
-    private boolean isCorrectForDropsPassItemStack(Tool instance, BlockState state, ItemStack stack) {
-        return instance.itematic$isCorrectForDrops(stack, state);
+    private boolean isCorrectForDropsPassItemStack(Tool instance, BlockState state, ItemStack itemStack) {
+        return instance.itematic$isCorrectForDrops(itemStack, state);
     }
 
     @WrapMethod(
@@ -489,18 +489,18 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "getUseAnimation"
     )
-    public ItemUseAnimation getUseActionUseItemBehavior(ItemStack stack, Operation<ItemUseAnimation> original) {
+    public ItemUseAnimation getUseActionUseItemBehavior(ItemStack itemStack, Operation<ItemUseAnimation> original) {
         if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
             return ItemUseAnimation.NONE;
         }
 
-        return stack.getOrDefault(ItematicDataComponents.USE_ANIMATION, ItemUseAnimation.NONE);
+        return itemStack.getOrDefault(ItematicDataComponents.USE_ANIMATION, ItemUseAnimation.NONE);
     }
 
     @WrapMethod(
         method = "getUseDuration"
     )
-    public int useItemBehavior(ItemStack stack, LivingEntity user, Operation<Integer> original) {
+    public int useItemBehavior(ItemStack itemStack, LivingEntity user, Operation<Integer> original) {
         if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
             return 0;
         }
@@ -510,7 +510,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return 0;
         }
 
-        return useDuration.ticks(stack, user);
+        return useDuration.ticks(itemStack, user);
     }
 
     @WrapMethod(
@@ -523,46 +523,46 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "getName(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/network/chat/Component;"
     )
-    public Component checkBehavior(ItemStack stack, Operation<Component> original) {
+    public Component checkBehavior(ItemStack itemStack, Operation<Component> original) {
         Optional<String> potionHolderTranslationKey = this.itematic$getBehavior(ItemBehaviorType.POTION_HOLDER)
-            .map(potionHolder -> potionHolder.translationKey(stack, this.display.translationKey()));
+            .map(potionHolder -> potionHolder.translationKey(itemStack, this.display.translationKey()));
         if (potionHolderTranslationKey.isPresent()) {
             return Component.translatable(potionHolderTranslationKey.get());
         }
 
         Optional<String> bannerPatternHolderTranslationKey = this.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
-            .flatMap(bannerPatternHolder -> bannerPatternHolder.translationKey(stack, this.display.translationKey()));
+            .flatMap(bannerPatternHolder -> bannerPatternHolder.translationKey(itemStack, this.display.translationKey()));
         if (bannerPatternHolderTranslationKey.isPresent()) {
             return Component.translatable(bannerPatternHolderTranslationKey.get());
         }
 
-        return original.call(stack);
+        return original.call(itemStack);
     }
 
     @WrapMethod(
         method = "getTooltipImage"
     )
-    public Optional<TooltipComponent> useItemBehavior(ItemStack stack, Operation<Optional<TooltipComponent>> original) {
+    public Optional<TooltipComponent> useItemBehavior(ItemStack itemStack, Operation<Optional<TooltipComponent>> original) {
         return this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .flatMap(c -> c.tooltipData(stack));
+            .flatMap(c -> c.tooltipData(itemStack));
     }
 
     @WrapMethod(
         method = "getName(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/network/chat/Component;"
     )
-    private Component alsoCheckTextHolderItemBehavior(ItemStack stack, Operation<Component> original) {
-        if (!stack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
-            return original.call(stack);
+    private Component alsoCheckTextHolderItemBehavior(ItemStack itemStack, Operation<Component> original) {
+        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
+            return original.call(itemStack);
         }
 
-        WrittenBookContent writtenBookContent = stack.get(DataComponents.WRITTEN_BOOK_CONTENT);
+        WrittenBookContent writtenBookContent = itemStack.get(DataComponents.WRITTEN_BOOK_CONTENT);
         if (writtenBookContent == null) {
-            return original.call(stack);
+            return original.call(itemStack);
         }
 
         String title = writtenBookContent.title().raw();
         if (StringUtil.isBlank(title)) {
-            return original.call(stack);
+            return original.call(itemStack);
         }
 
         return Component.literal(title);

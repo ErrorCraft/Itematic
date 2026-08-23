@@ -50,8 +50,8 @@ public interface SlotDisplayExtender {
                 target = "Lnet/minecraft/world/level/block/entity/FuelValues;fuelItems()Ljava/util/SequencedSet;"
             )
         )
-        private SequencedSet<Holder<Item>> useDataDrivenFuel(FuelValues instance, ContextMap parameters) {
-            HolderLookup.Provider lookup = parameters.getOptional(SlotDisplayContext.REGISTRIES);
+        private SequencedSet<Holder<Item>> useDataDrivenFuel(FuelValues instance, ContextMap context) {
+            HolderLookup.Provider lookup = context.getOptional(SlotDisplayContext.REGISTRIES);
             if (lookup == null) {
                 return Collections.emptyNavigableSet();
             }
@@ -69,8 +69,8 @@ public interface SlotDisplayExtender {
                 target = "Ljava/util/stream/Stream;map(Ljava/util/function/Function;)Ljava/util/stream/Stream;"
             )
         )
-        private <T> Function<? super Holder<Item>, ? extends T> useHolder(Function<? super Item, ? extends T> mapper, @Local DisplayContentsFactory.ForStacks<T> fromStack) {
-            return fromStack::forStack;
+        private <T> Function<? super Holder<Item>, ? extends T> useHolder(Function<? super Item, ? extends T> mapper, @Local(name = "stacks") DisplayContentsFactory.ForStacks<T> stacks) {
+            return stacks::forStack;
         }
     }
 }

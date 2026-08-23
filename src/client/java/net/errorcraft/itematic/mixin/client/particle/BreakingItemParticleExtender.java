@@ -20,7 +20,7 @@ public class BreakingItemParticleExtender {
                 target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private ItemStack newItemStackForSnowballUseCreateStack(ItemLike item, @Local(argsOnly = true) ClientLevel level) {
+        private ItemStack newItemStackForSnowballUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) ClientLevel level) {
             return level.itematic$createStack(ItemIds.SNOWBALL);
         }
     }
@@ -34,7 +34,7 @@ public class BreakingItemParticleExtender {
                 target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private ItemStack newItemStackForSlimeBallUseCreateStack(ItemLike item, @Local(argsOnly = true) ClientLevel level) {
+        private ItemStack newItemStackForSlimeBallUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) ClientLevel level) {
             return level.itematic$createStack(ItemIds.SLIME_BALL);
         }
     }

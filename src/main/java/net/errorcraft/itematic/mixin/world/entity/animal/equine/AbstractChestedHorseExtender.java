@@ -6,7 +6,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.equine.AbstractChestedHorse;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -39,18 +38,18 @@ public abstract class AbstractChestedHorseExtender extends AbstractHorse {
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isChestCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.CHEST);
+    private boolean isChestCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.CHEST);
     }
 
     @Mixin(targets = "net/minecraft/world/entity/animal/equine/AbstractChestedHorse$1")
     public static class ChestSlotAccessExtender {
         @Shadow
         @Final
-        AbstractChestedHorse field_27867;
+        AbstractChestedHorse this$0;
 
         @Redirect(
             method = "get",
@@ -60,18 +59,18 @@ public abstract class AbstractChestedHorseExtender extends AbstractHorse {
             )
         )
         private ItemStack newItemStackForChestUseCreateStack(ItemLike item) {
-            return this.field_27867.level().itematic$createStack(ItemIds.CHEST);
+            return this.this$0.level().itematic$createStack(ItemIds.CHEST);
         }
 
         @Redirect(
             method = "set",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
             )
         )
-        private boolean isChestCheckId(ItemStack instance, Item item) {
-            return instance.itematic$is(ItemIds.CHEST);
+        private boolean isChestCheckId(ItemStack instance, Object o) {
+            return instance.is(ItemIds.CHEST);
         }
     }
 }

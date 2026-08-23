@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.TippedArrowRecipe;
 import net.minecraft.world.level.ItemLike;
@@ -18,12 +17,12 @@ public class TippedArrowRecipeExtender {
         method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 1
         )
     )
-    private boolean isArrowCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.ARROW);
+    private boolean isArrowCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.ARROW);
     }
 
     @Redirect(
@@ -33,8 +32,8 @@ public class TippedArrowRecipeExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForTippedArrowUseHolder(ItemLike item, int count, @Local(argsOnly = true) HolderLookup.Provider lookup) {
-        return lookup.lookupOrThrow(Registries.ITEM)
+    private ItemStack newItemStackForTippedArrowUseHolder(ItemLike item, int count, @Local(name = "registries", argsOnly = true) HolderLookup.Provider registries) {
+        return registries.lookupOrThrow(Registries.ITEM)
             .get(ItemIds.TIPPED_ARROW)
             .map(itemHolder -> new ItemStack(itemHolder, count))
             .orElse(ItemStack.EMPTY);
@@ -47,11 +46,11 @@ public class TippedArrowRecipeExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         )
     )
-    private boolean isLingeringPotionCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.LINGERING_POTION);
+    private boolean isLingeringPotionCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.LINGERING_POTION);
     }
 }

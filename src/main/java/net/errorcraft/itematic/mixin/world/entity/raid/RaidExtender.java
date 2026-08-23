@@ -39,7 +39,7 @@ public abstract class RaidExtender {
             target = "Lnet/minecraft/world/entity/raid/Raid;getOminousBannerInstance(Lnet/minecraft/core/HolderGetter;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private void setOminousBannerForLaterUse(int wave, Raider entity, CallbackInfo info) {
-        ItematicRaids.createOminousBanner(entity.level());
+    private void setOminousBannerForLaterUse(int wave, Raider raider, CallbackInfo info) {
+        ItematicRaids.createOminousBanner(raider.level());
     }
 }

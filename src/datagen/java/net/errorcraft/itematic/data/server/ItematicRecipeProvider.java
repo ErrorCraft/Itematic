@@ -5,7 +5,7 @@ import net.errorcraft.itematic.data.recipe.brewing.ModifyBrewingRecipeBuilder;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.references.PotionIds;
 import net.errorcraft.itematic.tags.ItematicItemTags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -22,7 +22,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import java.util.concurrent.CompletableFuture;
 
 public class ItematicRecipeProvider extends FabricRecipeProvider {
-    public ItematicRecipeProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public ItematicRecipeProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 

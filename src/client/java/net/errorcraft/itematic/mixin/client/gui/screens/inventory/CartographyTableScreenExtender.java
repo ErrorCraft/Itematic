@@ -2,7 +2,6 @@ package net.errorcraft.itematic.mixin.client.gui.screens.inventory;
 
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.gui.screens.inventory.CartographyTableScreen;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +15,7 @@ public class CartographyTableScreenExtender {
         method = "renderBg",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -27,15 +26,15 @@ public class CartographyTableScreenExtender {
             )
         )
     )
-    private boolean isPaperCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.PAPER);
+    private boolean isPaperCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.PAPER);
     }
 
     @Redirect(
         method = "renderBg",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -46,15 +45,15 @@ public class CartographyTableScreenExtender {
             )
         )
     )
-    private boolean isMapCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.MAP);
+    private boolean isMapCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.MAP);
     }
 
     @Redirect(
         method = "renderBg",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -65,7 +64,7 @@ public class CartographyTableScreenExtender {
             )
         )
     )
-    private boolean isGlassPaneCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GLASS_PANE);
+    private boolean isGlassPaneCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GLASS_PANE);
     }
 }

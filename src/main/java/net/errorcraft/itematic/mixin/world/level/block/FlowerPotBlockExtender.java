@@ -24,8 +24,8 @@ public abstract class FlowerPotBlockExtender extends BlockBehaviourExtender {
     @WrapMethod(
         method = "useItemOn"
     )
-    public InteractionResult useAction(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, Operation<InteractionResult> original) {
-        if (stack.is(ItematicItemTags.PREVENTS_TAKING_POTTED_ITEM_OUT)) {
+    public InteractionResult useAction(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, Operation<InteractionResult> original) {
+        if (itemStack.is(ItematicItemTags.PREVENTS_TAKING_POTTED_ITEM_OUT)) {
             return InteractionResult.CONSUME;
         }
 
@@ -39,7 +39,7 @@ public abstract class FlowerPotBlockExtender extends BlockBehaviourExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+    private ItemStack newItemStackUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
         return level.itematic$createStack(this.itematic$asItemId());
     }
 

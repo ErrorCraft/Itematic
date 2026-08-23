@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.MultifaceBlock;
@@ -18,10 +17,10 @@ public class MultifaceBlockExtender extends Block {
         method = "canBeReplaced(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/item/context/BlockPlaceContext;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isItemCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(this.itematic$asItemId());
+    private boolean isItemCheckId(ItemStack instance, Object o) {
+        return instance.is(this.itematic$asItemId());
     }
 }

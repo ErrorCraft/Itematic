@@ -29,8 +29,8 @@ public abstract class PandaExtender extends MobExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseHolder(ItemLike item, int count, @Local(ordinal = 0) ItemStack stack) {
-        return new ItemStack(stack.getItemHolder(), count);
+    private ItemStack newItemStackUseHolder(ItemLike item, int count, @Local(name = "interactionItemStack") ItemStack interactionItemStack) {
+        return new ItemStack(interactionItemStack.typeHolder(), count);
     }
 
     @Override

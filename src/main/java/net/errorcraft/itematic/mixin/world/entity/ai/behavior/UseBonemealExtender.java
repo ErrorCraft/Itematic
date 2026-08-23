@@ -40,10 +40,10 @@ public class UseBonemealExtender {
         method = "tick(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/npc/villager/Villager;J)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBoneMealCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.BONE_MEAL);
+    private boolean isBoneMealCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.BONE_MEAL);
     }
 }

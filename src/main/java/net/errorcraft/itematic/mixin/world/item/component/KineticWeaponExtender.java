@@ -24,7 +24,7 @@ public class KineticWeaponExtender {
         method = "damageEntities",
         at = @At("MIXINEXTRAS:EXPRESSION")
     )
-    private int useUsedTicks(int original, @Local(argsOnly = true) int ticksRemaining) {
+    private int useUsedTicks(int original, @Local(name = "ticksRemaining", argsOnly = true) int ticksRemaining) {
         // This parameter has been repurposed to be the used ticks rather than the remaining ticks due to indefinite use durations
         return ticksRemaining;
     }

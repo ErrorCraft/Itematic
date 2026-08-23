@@ -43,8 +43,8 @@ public abstract class LoomScreenExtender extends AbstractContainerScreen<LoomMen
             target = "Lnet/minecraft/world/item/BannerItem;getColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemBehavior(BannerItem instance, @Local(ordinal = 3) Slot outputSlot) {
-        return outputSlot.getItem()
+    private DyeColor getColorUseItemBehavior(BannerItem instance, @Local(name = "resultSlot") Slot resultSlot) {
+        return resultSlot.getItem()
             .itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
             .flatMap(BannerPatternHolderItemBehavior::color)
             .orElse(DyeColor.WHITE);

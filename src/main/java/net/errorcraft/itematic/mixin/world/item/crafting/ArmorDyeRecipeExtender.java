@@ -44,8 +44,8 @@ public class ArmorDyeRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemBehaviorForMatches(Object reference, Class<DyeItem> clazz, @Local ItemStack inputStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
-        Optional<DyeItemBehavior> optionalDye = inputStack.itematic$getBehavior(ItemBehaviorType.DYE);
+    private boolean instanceOfDyeItemUseItemBehaviorForMatches(Object reference, Class<DyeItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        Optional<DyeItemBehavior> optionalDye = itemStack.itematic$getBehavior(ItemBehaviorType.DYE);
         optionalDye.ifPresent(dye::set);
         return optionalDye.isPresent();
     }
@@ -57,8 +57,8 @@ public class ArmorDyeRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemBehaviorForAssemble(Object reference, Class<DyeItem> clazz, @Local(ordinal = 1) ItemStack inputStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
-        Optional<DyeItemBehavior> optionalDye = inputStack.itematic$getBehavior(ItemBehaviorType.DYE);
+    private boolean instanceOfDyeItemUseItemBehaviorForAssemble(Object reference, Class<DyeItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        Optional<DyeItemBehavior> optionalDye = itemStack.itematic$getBehavior(ItemBehaviorType.DYE);
         optionalDye.ifPresent(dye::set);
         return optionalDye.isPresent();
     }
@@ -77,8 +77,7 @@ public class ArmorDyeRecipeExtender {
         method = "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/List;add(Ljava/lang/Object;)Z",
-            remap = false
+            target = "Ljava/util/List;add(Ljava/lang/Object;)Z"
         )
     )
     @SuppressWarnings("unchecked")

@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(StopHoldingItemIfNoLongerAdmiring.class)
 public class StopHoldingItemIfNoLongerAdmiringExtender {
     @ModifyExpressionValue(
-        method = "method_47299",
+        method = "lambda$create$2",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private static boolean alsoCheckAttackBlockingItemBehavior(boolean original, @Local(argsOnly = true) Piglin piglin) {
-        return original && piglin.getOffhandItem().itematic$hasBehavior(ItemBehaviorType.ATTACK_BLOCKING);
+    private static boolean alsoCheckAttackBlockingItemBehavior(boolean original, @Local(name = "body", argsOnly = true) Piglin body) {
+        return original && body.getOffhandItem().itematic$hasBehavior(ItemBehaviorType.ATTACK_BLOCKING);
     }
 }

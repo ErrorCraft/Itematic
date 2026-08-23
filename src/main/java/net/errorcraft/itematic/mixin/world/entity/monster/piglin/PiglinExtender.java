@@ -91,14 +91,14 @@ public abstract class PiglinExtender extends MobExtender {
     @WrapMethod(
         method = "canUseNonMeleeWeapon"
     )
-    private boolean useItemBehaviorComponent(ItemStack stack, Operation<Boolean> original) {
-        if (stack.itematic$getBehavior(ItemBehaviorType.SHOOTER)
+    private boolean useItemBehaviorComponent(ItemStack item, Operation<Boolean> original) {
+        if (item.itematic$getBehavior(ItemBehaviorType.SHOOTER)
             .map(shooter -> shooter.usesMethod(ShooterMethodType.CHARGEABLE))
             .orElse(false)) {
             return true;
         }
 
-        return stack.itematic$getBehavior(ItemBehaviorType.WEAPON)
+        return item.itematic$getBehavior(ItemBehaviorType.WEAPON)
             .map(weapon -> weapon.has(MeleeWeaponComponents.KINETIC))
             .orElse(false);
     }
@@ -107,11 +107,11 @@ public abstract class PiglinExtender extends MobExtender {
         method = "holdInOffHand",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isGoldIngotCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GOLD_INGOT);
+    private boolean isGoldIngotCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GOLD_INGOT);
     }
 
     @Redirect(

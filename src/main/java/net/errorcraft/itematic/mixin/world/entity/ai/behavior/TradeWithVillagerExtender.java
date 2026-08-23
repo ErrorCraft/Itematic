@@ -67,13 +67,13 @@ public class TradeWithVillagerExtender {
             target = "Lnet/minecraft/world/entity/npc/villager/VillagerProfession;requestedItems()Lcom/google/common/collect/ImmutableSet;"
         )
     )
-    private static ImmutableSet<Item> requestedItemsUseDynamicRegistry(VillagerProfession instance, Villager entity) {
+    private static ImmutableSet<Item> requestedItemsUseDynamicRegistry(VillagerProfession instance, Villager myBody) {
         TagKey<Item> gatherableItems = instance.itematic$gatherableItems();
         if (gatherableItems == null) {
             return ImmutableSet.of();
         }
 
-        return entity.registryAccess()
+        return myBody.registryAccess()
             .lookupOrThrow(Registries.ITEM)
             .get(gatherableItems)
             .stream()
@@ -101,8 +101,8 @@ public class TradeWithVillagerExtender {
             target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"
         )
     )
-    private static void storeInventoryStackHolder(Villager villager, Set<Item> validItems, LivingEntity target, CallbackInfo info, @Local(ordinal = 1) ItemStack inventoryStack, @Share("foundItem") LocalRef<@Nullable Holder<Item>> foundItemReference) {
-        foundItemReference.set(inventoryStack.getItemHolder());
+    private static void storeInventoryStackHolder(Villager villager, Set<Item> items, LivingEntity target, CallbackInfo info, @Local(name = "itemStack") ItemStack itemStack, @Share("foundItem") LocalRef<@Nullable Holder<Item>> foundItemReference) {
+        foundItemReference.set(itemStack.typeHolder());
     }
 
     @Redirect(

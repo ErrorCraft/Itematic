@@ -49,8 +49,8 @@ public interface CauldronInteractionExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack transmuteCopyForShulkerBoxUseHolder(ItemStack instance, ItemLike item, int count, @Local(argsOnly = true) Level level) {
-        return instance.itematic$transmuteCopy(level.itematic$getItem(ItemIds.SHULKER_BOX), count);
+    private static ItemStack transmuteCopyForShulkerBoxUseHolder(ItemStack instance, ItemLike newItem, int newCount, @Local(name = "level", argsOnly = true) Level level) {
+        return instance.itematic$transmuteCopy(level.itematic$getItem(ItemIds.SHULKER_BOX), newCount);
     }
 
     @Redirect(
@@ -66,59 +66,59 @@ public interface CauldronInteractionExtender {
 
     @Redirect(
         method = {
-            "method_32219",
-            "method_32222"
+            "lambda$bootStrap$0",
+            "lambda$bootStrap$4"
         },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+    private static ItemStack newItemStackForGlassBottleUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
         return level.itematic$createStack(ItemIds.GLASS_BOTTLE);
     }
 
     @Redirect(
-        method = "method_32220",
+        method = "lambda$bootStrap$3",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;createItemStack(Lnet/minecraft/world/item/Item;Lnet/minecraft/core/Holder;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion, @Local(argsOnly = true) Level level) {
+    private static ItemStack newItemStackForPotionUseCreateStack(Item item, Holder<Potion> potion, @Local(name = "level", argsOnly = true) Level level) {
         return PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), potion);
     }
 
     @Redirect(
-        method = "method_32221",
+        method = "lambda$bootStrap$1",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+    private static ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
         return level.itematic$createStack(ItemIds.WATER_BUCKET);
     }
 
     @Redirect(
-        method = "method_32218",
+        method = "lambda$bootStrap$5",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+    private static ItemStack newItemStackForLavaBucketUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
         return level.itematic$createStack(ItemIds.LAVA_BUCKET);
     }
 
     @Redirect(
-        method = "method_32698",
+        method = "lambda$bootStrap$7",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+    private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
         return level.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
     }
 
@@ -129,7 +129,7 @@ public interface CauldronInteractionExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+    private static ItemStack newItemStackForBucketUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
         return level.itematic$createStack(ItemIds.BUCKET);
     }
 
@@ -1069,9 +1069,9 @@ public interface CauldronInteractionExtender {
 
     @Redirect(
         method = {
-            "method_32219",
-            "method_32220",
-            "method_32222",
+            "lambda$bootStrap$0",
+            "lambda$bootStrap$3",
+            "lambda$bootStrap$4",
             "fillBucket",
             "emptyBucket"
         },
@@ -1080,7 +1080,7 @@ public interface CauldronInteractionExtender {
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private static <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key, @Local(argsOnly = true, ordinal = 0) ItemStack stack) {
-        return instance.itematic$get(stack.getItemHolder());
+    private static <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, @Local(name = "itemInHand", argsOnly = true) ItemStack itemInHand) {
+        return instance.itematic$get(itemInHand.typeHolder());
     }
 }

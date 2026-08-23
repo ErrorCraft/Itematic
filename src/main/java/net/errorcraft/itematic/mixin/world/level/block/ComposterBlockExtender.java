@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CompostableItemBehavior;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -24,24 +23,22 @@ public class ComposterBlockExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;containsKey(Ljava/lang/Object;)Z",
-            remap = false
+            target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;containsKey(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean containsKeyCheckCompostableItemBehavior(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$hasBehavior(ItemBehaviorType.COMPOSTABLE);
+    private static boolean containsKeyCheckCompostableItemBehavior(Object2FloatMap<ItemLike> instance, Object o, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack) {
+        return itemStack.itematic$hasBehavior(ItemBehaviorType.COMPOSTABLE);
     }
 
     @Redirect(
         method = "addItem",
         at = @At(
             value = "INVOKE",
-            target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;getFloat(Ljava/lang/Object;)F",
-            remap = false
+            target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;getFloat(Ljava/lang/Object;)F"
         )
     )
-    private static float getFloatUseItemBehavior(Object2FloatMap<ItemLike> instance, Object o, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$getBehavior(ItemBehaviorType.COMPOSTABLE)
+    private static float getFloatUseItemBehavior(Object2FloatMap<ItemLike> instance, Object o, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack) {
+        return itemStack.itematic$getBehavior(ItemBehaviorType.COMPOSTABLE)
             .map(CompostableItemBehavior::levelIncreaseChance)
             .orElse(0.0f);
     }
@@ -53,7 +50,7 @@ public class ComposterBlockExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+    private static ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
         return level.itematic$createStack(ItemIds.BONE_MEAL);
     }
 
@@ -64,7 +61,7 @@ public class ComposterBlockExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, @Local(argsOnly = true) LevelAccessor level) {
+    private ItemStack newItemStackForBoneMealUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) LevelAccessor level) {
         return level.itematic$createStack(ItemIds.BONE_MEAL);
     }
 
@@ -74,12 +71,11 @@ public class ComposterBlockExtender {
             method = "canPlaceItemThroughFace",
             at = @At(
                 value = "INVOKE",
-                target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;containsKey(Ljava/lang/Object;)Z",
-                remap = false
+                target = "Lit/unimi/dsi/fastutil/objects/Object2FloatMap;containsKey(Ljava/lang/Object;)Z"
             )
         )
-        private boolean containsKeyCheckCompostableItemBehavior(Object2FloatMap<ItemLike> instance, Object o, int slot, ItemStack stack) {
-            return stack.itematic$hasBehavior(ItemBehaviorType.COMPOSTABLE);
+        private boolean containsKeyCheckCompostableItemBehavior(Object2FloatMap<ItemLike> instance, Object o, int slot, ItemStack itemStack) {
+            return itemStack.itematic$hasBehavior(ItemBehaviorType.COMPOSTABLE);
         }
     }
 
@@ -89,11 +85,11 @@ public class ComposterBlockExtender {
             method = "canTakeItemThroughFace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
             )
         )
-        private boolean isBoneMealCheckId(ItemStack instance, Item item) {
-            return instance.itematic$is(ItemIds.BONE_MEAL);
+        private boolean isBoneMealCheckId(ItemStack instance, Object o) {
+            return instance.is(ItemIds.BONE_MEAL);
         }
     }
 }

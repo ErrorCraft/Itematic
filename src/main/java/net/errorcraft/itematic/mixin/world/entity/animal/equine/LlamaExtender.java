@@ -26,19 +26,19 @@ public abstract class LlamaExtender extends MobExtender {
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         )
     )
-    private boolean isWheatCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.WHEAT);
+    private boolean isWheatCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.WHEAT);
     }
 
     @Redirect(
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -49,8 +49,8 @@ public abstract class LlamaExtender extends MobExtender {
             )
         )
     )
-    private boolean isHayBlockCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.HAY_BLOCK);
+    private boolean isHayBlockCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.HAY_BLOCK);
     }
 
     @Override

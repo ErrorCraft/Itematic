@@ -30,7 +30,7 @@ public class InventoryExtender {
             ordinal = 0
         )
     )
-    private Object addItemIdToCrashReportUseHolder(Object value, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$key().identifier();
+    private Object addItemIdToCrashReportUseHolder(Object value, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack) {
+        return itemStack.itematic$key().identifier();
     }
 }

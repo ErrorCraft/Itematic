@@ -37,7 +37,7 @@ public class AbstractFurnaceBlockEntityExtender {
         method = "burn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -48,8 +48,8 @@ public class AbstractFurnaceBlockEntityExtender {
             )
         )
     )
-    private static boolean isWetSpongeCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.WET_SPONGE);
+    private static boolean isWetSpongeCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.WET_SPONGE);
     }
 
     @Redirect(
@@ -59,7 +59,7 @@ public class AbstractFurnaceBlockEntityExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -70,8 +70,8 @@ public class AbstractFurnaceBlockEntityExtender {
             )
         )
     )
-    private static boolean isBucketCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.BUCKET);
+    private static boolean isBucketCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.BUCKET);
     }
 
     @Redirect(
@@ -89,12 +89,12 @@ public class AbstractFurnaceBlockEntityExtender {
         method = "canTakeItemThroughFace",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         )
     )
-    private boolean isWaterBucketCheckKey(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.WATER_BUCKET);
+    private boolean isWaterBucketCheckKey(ItemStack instance, Object o) {
+        return instance.is(ItemIds.WATER_BUCKET);
     }
 
     @Redirect(
@@ -104,19 +104,19 @@ public class AbstractFurnaceBlockEntityExtender {
             target = "Lnet/minecraft/world/level/block/entity/FuelValues;isFuel(Lnet/minecraft/world/item/ItemStack;)Z"
         )
     )
-    private boolean isFuelCheckFuelItemBehavior(FuelValues instance, ItemStack item) {
-        return item.itematic$hasBehavior(ItemBehaviorType.FUEL);
+    private boolean isFuelCheckFuelItemBehavior(FuelValues instance, ItemStack itemStack) {
+        return itemStack.itematic$hasBehavior(ItemBehaviorType.FUEL);
     }
 
     @Redirect(
         method = "canPlaceItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBucketCheckIdForCanPlaceItem(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.BUCKET);
+    private boolean isBucketCheckIdForCanPlaceItem(ItemStack instance, Object o) {
+        return instance.is(ItemIds.BUCKET);
     }
 
     @ModifyArg(
@@ -127,8 +127,8 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     @SuppressWarnings("unchecked")
-    private static <E> E setRemainderItemStackUseItemBehavior(E element, @Local(ordinal = 0) Item item) {
-        return (E) item.itematic$getBehavior(ItemBehaviorType.FUEL)
+    private static <E> E setRemainderItemStackUseItemBehavior(E element, @Local(name = "fuelItem") Item fuelItem) {
+        return (E) fuelItem.itematic$getBehavior(ItemBehaviorType.FUEL)
             .flatMap(FuelItemBehavior::remainder)
             .orElse(ItemStack.EMPTY);
     }

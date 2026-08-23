@@ -22,7 +22,7 @@ public class LightBlockExtender {
         )
     )
     @Nullable
-    private Item getLightUseDynamicRegistry(Item item, @Local(argsOnly = true) BlockGetter level) {
+    private Item getLightUseDynamicRegistry(Item item, @Local(name = "level", argsOnly = true) BlockGetter level) {
         if (level instanceof ItemAccess itemAccess) {
             return itemAccess.get(ItemIds.LIGHT)
                 .map(Holder::value)

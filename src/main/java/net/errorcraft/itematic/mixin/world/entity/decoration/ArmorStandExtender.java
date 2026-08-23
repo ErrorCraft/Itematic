@@ -4,7 +4,6 @@ import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -36,10 +35,10 @@ public abstract class ArmorStandExtender extends LivingEntity {
         method = "interactAt",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isNameTagCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.NAME_TAG);
+    private boolean isNameTagCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.NAME_TAG);
     }
 }

@@ -21,10 +21,10 @@ public class EnchantRandomlyFunctionExtender {
         method = "run",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBookUseItemBehavior(ItemStack instance, Item item) {
+    private boolean isBookUseItemBehavior(ItemStack instance, Object o) {
         return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
             .flatMap(EnchantableItemBehavior::transformsInto)
             .isPresent();
@@ -34,14 +34,14 @@ public class EnchantRandomlyFunctionExtender {
         method = "enchantItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isBookUseItemBehavior(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+    private static boolean isBookUseItemBehavior(ItemStack instance, Object o, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> item = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
             .flatMap(EnchantableItemBehavior::transformsInto);
-        optionalItem.ifPresent(transformsInto::set);
-        return optionalItem.isPresent();
+        item.ifPresent(transformsInto::set);
+        return item.isPresent();
     }
 
     @Redirect(
@@ -51,7 +51,7 @@ public class EnchantRandomlyFunctionExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForEnchantedBookUseHolder(ItemLike item, ItemStack stack, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        return stack.itematic$transmuteCopy(transformsInto.get());
+    private static ItemStack newItemStackForEnchantedBookUseHolder(ItemLike item, ItemStack itemStack, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        return itemStack.itematic$transmuteCopy(transformsInto.get());
     }
 }

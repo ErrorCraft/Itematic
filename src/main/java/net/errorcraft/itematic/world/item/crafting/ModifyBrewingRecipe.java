@@ -87,7 +87,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
             Registries.POTION,
             ModifyBrewingRecipe::new
         );
-        private static final StreamCodec<RegistryFriendlyByteBuf, ModifyBrewingRecipe> PACKET_CODEC = createPacketCodec(
+        private static final StreamCodec<RegistryFriendlyByteBuf, ModifyBrewingRecipe> STREAM_CODEC = createPacketCodec(
             Registries.POTION,
             ModifyBrewingRecipe::new
         );
@@ -99,7 +99,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
 
         @Override
         public StreamCodec<RegistryFriendlyByteBuf, ModifyBrewingRecipe> streamCodec() {
-            return PACKET_CODEC;
+            return STREAM_CODEC;
         }
     }
 }

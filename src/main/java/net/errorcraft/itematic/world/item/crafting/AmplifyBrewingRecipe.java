@@ -82,7 +82,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
             Registries.ITEM,
             AmplifyBrewingRecipe::new
         );
-        private static final StreamCodec<RegistryFriendlyByteBuf, AmplifyBrewingRecipe> PACKET_CODEC = createPacketCodec(
+        private static final StreamCodec<RegistryFriendlyByteBuf, AmplifyBrewingRecipe> STREAM_CODEC = createPacketCodec(
             Registries.ITEM,
             AmplifyBrewingRecipe::new
         );
@@ -94,7 +94,7 @@ public class AmplifyBrewingRecipe extends BrewingRecipe<Item> {
 
         @Override
         public StreamCodec<RegistryFriendlyByteBuf, AmplifyBrewingRecipe> streamCodec() {
-            return PACKET_CODEC;
+            return STREAM_CODEC;
         }
     }
 }

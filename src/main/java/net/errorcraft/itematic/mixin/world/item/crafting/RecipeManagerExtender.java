@@ -39,7 +39,7 @@ public class RecipeManagerExtender {
 
     @Redirect(
         method = {
-            "method_64989",
+            "lambda$finalizeRecipeLoading$1",
             "unpackRecipeInfo"
         },
         at = @At(

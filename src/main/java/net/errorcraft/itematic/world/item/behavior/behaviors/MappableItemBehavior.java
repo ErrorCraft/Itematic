@@ -41,7 +41,7 @@ public record MappableItemBehavior(Holder<Item> transformsInto) implements ItemB
             return ItemResult.SUCCEED;
         }
 
-        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         level.playSound(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundSource(), 1.0f, 1.0f);
         ItemStack resultStack = this.createStack(serverLevel, user.getBlockX(), user.getBlockZ(), 0, true, false);
         stack.consume(1, user);

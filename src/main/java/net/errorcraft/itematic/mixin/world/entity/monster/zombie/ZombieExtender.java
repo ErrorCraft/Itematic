@@ -65,11 +65,11 @@ public abstract class ZombieExtender extends MobExtender {
         method = "wantsToPickUp",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isGlowInkSacCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GLOW_INK_SAC);
+    private boolean isGlowInkSacCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GLOW_INK_SAC);
     }
 
     @Redirect(

@@ -19,8 +19,8 @@ public class DataFixersExtender {
             target = "(Lcom/mojang/datafixers/schemas/Schema;)Lnet/minecraft/util/datafix/fixes/FireResistantToDamageResistantComponentFix;"
         )
     )
-    private static FireResistantToDamageResistantComponentFix immuneToDamageToDamageResistantComponentFix(Schema outputSchema, Operation<FireResistantToDamageResistantComponentFix> original, DataFixerBuilder builder) {
-        builder.addFixer(new ImmuneToDamageToDamageResistantComponentFix(outputSchema));
+    private static FireResistantToDamageResistantComponentFix immuneToDamageToDamageResistantComponentFix(Schema outputSchema, Operation<FireResistantToDamageResistantComponentFix> original, DataFixerBuilder fixerUpper) {
+        fixerUpper.addFixer(new ImmuneToDamageToDamageResistantComponentFix(outputSchema));
         return original.call(outputSchema);
     }
 }

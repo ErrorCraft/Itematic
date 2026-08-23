@@ -23,19 +23,19 @@ import java.util.List;
 @Mixin(DecoratedPotBlock.class)
 public class DecoratedPotBlockExtender implements BlockBehaviourAccess {
     @Redirect(
-        method = "method_49815",
+        method = "lambda$getDrops$0",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/entity/PotDecorations;ordered()Ljava/util/List;"
         )
     )
     @SuppressWarnings("DataFlowIssue")
-    private static List<Holder<Item>> getDecorationsUseHolders(PotDecorations instance, DecoratedPotBlockEntity blockEntity) {
-        return instance.itematic$entries(blockEntity.getLevel().registryAccess());
+    private static List<Holder<Item>> getDecorationsUseHolders(PotDecorations instance, DecoratedPotBlockEntity entity) {
+        return instance.itematic$entries(entity.getLevel().registryAccess());
     }
 
     @Redirect(
-        method = "method_49815",
+        method = "lambda$getDrops$0",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Iterator;next()Ljava/lang/Object;"
@@ -47,14 +47,14 @@ public class DecoratedPotBlockExtender implements BlockBehaviourAccess {
     }
 
     @Redirect(
-        method = "method_49815",
+        method = "lambda$getDrops$0",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/Item;getDefaultInstance()Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackUseHolder(Item instance, @Local Iterator<Holder<Item>> iterator) {
-        return new ItemStack(iterator.next());
+    private static ItemStack newItemStackUseHolder(Item instance, @Local(name = "i$") Iterator<Holder<Item>> i$) {
+        return new ItemStack(i$.next());
     }
 
     @Redirect(
@@ -64,9 +64,9 @@ public class DecoratedPotBlockExtender implements BlockBehaviourAccess {
             target = "Lnet/minecraft/world/level/block/entity/DecoratedPotBlockEntity;createDecoratedPotItem(Lnet/minecraft/world/level/block/entity/PotDecorations;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack getStackWithUseCreateStack(PotDecorations potDecorations, LevelReader level) {
+    private ItemStack getStackWithUseCreateStack(PotDecorations decorations, LevelReader level) {
         ItemStack stack = level.itematic$createStack(ItemIds.DECORATED_POT);
-        stack.set(DataComponents.POT_DECORATIONS, potDecorations);
+        stack.set(DataComponents.POT_DECORATIONS, decorations);
         return stack;
     }
 

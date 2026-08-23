@@ -21,19 +21,19 @@ import java.util.Optional;
 public class SmithingTransformRecipeExtender implements RecipeAccess {
     @Shadow
     @Final
-    Optional<Ingredient> template;
+    private Optional<Ingredient> template;
 
     @Shadow
     @Final
-    Ingredient base;
+    private Ingredient base;
 
     @Shadow
     @Final
-    Optional<Ingredient> addition;
+    private Optional<Ingredient> addition;
 
     @Shadow
     @Final
-    TransmuteResult result;
+    private TransmuteResult result;
 
     @Override
     public List<RecipeDisplay> itematic$display(HolderGetter<Item> items) {

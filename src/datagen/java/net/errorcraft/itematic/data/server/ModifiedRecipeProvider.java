@@ -3,7 +3,7 @@ package net.errorcraft.itematic.data.server;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.errorcraft.itematic.references.ItemIds;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -28,8 +28,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
-    public ModifiedRecipeProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(dataOutput, registriesFuture, PackOutput.Target.DATA_PACK, "recipe", Recipe.CODEC);
+    public ModifiedRecipeProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture, PackOutput.Target.DATA_PACK, "recipe", Recipe.CODEC);
     }
 
     @Override

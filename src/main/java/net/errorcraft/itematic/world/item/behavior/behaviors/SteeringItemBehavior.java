@@ -55,7 +55,7 @@ public record SteeringItemBehavior(Holder<EntityType<?>> target, int damagePerUs
             return ItemResult.SUCCEED;
         }
 
-        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         return ItemResult.PASS;
     }
 

@@ -48,7 +48,7 @@ public class ObjectiveCriteriaArgumentExtender implements ObjectiveCriteriaArgum
             )
         )
     )
-    private <T> Iterator<Holder.Reference<T>> getRegistryUseDynamicRegistry(Iterator<T> original, @Local StatType<T> type) {
+    private <T> Iterator<Holder.Reference<T>> getRegistryUseDynamicRegistry(Iterator<T> original, @Local(name = "type") StatType<T> type) {
         return this.context.lookupOrThrow(type.getRegistry().key())
             .listElements()
             .iterator();
@@ -62,8 +62,8 @@ public class ObjectiveCriteriaArgumentExtender implements ObjectiveCriteriaArgum
         )
     )
     @SuppressWarnings("unchecked")
-    private <T> String getStatNameUseRegistryEntry(ObjectiveCriteriaArgument instance, StatType<T> stat, Object value) {
-        return ItematicStats.statName(stat, (Holder.Reference<T>) value);
+    private <T> String getStatNameUseRegistryEntry(ObjectiveCriteriaArgument instance, StatType<T> type, Object value) {
+        return ItematicStats.statName(type, (Holder.Reference<T>) value);
     }
 
     @Override

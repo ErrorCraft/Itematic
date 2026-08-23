@@ -19,8 +19,7 @@ public class ClientBundleTooltipExtender implements ClientBundleTooltipAccess {
         at = @At(
             value = "FIELD",
             target = "Lorg/apache/commons/lang3/math/Fraction;ONE:Lorg/apache/commons/lang3/math/Fraction;",
-            opcode = Opcodes.GETSTATIC,
-            remap = false
+            opcode = Opcodes.GETSTATIC
         )
     )
     private Fraction capacity() {

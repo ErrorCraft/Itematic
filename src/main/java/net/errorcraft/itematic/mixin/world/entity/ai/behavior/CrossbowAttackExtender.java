@@ -34,7 +34,7 @@ public class CrossbowAttackExtender {
             target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getWeaponHoldingHand(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/InteractionHand;"
         )
     )
-    private InteractionHand getHandForHeldCrossbowUseId(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemIds.CROSSBOW);
+    private InteractionHand getHandForHeldCrossbowUseId(LivingEntity mob, Item weaponItem) {
+        return ItematicProjectileUtil.getWeaponHoldingHand(mob, ItemIds.CROSSBOW);
     }
 }

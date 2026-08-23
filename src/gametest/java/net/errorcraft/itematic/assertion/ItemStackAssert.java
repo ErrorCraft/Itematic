@@ -35,7 +35,7 @@ public class ItemStackAssert {
     }
 
     public ItemStackAssert is(ResourceKey<Item> id) {
-        if (this.stack.itematic$is(id)) {
+        if (this.stack.is(id)) {
             return this;
         }
 
@@ -43,7 +43,7 @@ public class ItemStackAssert {
             "test.error.expected_type",
             this.name,
             id.identifier(),
-            this.stack.getItemHolder().getRegisteredName()
+            this.stack.typeHolder().getRegisteredName()
         );
     }
 
@@ -55,7 +55,7 @@ public class ItemStackAssert {
         throw this.helper.assertionException(
             "test.error.item_stack.expected_empty",
             this.name,
-            this.stack.getItemHolder().getRegisteredName()
+            this.stack.typeHolder().getRegisteredName()
         );
     }
 

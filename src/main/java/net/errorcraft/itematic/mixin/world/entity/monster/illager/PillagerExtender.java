@@ -28,8 +28,8 @@ public abstract class PillagerExtender extends MobExtender {
     @WrapMethod(
         method = "canUseNonMeleeWeapon"
     )
-    private boolean useItemBehaviorComponent(ItemStack stack, Operation<Boolean> original) {
-        return stack.itematic$getBehavior(ItemBehaviorType.SHOOTER)
+    private boolean useItemBehaviorComponent(ItemStack item, Operation<Boolean> original) {
+        return item.itematic$getBehavior(ItemBehaviorType.SHOOTER)
             .map(shooter -> shooter.usesMethod(ShooterMethodType.CHARGEABLE))
             .orElse(false);
     }
@@ -38,11 +38,11 @@ public abstract class PillagerExtender extends MobExtender {
         method = "wantsItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isWhiteBannerCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.WHITE_BANNER);
+    private boolean isWhiteBannerCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.WHITE_BANNER);
     }
 
     @Redirect(
@@ -74,11 +74,11 @@ public abstract class PillagerExtender extends MobExtender {
         method = "enchantSpawnedWeapon",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isCrossbowCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.CROSSBOW);
+    private boolean isCrossbowCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.CROSSBOW);
     }
 
     @Override

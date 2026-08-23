@@ -21,10 +21,10 @@ public class ChiseledBookshelfBlockExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isEnchantedBookUseItemBehavior(ItemStack instance, Item item) {
+    private static boolean isEnchantedBookUseItemBehavior(ItemStack instance, Object o) {
         return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER)
             .map(EnchantmentHolderItemBehavior::grindingTransformsInto)
             .isPresent();
@@ -37,7 +37,7 @@ public class ChiseledBookshelfBlockExtender {
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private static <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key, @Local(argsOnly = true) ItemStack stack) {
-        return instance.itematic$get(stack.getItemHolder());
+    private static <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack) {
+        return instance.itematic$get(itemStack.typeHolder());
     }
 }

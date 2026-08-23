@@ -21,14 +21,14 @@ public class SetEnchantmentsFunctionExtender {
         method = "run",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBookUseItemBehavior(ItemStack instance, Item item, @Share("transformedItem") LocalRef<Holder<Item>> transformedItem) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+    private boolean isBookUseItemBehavior(ItemStack instance, Object o, @Share("transformedItem") LocalRef<Holder<Item>> transformedItem) {
+        Optional<Holder<Item>> item = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
             .flatMap(EnchantableItemBehavior::transformsInto);
-        optionalItem.ifPresent(transformedItem::set);
-        return optionalItem.isPresent();
+        item.ifPresent(transformedItem::set);
+        return item.isPresent();
     }
 
     @Redirect(
@@ -38,7 +38,7 @@ public class SetEnchantmentsFunctionExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack transmuteCopyForEnchantedBookUseHolder(ItemStack instance, ItemLike item, @Share("transformedItem") LocalRef<Holder<Item>> transformedItem) {
+    private ItemStack transmuteCopyForEnchantedBookUseHolder(ItemStack instance, ItemLike newItem, @Share("transformedItem") LocalRef<Holder<Item>> transformedItem) {
         return instance.itematic$transmuteCopy(transformedItem.get());
     }
 }

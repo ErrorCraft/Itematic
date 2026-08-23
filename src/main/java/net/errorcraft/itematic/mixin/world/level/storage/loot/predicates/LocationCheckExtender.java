@@ -26,8 +26,7 @@ public class LocationCheckExtender implements LocationCheckAccess {
         at = @At(
             value = "INVOKE",
             target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;mapCodec(Ljava/util/function/Function;)Lcom/mojang/serialization/MapCodec;",
-            ordinal = 1,
-            remap = false
+            ordinal = 1
         )
     )
     private static MapCodec<LocationCheck> addExtraMapCodecFields(MapCodec<LocationCheck> original) {

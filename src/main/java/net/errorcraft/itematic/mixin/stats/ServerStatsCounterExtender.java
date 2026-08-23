@@ -44,25 +44,23 @@ public class ServerStatsCounterExtender extends StatsCounter {
         method = "createTypedStatsCodec",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;flatComapMap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
-            remap = false
+            target = "Lcom/mojang/serialization/Codec;flatComapMap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
         ),
         index = 0
     )
-    private static <T> Function<Holder<T>, Stat<?>> flatComapMapToUseRegistryEntry(Function<T, Stat<?>> to, @Local(argsOnly = true) StatType<T> statType) {
-        return statType::itematic$get;
+    private static <T> Function<Holder<T>, Stat<?>> flatComapMapToUseRegistryEntry(Function<T, Stat<?>> to, @Local(name = "type", argsOnly = true) StatType<T> type) {
+        return type::itematic$get;
     }
 
     @ModifyArg(
-        method = "method_67581",
+        method = "lambda$createTypedStatsCodec$0",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/DataResult;success(Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;",
-            remap = false
+            target = "Lcom/mojang/serialization/DataResult;success(Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;"
         )
     )
     @SuppressWarnings("unchecked")
-    private static <T> T getValueUseRegistryEntry(T result, @Local(argsOnly = true) Stat<T> stat) {
+    private static <T> T getValueUseRegistryEntry(T result, @Local(name = "stat", argsOnly = true) Stat<T> stat) {
         return (T) stat.itematic$entry();
     }
 
@@ -75,7 +73,7 @@ public class ServerStatsCounterExtender extends StatsCounter {
             shift = At.Shift.AFTER
         )
     )
-    private void setRegistries(MinecraftServer server, Path path, CallbackInfo info) {
+    private void setRegistries(MinecraftServer server, Path file, CallbackInfo info) {
         this.registries = server.registryAccess();
     }
 
@@ -83,8 +81,7 @@ public class ServerStatsCounterExtender extends StatsCounter {
         method = "parse",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Dynamic;<init>(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)V",
-            remap = false
+            target = "Lcom/mojang/serialization/Dynamic;<init>(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)V"
         )
     )
     private <T> DynamicOps<T> useRegistryOps(DynamicOps<T> ops) {
@@ -95,8 +92,7 @@ public class ServerStatsCounterExtender extends StatsCounter {
         method = "toJson",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;",
-            remap = false
+            target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;"
         )
     )
     private <T> DynamicOps<T> encodeStartUseRegistryOps(DynamicOps<T> ops) {

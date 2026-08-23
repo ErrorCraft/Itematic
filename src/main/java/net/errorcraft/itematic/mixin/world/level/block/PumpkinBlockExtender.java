@@ -18,11 +18,11 @@ public class PumpkinBlockExtender {
         method = "useItemOn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isShearsCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.SHEARS);
+    private boolean isShearsCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.SHEARS);
     }
 
     @Redirect(
@@ -32,7 +32,7 @@ public class PumpkinBlockExtender {
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key, @Local(argsOnly = true) Level level) {
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, @Local(name = "level", argsOnly = true) Level level) {
         return instance.itematic$get(level.itematic$getItem(ItemIds.SHEARS));
     }
 }

@@ -69,17 +69,16 @@ public class ToolExtender implements ToolAccess {
         @Shadow
         @Final
         @Nullable
-        HolderSet<Block> blocks;
+        private HolderSet<Block> blocks;
 
         @Unique
         private Optional<ItemPredicate> item = Optional.empty();
 
         @Redirect(
-            method = "method_58430",
+            method = "lambda$static$0",
             at = @At(
                 value = "INVOKE",
-                target = "Lcom/mojang/serialization/Codec;fieldOf(Ljava/lang/String;)Lcom/mojang/serialization/MapCodec;",
-                remap = false
+                target = "Lcom/mojang/serialization/Codec;fieldOf(Ljava/lang/String;)Lcom/mojang/serialization/MapCodec;"
             )
         )
         private static MapCodec<Optional<HolderSet<Block>>> makeBlocksFieldOptional(Codec<HolderSet<Block>> instance, String name) {
@@ -87,12 +86,11 @@ public class ToolExtender implements ToolAccess {
         }
 
         @ModifyArg(
-            method = "method_58430",
+            method = "lambda$static$0",
             at = @At(
                 value = "INVOKE",
                 target = "Lcom/mojang/serialization/MapCodec;forGetter(Ljava/util/function/Function;)Lcom/mojang/serialization/codecs/RecordCodecBuilder;",
-                ordinal = 0,
-                remap = false
+                ordinal = 0
             ),
             slice = @Slice(
                 from = @At(
@@ -106,7 +104,7 @@ public class ToolExtender implements ToolAccess {
         }
 
         @Redirect(
-            method = "method_58430",
+            method = "lambda$static$0",
             at = @At(
                 value = "FIELD",
                 target = "Lnet/minecraft/util/ExtraCodecs;POSITIVE_FLOAT:Lcom/mojang/serialization/Codec;",
@@ -118,11 +116,10 @@ public class ToolExtender implements ToolAccess {
         }
 
         @ModifyArg(
-            method = "method_58430",
+            method = "lambda$static$0",
             at = @At(
                 value = "INVOKE",
-                target = "Lcom/mojang/datafixers/Products$P3;apply(Lcom/mojang/datafixers/kinds/Applicative;Lcom/mojang/datafixers/util/Function3;)Lcom/mojang/datafixers/kinds/App;",
-                remap = false
+                target = "Lcom/mojang/datafixers/Products$P3;apply(Lcom/mojang/datafixers/kinds/Applicative;Lcom/mojang/datafixers/util/Function3;)Lcom/mojang/datafixers/kinds/App;"
             )
         )
         private static Function3<Optional<HolderSet<Block>>, Optional<Float>, Optional<Boolean>, Tool.Rule> createRuleUseOptionalBlocksForCodec(Function3<HolderSet<Block>, Optional<Float>, Optional<Boolean>, Tool.Rule> instance) {
@@ -168,8 +165,7 @@ public class ToolExtender implements ToolAccess {
             method = "<clinit>",
             at = @At(
                 value = "INVOKE",
-                target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
-                remap = false
+                target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
             )
         )
         private static Codec<Tool.Rule> addExtraMapCodecFields(Codec<Tool.Rule> original) {

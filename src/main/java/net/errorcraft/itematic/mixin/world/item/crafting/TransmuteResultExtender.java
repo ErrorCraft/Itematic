@@ -24,7 +24,7 @@ public class TransmuteResultExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack transmuteCopyUseHolder(ItemStack instance, ItemLike item, int count) {
-        return instance.itematic$transmuteCopy(this.item, count);
+    private ItemStack transmuteCopyUseHolder(ItemStack instance, ItemLike newItem, int newCount) {
+        return instance.itematic$transmuteCopy(this.item, newCount);
     }
 }

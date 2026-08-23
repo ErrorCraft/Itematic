@@ -31,8 +31,8 @@ public class LoomMenuExtender {
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private boolean alsoCheckBannerPatternHolderItemBehavior(boolean original, @Local(ordinal = 1) ItemStack slotStack) {
-        return original && slotStack.itematic$hasBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER);
+    private boolean alsoCheckBannerPatternHolderItemBehavior(boolean original, @Local(name = "stack") ItemStack stack) {
+        return original && stack.itematic$hasBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER);
     }
 
     @ModifyConstant(
@@ -42,8 +42,8 @@ public class LoomMenuExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemBehavior(Object reference, Class<BannerItem> clazz, @Local(ordinal = 1) ItemStack slotStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
-        Optional<DyeItemBehavior> optionalDye = slotStack.itematic$getBehavior(ItemBehaviorType.DYE);
+    private boolean instanceOfDyeItemUseItemBehavior(Object reference, Class<BannerItem> clazz, @Local(name = "stack") ItemStack stack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        Optional<DyeItemBehavior> optionalDye = stack.itematic$getBehavior(ItemBehaviorType.DYE);
         optionalDye.ifPresent(dye::set);
         return optionalDye.isPresent();
     }
@@ -80,8 +80,8 @@ public class LoomMenuExtender {
                 ordinal = 0
             )
         )
-        private boolean instanceOfBannerItemUseItemBehavior(Object reference, Class<BannerItem> clazz, ItemStack stack) {
-            return stack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+        private boolean instanceOfBannerItemUseItemBehavior(Object reference, Class<BannerItem> clazz, ItemStack itemStack) {
+            return itemStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
                 .map(BannerPatternHolderItemBehavior::modifiable)
                 .orElse(false);
         }
@@ -96,8 +96,8 @@ public class LoomMenuExtender {
                 ordinal = 0
             )
         )
-        private boolean instanceOfDyeItemCheckDyeItemBehavior(Object reference, Class<DyeItem> clazz, ItemStack stack) {
-            return stack.itematic$hasBehavior(ItemBehaviorType.DYE);
+        private boolean instanceOfDyeItemCheckDyeItemBehavior(Object reference, Class<DyeItem> clazz, ItemStack itemStack) {
+            return itemStack.itematic$hasBehavior(ItemBehaviorType.DYE);
         }
     }
 
@@ -110,8 +110,8 @@ public class LoomMenuExtender {
                 target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
             )
         )
-        private boolean alsoCheckBannerPatternHolderItemBehavior(boolean original, ItemStack stack) {
-            return original && stack.itematic$hasBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER);
+        private boolean alsoCheckBannerPatternHolderItemBehavior(boolean original, ItemStack itemStack) {
+            return original && itemStack.itematic$hasBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER);
         }
     }
 }

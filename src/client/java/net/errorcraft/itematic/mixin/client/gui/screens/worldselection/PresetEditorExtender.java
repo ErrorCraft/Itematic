@@ -12,14 +12,14 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(PresetEditor.class)
 public interface PresetEditorExtender {
     @ModifyExpressionValue(
-        method = "method_41863",
+        method = "lambda$static$0",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/client/gui/screens/worldselection/CreateWorldScreen;Ljava/util/function/Consumer;Lnet/minecraft/world/level/levelgen/flat/FlatLevelGeneratorSettings;)Lnet/minecraft/client/gui/screens/CreateFlatWorldScreen;"
         )
     )
-    private static CreateFlatWorldScreen setItems(CreateFlatWorldScreen original, @Local RegistryAccess registries) {
-        original.itematic$setItems(registries.lookupOrThrow(Registries.ITEM));
+    private static CreateFlatWorldScreen setItems(CreateFlatWorldScreen original, @Local(name = "registryAccess") RegistryAccess registryAccess) {
+        original.itematic$setItems(registryAccess.lookupOrThrow(Registries.ITEM));
         return original;
     }
 }

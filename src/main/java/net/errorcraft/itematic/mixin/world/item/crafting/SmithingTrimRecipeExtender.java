@@ -21,19 +21,19 @@ import java.util.List;
 public class SmithingTrimRecipeExtender implements RecipeAccess {
     @Shadow
     @Final
-    Ingredient template;
+    private Ingredient template;
 
     @Shadow
     @Final
-    Ingredient base;
+    private Ingredient base;
 
     @Shadow
     @Final
-    Ingredient addition;
+    private Ingredient addition;
 
     @Shadow
     @Final
-    Holder<TrimPattern> pattern;
+    private Holder<TrimPattern> pattern;
 
     @Override
     public List<RecipeDisplay> itematic$display(HolderGetter<Item> items) {

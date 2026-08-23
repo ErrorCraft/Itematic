@@ -26,11 +26,11 @@ import java.util.Optional;
 public abstract class ShapedRecipeExtender implements CraftingRecipe, RecipeAccess {
     @Shadow
     @Final
-    ShapedRecipePattern pattern;
+    private ShapedRecipePattern pattern;
 
     @Shadow
     @Final
-    ItemStack result;
+    private ItemStack result;
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {

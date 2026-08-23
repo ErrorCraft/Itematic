@@ -17,7 +17,7 @@ public class RepairItemRecipeExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseHolder(ItemLike item, @Local(ordinal = 0) ItemStack firstStack) {
-        return new ItemStack(firstStack.getItemHolder());
+    private ItemStack newItemStackUseHolder(ItemLike item, @Local(name = "first") ItemStack first) {
+        return new ItemStack(first.typeHolder());
     }
 }

@@ -39,7 +39,7 @@ public class EquippableExtender {
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key, ItemStack stack) {
-        return instance.itematic$get(stack.getItemHolder());
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, ItemStack inHand) {
+        return instance.itematic$get(inHand.typeHolder());
     }
 }

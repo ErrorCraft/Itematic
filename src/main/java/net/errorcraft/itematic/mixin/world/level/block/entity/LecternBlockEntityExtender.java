@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(LecternBlockEntity.class)
 public class LecternBlockEntityExtender {
     @Shadow
-    ItemStack book;
+    private ItemStack book;
 
     @WrapMethod(
         method = "hasBook"

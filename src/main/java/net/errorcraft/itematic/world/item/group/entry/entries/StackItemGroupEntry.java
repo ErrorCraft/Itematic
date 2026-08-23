@@ -42,11 +42,11 @@ public final class StackItemGroupEntry extends PossiblyHiddenItemGroupEntry<Stac
     }
 
     public static StackItemGroupEntry fromStack(ItemStack stack) {
-        return new StackItemGroupEntry(stack.getItemHolder(), stack.getComponentsPatch());
+        return new StackItemGroupEntry(stack.typeHolder(), stack.getComponentsPatch());
     }
 
     public static StackItemGroupEntry fromStack(ItemStack stack, boolean requiresPermissions) {
-        return new StackItemGroupEntry(CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS, requiresPermissions, stack.getItemHolder(), stack.getComponentsPatch());
+        return new StackItemGroupEntry(CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS, requiresPermissions, stack.typeHolder(), stack.getComponentsPatch());
     }
 
     @Override

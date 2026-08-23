@@ -13,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.BrewingStandMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.ContainerSynchronizer;
 import net.minecraft.world.inventory.RecipeBookMenu;
@@ -167,8 +167,8 @@ public class BrewingStandMenuDelegate extends RecipeBookMenu {
     }
 
     @Override
-    public void clicked(int slotIndex, int button, ClickType actionType, Player player) {
-        this.delegate.clicked(slotIndex, button, actionType, player);
+    public void clicked(int slotIndex, int buttonNum, ContainerInput containerInput, Player player) {
+        super.clicked(slotIndex, buttonNum, containerInput, player);
     }
 
     @Override

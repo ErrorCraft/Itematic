@@ -25,11 +25,11 @@ import java.util.List;
 public abstract class ShapelessRecipeExtender implements CraftingRecipe, RecipeAccess {
     @Shadow
     @Final
-    ItemStack result;
+    private ItemStack result;
 
     @Shadow
     @Final
-    List<Ingredient> ingredients;
+    private List<Ingredient> ingredients;
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {

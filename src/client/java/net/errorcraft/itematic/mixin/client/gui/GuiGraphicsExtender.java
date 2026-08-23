@@ -32,15 +32,15 @@ public abstract class GuiGraphicsExtender {
         method = "<init>(Lnet/minecraft/client/Minecraft;Lorg/joml/Matrix3x2fStack;Lnet/minecraft/client/gui/render/state/GuiRenderState;II)V",
         at = @At("TAIL")
     )
-    private void setItemBarStyles(Minecraft client, Matrix3x2fStack matrices, GuiRenderState state, int mouseX, int mouseY, CallbackInfo info) {
-        this.itemBarStyles = client.itematic$itemBarStyles();
+    private void setItemBarStyles(Minecraft minecraft, Matrix3x2fStack pose, GuiRenderState guiRenderState, int mouseX, int mouseY, CallbackInfo info) {
+        this.itemBarStyles = minecraft.itematic$itemBarStyles();
     }
 
     @WrapMethod(
         method = "renderItemBar"
     )
-    private void useDataComponent(ItemStack stack, int x, int y, Operation<Void> original) {
-        Identifier itemBarStyleId = stack.get(ItematicDataComponents.ITEM_BAR_STYLE);
+    private void useDataComponent(ItemStack itemStack, int x, int y, Operation<Void> original) {
+        Identifier itemBarStyleId = itemStack.get(ItematicDataComponents.ITEM_BAR_STYLE);
         if (itemBarStyleId == null) {
             return;
         }
@@ -50,18 +50,18 @@ public abstract class GuiGraphicsExtender {
             return;
         }
 
-        if (!itemBarStyle.isVisible(stack)) {
+        if (!itemBarStyle.isVisible(itemStack)) {
             return;
         }
 
         this.blitSprite(
             RenderPipelines.GUI_TEXTURED,
-            itemBarStyle.progressTexture(stack),
+            itemBarStyle.progressTexture(itemStack),
             x,
             y,
             16,
             16,
-            itemBarStyle.color(stack)
+            itemBarStyle.color(itemStack)
         );
     }
 }

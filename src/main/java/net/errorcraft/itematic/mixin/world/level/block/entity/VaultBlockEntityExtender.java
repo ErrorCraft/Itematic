@@ -20,8 +20,8 @@ public class VaultBlockEntityExtender {
                 target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
             )
         )
-        private static <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key, @Local(argsOnly = true) ItemStack stack) {
-            return instance.itematic$get(stack.getItemHolder());
+        private static <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, @Local(name = "stackToInsert", argsOnly = true) ItemStack stackToInsert) {
+            return instance.itematic$get(stackToInsert.typeHolder());
         }
     }
 }

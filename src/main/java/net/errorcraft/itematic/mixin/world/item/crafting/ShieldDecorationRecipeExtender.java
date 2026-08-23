@@ -27,11 +27,11 @@ public class ShieldDecorationRecipeExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isShieldCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.SHIELD);
+    private boolean isShieldCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.SHIELD);
     }
 
     @ModifyConstant(
@@ -41,8 +41,8 @@ public class ShieldDecorationRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBannerItemUseItemBehaviorForMatches(Object reference, Class<BannerItem> clazz, @Local ItemStack inputStack) {
-        return inputStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+    private boolean instanceOfBannerItemUseItemBehaviorForMatches(Object reference, Class<BannerItem> clazz, @Local(name = "itemStack") ItemStack itemStack) {
+        return itemStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
             .map(BannerPatternHolderItemBehavior::modifiable)
             .orElse(false);
     }
@@ -54,8 +54,8 @@ public class ShieldDecorationRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBannerItemUseItemBehaviorForAssemble(Object reference, Class<BannerItem> clazz, @Local(ordinal = 2) ItemStack inputStack) {
-        return inputStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+    private boolean instanceOfBannerItemUseItemBehaviorForAssemble(Object reference, Class<BannerItem> clazz, @Local(name = "itemStack") ItemStack itemStack) {
+        return itemStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
             .map(BannerPatternHolderItemBehavior::modifiable)
             .orElse(false);
     }
@@ -87,8 +87,8 @@ public class ShieldDecorationRecipeExtender {
             target = "Lnet/minecraft/world/item/BannerItem;getColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemBehavior(BannerItem instance, @Local(ordinal = 0) ItemStack bannerStack) {
-        return bannerStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
+    private DyeColor getColorUseItemBehavior(BannerItem instance, @Local(name = "patternBanner") ItemStack patternBanner) {
+        return patternBanner.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
             .flatMap(BannerPatternHolderItemBehavior::color)
             .orElse(DyeColor.WHITE);
     }

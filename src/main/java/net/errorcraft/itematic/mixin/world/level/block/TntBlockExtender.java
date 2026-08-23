@@ -9,7 +9,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.TntBlock;
@@ -24,7 +23,7 @@ public class TntBlockExtender {
         method = "useItemOn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         ),
         slice = @Slice(
             from = @At(
@@ -33,8 +32,8 @@ public class TntBlockExtender {
             )
         )
     )
-    private boolean isFlintAndSteelCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.FLINT_AND_STEEL);
+    private boolean isFlintAndSteelCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.FLINT_AND_STEEL);
     }
 
     @ModifyExpressionValue(

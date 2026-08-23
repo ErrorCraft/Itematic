@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
 import net.errorcraft.itematic.references.ItemIds;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelReader;
@@ -27,10 +26,10 @@ public class SweetBerryBushBlockExtender {
         method = "useItemOn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBoneMealCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.BONE_MEAL);
+    private boolean isBoneMealCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.BONE_MEAL);
     }
 }

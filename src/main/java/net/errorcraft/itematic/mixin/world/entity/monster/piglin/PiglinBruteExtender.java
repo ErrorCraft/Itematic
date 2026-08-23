@@ -36,11 +36,11 @@ public abstract class PiglinBruteExtender extends MobExtender {
         method = "wantsToPickUp",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isGoldenAxeCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GOLDEN_AXE);
+    private boolean isGoldenAxeCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GOLDEN_AXE);
     }
 
     @Override

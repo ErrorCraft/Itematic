@@ -147,7 +147,7 @@ public abstract class FoxExtender extends MobExtender {
     public static class FoxEatBerriesGoalExtender {
         @Shadow
         @Final
-        Fox field_17975;
+        Fox this$0;
 
         @Redirect(
             method = "pickSweetBerries",
@@ -158,7 +158,7 @@ public abstract class FoxExtender extends MobExtender {
             )
         )
         private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item) {
-            return this.field_17975.level().itematic$createStack(ItemIds.SWEET_BERRIES);
+            return this.this$0.level().itematic$createStack(ItemIds.SWEET_BERRIES);
         }
 
         @Redirect(
@@ -176,7 +176,7 @@ public abstract class FoxExtender extends MobExtender {
             )
         )
         private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item, int count) {
-            return this.field_17975.level().itematic$createStack(ItemIds.SWEET_BERRIES, count);
+            return this.this$0.level().itematic$createStack(ItemIds.SWEET_BERRIES, count);
         }
     }
 }

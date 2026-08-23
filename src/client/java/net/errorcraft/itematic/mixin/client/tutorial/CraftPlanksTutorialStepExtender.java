@@ -35,7 +35,7 @@ public class CraftPlanksTutorialStepExtender {
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private static <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key, @Local Holder<Item> item) {
+    private static <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, @Local(name = "item") Holder<Item> item) {
         return instance.itematic$get(item);
     }
 }

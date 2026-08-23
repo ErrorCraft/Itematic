@@ -75,7 +75,7 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
         if (this.drawDuration.filter(drawDuration -> drawDuration.matches(usedTicks)).isPresent()) {
             this.createEntity(level, user, stack, stackExchanger);
             if (user instanceof Player player) {
-                player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+                player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
             }
 
             return true;

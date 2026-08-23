@@ -70,7 +70,7 @@ public class CastableItemBehavior implements ItemBehavior<CastableItemBehavior> 
             Projectile.spawnProjectile(new FishingHook(user, level, luck, speed), serverLevel, stack);
         }
 
-        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         user.gameEvent(GameEvent.ITEM_INTERACT_START);
     }
 }

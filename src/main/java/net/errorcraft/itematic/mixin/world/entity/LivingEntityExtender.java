@@ -55,9 +55,6 @@ import java.util.function.Predicate;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityExtender extends Entity implements LivingEntityAccess {
     @Shadow
-    protected ItemStack useItem;
-
-    @Shadow
     protected int useItemRemaining;
 
     @Shadow
@@ -70,13 +67,13 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     public abstract ItemStack getMainHandItem();
 
     @Shadow
-    public abstract boolean isHolding(Predicate<ItemStack> predicate);
+    public abstract boolean isHolding(Predicate<ItemStack> itemPredicate);
 
     @Shadow
     public abstract ItemStack getItemInHand(InteractionHand hand);
 
     @Shadow
-    public abstract ItemStack getItemBySlot(EquipmentSlot equipmentSlot);
+    public abstract ItemStack getItemBySlot(EquipmentSlot slot);
 
     @Shadow
     public abstract boolean isUsingItem();
@@ -97,12 +94,12 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @WrapMethod(
         method = "getEquipmentSlotForItem"
     )
-    private EquipmentSlot alsoCheckEquipmentItemBehavior(ItemStack stack, Operation<EquipmentSlot> original) {
-        if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
+    private EquipmentSlot alsoCheckEquipmentItemBehavior(ItemStack itemStack, Operation<EquipmentSlot> original) {
+        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             return EquipmentSlot.MAINHAND;
         }
 
-        return original.call(stack);
+        return original.call(itemStack);
     }
 
     @Inject(
@@ -113,8 +110,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         ),
         cancellable = true
     )
-    private void alsoCheckEquipmentItemBehavior(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
-        if (!newStack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
+    private void alsoCheckEquipmentItemBehavior(EquipmentSlot slot, ItemStack oldStack, ItemStack stack, CallbackInfo info) {
+        if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.cancel();
         }
     }
@@ -123,7 +120,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         method = "getVisibilityPercent",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -134,15 +131,15 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             )
         )
     )
-    private boolean isSkeletonSkullCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.SKELETON_SKULL);
+    private boolean isSkeletonSkullCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.SKELETON_SKULL);
     }
 
     @Redirect(
         method = "getVisibilityPercent",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -153,15 +150,15 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             )
         )
     )
-    private boolean isZombieHeadCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.ZOMBIE_HEAD);
+    private boolean isZombieHeadCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.ZOMBIE_HEAD);
     }
 
     @Redirect(
         method = "getVisibilityPercent",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -172,15 +169,15 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             )
         )
     )
-    private boolean isCreeperHeadCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.CREEPER_HEAD);
+    private boolean isCreeperHeadCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.CREEPER_HEAD);
     }
 
     @Redirect(
         method = "getVisibilityPercent",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         ),
         slice = @Slice(
             from = @At(
@@ -195,8 +192,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             )
         )
     )
-    private boolean isPiglinHeadCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.PIGLIN_HEAD);
+    private boolean isPiglinHeadCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.PIGLIN_HEAD);
     }
 
     @Redirect(
@@ -223,8 +220,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key, @Local(ordinal = 0) ItemStack stack) {
-        return instance.itematic$get(stack.getItemHolder());
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, @Local(name = "protectionItem") ItemStack protectionItem) {
+        return instance.itematic$get(protectionItem.typeHolder());
     }
 
     @Redirect(
@@ -234,18 +231,18 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             target = "Lnet/minecraft/world/item/component/DeathProtection;applyEffects(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V"
         )
     )
-    private void invokeBeforeDeathHolderEvent(DeathProtection instance, ItemStack stack, LivingEntity entity) {
+    private void invokeBeforeDeathHolderEvent(DeathProtection instance, ItemStack itemStack, LivingEntity entity) {
         if (!(entity.level() instanceof ServerLevel level)) {
             return;
         }
 
         ActionContext context = ActionContext.builder(level)
-            .stackExchanger(entity, stack)
+            .stackExchanger(entity, itemStack)
             .add(LootContextParams.THIS_ENTITY, entity)
             .add(LootContextParams.ORIGIN, entity.position())
-            .add(LootContextParams.TOOL, stack)
+            .add(LootContextParams.TOOL, itemStack)
             .build();
-        stack.itematic$invokeEvent(ItemEvent.BEFORE_DEATH_HOLDER, context);
+        itemStack.itematic$invokeEvent(ItemEvent.BEFORE_DEATH_HOLDER, context);
     }
 
     @Inject(
@@ -268,7 +265,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             opcode = Opcodes.PUTFIELD
         )
     )
-    private void resetUseTime(EntityDataAccessor<?> data, CallbackInfo info) {
+    private void resetUseTime(EntityDataAccessor<?> accessor, CallbackInfo info) {
         this.usedItemTicks = 0;
     }
 
@@ -300,7 +297,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
             opcode = Opcodes.GETFIELD
         )
     )
-    private void incrementUseTime(ItemStack stack, CallbackInfo info) {
+    private void incrementUseTime(ItemStack useItem, CallbackInfo info) {
         this.usedItemTicks++;
     }
 
@@ -352,8 +349,8 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         ),
         cancellable = true
     )
-    private void alsoCheckEquipmentItemBehavior(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
+    private void alsoCheckEquipmentItemBehavior(ItemStack itemStack, CallbackInfoReturnable<Boolean> info) {
+        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.setReturnValue(false);
         }
     }
@@ -421,7 +418,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     @Override
     public boolean itematic$isHolding(ResourceKey<Item> item) {
-        return this.isHolding(stack -> stack.itematic$is(item));
+        return this.isHolding(stack -> stack.is(item));
     }
 
     @Override

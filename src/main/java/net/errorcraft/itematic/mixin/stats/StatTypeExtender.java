@@ -58,8 +58,8 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
             target = "Lnet/minecraft/network/codec/ByteBufCodecs;registry(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/network/codec/StreamCodec;"
         )
     )
-    private StreamCodec<RegistryFriendlyByteBuf, Holder<T>> doNotUseValueStreamCodec(ResourceKey<? extends Registry<T>> registry) {
-        return ByteBufCodecs.holderRegistry(registry);
+    private StreamCodec<RegistryFriendlyByteBuf, Holder<T>> doNotUseValueStreamCodec(ResourceKey<? extends Registry<T>> registryKey) {
+        return ByteBufCodecs.holderRegistry(registryKey);
     }
 
     @ModifyArg(
@@ -90,7 +90,7 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
         method = "<init>",
         at = @At("TAIL")
     )
-    private void setCodec(Registry<T> registry, Component name, CallbackInfo info) {
+    private void setCodec(Registry<T> registry, Component displayName, CallbackInfo info) {
         this.codec = RegistryFixedCodec.create(this.registry.key())
             .xmap(this::itematic$get, Stat::itematic$entry)
             .fieldOf("entry");
@@ -110,26 +110,25 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
         method = "get(Ljava/lang/Object;Lnet/minecraft/stats/StatFormatter;)Lnet/minecraft/stats/Stat;"
     )
     @Nullable
-    private Stat<T> checkDynamicRegistry(T object, StatFormatter formatter, Operation<Stat<T>> original) {
+    private Stat<T> checkDynamicRegistry(T argument, StatFormatter formatter, Operation<Stat<T>> original) {
         if (Objects.equals(this.registry.key(), Registries.ITEM)) {
             LOGGER.warn(ItematicUtil.stackTraceMessage("Tried to get a stat for an item from a value directly. This is no longer supported and should be modified to use a holder instead."));
             return null;
         }
 
-        return original.call(object, formatter);
+        return original.call(argument, formatter);
     }
 
     @Redirect(
         method = "get(Ljava/lang/Object;Lnet/minecraft/stats/StatFormatter;)Lnet/minecraft/stats/Stat;",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/Map;computeIfAbsent(Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;",
-            remap = false
+            target = "Ljava/util/Map;computeIfAbsent(Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;"
         )
     )
     @SuppressWarnings("unchecked")
-    private <K, V> V computeIfAbsentUseHolder(Map<K, V> instance, K k, Function<? super K, ? extends V> mappingFunction, T key, StatFormatter formatter) {
-        return (V) this.itematic$get(this.registry.wrapAsHolder(key), formatter);
+    private <K, V> V computeIfAbsentUseHolder(Map<K, V> instance, K key, Function<? super K, ? extends V> mappingFunction, T argument, StatFormatter formatter) {
+        return (V) this.itematic$get(this.registry.wrapAsHolder(argument), formatter);
     }
 
     @Override

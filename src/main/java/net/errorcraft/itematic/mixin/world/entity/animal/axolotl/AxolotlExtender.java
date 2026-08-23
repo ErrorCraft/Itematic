@@ -25,11 +25,11 @@ public abstract class AxolotlExtender extends MobExtender {
         method = "usePlayerItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isTropicalFishBucketCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.TROPICAL_FISH_BUCKET);
+    private boolean isTropicalFishBucketCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.TROPICAL_FISH_BUCKET);
     }
 
     @Redirect(

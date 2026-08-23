@@ -46,10 +46,10 @@ public class DecoratedPotRecipeExtender {
         }
 
         PotDecorations potDecorations = PotDecorationsAccessor.create(
-            Optional.of(input.getItem(1).getItemHolder()),
-            Optional.of(input.getItem(3).getItemHolder()),
-            Optional.of(input.getItem(5).getItemHolder()),
-            Optional.of(input.getItem(7).getItemHolder())
+            Optional.of(input.getItem(1).typeHolder()),
+            Optional.of(input.getItem(3).typeHolder()),
+            Optional.of(input.getItem(5).typeHolder()),
+            Optional.of(input.getItem(7).typeHolder())
         );
         stack.set(DataComponents.POT_DECORATIONS, potDecorations);
         return stack;

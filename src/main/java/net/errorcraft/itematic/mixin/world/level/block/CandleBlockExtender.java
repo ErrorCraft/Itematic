@@ -49,7 +49,7 @@ public abstract class CandleBlockExtender extends AbstractCandleBlock {
             target = "Lnet/minecraft/world/item/context/BlockPlaceContext;isSecondaryUseActive()Z"
         )
     )
-    private boolean equalItemsCheckId(boolean original, @Local(argsOnly = true) BlockPlaceContext context) {
-        return original || !context.getItemInHand().itematic$is(this.itematic$asItemId());
+    private boolean equalItemsCheckId(boolean original, @Local(name = "context", argsOnly = true) BlockPlaceContext context) {
+        return original || !context.getItemInHand().is(this.itematic$asItemId());
     }
 }

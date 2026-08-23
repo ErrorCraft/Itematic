@@ -43,8 +43,8 @@ public class OverlayRecipeComponentExtender {
             method = "<init>",
             at = @At("TAIL")
         )
-        private void setBrewingRecipe(OverlayRecipeComponent recipeAlternativesWidget, int x, int y, RecipeDisplayId recipeId, RecipeDisplay display, ContextMap context, boolean craftable, CallbackInfo info) {
-            this.isBrewingRecipe = display instanceof BrewingRecipeDisplay;
+        private void setBrewingRecipe(OverlayRecipeComponent overlayRecipeComponent, int x, int y, RecipeDisplayId id, RecipeDisplay recipe, ContextMap context, boolean isCraftable, CallbackInfo info) {
+            this.isBrewingRecipe = recipe instanceof BrewingRecipeDisplay;
         }
 
         @WrapMethod(

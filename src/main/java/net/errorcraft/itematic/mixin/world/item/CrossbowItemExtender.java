@@ -17,14 +17,14 @@ public class CrossbowItemExtender {
     @WrapMethod(
         method = "getChargeDuration"
     )
-    private static int checkAndStoreDefaultChargeTime(ItemStack stack, LivingEntity user, Operation<Integer> original, @Share("defaultChargeTime") LocalFloatRef defaultChargeTimeReference) {
-        Float defaultChargeTime = stack.get(ItematicDataComponents.SHOOTER_DEFAULT_CHARGE_TIME);
+    private static int checkAndStoreDefaultChargeTime(ItemStack crossbow, LivingEntity user, Operation<Integer> original, @Share("defaultChargeTime") LocalFloatRef defaultChargeTimeReference) {
+        Float defaultChargeTime = crossbow.get(ItematicDataComponents.SHOOTER_DEFAULT_CHARGE_TIME);
         if (defaultChargeTime == null) {
             return 0;
         }
 
         defaultChargeTimeReference.set(defaultChargeTime);
-        return original.call(stack, user);
+        return original.call(crossbow, user);
     }
 
     @ModifyConstant(

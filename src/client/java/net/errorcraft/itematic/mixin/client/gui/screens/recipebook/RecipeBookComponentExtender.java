@@ -65,7 +65,7 @@ public class RecipeBookComponentExtender {
             method = "<init>(Lnet/minecraft/client/gui/screens/recipebook/SearchRecipeBookCategory;)V",
             at = @At("TAIL")
         )
-        private void setIcons(SearchRecipeBookCategory type, CallbackInfo info) {
+        private void setIcons(SearchRecipeBookCategory category, CallbackInfo info) {
             this.primaryIconItem = ItemIds.COMPASS;
             this.secondaryIconItem = Optional.empty();
         }
@@ -74,8 +74,8 @@ public class RecipeBookComponentExtender {
             method = "<init>(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/crafting/RecipeBookCategory;)V",
             at = @At("TAIL")
         )
-        private void setIcons(Item primaryIcon, RecipeBookCategory category, CallbackInfo info) {
-            this.primaryIconItem = BuiltInRegistries.ITEM.getResourceKey(primaryIcon).orElseThrow();
+        private void setIcons(Item icon, RecipeBookCategory category, CallbackInfo info) {
+            this.primaryIconItem = BuiltInRegistries.ITEM.getResourceKey(icon).orElseThrow();
             this.secondaryIconItem = Optional.empty();
         }
 

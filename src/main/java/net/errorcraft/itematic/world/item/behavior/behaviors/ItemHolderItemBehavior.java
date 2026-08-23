@@ -256,7 +256,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
 
         player.drop(removedStack, true);
         player.playSound(this.emptySound.value(), 0.8f, 0.8f + player.level().getRandom().nextFloat() * 0.4f);
-        player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
 
         stack.set(DataComponents.BUNDLE_CONTENTS, newBuilder.toImmutable());
     }

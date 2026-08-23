@@ -34,8 +34,8 @@ public interface CrossbowAttackMobExtender {
             target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getWeaponHoldingHand(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/InteractionHand;"
         )
     )
-    private InteractionHand getHandForHeldCrossbowUseId(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemIds.CROSSBOW);
+    private InteractionHand getHandForHeldCrossbowUseId(LivingEntity mob, Item weaponItem) {
+        return ItematicProjectileUtil.getWeaponHoldingHand(mob, ItemIds.CROSSBOW);
     }
 
     @ModifyConstant(
@@ -45,8 +45,8 @@ public interface CrossbowAttackMobExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfCrossbowItemUseItemBehavior(Object reference, Class<CrossbowItem> clazz, @Local ItemStack heldStack, @Share("shooter") LocalRef<ShooterItemBehavior> shooterReference) {
-        Optional<ShooterItemBehavior> optionalShooter = heldStack.itematic$getBehavior(ItemBehaviorType.SHOOTER);
+    private boolean instanceOfCrossbowItemUseItemBehavior(Object reference, Class<CrossbowItem> clazz, @Local(name = "usedItem") ItemStack usedItem, @Share("shooter") LocalRef<ShooterItemBehavior> shooterReference) {
+        Optional<ShooterItemBehavior> optionalShooter = usedItem.itematic$getBehavior(ItemBehaviorType.SHOOTER);
         optionalShooter.ifPresent(shooterReference::set);
         return optionalShooter.isPresent();
     }

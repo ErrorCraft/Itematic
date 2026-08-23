@@ -28,12 +28,12 @@ public abstract class ServerPlayerExtender extends Player {
     @WrapMethod(
         method = "openItemGui"
     )
-    private void alsoCheckTextHolderItemBehavior(ItemStack stack, InteractionHand hand, Operation<Void> original) {
-        if (!stack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
+    private void alsoCheckTextHolderItemBehavior(ItemStack itemStack, InteractionHand hand, Operation<Void> original) {
+        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
             return;
         }
 
-        original.call(stack, hand);
+        original.call(itemStack, hand);
     }
 
     @WrapMethod(
@@ -54,8 +54,8 @@ public abstract class ServerPlayerExtender extends Player {
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key, ItemStack stack) {
-        return instance.itematic$get(stack.getItemHolder());
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, ItemStack itemStack) {
+        return instance.itematic$get(itemStack.typeHolder());
     }
 
     @Redirect(
@@ -65,11 +65,11 @@ public abstract class ServerPlayerExtender extends Player {
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key) {
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument) {
         Holder<Item> item = this.level()
             .registryAccess()
             .lookupOrThrow(Registries.ITEM)
-            .wrapAsHolder((Item) key);
+            .wrapAsHolder((Item) argument);
         return instance.itematic$get(item);
     }
 }

@@ -33,18 +33,18 @@ public class CreateFlatWorldScreenExtender implements CreateFlatWorldScreenAcces
     public static class DetailsListExtender implements DetailsListAccess {
         @Shadow
         @Final
-        CreateFlatWorldScreen field_18738;
+        CreateFlatWorldScreen this$0;
 
         @Override
         public HolderLookup.RegistryLookup<Item> itematic$items() {
-            return this.field_18738.itematic$items();
+            return this.this$0.itematic$items();
         }
 
         @Mixin(targets = "net/minecraft/client/gui/screens/CreateFlatWorldScreen$DetailsList$LayerEntry")
         public static class LayerEntryExtender {
             @Shadow
             @Final
-            CreateFlatWorldScreen.DetailsList field_18739;
+            CreateFlatWorldScreen.DetailsList this$1;
 
             @Redirect(
                 method = "renderContent",
@@ -53,9 +53,9 @@ public class CreateFlatWorldScreenExtender implements CreateFlatWorldScreenAcces
                     target = "Lnet/minecraft/client/gui/screens/CreateFlatWorldScreen$DetailsList$LayerEntry;getDisplayItem(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/item/ItemStack;"
                 )
             )
-            private ItemStack createItemStackUseRegistryEntry(@Coerce Object instance, BlockState state) {
-                HolderLookup.RegistryLookup<Item> itemLookup = this.field_18739.itematic$items();
-                return itemLookup.get(state.getBlock().itematic$asItemId())
+            private ItemStack createItemStackUseRegistryEntry(@Coerce Object instance, BlockState blockState) {
+                HolderLookup.RegistryLookup<Item> itemLookup = this.this$1.itematic$items();
+                return itemLookup.get(blockState.getBlock().itematic$asItemId())
                     .map(ItemStack::new)
                     .orElse(ItemStack.EMPTY);
             }

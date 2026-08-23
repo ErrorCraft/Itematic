@@ -26,8 +26,8 @@ public class DispenserBlockExtender {
     @WrapMethod(
         method = "getDispenseMethod"
     )
-    public DispenseItemBehavior useItemBehavior(Level level, ItemStack stack, Operation<DispenseItemBehavior> original) {
-        return behavior(stack).orElse(DEFAULT_BEHAVIOR);
+    public DispenseItemBehavior useItemBehavior(Level level, ItemStack itemStack, Operation<DispenseItemBehavior> original) {
+        return behavior(itemStack).orElse(DEFAULT_BEHAVIOR);
     }
 
     @Unique

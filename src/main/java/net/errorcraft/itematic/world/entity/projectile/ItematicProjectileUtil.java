@@ -9,7 +9,7 @@ public class ItematicProjectileUtil {
     private ItematicProjectileUtil() {}
 
     public static InteractionHand getWeaponHoldingHand(LivingEntity entity, ResourceKey<Item> item) {
-        return entity.getMainHandItem().itematic$is(item)
+        return entity.getMainHandItem().is(item)
             ? InteractionHand.MAIN_HAND
             : InteractionHand.OFF_HAND;
     }

@@ -21,8 +21,7 @@ public class FuelValuesExtender {
             method = "remove",
             at = @At(
                 value = "INVOKE",
-                target = "Lit/unimi/dsi/fastutil/objects/ObjectSortedSet;removeIf(Ljava/util/function/Predicate;)Z",
-                remap = false
+                target = "Lit/unimi/dsi/fastutil/objects/ObjectSortedSet;removeIf(Ljava/util/function/Predicate;)Z"
             )
         )
         private boolean doNotRemove(ObjectSortedSet<Item> instance, Predicate<Item> predicate) {

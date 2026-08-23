@@ -25,7 +25,7 @@ public class BeetrootSoupTestSuite {
                 beetrootSoup.getUseDuration(player),
                 () -> Assert.isTrue(
                     helper,
-                    player.getInventory().contains(stack -> stack.itematic$is(ItemIds.BOWL)),
+                    player.getInventory().contains(stack -> stack.is(ItemIds.BOWL)),
                     () -> "Expected Player to have a Bowl in their inventory"
                 )
             )

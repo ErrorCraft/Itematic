@@ -10,9 +10,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.LodestoneTracker;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +37,8 @@ public class SetItemPointerLocationItemModifier extends LootItemConditionalFunct
     }
 
     @Override
-    public LootItemFunctionType<SetItemPointerLocationItemModifier> getType() {
-        return ItematicItemModifierTypes.SET_ITEM_POINTER_LOCATION;
+    public MapCodec<? extends LootItemConditionalFunction> codec() {
+        return CODEC;
     }
 
     @Override

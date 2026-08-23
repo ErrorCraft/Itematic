@@ -53,6 +53,6 @@ public class MapExtendingRecipeExtender {
             return stack.itematic$hasBehavior(ItemBehaviorType.MAP_HOLDER);
         }
 
-        return stack.itematic$is(ItemIds.PAPER);
+        return stack.is(ItemIds.PAPER);
     }
 }

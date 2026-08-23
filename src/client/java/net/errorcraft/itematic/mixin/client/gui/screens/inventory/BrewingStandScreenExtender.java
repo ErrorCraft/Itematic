@@ -19,10 +19,10 @@ public abstract class BrewingStandScreenExtender extends AbstractContainerScreen
 
     @ModifyVariable(
         method = "renderBg",
-        ordinal = 2,
-        at = @At("STORE:FIRST")
+        at = @At("STORE:FIRST"),
+        name = "xo"
     )
-    private int useDirectLeftPos(int original) {
+    private int useDirectLeftPos(int xo) {
         return this.leftPos;
     }
 

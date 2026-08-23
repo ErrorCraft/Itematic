@@ -2,7 +2,6 @@ package net.errorcraft.itematic.mixin.world.inventory;
 
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.inventory.FurnaceFuelSlot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,10 +13,10 @@ public class FurnaceFuelSlotExtender {
         method = "isBucket",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isBucketCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.BUCKET);
+    private static boolean isBucketCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.BUCKET);
     }
 }

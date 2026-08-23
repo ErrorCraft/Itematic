@@ -20,15 +20,15 @@ public abstract class GameTestHelperExtender {
     private GameTestInfo testInfo;
 
     @Shadow
-    public abstract Vec3 absoluteVec(Vec3 pos);
+    public abstract Vec3 absoluteVec(Vec3 relativeVec);
 
     @ModifyReturnValue(
         method = "makeMockPlayer",
         at = @At("TAIL")
     )
-    private Player setPlayerData(Player original, GameType gameMode) {
+    private Player setPlayerData(Player original, GameType gameType) {
         original.setPos(this.absoluteVec(Vec3.ZERO));
-        gameMode.updatePlayerAbilities(original.getAbilities());
+        gameType.updatePlayerAbilities(original.getAbilities());
         return original;
     }
 

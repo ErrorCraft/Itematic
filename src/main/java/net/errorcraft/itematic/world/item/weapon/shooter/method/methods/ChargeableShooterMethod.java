@@ -161,7 +161,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
         shooter.shoot(serverLevel, user, hand, stack, chargedProjectiles.getItems(), power, divergence, user instanceof Player, targetOverride);
         if (user instanceof ServerPlayer player) {
             CriteriaTriggers.SHOT_CROSSBOW.trigger(player, stack);
-            player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+            player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         }
     }
 

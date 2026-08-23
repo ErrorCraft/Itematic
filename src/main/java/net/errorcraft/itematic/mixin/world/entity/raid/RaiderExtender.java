@@ -43,14 +43,14 @@ public class RaiderExtender extends PatrollingMonster {
     }
 
     @Inject(
-        method = "method_16483",
+        method = "lambda$static$0",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/raid/Raid;getOminousBannerInstance(Lnet/minecraft/core/HolderGetter;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static void setOminousBannerForLaterUse(ItemEntity itemEntity, CallbackInfoReturnable<Boolean> info) {
-        ItematicRaids.createOminousBanner(itemEntity.level());
+    private static void setOminousBannerForLaterUse(ItemEntity e, CallbackInfoReturnable<Boolean> info) {
+        ItematicRaids.createOminousBanner(e.level());
     }
 
     @Mixin(Raider.ObtainRaidLeaderBannerGoal.class)

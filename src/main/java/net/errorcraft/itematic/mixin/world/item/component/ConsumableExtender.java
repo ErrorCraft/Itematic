@@ -20,8 +20,7 @@ public class ConsumableExtender {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
-            remap = false
+            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
         )
     )
     private static Function<RecordCodecBuilder.Instance<Consumable>, ? extends App<RecordCodecBuilder.Mu<Consumable>, Consumable>> doNotUseAllFields(Function<RecordCodecBuilder.Instance<Consumable>, ? extends App<RecordCodecBuilder.Mu<Consumable>, Consumable>> builder) {

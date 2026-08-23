@@ -20,7 +20,7 @@ public class ChargedProjectilesExtender implements ChargedProjectilesAccess {
     @Override
     public boolean itematic$contains(ResourceKey<Item> item) {
         for (ItemStack projectile : this.items) {
-            if (projectile.itematic$is(item)) {
+            if (projectile.is(item)) {
                 return true;
             }
         }

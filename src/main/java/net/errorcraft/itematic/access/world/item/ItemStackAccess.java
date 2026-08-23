@@ -20,7 +20,6 @@ public interface ItemStackAccess {
         throw new AssertionError("Implemented via mixin");
     }
     default void itematic$setComponents(PatchedDataComponentMap components) {}
-    default void itematic$tryIncrement(int count) {}
     default int itematic$tryDecrement(int amount) {
         return 0;
     }
@@ -29,12 +28,6 @@ public interface ItemStackAccess {
     }
     default ItemStack itematic$transmuteCopy(Holder<Item> item, int count) {
         return ItemStack.EMPTY;
-    }
-    default ItemStack itematic$transmuteCopyIgnoreEmpty(Holder<Item> item, int count) {
-        return ItemStack.EMPTY;
-    }
-    default boolean itematic$is(ResourceKey<Item> item) {
-        return false;
     }
     default void itematic$damage(int amount, ActionContext context) {}
     default <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {

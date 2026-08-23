@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
 import net.errorcraft.itematic.references.ItemIds;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.MapCloningRecipe;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,10 +16,10 @@ public class MapCloningRecipeExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isMapCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.MAP);
+    private boolean isMapCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.MAP);
     }
 }

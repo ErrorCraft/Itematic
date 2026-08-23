@@ -37,11 +37,11 @@ public abstract class IronGolemExtender extends MobExtender {
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isIronIngotCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.IRON_INGOT);
+    private boolean isIronIngotCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.IRON_INGOT);
     }
 
     @Override

@@ -38,8 +38,8 @@ public class FireworkStarRecipeExtender {
             target = "Ljava/util/Map;containsKey(Ljava/lang/Object;)Z"
         )
     )
-    private boolean containsKeyCheckFireworkShapeModifierItemBehavior(Map<Item, FireworkExplosion.Shape> instance, Object o, @Local ItemStack stack) {
-        return stack.itematic$hasBehavior(ItemBehaviorType.FIREWORK_SHAPE_MODIFIER);
+    private boolean containsKeyCheckFireworkShapeModifierItemBehavior(Map<Item, FireworkExplosion.Shape> instance, Object o, @Local(name = "itemStack") ItemStack itemStack) {
+        return itemStack.itematic$hasBehavior(ItemBehaviorType.FIREWORK_SHAPE_MODIFIER);
     }
 
     @Redirect(
@@ -51,8 +51,8 @@ public class FireworkStarRecipeExtender {
     )
     @Nullable
     @SuppressWarnings("unchecked")
-    private <V> V getUseItemBehavior(Map<Item, FireworkExplosion.Shape> instance, Object o, @Local ItemStack input) {
-        return (V) input.itematic$getBehavior(ItemBehaviorType.FIREWORK_SHAPE_MODIFIER)
+    private <V> V getUseItemBehavior(Map<Item, FireworkExplosion.Shape> instance, Object o, @Local(name = "itemStack") ItemStack itemStack) {
+        return (V) itemStack.itematic$getBehavior(ItemBehaviorType.FIREWORK_SHAPE_MODIFIER)
             .map(FireworkShapeModifierItemBehavior::shape)
             .orElse(null);
     }
@@ -76,7 +76,7 @@ public class FireworkStarRecipeExtender {
         )
     )
     private boolean testGlowstoneDustCheckId(Ingredient instance, ItemStack input) {
-        return input.itematic$is(ItemIds.GLOWSTONE_DUST);
+        return input.is(ItemIds.GLOWSTONE_DUST);
     }
 
     @Redirect(
@@ -98,7 +98,7 @@ public class FireworkStarRecipeExtender {
         )
     )
     private boolean testDiamondCheckId(Ingredient instance, ItemStack input) {
-        return input.itematic$is(ItemIds.DIAMOND);
+        return input.is(ItemIds.DIAMOND);
     }
 
     @Redirect(
@@ -117,7 +117,7 @@ public class FireworkStarRecipeExtender {
         )
     )
     private boolean testGunpowderCheckId(Ingredient instance, ItemStack input) {
-        return input.itematic$is(ItemIds.GUNPOWDER);
+        return input.is(ItemIds.GUNPOWDER);
     }
 
     @ModifyConstant(
@@ -126,7 +126,7 @@ public class FireworkStarRecipeExtender {
             classValue = DyeItem.class
         )
     )
-    private boolean instanceOfDyeItemCheckDyeItemBehavior(Object reference, Class<DyeItem> clazz, @Local ItemStack itemStack) {
+    private boolean instanceOfDyeItemCheckDyeItemBehavior(Object reference, Class<DyeItem> clazz, @Local(name = "itemStack") ItemStack itemStack) {
         return itemStack.itematic$hasBehavior(ItemBehaviorType.DYE);
     }
 
@@ -137,8 +137,8 @@ public class FireworkStarRecipeExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfDyeItemUseItemBehavior(Object reference, Class<DyeItem> clazz, @Local ItemStack ingredient, @Share("dye") LocalRef<DyeItemBehavior> dye) {
-        Optional<DyeItemBehavior> optionalDye = ingredient.itematic$getBehavior(ItemBehaviorType.DYE);
+    private boolean instanceOfDyeItemUseItemBehavior(Object reference, Class<DyeItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("dye") LocalRef<DyeItemBehavior> dye) {
+        Optional<DyeItemBehavior> optionalDye = itemStack.itematic$getBehavior(ItemBehaviorType.DYE);
         optionalDye.ifPresent(dye::set);
         return optionalDye.isPresent();
     }
@@ -180,8 +180,8 @@ public class FireworkStarRecipeExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireworkStarUseHolder(ItemLike item, @Local(argsOnly = true) HolderLookup.Provider lookup) {
-        return lookup.lookupOrThrow(Registries.ITEM)
+    private ItemStack newItemStackForFireworkStarUseHolder(ItemLike item, @Local(name = "registries", argsOnly = true) HolderLookup.Provider registries) {
+        return registries.lookupOrThrow(Registries.ITEM)
             .get(ItemIds.FIREWORK_STAR)
             .map(ItemStack::new)
             .orElse(ItemStack.EMPTY);

@@ -27,13 +27,13 @@ import java.util.List;
 public class BundleContentsExtender implements BundleContentsAccess {
     @Shadow
     @Final
-    List<ItemStack> items;
+    private List<ItemStack> items;
 
     @Shadow
     @Final
     @Mutable
     @Nullable
-    Fraction weight;
+    private Fraction weight;
 
     @Redirect(
         method = "<init>(Ljava/util/List;)V",
@@ -43,7 +43,7 @@ public class BundleContentsExtender implements BundleContentsAccess {
         )
     )
     @Nullable
-    private static Fraction doNotCalculateOccupancyForLaterCaching(List<ItemStack> stacks) {
+    private static Fraction doNotCalculateOccupancyForLaterCaching(List<ItemStack> items) {
         return null;
     }
 
@@ -51,10 +51,8 @@ public class BundleContentsExtender implements BundleContentsAccess {
         method = "equals",
         at = @At(
             value = "INVOKE",
-            target = "Lorg/apache/commons/lang3/math/Fraction;equals(Ljava/lang/Object;)Z",
-            remap = false
-        ),
-        remap = false
+            target = "Lorg/apache/commons/lang3/math/Fraction;equals(Ljava/lang/Object;)Z"
+        )
     )
     private boolean doNotTestWeight(Fraction instance, Object obj, Operation<Boolean> original) {
         return true;
@@ -95,8 +93,7 @@ public class BundleContentsExtender implements BundleContentsAccess {
             at = @At(
                 value = "FIELD",
                 target = "Lorg/apache/commons/lang3/math/Fraction;ONE:Lorg/apache/commons/lang3/math/Fraction;",
-                opcode = Opcodes.GETSTATIC,
-                remap = false
+                opcode = Opcodes.GETSTATIC
             )
         )
         private Fraction getCapacity() {
@@ -136,8 +133,8 @@ public class BundleContentsExtender implements BundleContentsAccess {
                 target = "Lnet/minecraft/world/item/component/BundleContents;canItemBeInBundle(Lnet/minecraft/world/item/ItemStack;)Z"
             )
         )
-        private boolean checkFromDataComponent(ItemStack stack) {
-            return this.rules.canOccupy(stack);
+        private boolean checkFromDataComponent(ItemStack itemsToAdd) {
+            return this.rules.canOccupy(itemsToAdd);
         }
 
         @Inject(
@@ -148,24 +145,24 @@ public class BundleContentsExtender implements BundleContentsAccess {
             ),
             cancellable = true
         )
-        private void splitOverMultipleItemStacks(ItemStack stack, CallbackInfoReturnable<Integer> info, @Local int countToAdd) {
+        private void splitOverMultipleItemStacks(ItemStack itemsToAdd, CallbackInfoReturnable<Integer> info, @Local(name = "amountToAdd") int amountToAdd) {
             // The assumption that an overflowing item stack doesn't fit no longer applies due to data-driven occupancies
-            info.setReturnValue(countToAdd);
+            info.setReturnValue(amountToAdd);
             for (ItemStack heldStack : this.items) {
-                if (!ItemStack.isSameItemSameComponents(heldStack, stack)) {
+                if (!ItemStack.isSameItemSameComponents(heldStack, itemsToAdd)) {
                     continue;
                 }
 
-                int count = Math.min(heldStack.getMaxStackSize() - heldStack.getCount(), countToAdd);
+                int count = Math.min(heldStack.getMaxStackSize() - heldStack.getCount(), amountToAdd);
                 heldStack.grow(count);
-                stack.shrink(count);
-                countToAdd -= count;
-                if (countToAdd <= 0) {
+                itemsToAdd.shrink(count);
+                amountToAdd -= count;
+                if (amountToAdd <= 0) {
                     return;
                 }
             }
 
-            this.items.addFirst(stack.split(countToAdd));
+            this.items.addFirst(itemsToAdd.split(amountToAdd));
         }
 
         @Override
