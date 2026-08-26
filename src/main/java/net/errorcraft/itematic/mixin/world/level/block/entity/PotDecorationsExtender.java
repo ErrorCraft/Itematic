@@ -1,6 +1,8 @@
 package net.errorcraft.itematic.mixin.world.level.block.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.world.level.block.entity.PotDecorationsAccess;
 import net.errorcraft.itematic.references.ItemIds;
@@ -14,7 +16,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
@@ -26,7 +27,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,15 +60,15 @@ public abstract class PotDecorationsExtender implements PotDecorationsAccess {
     @Final
     private Optional<Holder<Item>> front;
 
-    @Redirect(
+    @WrapOperation(
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/core/DefaultedRegistry;byNameCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<Optional<Holder<Item>>> doNotUseStaticRegistry(DefaultedRegistry<Item> instance) {
-        return ExtraCodecs.optionalEmptyMap(RegistryFixedCodec.create(Registries.ITEM));
+    private static Codec<Optional<Holder<Item>>> doNotUseStaticRegistry(DefaultedRegistry<Item> instance, Operation<Codec<Item>> original) {
+        return ExtraCodecs.optionalEmptyMap(Item.CODEC);
     }
 
     @ModifyArg(
@@ -95,14 +95,14 @@ public abstract class PotDecorationsExtender implements PotDecorationsAccess {
         return PotDecorations::itematic$optionalEntries;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/network/codec/ByteBufCodecs;registry(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/network/codec/StreamCodec;"
         )
     )
-    private static StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<Item>>> doNotUseValueStreamCodec(ResourceKey<Registry<Item>> registryKey) {
+    private static StreamCodec<RegistryFriendlyByteBuf, Optional<Holder<Item>>> doNotUseValueStreamCodec(ResourceKey<? extends Registry<Item>> registryKey, Operation<StreamCodec<RegistryFriendlyByteBuf, Item>> original) {
         return ByteBufCodecs.holderRegistry(registryKey).apply(ByteBufCodecs::optional);
     }
 
@@ -143,36 +143,36 @@ public abstract class PotDecorationsExtender implements PotDecorationsAccess {
         return original.map(Holder::value);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "getItem",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/List;get(I)Ljava/lang/Object;"
         )
     )
-    private static <T> @Nullable T getItemReturnNull(List<T> instance, int index) {
+    private static <E> @Nullable E getItemReturnNull(List<E> instance, int index, Operation<E> original) {
         return null;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "getItem",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/Optional;of(Ljava/lang/Object;)Ljava/util/Optional;"
         )
     )
-    private static <T> Optional<Holder<Item>> optionalUseValueFromList(T value, List<Optional<Holder<Item>>> sherds, int i) {
+    private static <T> Optional<Holder<Item>> optionalUseValueFromList(T value, Operation<Optional<T>> original, List<Optional<Holder<Item>>> sherds, int i) {
         return sherds.get(i);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "addToTooltip",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/entity/PotDecorations;addSideDetailsToTooltip(Ljava/util/function/Consumer;Ljava/util/Optional;)V"
         )
     )
-    private void appendSideDetailsToTooltipUseHolder(Consumer<Component> consumer, Optional<Holder<Item>> side) {
+    private void appendSideDetailsToTooltipUseHolder(Consumer<Component> consumer, Optional<Holder<Item>> side, Operation<Void> original) {
         side.map(ItemStack::new)
             .map(ItemStack::getHoverName)
             .map(Component::plainCopy)

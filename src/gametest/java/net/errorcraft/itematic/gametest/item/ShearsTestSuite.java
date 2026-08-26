@@ -2,6 +2,7 @@ package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -30,7 +31,7 @@ public class ShearsTestSuite {
         Pig target = helper.spawn(EntityType.PIG, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.SADDLE, level.itematic$createStack(ItemIds.SADDLE));
         helper.succeedIf(() -> {
-            InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
+            InteractionResult result = TestUtil.interactWithEntity(target, player);
             Assert.isTrue(
                 helper,
                 result.consumesAction(),
@@ -63,7 +64,7 @@ public class ShearsTestSuite {
         Horse target = helper.spawn(EntityType.HORSE, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.SADDLE, level.itematic$createStack(ItemIds.SADDLE));
         helper.succeedIf(() -> {
-            InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
+            InteractionResult result = TestUtil.interactWithEntity(target, player);
             Assert.isTrue(
                 helper,
                 result.consumesAction(),
@@ -96,7 +97,7 @@ public class ShearsTestSuite {
         Horse target = helper.spawn(EntityType.HORSE, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.IRON_HORSE_ARMOR));
         helper.succeedIf(() -> {
-            InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
+            InteractionResult result = TestUtil.interactWithEntity(target, player);
             Assert.isTrue(
                 helper,
                 result.consumesAction(),
@@ -130,7 +131,7 @@ public class ShearsTestSuite {
         target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.WOLF_ARMOR));
         target.setOwner(player);
         helper.succeedIf(() -> {
-            InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
+            InteractionResult result = TestUtil.interactWithEntity(target, player);
             Assert.isTrue(
                 helper,
                 result.consumesAction(),
@@ -163,7 +164,7 @@ public class ShearsTestSuite {
         Wolf target = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.WOLF_ARMOR));
         helper.succeedIf(() -> {
-            InteractionResult result = target.interact(player, InteractionHand.MAIN_HAND);
+            InteractionResult result = TestUtil.interactWithEntity(target, player);
             Assert.isFalse(
                 helper,
                 result.consumesAction(),

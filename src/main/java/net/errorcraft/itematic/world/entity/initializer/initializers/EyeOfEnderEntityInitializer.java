@@ -3,6 +3,7 @@ package net.errorcraft.itematic.world.entity.initializer.initializers;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -48,7 +49,12 @@ public class EyeOfEnderEntityInitializer implements EntityInitializer<EyeOfEnder
             return null;
         }
 
-        EyeOfEnder entity = this.createEntity(level, pos, context.get(LootContextParams.TOOL), strongholdPos);
+        EyeOfEnder entity = this.createEntity(
+            level,
+            pos,
+            context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance),
+            strongholdPos
+        );
         Entity user = context.get(LootContextParams.THIS_ENTITY);
         level.gameEvent(GameEvent.PROJECTILE_SHOOT, pos, GameEvent.Context.of(user));
         if (user instanceof ServerPlayer serverPlayer) {

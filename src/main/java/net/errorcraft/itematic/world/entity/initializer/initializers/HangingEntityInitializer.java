@@ -3,6 +3,7 @@ package net.errorcraft.itematic.world.entity.initializer.initializers;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -49,7 +50,7 @@ public record HangingEntityInitializer<T extends HangingEntity>(Creator<T> creat
         }
 
         Player player = context.get(LootContextParams.THIS_ENTITY, Player.class);
-        ItemStack usedStack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        ItemStack usedStack = context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY);
         return player == null || player.mayUseItemAt(pos, facing, usedStack);
     }
 

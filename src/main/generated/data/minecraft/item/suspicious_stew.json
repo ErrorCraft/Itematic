@@ -10,8 +10,7 @@
     "minecraft:useable": {
       "animation": "eat",
       "remainder": {
-        "id": "minecraft:bowl",
-        "count": 1
+        "id": "minecraft:bowl"
       },
       "ticks": {
         "type": "minecraft:constant",

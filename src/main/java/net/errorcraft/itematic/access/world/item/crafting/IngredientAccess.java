@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.access.world.item.crafting;
 
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 
 import java.util.Optional;
 
 public interface IngredientAccess {
-    default Optional<ItemStack> itematic$remainder() {
+    default Optional<ItemStackTemplate> itematic$remainder() {
         return Optional.empty();
     }
-    default void itematic$setRemainder(Optional<ItemStack> remainder) {}
+    default void itematic$setRemainder(Optional<ItemStackTemplate> remainder) {}
 }

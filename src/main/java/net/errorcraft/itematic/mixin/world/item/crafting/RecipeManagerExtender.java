@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.world.item.crafting;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -15,7 +16,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
@@ -26,18 +26,17 @@ public class RecipeManagerExtender {
     private HolderLookup.Provider registries;
 
     @Unique
-    private static HolderLookup.RegistryLookup<Item> items;
+    private static final ScopedValue<HolderLookup.RegistryLookup<Item>> ITEMS = ScopedValue.newInstance();
 
     @WrapMethod(
         method = "finalizeRecipeLoading"
     )
-    private void temporarilyStoreItemLookup(FeatureFlagSet enabledFlags, Operation<Void> original) {
-        items = this.registries.lookupOrThrow(Registries.ITEM);
-        original.call(enabledFlags);
-        items = null;
+    private void passItemLookup(FeatureFlagSet enabledFlags, Operation<Void> original) {
+        ScopedValue.where(ITEMS, this.registries.lookupOrThrow(Registries.ITEM))
+            .run(() -> original.call(enabledFlags));
     }
 
-    @Redirect(
+    @WrapOperation(
         method = {
             "lambda$finalizeRecipeLoading$1",
             "unpackRecipeInfo"
@@ -47,18 +46,18 @@ public class RecipeManagerExtender {
             target = "Lnet/minecraft/world/item/crafting/Recipe;placementInfo()Lnet/minecraft/world/item/crafting/PlacementInfo;"
         )
     )
-    private static PlacementInfo placementInfoUseDynamicRegistry(Recipe<?> instance) {
-        return instance.itematic$placementInfo(items);
+    private static PlacementInfo placementInfoUseDynamicRegistry(Recipe<?> instance, Operation<PlacementInfo> original) {
+        return instance.itematic$placementInfo(ITEMS.get());
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "unpackRecipeInfo",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/crafting/Recipe;display()Ljava/util/List;"
         )
     )
-    private static List<RecipeDisplay> displayUseDynamicRegistry(Recipe<?> instance) {
-        return instance.itematic$display(items);
+    private static List<RecipeDisplay> displayUseDynamicRegistry(Recipe<?> instance, Operation<List<RecipeDisplay>> original) {
+        return instance.itematic$display(ITEMS.get());
     }
 }

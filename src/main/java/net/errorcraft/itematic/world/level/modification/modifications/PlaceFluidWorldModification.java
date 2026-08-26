@@ -22,7 +22,7 @@ public record PlaceFluidWorldModification(Holder<Fluid> fluid, Holder<SoundEvent
     public static final MapCodec<PlaceFluidWorldModification> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         RegistryFixedCodec.create(Registries.FLUID).fieldOf("fluid").forGetter(PlaceFluidWorldModification::fluid),
         SoundEvent.CODEC.fieldOf("place_sound").forGetter(PlaceFluidWorldModification::placeSound),
-        RegistryFixedCodec.create(Registries.ITEM).fieldOf("transforms_into").forGetter(PlaceFluidWorldModification::transformsInto)
+        Item.CODEC.fieldOf("transforms_into").forGetter(PlaceFluidWorldModification::transformsInto)
     ).apply(instance, PlaceFluidWorldModification::new));
 
     @Override

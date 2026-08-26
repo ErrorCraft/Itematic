@@ -61,7 +61,7 @@ public class FluidDrainer {
     }
 
     private void applyPlayerEffects(Player player, BucketPickup fluidDrainable, ItemStack drainedItemStack) {
-        ItemStack stack = this.context.get(LootContextParams.TOOL);
+        ItemStack stack = this.context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance);
         if (!ItemStacks.isNullOrEmpty(stack)) {
             player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         }

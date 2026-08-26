@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.world.item.crafting;
 import net.errorcraft.itematic.access.world.item.crafting.ShapedRecipePatternAccess;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
@@ -45,7 +46,8 @@ public abstract class ShapedRecipePatternExtender implements ShapedRecipePattern
                     x + y * this.width;
                 this.ingredients.get(index)
                     .flatMap(Ingredient::itematic$remainder)
-                    .ifPresent(remainder -> remainders.set(index, remainder.copy()));
+                    .map(ItemStackTemplate::create)
+                    .ifPresent(remainder -> remainders.set(index, remainder));
             }
         }
 

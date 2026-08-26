@@ -29,7 +29,7 @@ public class LeadTestSuite {
         Horse horse = TestUtil.createEntityAt(helper, EntityType.HORSE, PLACED_ENTITY_POSITION, entity -> {
         });
         helper.succeedIf(() -> {
-            InteractionResult result = horse.interact(player, InteractionHand.MAIN_HAND);
+            InteractionResult result = TestUtil.interactWithEntity(horse, player);
             Assert.isTrue(
                 helper,
                 result.consumesAction(),
@@ -53,7 +53,7 @@ public class LeadTestSuite {
         Boat boat = TestUtil.createEntityAt(helper, EntityType.OAK_BOAT, PLACED_ENTITY_POSITION, entity -> {
         });
         helper.succeedIf(() -> {
-            InteractionResult result = boat.interact(player, InteractionHand.MAIN_HAND);
+            InteractionResult result = TestUtil.interactWithEntity(boat, player);
             Assert.isTrue(
                 helper,
                 result.consumesAction(),

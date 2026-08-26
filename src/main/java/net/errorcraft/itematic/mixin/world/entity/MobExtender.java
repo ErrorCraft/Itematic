@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.world.entity;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -35,7 +36,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.Map;
@@ -91,7 +91,7 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
         super(type, level);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "checkAndHandleImportantInteractions",
         at = @At(
             value = "INVOKE",
@@ -99,7 +99,7 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
         )
     )
     @Nullable
-    private Item getItemUseNull(ItemStack instance) {
+    private Item getItemUseNull(ItemStack instance, Operation<Item> original) {
         return null;
     }
 
@@ -116,18 +116,18 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
         return optionalSpawnEgg.isPresent();
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "checkAndHandleImportantInteractions",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/SpawnEggItem;spawnOffspringFromSpawnEgg(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"
         )
     )
-    private Optional<Mob> spawnOffspringUseItemBehavior(SpawnEggItem instance, Player player, Mob parent, EntityType<? extends Mob> type, ServerLevel level, Vec3 pos, ItemStack spawnEggStack, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
+    private Optional<Mob> spawnOffspringUseItemBehavior(Player player, Mob parent, EntityType<? extends Mob> type, ServerLevel level, Vec3 pos, ItemStack spawnEggStack, Operation<Optional<Mob>> original, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
         return spawnEgg.get().spawnBaby(player, parent, type, level, pos, spawnEggStack);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "checkAndHandleImportantInteractions",
         at = @At(
             value = "INVOKE",
@@ -135,11 +135,11 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
             ordinal = 0
         )
     )
-    private boolean isLeadCheckId(ItemStack instance, Object o) {
+    private boolean isLeadCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
         return instance.is(ItemIds.LEAD);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "INVOKE",
@@ -147,7 +147,7 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
         )
     )
     @Nullable
-    private Item getEquipmentForSlotUseId(EquipmentSlot slot, int type, @Share("item") LocalRef<Holder<Item>> itemReference) {
+    private Item getEquipmentForSlotUseId(EquipmentSlot slot, int type, Operation<Item> original, @Share("item") LocalRef<Holder<Item>> itemReference) {
         ResourceKey<Item> itemId = LEVEL_TO_EQUIPMENT.get(type).get(slot);
         Optional<Holder.Reference<Item>> item = this.level().itematic$itemAccess().get(itemId);
         if (item.isEmpty()) {
@@ -158,18 +158,18 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
         return item.get().value();
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseHolder(ItemLike item, @Share("item") LocalRef<Holder<Item>> itemReference) {
+    private ItemStack newItemStackUseHolder(ItemLike item, Operation<ItemStack> original, @Share("item") LocalRef<Holder<Item>> itemReference) {
         return new ItemStack(itemReference.get());
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "doHurtTarget",
         at = @At(
             value = "INVOKE",
@@ -184,7 +184,7 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
             )
         )
     )
-    private double useCustomAttackDamage(Mob instance, Holder<Attribute> attribute) {
+    private double useCustomAttackDamage(Mob instance, Holder<Attribute> holder, Operation<Double> original) {
         return this.itematic$getAttackDamage();
     }
 

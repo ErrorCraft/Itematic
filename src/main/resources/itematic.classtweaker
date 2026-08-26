@@ -53,8 +53,8 @@ inject-interface    net/minecraft/world/inventory/tooltip/BundleTooltip    net/e
 inject-interface    net/minecraft/world/item/BrushItem    net/errorcraft/itematic/access/world/item/BrushItemAccess
 inject-interface    net/minecraft/world/item/CreativeModeTab    net/errorcraft/itematic/access/world/item/CreativeModeTabAccess
 inject-interface    net/minecraft/world/item/CreativeModeTab$TabVisibility    net/minecraft/util/StringRepresentable
-inject-interface    net/minecraft/world/item/DyeColor    net/errorcraft/itematic/access/world/item/DyeColorAccess
 inject-interface    net/minecraft/world/item/Item    net/errorcraft/itematic/access/world/item/ItemAccess
+inject-interface    net/minecraft/world/item/ItemInstance    net/errorcraft/itematic/access/world/item/ItemInstanceAccess
 inject-interface    net/minecraft/world/item/ItemStack    net/errorcraft/itematic/access/world/item/ItemStackAccess
 inject-interface    net/minecraft/world/item/component/BundleContents    net/errorcraft/itematic/access/world/item/component/BundleContentsAccess
 inject-interface    net/minecraft/world/item/component/BundleContents$Mutable    net/errorcraft/itematic/access/world/item/component/BundleContentsAccess$MutableAccess

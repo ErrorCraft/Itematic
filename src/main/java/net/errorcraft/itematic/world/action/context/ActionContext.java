@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.action.context;
 
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
@@ -80,6 +81,15 @@ public class ActionContext {
         return this.parameters.getOrDefault(parameter, defaultValue);
     }
 
+    public <T, U> U getOrDefault(ContextKey<T> parameter, Function<T, U> mapper, U defaultValue) {
+        T value = this.get(parameter);
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return mapper.apply(value);
+    }
+
     public ItemStack resultStack() {
         return this.stackExchanger.result();
     }
@@ -140,7 +150,7 @@ public class ActionContext {
                 this.level,
                 entity instanceof Player player ? player : null,
                 this.getOrDefault(ItematicContextKeys.HAND, InteractionHand.MAIN_HAND),
-                this.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY),
+                this.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY),
                 new BlockHitResult(
                     pos,
                     side,
@@ -155,7 +165,7 @@ public class ActionContext {
             this.level,
             blockPos,
             side,
-            this.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY),
+            this.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY),
             useSide
         );
     }

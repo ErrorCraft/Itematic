@@ -6,27 +6,28 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 
-public record ExchangeItemAction(ItemStack item, boolean decrementCount) implements Action<ExchangeItemAction> {
+public record ExchangeItemAction(ItemStackTemplate item, boolean decrementCount) implements Action<ExchangeItemAction> {
     public static final MapCodec<ExchangeItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItemStack.CODEC.fieldOf("item").forGetter(ExchangeItemAction::item),
+        ItemStackTemplate.CODEC.fieldOf("item").forGetter(ExchangeItemAction::item),
         Codec.BOOL.optionalFieldOf("decrement_count", true).forGetter(ExchangeItemAction::decrementCount)
     ).apply(instance, ExchangeItemAction::new));
 
     public static ExchangeItemAction of(Holder<Item> item) {
-        return new ExchangeItemAction(new ItemStack(item), true);
+        return new ExchangeItemAction(ItemStackTemplates.of(item), true);
     }
 
     public static ExchangeItemAction ofNoDecrement(Holder<Item> item) {
-        return new ExchangeItemAction(new ItemStack(item), false);
+        return new ExchangeItemAction(ItemStackTemplates.of(item), false);
     }
 
     public static ExchangeItemAction of(Holder<Item> item, DataComponentPatch components) {
-        return new ExchangeItemAction(new ItemStack(item, 1, components), true);
+        return new ExchangeItemAction(ItemStackTemplates.of(item, components), true);
     }
 
     @Override
@@ -40,7 +41,7 @@ public record ExchangeItemAction(ItemStack item, boolean decrementCount) impleme
             context.resultStack().shrink(1);
         }
 
-        context.exchangeStack(this.item.copy());
+        context.exchangeStack(this.item.create());
         return true;
     }
 }

@@ -4,6 +4,7 @@ import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.tags.ItemGroupItemTags;
 import net.errorcraft.itematic.world.entity.raid.ItematicRaids;
+import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.errorcraft.itematic.world.item.group.entry.entries.EnchantmentItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.entries.InstrumentItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.entries.PaintingVariantItemGroupEntry;
@@ -23,7 +24,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.PaintingVariantTags;
 import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.component.OminousBottleAmplifier;
 import net.minecraft.world.level.block.LightBlock;
@@ -186,7 +187,10 @@ public class ItemGroupEntryProviders {
             .add(ItemGroupItemTags.BEDS)
             .add(ItemGroupItemTags.CANDLES)
             .add(ItemGroupItemTags.BANNERS)
-            .add(StackItemGroupEntry.fromStack(ItematicRaids.getOminousBanner(items, bannerPatterns)))
+            .add(ItematicRaids.ominousBanner(
+                items.getOrThrow(ItemIds.WHITE_BANNER),
+                bannerPatterns
+            ))
             .add(ItemGroupItemTags.HEADS)
             .add(items.getOrThrow(ItemIds.DRAGON_EGG))
             .add(items.getOrThrow(ItemIds.END_PORTAL_FRAME))
@@ -492,16 +496,16 @@ public class ItemGroupEntryProviders {
             .build()
         );
         registerable.register(OP_BLOCKS, ItemGroupEntryProvider.builder()
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.COMMAND_BLOCK)))
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.CHAIN_COMMAND_BLOCK)))
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.REPEATING_COMMAND_BLOCK)))
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.COMMAND_BLOCK_MINECART)))
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.JIGSAW)))
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.STRUCTURE_BLOCK)))
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.STRUCTURE_VOID)))
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.BARRIER)))
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.DEBUG_STICK)))
-            .add(ItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.TEST_INSTANCE_BLOCK)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.COMMAND_BLOCK)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.CHAIN_COMMAND_BLOCK)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.REPEATING_COMMAND_BLOCK)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.COMMAND_BLOCK_MINECART)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.JIGSAW)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.STRUCTURE_BLOCK)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.STRUCTURE_VOID)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.BARRIER)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.DEBUG_STICK)))
+            .add(StackItemGroupEntry.requiresPermissions(items.getOrThrow(ItemIds.TEST_INSTANCE_BLOCK)))
             .add(testBlocks(items.getOrThrow(ItemIds.TEST_BLOCK)))
             .add(lightBlocks(items.getOrThrow(ItemIds.LIGHT)))
             .add(PaintingVariantItemGroupEntry.unexpected(items.getOrThrow(ItemIds.PAINTING), PaintingVariantTags.PLACEABLE))
@@ -516,7 +520,7 @@ public class ItemGroupEntryProviders {
     private static ItemGroupEntry<?>[] flightDuration(Holder<Item> item) {
         List<ItemGroupEntry<?>> entries = new ArrayList<>();
         for (byte flight : FireworkRocketItem.CRAFTABLE_DURATIONS) {
-            entries.add(ItemGroupEntry.simple(
+            entries.add(new StackItemGroupEntry(
                 item,
                 DataComponentPatch.builder()
                     .set(DataComponents.FIREWORKS, new Fireworks(flight, List.of()))
@@ -530,12 +534,16 @@ public class ItemGroupEntryProviders {
     private static ItemGroupEntry<?>[] testBlocks(Holder<Item> item) {
         List<ItemGroupEntry<?>> entries = new ArrayList<>(TestBlockMode.values().length);
         for (TestBlockMode mode : TestBlockMode.values()) {
-            entries.add(StackItemGroupEntry.fromStack(
-                TestBlock.setModeOnStack(
-                    new ItemStack(item),
-                    mode
-                ),
-                true
+            entries.add(StackItemGroupEntry.requiresPermissions(
+                ItemStackTemplates.of(
+                    item,
+                    DataComponentPatch.builder()
+                        .set(
+                            DataComponents.BLOCK_STATE,
+                            BlockItemStateProperties.EMPTY.with(TestBlock.MODE, mode)
+                        )
+                        .build()
+                )
             ));
         }
 
@@ -544,13 +552,17 @@ public class ItemGroupEntryProviders {
 
     private static ItemGroupEntry<?>[] lightBlocks(Holder<Item> item) {
         List<ItemGroupEntry<?>> entries = new ArrayList<>(LightBlock.MAX_LEVEL);
-        for (int level = LightBlock.MAX_LEVEL; level >= 0; --level) {
-            entries.add(StackItemGroupEntry.fromStack(
-                LightBlock.setLightOnStack(
-                    new ItemStack(item),
-                    level
-                ),
-                true
+        for (int level = LightBlock.MAX_LEVEL; level >= 0; level--) {
+            entries.add(StackItemGroupEntry.requiresPermissions(
+                ItemStackTemplates.of(
+                    item,
+                    DataComponentPatch.builder()
+                        .set(
+                            DataComponents.BLOCK_STATE,
+                            BlockItemStateProperties.EMPTY.with(LightBlock.LEVEL, level)
+                        )
+                        .build()
+                )
             ));
         }
 
@@ -560,9 +572,12 @@ public class ItemGroupEntryProviders {
     private static ItemGroupEntry<?>[] ominousBottles(Holder<Item> item) {
         List<ItemGroupEntry<?>> entries = new ArrayList<>(OminousBottleAmplifier.MAX_AMPLIFIER - OminousBottleAmplifier.MIN_AMPLIFIER + 1);
         for (int amplifier = OminousBottleAmplifier.MIN_AMPLIFIER; amplifier <= OminousBottleAmplifier.MAX_AMPLIFIER; amplifier++) {
-            ItemStack stack = new ItemStack(item);
-            stack.set(DataComponents.OMINOUS_BOTTLE_AMPLIFIER, new OminousBottleAmplifier(amplifier));
-            entries.add(StackItemGroupEntry.fromStack(stack));
+            entries.add(new StackItemGroupEntry(
+                item,
+                DataComponentPatch.builder()
+                    .set(DataComponents.OMINOUS_BOTTLE_AMPLIFIER, new OminousBottleAmplifier(amplifier))
+                    .build()
+            ));
         }
 
         return entries.toArray(ItemGroupEntry[]::new);

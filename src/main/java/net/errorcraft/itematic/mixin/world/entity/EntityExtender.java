@@ -22,7 +22,6 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Entity.class)
@@ -31,7 +30,7 @@ public abstract class EntityExtender implements EntityAccess {
     @Nullable
     public abstract ItemEntity spawnAtLocation(ServerLevel level, ItemStack itemStack);
 
-    @Redirect(
+    @WrapOperation(
         method = "interact",
         at = @At(
             value = "INVOKE",
@@ -49,11 +48,11 @@ public abstract class EntityExtender implements EntityAccess {
             )
         )
     )
-    private boolean isShearsCheckId(ItemStack instance, Object o) {
+    private boolean isShearsCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
         return instance.is(ItemIds.SHEARS);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "interact",
         at = @At(
             value = "INVOKE",
@@ -68,13 +67,13 @@ public abstract class EntityExtender implements EntityAccess {
             )
         )
     )
-    private boolean isLeadCheckId(ItemStack instance, Object o) {
+    private boolean isLeadCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
         return instance.is(ItemIds.LEAD);
     }
 
-    @Definition(id = "ServerPlayerEntity", type = ServerPlayer.class)
+    @Definition(id = "ServerPlayer", type = ServerPlayer.class)
     @Definition(id = "player", local = @Local(type = Player.class))
-    @Expression("(ServerPlayerEntity) player")
+    @Expression("(ServerPlayer) player")
     @WrapOperation(
         method = "attemptToShearEquipment",
         at = @At("MIXINEXTRAS:EXPRESSION")

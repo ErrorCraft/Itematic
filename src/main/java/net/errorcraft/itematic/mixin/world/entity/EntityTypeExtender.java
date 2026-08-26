@@ -18,6 +18,7 @@ import net.errorcraft.itematic.world.entity.initializer.initializers.MinecartEnt
 import net.errorcraft.itematic.world.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.world.entity.initializer.initializers.ThrownBallEntityInitializer;
 import net.errorcraft.itematic.world.entity.initializer.initializers.ThrownTridentEntityInitializer;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -474,7 +475,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     @Unique
     @Nullable
     private static <T extends Entity> Consumer<T> copier(ActionContext context, @Nullable EntitySpawnCallback callback, boolean allowItemData) {
-        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY);
         if (!allowItemData || stack.isEmpty()) {
             return callback == null ? null : entity -> callback.accept(entity, stack);
         }

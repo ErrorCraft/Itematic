@@ -75,7 +75,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.EntityItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkShapeModifierItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
@@ -168,7 +167,6 @@ import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.Item;
@@ -184,7 +182,6 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.Consumables;
-import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.item.component.Tool;
@@ -4438,7 +4435,6 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
             this.registerable.register(ItemIds.WARPED_SHELF, create(
@@ -4446,7 +4442,13 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.GOLDEN_DANDELION, create(
+                ItemDisplay.Builder.forBlock(ItemIds.GOLDEN_DANDELION).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GOLDEN_DANDELION)))
                     .build()
             ));
         }
@@ -10731,9 +10733,7 @@ public class Items {
                         DataComponentPatch.builder()
                             .set(
                                 DataComponents.CHICKEN_VARIANT,
-                                new EitherHolder<>(
-                                    this.chickenVariants.getOrThrow(ChickenVariants.TEMPERATE)
-                                )
+                                this.chickenVariants.getOrThrow(ChickenVariants.TEMPERATE)
                             )
                             .build()
                     ))
@@ -10750,9 +10750,7 @@ public class Items {
                         DataComponentPatch.builder()
                             .set(
                                 DataComponents.CHICKEN_VARIANT,
-                                new EitherHolder<>(
-                                    this.chickenVariants.getOrThrow(ChickenVariants.COLD)
-                                )
+                                this.chickenVariants.getOrThrow(ChickenVariants.COLD)
                             )
                             .build()
                     ))
@@ -10769,9 +10767,7 @@ public class Items {
                         DataComponentPatch.builder()
                             .set(
                                 DataComponents.CHICKEN_VARIANT,
-                                new EitherHolder<>(
-                                    this.chickenVariants.getOrThrow(ChickenVariants.WARM)
-                                )
+                                this.chickenVariants.getOrThrow(ChickenVariants.WARM)
                             )
                             .build()
                     ))
@@ -10845,7 +10841,6 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.FIRE_CHARGE).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(FireworkShapeModifierItemBehavior.of(FireworkExplosion.Shape.LARGE_BALL))
                     .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.SMALL_FIREBALL)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_CHARGE)))
                     .build(),
@@ -12069,7 +12064,6 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.FEATHER).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(FireworkShapeModifierItemBehavior.of(FireworkExplosion.Shape.BURST))
                     .build()
             ));
             this.registerable.register(ItemIds.GUNPOWDER, create(
@@ -12391,7 +12385,6 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.GOLD_NUGGET).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(FireworkShapeModifierItemBehavior.of(FireworkExplosion.Shape.STAR))
                     .build()
             ));
             this.registerable.register(ItemIds.GLASS_BOTTLE, create(

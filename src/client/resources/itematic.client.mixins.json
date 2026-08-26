@@ -43,6 +43,7 @@
     "gui.screens.worldselection.PresetFlatWorldScreenExtender$PresetsListExtender$EntryExtender",
     "multiplayer.ClientLevelExtender",
     "multiplayer.ClientPacketListenerExtender",
+    "particle.BreakingItemParticleExtender$CobwebProviderExtender",
     "particle.BreakingItemParticleExtender$SlimeProviderExtender",
     "particle.BreakingItemParticleExtender$SnowballProviderExtender",
     "player.AbstractClientPlayerExtender",

@@ -5,7 +5,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.world.item.crafting.IngredientAccess;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Mixin(Ingredient.class)
 public class IngredientExtender implements IngredientAccess {
     @Unique
-    private Optional<ItemStack> remainder = Optional.empty();
+    private Optional<ItemStackTemplate> remainder = Optional.empty();
 
     @ModifyExpressionValue(
         method = "<clinit>",
@@ -29,24 +29,24 @@ public class IngredientExtender implements IngredientAccess {
     private static Codec<Ingredient> addRemainder(Codec<Ingredient> original) {
         Codec<Ingredient> fullCodec = RecordCodecBuilder.create(instance -> instance.group(
             original.fieldOf("items").forGetter(Function.identity()),
-            ItemStack.CODEC.optionalFieldOf("remainder").forGetter(Ingredient::itematic$remainder)
+            ItemStackTemplate.CODEC.optionalFieldOf("remainder").forGetter(Ingredient::itematic$remainder)
         ).apply(instance, IngredientExtender::setRemainder));
         return Codec.either(original, fullCodec)
             .xmap(Either::unwrap, IngredientExtender::wrap);
     }
 
     @Override
-    public Optional<ItemStack> itematic$remainder() {
+    public Optional<ItemStackTemplate> itematic$remainder() {
         return this.remainder;
     }
 
     @Override
-    public void itematic$setRemainder(Optional<ItemStack> remainder) {
+    public void itematic$setRemainder(Optional<ItemStackTemplate> remainder) {
         this.remainder = remainder;
     }
 
     @Unique
-    private static Ingredient setRemainder(Ingredient ingredient, Optional<ItemStack> remainder) {
+    private static Ingredient setRemainder(Ingredient ingredient, Optional<ItemStackTemplate> remainder) {
         ingredient.itematic$setRemainder(remainder);
         return ingredient;
     }

@@ -1400,6 +1400,7 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(ItemIds.BAKED_POTATO)
             .add(ItemIds.POISONOUS_POTATO)
             .add(ItemIds.BEETROOT)
+            .add(ItemIds.GOLDEN_DANDELION)
             .add(ItemIds.DRIED_KELP)
             .add(ItemIds.BEEF)
             .add(ItemIds.COOKED_BEEF)

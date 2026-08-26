@@ -23,6 +23,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.Level;
@@ -55,12 +56,12 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
         return new Builder(entity);
     }
 
-    public EntityType<?> entityType(ItemStack stack) {
+    public EntityType<?> entityType(ItemInstance item) {
         if (!this.allowItemData) {
             return this.entity.value();
         }
 
-        TypedEntityData<EntityType<?>> entityData = stack.get(DataComponents.ENTITY_DATA);
+        TypedEntityData<EntityType<?>> entityData = item.get(DataComponents.ENTITY_DATA);
         if (entityData != null) {
             return entityData.type();
         }

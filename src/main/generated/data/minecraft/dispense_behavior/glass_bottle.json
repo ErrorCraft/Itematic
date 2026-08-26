@@ -16,8 +16,7 @@
               "action": {
                 "type": "minecraft:exchange_item",
                 "item": {
-                  "id": "minecraft:honey_bottle",
-                  "count": 1
+                  "id": "minecraft:honey_bottle"
                 }
               }
             }

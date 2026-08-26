@@ -3,6 +3,7 @@ package net.errorcraft.itematic.world.level.material;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
@@ -43,7 +44,7 @@ public class FluidUtil {
             player.mayUseItemAt(
                 pos.relative(direction),
                 direction,
-                context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
+                context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY)
             );
     }
 }

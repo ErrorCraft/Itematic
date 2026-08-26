@@ -1,41 +1,56 @@
 package net.errorcraft.itematic.mixin.client.particle;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BreakingItemParticle;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 public class BreakingItemParticleExtender {
-    @Mixin(BreakingItemParticle.SnowballProvider.class)
-    public static class SnowballProviderExtender {
-        @Redirect(
+    @Mixin(BreakingItemParticle.SlimeProvider.class)
+    public static class SlimeProviderExtender {
+        @WrapOperation(
             method = "createParticle(Lnet/minecraft/core/particles/SimpleParticleType;Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDDLnet/minecraft/util/RandomSource;)Lnet/minecraft/client/particle/Particle;",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
+                target = "(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/item/ItemStackTemplate;"
             )
         )
-        private ItemStack newItemStackForSnowballUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) ClientLevel level) {
-            return level.itematic$createStack(ItemIds.SNOWBALL);
+        private ItemStackTemplate newItemStackTemplateForSlimeBallUseCreateStackTemplate(Item item, Operation<ItemStackTemplate> original, @Local(name = "level", argsOnly = true) ClientLevel level) {
+            return level.itematic$createStackTemplate(ItemIds.SLIME_BALL);
         }
     }
 
-    @Mixin(BreakingItemParticle.SlimeProvider.class)
-    public static class SlimeProviderExtender {
-        @Redirect(
+    @Mixin(BreakingItemParticle.CobwebProvider.class)
+    public static class CobwebProviderExtender {
+        @WrapOperation(
             method = "createParticle(Lnet/minecraft/core/particles/SimpleParticleType;Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDDLnet/minecraft/util/RandomSource;)Lnet/minecraft/client/particle/Particle;",
             at = @At(
                 value = "NEW",
-                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
+                target = "(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/item/ItemStackTemplate;"
             )
         )
-        private ItemStack newItemStackForSlimeBallUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) ClientLevel level) {
-            return level.itematic$createStack(ItemIds.SLIME_BALL);
+        private ItemStackTemplate newItemStackTemplateForCobwebUseCreateStackTemplate(Item item, Operation<ItemStackTemplate> original, @Local(name = "level", argsOnly = true) ClientLevel level) {
+            return level.itematic$createStackTemplate(ItemIds.COBWEB);
+        }
+    }
+
+    @Mixin(BreakingItemParticle.SnowballProvider.class)
+    public static class SnowballProviderExtender {
+        @WrapOperation(
+            method = "createParticle(Lnet/minecraft/core/particles/SimpleParticleType;Lnet/minecraft/client/multiplayer/ClientLevel;DDDDDDLnet/minecraft/util/RandomSource;)Lnet/minecraft/client/particle/Particle;",
+            at = @At(
+                value = "NEW",
+                target = "(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/item/ItemStackTemplate;"
+            )
+        )
+        private ItemStackTemplate newItemStackTemplateForSnowballUseCreateStackTemplate(Item item, Operation<ItemStackTemplate> original, @Local(name = "level", argsOnly = true) ClientLevel level) {
+            return level.itematic$createStackTemplate(ItemIds.SNOWBALL);
         }
     }
 }

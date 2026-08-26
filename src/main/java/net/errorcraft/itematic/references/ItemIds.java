@@ -236,6 +236,7 @@ public class ItemIds {
     public static final ResourceKey<Item> RED_WOOL = of("red_wool");
     public static final ResourceKey<Item> BLACK_WOOL = of("black_wool");
     public static final ResourceKey<Item> DANDELION = of("dandelion");
+    public static final ResourceKey<Item> GOLDEN_DANDELION = of("golden_dandelion");
     public static final ResourceKey<Item> OPEN_EYEBLOSSOM = of("open_eyeblossom");
     public static final ResourceKey<Item> CLOSED_EYEBLOSSOM = of("closed_eyeblossom");
     public static final ResourceKey<Item> POPPY = of("poppy");

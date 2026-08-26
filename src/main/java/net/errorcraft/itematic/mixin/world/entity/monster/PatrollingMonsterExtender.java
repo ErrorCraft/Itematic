@@ -1,26 +1,27 @@
 package net.errorcraft.itematic.mixin.world.entity.monster;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.raid.ItematicRaids;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.world.entity.monster.PatrollingMonster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PatrollingMonster.class)
 public class PatrollingMonsterExtender {
-    @Inject(
+    @WrapOperation(
         method = "finalizeSpawn",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/raid/Raid;getOminousBannerInstance(Lnet/minecraft/core/HolderGetter;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private void setOminousBannerForLaterUse(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> info) {
-        ItematicRaids.createOminousBanner(level);
+    private ItemStack getOminousBannerInstanceUseHolder(HolderGetter<BannerPattern> patternGetter, Operation<ItemStack> original, ServerLevelAccessor level) {
+        return ItematicRaids.ominousBanner(ItemIds.WHITE_BANNER, level);
     }
 }

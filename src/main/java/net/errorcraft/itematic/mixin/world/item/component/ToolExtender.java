@@ -1,6 +1,8 @@
 package net.errorcraft.itematic.mixin.world.item.component;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.datafixers.util.Function3;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -25,7 +27,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class ToolExtender implements ToolAccess {
     private float defaultMiningSpeed;
 
     @Override
-    public float itematic$getSpeed(ItemStack stack, BlockState state) {
+    public float itematic$getMiningSpeed(ItemStack stack, BlockState state) {
         for (Tool.Rule rule : this.rules) {
             if (rule.speed().isPresent() && rule.itematic$matches(stack, state)) {
                 return rule.speed().get();
@@ -74,14 +75,14 @@ public class ToolExtender implements ToolAccess {
         @Unique
         private Optional<ItemPredicate> item = Optional.empty();
 
-        @Redirect(
+        @WrapOperation(
             method = "lambda$static$0",
             at = @At(
                 value = "INVOKE",
                 target = "Lcom/mojang/serialization/Codec;fieldOf(Ljava/lang/String;)Lcom/mojang/serialization/MapCodec;"
             )
         )
-        private static MapCodec<Optional<HolderSet<Block>>> makeBlocksFieldOptional(Codec<HolderSet<Block>> instance, String name) {
+        private static MapCodec<Optional<HolderSet<Block>>> makeBlocksFieldOptional(Codec<HolderSet<Block>> instance, String name, Operation<MapCodec<HolderSet<Block>>> original) {
             return instance.optionalFieldOf(name);
         }
 
@@ -103,7 +104,7 @@ public class ToolExtender implements ToolAccess {
             return tool -> Optional.ofNullable(getter.apply(tool));
         }
 
-        @Redirect(
+        @WrapOperation(
             method = "lambda$static$0",
             at = @At(
                 value = "FIELD",
@@ -111,7 +112,7 @@ public class ToolExtender implements ToolAccess {
                 opcode = Opcodes.GETSTATIC
             )
         )
-        private static Codec<Float> allowZeroForSpeedField() {
+        private static Codec<Float> allowZeroForSpeedField(Operation<Codec<Float>> original) {
             return ItematicCodecs.NON_NEGATIVE_FLOAT;
         }
 

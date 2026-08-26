@@ -7,6 +7,7 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +38,7 @@ public record ShearAtPositionAction(PositionTarget position) implements Action<S
             return false;
         }
 
-        ItemStack tool = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        ItemStack tool = context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY);
         return ShearsDispenseItemBehaviorAccessor.tryShearBeehive(level, tool, pos)
             || ShearsDispenseItemBehaviorAccessor.tryShearEntity(level, pos, tool);
     }

@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.world.level.block.entity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.world.level.block.entity.BrewingStandBlockEntityAccess;
 import net.errorcraft.itematic.references.ItemIds;
@@ -34,7 +35,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.Optional;
@@ -54,14 +54,14 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
     @Unique
     private int maxBrewingTime;
 
-    @Redirect(
+    @WrapOperation(
         method = "serverTick",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/entity/BrewingStandBlockEntity;isBrewable(Lnet/minecraft/world/item/alchemy/PotionBrewing;Lnet/minecraft/core/NonNullList;)Z"
         )
     )
-    private static boolean useRecipe(PotionBrewing potionBrewing, NonNullList<ItemStack> items, Level level, @Local(name = "entity", argsOnly = true) BrewingStandBlockEntity entity) {
+    private static boolean useRecipe(PotionBrewing potionBrewing, NonNullList<ItemStack> items, Operation<Boolean> original, Level level, @Local(name = "entity", argsOnly = true) BrewingStandBlockEntity entity) {
         BrewingStandBlockEntityExtender blockEntityExtender = (BrewingStandBlockEntityExtender)(Object) entity;
         if (!blockEntityExtender.acceptsRecipes()) {
             return false;
@@ -83,14 +83,14 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
         return false;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "serverTick",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/block/entity/BrewingStandBlockEntity;doBrew(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/NonNullList;)V"
         )
     )
-    private static void useRecipe(Level level, BlockPos pos, NonNullList<ItemStack> items, @Local(name = "entity", argsOnly = true) BrewingStandBlockEntity entity) {
+    private static void useRecipe(Level level, BlockPos pos, NonNullList<ItemStack> items, Operation<Void> original, @Local(name = "entity", argsOnly = true) BrewingStandBlockEntity entity) {
         if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
@@ -101,7 +101,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
         for (int i = 0; i < 3; i++) {
             BrewingRecipeInput input = new BrewingRecipeInput(items.get(i), reagent);
             if (recipe != null && recipe.matches(input, level)) {
-                ItemStack result = recipe.assemble(input, level.registryAccess());
+                ItemStack result = recipe.assemble(input);
                 items.set(i, result);
                 continue;
             }
@@ -109,7 +109,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             Optional<RecipeHolder<BrewingRecipe<?>>> optionalRecipe = blockEntityExtender.quickCheck.getRecipeFor(input, serverLevel);
             if (optionalRecipe.isPresent()) {
                 recipe = optionalRecipe.get().value();
-                ItemStack result = recipe.assemble(input, level.registryAccess());
+                ItemStack result = recipe.assemble(input);
                 items.set(i, result);
             }
         }
@@ -143,18 +143,18 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
         return BrewingRecipe.DEFAULT_BREWING_TIME;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "canPlaceItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionBrewing;isIngredient(Lnet/minecraft/world/item/ItemStack;)Z"
         )
     )
-    private boolean acceptAllItemsForInput(PotionBrewing instance, ItemStack ingredient) {
+    private boolean acceptAllItemsForInput(PotionBrewing instance, ItemStack ingredient, Operation<Boolean> original) {
         return true;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "canPlaceItem",
         at = @At(
             value = "INVOKE",
@@ -169,11 +169,11 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             )
         )
     )
-    private boolean isPotionCheckTag(ItemStack instance, Object o) {
+    private boolean isPotionCheckTag(ItemStack instance, Object o, Operation<Boolean> original) {
         return instance.is(ItematicItemTags.BREWING_INPUTS);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "canPlaceItem",
         at = @At(
             value = "INVOKE",
@@ -192,11 +192,11 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             )
         )
     )
-    private boolean isRemainingItemReturnFalse(ItemStack instance, Object o) {
+    private boolean isRemainingItemReturnFalse(ItemStack instance, Object o, Operation<Boolean> original) {
         return false;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = {
             "canPlaceItem",
             "canTakeItemThroughFace"
@@ -214,7 +214,7 @@ public class BrewingStandBlockEntityExtender implements StackedContentsCompatibl
             )
         )
     )
-    private boolean isGlassBottleCheckId(ItemStack instance, Object o) {
+    private boolean isGlassBottleCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
         return instance.is(ItemIds.GLASS_BOTTLE);
     }
 

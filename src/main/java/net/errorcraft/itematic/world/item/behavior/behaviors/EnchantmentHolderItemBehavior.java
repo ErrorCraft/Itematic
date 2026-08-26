@@ -7,14 +7,12 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 public record EnchantmentHolderItemBehavior(Holder<Item> grindingTransformsInto) implements ItemBehavior<EnchantmentHolderItemBehavior> {
     public static final Codec<EnchantmentHolderItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.create(Registries.ITEM).fieldOf("grinding_transforms_into").forGetter(EnchantmentHolderItemBehavior::grindingTransformsInto)
+        Item.CODEC.fieldOf("grinding_transforms_into").forGetter(EnchantmentHolderItemBehavior::grindingTransformsInto)
     ).apply(instance, EnchantmentHolderItemBehavior::new));
 
     public static EnchantmentHolderItemBehavior of(Holder<Item> grindingTransformsInto) {

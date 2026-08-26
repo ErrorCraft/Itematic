@@ -1,10 +1,9 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import net.errorcraft.itematic.access.world.item.crafting.RecipeAccess;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SingleItemRecipe;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
@@ -17,9 +16,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.List;
 
 @Mixin(StonecutterRecipe.class)
-public abstract class StonecutterRecipeExtender extends SingleItemRecipe implements RecipeAccess {
-    public StonecutterRecipeExtender(String group, Ingredient input, ItemStack result) {
-        super(group, input, result);
+public abstract class StonecutterRecipeExtender extends SingleItemRecipe {
+    public StonecutterRecipeExtender(CommonInfo commonInfo, Ingredient input, ItemStackTemplate result) {
+        super(commonInfo, input, result);
     }
 
     @Shadow

@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(MaceItem.class)
 public class MaceItemExtender {
     @Unique
-    private static SmashingWeapon usedStackSmashingWeapon;
+    private static final ScopedValue<SmashingWeapon> USED_SMASHING_WEAPON = ScopedValue.newInstance();
 
     @WrapMethod(
         method = "hurtEnemy"
@@ -112,9 +112,8 @@ public class MaceItemExtender {
         )
     )
     private void temporarilyStoreSmashingWeapon(Level level, Entity attacker, Entity entity, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
-        usedStackSmashingWeapon = smashingWeaponReference.get();
-        original.call(level, attacker, attacker);
-        usedStackSmashingWeapon = null;
+        ScopedValue.where(USED_SMASHING_WEAPON, smashingWeaponReference.get())
+            .run(() -> original.call(level, attacker, attacker));
     }
 
     @WrapOperation(
@@ -160,7 +159,7 @@ public class MaceItemExtender {
         )
     )
     private static double knockbackPowerUseDataComponent(double constant) {
-        return usedStackSmashingWeapon.knockbackPower();
+        return USED_SMASHING_WEAPON.get().knockbackPower();
     }
 
     @ModifyConstant(
@@ -170,6 +169,6 @@ public class MaceItemExtender {
         )
     )
     private static double heavySmashAttackFallDistanceUseDataComponent(double constant) {
-        return usedStackSmashingWeapon.heavySmashAttackFallDistance();
+        return USED_SMASHING_WEAPON.get().heavySmashAttackFallDistance();
     }
 }

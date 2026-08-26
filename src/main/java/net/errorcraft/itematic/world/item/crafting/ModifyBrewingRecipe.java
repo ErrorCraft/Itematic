@@ -28,12 +28,22 @@ import java.util.List;
 import java.util.Optional;
 
 public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
-    public ModifyBrewingRecipe(String group, Holder<Potion> base, Ingredient reagent, Holder<Potion> result, int brewingTime) {
-        super(group, base, reagent, result, brewingTime);
+    private static final MapCodec<ModifyBrewingRecipe> CODEC = codec(
+        Registries.POTION,
+        ModifyBrewingRecipe::new
+    );
+    private static final StreamCodec<RegistryFriendlyByteBuf, ModifyBrewingRecipe> STREAM_CODEC = streamCodec(
+        Registries.POTION,
+        ModifyBrewingRecipe::new
+    );
+    public static final RecipeSerializer<ModifyBrewingRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
+    public ModifyBrewingRecipe(CommonInfo commonInfo, String group, Holder<Potion> base, Ingredient reagent, Holder<Potion> result, int brewingTime) {
+        super(commonInfo, group, base, reagent, result, brewingTime);
     }
 
     public ModifyBrewingRecipe(Holder<Potion> base, Ingredient reagent, Holder<Potion> result) {
-        super("", base, reagent, result, DEFAULT_BREWING_TIME);
+        super(new CommonInfo(true), "", base, reagent, result, DEFAULT_BREWING_TIME);
     }
 
     @Override
@@ -80,26 +90,5 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.BREWING_STAND))
             )
         );
-    }
-
-    public static class Serializer implements RecipeSerializer<ModifyBrewingRecipe> {
-        private static final MapCodec<ModifyBrewingRecipe> CODEC = createCodec(
-            Registries.POTION,
-            ModifyBrewingRecipe::new
-        );
-        private static final StreamCodec<RegistryFriendlyByteBuf, ModifyBrewingRecipe> STREAM_CODEC = createPacketCodec(
-            Registries.POTION,
-            ModifyBrewingRecipe::new
-        );
-
-        @Override
-        public MapCodec<ModifyBrewingRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ModifyBrewingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
     }
 }

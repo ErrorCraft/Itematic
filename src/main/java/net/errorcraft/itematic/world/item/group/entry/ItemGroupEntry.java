@@ -4,12 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.group.entry.entries.StackItemGroupEntry;
-import net.errorcraft.itematic.world.item.group.entry.entries.TagItemGroupEntry;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 
@@ -18,7 +13,7 @@ import java.util.function.Function;
 public interface ItemGroupEntry<T extends ItemGroupEntry<T>> {
     Codec<ItemGroupEntry<?>> ELEMENT_CODEC = ItematicBuiltInRegistries.ITEM_GROUP_ENTRY_TYPE.byNameCodec()
         .dispatch(ItemGroupEntry::type, ItemGroupEntryType::codec);
-    Codec<ItemGroupEntry<?>> CODEC = Codec.either(ELEMENT_CODEC, RegistryFixedCodec.create(Registries.ITEM))
+    Codec<ItemGroupEntry<?>> CODEC = Codec.either(ELEMENT_CODEC, Item.CODEC)
         .xmap(
             either -> either.map(
                 Function.identity(),
@@ -26,27 +21,6 @@ public interface ItemGroupEntry<T extends ItemGroupEntry<T>> {
             ),
             ItemGroupEntry::createEither
         );
-
-    static StackItemGroupEntry simple(Holder<Item> item) {
-        return new StackItemGroupEntry(item);
-    }
-
-    static StackItemGroupEntry simple(Holder<Item> item, DataComponentPatch components) {
-        return new StackItemGroupEntry(item, components);
-    }
-
-    static StackItemGroupEntry requiresPermissions(Holder<Item> item) {
-        return new StackItemGroupEntry(
-            CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS,
-            true,
-            item,
-            DataComponentPatch.EMPTY
-        );
-    }
-
-    static TagItemGroupEntry tag(TagKey<Item> tag) {
-        return new TagItemGroupEntry(tag);
-    }
 
     ItemGroupEntryType<T> type();
     void addStacks(CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries);

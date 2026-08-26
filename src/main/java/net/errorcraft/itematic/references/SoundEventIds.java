@@ -22,6 +22,7 @@ public class SoundEventIds {
     public static final ResourceKey<SoundEvent> BUCKET_EMPTY_TADPOLE = of("item.bucket.empty_tadpole");
     public static final ResourceKey<SoundEvent> BUNDLE_DROP_CONTENTS = of("item.bundle.drop_contents");
     public static final ResourceKey<SoundEvent> BUNDLE_INSERT = of("item.bundle.insert");
+    public static final ResourceKey<SoundEvent> BUNDLE_INSERT_FAIL = of("item.bundle.insert_fail");
     public static final ResourceKey<SoundEvent> BUNDLE_REMOVE_ONE = of("item.bundle.remove_one");
     public static final ResourceKey<SoundEvent> ENDER_EYE_LAUNCH = of("entity.ender_eye.launch");
     public static final ResourceKey<SoundEvent> END_PORTAL_FRAME_FILL = of("block.end_portal_frame.fill");

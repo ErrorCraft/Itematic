@@ -99,6 +99,7 @@
       "tag": "minecraft:item_group/banners"
     },
     {
+      "id": "minecraft:white_banner",
       "type": "minecraft:stack",
       "components": {
         "minecraft:banner_patterns": [
@@ -144,8 +145,7 @@
             "minecraft:banner_patterns"
           ]
         }
-      },
-      "item": "minecraft:white_banner"
+      }
     },
     {
       "type": "minecraft:tag",

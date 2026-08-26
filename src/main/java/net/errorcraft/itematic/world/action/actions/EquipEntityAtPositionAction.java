@@ -33,8 +33,8 @@ public record EquipEntityAtPositionAction(PositionTarget position) implements Ac
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack equipment = context.get(LootContextParams.TOOL);
-        if (ItemStacks.isNullOrEmpty(equipment)) {
+        ItemStack stack = context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance);
+        if (ItemStacks.isNullOrEmpty(stack)) {
             return false;
         }
 
@@ -46,13 +46,13 @@ public record EquipEntityAtPositionAction(PositionTarget position) implements Ac
         List<LivingEntity> entities = context.level().getEntitiesOfClass(
             LivingEntity.class,
             new AABB(pos),
-            entity -> entity.canEquipWithDispenser(equipment)
+            entity -> entity.canEquipWithDispenser(stack)
         );
         if (entities.isEmpty()) {
             return false;
         }
 
-        equip(entities.getFirst(), equipment.copyWithCount(1));
+        equip(entities.getFirst(), stack.copyWithCount(1));
         return true;
     }
 

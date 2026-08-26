@@ -6,6 +6,7 @@
         "numerator": 1
       },
       "empty_sound": "minecraft:item.bundle.drop_contents",
+      "insert_fail_item_sound": "minecraft:item.bundle.insert_fail",
       "insert_item_sound": "minecraft:item.bundle.insert",
       "remove_item_sound": "minecraft:item.bundle.remove_one",
       "rules": [
@@ -18,9 +19,9 @@
         {
           "type": "minecraft:occupancy_held_items_with_penalty",
           "condition": {
-            "behavior": [
-              "minecraft:item_holder"
-            ]
+            "predicates": {
+              "minecraft:bundle_contents": {}
+            }
           },
           "penalty": {
             "denominator": 16,

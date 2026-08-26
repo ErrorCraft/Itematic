@@ -1,15 +1,15 @@
 package net.errorcraft.itematic.world.item.holder.rule.rules;
 
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemInstance;
 import org.apache.commons.lang3.math.Fraction;
 
 public record OccupancyHeldItemsWithPenaltyItemHolderRule(Fraction penalty) implements ItemHolderRule {
@@ -28,15 +28,17 @@ public record OccupancyHeldItemsWithPenaltyItemHolderRule(Fraction penalty) impl
     }
 
     @Override
-    public Fraction occupancy(ItemStack stack) {
-        return stack.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .map(c -> c.occupancy(stack))
-            .map(this.penalty::add)
-            .orElse(this.penalty);
+    public DataResult<Fraction> occupancy(ItemInstance item) {
+        DataResult<Fraction> occupancyHeldItems = ItemHolderItemBehavior.occupancy(item);
+        if (occupancyHeldItems != null) {
+            return occupancyHeldItems.map(occupancy -> occupancy.add(this.penalty));
+        }
+
+        return DataResult.success(this.penalty);
     }
 
     @Override
-    public boolean canOccupy(ItemStack stack) {
+    public boolean canOccupy(ItemInstance item) {
         return true;
     }
 }

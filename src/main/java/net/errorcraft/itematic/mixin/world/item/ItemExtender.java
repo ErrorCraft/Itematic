@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.world.item;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.world.item.ItemAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
@@ -27,13 +28,14 @@ import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
@@ -57,19 +59,14 @@ import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jspecify.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
@@ -77,11 +74,6 @@ import java.util.function.Consumer;
 
 @Mixin(Item.class)
 public abstract class ItemExtender implements ItemAccess, FabricItem {
-    @Shadow
-    @Final
-    @Mutable
-    private DataComponentMap components;
-
     @Unique
     private ItemDisplay display;
 
@@ -92,52 +84,59 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     private ItemBehaviorSet behavior;
 
     @Unique
+    private DataComponentMap dataComponents;
+
+    @Unique
     private ActionEventMap<ItemEvent> events;
 
-    @Redirect(
+    @WrapOperation(
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/core/DefaultedRegistry;holderByNameCodec()Lcom/mojang/serialization/Codec;"
         )
     )
-    private static Codec<Holder<Item>> doNotUseStaticRegistry(DefaultedRegistry<Item> instance) {
+    private static Codec<Holder<Item>> doNotUseStaticRegistry(DefaultedRegistry<Item> instance, Operation<Codec<Holder<Item>>> original) {
         return RegistryFixedCodec.create(Registries.ITEM);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "lambda$static$0",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/core/Holder;is(Lnet/minecraft/core/Holder;)Z"
         )
     )
-    private static boolean isAirCheckId(Holder<Item> instance, Holder<Item> entry) {
+    private static boolean isAirCheckId(Holder<Item> instance, Holder<Item> holder, Operation<Boolean> original) {
         return instance.is(ItemIds.AIR);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "<init>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/Item$Properties;effectiveDescriptionId()Ljava/lang/String;"
+            target = "Lnet/minecraft/world/item/Item$Properties;itemIdOrThrow()Lnet/minecraft/resources/ResourceKey;"
         )
     )
     @Nullable
-    private String effectiveDescriptionIdUseNull(Item.Properties instance) {
+    private ResourceKey<Item> doNotGetItemIdToPreventNullPointerException(Item.Properties instance, Operation<ResourceKey<Item>> original) {
         return null;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "<init>",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/Item$Properties;effectiveModel()Lnet/minecraft/resources/Identifier;"
+            target = "Lnet/minecraft/core/component/DataComponentInitializers;add(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/component/DataComponentInitializers$Initializer;)V"
         )
     )
-    @Nullable
-    private Identifier effectiveModelUseNull(Item.Properties instance) {
-        return null;
+    private void doNotAddDataComponentInitializer(DataComponentInitializers instance, ResourceKey<Item> key, DataComponentInitializers.Initializer<Item> initializer, Operation<Void> original) {}
+
+    @WrapMethod(
+        method = "components"
+    )
+    private DataComponentMap useFieldInsteadOfIntrusiveHolder(Operation<DataComponentMap> original) {
+        return this.dataComponents;
     }
 
     @WrapMethod(
@@ -331,9 +330,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private void onItemEntityDestroyedUseItemBehavior(ItemEntity itemEntity, CallbackInfo info) {
         this.itematic$getBehavior(ItemBehaviorType.BLOCK)
-            .ifPresent(c -> c.onDestroyed(itemEntity));
+            .ifPresent(block -> block.onDestroyed(itemEntity));
         this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .ifPresent(c -> c.onDestroyed(itemEntity));
+            .ifPresent(itemHolder -> itemHolder.onDestroyed(itemEntity));
     }
 
     @WrapMethod(
@@ -455,25 +454,25 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return original.call(itemStack, state, level, pos, user);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "getDestroySpeed",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/component/Tool;getMiningSpeed(Lnet/minecraft/world/level/block/state/BlockState;)F"
         )
     )
-    private float getSpeedPassItemStack(Tool instance, BlockState state, ItemStack itemStack) {
-        return instance.itematic$getSpeed(itemStack, state);
+    private float getMiningSpeedPassItemStack(Tool instance, BlockState state, Operation<Float> original, ItemStack itemStack) {
+        return instance.itematic$getMiningSpeed(itemStack, state);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "isCorrectToolForDrops",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/component/Tool;isCorrectForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z"
         )
     )
-    private boolean isCorrectForDropsPassItemStack(Tool instance, BlockState state, ItemStack itemStack) {
+    private boolean isCorrectForDropsPassItemStack(Tool instance, BlockState state, Operation<Boolean> original, ItemStack itemStack) {
         return instance.itematic$isCorrectForDrops(itemStack, state);
     }
 
@@ -505,7 +504,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return 0;
         }
 
-        UseDuration useDuration = this.components.get(ItematicDataComponents.USE_DURATION);
+        UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
         if (useDuration == null) {
             return 0;
         }
@@ -544,7 +543,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     public Optional<TooltipComponent> useItemBehavior(ItemStack itemStack, Operation<Optional<TooltipComponent>> original) {
         return this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .flatMap(c -> c.tooltipData(itemStack));
+            .flatMap(itemHolder -> itemHolder.tooltipData(itemStack));
     }
 
     @WrapMethod(
@@ -596,7 +595,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public void itematic$setBehavior(ItemBehaviorSet components) {
         this.behavior = components;
-        this.components = this.initializeComponents();
+        this.dataComponents = this.createDefaultDataComponents();
     }
 
     @Override
@@ -648,7 +647,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
         return this.itematic$getBehavior(ItemBehaviorType.FOOD)
-            .map(c -> c.mayStartUsing(user, stack))
+            .map(food -> food.mayStartUsing(user, stack))
             .orElse(true);
     }
 
@@ -672,43 +671,47 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Unique
-    private DataComponentMap initializeComponents() {
-        DataComponentMap.Builder componentsBuilder = DataComponentMap.builder()
+    private DataComponentMap createDefaultDataComponents() {
+        DataComponentMap.Builder builder = DataComponentMap.builder()
             .addAll(DataComponents.COMMON_ITEM_COMPONENTS);
-        this.display.addComponents(componentsBuilder);
+        this.display.addComponents(builder);
         for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.addComponents(componentsBuilder);
+            behavior.addComponents(builder);
         }
 
         if (!this.attributeModifiers.modifiers().isEmpty()) {
-            componentsBuilder.set(DataComponents.ATTRIBUTE_MODIFIERS, this.attributeModifiers);
+            builder.set(DataComponents.ATTRIBUTE_MODIFIERS, this.attributeModifiers);
         }
 
-        return componentsBuilder.build();
+        return builder.build();
     }
 
     @Mixin(Item.Properties.class)
     public static class PropertiesExtender {
-        @Redirect(
-            method = "usingConvertsTo",
-            at = @At(
-                value = "NEW",
-                target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
-            )
+        @WrapMethod(
+            method = {
+                "usingConvertsTo",
+                "craftRemainder(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/item/Item$Properties;"
+            }
         )
-        private ItemStack newItemStackUseEmptyItemStack(ItemLike item) {
-            return ItemStack.EMPTY;
+        private Item.Properties doNotUseToPreventCreatingNewItemStackTemplateWithItem(Item item, Operation<Item.Properties> original) {
+            return (Item.Properties) (Object) this;
         }
 
-        @Redirect(
-            method = "buildAndValidateComponents",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/core/component/DataComponentMap$Builder;set(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Lnet/minecraft/core/component/DataComponentMap$Builder;"
-            )
+        @WrapMethod(
+            method = "effectiveDescriptionId"
         )
-        private <T> DataComponentMap.Builder doNotAddDataComponents(DataComponentMap.Builder instance, DataComponentType<T> type, @Nullable T value) {
-            return instance;
+        @Nullable
+        private String effectiveDescriptionIdUseNull(Operation<String> original) {
+            return null;
+        }
+
+        @WrapMethod(
+            method = "effectiveModel"
+        )
+        @Nullable
+        private Identifier effectiveModelUseNull(Operation<Identifier> original) {
+            return null;
         }
     }
 }

@@ -6,6 +6,7 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -26,7 +27,7 @@ public record UseBucketAction(PositionTarget position) implements Action<UseBuck
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY);
         return stack.itematic$getBehavior(ItemBehaviorType.BUCKET)
             .map(bucket -> bucket.use(context, this.position, false))
             .orElse(false);

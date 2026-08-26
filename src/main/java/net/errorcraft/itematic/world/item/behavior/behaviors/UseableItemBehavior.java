@@ -6,6 +6,7 @@ import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.SetCodec;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.item.component.UseRemainder;
@@ -31,11 +33,11 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation animation, Optional<ItemStack> remainder, UseEffects effects, Set<Pass> passes) implements ItemBehavior<UseableItemBehavior> {
+public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation animation, Optional<ItemStackTemplate> remainder, UseEffects effects, Set<Pass> passes) implements ItemBehavior<UseableItemBehavior> {
     public static final Codec<UseableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UseDuration.CODEC.optionalFieldOf("ticks").forGetter(UseableItemBehavior::ticks),
         ItemUseAnimation.CODEC.optionalFieldOf("animation", ItemUseAnimation.NONE).forGetter(UseableItemBehavior::animation),
-        ItemStack.CODEC.optionalFieldOf("remainder").forGetter(UseableItemBehavior::remainder),
+        ItemStackTemplate.CODEC.optionalFieldOf("remainder").forGetter(UseableItemBehavior::remainder),
         UseEffects.CODEC.optionalFieldOf("effects", UseEffects.DEFAULT).forGetter(UseableItemBehavior::effects),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemBehavior::passes)
     ).apply(instance, UseableItemBehavior::new));
@@ -125,7 +127,7 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
             return new UseableItemBehavior(
                 Optional.ofNullable(this.ticks).map(UseDuration::new),
                 this.animation,
-                Optional.ofNullable(this.remainder).map(ItemStack::new),
+                Optional.ofNullable(this.remainder).map(ItemStackTemplates::of),
                 this.effects,
                 this.passes
             );

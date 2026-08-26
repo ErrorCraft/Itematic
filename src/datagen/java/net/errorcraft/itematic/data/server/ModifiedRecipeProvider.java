@@ -3,6 +3,7 @@ package net.errorcraft.itematic.data.server;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
 import net.minecraft.core.Holder;
@@ -14,7 +15,8 @@ import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -69,27 +71,30 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
     }
 
     private static ShapelessRecipeBuilder shapelessRecipe(RecipeCategory category, Holder<Item> result, int count) {
-        return new ShapelessRecipeBuilder(new ItemStack(result, count), category);
+        return new ShapelessRecipeBuilder(ItemStackTemplates.of(result, count), category);
     }
 
     private static ShapedRecipeBuilder shapedRecipe(RecipeCategory category, Holder<Item> result) {
-        return new ShapedRecipeBuilder(new ItemStack(result), category);
+        return new ShapedRecipeBuilder(ItemStackTemplates.of(result), category);
     }
 
     private static class ShapelessRecipeBuilder {
-        private final ItemStack result;
+        private final ItemStackTemplate result;
         private final RecipeCategory category;
         private final List<Ingredient> inputs = new ArrayList<>();
 
-        private ShapelessRecipeBuilder(ItemStack result, RecipeCategory category) {
+        private ShapelessRecipeBuilder(ItemStackTemplate result, RecipeCategory category) {
             this.result = result;
             this.category = category;
         }
 
         public ShapelessRecipe build() {
             return new ShapelessRecipe(
-                "",
-                RecipeBuilder.determineBookCategory(this.category),
+                new Recipe.CommonInfo(true),
+                new CraftingRecipe.CraftingBookInfo(
+                    RecipeBuilder.determineCraftingBookCategory(this.category),
+                    ""
+                ),
                 this.result,
                 this.inputs
             );
@@ -98,7 +103,7 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
         public ShapelessRecipeBuilder input(Holder<Item> input, int count, Holder<Item> remainder) {
             for (int i = 0; i < count; i++) {
                 Ingredient ingredient = Ingredient.of(HolderSet.direct(input));
-                ingredient.itematic$setRemainder(Optional.of(new ItemStack(remainder)));
+                ingredient.itematic$setRemainder(Optional.of(ItemStackTemplates.of(remainder)));
                 this.inputs.add(ingredient);
             }
 
@@ -107,23 +112,25 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
     }
 
     private static class ShapedRecipeBuilder {
-        private final ItemStack result;
+        private final ItemStackTemplate result;
         private final RecipeCategory category;
         private final Char2ObjectMap<Ingredient> inputs = new Char2ObjectOpenHashMap<>();
         private final List<String> pattern = new ArrayList<>();
 
-        private ShapedRecipeBuilder(ItemStack result, RecipeCategory category) {
+        private ShapedRecipeBuilder(ItemStackTemplate result, RecipeCategory category) {
             this.result = result;
             this.category = category;
         }
 
         public ShapedRecipe build() {
             return new ShapedRecipe(
-                "",
-                RecipeBuilder.determineBookCategory(this.category),
+                new Recipe.CommonInfo(true),
+                new CraftingRecipe.CraftingBookInfo(
+                    RecipeBuilder.determineCraftingBookCategory(this.category),
+                    ""
+                ),
                 ShapedRecipePattern.of(this.inputs, this.pattern),
-                this.result,
-                true
+                this.result
             );
         }
 
@@ -134,7 +141,7 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
 
         public ShapedRecipeBuilder input(char key, Holder<Item> input, Holder<Item> remainder) {
             Ingredient ingredient = Ingredient.of(HolderSet.direct(input));
-            ingredient.itematic$setRemainder(Optional.of(new ItemStack(remainder)));
+            ingredient.itematic$setRemainder(Optional.of(ItemStackTemplates.of(remainder)));
             this.inputs.put(key, ingredient);
             return this;
         }

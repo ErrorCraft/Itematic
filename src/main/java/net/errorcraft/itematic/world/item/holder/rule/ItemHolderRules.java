@@ -1,13 +1,14 @@
 package net.errorcraft.itematic.world.item.holder.rule;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.advancements.criterion.ItemPredicates;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemInstance;
 import org.apache.commons.lang3.math.Fraction;
 
 import java.util.ArrayList;
@@ -22,20 +23,20 @@ public record ItemHolderRules(List<Rule> rules) {
         return new Builder();
     }
 
-    public Fraction occupancy(ItemStack stack) {
+    public DataResult<Fraction> occupancy(ItemInstance item) {
         for (Rule rule : this.rules) {
-            if (rule.test(stack)) {
-                return rule.rule.occupancy(stack);
+            if (rule.test(item)) {
+                return rule.rule.occupancy(item);
             }
         }
 
-        return Fraction.getFraction(1, stack.getMaxStackSize());
+        return DataResult.success(Fraction.getFraction(1, item.getMaxStackSize()));
     }
 
-    public boolean canOccupy(ItemStack stack) {
+    public boolean canOccupy(ItemInstance item) {
         for (Rule rule : this.rules) {
-            if (rule.test(stack)) {
-                return rule.rule.canOccupy(stack);
+            if (rule.test(item)) {
+                return rule.rule.canOccupy(item);
             }
         }
 
@@ -71,7 +72,7 @@ public record ItemHolderRules(List<Rule> rules) {
             Rule::new
         );
 
-        public boolean test(ItemStack stack) {
+        public boolean test(ItemInstance stack) {
             return this.condition.map(predicate -> predicate.test(stack))
                 .orElse(true);
         }

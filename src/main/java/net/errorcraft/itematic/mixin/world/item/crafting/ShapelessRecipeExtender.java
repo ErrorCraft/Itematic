@@ -2,12 +2,12 @@ package net.errorcraft.itematic.mixin.world.item.crafting;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import net.errorcraft.itematic.access.world.item.crafting.RecipeAccess;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -20,12 +20,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mixin(ShapelessRecipe.class)
-public abstract class ShapelessRecipeExtender implements CraftingRecipe, RecipeAccess {
+public abstract class ShapelessRecipeExtender implements CraftingRecipe {
     @Shadow
     @Final
-    private ItemStack result;
+    private ItemStackTemplate result;
 
     @Shadow
     @Final
@@ -36,7 +37,8 @@ public abstract class ShapelessRecipeExtender implements CraftingRecipe, RecipeA
         IntSet foundInputs = new IntOpenHashSet();
         NonNullList<ItemStack> remainders = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         for (Ingredient ingredient : this.ingredients) {
-            if (ingredient.itematic$remainder().isEmpty()) {
+            Optional<ItemStackTemplate> remainder = ingredient.itematic$remainder();
+            if (remainder.isEmpty()) {
                 continue;
             }
 
@@ -49,7 +51,7 @@ public abstract class ShapelessRecipeExtender implements CraftingRecipe, RecipeA
                     continue;
                 }
 
-                remainders.set(i, ingredient.itematic$remainder().get().copy());
+                remainders.set(i, remainder.get().create());
                 foundInputs.add(i);
                 break;
             }

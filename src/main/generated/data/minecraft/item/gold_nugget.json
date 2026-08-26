@@ -1,6 +1,5 @@
 {
   "behavior": {
-    "minecraft:firework_shape_modifier": "star",
     "minecraft:stackable": 64
   },
   "display": {

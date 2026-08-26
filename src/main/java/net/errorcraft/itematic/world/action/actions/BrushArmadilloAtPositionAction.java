@@ -6,6 +6,7 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -46,7 +47,11 @@ public record BrushArmadilloAtPositionAction(PositionTarget position) implements
         }
 
         Entity interactingEntity = context.get(LootContextParams.THIS_ENTITY);
-        ItemStack usedStack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        ItemStack usedStack = context.getOrDefault(
+            LootContextParams.TOOL,
+            ItemStacks::fromItemInstance,
+            ItemStack.EMPTY
+        );
         for (Armadillo armadillo : armadillos) {
             if (armadillo.brushOffScute(interactingEntity, usedStack)) {
                 return true;

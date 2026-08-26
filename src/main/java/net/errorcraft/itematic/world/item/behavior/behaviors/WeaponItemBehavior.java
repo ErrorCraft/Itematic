@@ -27,7 +27,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.SwingAnimation;
@@ -105,7 +104,7 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
         builder.set(ItematicDataComponents.ATTACK_SPEED_MULTIPLIER, this.attackSpeed);
         this.getAllOfType(MeleeWeaponWithDataComponents.class)
             .forEach(meleeWeapon -> meleeWeapon.addComponents(builder));
-        this.damageType.ifPresent(damageType -> builder.set(DataComponents.DAMAGE_TYPE, new EitherHolder<>(damageType)));
+        this.damageType.ifPresent(damageType -> builder.set(DataComponents.DAMAGE_TYPE, damageType));
         this.swingAnimation.ifPresent(swingAnimation -> builder.set(DataComponents.SWING_ANIMATION, swingAnimation));
         this.attackRange.ifPresent(attackRange -> builder.set(DataComponents.ATTACK_RANGE, attackRange));
         this.minimumAttackCharge.ifPresent(minimumAttackCharge -> builder.set(DataComponents.MINIMUM_ATTACK_CHARGE, minimumAttackCharge));

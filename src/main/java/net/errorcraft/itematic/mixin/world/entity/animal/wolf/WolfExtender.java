@@ -1,7 +1,11 @@
 package net.errorcraft.itematic.mixin.world.entity.animal.wolf;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
 import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +16,6 @@ import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Wolf.class)
@@ -21,29 +24,32 @@ public abstract class WolfExtender extends MobExtender {
         super(type, level);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "actuallyHurt",
         at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/Item;getDefaultInstance()Lnet/minecraft/world/item/ItemStack;"
+            value = "NEW",
+            target = "(Lnet/minecraft/core/particles/ParticleType;Lnet/minecraft/world/item/Item;)Lnet/minecraft/core/particles/ItemParticleOption;"
         )
     )
-    private ItemStack newItemStackForArmadilloScuteUseCreateStack(Item instance) {
-        return this.level().itematic$createStack(ItemIds.ARMADILLO_SCUTE);
+    private ItemParticleOption newItemStackTemplateForArmadilloScuteUseCreateStackTemplate(ParticleType<ItemParticleOption> type, Item item, Operation<ItemParticleOption> original) {
+        return new ItemParticleOption(
+            type,
+            this.level().itematic$createStackTemplate(ItemIds.ARMADILLO_SCUTE)
+        );
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "canArmorAbsorb",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isWolfArmorCheckId(ItemStack instance, Object o) {
+    private boolean isWolfArmorCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
         return instance.is(ItemIds.WOLF_ARMOR);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
@@ -57,7 +63,7 @@ public abstract class WolfExtender extends MobExtender {
             )
         )
     )
-    private boolean isBoneCheckId(ItemStack instance, Object o) {
+    private boolean isBoneCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
         return instance.is(ItemIds.BONE);
     }
 

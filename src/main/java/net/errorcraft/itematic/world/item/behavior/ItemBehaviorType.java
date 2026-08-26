@@ -25,7 +25,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.EntityItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkShapeModifierItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
@@ -149,10 +148,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<PlayableSongItemBehavior> PLAYABLE_SONG = register(
         "playable_song",
         PlayableSongItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<FireworkShapeModifierItemBehavior> FIREWORK_SHAPE_MODIFIER = register(
-        "firework_shape_modifier",
-        FireworkShapeModifierItemBehavior.CODEC
     );
     public static final ItemBehaviorType<FireworkExplosionHolderItemBehavior> FIREWORK_EXPLOSION_HOLDER = register(
         "firework_explosion_holder",

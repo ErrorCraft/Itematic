@@ -14,8 +14,7 @@
     "minecraft:useable": {
       "animation": "drink",
       "remainder": {
-        "id": "minecraft:glass_bottle",
-        "count": 1
+        "id": "minecraft:glass_bottle"
       },
       "ticks": {
         "type": "minecraft:constant",
@@ -44,8 +43,7 @@
           "action": {
             "type": "minecraft:exchange_item",
             "item": {
-              "id": "minecraft:glass_bottle",
-              "count": 1
+              "id": "minecraft:glass_bottle"
             }
           }
         },

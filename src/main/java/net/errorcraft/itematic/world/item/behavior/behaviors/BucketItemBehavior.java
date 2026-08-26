@@ -138,7 +138,7 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
 
         this.entity.ifPresent(entity -> EntityPlacer.of(entity, BucketItemBehavior::initializeBucketEntity)
             .place(context, PositionTarget.INTERACTED, EntitySpawnReason.BUCKET));
-        ItemStack stack = context.get(LootContextParams.TOOL);
+        ItemStack stack = context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance);
         if (!ItemStacks.isNullOrEmpty(stack)) {
             stack.consume(
                 1,

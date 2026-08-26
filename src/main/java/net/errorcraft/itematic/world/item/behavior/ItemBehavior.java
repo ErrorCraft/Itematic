@@ -48,10 +48,10 @@ public interface ItemBehavior<T extends ItemBehavior<T>> {
         return false;
     }
     default void finishUsing(Level level, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {}
-    default boolean clickOnSlot(ItemStack stack, Slot slot, ClickAction clickType, Player user) {
+    default boolean clickOnSlot(ItemStack stack, Slot slot, ClickAction clickAction, Player user) {
         return false;
     }
-    default boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickAction clickType, Player user, ItemStackExchanger stackExchanger) {
+    default boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickAction clickAction, Player user, ItemStackExchanger stackExchanger) {
         return false;
     }
     default void onCraft(ItemStack stack, Level level) {}

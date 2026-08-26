@@ -30,7 +30,7 @@ public record ApplySuspiciousStewEffectsFromItemAction(LootContext.EntityTarget 
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.get(LootContextParams.TOOL);
+        ItemStack stack = context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance);
         if (ItemStacks.isNullOrEmpty(stack)) {
             return false;
         }

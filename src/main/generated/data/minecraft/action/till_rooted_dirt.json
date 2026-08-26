@@ -16,8 +16,7 @@
         "action": {
           "type": "minecraft:drop_item_from_block",
           "item": {
-            "id": "minecraft:hanging_roots",
-            "count": 1
+            "id": "minecraft:hanging_roots"
           },
           "position": "interacted"
         }

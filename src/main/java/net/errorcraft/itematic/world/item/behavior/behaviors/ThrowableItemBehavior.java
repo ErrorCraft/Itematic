@@ -73,11 +73,11 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
     @Override
     public boolean stopUsing(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         if (this.drawDuration.filter(drawDuration -> drawDuration.matches(usedTicks)).isPresent()) {
-            this.createEntity(level, user, stack, stackExchanger);
             if (user instanceof Player player) {
                 player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
             }
 
+            this.createEntity(level, user, stack, stackExchanger);
             return true;
         }
 
@@ -98,7 +98,8 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
     }
 
     private void createEntity(ActionContext context, ItemStack stack) {
-        ProjectileItemBehavior projectile = stack.itematic$getBehavior(ItemBehaviorType.PROJECTILE).orElse(null);
+        ProjectileItemBehavior projectile = stack.itematic$getBehavior(ItemBehaviorType.PROJECTILE)
+            .orElse(null);
         if (projectile == null) {
             return;
         }

@@ -161,6 +161,7 @@ public class BlockIds {
     public static final ResourceKey<Block> RED_WOOL = of("red_wool");
     public static final ResourceKey<Block> BLACK_WOOL = of("black_wool");
     public static final ResourceKey<Block> DANDELION = of("dandelion");
+    public static final ResourceKey<Block> GOLDEN_DANDELION = of("golden_dandelion");
     public static final ResourceKey<Block> TORCHFLOWER = of("torchflower");
     public static final ResourceKey<Block> POPPY = of("poppy");
     public static final ResourceKey<Block> BLUE_ORCHID = of("blue_orchid");

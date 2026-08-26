@@ -59,7 +59,7 @@ public abstract class AbstractHorseExtender extends Animal {
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/world/level/block/Blocks;HAY_BLOCK:Lnet/minecraft/world/level/block/Block;",
+                target = "Lnet/minecraft/world/item/Items;HAY_BLOCK:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
