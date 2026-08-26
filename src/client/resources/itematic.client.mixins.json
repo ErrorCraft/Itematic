@@ -9,7 +9,7 @@
     "MinecraftExtender",
     "gui.BundleMouseActionsExtender",
     "gui.GuiExtender",
-    "gui.GuiGraphicsExtender",
+    "gui.GuiGraphicsExtractorExtender",
     "gui.components.ItemDisplayWidgetExtender",
     "gui.screens.CreateFlatWorldScreenExtender",
     "gui.screens.CreateFlatWorldScreenExtender$DetailsListExtender",

@@ -364,7 +364,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @ModifyConstant(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 constant = @Constant(
                     classValue = BlockItem.class,
                     ordinal = 0
@@ -378,7 +378,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 at = @At(
                     value = "FIELD",
                     target = "Lnet/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList$ItemRow;item:Lnet/minecraft/world/item/Item;",
@@ -391,7 +391,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/item/BlockItem;getBlock()Lnet/minecraft/world/level/block/Block;"
@@ -403,7 +403,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;",
@@ -422,7 +422,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;",

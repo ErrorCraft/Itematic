@@ -7,7 +7,7 @@ import net.errorcraft.itematic.client.resources.item.bar.ItemBarStyle;
 import net.errorcraft.itematic.client.resources.item.bar.ItemBarStyleManager;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.resources.Identifier;
@@ -20,8 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GuiGraphics.class)
-public abstract class GuiGraphicsExtender {
+@Mixin(GuiGraphicsExtractor.class)
+public abstract class GuiGraphicsExtractorExtender {
     @Shadow
     public abstract void blitSprite(RenderPipeline renderPipeline, Identifier location, int x, int y, int width, int height, int color);
 
@@ -37,7 +37,7 @@ public abstract class GuiGraphicsExtender {
     }
 
     @WrapMethod(
-        method = "renderItemBar"
+        method = "itemBar"
     )
     private void useDataComponent(ItemStack itemStack, int x, int y, Operation<Void> original) {
         Identifier itemBarStyleId = itemStack.get(ItematicDataComponents.ITEM_BAR_STYLE);

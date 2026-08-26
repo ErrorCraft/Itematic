@@ -4,7 +4,7 @@ package net.errorcraft.itematic.mixin.client.gui.screens.debug;
 import net.errorcraft.itematic.access.client.gui.screens.debug.GameModeSwitcherScreenAccess;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.debug.GameModeSwitcherScreen;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -25,20 +25,20 @@ public class GameModeSwitcherScreenExtender {
     @Mixin(GameModeSwitcherScreen.GameModeSlot.class)
     public static class GameModeSlotExtender {
         @Redirect(
-            method = "renderWidget",
+            method = "extractWidgetRenderState",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/client/gui/screens/debug/GameModeSwitcherScreen$GameModeIcon;drawIcon(Lnet/minecraft/client/gui/GuiGraphics;II)V"
+                target = "Lnet/minecraft/client/gui/screens/debug/GameModeSwitcherScreen$GameModeIcon;extractIcon(Lnet/minecraft/client/gui/GuiGraphicsExtractor;II)V"
             )
         )
-        private void drawIconUseHolder(GameModeSwitcherScreen.GameModeIcon instance, GuiGraphics graphics, int x, int y) {
+        private void drawIconUseHolder(GameModeSwitcherScreen.GameModeIcon instance, GuiGraphicsExtractor graphics, int x, int y) {
             Level level = Minecraft.getInstance().level;
             if (level == null) {
                 return;
             }
 
             ItemStack stack = instance.itematic$icon(level.registryAccess().lookupOrThrow(Registries.ITEM));
-            graphics.renderItem(stack, x, y);
+            graphics.item(stack, x, y);
         }
     }
 

@@ -18,7 +18,7 @@ public abstract class BrewingStandScreenExtender extends AbstractContainerScreen
     }
 
     @ModifyVariable(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At("STORE:FIRST"),
         name = "xo"
     )
@@ -27,7 +27,7 @@ public abstract class BrewingStandScreenExtender extends AbstractContainerScreen
     }
 
     @ModifyConstant(
-        method = "renderBg",
+        method = "extractBackground",
         constant = @Constant(
             floatValue = 400.0f
         )

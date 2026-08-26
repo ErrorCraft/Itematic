@@ -47,7 +47,7 @@ public class CreateFlatWorldScreenExtender implements CreateFlatWorldScreenAcces
             CreateFlatWorldScreen.DetailsList this$1;
 
             @Redirect(
-                method = "renderContent",
+                method = "extractContent",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/screens/CreateFlatWorldScreen$DetailsList$LayerEntry;getDisplayItem(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/item/ItemStack;"

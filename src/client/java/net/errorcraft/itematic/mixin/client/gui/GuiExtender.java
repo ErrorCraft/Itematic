@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(Gui.class)
 public class GuiExtender {
     @WrapOperation(
-        method = "renderCameraOverlays",
+        method = "extractCameraOverlays",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"

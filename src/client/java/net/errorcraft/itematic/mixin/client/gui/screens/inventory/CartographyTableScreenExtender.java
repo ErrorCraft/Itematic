@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(CartographyTableScreen.class)
 public class CartographyTableScreenExtender {
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
@@ -31,7 +31,7 @@ public class CartographyTableScreenExtender {
     }
 
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
@@ -50,7 +50,7 @@ public class CartographyTableScreenExtender {
     }
 
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",

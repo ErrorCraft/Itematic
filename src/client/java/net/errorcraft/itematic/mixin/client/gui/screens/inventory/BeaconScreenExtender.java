@@ -24,7 +24,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
     }
 
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
@@ -36,7 +36,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
     }
 
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
@@ -55,7 +55,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
     }
 
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
@@ -74,7 +74,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
     }
 
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",
@@ -93,7 +93,7 @@ public abstract class BeaconScreenExtender extends AbstractContainerScreen<Beaco
     }
 
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;",

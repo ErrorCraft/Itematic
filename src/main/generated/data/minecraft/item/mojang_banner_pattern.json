@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:banner_pattern": {
-      "patterns": "minecraft:pattern_item/mojang"
+      "patterns": "#minecraft:pattern_item/mojang"
     },
     "minecraft:stackable": 1
   },

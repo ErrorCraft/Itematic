@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:banner_pattern": {
-      "patterns": "minecraft:pattern_item/flow"
+      "patterns": "#minecraft:pattern_item/flow"
     },
     "minecraft:stackable": 1
   },

@@ -14,7 +14,7 @@ import java.util.Optional;
 @Mixin(RecipeBookTabButton.class)
 public class RecipeBookTabButtonExtender {
     @Redirect(
-        method = "renderIcon",
+        method = "extractIcon",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/screens/recipebook/RecipeBookComponent$TabInfo;primaryIcon()Lnet/minecraft/world/item/ItemStack;"
@@ -30,7 +30,7 @@ public class RecipeBookTabButtonExtender {
     }
 
     @Redirect(
-        method = "renderIcon",
+        method = "extractIcon",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/screens/recipebook/RecipeBookComponent$TabInfo;secondaryIcon()Ljava/util/Optional;"

@@ -6,7 +6,7 @@ import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.access.client.gui.screens.inventory.tooltip.ClientBundleTooltipAccess;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientBundleTooltip;
 import net.minecraft.world.item.component.BundleContents;
 import org.apache.commons.lang3.math.Fraction;
@@ -27,7 +27,7 @@ public class ClientBundleTooltipExtender implements ClientBundleTooltipAccess {
     private ItemHolderRules itemHolderRules;
 
     @WrapOperation(
-        method = "renderImage",
+        method = "extractImage",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/component/BundleContents;weight()Lcom/mojang/serialization/DataResult;"
@@ -38,13 +38,13 @@ public class ClientBundleTooltipExtender implements ClientBundleTooltipAccess {
     }
 
     @WrapOperation(
-        method = "renderBundleWithItemsTooltip",
+        method = "extractBundleWithItemsTooltip",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientBundleTooltip;drawProgressbar(IILnet/minecraft/client/gui/Font;Lnet/minecraft/client/gui/GuiGraphics;Lorg/apache/commons/lang3/math/Fraction;)V"
+            target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientBundleTooltip;extractProgressbar(IILnet/minecraft/client/gui/Font;Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lorg/apache/commons/lang3/math/Fraction;)V"
         )
     )
-    private void passCapacity(int x, int y, Font font, GuiGraphics graphics, Fraction weight, Operation<Void> original) {
+    private void passCapacity(int x, int y, Font font, GuiGraphicsExtractor graphics, Fraction weight, Operation<Void> original) {
         ScopedValue.where(CAPACITY, this.capacity)
             .run(() -> original.call(x, y, font, graphics, weight));
     }

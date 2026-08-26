@@ -95,7 +95,7 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
     }
 
     @ModifyConstant(
-        method = "renderOnboardingTooltips",
+        method = "extractOnboardingTooltips",
         constant = @Constant(
             classValue = SmithingTemplateItem.class,
             ordinal = 0
@@ -109,7 +109,7 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
     }
 
     @ModifyVariable(
-        method = "renderOnboardingTooltips",
+        method = "extractOnboardingTooltips",
         at = @At("LOAD"),
         ordinal = 0
     )
@@ -119,7 +119,7 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
     }
 
     @Redirect(
-        method = "renderOnboardingTooltips",
+        method = "extractOnboardingTooltips",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/SmithingTemplateItem;getBaseSlotDescription()Lnet/minecraft/network/chat/Component;"
@@ -130,7 +130,7 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
     }
 
     @Redirect(
-        method = "renderOnboardingTooltips",
+        method = "extractOnboardingTooltips",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/SmithingTemplateItem;getAdditionSlotDescription()Lnet/minecraft/network/chat/Component;"

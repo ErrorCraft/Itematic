@@ -25,7 +25,7 @@ public abstract class LoomScreenExtender extends AbstractContainerScreen<LoomMen
     }
 
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"
@@ -37,7 +37,7 @@ public abstract class LoomScreenExtender extends AbstractContainerScreen<LoomMen
     }
 
     @Redirect(
-        method = "renderBg",
+        method = "extractBackground",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/BannerItem;getColor()Lnet/minecraft/world/item/DyeColor;"

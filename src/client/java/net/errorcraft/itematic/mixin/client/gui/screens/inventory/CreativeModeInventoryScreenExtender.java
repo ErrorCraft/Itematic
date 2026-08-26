@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.references.ItemIds;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.DefaultedRegistry;
@@ -32,8 +31,8 @@ public abstract class CreativeModeInventoryScreenExtender extends AbstractContai
         super(menu, inventory, title);
     }
 
-    @Definition(id = "getCreativeHotbarStorage", method = "Lnet/minecraft/client/Minecraft;getHotbarManager()Lnet/minecraft/client/HotbarManager;")
-    @Expression("? = ?.getCreativeHotbarStorage()")
+    @Definition(id = "getHotbarManager", method = "Lnet/minecraft/client/Minecraft;getHotbarManager()Lnet/minecraft/client/HotbarManager;")
+    @Expression("? = ?.getHotbarManager()")
     @Inject(
         method = "selectTab",
         at = @At(
@@ -58,14 +57,14 @@ public abstract class CreativeModeInventoryScreenExtender extends AbstractContai
     }
 
     @Redirect(
-        method = "renderTabButton",
+        method = "extractTabButton",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/CreativeModeTab;getIconItem()Lnet/minecraft/world/item/ItemStack;"
         )
     )
     @SuppressWarnings("ConstantConditions")
-    private ItemStack getIconUseDynamicRegistry(CreativeModeTab instance, GuiGraphics graphics) {
+    private ItemStack getIconItemUseDynamicRegistry(CreativeModeTab instance) {
         return instance.itematic$icon(this.minecraft.level.itematic$itemAccess());
     }
 

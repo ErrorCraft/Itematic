@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:immune_to_damage": {
-      "damage": "minecraft:is_explosion"
+      "damage": "#minecraft:is_explosion"
     },
     "minecraft:stackable": 64
   },

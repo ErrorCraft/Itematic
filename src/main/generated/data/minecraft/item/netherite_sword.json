@@ -7,7 +7,7 @@
       "enchantability": 15
     },
     "minecraft:immune_to_damage": {
-      "damage": "minecraft:is_fire"
+      "damage": "#minecraft:is_fire"
     },
     "minecraft:repairable": {
       "items": "#minecraft:netherite_tool_materials"
