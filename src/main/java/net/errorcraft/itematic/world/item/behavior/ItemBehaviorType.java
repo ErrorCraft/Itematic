@@ -18,7 +18,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.DecoratedPotPatternItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DispensableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DyeItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.DyeableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantmentHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EntityItemBehavior;
@@ -128,10 +127,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<DyeItemBehavior> DYE = register(
         "dye",
         DyeItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<DyeableItemBehavior> DYEABLE = register(
-        "dyeable",
-        DyeableItemBehavior.CODEC
     );
     public static final ItemBehaviorType<SpawnEggItemBehavior> SPAWN_EGG = register(
         "spawn_egg",

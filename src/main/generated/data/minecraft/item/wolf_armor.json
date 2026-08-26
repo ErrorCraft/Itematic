@@ -13,7 +13,6 @@
       "break_sound": "minecraft:item.wolf_armor.break",
       "durability": 64
     },
-    "minecraft:dyeable": {},
     "minecraft:equipment": {
       "allowed_entities": "minecraft:wolf",
       "asset_id": "minecraft:armadillo_scute",

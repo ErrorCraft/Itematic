@@ -68,7 +68,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.DecoratedPotPatternItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DispensableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DyeItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.DyeableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantmentHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EntityItemBehavior;
@@ -8268,7 +8267,6 @@ public class Items {
                     .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.LEATHER_CHESTPLATE, create(
@@ -8279,7 +8277,6 @@ public class Items {
                     .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.LEATHER_LEGGINGS, create(
@@ -8290,7 +8287,6 @@ public class Items {
                     .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.LEATHER_BOOTS, create(
@@ -8301,7 +8297,6 @@ public class Items {
                     .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.COPPER_HELMET, create(
@@ -8573,7 +8568,6 @@ public class Items {
                     .with(StackableItemBehavior.of(1))
                     .with(EquipmentItemBehavior.ofHorseArmor(ArmorMaterials.LEATHER, this.soundEvents, this.entityTypes))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.COPPER_HORSE_ARMOR, create(
@@ -8644,7 +8638,6 @@ public class Items {
                         .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_WOLF))
                         .build()
                     ))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.WHITE_HARNESS, create(

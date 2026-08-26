@@ -15,7 +15,6 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
     },
-    "minecraft:dyeable": {},
     "minecraft:enchantable": {
       "enchantability": 15
     },
