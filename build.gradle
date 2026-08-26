@@ -92,7 +92,7 @@ loom {
 		gametestClient {
 			inherit client
 			name "GameTest Client"
-			vmArg "-Ditematic.gametest.structure-output-directory=${file("src/gametest/resources/data")}"
+			vmArg "-Ditematic.gametest.structure-directory=${file("src/gametest/resources/data")}"
 
 			runDir "run"
 			source sourceSets.gametest

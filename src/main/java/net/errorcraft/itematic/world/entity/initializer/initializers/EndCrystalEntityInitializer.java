@@ -7,7 +7,7 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.dimension.end.EndDragonFight;
+import net.minecraft.world.level.dimension.end.EnderDragonFight;
 import org.jspecify.annotations.Nullable;
 
 public class EndCrystalEntityInitializer implements EntityInitializer<EndCrystal> {
@@ -32,7 +32,7 @@ public class EndCrystalEntityInitializer implements EntityInitializer<EndCrystal
     }
 
     private void tryRespawnEnderDragon(ServerLevel level) {
-        EndDragonFight enderDragonFight = level.getDragonFight();
+        EnderDragonFight enderDragonFight = level.getDragonFight();
         if (enderDragonFight != null) {
             enderDragonFight.tryRespawn();
         }
