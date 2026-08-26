@@ -8,8 +8,8 @@ import net.errorcraft.itematic.client.resources.item.bar.ItemBarStyleManager;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.render.state.GuiRenderState;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.state.gui.GuiRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix3x2fStack;
@@ -29,7 +29,7 @@ public abstract class GuiGraphicsExtender {
     private ItemBarStyleManager itemBarStyles;
 
     @Inject(
-        method = "<init>(Lnet/minecraft/client/Minecraft;Lorg/joml/Matrix3x2fStack;Lnet/minecraft/client/gui/render/state/GuiRenderState;II)V",
+        method = "<init>(Lnet/minecraft/client/Minecraft;Lorg/joml/Matrix3x2fStack;Lnet/minecraft/client/renderer/state/gui/GuiRenderState;II)V",
         at = @At("TAIL")
     )
     private void setItemBarStyles(Minecraft minecraft, Matrix3x2fStack pose, GuiRenderState guiRenderState, int mouseX, int mouseY, CallbackInfo info) {
