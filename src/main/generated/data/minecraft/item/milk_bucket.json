@@ -8,8 +8,7 @@
     "minecraft:useable": {
       "animation": "drink",
       "remainder": {
-        "id": "minecraft:bucket",
-        "count": 1
+        "id": "minecraft:bucket"
       },
       "ticks": {
         "type": "minecraft:constant",

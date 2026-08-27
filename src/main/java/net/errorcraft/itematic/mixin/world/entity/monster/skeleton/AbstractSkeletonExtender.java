@@ -86,15 +86,15 @@ public class AbstractSkeletonExtender extends Monster {
             target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getWeaponHoldingHand(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/InteractionHand;"
         )
     )
-    private InteractionHand getHandForHeldBowUseId(LivingEntity entity, Item item) {
-        return ItematicProjectileUtil.getWeaponHoldingHand(entity, ItemIds.BOW);
+    private InteractionHand getHandForHeldBowUseId(LivingEntity mob, Item weaponItem) {
+        return ItematicProjectileUtil.getWeaponHoldingHand(mob, ItemIds.BOW);
     }
 
     @WrapMethod(
         method = "canUseNonMeleeWeapon"
     )
-    private boolean checkShooterMethod(ItemStack stack, Operation<Boolean> original) {
-        return stack.itematic$getBehavior(ItemBehaviorType.SHOOTER)
+    private boolean checkShooterMethod(ItemStack item, Operation<Boolean> original) {
+        return item.itematic$getBehavior(ItemBehaviorType.SHOOTER)
             .map(shooter -> shooter.usesMethod(ShooterMethodType.DIRECT))
             .orElse(false);
     }
@@ -103,11 +103,11 @@ public class AbstractSkeletonExtender extends Monster {
         method = "reassessWeaponGoal",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBowCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.BOW);
+    private boolean isBowCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.BOW);
     }
 
     @Redirect(
@@ -117,7 +117,7 @@ public class AbstractSkeletonExtender extends Monster {
             target = "Lnet/minecraft/world/entity/projectile/Projectile;spawnProjectileUsingShoot(Lnet/minecraft/world/entity/projectile/Projectile;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;DDDFF)Lnet/minecraft/world/entity/projectile/Projectile;"
         )
     )
-    private <T extends Projectile> T onlySetSpeed(T projectile, ServerLevel level, ItemStack stack, double targetX, double targetY, double targetZ, float pow, float uncertainty) {
+    private <T extends Projectile> T onlySetSpeed(T projectile, ServerLevel serverLevel, ItemStack itemStack, double targetX, double targetY, double targetZ, float pow, float uncertainty) {
         projectile.shoot(targetX, targetY, targetZ, pow, uncertainty);
         return projectile;
     }

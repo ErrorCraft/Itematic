@@ -22,7 +22,7 @@ public class MapIdExtender implements InventoryTickListener {
         }
 
         if (owner instanceof Player playerOwner) {
-            mapState.tickCarriedBy(playerOwner, stack);
+            mapState.tickCarriedBy(playerOwner, stack, null);
         }
 
         if (!mapState.locked && slot != null && slot.getType() == EquipmentSlot.Type.HAND) {

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameProtocols.class)
 public class GameProtocolsExtender {
     @Inject(
-        method = "method_55958",
+        method = "lambda$static$2",
         at = @At("TAIL")
     )
     private static void registerCustomClientboundPackets(ProtocolInfoBuilder<ClientGamePacketListener, RegistryFriendlyByteBuf, Unit> builder, CallbackInfo info) {

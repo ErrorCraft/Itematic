@@ -1,4 +1,4 @@
-classTweaker	v2	named
+classTweaker    v2    official
 
 accessible    class    net/minecraft/advancements/criterion/StatePropertiesPredicate$PropertyMatcher
 accessible    class    net/minecraft/advancements/criterion/StatePropertiesPredicate$RangedMatcher
@@ -46,7 +46,6 @@ inject-interface    net/minecraft/world/entity/Mob    net/errorcraft/itematic/ac
 inject-interface    net/minecraft/world/entity/ai/attributes/AttributeInstance    net/errorcraft/itematic/access/world/entity/ai/attributes/AttributeInstanceAccess
 inject-interface    net/minecraft/world/entity/ai/attributes/AttributeMap    net/errorcraft/itematic/access/world/entity/ai/attributes/AttributeMapAccess
 inject-interface    net/minecraft/world/entity/ai/attributes/AttributeSupplier    net/errorcraft/itematic/access/world/entity/ai/attributes/AttributeSupplierAccess
-inject-interface    net/minecraft/world/entity/npc/villager/VillagerData    net/errorcraft/itematic/access/world/entity/npc/villager/VillagerDataAccess
 inject-interface    net/minecraft/world/entity/npc/villager/VillagerProfession    net/errorcraft/itematic/access/world/entity/npc/villager/VillagerProfessionAccess
 inject-interface    net/minecraft/world/entity/player/StackedItemContents    net/errorcraft/itematic/access/world/entity/player/StackedItemContentsAccess
 inject-interface    net/minecraft/world/inventory/BrewingStandMenu    net/errorcraft/itematic/access/world/inventory/BrewingStandMenuAccess
@@ -54,8 +53,8 @@ inject-interface    net/minecraft/world/inventory/tooltip/BundleTooltip    net/e
 inject-interface    net/minecraft/world/item/BrushItem    net/errorcraft/itematic/access/world/item/BrushItemAccess
 inject-interface    net/minecraft/world/item/CreativeModeTab    net/errorcraft/itematic/access/world/item/CreativeModeTabAccess
 inject-interface    net/minecraft/world/item/CreativeModeTab$TabVisibility    net/minecraft/util/StringRepresentable
-inject-interface    net/minecraft/world/item/DyeColor    net/errorcraft/itematic/access/world/item/DyeColorAccess
 inject-interface    net/minecraft/world/item/Item    net/errorcraft/itematic/access/world/item/ItemAccess
+inject-interface    net/minecraft/world/item/ItemInstance    net/errorcraft/itematic/access/world/item/ItemInstanceAccess
 inject-interface    net/minecraft/world/item/ItemStack    net/errorcraft/itematic/access/world/item/ItemStackAccess
 inject-interface    net/minecraft/world/item/component/BundleContents    net/errorcraft/itematic/access/world/item/component/BundleContentsAccess
 inject-interface    net/minecraft/world/item/component/BundleContents$Mutable    net/errorcraft/itematic/access/world/item/component/BundleContentsAccess$MutableAccess

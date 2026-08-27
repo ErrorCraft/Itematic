@@ -13,8 +13,7 @@
     },
     "minecraft:fuel": {
       "remainder": {
-        "id": "minecraft:bucket",
-        "count": 1
+        "id": "minecraft:bucket"
       },
       "ticks": 20000
     },

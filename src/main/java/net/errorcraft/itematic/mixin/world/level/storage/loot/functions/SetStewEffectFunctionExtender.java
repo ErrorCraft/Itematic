@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.world.level.storage.loot.functions;
 
 import net.errorcraft.itematic.references.ItemIds;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.SetStewEffectFunction;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,10 +13,10 @@ public class SetStewEffectFunctionExtender {
         method = "run",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isSuspiciousStewCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.SUSPICIOUS_STEW);
+    private boolean isSuspiciousStewCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.SUSPICIOUS_STEW);
     }
 }

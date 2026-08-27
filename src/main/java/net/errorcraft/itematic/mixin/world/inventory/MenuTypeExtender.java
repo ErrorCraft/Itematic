@@ -25,7 +25,7 @@ public class MenuTypeExtender {
             )
         )
     )
-    private static MenuType<BrewingStandMenuDelegate> useDelegatingBrewingStandMenu(String id, MenuType.MenuSupplier<BrewingStandMenu> factory) {
+    private static MenuType<BrewingStandMenuDelegate> useDelegatingBrewingStandMenu(String name, MenuType.MenuSupplier<BrewingStandMenu> constructor) {
         return ItematicMenuTypes.BREWING_STAND;
     }
 }

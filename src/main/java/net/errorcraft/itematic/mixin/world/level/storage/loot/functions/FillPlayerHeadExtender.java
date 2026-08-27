@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.mixin.world.level.storage.loot.functions;
 
 import net.errorcraft.itematic.references.ItemIds;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.FillPlayerHead;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,10 +13,10 @@ public class FillPlayerHeadExtender {
         method = "run",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isPlayerHeadCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.PLAYER_HEAD);
+    private boolean isPlayerHeadCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.PLAYER_HEAD);
     }
 }

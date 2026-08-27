@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.world.item;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.DebugStickItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
@@ -12,5 +12,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(DebugStickItem.class)
 public interface DebugStickItemAccessor {
     @Invoker("handleInteraction")
-    boolean itematic$handleInteraction(Player player, BlockState state, LevelAccessor level, BlockPos pos, boolean cycle, ItemStack stack);
+    boolean itematic$handleInteraction(ServerPlayer player, BlockState state, LevelAccessor level, BlockPos pos, boolean cycle, ItemStack itemStackInHand);
 }

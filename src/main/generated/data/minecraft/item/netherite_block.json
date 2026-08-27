@@ -4,7 +4,7 @@
       "block": "minecraft:netherite_block"
     },
     "minecraft:immune_to_damage": {
-      "damage": "minecraft:is_fire"
+      "damage": "#minecraft:is_fire"
     },
     "minecraft:stackable": 64
   },

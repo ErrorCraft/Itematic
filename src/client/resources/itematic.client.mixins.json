@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "net.errorcraft.itematic.mixin.client",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "mixinextras": {
     "minVersion": "0.5.0"
   },
@@ -9,7 +9,7 @@
     "MinecraftExtender",
     "gui.BundleMouseActionsExtender",
     "gui.GuiExtender",
-    "gui.GuiGraphicsExtender",
+    "gui.GuiGraphicsExtractorExtender",
     "gui.components.ItemDisplayWidgetExtender",
     "gui.screens.CreateFlatWorldScreenExtender",
     "gui.screens.CreateFlatWorldScreenExtender$DetailsListExtender",
@@ -43,11 +43,11 @@
     "gui.screens.worldselection.PresetFlatWorldScreenExtender$PresetsListExtender$EntryExtender",
     "multiplayer.ClientLevelExtender",
     "multiplayer.ClientPacketListenerExtender",
+    "particle.BreakingItemParticleExtender$CobwebProviderExtender",
     "particle.BreakingItemParticleExtender$SlimeProviderExtender",
     "particle.BreakingItemParticleExtender$SnowballProviderExtender",
     "player.AbstractClientPlayerExtender",
     "player.LocalPlayerExtender",
-    "player.inventory.HotbarExtender",
     "renderer.ItemInHandRendererExtender",
     "renderer.LevelEventHandlerExtender",
     "renderer.blockentity.DecoratedPotRendererExtender",

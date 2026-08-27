@@ -1,57 +1,93 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.mixin.world.level.block.entity.PotDecorationsAccessor;
-import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.TagKey;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.DecoratedPotRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.entity.PotDecorations;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Optional;
 
 @Mixin(DecoratedPotRecipe.class)
-public class DecoratedPotRecipeExtender {
-    @Redirect(
-        method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"
-        )
-    )
-    private boolean isDecoratedPotIngredientsCheckDecoratedPotPatternItemBehavior(ItemStack instance, TagKey<Item> tag) {
-        return !instance.isEmpty() && instance.itematic$hasBehavior(ItemBehaviorType.DECORATED_POT_PATTERN);
+public abstract class DecoratedPotRecipeExtender extends CustomRecipe {
+    @Shadow
+    @Final
+    private Ingredient backPattern;
+
+    @Shadow
+    @Final
+    private Ingredient leftPattern;
+
+    @Shadow
+    @Final
+    private Ingredient rightPattern;
+
+    @Shadow
+    @Final
+    private Ingredient frontPattern;
+
+    @Shadow
+    private static ItemStack back(CraftingInput input) {
+        throw new UnsupportedOperationException("Implemented via mixin");
     }
 
-    @WrapMethod(
-        method = "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;"
-    )
-    public ItemStack useHolders(CraftingInput input, HolderLookup.Provider registries, Operation<ItemStack> original) {
-        ItemStack stack = registries.lookupOrThrow(Registries.ITEM)
-            .get(ItemIds.DECORATED_POT)
-            .map(ItemStack::new)
-            .orElse(ItemStack.EMPTY);
-        if (stack.isEmpty()) {
-            return stack;
-        }
+    @Shadow
+    private static ItemStack left(CraftingInput input) {
+        throw new UnsupportedOperationException("Implemented via mixin");
+    }
 
-        PotDecorations potDecorations = PotDecorationsAccessor.create(
-            Optional.of(input.getItem(1).getItemHolder()),
-            Optional.of(input.getItem(3).getItemHolder()),
-            Optional.of(input.getItem(5).getItemHolder()),
-            Optional.of(input.getItem(7).getItemHolder())
+    @Shadow
+    private static ItemStack right(CraftingInput input) {
+        throw new UnsupportedOperationException("Implemented via mixin");
+    }
+
+    @Shadow
+    private static ItemStack front(CraftingInput input) {
+        throw new UnsupportedOperationException("Implemented via mixin");
+    }
+
+    @WrapOperation(
+        method = "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;)Lnet/minecraft/world/item/ItemStack;",
+        at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/level/block/entity/PotDecorations;"
+        )
+    )
+    public PotDecorations useHolders(Item back, Item left, Item right, Item front, Operation<PotDecorations> original, CraftingInput input) {
+        return PotDecorationsAccessor.create(
+            Optional.of(back(input).typeHolder()),
+            Optional.of(left(input).typeHolder()),
+            Optional.of(right(input).typeHolder()),
+            Optional.of(front(input).typeHolder())
         );
-        stack.set(DataComponents.POT_DECORATIONS, potDecorations);
-        return stack;
+    }
+
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
+        NonNullList<ItemStack> remainders = NonNullList.withSize(input.size(), ItemStack.EMPTY);
+        this.backPattern.itematic$remainder()
+            .map(ItemStackTemplate::create)
+            .ifPresent(remainder -> remainders.set(1, remainder));
+        this.leftPattern.itematic$remainder()
+            .map(ItemStackTemplate::create)
+            .ifPresent(remainder -> remainders.set(3, remainder));
+        this.rightPattern.itematic$remainder()
+            .map(ItemStackTemplate::create)
+            .ifPresent(remainder -> remainders.set(5, remainder));
+        this.frontPattern.itematic$remainder()
+            .map(ItemStackTemplate::create)
+            .ifPresent(remainder -> remainders.set(7, remainder));
+        return remainders;
     }
 }

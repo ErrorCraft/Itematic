@@ -7,7 +7,6 @@ import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.world.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +15,7 @@ import java.util.Collection;
 
 public class PotionItemGroupEntry extends PossiblyHiddenItemGroupEntry<PotionItemGroupEntry> {
     public static final MapCodec<PotionItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> codec(instance).and(
-        RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(entry -> entry.item)
+        Item.CODEC.fieldOf("item").forGetter(entry -> entry.item)
     ).apply(instance, PotionItemGroupEntry::new));
 
     private final Holder<Item> item;

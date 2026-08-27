@@ -26,7 +26,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAssets;
@@ -103,8 +102,7 @@ public record EquipmentItemBehavior(Equippable equippable) implements ItemBehavi
             of(Equippable.builder(EquipmentSlot.HEAD)
                 .setSwappable(false)
                 .build()),
-            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)),
-            FireworkShapeModifierItemBehavior.of(FireworkExplosion.Shape.CREEPER)
+            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD))
         };
     }
 

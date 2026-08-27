@@ -32,7 +32,7 @@ public class WorkAtComposterExtender {
             target = "Lnet/minecraft/world/SimpleContainer;removeItemType(Lnet/minecraft/world/item/Item;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack removeItemUseId(SimpleContainer instance, Item item, int count) {
+    private ItemStack removeItemUseId(SimpleContainer instance, Item itemType, int count) {
         instance.itematic$removeItem(ItemIds.WHEAT, count);
         return ItemStack.EMPTY;
     }
@@ -44,8 +44,8 @@ public class WorkAtComposterExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForBreadUseCreateStack(ItemLike item, int count, @Local(argsOnly = true) Villager villager) {
-        return villager.level().itematic$createStack(ItemIds.BREAD, count);
+    private ItemStack newItemStackForBreadUseCreateStack(ItemLike item, int count, @Local(name = "body", argsOnly = true) Villager body) {
+        return body.level().itematic$createStack(ItemIds.BREAD, count);
     }
 
     @Redirect(
@@ -55,8 +55,8 @@ public class WorkAtComposterExtender {
             target = "Ljava/util/List;indexOf(Ljava/lang/Object;)I"
         )
     )
-    private int indexOfItemUseId(List<Item> instance, Object o, @Local ItemStack stack) {
-        return COMPOSTABLE_KEYS.indexOf(stack.itematic$key());
+    private int indexOfItemUseId(List<Item> instance, Object o, @Local(name = "itemStack") ItemStack itemStack) {
+        return COMPOSTABLE_KEYS.indexOf(itemStack.itematic$key());
     }
 
     @Redirect(
@@ -67,7 +67,7 @@ public class WorkAtComposterExtender {
             opcode = Opcodes.GETSTATIC
         )
     )
-    private Item getWheatUseDynamicRegistry(@Local(argsOnly = true) Villager entity) {
-        return entity.level().itematic$getItem(ItemIds.WHEAT).value();
+    private Item getWheatUseDynamicRegistry(@Local(name = "body", argsOnly = true) Villager body) {
+        return body.level().itematic$getItem(ItemIds.WHEAT).value();
     }
 }

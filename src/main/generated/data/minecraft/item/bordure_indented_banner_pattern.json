@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:banner_pattern": {
-      "patterns": "minecraft:pattern_item/bordure_indented"
+      "patterns": "#minecraft:pattern_item/bordure_indented"
     },
     "minecraft:stackable": 1
   },

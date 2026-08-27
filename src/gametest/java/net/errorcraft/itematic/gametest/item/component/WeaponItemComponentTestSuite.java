@@ -21,8 +21,7 @@ public class WeaponItemComponentTestSuite {
     @GameTest
     public void zombieAttackingUnarmedDealsDamageFromTrueBaseValueAttackDamageAttribute(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        Zombie zombie = TestUtil.createEntity(helper, EntityType.ZOMBIE, entity -> {
-        });
+        Zombie zombie = TestUtil.createEntity(helper, EntityType.ZOMBIE, _ -> {});
         level.addFreshEntity(zombie);
         Pig victim = spawnVictim(helper);
         helper.startSequence().thenExecuteAfter(1, () -> {

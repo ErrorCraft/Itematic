@@ -7,7 +7,7 @@ import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+
 import java.util.Set;
 
 public record SideCheckPredicate(Set<Direction> sides) implements LootItemCondition {
@@ -20,8 +20,8 @@ public record SideCheckPredicate(Set<Direction> sides) implements LootItemCondit
     }
 
     @Override
-    public LootItemConditionType getType() {
-        return ItematicPredicateTypes.SIDE_CHECK;
+    public MapCodec<? extends LootItemCondition> codec() {
+        return CODEC;
     }
 
     @Override

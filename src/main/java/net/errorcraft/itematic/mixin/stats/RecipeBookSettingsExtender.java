@@ -45,8 +45,7 @@ public class RecipeBookSettingsExtender implements RecipeBookSettingsAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;mapCodec(Ljava/util/function/Function;)Lcom/mojang/serialization/MapCodec;",
-            remap = false
+            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;mapCodec(Ljava/util/function/Function;)Lcom/mojang/serialization/MapCodec;"
         )
     )
     private static MapCodec<RecipeBookSettings> addExtraMapCodecFields(MapCodec<RecipeBookSettings> original) {
@@ -70,13 +69,13 @@ public class RecipeBookSettingsExtender implements RecipeBookSettingsAccess {
     @WrapMethod(
         method = "updateSettings"
     )
-    private void checkBrewing(RecipeBookType type, UnaryOperator<RecipeBookSettings.TypeSettings> modifier, Operation<Void> original) {
-        if (type == RecipeBookType.ITEMATIC_BREWING) {
-            this.brewing = modifier.apply(this.brewing);
+    private void checkBrewing(RecipeBookType recipeBookType, UnaryOperator<RecipeBookSettings.TypeSettings> operator, Operation<Void> original) {
+        if (recipeBookType == RecipeBookType.ITEMATIC_BREWING) {
+            this.brewing = operator.apply(this.brewing);
             return;
         }
 
-        original.call(type, modifier);
+        original.call(recipeBookType, operator);
     }
 
     @ModifyReturnValue(

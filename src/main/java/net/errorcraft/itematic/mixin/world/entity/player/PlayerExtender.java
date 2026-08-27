@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public abstract class PlayerExtender extends LivingEntityExtender {
     @Shadow
     @Final
-    Inventory inventory;
+    private Inventory inventory;
 
     @Shadow
     public abstract Inventory getInventory();
@@ -99,10 +99,10 @@ public abstract class PlayerExtender extends LivingEntityExtender {
         method = "isScoping",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isSpyglassCheckZoomItemBehavior(ItemStack instance, Item item) {
+    private boolean isSpyglassCheckZoomItemBehavior(ItemStack instance, Object o) {
         return instance.itematic$hasBehavior(ItemBehaviorType.ZOOM);
     }
 
@@ -140,7 +140,7 @@ public abstract class PlayerExtender extends LivingEntityExtender {
     private boolean isEquipped(ResourceKey<Item> item) {
         for (EquipmentSlot slot : EquipmentSlot.VALUES) {
             ItemStack equippedStack = this.getItemBySlot(slot);
-            if (!equippedStack.itematic$is(item)) {
+            if (!equippedStack.is(item)) {
                 continue;
             }
 

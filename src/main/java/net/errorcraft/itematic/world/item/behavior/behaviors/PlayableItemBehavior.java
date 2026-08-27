@@ -10,7 +10,6 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.PlayableUseDurationProvider;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -49,12 +48,12 @@ public record PlayableItemBehavior(Holder<Instrument> defaultInstrument) impleme
 
     @Override
     public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        return this.instrument(stack, user.registryAccess())
+        return this.instrument(stack)
             .map(Holder::value)
             .map(instrument -> {
                 InstrumentItemAccessor.playSound(level, user, instrument);
                 user.getCooldowns().addCooldown(stack, Mth.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND));
-                user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+                user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
                 return ItemResult.CONSUME;
             }).orElse(ItemResult.PASS);
     }
@@ -64,12 +63,12 @@ public record PlayableItemBehavior(Holder<Instrument> defaultInstrument) impleme
         builder.set(DataComponents.INSTRUMENT, new InstrumentComponent(this.defaultInstrument));
     }
 
-    public Optional<Holder<Instrument>> instrument(ItemStack stack, HolderLookup.Provider lookup) {
+    public Optional<Holder<Instrument>> instrument(ItemStack stack) {
         InstrumentComponent instrument = stack.get(DataComponents.INSTRUMENT);
         if (instrument == null) {
             return Optional.empty();
         }
 
-        return instrument.unwrap(lookup);
+        return Optional.of(instrument.instrument());
     }
 }

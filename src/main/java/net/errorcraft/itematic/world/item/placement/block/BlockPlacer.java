@@ -4,6 +4,7 @@ import net.errorcraft.itematic.mixin.world.item.BlockItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.world.phys.shapes.CollisionContexts;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -82,7 +83,11 @@ public class BlockPlacer {
 
     private void placed(BlockState blockState, BlockPos pos, @Nullable LivingEntity placer) {
         Level level = this.context.level();
-        ItemStack stack = this.context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        ItemStack stack = this.context.getOrDefault(
+            LootContextParams.TOOL,
+            ItemStacks::fromItemInstance,
+            ItemStack.EMPTY
+        );
         blockState = this.placeFromNbt(blockState, pos, stack);
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null && placer instanceof Player playerPlacer) {

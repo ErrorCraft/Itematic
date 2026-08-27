@@ -5,8 +5,7 @@
     "A": {
       "items": "minecraft:milk_bucket",
       "remainder": {
-        "id": "minecraft:bucket",
-        "count": 1
+        "id": "minecraft:bucket"
       }
     },
     "B": "minecraft:sugar",
@@ -19,7 +18,6 @@
     "CCC"
   ],
   "result": {
-    "id": "minecraft:cake",
-    "count": 1
+    "id": "minecraft:cake"
   }
 }

@@ -81,7 +81,7 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
         }
 
         if (user instanceof Player playerEntity) {
-            playerEntity.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+            playerEntity.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         }
 
         return true;

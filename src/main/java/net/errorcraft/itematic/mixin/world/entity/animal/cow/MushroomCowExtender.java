@@ -29,12 +29,12 @@ public abstract class MushroomCowExtender extends MobExtender {
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         )
     )
-    private boolean isBowlCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.BOWL);
+    private boolean isBowlCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.BOWL);
     }
 
     @Redirect(
@@ -72,7 +72,7 @@ public abstract class MushroomCowExtender extends MobExtender {
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -83,8 +83,8 @@ public abstract class MushroomCowExtender extends MobExtender {
             )
         )
     )
-    private boolean isShearsCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.SHEARS);
+    private boolean isShearsCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.SHEARS);
     }
 
     @Redirect(
@@ -95,8 +95,8 @@ public abstract class MushroomCowExtender extends MobExtender {
         )
     )
     @Nullable
-    private SuspiciousEffectHolder getSuspiciousStewEffectsUseItemBehavior(ItemLike item, @Local(argsOnly = true) ItemStack stack) {
-        return stack.itematic$getBehavior(ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT)
+    private SuspiciousEffectHolder getSuspiciousStewEffectsUseItemBehavior(ItemLike item, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack) {
+        return itemStack.itematic$getBehavior(ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT)
             .orElse(null);
     }
 

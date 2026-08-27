@@ -7,21 +7,22 @@ import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 
-public record DropItemFromBlockAction(PositionTarget position, ItemStack item) implements Action<DropItemFromBlockAction> {
+public record DropItemFromBlockAction(PositionTarget position, ItemStackTemplate item) implements Action<DropItemFromBlockAction> {
     public static final MapCodec<DropItemFromBlockAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(DropItemFromBlockAction::position),
-        ItemStack.CODEC.fieldOf("item").forGetter(DropItemFromBlockAction::item)
+        ItemStackTemplate.CODEC.fieldOf("item").forGetter(DropItemFromBlockAction::item)
     ).apply(instance, DropItemFromBlockAction::new));
 
     public static DropItemFromBlockAction of(PositionTarget position, Holder<Item> item) {
-        return new DropItemFromBlockAction(position, new ItemStack(item));
+        return new DropItemFromBlockAction(position, ItemStackTemplates.of(item));
     }
 
     @Override
@@ -41,7 +42,7 @@ public record DropItemFromBlockAction(PositionTarget position, ItemStack item) i
             return false;
         }
 
-        Block.popResourceFromFace(context.level(), pos, side, this.item.copy());
+        Block.popResourceFromFace(context.level(), pos, side, this.item.create());
         return true;
     }
 }

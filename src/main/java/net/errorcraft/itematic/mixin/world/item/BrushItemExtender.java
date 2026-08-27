@@ -15,9 +15,9 @@ public class BrushItemExtender implements BrushItemAccess {
     @ModifyVariable(
         method = "onUseTick",
         at = @At("LOAD"),
-        ordinal = 1
+        name = "timeElapsed"
     )
-    private int useUsedTicksDirectlyInsteadOfCalculating(int value) {
+    private int useUsedTicksDirectlyInsteadOfCalculating(int timeElapsed) {
         return this.usedTicks + 1;
     }
 

@@ -9,8 +9,6 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +19,7 @@ import net.minecraft.world.level.Level;
 
 public record WritableItemBehavior(Holder<Item> transformsInto) implements ItemBehavior<WritableItemBehavior> {
     public static final Codec<WritableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.create(Registries.ITEM).fieldOf("transforms_into").forGetter(WritableItemBehavior::transformsInto)
+        Item.CODEC.fieldOf("transforms_into").forGetter(WritableItemBehavior::transformsInto)
     ).apply(instance, WritableItemBehavior::new));
 
     public static WritableItemBehavior of(Holder<Item> transformsInto) {
@@ -36,7 +34,7 @@ public record WritableItemBehavior(Holder<Item> transformsInto) implements ItemB
     @Override
     public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         user.openItemGui(stack, hand);
-        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         return ItemResult.SUCCEED;
     }
 

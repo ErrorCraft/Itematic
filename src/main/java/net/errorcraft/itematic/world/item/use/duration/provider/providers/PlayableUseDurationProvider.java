@@ -29,7 +29,7 @@ public class PlayableUseDurationProvider implements UseDurationProvider {
     @Override
     public OptionalInt get(ItemStack stack, LivingEntity user) {
         return stack.itematic$getBehavior(ItemBehaviorType.PLAYABLE)
-            .flatMap(component -> component.instrument(stack, user.registryAccess()))
+            .flatMap(playable -> playable.instrument(stack))
             .map(Holder::value)
             .map(instrument -> OptionalInt.of(Mth.floor(instrument.useDuration() * SharedConstants.TICKS_PER_SECOND)))
             .orElseGet(OptionalInt::empty);

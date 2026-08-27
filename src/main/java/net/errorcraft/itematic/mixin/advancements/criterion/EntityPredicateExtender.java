@@ -29,11 +29,10 @@ public class EntityPredicateExtender implements EntityPredicateAccess {
     private Optional<Boolean> inWaterOrRain = Optional.empty();
 
     @ModifyExpressionValue(
-        method = "method_53135",
+        method = "lambda$static$0",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
-            remap = false
+            target = "Lcom/mojang/serialization/codecs/RecordCodecBuilder;create(Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
         )
     )
     private static Codec<EntityPredicate> addExtraMapCodecFields(Codec<EntityPredicate> original) {
@@ -48,7 +47,7 @@ public class EntityPredicateExtender implements EntityPredicateAccess {
         method = "matches(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/entity/Entity;)Z",
         at = @At("TAIL")
     )
-    private boolean testExtraFields(boolean original, ServerLevel level, Vec3 pos, Entity entity) {
+    private boolean testExtraFields(boolean original, ServerLevel level, Vec3 position, Entity entity) {
         if (!original) {
             return false;
         }

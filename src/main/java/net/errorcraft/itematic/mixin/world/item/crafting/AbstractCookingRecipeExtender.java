@@ -1,11 +1,10 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import net.errorcraft.itematic.access.world.item.crafting.RecipeAccess;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SingleItemRecipe;
@@ -20,7 +19,7 @@ import org.spongepowered.asm.mixin.Unique;
 import java.util.List;
 
 @Mixin(AbstractCookingRecipe.class)
-public abstract class AbstractCookingRecipeExtender extends SingleItemRecipe implements RecipeAccess {
+public abstract class AbstractCookingRecipeExtender extends SingleItemRecipe {
     @Shadow
     @Final
     private float experience;
@@ -29,8 +28,8 @@ public abstract class AbstractCookingRecipeExtender extends SingleItemRecipe imp
     @Final
     private int cookingTime;
 
-    public AbstractCookingRecipeExtender(String group, Ingredient input, ItemStack result) {
-        super(group, input, result);
+    public AbstractCookingRecipeExtender(CommonInfo commonInfo, Ingredient input, ItemStackTemplate result) {
+        super(commonInfo, input, result);
     }
 
     @Override

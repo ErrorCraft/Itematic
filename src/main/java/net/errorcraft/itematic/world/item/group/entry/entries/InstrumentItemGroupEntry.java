@@ -7,18 +7,18 @@ import net.errorcraft.itematic.world.item.group.entry.PossiblyHiddenItemGroupEnt
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.InstrumentComponent;
+
 import java.util.Collection;
 
 public class InstrumentItemGroupEntry extends PossiblyHiddenItemGroupEntry<InstrumentItemGroupEntry> {
     public static final MapCodec<InstrumentItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> codec(instance).and(instance.group(
-        RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(entry -> entry.item),
+        Item.CODEC.fieldOf("item").forGetter(entry -> entry.item),
         TagKey.codec(Registries.INSTRUMENT).fieldOf("tag").forGetter(entry -> entry.tag)
     )).apply(instance, InstrumentItemGroupEntry::new));
 

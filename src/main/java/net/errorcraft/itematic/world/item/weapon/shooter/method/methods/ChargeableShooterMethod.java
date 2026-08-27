@@ -158,10 +158,10 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             return;
         }
 
-        shooter.shoot(serverLevel, user, hand, stack, chargedProjectiles.getItems(), power, divergence, user instanceof Player, targetOverride);
+        shooter.shoot(serverLevel, user, hand, stack, chargedProjectiles.itemCopies(), power, divergence, user instanceof Player, targetOverride);
         if (user instanceof ServerPlayer player) {
             CriteriaTriggers.SHOT_CROSSBOW.trigger(player, stack);
-            player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+            player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         }
     }
 
@@ -180,7 +180,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             return false;
         }
 
-        stack.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.of(projectiles));
+        stack.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.ofNonEmpty(projectiles));
         return true;
     }
 

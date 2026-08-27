@@ -12,13 +12,13 @@ public class PlayerPredicateExtender {
     @Mixin(targets = "net/minecraft/advancements/criterion/PlayerPredicate$StatMatcher")
     public static class StatMatcherExtender {
         @Redirect(
-            method = "method_53226",
+            method = "lambda$new$0",
             at = @At(
                 value = "INVOKE",
                 target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
             )
         )
-        private static <T> Stat<T> getStatUseHolder(StatType<T> instance, T key, @Local(argsOnly = true) Holder<T> value) {
+        private static <T> Stat<T> getStatUseHolder(StatType<T> instance, T argument, @Local(name = "value", argsOnly = true) Holder<T> value) {
             return instance.itematic$get(value);
         }
     }

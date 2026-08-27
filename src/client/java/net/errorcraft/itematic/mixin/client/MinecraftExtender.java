@@ -29,7 +29,7 @@ public class MinecraftExtender implements MinecraftAccess {
             target = "Lnet/minecraft/server/packs/resources/ReloadableResourceManager;createReload(Ljava/util/concurrent/Executor;Ljava/util/concurrent/Executor;Ljava/util/concurrent/CompletableFuture;Ljava/util/List;)Lnet/minecraft/server/packs/resources/ReloadInstance;"
         )
     )
-    private void addCustomLoaders(GameConfig args, CallbackInfo info) {
+    private void addCustomLoaders(GameConfig gameConfig, CallbackInfo info) {
         this.resourceManager.registerReloadListener(this.itemBarStyles);
     }
 

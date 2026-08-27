@@ -95,21 +95,21 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
     }
 
     @ModifyConstant(
-        method = "renderOnboardingTooltips",
+        method = "extractOnboardingTooltips",
         constant = @Constant(
             classValue = SmithingTemplateItem.class,
             ordinal = 0
         )
     )
-    private boolean instanceOfSmithingTemplateItemUseItemBehavior(Object reference, Class<SmithingTemplateItem> clazz, @Local(ordinal = 0) ItemStack stack, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplateReference) {
-        Optional<SmithingTemplate> smithingTemplate = stack.itematic$getBehavior(ItemBehaviorType.SMITHING_TEMPLATE_PROVIDER)
+    private boolean instanceOfSmithingTemplateItemUseItemBehavior(Object reference, Class<SmithingTemplateItem> clazz, @Local(name = "template") ItemStack template, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplateReference) {
+        Optional<SmithingTemplate> smithingTemplate = template.itematic$getBehavior(ItemBehaviorType.SMITHING_TEMPLATE_PROVIDER)
             .map(SmithingTemplateProviderItemBehavior::template);
         smithingTemplate.ifPresent(smithingTemplateReference::set);
         return smithingTemplate.isPresent();
     }
 
     @ModifyVariable(
-        method = "renderOnboardingTooltips",
+        method = "extractOnboardingTooltips",
         at = @At("LOAD"),
         ordinal = 0
     )
@@ -119,7 +119,7 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
     }
 
     @Redirect(
-        method = "renderOnboardingTooltips",
+        method = "extractOnboardingTooltips",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/SmithingTemplateItem;getBaseSlotDescription()Lnet/minecraft/network/chat/Component;"
@@ -130,7 +130,7 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
     }
 
     @Redirect(
-        method = "renderOnboardingTooltips",
+        method = "extractOnboardingTooltips",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/SmithingTemplateItem;getAdditionSlotDescription()Lnet/minecraft/network/chat/Component;"

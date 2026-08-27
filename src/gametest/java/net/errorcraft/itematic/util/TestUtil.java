@@ -178,6 +178,10 @@ public class TestUtil {
         entity.setPos(Vec3.atBottomCenterOf(absolutePos));
     }
 
+    public static InteractionResult interactWithEntity(Entity entity, Player player) {
+        return entity.interact(player, InteractionHand.MAIN_HAND, Vec3.ZERO);
+    }
+
     public static Optional<ItemStack> useStackOnBlock(GameTestHelper helper, Player player, ItemStack stack, BlockPos pos, Direction direction) {
         BlockPos absolutePos = helper.absolutePos(pos);
         InteractionResult result = stack.useOn(

@@ -2,6 +2,7 @@ package net.errorcraft.itematic.world.entity.initializer.initializers;
 
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +20,7 @@ public class ThrownTridentEntityInitializer implements EntityInitializer<ThrownT
 
     @Override
     public @Nullable ThrownTrident create(ActionContext context, EntitySpawnReason reason) {
-        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY);
         LivingEntity user = context.get(LootContextParams.THIS_ENTITY, LivingEntity.class);
         float spinAttackStrength = user != null ?
             EnchantmentHelper.getTridentSpinAttackStrength(stack, user) :

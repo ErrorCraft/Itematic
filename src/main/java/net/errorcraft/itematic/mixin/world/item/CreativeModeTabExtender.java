@@ -100,19 +100,15 @@ public class CreativeModeTabExtender implements CreativeModeTabAccess {
 
     @Mixin(targets = "net/minecraft/world/item/CreativeModeTab$ItemDisplayBuilder")
     public static class ItemDisplayBuilderExtender {
-        @Shadow
-        @Final
-        private CreativeModeTab tab;
-
         @Unique
         private static final Logger LOGGER = LogUtils.getLogger();
 
         @WrapMethod(
             method = "accept"
         )
-        private void preventDuplicateEntryExceptionAndLogMessageInstead(ItemStack stack, CreativeModeTab.TabVisibility visibility, Operation<Void> original) {
+        private void preventDuplicateEntryExceptionAndLogMessageInstead(ItemStack stack, CreativeModeTab.TabVisibility tabVisibility, Operation<Void> original) {
             try {
-                original.call(stack, visibility);
+                original.call(stack, tabVisibility);
             } catch (IllegalStateException e) {
                 LOGGER.warn(e.getMessage());
             }

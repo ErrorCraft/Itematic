@@ -10,8 +10,8 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DebugStickItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -35,16 +35,11 @@ public class DebugStickItemBehavior implements ItemBehavior<DebugStickItemBehavi
 
     @Override
     public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
+        if (!(context.getPlayer() instanceof ServerPlayer player)) {
+            return ItemResult.PASS;
+        }
+
         Level level = context.getLevel();
-        if (level.isClientSide()) {
-            return ItemResult.PASS;
-        }
-
-        Player player = context.getPlayer();
-        if (player == null) {
-            return ItemResult.PASS;
-        }
-
         BlockPos pos = context.getClickedPos();
         if (!DUMMY.itematic$handleInteraction(player, level.getBlockState(pos), level, pos, true, context.getItemInHand())) {
             return ItemResult.PASS;
@@ -59,7 +54,7 @@ public class DebugStickItemBehavior implements ItemBehavior<DebugStickItemBehavi
     }
 
     public void use(LivingEntity user, BlockState state, LevelAccessor level, BlockPos pos, ItemStack stack) {
-        if (!level.isClientSide() && user instanceof Player playerUser) {
+        if (user instanceof ServerPlayer playerUser) {
             DUMMY.itematic$handleInteraction(playerUser, state, level, pos, false, stack);
         }
     }

@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:banner_pattern": {
-      "patterns": "minecraft:pattern_item/creeper"
+      "patterns": "#minecraft:pattern_item/creeper"
     },
     "minecraft:stackable": 1
   },

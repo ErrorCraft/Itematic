@@ -7,7 +7,7 @@
       "enchantability": 15
     },
     "minecraft:immune_to_damage": {
-      "damage": "minecraft:is_fire"
+      "damage": "#minecraft:is_fire"
     },
     "minecraft:repairable": {
       "items": "#minecraft:netherite_tool_materials"
@@ -54,7 +54,7 @@
           "delay_ticks": 8,
           "dismount_conditions": {
             "max_duration_ticks": 50,
-            "min_speed": 7.0
+            "min_speed": 9.0
           },
           "forward_movement": 0.38,
           "hit_sound": "minecraft:item.spear.hit",

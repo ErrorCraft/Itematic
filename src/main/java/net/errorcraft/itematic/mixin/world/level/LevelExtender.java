@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Level.class)
 public abstract class LevelExtender implements LevelReaderAccess, LevelAccess {
     @Shadow
-    public abstract void playSound(@Nullable Entity source, double x, double y, double z, SoundEvent sound, SoundSource category, float volume, float pitch);
+    public abstract void playSound(@Nullable Entity except, double x, double y, double z, SoundEvent sound, SoundSource source, float volume, float pitch);
 
     @Unique
     private ItemAccess itemAccess;

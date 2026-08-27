@@ -8,7 +8,6 @@ import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodTyp
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +27,7 @@ public class ItemInHandRendererExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         ),
         slice = @Slice(
             from = @At(
@@ -43,7 +42,7 @@ public class ItemInHandRendererExtender {
             )
         )
     )
-    private static boolean isBowUseItemBehavior(ItemStack instance, Item item) {
+    private static boolean isBowUseItemBehavior(ItemStack instance, Object o) {
         return instance.itematic$getBehavior(ItemBehaviorType.SHOOTER)
             .map(ShooterItemBehavior::method)
             .filter(method -> method.type() == ShooterMethodType.DIRECT)
@@ -54,7 +53,7 @@ public class ItemInHandRendererExtender {
         method = "renderArmWithItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -65,7 +64,7 @@ public class ItemInHandRendererExtender {
             )
         )
     )
-    private boolean isCrossbowUseItemBehaviorAndStoreUseDuration(ItemStack instance, Item item, AbstractClientPlayer player, @Share("useDuration") LocalIntRef useDuration) {
+    private boolean isCrossbowUseItemBehaviorAndStoreUseDuration(ItemStack instance, Object o, AbstractClientPlayer player, @Share("useDuration") LocalIntRef useDuration) {
         Optional<ShooterItemBehavior> optionalShooter = instance.itematic$getBehavior(ItemBehaviorType.SHOOTER);
         if (optionalShooter.isEmpty()) {
             return false;
@@ -170,7 +169,7 @@ public class ItemInHandRendererExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         ),
         slice = @Slice(
             from = @At(
@@ -180,7 +179,7 @@ public class ItemInHandRendererExtender {
             )
         )
     )
-    private static boolean isCrossbowUseItemBehavior(ItemStack instance, Item item) {
+    private static boolean isCrossbowUseItemBehavior(ItemStack instance, Object o) {
         return instance.itematic$getBehavior(ItemBehaviorType.SHOOTER)
             .map(ShooterItemBehavior::method)
             .filter(method -> method.type() == ShooterMethodType.CHARGEABLE)

@@ -4,7 +4,7 @@
       "block": "minecraft:ancient_debris"
     },
     "minecraft:immune_to_damage": {
-      "damage": "minecraft:is_fire"
+      "damage": "#minecraft:is_fire"
     },
     "minecraft:stackable": 64
   },

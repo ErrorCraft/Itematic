@@ -6,7 +6,6 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.component.ProvidesTrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 
 public record TrimMaterialProviderItemBehavior(Holder<TrimMaterial> trimMaterial) implements ItemBehavior<TrimMaterialProviderItemBehavior> {
@@ -26,6 +25,6 @@ public record TrimMaterialProviderItemBehavior(Holder<TrimMaterial> trimMaterial
 
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
-        builder.set(DataComponents.PROVIDES_TRIM_MATERIAL, new ProvidesTrimMaterial(this.trimMaterial));
+        builder.set(DataComponents.PROVIDES_TRIM_MATERIAL, this.trimMaterial);
     }
 }

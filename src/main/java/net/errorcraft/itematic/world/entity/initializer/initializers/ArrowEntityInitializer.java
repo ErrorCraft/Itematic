@@ -3,6 +3,7 @@ package net.errorcraft.itematic.world.entity.initializer.initializers;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
@@ -28,7 +29,8 @@ public record ArrowEntityInitializer<T extends AbstractArrow>(OwnerCreator<T> ow
             return this.ownerCreator.create(
                 context.level(),
                 entity,
-                context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY).copyWithCount(1),
+                context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY)
+                    .copyWithCount(1),
                 shooter
             );
         }
@@ -43,7 +45,8 @@ public record ArrowEntityInitializer<T extends AbstractArrow>(OwnerCreator<T> ow
             pos.x(),
             pos.y(),
             pos.z(),
-            context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY).copyWithCount(1),
+            context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY)
+                .copyWithCount(1),
             null
         );
         entity.pickup = AbstractArrow.Pickup.ALLOWED;

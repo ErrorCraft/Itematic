@@ -23,7 +23,7 @@ public class TagEntryExtender {
             target = "Lnet/minecraft/core/DefaultedRegistry;getTagOrEmpty(Lnet/minecraft/tags/TagKey;)Ljava/lang/Iterable;"
         )
     )
-    private Iterable<Holder<Item>> getTagOrEmptyUseDynamicRegistry(DefaultedRegistry<Item> instance, TagKey<Item> tagKey, @Local(argsOnly = true) LootContext context) {
+    private Iterable<Holder<Item>> getTagOrEmptyUseDynamicRegistry(DefaultedRegistry<Item> instance, TagKey<Item> tagKey, @Local(name = "context", argsOnly = true) LootContext context) {
         return context.getLevel().itematic$itemAccess().iterateTag(tagKey);
     }
 }

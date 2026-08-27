@@ -6,7 +6,6 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,11 +24,11 @@ public abstract class AbstractClientPlayerExtender extends Player {
         method = "getFieldOfViewModifier",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBowCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.BOW);
+    private boolean isBowCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.BOW);
     }
 
     @ModifyConstant(

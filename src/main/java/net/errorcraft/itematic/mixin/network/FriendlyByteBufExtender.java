@@ -15,8 +15,7 @@ public class FriendlyByteBufExtender {
         method = "readWithCodec(Lcom/mojang/serialization/DynamicOps;Lcom/mojang/serialization/Codec;Lnet/minecraft/nbt/NbtAccounter;)Ljava/lang/Object;",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;parse(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;",
-            remap = false
+            target = "Lcom/mojang/serialization/Codec;parse(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;"
         )
     )
     private DynamicOps<Tag> useCustomDynamicOpsForParse(DynamicOps<Tag> ops) {
@@ -27,8 +26,7 @@ public class FriendlyByteBufExtender {
         method = "writeWithCodec(Lcom/mojang/serialization/DynamicOps;Lcom/mojang/serialization/Codec;Ljava/lang/Object;)Lnet/minecraft/network/FriendlyByteBuf;",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;",
-            remap = false
+            target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;"
         )
     )
     private DynamicOps<Tag> useCustomDynamicOpsForEncodeStart(DynamicOps<Tag> ops) {

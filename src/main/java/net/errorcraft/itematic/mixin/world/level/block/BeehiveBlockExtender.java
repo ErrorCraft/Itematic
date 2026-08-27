@@ -5,7 +5,6 @@ import net.errorcraft.itematic.access.world.level.block.state.BlockBehaviourAcce
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Bees;
 import net.minecraft.world.level.ItemLike;
@@ -25,7 +24,7 @@ public class BeehiveBlockExtender implements BlockBehaviourAccess {
         method = "useItemOn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -36,15 +35,15 @@ public class BeehiveBlockExtender implements BlockBehaviourAccess {
             )
         )
     )
-    private boolean isShearsCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.SHEARS);
+    private boolean isShearsCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.SHEARS);
     }
 
     @Redirect(
         method = "useItemOn",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -55,8 +54,8 @@ public class BeehiveBlockExtender implements BlockBehaviourAccess {
             )
         )
     )
-    private boolean isGlassBottleCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GLASS_BOTTLE);
+    private boolean isGlassBottleCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GLASS_BOTTLE);
     }
 
     @Redirect(
@@ -66,7 +65,7 @@ public class BeehiveBlockExtender implements BlockBehaviourAccess {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForHoneyBottleUseCreateStack(ItemLike item, @Local(argsOnly = true) Level level) {
+    private ItemStack newItemStackForHoneyBottleUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
         return level.itematic$createStack(ItemIds.HONEY_BOTTLE);
     }
 

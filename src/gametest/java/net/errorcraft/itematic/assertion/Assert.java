@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,7 +64,7 @@ public class Assert {
         );
     }
 
-    public static <T> void areEqual(GameTestHelper helper, T value, T expected, Supplier<String> message) {
+    public static <T> void areEqual(GameTestHelper helper, @Nullable T value, @Nullable T expected, Supplier<String> message) {
         if (Objects.equals(value, expected)) {
             return;
         }
@@ -132,5 +133,12 @@ public class Assert {
 
     public static ItemStackAssert itemStack(GameTestHelper helper, ItemStack stack, String name) {
         return new ItemStackAssert(helper, stack, name);
+    }
+
+    public static ItemStackAssert itemStack(GameTestHelper helper, @Nullable ItemStackTemplate template) {
+        return new ItemStackAssert(
+            helper,
+            isNotNull(helper, template, "item stack template").create()
+        );
     }
 }

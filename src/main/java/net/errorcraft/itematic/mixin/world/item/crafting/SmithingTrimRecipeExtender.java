@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import net.errorcraft.itematic.access.world.item.crafting.RecipeAccess;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SimpleSmithingRecipe;
 import net.minecraft.world.item.crafting.SmithingTrimRecipe;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
@@ -18,22 +18,26 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.List;
 
 @Mixin(SmithingTrimRecipe.class)
-public class SmithingTrimRecipeExtender implements RecipeAccess {
+public abstract class SmithingTrimRecipeExtender extends SimpleSmithingRecipe {
     @Shadow
     @Final
-    Ingredient template;
+    private Ingredient template;
 
     @Shadow
     @Final
-    Ingredient base;
+    private Ingredient base;
 
     @Shadow
     @Final
-    Ingredient addition;
+    private Ingredient addition;
 
     @Shadow
     @Final
-    Holder<TrimPattern> pattern;
+    private Holder<TrimPattern> pattern;
+
+    protected SmithingTrimRecipeExtender(CommonInfo commonInfo) {
+        super(commonInfo);
+    }
 
     @Override
     public List<RecipeDisplay> itematic$display(HolderGetter<Item> items) {

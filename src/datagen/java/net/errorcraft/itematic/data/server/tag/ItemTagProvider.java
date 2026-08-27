@@ -3,16 +3,17 @@ package net.errorcraft.itematic.data.server.tag;
 import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.tags.ItemGroupItemTags;
 import net.errorcraft.itematic.tags.ItematicItemTags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
+
 import java.util.concurrent.CompletableFuture;
 
-public class ItemTagProvider extends FabricTagProvider<Item> {
-    public ItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+public class ItemTagProvider extends FabricTagsProvider<Item> {
+    public ItemTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, Registries.ITEM, registriesFuture);
     }
 
@@ -1399,6 +1400,7 @@ public class ItemTagProvider extends FabricTagProvider<Item> {
             .add(ItemIds.BAKED_POTATO)
             .add(ItemIds.POISONOUS_POTATO)
             .add(ItemIds.BEETROOT)
+            .add(ItemIds.GOLDEN_DANDELION)
             .add(ItemIds.DRIED_KELP)
             .add(ItemIds.BEEF)
             .add(ItemIds.COOKED_BEEF)

@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.client.gui.screens.achievement;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.client.gui.screens.achievement.StatsScreenAccess;
@@ -47,7 +48,7 @@ import java.util.Set;
 public abstract class StatsScreenExtender implements StatsScreenAccess {
     @Shadow
     @Final
-    StatsCounter stats;
+    private StatsCounter stats;
 
     @Override
     public StatsCounter itematic$stats() {
@@ -62,7 +63,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
     public static class ItemStatisticsListExtender extends ContainerObjectSelectionList {
         @Shadow
         @Final
-        StatsScreen field_18752;
+        StatsScreen this$0;
 
         @Shadow
         @Final
@@ -80,8 +81,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             method = "<init>",
             at = @At(
                 value = "INVOKE",
-                target = "Lcom/google/common/collect/Sets;newIdentityHashSet()Ljava/util/Set;",
-                remap = false
+                target = "Lcom/google/common/collect/Sets;newIdentityHashSet()Ljava/util/Set;"
             )
         )
         private void storeItemsSet(StatsScreen statsScreen, Minecraft minecraft, CallbackInfo info, @Share("items") LocalRef<Set<Holder<Item>>> items) {
@@ -121,7 +121,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 target = "Ljava/util/Set;iterator()Ljava/util/Iterator;"
             )
         )
-        private void addEntries(StatsScreen statsScreen, Minecraft client, CallbackInfo info, @Share("items") LocalRef<Set<Holder<Item>>> items) {
+        private void addEntries(StatsScreen statsScreen, Minecraft minecraft, CallbackInfo info, @Share("items") LocalRef<Set<Holder<Item>>> items) {
             for (Holder<Item> item : items.get()) {
                 StatsScreen.ItemStatisticsList.ItemRow itemRow = StatsScreenAccessor.ItemStatisticsListAccessor.ItemRowAccessor.create((StatsScreen.ItemStatisticsList)(Object) this, null);
                 itemRow.itematic$setItem(item);
@@ -131,7 +131,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
 
         @Unique
         private Set<Holder<Item>> entries(RegistryAccess registries) {
-            StatsCounter statHandler = this.field_18752.itematic$stats();
+            StatsCounter statHandler = this.this$0.itematic$stats();
             Set<Holder<Item>> entries = new HashSet<>();
             Registry<Item> items = registries.lookupOrThrow(Registries.ITEM);
             Registry<Block> blocks = registries.lookupOrThrow(Registries.BLOCK);
@@ -171,7 +171,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             return statHandler.getValue(statType.itematic$get(holder)) <= 0;
         }
 
-        @Mixin(targets = "net.minecraft.client.gui.screens.achievement.StatsScreen$ItemStatisticsList$ItemRowComparator")
+        @Mixin(targets = "net/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList$ItemRowComparator")
         public static class ItemRowComparatorExtender {
             @ModifyConstant(
                 method = "compare(Lnet/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList$ItemRow;Lnet/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList$ItemRow;)I",
@@ -180,8 +180,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     ordinal = 0
                 )
             )
-            private boolean instanceOfBlockItemForFirstItemUseItemBehavior(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatisticsList.ItemRow first, @Share("firstBlock") LocalRef<BlockItemBehavior> firstBlockReference) {
-                Optional<BlockItemBehavior> firstBlock = first.itematic$item()
+            private boolean instanceOfBlockItemForFirstItemUseItemBehavior(Object reference, Class<BlockItem> clazz, @Local(name = "one", argsOnly = true) StatsScreen.ItemStatisticsList.ItemRow one, @Share("firstBlock") LocalRef<BlockItemBehavior> firstBlockReference) {
+                Optional<BlockItemBehavior> firstBlock = one.itematic$item()
                     .value()
                     .itematic$getBehavior(ItemBehaviorType.BLOCK);
                 firstBlock.ifPresent(firstBlockReference::set);
@@ -201,8 +201,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private boolean instanceOfBlockItemForSecondItemUseItemBehavior(Object reference, Class<BlockItem> clazz, StatsScreen.ItemStatisticsList.ItemRow first, StatsScreen.ItemStatisticsList.ItemRow second, @Share("secondBlock") LocalRef<BlockItemBehavior> secondBlockReference) {
-                Optional<BlockItemBehavior> secondBlock = second.itematic$item()
+            private boolean instanceOfBlockItemForSecondItemUseItemBehavior(Object reference, Class<BlockItem> clazz, @Local(name = "two", argsOnly = true) StatsScreen.ItemStatisticsList.ItemRow two, @Share("secondBlock") LocalRef<BlockItemBehavior> secondBlockReference) {
+                Optional<BlockItemBehavior> secondBlock = two.itematic$item()
                     .value()
                     .itematic$getBehavior(ItemBehaviorType.BLOCK);
                 secondBlock.ifPresent(secondBlockReference::set);
@@ -253,7 +253,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForFirstBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T stat, @Share("firstBlock") LocalRef<BlockItemBehavior> firstBlockReference) {
+            private <T> int getStatForFirstBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T key, @Share("firstBlock") LocalRef<BlockItemBehavior> firstBlockReference) {
                 return instance.getValue(type.itematic$get(firstBlockReference.get().block().defaultBlock()));
             }
 
@@ -277,7 +277,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForSecondBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T stat, @Share("secondBlock") LocalRef<BlockItemBehavior> secondBlockReference) {
+            private <T> int getStatForSecondBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T key, @Share("secondBlock") LocalRef<BlockItemBehavior> secondBlockReference) {
                 return instance.getValue(type.itematic$get(secondBlockReference.get().block().defaultBlock()));
             }
 
@@ -296,8 +296,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForFirstItemUseHolder(StatsCounter instance, StatType<Item> type, T stat, StatsScreen.ItemStatisticsList.ItemRow first) {
-                return instance.getValue(type.itematic$get(first.itematic$item()));
+            private <T> int getStatForFirstItemUseHolder(StatsCounter instance, StatType<Item> type, T key, StatsScreen.ItemStatisticsList.ItemRow one) {
+                return instance.getValue(type.itematic$get(one.itematic$item()));
             }
 
             @Redirect(
@@ -315,8 +315,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForSecondItemUseHolder(StatsCounter instance, StatType<Item> type, T stat, StatsScreen.ItemStatisticsList.ItemRow first, StatsScreen.ItemStatisticsList.ItemRow second) {
-                return instance.getValue(type.itematic$get(second.itematic$item()));
+            private <T> int getStatForSecondItemUseHolder(StatsCounter instance, StatType<Item> type, T key, @Local(name = "two", argsOnly = true) StatsScreen.ItemStatisticsList.ItemRow two) {
+                return instance.getValue(type.itematic$get(two.itematic$item()));
             }
 
             @Redirect(
@@ -338,8 +338,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     ordinal = 0
                 )
             )
-            private int compareUseHolders(int x, int y, StatsScreen.ItemStatisticsList.ItemRow first, StatsScreen.ItemStatisticsList.ItemRow second) {
-                return first.itematic$item().compareTo(second.itematic$item());
+            private int compareUseHolders(int x, int y, StatsScreen.ItemStatisticsList.ItemRow one, StatsScreen.ItemStatisticsList.ItemRow two) {
+                return one.itematic$item().compareTo(two.itematic$item());
             }
         }
 
@@ -364,7 +364,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @ModifyConstant(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 constant = @Constant(
                     classValue = BlockItem.class,
                     ordinal = 0
@@ -378,7 +378,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 at = @At(
                     value = "FIELD",
                     target = "Lnet/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList$ItemRow;item:Lnet/minecraft/world/item/Item;",
@@ -391,7 +391,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/item/BlockItem;getBlock()Lnet/minecraft/world/level/block/Block;"
@@ -403,7 +403,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
             }
 
             @Redirect(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;",
@@ -417,12 +417,12 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> Stat<Block> getStatUseHolder(StatType<Block> instance, T key, @Share("block") LocalRef<BlockItemBehavior> blockReference) {
+            private <T> Stat<Block> getStatUseHolder(StatType<Block> instance, T argument, @Share("block") LocalRef<BlockItemBehavior> blockReference) {
                 return instance.itematic$get(blockReference.get().block().defaultBlock());
             }
 
             @Redirect(
-                method = "renderContent(Lnet/minecraft/client/gui/GuiGraphics;IIZF)V",
+                method = "extractContent",
                 at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;",
@@ -436,7 +436,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key) {
+            private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument) {
                 return instance.itematic$get(this.item);
             }
 

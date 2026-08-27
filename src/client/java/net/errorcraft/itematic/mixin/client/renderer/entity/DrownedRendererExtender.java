@@ -2,7 +2,6 @@ package net.errorcraft.itematic.mixin.client.renderer.entity;
 
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.renderer.entity.DrownedRenderer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,10 +13,10 @@ public class DrownedRendererExtender {
         method = "getArmPose(Lnet/minecraft/world/entity/monster/zombie/Drowned;Lnet/minecraft/world/entity/HumanoidArm;)Lnet/minecraft/client/model/HumanoidModel$ArmPose;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isTridentCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.TRIDENT);
+    private boolean isTridentCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.TRIDENT);
     }
 }

@@ -35,7 +35,7 @@ public record ZoomItemBehavior(float fieldOfViewMultiplier, Holder<SoundEvent> s
     @Override
     public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         user.playSound(this.startUsingSound.value(), 1.0f, 1.0f);
-        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         return ItemResult.PASS;
     }
 

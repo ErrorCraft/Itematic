@@ -27,8 +27,7 @@ public class ObjectiveCriteriaExtender implements ObjectiveCriteriaAccess {
         method = "<clinit>",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/mojang/serialization/codecs/PrimitiveCodec;comapFlatMap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;",
-            remap = false
+            target = "Lcom/mojang/serialization/codecs/PrimitiveCodec;comapFlatMap(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
         )
     )
     private static Codec<ObjectiveCriteria> useDynamicRegistry(PrimitiveCodec<String> instance, Function<String, DataResult<ObjectiveCriteria>> to, Function<ObjectiveCriteria, String> from) {

@@ -22,10 +22,10 @@ public class EnchantmentHelperExtender {
         method = "getComponentType",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isEnchantedBookCheckEnchantmentHolderItemBehavior(ItemStack instance, Item item) {
+    private static boolean isEnchantedBookCheckEnchantmentHolderItemBehavior(ItemStack instance, Object o) {
         return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER);
     }
 
@@ -33,14 +33,14 @@ public class EnchantmentHelperExtender {
         method = "enchantItem(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILjava/util/stream/Stream;)Lnet/minecraft/world/item/ItemStack;",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isBookUseItemBehavior(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
+    private static boolean isBookUseItemBehavior(ItemStack instance, Object o, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> item = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
             .flatMap(EnchantableItemBehavior::transformsInto);
-        optionalItem.ifPresent(transformsInto::set);
-        return optionalItem.isPresent();
+        item.ifPresent(transformsInto::set);
+        return item.isPresent();
     }
 
     @Redirect(
@@ -50,18 +50,18 @@ public class EnchantmentHelperExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForEnchantedBookUseHolder(ItemLike item, @Local(argsOnly = true) ItemStack target, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        return target.itematic$transmuteCopy(transformsInto.get());
+    private static ItemStack newItemStackForEnchantedBookUseHolder(ItemLike item, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        return itemStack.itematic$transmuteCopy(transformsInto.get());
     }
 
     @Redirect(
         method = "getAvailableEnchantmentResults",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isBookUseItemBehavior(ItemStack instance, Item item) {
+    private static boolean isBookUseItemBehavior(ItemStack instance, Object o) {
         return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
             .flatMap(EnchantableItemBehavior::transformsInto)
             .isPresent();

@@ -1,15 +1,15 @@
 {
   "required": true,
-  "package": "net.errorcraft.itematic.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "package": "net.errorcraft.itematic.mixin.gametest.framework",
+  "compatibilityLevel": "JAVA_25",
   "mixinextras": {
     "minVersion": "0.5.0"
   },
   "mixins": [
-    "gametest.framework.GameTestHelperExtender",
-    "gametest.framework.GameTestInfoExtender",
-    "gametest.framework.GameTestServerExtender",
-    "world.level.levelgen.structure.templatesystem.StructureTemplateManagerExtender"
+    "GameTestHelperExtender",
+    "GameTestInfoExtender",
+    "GameTestServerExtender",
+    "StructureUtilsExtender"
   ],
   "injectors": {
     "defaultRequire": 1

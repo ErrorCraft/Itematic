@@ -61,9 +61,9 @@ public class FluidDrainer {
     }
 
     private void applyPlayerEffects(Player player, BucketPickup fluidDrainable, ItemStack drainedItemStack) {
-        ItemStack stack = this.context.get(LootContextParams.TOOL);
+        ItemStack stack = this.context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance);
         if (!ItemStacks.isNullOrEmpty(stack)) {
-            player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+            player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         }
 
         fluidDrainable.getPickupSound().ifPresent(sound -> player.playSound(sound, 1.0f, 1.0f));

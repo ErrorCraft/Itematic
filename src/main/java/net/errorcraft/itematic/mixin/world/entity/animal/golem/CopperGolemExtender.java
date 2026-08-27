@@ -26,7 +26,7 @@ public abstract class CopperGolemExtender extends MobExtender {
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -37,15 +37,15 @@ public abstract class CopperGolemExtender extends MobExtender {
             )
         )
     )
-    private boolean isShearsCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.SHEARS);
+    private boolean isShearsCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.SHEARS);
     }
 
     @Redirect(
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -56,8 +56,8 @@ public abstract class CopperGolemExtender extends MobExtender {
             )
         )
     )
-    private boolean isHoneycombCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.HONEYCOMB);
+    private boolean isHoneycombCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.HONEYCOMB);
     }
 
     @Override

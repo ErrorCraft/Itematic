@@ -20,7 +20,7 @@ public class EndCityPiecesExtender {
                 target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
             )
         )
-        private ItemStack newItemStackForElytraUseCreateStack(ItemLike item, @Local(argsOnly = true) ServerLevelAccessor level) {
+        private ItemStack newItemStackForElytraUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) ServerLevelAccessor level) {
             return level.itematic$createStack(ItemIds.ELYTRA);
         }
     }

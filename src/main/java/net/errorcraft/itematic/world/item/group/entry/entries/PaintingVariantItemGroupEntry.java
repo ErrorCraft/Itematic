@@ -9,7 +9,6 @@ import net.minecraft.advancements.criterion.TagPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.item.CreativeModeTab;
@@ -21,7 +20,7 @@ import java.util.Comparator;
 
 public class PaintingVariantItemGroupEntry extends PossiblyHiddenItemGroupEntry<PaintingVariantItemGroupEntry> {
     public static final MapCodec<PaintingVariantItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> codec(instance).and(instance.group(
-        RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(entry -> entry.item),
+        Item.CODEC.fieldOf("item").forGetter(entry -> entry.item),
         TagPredicate.codec(Registries.PAINTING_VARIANT).fieldOf("tag").forGetter(entry -> entry.tag)
     )).apply(instance, PaintingVariantItemGroupEntry::new));
     private static final Comparator<Holder<PaintingVariant>> PAINTING_VARIANT_COMPARATOR = CreativeModeTabsAccessor.paintingVariantComparator();

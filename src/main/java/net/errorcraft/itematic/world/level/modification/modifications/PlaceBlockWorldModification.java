@@ -9,8 +9,6 @@ import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.world.level.modification.WorldModification;
 import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +20,7 @@ public record PlaceBlockWorldModification(BlockPicker<?> block, Holder<SoundEven
     public static final MapCodec<PlaceBlockWorldModification> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         BlockPicker.CODEC.fieldOf("block").forGetter(PlaceBlockWorldModification::block),
         SoundEvent.CODEC.fieldOf("place_sound").forGetter(PlaceBlockWorldModification::placeSound),
-        RegistryFixedCodec.create(Registries.ITEM).fieldOf("transforms_into").forGetter(PlaceBlockWorldModification::transformsInto)
+        Item.CODEC.fieldOf("transforms_into").forGetter(PlaceBlockWorldModification::transformsInto)
     ).apply(instance, PlaceBlockWorldModification::new));
 
     @Override

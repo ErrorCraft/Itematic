@@ -4,7 +4,6 @@ import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.objectweb.asm.Opcodes;
@@ -23,19 +22,19 @@ public abstract class AbstractHorseExtender extends Animal {
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         )
     )
-    private boolean isWheatCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.WHEAT);
+    private boolean isWheatCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.WHEAT);
     }
 
     @Redirect(
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -46,34 +45,34 @@ public abstract class AbstractHorseExtender extends Animal {
             )
         )
     )
-    private boolean isSugarCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.SUGAR);
+    private boolean isSugarCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.SUGAR);
     }
 
     @Redirect(
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
             from = @At(
                 value = "FIELD",
-                target = "Lnet/minecraft/world/level/block/Blocks;HAY_BLOCK:Lnet/minecraft/world/level/block/Block;",
+                target = "Lnet/minecraft/world/item/Items;HAY_BLOCK:Lnet/minecraft/world/item/Item;",
                 opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private boolean isHayBlockCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.HAY_BLOCK);
+    private boolean isHayBlockCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.HAY_BLOCK);
     }
 
     @Redirect(
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -84,15 +83,15 @@ public abstract class AbstractHorseExtender extends Animal {
             )
         )
     )
-    private boolean isAppleCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.APPLE);
+    private boolean isAppleCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.APPLE);
     }
 
     @Redirect(
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -103,15 +102,15 @@ public abstract class AbstractHorseExtender extends Animal {
             )
         )
     )
-    private boolean isCarrotCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.CARROT);
+    private boolean isCarrotCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.CARROT);
     }
 
     @Redirect(
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -122,15 +121,15 @@ public abstract class AbstractHorseExtender extends Animal {
             )
         )
     )
-    private boolean isGoldenCarrotCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GOLDEN_CARROT);
+    private boolean isGoldenCarrotCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GOLDEN_CARROT);
     }
 
     @Redirect(
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -141,15 +140,15 @@ public abstract class AbstractHorseExtender extends Animal {
             )
         )
     )
-    private boolean isGoldenAppleCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GOLDEN_APPLE);
+    private boolean isGoldenAppleCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GOLDEN_APPLE);
     }
 
     @Redirect(
         method = "handleEating",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -160,7 +159,7 @@ public abstract class AbstractHorseExtender extends Animal {
             )
         )
     )
-    private boolean isEnchantedGoldenAppleCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.ENCHANTED_GOLDEN_APPLE);
+    private boolean isEnchantedGoldenAppleCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.ENCHANTED_GOLDEN_APPLE);
     }
 }

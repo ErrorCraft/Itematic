@@ -15,14 +15,13 @@ import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Map;
 
 @Mixin(CelebrateVillagersSurvivedRaid.class)
 public class CelebrateVillagersSurvivedRaidExtender extends Behavior<Villager> {
     @Unique
-    private ServerLevel level;
+    private static final ScopedValue<ServerLevel> LEVEL = ScopedValue.newInstance();
 
     public CelebrateVillagersSurvivedRaidExtender(Map<MemoryModuleType<?>, MemoryStatus> requiredMemoryState) {
         super(requiredMemoryState);
@@ -35,21 +34,19 @@ public class CelebrateVillagersSurvivedRaidExtender extends Behavior<Villager> {
             target = "Lnet/minecraft/world/entity/ai/behavior/CelebrateVillagersSurvivedRaid;getFirework(Lnet/minecraft/world/item/DyeColor;I)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack temporarilyStoreServerLevel(CelebrateVillagersSurvivedRaid instance, DyeColor color, int flightDuration, Operation<ItemStack> original, ServerLevel level) {
-        this.level = level;
-        ItemStack result = original.call(instance, color, flightDuration);
-        this.level = null;
-        return result;
+    private ItemStack passLevel(CelebrateVillagersSurvivedRaid instance, DyeColor color, int flightDuration, Operation<ItemStack> original, ServerLevel level) {
+        return ScopedValue.where(LEVEL, level)
+            .call(() -> original.call(instance, color, flightDuration));
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "getFirework",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForFireworkRocketUseCreateStack(ItemLike item) {
-        return this.level.itematic$createStack(ItemIds.FIREWORK_ROCKET);
+    private ItemStack newItemStackForFireworkRocketUseCreateStack(ItemLike item, Operation<ItemStack> original) {
+        return LEVEL.get().itematic$createStack(ItemIds.FIREWORK_ROCKET);
     }
 }

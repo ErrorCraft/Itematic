@@ -3,9 +3,6 @@
     "minecraft:block": {
       "block": "minecraft:crimson_shelf"
     },
-    "minecraft:fuel": {
-      "ticks": 300
-    },
     "minecraft:stackable": 64
   },
   "display": {

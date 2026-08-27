@@ -24,8 +24,8 @@ public interface ContainerComponentManipulatorExtender<T> extends ContainerCompo
             target = "Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;setContents(Ljava/lang/Object;Ljava/util/stream/Stream;)Ljava/lang/Object;"
         )
     )
-    private T useStackAwareVersion(ContainerComponentManipulator<T> instance, T component, Stream<ItemStack> newContents, Operation<T> original, @Local(argsOnly = true) ItemStack stack) {
-        return this.itematic$setContents(stack, component, newContents);
+    private T useStackAwareVersion(ContainerComponentManipulator<T> instance, T component, Stream<ItemStack> newContents, Operation<T> original, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack) {
+        return this.itematic$setContents(itemStack, component, newContents);
     }
 
     default T itematic$setContents(ItemStack stack, T component, Stream<ItemStack> newContents) {

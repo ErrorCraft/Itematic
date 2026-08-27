@@ -42,7 +42,7 @@ public abstract class StriderExtender extends MobExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForWarpedFungusOnAStickUseCreateStack(ItemLike item, @Local(argsOnly = true) ServerLevelAccessor level) {
+    private ItemStack newItemStackForWarpedFungusOnAStickUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) ServerLevelAccessor level) {
         return level.itematic$createStack(ItemIds.WARPED_FUNGUS_ON_A_STICK);
     }
 

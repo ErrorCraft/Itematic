@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(MaceItem.class)
 public class MaceItemExtender {
     @Unique
-    private static SmashingWeapon usedStackSmashingWeapon;
+    private static final ScopedValue<SmashingWeapon> USED_SMASHING_WEAPON = ScopedValue.newInstance();
 
     @WrapMethod(
         method = "hurtEnemy"
@@ -111,10 +111,9 @@ public class MaceItemExtender {
             target = "Lnet/minecraft/world/item/MaceItem;knockback(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V"
         )
     )
-    private void temporarilyStoreSmashingWeapon(Level level, Entity attacker, Entity attacked, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
-        usedStackSmashingWeapon = smashingWeaponReference.get();
-        original.call(level, attacker, attacker);
-        usedStackSmashingWeapon = null;
+    private void temporarilyStoreSmashingWeapon(Level level, Entity attacker, Entity entity, Operation<Void> original, @Share("smashingWeapon") LocalRef<SmashingWeapon> smashingWeaponReference) {
+        ScopedValue.where(USED_SMASHING_WEAPON, smashingWeaponReference.get())
+            .run(() -> original.call(level, attacker, attacker));
     }
 
     @WrapOperation(
@@ -124,8 +123,8 @@ public class MaceItemExtender {
             target = "Lnet/minecraft/world/item/MaceItem;canSmashAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"
         )
     )
-    private boolean canSmashAttackUseDataComponent(LivingEntity attacker, Operation<Boolean> original, ItemStack stack) {
-        SmashingWeapon smashingWeapon = stack.get(ItematicDataComponents.SMASHING_WEAPON);
+    private boolean canSmashAttackUseDataComponent(LivingEntity attacker, Operation<Boolean> original, ItemStack itemStack) {
+        SmashingWeapon smashingWeapon = itemStack.get(ItematicDataComponents.SMASHING_WEAPON);
         if (smashingWeapon == null) {
             return false;
         }
@@ -152,7 +151,7 @@ public class MaceItemExtender {
 
     @ModifyConstant(
         method = {
-            "method_58409",
+            "lambda$knockback$0",
             "getKnockbackPower"
         },
         constant = @Constant(
@@ -160,7 +159,7 @@ public class MaceItemExtender {
         )
     )
     private static double knockbackPowerUseDataComponent(double constant) {
-        return usedStackSmashingWeapon.knockbackPower();
+        return USED_SMASHING_WEAPON.get().knockbackPower();
     }
 
     @ModifyConstant(
@@ -170,6 +169,6 @@ public class MaceItemExtender {
         )
     )
     private static double heavySmashAttackFallDistanceUseDataComponent(double constant) {
-        return usedStackSmashingWeapon.heavySmashAttackFallDistance();
+        return USED_SMASHING_WEAPON.get().heavySmashAttackFallDistance();
     }
 }

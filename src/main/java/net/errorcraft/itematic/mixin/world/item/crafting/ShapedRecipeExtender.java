@@ -1,11 +1,11 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import net.errorcraft.itematic.access.world.item.crafting.RecipeAccess;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -23,14 +23,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Mixin(ShapedRecipe.class)
-public abstract class ShapedRecipeExtender implements CraftingRecipe, RecipeAccess {
+public abstract class ShapedRecipeExtender implements CraftingRecipe {
     @Shadow
     @Final
-    ShapedRecipePattern pattern;
+    private ShapedRecipePattern pattern;
 
     @Shadow
     @Final
-    ItemStack result;
+    private ItemStackTemplate result;
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {

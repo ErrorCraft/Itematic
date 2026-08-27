@@ -8,7 +8,6 @@ import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
-import net.errorcraft.itematic.world.item.trading.Trade;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryDataLoader;
@@ -34,7 +33,6 @@ public class RegistryDataLoaderExtender {
             .addAll(original)
             .add(createData(Registries.ITEM, Items.CODEC))
             .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
-            .add(createData(ItematicRegistries.TRADE, Trade.CODEC))
             .add(createData(ItematicRegistries.ACTION, ActionEntry.CODEC))
             .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
@@ -53,7 +51,6 @@ public class RegistryDataLoaderExtender {
             .addAll(original)
             .add(createData(Registries.ITEM, Items.CODEC))
             .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
-            .add(createData(ItematicRegistries.TRADE, Trade.CODEC))
             .add(createData(ItematicRegistries.ACTION, ActionEntry.CODEC))
             .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();

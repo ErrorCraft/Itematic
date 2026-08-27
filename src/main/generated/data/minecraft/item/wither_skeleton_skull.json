@@ -27,7 +27,6 @@
       "slot": "head",
       "swappable": false
     },
-    "minecraft:firework_shape_modifier": "creeper",
     "minecraft:stackable": 64
   },
   "display": {

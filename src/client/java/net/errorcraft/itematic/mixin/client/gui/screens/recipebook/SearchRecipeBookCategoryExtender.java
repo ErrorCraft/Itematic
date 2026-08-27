@@ -11,5 +11,5 @@ public enum SearchRecipeBookCategoryExtender {
     ITEMATIC_BREWING(ItematicRecipeBookCategories.BREWING_MODIFY, ItematicRecipeBookCategories.BREWING_AMPLIFY);
 
     @Shadow
-    SearchRecipeBookCategoryExtender(RecipeBookCategory... categories) {}
+    SearchRecipeBookCategoryExtender(RecipeBookCategory... includedCategories) {}
 }

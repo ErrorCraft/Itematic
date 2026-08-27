@@ -27,8 +27,8 @@ public class BehaviorUtilsExtender {
             ordinal = 0
         )
     )
-    private static boolean instanceOfProjectileWeaponItemUseItemBehavior(Object reference, Class<ProjectileWeaponItem> clazz, Mob mob, @Share("shooter") LocalRef<ShooterItemBehavior> shooter) {
-        Optional<ShooterItemBehavior> optionalShooter = mob.getMainHandItem().itematic$getBehavior(ItemBehaviorType.SHOOTER);
+    private static boolean instanceOfProjectileWeaponItemUseItemBehavior(Object reference, Class<ProjectileWeaponItem> clazz, Mob body, @Share("shooter") LocalRef<ShooterItemBehavior> shooter) {
+        Optional<ShooterItemBehavior> optionalShooter = body.getMainHandItem().itematic$getBehavior(ItemBehaviorType.SHOOTER);
         optionalShooter.ifPresent(shooter::set);
         return optionalShooter.isPresent();
     }

@@ -19,7 +19,7 @@ public interface SimpleWaterloggedBlockExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item, @Local(argsOnly = true) LevelAccessor level) {
+    private ItemStack newItemStackForWaterBucketUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) LevelAccessor level) {
         return level.itematic$createStack(ItemIds.WATER_BUCKET);
     }
 }

@@ -2,10 +2,14 @@ package net.errorcraft.itematic.world.item.group.entry;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.world.item.group.entry.entries.StackItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.TagItemGroupEntry;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +37,16 @@ public record ItemGroupEntryProvider(List<ItemGroupEntry<?>> entries) {
             return new ItemGroupEntryProvider(this.entries);
         }
 
-        public Builder add(Holder<Item> entry) {
-            return this.add(ItemGroupEntry.simple(entry));
+        public Builder add(Holder<Item> item) {
+            return this.add(new StackItemGroupEntry(item));
+        }
+
+        public Builder add(ItemStackTemplate item) {
+            return this.add(new StackItemGroupEntry(item));
         }
 
         public Builder add(TagKey<Item> tag) {
-            return this.add(ItemGroupEntry.tag(tag));
+            return this.add(new TagItemGroupEntry(tag));
         }
 
         public Builder add(ItemGroupEntry<?> entry) {

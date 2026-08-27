@@ -19,7 +19,7 @@ public abstract class ItemEntityExtender {
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key, @Local ItemStack stack) {
-        return instance.itematic$get(stack.getItemHolder());
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, @Local(name = "itemStack") ItemStack itemStack) {
+        return instance.itematic$get(itemStack.typeHolder());
     }
 }

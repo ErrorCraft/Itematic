@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:golden_dandelion"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:golden_dandelion",
+    "translation_key": "block.minecraft.golden_dandelion"
+  }
+}

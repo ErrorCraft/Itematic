@@ -21,14 +21,14 @@ public class GrindstoneMenuExtender {
         method = "removeNonCursesFrom",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isEnchantedBookUseItemBehavior(ItemStack instance, Item item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> optionalItem = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER)
+    private boolean isEnchantedBookUseItemBehavior(ItemStack instance, Object o, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+        Optional<Holder<Item>> item = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER)
             .map(EnchantmentHolderItemBehavior::grindingTransformsInto);
-        optionalItem.ifPresent(transformsInto::set);
-        return optionalItem.isPresent();
+        item.ifPresent(transformsInto::set);
+        return item.isPresent();
     }
 
     @Redirect(
@@ -38,7 +38,7 @@ public class GrindstoneMenuExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack transmuteCopyForBookUseHolder(ItemStack instance, ItemLike item, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
+    private ItemStack transmuteCopyForBookUseHolder(ItemStack instance, ItemLike newItem, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
         return instance.itematic$transmuteCopy(transformsInto.get());
     }
 

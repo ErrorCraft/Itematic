@@ -5,8 +5,7 @@
     "#": {
       "items": "minecraft:honey_bottle",
       "remainder": {
-        "id": "minecraft:glass_bottle",
-        "count": 1
+        "id": "minecraft:glass_bottle"
       }
     }
   },
@@ -15,7 +14,6 @@
     "##"
   ],
   "result": {
-    "id": "minecraft:honey_block",
-    "count": 1
+    "id": "minecraft:honey_block"
   }
 }

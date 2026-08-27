@@ -9,7 +9,6 @@ import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.stats.Stats;
@@ -55,7 +54,7 @@ public record SteeringItemBehavior(Holder<EntityType<?>> target, int damagePerUs
             return ItemResult.SUCCEED;
         }
 
-        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         return ItemResult.PASS;
     }
 
@@ -65,7 +64,7 @@ public record SteeringItemBehavior(Holder<EntityType<?>> target, int damagePerUs
             return false;
         }
 
-        if (!this.matchesEntityType(vehicle)) {
+        if (!vehicle.is(this.target)) {
             return false;
         }
 
@@ -75,11 +74,5 @@ public record SteeringItemBehavior(Holder<EntityType<?>> target, int damagePerUs
 
         stack.itematic$damage(this.damagePerUse, context);
         return true;
-    }
-
-    private boolean matchesEntityType(Entity vehicle) {
-        return BuiltInRegistries.ENTITY_TYPE.getResourceKey(vehicle.getType())
-            .map(this.target::is)
-            .orElse(false);
     }
 }

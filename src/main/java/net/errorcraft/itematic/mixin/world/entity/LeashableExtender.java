@@ -24,7 +24,7 @@ public interface LeashableExtender {
         )
     )
     @Nullable
-    private static ItemEntity spawnLeadUseId(Entity instance, ServerLevel level, ItemLike item) {
+    private static ItemEntity spawnLeadUseId(Entity instance, ServerLevel level, ItemLike resource) {
         return instance.itematic$spawnAtLocation(level, ItemIds.LEAD);
     }
 }

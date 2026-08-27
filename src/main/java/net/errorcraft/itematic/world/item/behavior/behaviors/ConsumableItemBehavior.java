@@ -117,7 +117,7 @@ public record ConsumableItemBehavior(boolean hasConsumeParticles, Holder<SoundEv
             CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
         }
 
-        player.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
     }
 
     private static boolean shouldSpawnParticlesAndPlaySounds(int usedTicks, int remainingUseTicks) {

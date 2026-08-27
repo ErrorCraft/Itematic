@@ -9,8 +9,6 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -23,7 +21,7 @@ import net.minecraft.world.level.saveddata.maps.MapId;
 
 public record MappableItemBehavior(Holder<Item> transformsInto) implements ItemBehavior<MappableItemBehavior> {
     public static final Codec<MappableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.create(Registries.ITEM).fieldOf("transforms_into").forGetter(MappableItemBehavior::transformsInto)
+        Item.CODEC.fieldOf("transforms_into").forGetter(MappableItemBehavior::transformsInto)
     ).apply(instance, MappableItemBehavior::new));
 
     public static MappableItemBehavior of(Holder<Item> transformsInto) {
@@ -41,7 +39,7 @@ public record MappableItemBehavior(Holder<Item> transformsInto) implements ItemB
             return ItemResult.SUCCEED;
         }
 
-        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         level.playSound(null, user, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, user.getSoundSource(), 1.0f, 1.0f);
         ItemStack resultStack = this.createStack(serverLevel, user.getBlockX(), user.getBlockZ(), 0, true, false);
         stack.consume(1, user);

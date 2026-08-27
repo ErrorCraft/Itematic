@@ -18,6 +18,7 @@ import net.errorcraft.itematic.world.entity.initializer.initializers.MinecartEnt
 import net.errorcraft.itematic.world.entity.initializer.initializers.SimpleEntityInitializer;
 import net.errorcraft.itematic.world.entity.initializer.initializers.ThrownBallEntityInitializer;
 import net.errorcraft.itematic.world.entity.initializer.initializers.ThrownTridentEntityInitializer;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -59,7 +60,7 @@ import java.util.function.Consumer;
 @Mixin(EntityType.class)
 public abstract class EntityTypeExtender<T extends Entity> implements EntityTypeAccess<T> {
     @Shadow
-    public static <T extends Entity> Consumer<T> appendDefaultStackConfig(Consumer<T> initialConfig, Level level, ItemStack stack, @Nullable LivingEntity user) {
+    public static <T extends Entity> Consumer<T> appendDefaultStackConfig(Consumer<T> initialConfig, Level level, ItemStack itemStack, @Nullable LivingEntity user) {
         throw new UnsupportedOperationException("Implemented via mixin");
     }
 
@@ -438,7 +439,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
         )
     )
     @Nullable
-    private T useEntityInitializer(EntityType.EntityFactory<T> instance, EntityType<T> type, Level level, Operation<T> original, @Local(argsOnly = true) EntitySpawnReason reason) {
+    private T useEntityInitializer(EntityType.EntityFactory<T> instance, EntityType<T> type, Level level, Operation<T> original, @Local(name = "reason", argsOnly = true) EntitySpawnReason reason) {
         if (this.actionContext == null) {
             return original.call(instance, type, level);
         }
@@ -474,13 +475,13 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     @Unique
     @Nullable
     private static <T extends Entity> Consumer<T> copier(ActionContext context, @Nullable EntitySpawnCallback callback, boolean allowItemData) {
-        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY);
+        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY);
         if (!allowItemData || stack.isEmpty()) {
             return callback == null ? null : entity -> callback.accept(entity, stack);
         }
 
         return appendDefaultStackConfig(
-            callback == null ?entity -> {} : entity -> callback.accept(entity, stack),
+            callback == null ? _ -> {} : entity -> callback.accept(entity, stack),
             context.level(),
             stack,
             context.get(LootContextParams.THIS_ENTITY, LivingEntity.class)
@@ -503,7 +504,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
 
         @Override
         public void itematic$initializer(EntityInitializer<T> initializer) {
-            this.initializer = type -> initializer;
+            this.initializer = _ -> initializer;
         }
 
         @Override

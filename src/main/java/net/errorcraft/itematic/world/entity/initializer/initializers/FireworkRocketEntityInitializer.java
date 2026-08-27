@@ -3,6 +3,7 @@ package net.errorcraft.itematic.world.entity.initializer.initializers;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +28,8 @@ public class FireworkRocketEntityInitializer implements EntityInitializer<Firewo
             pos.x(),
             pos.y(),
             pos.z(),
-            context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY).copyWithCount(1)
+            context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY)
+                .copyWithCount(1)
         );
     }
 }

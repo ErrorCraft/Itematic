@@ -28,7 +28,7 @@ public abstract class FallingBlockEntityExtender extends Entity {
         )
     )
     @Nullable
-    private ItemEntity spawnItemUseId(FallingBlockEntity instance, ServerLevel level, ItemLike item, @Local Block block) {
+    private ItemEntity spawnItemUseId(FallingBlockEntity instance, ServerLevel level, ItemLike item, @Local(name = "block") Block block) {
         return this.itematic$spawnAtLocation(level, block.itematic$asItemId());
     }
 }

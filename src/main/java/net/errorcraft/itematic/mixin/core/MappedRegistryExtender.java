@@ -16,11 +16,10 @@ public class MappedRegistryExtender<T> {
         method = "register(Lnet/minecraft/resources/ResourceKey;Ljava/lang/Object;Lnet/minecraft/core/RegistrationInfo;)Lnet/minecraft/core/Holder$Reference;",
         at = @At(
             value = "INVOKE",
-            target = "Lit/unimi/dsi/fastutil/objects/ObjectList;add(Ljava/lang/Object;)Z",
-            remap = false
+            target = "Lit/unimi/dsi/fastutil/objects/ObjectList;add(Ljava/lang/Object;)Z"
         )
     )
-    private void setRawId(ResourceKey<T> key, T value, RegistrationInfo info, CallbackInfoReturnable<Holder.Reference<T>> infoReturnable, @Local Holder.Reference<T> reference, @Local int rawId) {
-        reference.itematic$setRawId(rawId);
+    private void setRawId(ResourceKey<T> key, T value, RegistrationInfo registrationInfo, CallbackInfoReturnable<Holder.Reference<T>> info, @Local(name = "holder") Holder.Reference<T> holder, @Local(name = "newId") int newId) {
+        holder.itematic$setRawId(newId);
     }
 }

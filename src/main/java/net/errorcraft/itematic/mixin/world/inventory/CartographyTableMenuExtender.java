@@ -2,7 +2,6 @@ package net.errorcraft.itematic.mixin.world.inventory;
 
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.inventory.CartographyTableMenu;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public class CartographyTableMenuExtender {
     @Redirect(
         method = {
-            "method_17382",
+            "lambda$setupResultSlot$0",
             "quickMoveStack"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -30,18 +29,18 @@ public class CartographyTableMenuExtender {
             )
         )
     )
-    private boolean isGlassPaneCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GLASS_PANE);
+    private boolean isGlassPaneCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GLASS_PANE);
     }
 
     @Redirect(
         method = {
-            "method_17382",
+            "lambda$setupResultSlot$0",
             "quickMoveStack"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -52,18 +51,18 @@ public class CartographyTableMenuExtender {
             )
         )
     )
-    private boolean isPaperCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.PAPER);
+    private boolean isPaperCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.PAPER);
     }
 
     @Redirect(
         method = {
-            "method_17382",
+            "lambda$setupResultSlot$0",
             "quickMoveStack"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -74,8 +73,8 @@ public class CartographyTableMenuExtender {
             )
         )
     )
-    private boolean isMapCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.MAP);
+    private boolean isMapCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.MAP);
     }
 
     @Mixin(targets = "net/minecraft/world/inventory/CartographyTableMenu$4")
@@ -84,19 +83,19 @@ public class CartographyTableMenuExtender {
             method = "mayPlace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
                 ordinal = 0
             )
         )
-        private boolean isPaperCheckId(ItemStack instance, Item item) {
-            return instance.itematic$is(ItemIds.PAPER);
+        private boolean isPaperCheckId(ItemStack instance, Object o) {
+            return instance.is(ItemIds.PAPER);
         }
 
         @Redirect(
             method = "mayPlace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
                 ordinal = 0
             ),
             slice = @Slice(
@@ -107,15 +106,15 @@ public class CartographyTableMenuExtender {
                 )
             )
         )
-        private boolean isGlassPaneCheckId(ItemStack instance, Item item) {
-            return instance.itematic$is(ItemIds.GLASS_PANE);
+        private boolean isGlassPaneCheckId(ItemStack instance, Object o) {
+            return instance.is(ItemIds.GLASS_PANE);
         }
 
         @Redirect(
             method = "mayPlace",
             at = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
                 ordinal = 0
             ),
             slice = @Slice(
@@ -126,8 +125,8 @@ public class CartographyTableMenuExtender {
                 )
             )
         )
-        private boolean isMapCheckId(ItemStack instance, Item item) {
-            return instance.itematic$is(ItemIds.MAP);
+        private boolean isMapCheckId(ItemStack instance, Object o) {
+            return instance.is(ItemIds.MAP);
         }
     }
 }

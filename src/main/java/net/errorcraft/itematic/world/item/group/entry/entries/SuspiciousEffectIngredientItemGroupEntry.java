@@ -8,7 +8,6 @@ import net.errorcraft.itematic.world.item.group.entry.PossiblyHiddenItemGroupEnt
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +19,7 @@ import java.util.Set;
 
 public class SuspiciousEffectIngredientItemGroupEntry extends PossiblyHiddenItemGroupEntry<SuspiciousEffectIngredientItemGroupEntry> {
     public static final MapCodec<SuspiciousEffectIngredientItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> codec(instance).and(
-        RegistryFixedCodec.create(Registries.ITEM).fieldOf("item").forGetter(entry -> entry.item)
+        Item.CODEC.fieldOf("item").forGetter(entry -> entry.item)
     ).apply(instance, SuspiciousEffectIngredientItemGroupEntry::new));
 
     private final Holder<Item> item;
@@ -47,9 +46,9 @@ public class SuspiciousEffectIngredientItemGroupEntry extends PossiblyHiddenItem
             .map(Holder::value)
             .map(item -> item.itematic$getBehavior(ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT))
             .flatMap(Optional::stream)
-            .forEach(c -> {
+            .forEach(suspiciousEffectIngredient -> {
                 ItemStack stack = new ItemStack(this.item);
-                stack.set(DataComponents.SUSPICIOUS_STEW_EFFECTS, c.getSuspiciousEffects());
+                stack.set(DataComponents.SUSPICIOUS_STEW_EFFECTS, suspiciousEffectIngredient.getSuspiciousEffects());
                 set.add(stack);
             });
         return set;

@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.world.item.crafting;
 import net.errorcraft.itematic.access.world.item.crafting.ShapedRecipePatternAccess;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
@@ -32,20 +33,21 @@ public abstract class ShapedRecipePatternExtender implements ShapedRecipePattern
     private boolean symmetrical;
 
     @Shadow
-    protected abstract boolean matches(CraftingInput input, boolean mirrored);
+    protected abstract boolean matches(CraftingInput input, boolean xFlip);
 
     @Override
     public NonNullList<ItemStack> itematic$remainder(CraftingInput input) {
-        boolean actuallyMirrored = !this.symmetrical && this.matches(input, true);
+        boolean actuallyFlipped = !this.symmetrical && this.matches(input, true);
         NonNullList<ItemStack> remainders = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
-                int index = actuallyMirrored ?
+                int index = actuallyFlipped ?
                     this.width - x - 1 + y * this.width :
                     x + y * this.width;
                 this.ingredients.get(index)
                     .flatMap(Ingredient::itematic$remainder)
-                    .ifPresent(remainder -> remainders.set(index, remainder.copy()));
+                    .map(ItemStackTemplate::create)
+                    .ifPresent(remainder -> remainders.set(index, remainder));
             }
         }
 

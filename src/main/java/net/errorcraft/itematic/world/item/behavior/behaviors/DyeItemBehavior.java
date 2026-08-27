@@ -9,6 +9,8 @@ import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -51,5 +53,10 @@ public record DyeItemBehavior(DyeColor color) implements ItemBehavior<DyeItemBeh
         }
 
         return ItemResult.PASS;
+    }
+
+    @Override
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(DataComponents.DYE, this.color);
     }
 }

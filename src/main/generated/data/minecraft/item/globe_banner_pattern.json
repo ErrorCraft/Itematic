@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:banner_pattern": {
-      "patterns": "minecraft:pattern_item/globe"
+      "patterns": "#minecraft:pattern_item/globe"
     },
     "minecraft:stackable": 1
   },

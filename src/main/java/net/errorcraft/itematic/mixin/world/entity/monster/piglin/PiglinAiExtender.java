@@ -18,22 +18,22 @@ public class PiglinAiExtender {
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isGoldNuggetCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GOLD_NUGGET);
+    private static boolean isGoldNuggetCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GOLD_NUGGET);
     }
 
     @Redirect(
         method = "isBarterCurrency",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isGoldIngotCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GOLD_INGOT);
+    private static boolean isGoldIngotCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GOLD_INGOT);
     }
 
     @Redirect(

@@ -4,18 +4,19 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.entity.BannerPattern;
 
-public record BannerPatternItemBehavior(TagKey<BannerPattern> patterns) implements ItemBehavior<BannerPatternItemBehavior> {
+public record BannerPatternItemBehavior(HolderSet<BannerPattern> patterns) implements ItemBehavior<BannerPatternItemBehavior> {
     public static final Codec<BannerPatternItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        TagKey.codec(Registries.BANNER_PATTERN).fieldOf("patterns").forGetter(BannerPatternItemBehavior::patterns)
+        RegistryCodecs.homogeneousList(Registries.BANNER_PATTERN).fieldOf("patterns").forGetter(BannerPatternItemBehavior::patterns)
     ).apply(instance, BannerPatternItemBehavior::new));
 
-    public static ItemBehavior<?>[] of(TagKey<BannerPattern> patterns) {
+    public static ItemBehavior<?>[] of(HolderSet<BannerPattern> patterns) {
         return new ItemBehavior<?>[] {
             StackableItemBehavior.of(1),
             new BannerPatternItemBehavior(patterns)

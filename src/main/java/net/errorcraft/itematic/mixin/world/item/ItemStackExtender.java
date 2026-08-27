@@ -5,6 +5,11 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import com.mojang.serialization.DataResult;
+import net.errorcraft.itematic.access.world.item.ItemInstanceAccess;
 import net.errorcraft.itematic.access.world.item.ItemStackAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.references.ItemIds;
@@ -12,10 +17,10 @@ import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
+import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
@@ -23,10 +28,9 @@ import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
+import net.minecraft.core.TypedInstance;
 import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.network.chat.Component;
@@ -36,8 +40,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -49,16 +51,18 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import org.apache.commons.lang3.math.Fraction;
 import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.slf4j.Logger;
@@ -70,19 +74,15 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackExtender implements DataComponentHolder, ItemStackAccess, FabricItemStack {
+public abstract class ItemStackExtender implements DataComponentHolder, TypedInstance<Item>, ItemStackAccess, ItemInstanceAccess, FabricItemStack {
     @Shadow
     @Final
     private static Logger LOGGER;
@@ -96,14 +96,18 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
 
     @Shadow
     @Final
+    private @Nullable Holder<Item> item;
+
+    @Shadow
+    @Final
     @Mutable
-    PatchedDataComponentMap components;
+    private PatchedDataComponentMap components;
 
     @Shadow
     public abstract boolean isEmpty();
 
     @Shadow
-    public abstract void hurtAndBreak(int amount, ServerLevel level, @Nullable ServerPlayer player, Consumer<Item> breakCallback);
+    public abstract void hurtAndBreak(int amount, ServerLevel level, @Nullable ServerPlayer player, Consumer<Item> onBreak);
 
     @Shadow
     public abstract int getDamageValue();
@@ -112,112 +116,107 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     public abstract void shrink(int amount);
 
     @Shadow
-    public abstract int getMaxStackSize();
-
-    @Shadow
     public abstract int getCount();
 
     @Unique
-    private final Set<ItemEvent> activeEvents = new HashSet<>();
+    private static final ScopedValue<ActionContext> ACTION_CONTEXT = ScopedValue.newInstance();
 
-    @Unique
-    @Nullable
-    private Holder<Item> item;
-
-    @Unique
-    @Nullable
-    private ActionContext context;
-
-    @Inject(
-        method = "<init>(Lnet/minecraft/core/Holder;)V",
-        at = @At("TAIL")
-    )
-    private void holderConstructorSetFields(Holder<Item> entry, CallbackInfo info) {
-        this.setFields(entry);
-    }
-
-    @Inject(
-        method = "<init>(Lnet/minecraft/core/Holder;I)V",
-        at = @At("TAIL")
-    )
-    private void holderConstructorSetFields(Holder<Item> entry, int count, CallbackInfo info) {
-        this.setFields(entry);
-    }
-
-    @Inject(
-        method = "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V",
-        at = @At("TAIL")
-    )
-    private void holderConstructorSetFields(Holder<Item> item, int count, DataComponentPatch changes, CallbackInfo info) {
-        this.setFields(item, changes);
-    }
-
-    @Redirect(
+    @ModifyArg(
         method = {
-            "<init>(Lnet/minecraft/core/Holder;)V",
+            "<init>(Lnet/minecraft/world/level/ItemLike;)V",
+            "<init>(Lnet/minecraft/world/level/ItemLike;I)V"
+        },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/core/Holder;I)V"
+        )
+    )
+    @Nullable
+    private static Holder<Item> useNullForDirectItemsAndLogWarning(Holder<Item> item) {
+        LOGGER.warn(ItematicUtil.stackTraceMessage("Tried to create an item stack from an item or item-like value directly. This is no longer supported and should be modified to use a holder instead."));
+        return null;
+    }
+
+    @WrapOperation(
+        method = {
             "<init>(Lnet/minecraft/core/Holder;I)V",
             "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/core/Holder;value()Ljava/lang/Object;"
+            target = "Lnet/minecraft/core/Holder;components()Lnet/minecraft/core/component/DataComponentMap;"
         )
     )
     @Nullable
-    private static <T> T holderValueUseNullToPreventUnboundHolderIssues(Holder<T> instance) {
+    private static DataComponentMap doNotGetComponentsToPreventNullPointerException(Holder<Item> instance, Operation<DataComponentMap> original) {
         return null;
     }
 
-    @Redirect(
-        method = {
-            "<init>(Lnet/minecraft/world/level/ItemLike;I)V",
-            "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V"
-        },
+    @ModifyArg(
+        method = "<init>(Lnet/minecraft/core/Holder;I)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/level/ItemLike;asItem()Lnet/minecraft/world/item/Item;"
+            target = "Lnet/minecraft/core/component/PatchedDataComponentMap;<init>(Lnet/minecraft/core/component/DataComponentMap;)V"
         )
     )
-    @Nullable
-    private static Item asItemUseNullToPreventNullPointerExceptionStatic(ItemLike instance) {
-        return null;
+    private static DataComponentMap checkNullAndUnboundHolderForConstructor(DataComponentMap prototype, @Local(name = "item", argsOnly = true) @Nullable Holder<Item> item) {
+        if (item == null || !item.isBound()) {
+            return DataComponentMap.EMPTY;
+        }
+
+        return item.value().components();
     }
 
-    @Redirect(
-        method = {
-            "<init>(Lnet/minecraft/world/level/ItemLike;I)V",
-            "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V"
-        },
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/Item;components()Lnet/minecraft/core/component/DataComponentMap;"
-        )
-    )
-    @Nullable
-    private static DataComponentMap componentsUseNullToPreventNullPointerException(Item instance) {
-        return null;
-    }
-
-    @Redirect(
+    @ModifyArg(
         method = "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/core/component/PatchedDataComponentMap;fromPatch(Lnet/minecraft/core/component/DataComponentMap;Lnet/minecraft/core/component/DataComponentPatch;)Lnet/minecraft/core/component/PatchedDataComponentMap;"
         )
     )
-    @Nullable
-    private static PatchedDataComponentMap fromPatchUseNullToPreventNullPointerException(DataComponentMap baseComponents, DataComponentPatch changes) {
-        return null;
+    private static DataComponentMap checkNullAndUnboundHolderForFromPatch(DataComponentMap prototype, @Local(name = "item", argsOnly = true) @Nullable Holder<Item> item) {
+        if (item == null || !item.isBound()) {
+            return DataComponentMap.EMPTY;
+        }
+
+        return item.value().components();
     }
 
-    @Inject(
-        method = "<init>(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)V",
-        at = @At("TAIL")
+    @ModifyExpressionValue(
+        method = "validateComponents",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/core/component/DataComponentMap;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/core/component/DataComponents;BUNDLE_CONTENTS:Lnet/minecraft/core/component/DataComponentType;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
     )
-    private void checkItemValue(@Nullable ItemLike item, int count, PatchedDataComponentMap components, CallbackInfo info) {
-        if (item != null) {
-            LOGGER.warn(ItematicUtil.stackTraceMessage("Tried to create an item stack from an item or item-like value directly. This is no longer supported and should be modified to use a holder instead."));
+    @Nullable
+    private static Object alsoGetItemHolderRulesDataComponent(Object original, DataComponentMap components, @Share("itemHolderRules") LocalRef<ItemHolderRules> itemHolderRulesReference) {
+        ItemHolderRules itemHolderRules = components.get(ItematicDataComponents.ITEM_HOLDER_RULES);
+        if (itemHolderRules == null) {
+            return null;
         }
+
+        itemHolderRulesReference.set(itemHolderRules);
+        return original;
+    }
+
+    @WrapOperation(
+        method = "validateComponents",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/component/BundleContents;weight()Lcom/mojang/serialization/DataResult;"
+        )
+    )
+    private static DataResult<Fraction> useItemHolderRulesDataComponent(BundleContents instance, Operation<DataResult<Fraction>> original, @Share("itemHolderRules") LocalRef<ItemHolderRules> itemHolderRulesReference) {
+        return instance.itematic$occupancy(itemHolderRulesReference.get());
     }
 
     @WrapMethod(
@@ -319,74 +318,42 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         original.call(player, craftCount);
     }
 
-    @WrapMethod(
-        method = "getItemHolder"
-    )
-    @Nullable
-    private Holder<Item> useHolderField(Operation<Holder<Item>> original) {
-        return this.item;
-    }
-
-    @Redirect(
-        method = "getItem",
-        at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/world/item/ItemStack;item:Lnet/minecraft/world/item/Item;",
-            opcode = Opcodes.GETFIELD
-        )
-    )
-    @SuppressWarnings("DataFlowIssue")
-    private Item useHolderToPreventNullPointerException(ItemStack instance) {
-        return this.item.value();
-    }
-
-    @Redirect(
-        method = "copy()Lnet/minecraft/world/item/ItemStack;",
-        at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/world/level/ItemLike;ILnet/minecraft/core/component/PatchedDataComponentMap;)Lnet/minecraft/world/item/ItemStack;"
-        )
-    )
-    @SuppressWarnings("DataFlowIssue")
-    private ItemStack newItemStackUseRegistryEntry(ItemLike item, int count, PatchedDataComponentMap components) {
-        ItemStack copy = new ItemStack(this.item, count);
-        copy.itematic$setComponents(components);
-        return copy;
-    }
-
-    @ModifyArg(
-        method = "transmuteCopyIgnoreEmpty",
+    @WrapOperation(
+        method = "typeHolder",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V"
+            target = "Lnet/minecraft/world/item/Item;builtInRegistryHolder()Lnet/minecraft/core/Holder$Reference;"
         )
     )
-    @SuppressWarnings("DataFlowIssue")
-    private Holder<Item> getEntryUseField(Holder<Item> item) {
-        return this.item;
+    private Holder.@Nullable Reference<Item> useNull(Item instance, Operation<Holder.Reference<Item>> original) {
+        return null;
     }
 
     @WrapMethod(
-        method = "getMaxStackSize"
+        method = "getItem"
     )
-    private int alsoCheckStackableItemBehavior(Operation<Integer> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.STACKABLE)) {
-            return Items.UNSTACKABLE_MAX_STACK_SIZE;
+    private Item checkEmptyStackForGetItem(Operation<Item> original) {
+        if (this.isEmpty()) {
+            return Items.AIR;
         }
 
         return original.call();
     }
 
-    @WrapMethod(
-        method = "getTags"
+    @WrapOperation(
+        method = "isEmpty",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/core/Holder;value()Ljava/lang/Object;"
+        )
     )
-    @SuppressWarnings("DataFlowIssue")
-    public Stream<TagKey<Item>> useHolder(Operation<Stream<TagKey<Item>>> original) {
-        if (this.isEmpty()) {
-            return original.call();
+    @Nullable
+    private <T> T checkNull(@Nullable Holder<T> instance, Operation<T> original) {
+        if (instance == null) {
+            return null;
         }
 
-        return this.item.tags();
+        return original.call(instance);
     }
 
     @ModifyReturnValue(
@@ -396,67 +363,21 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     private boolean checkNullForEmptyStack(boolean original) {
         return original
             || this.item == null
-            || this.itematic$is(ItemIds.AIR);
-    }
-
-    @Redirect(
-        method = "isStackable",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"
-        )
-    )
-    private boolean isDamageableUseFalse(ItemStack instance) {
-        return false;
-    }
-
-    @WrapMethod(
-        method = "is(Lnet/minecraft/tags/TagKey;)Z"
-    )
-    @SuppressWarnings("DataFlowIssue")
-    public boolean useHolder(TagKey<Item> tag, Operation<Boolean> original) {
-        if (this.isEmpty()) {
-            return false;
-        }
-
-        return this.item.is(tag);
+            || this.item.is(ItemIds.AIR);
     }
 
     @WrapMethod(
         method = "is(Ljava/util/function/Predicate;)Z"
     )
-    @SuppressWarnings("DataFlowIssue")
-    public boolean useHolder(Predicate<Holder<Item>> predicate, Operation<Boolean> original) {
+    public boolean checkEmptyStackForIsPredicate(Predicate<Holder<Item>> item, Operation<Boolean> original) {
         if (this.isEmpty()) {
             return false;
         }
 
-        return predicate.test(this.item);
+        return original.call(item);
     }
 
-    @WrapMethod(
-        method = "is(Lnet/minecraft/core/Holder;)Z"
-    )
-    public boolean useHolder(Holder<Item> item, Operation<Boolean> original) {
-        if (this.isEmpty()) {
-            return false;
-        }
-
-        return this.item == item;
-    }
-
-    @WrapMethod(
-        method = "is(Lnet/minecraft/core/HolderSet;)Z"
-    )
-    private boolean checkEmptyStackForIsHolderSet(HolderSet<Item> items, Operation<Boolean> original) {
-        if (this.isEmpty()) {
-            return false;
-        }
-
-        return original.call(items);
-    }
-
-    @Redirect(
+    @WrapOperation(
         method = "onUseTick",
         at = @At(
             value = "INVOKE",
@@ -471,7 +392,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         )
     )
     @Nullable
-    private Object getKineticWeaponReturnNull(ItemStack instance, DataComponentType<KineticWeapon> componentType) {
+    private Object getKineticWeaponReturnNull(ItemStack instance, DataComponentType<KineticWeapon> type, Operation<Object> original) {
         return null;
     }
 
@@ -511,18 +432,18 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         return original.call(a, b);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = {
             "isSameItem",
             "isSameItemSameComponents"
         },
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isItemCheckHolder(ItemStack instance, Item item, ItemStack a, ItemStack b) {
-        return instance.is(b.getItemHolder());
+    private static boolean isItemCheckHolder(ItemStack instance, Object o, Operation<Boolean> original, @Local(name = "b", argsOnly = true) ItemStack b) {
+        return instance.is(b.typeHolder());
     }
 
     @WrapMethod(
@@ -561,18 +482,23 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     @SuppressWarnings("DataFlowIssue")
     private void addTooltipFromItem(Item instance, ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag, Operation<Void> original) {
         if (!this.isEmpty()) {
-            this.item.value().itematic$addTooltip((ItemStack) (Object) this, context, builder, tooltipFlag);
+            this.item.value().itematic$addTooltip(
+                (ItemStack)(Object) this,
+                context,
+                builder,
+                tooltipFlag
+            );
         }
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "addDetailsToTooltip",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/core/DefaultedRegistry;getKey(Ljava/lang/Object;)Lnet/minecraft/resources/Identifier;"
         )
     )
-    private <T> Identifier getIdHolder(DefaultedRegistry<T> instance, T t) {
+    private <T> Identifier getIdHolder(DefaultedRegistry<Item> instance, T t, Operation<Identifier> original) {
         return this.itematic$key().identifier();
     }
 
@@ -598,7 +524,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         return original.call(other, slot, clickAction, player, carriedItem);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "postHurtEnemy",
         at = @At(
             value = "INVOKE",
@@ -606,7 +532,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         )
     )
     @Nullable
-    private Object getWeaponDataComponentUseNull(ItemStack instance, DataComponentType<Weapon> type) {
+    private Object getWeaponDataComponentUseNull(ItemStack instance, DataComponentType<Weapon> type, Operation<Object> original) {
         return null;
     }
 
@@ -616,7 +542,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     )
     private int limitDamageApplied(int original) {
         return this.itematic$getBehavior(ItemBehaviorType.DAMAGEABLE)
-            .map(damageable -> Math.min(damageable.maximumDamage((ItemStack) (Object) this) - this.getDamageValue(), original))
+            .map(damageable -> Math.min(damageable.maximumDamage((ItemStack)(Object) this) - this.getDamageValue(), original))
             .orElse(original);
     }
 
@@ -628,12 +554,12 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
             shift = At.Shift.AFTER
         )
     )
-    private void invokeDamageItemEvent(int damage, @Nullable ServerPlayer player, Consumer<Item> breakCallback, CallbackInfo info) {
-        if (this.context == null) {
+    private void invokeDamageItemEvent(int newDamage, @Nullable ServerPlayer player, Consumer<Item> onBreak, CallbackInfo info) {
+        if (!ACTION_CONTEXT.isBound()) {
             return;
         }
 
-        this.itematic$invokeEvent(ItemEvent.DAMAGE_ITEM, this.context);
+        this.itematic$invokeEvent(ItemEvent.DAMAGE_ITEM, ACTION_CONTEXT.get());
     }
 
     @Inject(
@@ -643,15 +569,15 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
             target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
         )
     )
-    private void invokeBreakItemEvent(int damage, @Nullable ServerPlayer player, Consumer<Item> breakCallback, CallbackInfo info) {
-        if (this.context == null) {
+    private void invokeBreakItemEvent(int newDamage, @Nullable ServerPlayer player, Consumer<Item> onBreak, CallbackInfo info) {
+        if (!ACTION_CONTEXT.isBound()) {
             return;
         }
 
-        this.itematic$invokeEvent(ItemEvent.BREAK_ITEM, this.context);
+        this.itematic$invokeEvent(ItemEvent.BREAK_ITEM, ACTION_CONTEXT.get());
     }
 
-    @Redirect(
+    @WrapOperation(
         method = {
             "useOn",
             "hurtEnemy",
@@ -664,7 +590,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         )
     )
     @SuppressWarnings("DataFlowIssue")
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T key) {
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, Operation<Stat<T>> original) {
         return instance.itematic$get(this.item);
     }
 
@@ -675,12 +601,12 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
             target = "Lnet/minecraft/world/InteractionResult$Success;heldItemTransformedTo(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/InteractionResult$Success;"
         )
     )
-    private InteractionResult.Success doNotModifyResultingItemStackIfNotUseable(InteractionResult.Success instance, ItemStack newHandStack, Operation<InteractionResult.Success> original) {
+    private InteractionResult.Success doNotModifyResultingItemStackIfNotUseable(InteractionResult.Success instance, ItemStack itemStack, Operation<InteractionResult.Success> original) {
         if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
             return instance;
         }
 
-        return original.call(instance, newHandStack);
+        return original.call(instance, itemStack);
     }
 
     @WrapMethod(
@@ -688,14 +614,14 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     )
     private ItemStack checkForUseableBehavior(LivingEntity user, ItemStack stackBeforeUsing, Operation<ItemStack> original) {
         if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
-            return (ItemStack) (Object) this;
+            return (ItemStack)(Object) this;
         }
 
         return original.call(user, stackBeforeUsing);
     }
 
-    @Redirect(
-        method = "method_75224",
+    @WrapOperation(
+        method = "lambda$getDamageSource$1",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/Item;getItemDamageSource(Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/damagesource/DamageSource;"
@@ -703,9 +629,9 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     )
     @Nullable
     @SuppressWarnings("ConstantValue")
-    private DamageSource getDamageSourceUseItemBehavior(Item instance, LivingEntity user) {
+    private DamageSource getDamageSourceUseItemBehavior(Item instance, LivingEntity attacker, Operation<DamageSource> original) {
         return this.itematic$getBehavior(ItemBehaviorType.WEAPON)
-            .map(weapon -> weapon.damageSource((ItemStack)(Object) this, user))
+            .map(weapon -> weapon.damageSource((ItemStack)(Object) this, attacker))
             .orElse(null);
     }
 
@@ -720,7 +646,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         method = "hashItemAndComponents"
     )
     private static int checkEmptyStack(@Nullable ItemStack item, Operation<Integer> original) {
-        if (item != null && (item.isEmpty() || !item.getItemHolder().isBound())) {
+        if (item != null && (item.isEmpty() || !item.typeHolder().isBound())) {
             return 0;
         }
 
@@ -730,7 +656,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     @Override
     public boolean canBeEnchantedWith(Holder<Enchantment> enchantment, EnchantingContext context) {
         // Use the original implementation again
-        return enchantment.value().canEnchant((ItemStack) (Object) this);
+        return enchantment.value().canEnchant((ItemStack)(Object) this);
     }
 
     @Override
@@ -740,20 +666,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
         }
 
         return this.item.unwrapKey().orElse(ItemIds.AIR);
-    }
-
-    @Override
-    public void itematic$setComponents(PatchedDataComponentMap components) {
-        this.components = components;
-    }
-
-    @Override
-    public void itematic$tryIncrement(int count) {
-        if (this.isEmpty()) {
-            return;
-        }
-
-        this.count = Mth.clamp(this.count + count, 0, this.getMaxStackSize());
     }
 
     @Override
@@ -774,17 +686,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
             return EMPTY;
         }
 
-        return this.itematic$transmuteCopyIgnoreEmpty(item, count);
-    }
-
-    @Override
-    public ItemStack itematic$transmuteCopyIgnoreEmpty(Holder<Item> item, int count) {
-        return new ItemStack(item, count, this.components.asPatch());
-    }
-
-    @Override
-    public boolean itematic$is(ResourceKey<Item> item) {
-        return this.item != null && this.item.isBound() && this.item.is(item);
+        return this.transmuteCopyIgnoreEmpty(item, count);
     }
 
     @Override
@@ -793,15 +695,16 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
             return;
         }
 
-        this.context = context;
-        LivingEntity entity = context.get(LootContextParams.THIS_ENTITY, LivingEntity.class);
-        this.hurtAndBreak(
-            amount,
-            level,
-            entity instanceof ServerPlayer player ? player : null,
-            item -> this.onItemBroken(item, entity, context)
-        );
-        this.context = null;
+        ScopedValue.where(ACTION_CONTEXT, context)
+            .run(() -> {
+                LivingEntity entity = context.get(LootContextParams.THIS_ENTITY, LivingEntity.class);
+                this.hurtAndBreak(
+                    amount,
+                    level,
+                    entity instanceof ServerPlayer player ? player : null,
+                    item -> this.onItemBroken(item, entity, context)
+                );
+            });
     }
 
     @Override
@@ -825,14 +728,11 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
             return false;
         }
 
-        if (this.activeEvents.contains(event)) {
+        try {
+            return this.item.value().itematic$invokeEvent(event, context);
+        } catch (StackOverflowError e) {
             return false;
         }
-
-        this.activeEvents.add(event);
-        boolean result = this.item.value().itematic$invokeEvent(event, context);
-        this.activeEvents.remove(event);
-        return result;
     }
 
     @Override
@@ -863,23 +763,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemStac
     }
 
     @Unique
-    private void setFields(Holder<Item> entry) {
-        this.item = entry;
-        if (entry.isBound()) {
-            this.components = new PatchedDataComponentMap(entry.value().components());
-        } else {
-            this.components = new PatchedDataComponentMap(DataComponentMap.EMPTY);
-        }
-    }
-
-    @Unique
-    private void setFields(Holder<Item> entry, DataComponentPatch changes) {
-        this.item = entry;
-        if (entry.isBound()) {
-            this.components = PatchedDataComponentMap.fromPatch(entry.value().components(), changes);
-        } else {
-            this.components = PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, changes);
-        }
+    private ItemStack transmuteCopyIgnoreEmpty(Holder<Item> item, int count) {
+        return new ItemStack(item, count, this.components.asPatch());
     }
 
     @Unique

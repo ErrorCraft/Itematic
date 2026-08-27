@@ -47,7 +47,7 @@ public class FireworkItemBehavior implements ItemBehavior<FireworkItemBehavior> 
         FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(level, stack, user);
         level.addFreshEntity(fireworkRocketEntity);
         stack.consume(1, user);
-        user.awardStat(Stats.ITEM_USED.itematic$get(stack.getItemHolder()));
+        user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         return ItemResult.CONSUME;
     }
 

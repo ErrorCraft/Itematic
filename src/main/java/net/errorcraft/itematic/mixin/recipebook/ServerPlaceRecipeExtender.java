@@ -27,7 +27,7 @@ public class ServerPlaceRecipeExtender<R extends Recipe<?>> {
             target = "()Lnet/minecraft/world/entity/player/StackedItemContents;"
         )
     )
-    private static StackedItemContents setLevel(StackedItemContents original, @Local(argsOnly = true) Inventory inventory) {
+    private static StackedItemContents setLevel(StackedItemContents original, @Local(name = "inventory", argsOnly = true) Inventory inventory) {
         original.itematic$setLevel(inventory.player.level());
         return original;
     }

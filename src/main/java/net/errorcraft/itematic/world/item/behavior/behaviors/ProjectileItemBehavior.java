@@ -5,6 +5,7 @@ import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Direction;
@@ -84,18 +85,18 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
         );
     }
 
-    private void initializeProjectile(ActionContext context, Projectile projectileEntity, float angleOffset, float speed, float uncertainty) {
+    private void initializeProjectile(ActionContext context, Projectile projectile, float angleOffset, float speed, float uncertainty) {
         Entity user = context.get(LootContextParams.THIS_ENTITY);
         if (user != null) {
-            initializeProjectile(projectileEntity, user, angleOffset, speed, uncertainty);
+            initializeProjectile(projectile, user, angleOffset, speed, uncertainty);
         } else {
-            initializeProjectile(projectileEntity, context.getOrDefault(ItematicContextKeys.SIDE, Direction.UP), speed, uncertainty);
+            initializeProjectile(projectile, context.getOrDefault(ItematicContextKeys.SIDE, Direction.UP), speed, uncertainty);
         }
 
         if (context.level() instanceof ServerLevel serverLevel) {
-            projectileEntity.applyOnProjectileSpawned(
+            projectile.applyOnProjectileSpawned(
                 serverLevel,
-                context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
+                context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY)
             );
         }
     }

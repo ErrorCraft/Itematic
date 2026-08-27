@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -104,13 +105,14 @@ public class FluidPlacer {
             return false;
         }
 
+        RandomSource random = level.getRandom();
         level.playSound(
             this.context.get(LootContextParams.THIS_ENTITY),
             pos,
             SoundEvents.FIRE_EXTINGUISH,
             SoundSource.BLOCKS,
             0.5f,
-            2.6f + (level.random.nextFloat() - level.random.nextFloat()) * 0.8f
+            2.6f + (random.nextFloat() - random.nextFloat()) * 0.8f
         );
         for (int i = 0; i < 8; i++) {
             level.addParticle(

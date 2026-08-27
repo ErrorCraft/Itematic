@@ -24,11 +24,11 @@ public abstract class ZombieVillagerExtender extends MobExtender {
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isGoldenAppleCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.GOLDEN_APPLE);
+    private boolean isGoldenAppleCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.GOLDEN_APPLE);
     }
 
     @Override

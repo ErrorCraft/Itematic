@@ -6,7 +6,6 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.JukeboxPlayable;
 import net.minecraft.world.item.JukeboxSong;
 
@@ -27,6 +26,6 @@ public record PlayableSongItemBehavior(Holder<JukeboxSong> song) implements Item
 
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
-        builder.set(DataComponents.JUKEBOX_PLAYABLE, new JukeboxPlayable(new EitherHolder<>(this.song)));
+        builder.set(DataComponents.JUKEBOX_PLAYABLE, new JukeboxPlayable(this.song));
     }
 }

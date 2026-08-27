@@ -26,7 +26,7 @@ public abstract class SimpleContainerExtender implements SimpleContainerAccess {
         int countLeft = count;
         for (int i = this.size - 1; i >= 0; i--) {
             ItemStack heldStack = this.getItem(i);
-            if (!heldStack.itematic$is(item)) {
+            if (!heldStack.is(item)) {
                 continue;
             }
 

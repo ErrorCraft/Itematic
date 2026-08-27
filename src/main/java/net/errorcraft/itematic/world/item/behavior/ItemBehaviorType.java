@@ -18,14 +18,12 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.DecoratedPotPatternItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DispensableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DyeItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.DyeableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantmentHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EntityItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkShapeModifierItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
@@ -130,10 +128,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
         "dye",
         DyeItemBehavior.CODEC
     );
-    public static final ItemBehaviorType<DyeableItemBehavior> DYEABLE = register(
-        "dyeable",
-        DyeableItemBehavior.CODEC
-    );
     public static final ItemBehaviorType<SpawnEggItemBehavior> SPAWN_EGG = register(
         "spawn_egg",
         SpawnEggItemBehavior.CODEC
@@ -149,10 +143,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<PlayableSongItemBehavior> PLAYABLE_SONG = register(
         "playable_song",
         PlayableSongItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<FireworkShapeModifierItemBehavior> FIREWORK_SHAPE_MODIFIER = register(
-        "firework_shape_modifier",
-        FireworkShapeModifierItemBehavior.CODEC
     );
     public static final ItemBehaviorType<FireworkExplosionHolderItemBehavior> FIREWORK_EXPLOSION_HOLDER = register(
         "firework_explosion_holder",

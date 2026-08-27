@@ -41,7 +41,7 @@ public record ModifyItemAction(LootContext.ItemStackTarget stack, LootItemFuncti
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.get(this.stack.contextParam());
+        ItemStack stack = context.get(this.stack.contextParam(), ItemStacks::fromItemInstance);
         if (ItemStacks.isNullOrEmpty(stack)) {
             return false;
         }

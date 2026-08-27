@@ -26,11 +26,11 @@ public class ArgumentTypeInfosExtender {
             )
         )
     )
-    private static SingletonArgumentInfo<ObjectiveCriteriaArgument> useContextAwareVersion(Supplier<ObjectiveCriteriaArgument> typeSupplier) {
+    private static SingletonArgumentInfo<ObjectiveCriteriaArgument> useContextAwareVersion(Supplier<ObjectiveCriteriaArgument> constructor) {
         return SingletonArgumentInfo.contextAware(context -> {
-            ObjectiveCriteriaArgument argumentType = typeSupplier.get();
-            argumentType.itematic$setContext(context);
-            return argumentType;
+            ObjectiveCriteriaArgument argument = constructor.get();
+            argument.itematic$setContext(context);
+            return argument;
         });
     }
 }

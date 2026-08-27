@@ -46,7 +46,7 @@ public record PrimeTntAction(PositionTarget position) implements Action<PrimeTnt
         }
 
         if (player != null && !level.getGameRules().get(GameRules.TNT_EXPLODES)) {
-            player.displayClientMessage(Component.translatable("block.minecraft.tnt.disabled"), true);
+            player.sendOverlayMessage(Component.translatable("block.minecraft.tnt.disabled"));
         }
 
         return false;

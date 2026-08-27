@@ -27,11 +27,11 @@ public abstract class WitchExtender extends MobExtender {
         method = "aiStep",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isPotionCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.POTION);
+    private boolean isPotionCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.POTION);
     }
 
     @Redirect(

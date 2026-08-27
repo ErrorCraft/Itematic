@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import net.errorcraft.itematic.access.world.item.crafting.RecipeAccess;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SimpleSmithingRecipe;
 import net.minecraft.world.item.crafting.SmithingTransformRecipe;
-import net.minecraft.world.item.crafting.TransmuteResult;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SmithingRecipeDisplay;
@@ -18,22 +18,26 @@ import java.util.List;
 import java.util.Optional;
 
 @Mixin(SmithingTransformRecipe.class)
-public class SmithingTransformRecipeExtender implements RecipeAccess {
+public abstract class SmithingTransformRecipeExtender extends SimpleSmithingRecipe {
     @Shadow
     @Final
-    Optional<Ingredient> template;
+    private Optional<Ingredient> template;
 
     @Shadow
     @Final
-    Ingredient base;
+    private Ingredient base;
 
     @Shadow
     @Final
-    Optional<Ingredient> addition;
+    private Optional<Ingredient> addition;
 
     @Shadow
     @Final
-    TransmuteResult result;
+    private ItemStackTemplate result;
+
+    protected SmithingTransformRecipeExtender(CommonInfo commonInfo) {
+        super(commonInfo);
+    }
 
     @Override
     public List<RecipeDisplay> itematic$display(HolderGetter<Item> items) {
@@ -42,7 +46,7 @@ public class SmithingTransformRecipeExtender implements RecipeAccess {
                 Ingredient.optionalIngredientToDisplay(this.template),
                 this.base.display(),
                 Ingredient.optionalIngredientToDisplay(this.addition),
-                this.result.display(),
+                new SlotDisplay.ItemStackSlotDisplay(this.result),
                 new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.SMITHING_TABLE))
             )
         );

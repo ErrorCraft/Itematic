@@ -40,7 +40,7 @@ public class TwirlPlayerAction implements Action<TwirlPlayerAction> {
             return false;
         }
 
-        ItemStack stack = context.get(LootContextParams.TOOL);
+        ItemStack stack = context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance);
         if (ItemStacks.isNullOrEmpty(stack)) {
             return false;
         }

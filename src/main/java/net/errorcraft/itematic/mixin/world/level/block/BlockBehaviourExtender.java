@@ -33,11 +33,11 @@ public abstract class BlockBehaviourExtender implements BlockBehaviourAccess {
         method = "canBeReplaced(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/item/context/BlockPlaceContext;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isItemCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(this.itematic$asItemId());
+    private boolean isItemCheckId(ItemStack instance, Object o) {
+        return instance.is(this.itematic$asItemId());
     }
 
     @Redirect(

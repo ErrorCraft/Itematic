@@ -22,20 +22,19 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Entity.class)
 public abstract class EntityExtender implements EntityAccess {
     @Shadow
     @Nullable
-    public abstract ItemEntity spawnAtLocation(ServerLevel level, ItemStack stack);
+    public abstract ItemEntity spawnAtLocation(ServerLevel level, ItemStack itemStack);
 
-    @Redirect(
+    @WrapOperation(
         method = "interact",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         ),
         slice = @Slice(
             from = @At(
@@ -49,15 +48,15 @@ public abstract class EntityExtender implements EntityAccess {
             )
         )
     )
-    private boolean isShearsCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.SHEARS);
+    private boolean isShearsCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
+        return instance.is(ItemIds.SHEARS);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "interact",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
             ordinal = 0
         ),
         slice = @Slice(
@@ -68,13 +67,13 @@ public abstract class EntityExtender implements EntityAccess {
             )
         )
     )
-    private boolean isLeadCheckId(ItemStack instance, Item item) {
-        return instance.itematic$is(ItemIds.LEAD);
+    private boolean isLeadCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
+        return instance.is(ItemIds.LEAD);
     }
 
-    @Definition(id = "ServerPlayerEntity", type = ServerPlayer.class)
+    @Definition(id = "ServerPlayer", type = ServerPlayer.class)
     @Definition(id = "player", local = @Local(type = Player.class))
-    @Expression("(ServerPlayerEntity) player")
+    @Expression("(ServerPlayer) player")
     @WrapOperation(
         method = "attemptToShearEquipment",
         at = @At("MIXINEXTRAS:EXPRESSION")
@@ -91,7 +90,7 @@ public abstract class EntityExtender implements EntityAccess {
             target = "Lnet/minecraft/advancements/criterion/PlayerInteractTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/Entity;)V"
         )
     )
-    private boolean checkForServerPlayer(PlayerInteractTrigger instance, @Nullable ServerPlayer player, ItemStack stack, Entity entity) {
+    private boolean checkForServerPlayer(PlayerInteractTrigger instance, @Nullable ServerPlayer player, ItemStack itemStack, Entity interactedWith) {
         return player != null;
     }
 

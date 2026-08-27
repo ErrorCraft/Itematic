@@ -18,7 +18,7 @@ public class ItemCooldownsExtender {
             target = "Lnet/minecraft/core/DefaultedRegistry;getKey(Ljava/lang/Object;)Lnet/minecraft/resources/Identifier;"
         )
     )
-    private <T> Identifier getIdUseHolder(DefaultedRegistry<Item> instance, T t, ItemStack stack) {
-        return stack.itematic$key().identifier();
+    private <T> Identifier getIdUseHolder(DefaultedRegistry<Item> instance, T t, ItemStack item) {
+        return item.itematic$key().identifier();
     }
 }

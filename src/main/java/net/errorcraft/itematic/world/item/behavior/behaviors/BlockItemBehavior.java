@@ -8,6 +8,7 @@ import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.placement.block.BlockPlacer;
@@ -106,7 +107,7 @@ public record BlockItemBehavior(BlockPicker<?> block, boolean operatorOnly, Set<
     public void onDestroyed(ItemEntity item) {
         ItemContainerContents container = item.getItem().set(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
         if (container != null) {
-            ItemUtils.onContainerDestroyed(item, container.nonEmptyItemsCopy());
+            ItemUtils.onContainerDestroyed(item, container.nonEmptyItemCopyStream());
         }
     }
 
@@ -127,7 +128,7 @@ public record BlockItemBehavior(BlockPicker<?> block, boolean operatorOnly, Set<
         }
 
         if (decrementCount) {
-            context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
+            context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY)
                 .consume(
                     1,
                     context.get(LootContextParams.THIS_ENTITY, LivingEntity.class)

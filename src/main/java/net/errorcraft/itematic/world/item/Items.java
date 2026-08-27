@@ -68,14 +68,12 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.DecoratedPotPatternItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DispensableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DyeItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.DyeableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantmentHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EntityItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkShapeModifierItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
@@ -168,7 +166,6 @@ import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.Item;
@@ -184,7 +181,6 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.Consumables;
-import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.item.component.Tool;
@@ -197,6 +193,7 @@ import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -278,6 +275,7 @@ public class Items {
         private final HolderGetter<TrimMaterial> trimMaterials;
         private final HolderGetter<ChickenVariant> chickenVariants;
         private final HolderGetter<DamageType> damageTypes;
+        private final HolderGetter<BannerPattern> bannerPatterns;
 
         private Bootstrapper(BootstrapContext<Item> registerable) {
             this.registerable = registerable;
@@ -297,6 +295,7 @@ public class Items {
             this.trimMaterials = registerable.lookup(Registries.TRIM_MATERIAL);
             this.chickenVariants = registerable.lookup(Registries.CHICKEN_VARIANT);
             this.damageTypes = registerable.lookup(Registries.DAMAGE_TYPE);
+            this.bannerPatterns = registerable.lookup(Registries.BANNER_PATTERN);
         }
 
         private void bootstrap() {
@@ -4438,7 +4437,6 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
             this.registerable.register(ItemIds.WARPED_SHELF, create(
@@ -4446,7 +4444,13 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.GOLDEN_DANDELION, create(
+                ItemDisplay.Builder.forBlock(ItemIds.GOLDEN_DANDELION).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GOLDEN_DANDELION)))
                     .build()
             ));
         }
@@ -5757,7 +5761,7 @@ public class Items {
                         0.82f,
                         0.7f,
                         4.5f,
-                        10.0f,
+                        13.0f,
                         9.0f,
                         5.1f,
                         13.75f,
@@ -5777,7 +5781,7 @@ public class Items {
                         0.82f,
                         0.65f,
                         4.0f,
-                        9.0f,
+                        12.0f,
                         8.25f,
                         5.1f,
                         12.5f,
@@ -5797,7 +5801,7 @@ public class Items {
                         0.95f,
                         0.6f,
                         2.5f,
-                        8.0f,
+                        11.0f,
                         6.75f,
                         5.1f,
                         11.25f,
@@ -5817,7 +5821,7 @@ public class Items {
                         0.7f,
                         0.7f,
                         3.5f,
-                        10.0f,
+                        13.0f,
                         8.5f,
                         5.1f,
                         13.75f,
@@ -5837,7 +5841,7 @@ public class Items {
                         1.075f,
                         0.5f,
                         3.0f,
-                        7.5f,
+                        10.0f,
                         6.5f,
                         5.1f,
                         10.0f,
@@ -5857,7 +5861,7 @@ public class Items {
                         1.2f,
                         0.4f,
                         2.5f,
-                        7.0f,
+                        9.0f,
                         5.5f,
                         5.1f,
                         8.75f,
@@ -5865,7 +5869,7 @@ public class Items {
                         this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS),
                         this.soundEvents
                     ))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build()
             ));
             this.registerable.register(ItemIds.STONE_SWORD, create(
@@ -6052,14 +6056,14 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.NETHERITE_SWORD).build(),
                 ItemBehaviorSet.builder()
                     .with(DamageableItemBehavior.sword(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build()
             ));
             this.registerable.register(ItemIds.NETHERITE_SHOVEL, create(
                 ItemDisplay.Builder.forItem(ItemIds.NETHERITE_SHOVEL).build(),
                 ItemBehaviorSet.builder()
                     .with(DamageableItemBehavior.shovel(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build(),
                 ActionEventMap.Builder.item()
                     .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
@@ -6069,21 +6073,21 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.NETHERITE_PICKAXE).build(),
                 ItemBehaviorSet.builder()
                     .with(DamageableItemBehavior.pickaxe(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build()
             ));
             this.registerable.register(ItemIds.NETHERITE_AXE, create(
                 ItemDisplay.Builder.forItem(ItemIds.NETHERITE_AXE).build(),
                 ItemBehaviorSet.builder()
                     .with(DamageableItemBehavior.axe(this.blocks, ToolMaterial.NETHERITE, 6.0d, 0.25d, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build()
             ));
             this.registerable.register(ItemIds.NETHERITE_HOE, create(
                 ItemDisplay.Builder.forItem(ItemIds.NETHERITE_HOE).build(),
                 ItemBehaviorSet.builder()
                     .with(DamageableItemBehavior.hoe(this.blocks, ToolMaterial.NETHERITE, 5.0d, 1.0d, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build(),
                 ActionEventMap.Builder.item()
                     .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
@@ -8241,7 +8245,7 @@ public class Items {
                             new BlocksAttacks.DamageReduction(90.0f, Optional.empty(), 0.0f, 1.0f)
                         ),
                         new BlocksAttacks.ItemDamageFunction(3.0f, 1.0f, 1.0f),
-                        Optional.of(DamageTypeTags.BYPASSES_SHIELD),
+                        Optional.of(this.damageTypes.getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
                         Optional.of(this.soundEvents.getOrThrow(SoundEventIds.SHIELD_BLOCK)),
                         Optional.of(this.soundEvents.getOrThrow(SoundEventIds.SHIELD_BREAK))
                     )))
@@ -8266,7 +8270,6 @@ public class Items {
                     .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.LEATHER_CHESTPLATE, create(
@@ -8277,7 +8280,6 @@ public class Items {
                     .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.LEATHER_LEGGINGS, create(
@@ -8288,7 +8290,6 @@ public class Items {
                     .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.LEATHER_BOOTS, create(
@@ -8299,7 +8300,6 @@ public class Items {
                     .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.COPPER_HELMET, create(
@@ -8515,7 +8515,7 @@ public class Items {
                 AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.HELMET),
                 ItemBehaviorSet.builder()
                     .with(EquipmentItemBehavior.forArmor(ArmorMaterials.NETHERITE, ArmorType.HELMET))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .with(EnchantableItemBehavior.of(ArmorMaterials.NETHERITE))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -8526,7 +8526,7 @@ public class Items {
                 AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.CHESTPLATE),
                 ItemBehaviorSet.builder()
                     .with(EquipmentItemBehavior.forArmor(ArmorMaterials.NETHERITE, ArmorType.CHESTPLATE))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .with(EnchantableItemBehavior.of(ArmorMaterials.NETHERITE))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -8537,7 +8537,7 @@ public class Items {
                 AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.LEGGINGS),
                 ItemBehaviorSet.builder()
                     .with(EquipmentItemBehavior.forArmor(ArmorMaterials.NETHERITE, ArmorType.LEGGINGS))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .with(EnchantableItemBehavior.of(ArmorMaterials.NETHERITE))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -8548,7 +8548,7 @@ public class Items {
                 AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.BOOTS),
                 ItemBehaviorSet.builder()
                     .with(EquipmentItemBehavior.forArmor(ArmorMaterials.NETHERITE, ArmorType.BOOTS))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .with(EnchantableItemBehavior.of(ArmorMaterials.NETHERITE))
                     .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_NETHERITE_ARMOR)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
@@ -8571,7 +8571,6 @@ public class Items {
                     .with(StackableItemBehavior.of(1))
                     .with(EquipmentItemBehavior.ofHorseArmor(ArmorMaterials.LEATHER, this.soundEvents, this.entityTypes))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.COPPER_HORSE_ARMOR, create(
@@ -8616,7 +8615,7 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(1))
                     .with(EquipmentItemBehavior.ofHorseArmor(ArmorMaterials.NETHERITE, this.soundEvents, this.entityTypes))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                     .build()
             ));
@@ -8642,7 +8641,6 @@ public class Items {
                         .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_WOLF))
                         .build()
                     ))
-                    .with(DyeableItemBehavior.INSTANCE)
                     .build()
             ));
             this.registerable.register(ItemIds.WHITE_HARNESS, create(
@@ -10731,9 +10729,7 @@ public class Items {
                         DataComponentPatch.builder()
                             .set(
                                 DataComponents.CHICKEN_VARIANT,
-                                new EitherHolder<>(
-                                    this.chickenVariants.getOrThrow(ChickenVariants.TEMPERATE)
-                                )
+                                this.chickenVariants.getOrThrow(ChickenVariants.TEMPERATE)
                             )
                             .build()
                     ))
@@ -10750,9 +10746,7 @@ public class Items {
                         DataComponentPatch.builder()
                             .set(
                                 DataComponents.CHICKEN_VARIANT,
-                                new EitherHolder<>(
-                                    this.chickenVariants.getOrThrow(ChickenVariants.COLD)
-                                )
+                                this.chickenVariants.getOrThrow(ChickenVariants.COLD)
                             )
                             .build()
                     ))
@@ -10769,9 +10763,7 @@ public class Items {
                         DataComponentPatch.builder()
                             .set(
                                 DataComponents.CHICKEN_VARIANT,
-                                new EitherHolder<>(
-                                    this.chickenVariants.getOrThrow(ChickenVariants.WARM)
-                                )
+                                this.chickenVariants.getOrThrow(ChickenVariants.WARM)
                             )
                             .build()
                     ))
@@ -10845,7 +10837,6 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.FIRE_CHARGE).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(FireworkShapeModifierItemBehavior.of(FireworkExplosion.Shape.LARGE_BALL))
                     .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.SMALL_FIREBALL)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_CHARGE)))
                     .build(),
@@ -11628,7 +11619,7 @@ public class Items {
             this.registerable.register(ItemIds.FLOWER_BANNER_PATTERN, create(
                 ItemDisplay.Builder.forItem(ItemIds.FLOWER_BANNER_PATTERN).build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_FLOWER))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_FLOWER)))
                     .build()
             ));
             this.registerable.register(ItemIds.CREEPER_BANNER_PATTERN, create(
@@ -11636,7 +11627,7 @@ public class Items {
                     .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_CREEPER))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_CREEPER)))
                     .build()
             ));
             this.registerable.register(ItemIds.SKULL_BANNER_PATTERN, create(
@@ -11644,7 +11635,7 @@ public class Items {
                     .rarity(Rarity.RARE)
                     .build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_SKULL))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_SKULL)))
                     .build()
             ));
             this.registerable.register(ItemIds.MOJANG_BANNER_PATTERN, create(
@@ -11652,13 +11643,13 @@ public class Items {
                     .rarity(Rarity.RARE)
                     .build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_MOJANG))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_MOJANG)))
                     .build()
             ));
             this.registerable.register(ItemIds.GLOBE_BANNER_PATTERN, create(
                 ItemDisplay.Builder.forItem(ItemIds.GLOBE_BANNER_PATTERN).build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_GLOBE))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_GLOBE)))
                     .build()
             ));
             this.registerable.register(ItemIds.PIGLIN_BANNER_PATTERN, create(
@@ -11666,7 +11657,7 @@ public class Items {
                     .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_PIGLIN))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_PIGLIN)))
                     .build()
             ));
             this.registerable.register(ItemIds.FLOW_BANNER_PATTERN, create(
@@ -11674,7 +11665,7 @@ public class Items {
                     .rarity(Rarity.RARE)
                     .build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_FLOW))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_FLOW)))
                     .build()
             ));
             this.registerable.register(ItemIds.GUSTER_BANNER_PATTERN, create(
@@ -11682,7 +11673,7 @@ public class Items {
                     .rarity(Rarity.RARE)
                     .build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_GUSTER))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_GUSTER)))
                     .build()
             ));
             this.registerable.register(ItemIds.FIELD_MASONED_BANNER_PATTERN, create(
@@ -11690,7 +11681,7 @@ public class Items {
                     .rarity(Rarity.RARE)
                     .build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_FIELD_MASONED))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_FIELD_MASONED)))
                     .build()
             ));
             this.registerable.register(ItemIds.BORDURE_INDENTED_BANNER_PATTERN, create(
@@ -11698,7 +11689,7 @@ public class Items {
                     .rarity(Rarity.RARE)
                     .build(),
                 ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(BannerPatternTags.PATTERN_ITEM_BORDURE_INDENTED))
+                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_BORDURE_INDENTED)))
                     .build()
             ));
         }
@@ -11903,7 +11894,7 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ANCIENT_DEBRIS)))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build()
             ));
             this.registerable.register(ItemIds.NETHERITE_BLOCK, create(
@@ -11911,14 +11902,14 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHERITE_BLOCK)))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build()
             ));
             this.registerable.register(ItemIds.NETHERITE_INGOT, create(
                 ItemDisplay.Builder.forItem(ItemIds.NETHERITE_INGOT).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.NETHERITE)))
                     .build()
             ));
@@ -11926,7 +11917,7 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.NETHERITE_SCRAP).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_FIRE))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build()
             ));
             this.registerable.register(ItemIds.NETHER_STAR, create(
@@ -11936,7 +11927,7 @@ public class Items {
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(ImmuneToDamageItemBehavior.of(DamageTypeTags.IS_EXPLOSION))
+                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_EXPLOSION)))
                     .build()
             ));
         }
@@ -12069,7 +12060,6 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.FEATHER).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(FireworkShapeModifierItemBehavior.of(FireworkExplosion.Shape.BURST))
                     .build()
             ));
             this.registerable.register(ItemIds.GUNPOWDER, create(
@@ -12391,7 +12381,6 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.GOLD_NUGGET).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(FireworkShapeModifierItemBehavior.of(FireworkExplosion.Shape.STAR))
                     .build()
             ));
             this.registerable.register(ItemIds.GLASS_BOTTLE, create(

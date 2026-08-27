@@ -24,7 +24,7 @@ public class SetItemFunctionExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack transmuteCopyUseHolder(ItemStack instance, ItemLike item) {
+    private ItemStack transmuteCopyUseHolder(ItemStack instance, ItemLike newItem) {
         return instance.itematic$transmuteCopy(this.item);
     }
 }

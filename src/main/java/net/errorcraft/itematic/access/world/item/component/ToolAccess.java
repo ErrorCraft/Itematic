@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Optional;
 
 public interface ToolAccess {
-    default float itematic$getSpeed(ItemStack stack, BlockState state) {
+    default float itematic$getMiningSpeed(ItemStack stack, BlockState state) {
         return 0.0f;
     }
     default boolean itematic$isCorrectForDrops(ItemStack stack, BlockState state) {

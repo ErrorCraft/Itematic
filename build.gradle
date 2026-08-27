@@ -1,6 +1,6 @@
 plugins {
-	id 'fabric-loom' version '1.16-SNAPSHOT'
-	id 'maven-publish'
+	id "net.fabricmc.fabric-loom" version "${loom_version}"
+	id "maven-publish"
 }
 
 version = project.mod_version
@@ -11,9 +11,8 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
 
 processResources {
@@ -25,15 +24,11 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 25
 }
 
 loom {
 	splitEnvironmentSourceSets()
-
-	mixin {
-		useLegacyMixinAp = true
-	}
 }
 
 sourceSets {
@@ -65,6 +60,8 @@ loom {
 		itematic {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
+		}
+		"itematic-datagen" {
 			sourceSet sourceSets.datagen
 		}
 		"itematic-gametest" {
@@ -78,7 +75,7 @@ loom {
 			name "Data Generation"
 			vmArg "-Dfabric-api.datagen"
 			vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
-			vmArg "-Dfabric-api.datagen.modid=itematic"
+			vmArg "-Dfabric-api.datagen.modid=itematic-datagen"
 
 			runDir "build/datagen"
 			source sourceSets.datagen
@@ -95,7 +92,7 @@ loom {
 		gametestClient {
 			inherit client
 			name "GameTest Client"
-			vmArg "-Ditematic.gametest.structure-output-directory=${file("src/gametest/resources/data")}"
+			vmArg "-Ditematic.gametest.structure-directory=${file("src/gametest/resources/data")}"
 
 			runDir "run"
 			source sourceSets.gametest
@@ -106,9 +103,8 @@ loom {
 
 java {
 	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {

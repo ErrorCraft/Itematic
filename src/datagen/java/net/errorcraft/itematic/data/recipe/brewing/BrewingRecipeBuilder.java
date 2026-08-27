@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.data.recipe.brewing;
 
+import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.errorcraft.itematic.world.item.crafting.BrewingRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -14,7 +15,6 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jspecify.annotations.Nullable;
@@ -63,7 +63,7 @@ public abstract class BrewingRecipeBuilder<T> {
 
     protected Ingredient reagent() {
         Ingredient reagent = Ingredient.of(this.reagent);
-        reagent.itematic$setRemainder(Optional.ofNullable(this.remainder).map(ItemStack::new));
+        reagent.itematic$setRemainder(Optional.ofNullable(this.remainder).map(ItemStackTemplates::of));
         return reagent;
     }
 }

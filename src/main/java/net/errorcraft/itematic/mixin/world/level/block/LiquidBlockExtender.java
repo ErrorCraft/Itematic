@@ -27,7 +27,7 @@ public class LiquidBlockExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackUseCreateStack(ItemLike item, @Local(argsOnly = true) LevelAccessor level) {
+    private ItemStack newItemStackUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) LevelAccessor level) {
         ResourceKey<Item> itemId = this.fluid.itematic$getBucketItemId();
         if (itemId == null) {
             return ItemStack.EMPTY;

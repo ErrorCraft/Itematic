@@ -4,7 +4,7 @@ import net.errorcraft.itematic.client.gui.screens.recipebook.BrewingRecipeBookCo
 import net.errorcraft.itematic.mixin.client.gui.screens.inventory.AbstractContainerScreenAccessor;
 import net.errorcraft.itematic.mixin.client.gui.screens.inventory.BrewingStandScreenAccessor;
 import net.errorcraft.itematic.world.inventory.BrewingStandMenuDelegate;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
 import net.minecraft.client.gui.screens.inventory.BrewingStandScreen;
@@ -32,8 +32,8 @@ public class BrewingStandScreenDelegate extends AbstractRecipeBookScreen<Brewing
     }
 
     @Override
-    protected void renderBg(GuiGraphics graphics, float a, int xm, int ym) {
-        ((BrewingStandScreenAccessor) this.delegate).itematic$renderBg(graphics, a, xm, ym);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        ((BrewingStandScreenAccessor) this.delegate).itematic$extractBackground(graphics, mouseX, mouseY, a);
     }
 
     @Override

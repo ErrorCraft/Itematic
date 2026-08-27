@@ -1,17 +1,17 @@
 package net.errorcraft.itematic.mixin.client.renderer;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelEventHandler;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
-import org.objectweb.asm.Opcodes;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(LevelEventHandler.class)
 public class LevelEventHandlerExtender {
@@ -19,41 +19,33 @@ public class LevelEventHandlerExtender {
     @Final
     private ClientLevel level;
 
-    @Redirect(
+    @WrapOperation(
         method = "levelEvent",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/world/item/ItemStack"
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "NEW",
-                target = "net/minecraft/core/particles/ItemParticleOption",
-                ordinal = 1
-            )
+            target = "(Lnet/minecraft/core/particles/ParticleType;Lnet/minecraft/world/item/Item;)Lnet/minecraft/core/particles/ItemParticleOption;",
+            ordinal = 1
         )
     )
-    private ItemStack newItemStackForSplashPotionUseCreateStack(ItemLike item) {
-        return this.level.itematic$createStack(ItemIds.SPLASH_POTION);
+    private ItemParticleOption newItemStackTemplateForSplashPotionUseCreateStackTemplate(ParticleType<ItemParticleOption> type, Item item, Operation<ItemParticleOption> original) {
+        return new ItemParticleOption(
+            type,
+            this.level.itematic$createStackTemplate(ItemIds.SPLASH_POTION)
+        );
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "levelEvent",
         at = @At(
             value = "NEW",
-            target = "net/minecraft/world/item/ItemStack",
+            target = "(Lnet/minecraft/core/particles/ParticleType;Lnet/minecraft/world/item/Item;)Lnet/minecraft/core/particles/ItemParticleOption;",
             ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/core/particles/ParticleTypes;ITEM:Lnet/minecraft/core/particles/ParticleType;",
-                opcode = Opcodes.GETSTATIC,
-                ordinal = 0
-            )
         )
     )
-    private ItemStack newItemStackForEnderEyeUseCreateStack(ItemLike item) {
-        return this.level.itematic$createStack(ItemIds.ENDER_EYE);
+    private ItemParticleOption newItemStackTemplateForEnderEyeUseCreateStackTemplate(ParticleType<ItemParticleOption> type, Item item, Operation<ItemParticleOption> original) {
+        return new ItemParticleOption(
+            type,
+            this.level.itematic$createStackTemplate(ItemIds.ENDER_EYE)
+        );
     }
 }

@@ -1,253 +1,253 @@
 {
   "entries": [
     {
+      "id": "minecraft:command_block",
       "type": "minecraft:stack",
-      "item": "minecraft:command_block",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:chain_command_block",
       "type": "minecraft:stack",
-      "item": "minecraft:chain_command_block",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:repeating_command_block",
       "type": "minecraft:stack",
-      "item": "minecraft:repeating_command_block",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:command_block_minecart",
       "type": "minecraft:stack",
-      "item": "minecraft:command_block_minecart",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:jigsaw",
       "type": "minecraft:stack",
-      "item": "minecraft:jigsaw",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:structure_block",
       "type": "minecraft:stack",
-      "item": "minecraft:structure_block",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:structure_void",
       "type": "minecraft:stack",
-      "item": "minecraft:structure_void",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:barrier",
       "type": "minecraft:stack",
-      "item": "minecraft:barrier",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:debug_stick",
       "type": "minecraft:stack",
-      "item": "minecraft:debug_stick",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:test_instance_block",
       "type": "minecraft:stack",
-      "item": "minecraft:test_instance_block",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:test_block",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "mode": "start"
         }
       },
-      "item": "minecraft:test_block",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:test_block",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "mode": "log"
         }
       },
-      "item": "minecraft:test_block",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:test_block",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "mode": "fail"
         }
       },
-      "item": "minecraft:test_block",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:test_block",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "mode": "accept"
         }
       },
-      "item": "minecraft:test_block",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "15"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "14"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "13"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "12"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "11"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "10"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "9"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "8"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "7"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "6"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "5"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "4"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "3"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "2"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "1"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {
+      "id": "minecraft:light",
       "type": "minecraft:stack",
       "components": {
         "minecraft:block_state": {
           "level": "0"
         }
       },
-      "item": "minecraft:light",
       "requires_permissions": true
     },
     {

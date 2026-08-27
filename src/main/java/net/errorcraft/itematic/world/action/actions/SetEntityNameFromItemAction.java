@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -30,8 +31,8 @@ public record SetEntityNameFromItemAction(LootContext.EntityTarget entity) imple
 
     @Override
     public boolean execute(ActionContext context) {
-        ItemStack stack = context.get(LootContextParams.TOOL);
-        if (stack == null || stack.isEmpty()) {
+        ItemStack stack = context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance);
+        if (ItemStacks.isNullOrEmpty(stack)) {
             return false;
         }
 

@@ -19,6 +19,7 @@ public interface ClientTooltipComponentExtender {
     )
     private static ClientBundleTooltip setCapacity(ClientBundleTooltip original, @Local BundleTooltip data) {
         original.itematic$setCapacity(data.itematic$capacity());
+        original.itematic$setItemHolderRules(data.itematic$itemHolderRules());
         return original;
     }
 }
