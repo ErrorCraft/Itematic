@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record FirstToSucceedSequenceHandler(HolderSet<ActionEntry> entries) implements SequenceHandler<FirstToSucceedSequenceHandler> {
-    public static final Codec<FirstToSucceedSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(
+    public static final Codec<FirstToSucceedSequenceHandler> CODEC = ActionEntry.LIST_CODEC.xmap(
         FirstToSucceedSequenceHandler::new,
         FirstToSucceedSequenceHandler::entries
     );

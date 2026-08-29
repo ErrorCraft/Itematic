@@ -1,10 +1,13 @@
 package net.errorcraft.itematic.util;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
 import org.apache.commons.lang3.math.Fraction;
+
+import java.util.function.Function;
 
 public class ItematicCodecs {
     public static final Codec<Float> NON_NEGATIVE_FLOAT = Codec.FLOAT.validate(value -> {
@@ -76,5 +79,15 @@ public class ItematicCodecs {
 
             return DataResult.success(fraction);
         });
+    }
+
+    public static <T, U> Codec<T> withAlternative(Codec<T> primary, Codec<U> alternative, Function<U, T> converter, Function<T, Either<T, U>> wrapper) {
+        return Codec.either(
+            primary,
+            alternative
+        ).xmap(
+            either -> either.map(Function.identity(), converter),
+            wrapper
+        );
     }
 }

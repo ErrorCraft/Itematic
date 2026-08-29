@@ -7315,7 +7315,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_OAK_SAPLING))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_OAK_SAPLING)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.SPRUCE_SAPLING, create(
@@ -7327,7 +7330,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_SPRUCE_SAPLING))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_SPRUCE_SAPLING)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.BIRCH_SAPLING, create(
@@ -7339,7 +7345,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BIRCH_SAPLING))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_BIRCH_SAPLING)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.JUNGLE_SAPLING, create(
@@ -7351,7 +7360,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_JUNGLE_SAPLING))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_JUNGLE_SAPLING)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.ACACIA_SAPLING, create(
@@ -7363,7 +7375,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_ACACIA_SAPLING))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_ACACIA_SAPLING)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.CHERRY_SAPLING, create(
@@ -7375,7 +7390,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CHERRY_SAPLING))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_CHERRY_SAPLING)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.DARK_OAK_SAPLING, create(
@@ -7387,7 +7405,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_DARK_OAK_SAPLING))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_DARK_OAK_SAPLING)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.PALE_OAK_SAPLING, create(
@@ -7399,7 +7420,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_PALE_OAK_SAPLING))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_PALE_OAK_SAPLING)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.MANGROVE_PROPAGULE, create(
@@ -7411,7 +7435,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_MANGROVE_PROPAGULE))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_MANGROVE_PROPAGULE)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.SHORT_GRASS, create(
@@ -7647,7 +7674,10 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CACTUS))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_CACTUS)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.DRIED_KELP_BLOCK, create(
@@ -7667,7 +7697,10 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FERN))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_FERN)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.LILY_PAD, create(
@@ -7758,7 +7791,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_DANDELION))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_DANDELION)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.OPEN_EYEBLOSSOM, create(
@@ -7772,7 +7808,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_OPEN_EYEBLOSSOM))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_OPEN_EYEBLOSSOM)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.CLOSED_EYEBLOSSOM, create(
@@ -7786,7 +7825,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CLOSED_EYEBLOSSOM))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_CLOSED_EYEBLOSSOM)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.POPPY, create(
@@ -7800,7 +7842,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_POPPY))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_POPPY)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.BLUE_ORCHID, create(
@@ -7814,7 +7859,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BLUE_ORCHID))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_BLUE_ORCHID)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.ALLIUM, create(
@@ -7828,7 +7876,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_ALLIUM))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_ALLIUM)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.AZURE_BLUET, create(
@@ -7842,7 +7893,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_AZURE_BLUET))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_AZURE_BLUET)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.RED_TULIP, create(
@@ -7856,7 +7910,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_RED_TULIP))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_RED_TULIP)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.ORANGE_TULIP, create(
@@ -7870,7 +7927,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_ORANGE_TULIP))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_ORANGE_TULIP)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.WHITE_TULIP, create(
@@ -7884,7 +7944,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WHITE_TULIP))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_WHITE_TULIP)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.PINK_TULIP, create(
@@ -7898,7 +7961,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_PINK_TULIP))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_PINK_TULIP)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.OXEYE_DAISY, create(
@@ -7912,7 +7978,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_OXEYE_DAISY))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_OXEYE_DAISY)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.CORNFLOWER, create(
@@ -7926,7 +7995,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CORNFLOWER))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_CORNFLOWER)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.LILY_OF_THE_VALLEY, create(
@@ -7940,7 +8012,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_LILY_OF_THE_VALLEY))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_LILY_OF_THE_VALLEY)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.WITHER_ROSE, create(
@@ -7954,7 +8029,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WITHER_ROSE))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_WITHER_ROSE)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.AZALEA, create(
@@ -7966,7 +8044,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_AZALEA_BUSH))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_AZALEA_BUSH)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.SUNFLOWER, create(
@@ -8025,7 +8106,10 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BROWN_MUSHROOM))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_BROWN_MUSHROOM)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.RED_MUSHROOM, create(
@@ -8036,7 +8120,10 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_RED_MUSHROOM))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_RED_MUSHROOM)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.CRIMSON_FUNGUS, create(
@@ -8047,7 +8134,10 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_FUNGUS))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_FUNGUS)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.WARPED_FUNGUS, create(
@@ -8058,7 +8148,10 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_FUNGUS))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_FUNGUS)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.CRIMSON_ROOTS, create(
@@ -8069,7 +8162,10 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_ROOTS))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_ROOTS)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.WARPED_ROOTS, create(
@@ -8080,7 +8176,10 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_ROOTS))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_ROOTS)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.MOSS_BLOCK, create(
@@ -8148,7 +8247,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FLOWERING_AZALEA_BUSH))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_FLOWERING_AZALEA_BUSH)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.TORCHFLOWER, create(
@@ -8162,7 +8264,10 @@ public class Items {
                     ))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_TORCHFLOWER))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_TORCHFLOWER)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.PITCHER_PLANT, create(
@@ -10188,7 +10293,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_DEAD_BUSH))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_DEAD_BUSH)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.OAK_BUTTON, create(
@@ -10293,7 +10401,10 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.BAMBOO))
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BAMBOO))
+                    .addCancellable(
+                        ItemEvent.BEFORE_USE_ON_BLOCK,
+                        Actions.potBlock(this.blocks, BlockIds.POTTED_BAMBOO)
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.SCAFFOLDING, create(

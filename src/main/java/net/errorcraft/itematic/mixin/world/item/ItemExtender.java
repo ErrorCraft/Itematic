@@ -187,30 +187,40 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "useOn"
     )
     public InteractionResult useItemBehavior(UseOnContext context, Operation<InteractionResult> original) {
-        ItemStack stack = context.getItemInHand();
+        Level level = context.getLevel();
+        if (level.isClientSide()) {
+            return InteractionResult.PASS;
+        }
+
         ItemStackExchanger stackExchanger = context.itematic$stackExchanger();
+        LivingEntity user = context.getPlayer();
+        ItemStack stack = context.getItemInHand();
+        InteractionHand hand = context.getHand();
+        ActionContext actionContext = ActionContext.builder(level)
+            .stackExchanger(stackExchanger)
+            .addOptional(LootContextParams.THIS_ENTITY, user)
+            .addOptional(LootContextParams.ORIGIN, user, Entity::position)
+            .add(ItematicContextKeys.INTERACTED_POSITION, context.getClickedPos().getCenter())
+            .add(LootContextParams.TOOL, stack)
+            .add(ItematicContextKeys.HAND, hand)
+            .add(ItematicContextKeys.SIDE, context.getClickedFace())
+            .build();
+        if (this.itematic$invokeEvent(ItemEvent.BEFORE_USE_ON_BLOCK, actionContext) && this.cancelsOriginalCallOnSuccess(ItemEvent.BEFORE_USE_ON_BLOCK)) {
+            tryUpdateItemStack(user, hand, stack, stackExchanger);
+            return InteractionResult.CONSUME.heldItemTransformedTo(stackExchanger.result());
+        }
+
         ItemResult result = ItemResult.PASS;
         for (ItemBehavior<?> behavior : this.behavior) {
             ItemResult newResult = behavior.useOnBlock(context, stackExchanger);
             result = result.max(newResult);
         }
 
-        if (context.getLevel() instanceof ServerLevel serverLevel) {
-            ActionContext actionContext = ActionContext.builder(serverLevel)
-                .stackExchanger(stackExchanger)
-                .addOptional(LootContextParams.THIS_ENTITY, context.getPlayer())
-                .addOptional(LootContextParams.ORIGIN, context.getPlayer(), Entity::position)
-                .add(ItematicContextKeys.INTERACTED_POSITION, context.getClickedPos().getCenter())
-                .add(LootContextParams.TOOL, stack)
-                .add(ItematicContextKeys.HAND, context.getHand())
-                .add(ItematicContextKeys.SIDE, context.getClickedFace())
-                .build();
-            if (this.itematic$invokeEvent(ItemEvent.USE_ON_BLOCK, actionContext)) {
-                result = result.max(ItemResult.CONSUME);
-            }
+        if (this.itematic$invokeEvent(ItemEvent.USE_ON_BLOCK, actionContext)) {
+            result = result.max(ItemResult.CONSUME);
         }
 
-        tryUpdateItemStack(context.getPlayer(), context.getHand(), stack, stackExchanger);
+        tryUpdateItemStack(user, hand, stack, stackExchanger);
         InteractionResult trueResult = result.toActionResult();
         if (trueResult instanceof InteractionResult.Success success) {
             trueResult = success.heldItemTransformedTo(stackExchanger.result());
@@ -654,6 +664,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean canBeEnchantedWith(ItemStack stack, Holder<Enchantment> enchantment, EnchantingContext context) {
         return true;
+    }
+
+    @Unique
+    private boolean cancelsOriginalCallOnSuccess(ItemEvent event) {
+        return this.events.cancelsOriginalCallOnSuccess(event);
     }
 
     @Unique

@@ -33,7 +33,7 @@ public class RegistryDataLoaderExtender {
             .addAll(original)
             .add(createData(Registries.ITEM, Items.CODEC))
             .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
-            .add(createData(ItematicRegistries.ACTION, ActionEntry.CODEC))
+            .add(createData(ItematicRegistries.ACTION, ActionEntry.DIRECT_CODEC))
             .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }
@@ -51,7 +51,7 @@ public class RegistryDataLoaderExtender {
             .addAll(original)
             .add(createData(Registries.ITEM, Items.CODEC))
             .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
-            .add(createData(ItematicRegistries.ACTION, ActionEntry.CODEC))
+            .add(createData(ItematicRegistries.ACTION, ActionEntry.DIRECT_CODEC))
             .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
     }
