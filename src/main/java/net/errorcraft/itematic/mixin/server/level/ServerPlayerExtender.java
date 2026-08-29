@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.server.level;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.authlib.GameProfile;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerExtender extends Player {
@@ -47,25 +47,36 @@ public abstract class ServerPlayerExtender extends Player {
         original.call(stat, count);
     }
 
-    @Redirect(
+    @WrapOperation(
+        method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"
+        )
+    )
+    private boolean isEmptyCheckInteractableStack(ItemStack instance, Operation<Boolean> original) {
+        return instance.itematic$cannotBeInteractedWith();
+    }
+
+    @WrapOperation(
         method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, ItemStack itemStack) {
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, Operation<Stat<T>> original, ItemStack itemStack) {
         return instance.itematic$get(itemStack.typeHolder());
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "onEquippedItemBroken",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument) {
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, Operation<Stat<T>> original) {
         Holder<Item> item = this.level()
             .registryAccess()
             .lookupOrThrow(Registries.ITEM)

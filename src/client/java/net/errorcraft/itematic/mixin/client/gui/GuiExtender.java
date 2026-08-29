@@ -9,10 +9,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Gui.class)
 public class GuiExtender {
+    @Shadow
+    private ItemStack lastToolHighlight;
+
     @WrapOperation(
         method = "extractCameraOverlays",
         at = @At(
@@ -27,5 +31,16 @@ public class GuiExtender {
         }
 
         return original.call(instance, type);
+    }
+
+    @WrapOperation(
+        method = "tick()V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
+        )
+    )
+    private boolean isItemCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
+        return instance.itematic$key() == this.lastToolHighlight.itematic$key();
     }
 }

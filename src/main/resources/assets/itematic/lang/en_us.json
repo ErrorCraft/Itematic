@@ -1,3 +1,7 @@
 {
-  "gui.recipebook.toggleRecipes.brewable": "Showing Brewable"
+  "gui.recipebook.toggleRecipes.brewable": "Showing Brewable",
+  "item.failed_to_load": "Item failed to load",
+  "item.failed_to_load.could_not_find_item": "Could not find item with id '%s'",
+  "item.failed_to_load.retained_information": "All item information has been retained.",
+  "item.failed_to_load.update_data_packs": "Update any data packs necessary."
 }
