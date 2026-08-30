@@ -3,17 +3,35 @@ package net.errorcraft.itematic.mixin.world.entity.item;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityExtender {
+    @WrapOperation(
+        method = {
+            "addAdditionalSaveData",
+            "readAdditionalSaveData"
+        },
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/item/ItemStack;CODEC:Lcom/mojang/serialization/Codec;",
+            opcode = Opcodes.GETSTATIC
+        )
+    )
+    private Codec<ItemStack> useFailableItemStackCodec(Operation<Codec<ItemStack>> original) {
+        return ItemStacks.POSSIBLY_FAILED_CODEC;
+    }
+
     @WrapOperation(
         method = "playerTouch",
         at = @At(

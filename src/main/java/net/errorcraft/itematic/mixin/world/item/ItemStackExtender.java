@@ -146,6 +146,21 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @Nullable
     private ResourceKey<Item> failedKey;
 
+    @WrapOperation(
+        method = {
+            "<clinit>",
+            "lenientOptionalFieldOf"
+        },
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/item/ItemStack;CODEC:Lcom/mojang/serialization/Codec;",
+            opcode = Opcodes.GETSTATIC
+        )
+    )
+    private static Codec<ItemStack> useFailableItemStackCodec(Operation<Codec<ItemStack>> original) {
+        return ItemStacks.POSSIBLY_FAILED_CODEC;
+    }
+
     @ModifyArg(
         method = {
             "<init>(Lnet/minecraft/world/level/ItemLike;)V",
