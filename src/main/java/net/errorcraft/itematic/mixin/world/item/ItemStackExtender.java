@@ -431,6 +431,14 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
         return original || (this.failedKey == null && (this.item == null || this.item.is(ItemIds.AIR)));
     }
 
+    @ModifyReturnValue(
+        method = "isItemEnabled",
+        at = @At("RETURN")
+    )
+    private boolean checkSuccessfullyLoaded(boolean original) {
+        return original && this.itematic$isSuccessfullyLoaded();
+    }
+
     @WrapMethod(
         method = "is(Ljava/util/function/Predicate;)Z"
     )
