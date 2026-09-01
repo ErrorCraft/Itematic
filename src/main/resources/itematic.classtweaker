@@ -27,6 +27,7 @@ inject-interface    net/minecraft/client/gui/screens/achievement/StatsScreen$Ite
 inject-interface    net/minecraft/client/gui/screens/debug/GameModeSwitcherScreen$GameModeIcon    net/errorcraft/itematic/access/client/gui/screens/debug/GameModeSwitcherScreenAccess$GameModeIconAccess
 inject-interface    net/minecraft/client/gui/screens/inventory/tooltip/ClientBundleTooltip    net/errorcraft/itematic/access/client/gui/screens/inventory/tooltip/ClientBundleTooltipAccess
 inject-interface    net/minecraft/client/gui/screens/recipebook/RecipeBookComponent$TabInfo    net/errorcraft/itematic/access/client/gui/screens/recipebook/RecipeBookComponentAccess$TabInfoAccess
+inject-interface    net/minecraft/client/renderer/item/ItemStackRenderState    net/errorcraft/itematic/access/client/renderer/item/ItemStackRenderStateAccess
 inject-interface    net/minecraft/commands/arguments/ObjectiveCriteriaArgument    net/errorcraft/itematic/access/commands/arguments/ObjectiveCriteriaArgumentAccess
 inject-interface    net/minecraft/core/Holder    net/errorcraft/itematic/access/core/HolderAccess<TT;>
 inject-interface    net/minecraft/core/HolderSet    net/errorcraft/itematic/access/core/HolderSetAccess<TT;>
