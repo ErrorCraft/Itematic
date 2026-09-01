@@ -306,6 +306,7 @@
     "world.item.crafting.MapExtendingRecipeExtender",
     "world.item.crafting.RecipeExtender",
     "world.item.crafting.RecipeManagerExtender",
+    "world.item.crafting.RecipePropertySetExtender",
     "world.item.crafting.RepairItemRecipeExtender",
     "world.item.crafting.ShapedRecipeExtender",
     "world.item.crafting.ShapedRecipePatternExtender",
