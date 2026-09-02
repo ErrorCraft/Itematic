@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -908,7 +907,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
             method = "decode(Lnet/minecraft/network/RegistryFriendlyByteBuf;)Lnet/minecraft/world/item/ItemStack;"
         )
         @SuppressWarnings("DataFlowIssue")
-        private ItemStack checkForFailed(RegistryFriendlyByteBuf input, Operation<ItemStack> original, @Share("failedToLoad") LocalBooleanRef failedToLoad) {
+        private ItemStack checkForFailed(RegistryFriendlyByteBuf input, Operation<ItemStack> original) {
             if (input.readBoolean()) {
                 return original.call(input);
             }
