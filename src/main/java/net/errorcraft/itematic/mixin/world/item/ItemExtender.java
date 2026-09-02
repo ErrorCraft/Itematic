@@ -234,25 +234,28 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     public InteractionResult useItemBehavior(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type, Operation<InteractionResult> original) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, itemStack);
+        ActionContext context = ActionContext.builder(player.level())
+            .stackExchanger(stackExchanger)
+            .add(LootContextParams.THIS_ENTITY, player)
+            .add(LootContextParams.ORIGIN, player.position())
+            .add(LootContextParams.TARGET_ENTITY, target)
+            .add(ItematicContextKeys.INTERACTED_POSITION, target.position())
+            .add(LootContextParams.TOOL, itemStack)
+            .add(ItematicContextKeys.HAND, type)
+            .build();
+        if (this.itematic$invokeEvent(ItemEvent.BEFORE_USE_ON_ENTITY, context) && this.cancelsOriginalCallOnSuccess(ItemEvent.BEFORE_USE_ON_ENTITY)) {
+            tryUpdateItemStack(player, type, itemStack, stackExchanger);
+            return InteractionResult.CONSUME.heldItemTransformedTo(stackExchanger.result());
+        }
+
         ItemResult result = ItemResult.PASS;
         for (ItemBehavior<?> behavior : this.behavior) {
             ItemResult newResult = behavior.useOnEntity(player, target, type, itemStack, stackExchanger);
             result = result.max(newResult);
         }
 
-        if (player.level() instanceof ServerLevel serverLevel) {
-            ActionContext context = ActionContext.builder(serverLevel)
-                .stackExchanger(stackExchanger)
-                .add(LootContextParams.THIS_ENTITY, player)
-                .add(LootContextParams.ORIGIN, player.position())
-                .add(LootContextParams.TARGET_ENTITY, target)
-                .add(ItematicContextKeys.INTERACTED_POSITION, target.position())
-                .add(LootContextParams.TOOL, itemStack)
-                .add(ItematicContextKeys.HAND, type)
-                .build();
-            if (this.itematic$invokeEvent(ItemEvent.USE_ON_ENTITY, context)) {
-                result = result.max(ItemResult.CONSUME);
-            }
+        if (this.itematic$invokeEvent(ItemEvent.USE_ON_ENTITY, context)) {
+            result = result.max(ItemResult.CONSUME);
         }
 
         tryUpdateItemStack(player, type, itemStack, stackExchanger);
