@@ -404,6 +404,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         for (ItemBehavior<?> behavior : this.behavior) {
             result |= behavior.clickOnSlot(self, slot, clickAction, player);
         }
+
         return result;
     }
 

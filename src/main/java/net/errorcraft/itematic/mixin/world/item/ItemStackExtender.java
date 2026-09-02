@@ -318,9 +318,9 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "canDestroyBlock"
     )
-    private boolean checkInteractableStackForCanDestroyBlock(BlockState state, Level level, BlockPos pos, Player player, Operation<Boolean> original) {
-        if (this.itematic$cannotBeInteractedWith()) {
-            return true;
+    private boolean checkSuccessfullyLoaded(BlockState state, Level level, BlockPos pos, Player player, Operation<Boolean> original) {
+        if (!this.itematic$isSuccessfullyLoaded()) {
+            return false;
         }
 
         return original.call(state, level, pos, player);
@@ -612,7 +612,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
         method = "overrideStackedOnOther"
     )
     private boolean checkInteractableStackForOverrideStackedOnOther(Slot slot, ClickAction clickAction, Player player, Operation<Boolean> original) {
-        if (this.itematic$cannotBeInteractedWith()) {
+        if (this.itematic$cannotBeInteractedWith() || slot.getItem().itematic$cannotBeInteractedWith()) {
             return false;
         }
 
@@ -623,7 +623,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
         method = "overrideOtherStackedOnMe"
     )
     private boolean checkInteractableStackForOverrideOtherStackedOnMe(ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, Operation<Boolean> original) {
-        if (this.itematic$cannotBeInteractedWith()) {
+        if (this.itematic$cannotBeInteractedWith() || other.itematic$cannotBeInteractedWith()) {
             return false;
         }
 
