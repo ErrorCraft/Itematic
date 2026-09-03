@@ -1,10 +1,13 @@
 package net.errorcraft.itematic.util;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.ExtraCodecs;
 import org.apache.commons.lang3.math.Fraction;
+
+import java.util.function.Function;
 
 public class ItematicCodecs {
     public static final Codec<Float> NON_NEGATIVE_FLOAT = Codec.FLOAT.validate(value -> {
@@ -36,20 +39,6 @@ public class ItematicCodecs {
 
     private ItematicCodecs() {}
 
-    public static Codec<Integer> index(int size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("size must be positive: " + size);
-        }
-
-        return Codec.INT.validate(i -> {
-            if (i >= 0 && i <= size) {
-                return DataResult.success(i);
-            }
-
-            return DataResult.error(() -> "Index must be non-negative and less than " + size + ": " + i);
-        });
-    }
-
     public static Codec<Float> positiveFloat(float maxInclusive) {
         if (maxInclusive <= 0.0f) {
             throw new IllegalArgumentException("maxInclusive must be positive, got " + maxInclusive + " instead");
@@ -76,5 +65,15 @@ public class ItematicCodecs {
 
             return DataResult.success(fraction);
         });
+    }
+
+    public static <T, U> Codec<T> withAlternative(Codec<T> primary, Codec<U> alternative, Function<U, T> converter, Function<T, Either<T, U>> wrapper) {
+        return Codec.either(
+            primary,
+            alternative
+        ).xmap(
+            either -> either.map(Function.identity(), converter),
+            wrapper
+        );
     }
 }

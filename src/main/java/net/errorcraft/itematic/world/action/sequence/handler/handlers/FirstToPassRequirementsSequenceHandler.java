@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public record FirstToPassRequirementsSequenceHandler(HolderSet<ActionEntry> entries) implements SequenceHandler<FirstToPassRequirementsSequenceHandler> {
-    public static final Codec<FirstToPassRequirementsSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(
+    public static final Codec<FirstToPassRequirementsSequenceHandler> CODEC = ActionEntry.LIST_CODEC.xmap(
         FirstToPassRequirementsSequenceHandler::new,
         FirstToPassRequirementsSequenceHandler::entries
     );
