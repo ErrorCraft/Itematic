@@ -26,10 +26,7 @@
     "minecraft:string",
     "minecraft:lectern",
     "minecraft:daylight_detector",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/lightning_rods"
-    },
+    "#minecraft:item_group/lightning_rods",
     "minecraft:piston",
     "minecraft:sticky_piston",
     "minecraft:slime_block",
@@ -38,16 +35,10 @@
     "minecraft:dropper",
     "minecraft:crafter",
     "minecraft:hopper",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/chests"
-    },
+    "#minecraft:item_group/chests",
     "minecraft:barrel",
     "minecraft:chiseled_bookshelf",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/shelves"
-    },
+    "#minecraft:item_group/shelves",
     "minecraft:furnace",
     "minecraft:trapped_chest",
     "minecraft:jukebox",
@@ -56,14 +47,8 @@
     "minecraft:note_block",
     "minecraft:composter",
     "minecraft:cauldron",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/rails"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/minecarts"
-    },
+    "#minecraft:item_group/rails",
+    "#minecraft:item_group/minecarts",
     "minecraft:oak_chest_boat",
     "minecraft:bamboo_chest_raft",
     "minecraft:oak_door",

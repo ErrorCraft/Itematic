@@ -1,9 +1,6 @@
 {
   "entries": [
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/spawners"
-    },
+    "#minecraft:item_group/spawners",
     "minecraft:creaking_heart",
     "minecraft:allay_spawn_egg",
     "minecraft:armadillo_spawn_egg",

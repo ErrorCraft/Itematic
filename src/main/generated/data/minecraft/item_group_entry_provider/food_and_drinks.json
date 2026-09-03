@@ -1,9 +1,6 @@
 {
   "entries": [
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/food"
-    },
+    "#minecraft:item_group/food",
     {
       "type": "minecraft:suspicious_effect_ingredient",
       "item": "minecraft:suspicious_stew"
@@ -11,39 +8,39 @@
     "minecraft:milk_bucket",
     "minecraft:honey_bottle",
     {
-      "id": "minecraft:ominous_bottle",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:ominous_bottle_amplifier": 0
-      }
+      },
+      "items": "minecraft:ominous_bottle"
     },
     {
-      "id": "minecraft:ominous_bottle",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:ominous_bottle_amplifier": 1
-      }
+      },
+      "items": "minecraft:ominous_bottle"
     },
     {
-      "id": "minecraft:ominous_bottle",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:ominous_bottle_amplifier": 2
-      }
+      },
+      "items": "minecraft:ominous_bottle"
     },
     {
-      "id": "minecraft:ominous_bottle",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:ominous_bottle_amplifier": 3
-      }
+      },
+      "items": "minecraft:ominous_bottle"
     },
     {
-      "id": "minecraft:ominous_bottle",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:ominous_bottle_amplifier": 4
-      }
+      },
+      "items": "minecraft:ominous_bottle"
     },
     {
       "type": "minecraft:potion",

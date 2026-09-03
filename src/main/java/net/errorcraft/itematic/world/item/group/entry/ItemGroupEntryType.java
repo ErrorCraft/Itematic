@@ -4,21 +4,16 @@ import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.group.entry.entries.EnchantmentItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.entries.InstrumentItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.ItemItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.entries.PaintingVariantItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.entries.PotionItemGroupEntry;
-import net.errorcraft.itematic.world.item.group.entry.entries.StackItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.entries.SuspiciousEffectIngredientItemGroupEntry;
-import net.errorcraft.itematic.world.item.group.entry.entries.TagItemGroupEntry;
 import net.minecraft.core.Registry;
 
 public record ItemGroupEntryType<T extends ItemGroupEntry<T>>(MapCodec<T> codec) {
-    public static final ItemGroupEntryType<StackItemGroupEntry> STACK = register(
-        "stack",
-        new ItemGroupEntryType<>(StackItemGroupEntry.CODEC)
-    );
-    public static final ItemGroupEntryType<TagItemGroupEntry> TAG = register(
-        "tag",
-        new ItemGroupEntryType<>(TagItemGroupEntry.CODEC)
+    public static final ItemGroupEntryType<ItemItemGroupEntry> ITEM = register(
+        "item",
+        new ItemGroupEntryType<>(ItemItemGroupEntry.CODEC)
     );
     public static final ItemGroupEntryType<PaintingVariantItemGroupEntry> PAINTING_VARIANT = register(
         "painting_variant",

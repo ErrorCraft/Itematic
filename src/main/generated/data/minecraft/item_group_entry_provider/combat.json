@@ -1,70 +1,49 @@
 {
   "entries": [
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/swords"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/spears"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/axes"
-    },
+    "#minecraft:item_group/swords",
+    "#minecraft:item_group/spears",
+    "#minecraft:item_group/axes",
     "minecraft:trident",
     "minecraft:mace",
     "minecraft:shield",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/armor"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/horse_armor"
-    },
+    "#minecraft:item_group/armor",
+    "#minecraft:item_group/horse_armor",
     "minecraft:wolf_armor",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/nautilus_armor"
-    },
+    "#minecraft:item_group/nautilus_armor",
     "minecraft:totem_of_undying",
     "minecraft:tnt",
     "minecraft:end_crystal",
     "minecraft:snowball",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/eggs"
-    },
+    "#minecraft:item_group/eggs",
     "minecraft:wind_charge",
     "minecraft:bow",
     "minecraft:crossbow",
     {
-      "id": "minecraft:firework_rocket",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 1
         }
-      }
+      },
+      "items": "minecraft:firework_rocket"
     },
     {
-      "id": "minecraft:firework_rocket",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 2
         }
-      }
+      },
+      "items": "minecraft:firework_rocket"
     },
     {
-      "id": "minecraft:firework_rocket",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 3
         }
-      }
+      },
+      "items": "minecraft:firework_rocket"
     },
     "minecraft:arrow",
     "minecraft:spectral_arrow",
