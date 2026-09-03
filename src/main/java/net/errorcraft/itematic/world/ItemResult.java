@@ -52,7 +52,7 @@ public interface ItemResult {
 
         @Override
         public InteractionResult toActionResult() {
-            return InteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS_SERVER;
         }
     }
 }
