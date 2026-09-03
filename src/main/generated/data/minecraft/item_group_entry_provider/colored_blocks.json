@@ -1,52 +1,16 @@
 {
   "entries": [
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/wool"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/wool_carpets"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/terracotta"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/concrete"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/concrete_powder"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/glazed_terracotta"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/glass"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/glass_panes"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/shulker_boxes"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/beds"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/candles"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/banners"
-    }
+    "#minecraft:item_group/wool",
+    "#minecraft:item_group/wool_carpets",
+    "#minecraft:item_group/terracotta",
+    "#minecraft:item_group/concrete",
+    "#minecraft:item_group/concrete_powder",
+    "#minecraft:item_group/glazed_terracotta",
+    "#minecraft:item_group/glass",
+    "#minecraft:item_group/glass_panes",
+    "#minecraft:item_group/shulker_boxes",
+    "#minecraft:item_group/beds",
+    "#minecraft:item_group/candles",
+    "#minecraft:item_group/banners"
   ]
 }

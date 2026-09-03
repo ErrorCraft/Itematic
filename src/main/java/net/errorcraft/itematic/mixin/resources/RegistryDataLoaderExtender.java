@@ -31,8 +31,8 @@ public class RegistryDataLoaderExtender {
     private static List<RegistryDataLoader.RegistryData<?>> addCustomWorldRegistries(List<RegistryDataLoader.RegistryData<?>> original) {
         return new ImmutableList.Builder<RegistryDataLoader.RegistryData<?>>()
             .addAll(original)
-            .add(createData(Registries.ITEM, Items.CODEC))
-            .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
+            .add(createData(Registries.ITEM, Items.DIRECT_CODEC))
+            .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.DIRECT_CODEC))
             .add(createData(ItematicRegistries.ACTION, ActionEntry.DIRECT_CODEC))
             .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();
@@ -49,8 +49,8 @@ public class RegistryDataLoaderExtender {
     private static List<RegistryDataLoader.RegistryData<?>> addCustomSynchronizedRegistries(List<RegistryDataLoader.RegistryData<?>> original) {
         return new ImmutableList.Builder<RegistryDataLoader.RegistryData<?>>()
             .addAll(original)
-            .add(createData(Registries.ITEM, Items.CODEC))
-            .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.CODEC))
+            .add(createData(Registries.ITEM, Items.DIRECT_CODEC))
+            .add(createData(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProvider.DIRECT_CODEC))
             .add(createData(ItematicRegistries.ACTION, ActionEntry.DIRECT_CODEC))
             .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
             .build();

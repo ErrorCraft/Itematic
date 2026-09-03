@@ -214,14 +214,14 @@ import java.util.Optional;
 
 public class Items {
     public static final int UNSTACKABLE_MAX_STACK_SIZE = 1;
-    public static final Codec<Item> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final Codec<Item> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ItemDisplay.CODEC.fieldOf("display").forGetter(Item::itematic$display),
         ItemAttributeModifiers.CODEC.optionalFieldOf("attribute_modifiers", ItemAttributeModifiers.EMPTY).forGetter(Item::itematic$attributeModifiers),
         ItemBehaviorSet.CODEC.optionalFieldOf("behavior", ItemBehaviorSet.EMPTY).forGetter(Item::itematic$behavior),
         ActionEventMap.codec(ItematicBuiltInRegistries.ITEM_EVENT).optionalFieldOf("events", ActionEventMap.empty()).forGetter(Item::itematic$events)
     ).apply(instance, Items::create));
-    public static final Codec<HolderSet<Item>> HOLDER_SET_CODEC = RegistryCodecs.homogeneousList(Registries.ITEM);
-    public static final StreamCodec<RegistryFriendlyByteBuf, HolderSet<Item>> HOLDER_SET_STREAM_CODEC = ByteBufCodecs.holderSet(Registries.ITEM);
+    public static final Codec<HolderSet<Item>> LIST_CODEC = RegistryCodecs.homogeneousList(Registries.ITEM);
+    public static final StreamCodec<RegistryFriendlyByteBuf, HolderSet<Item>> LIST_STREAM_CODEC = ByteBufCodecs.holderSet(Registries.ITEM);
 
     public static void bootstrap(BootstrapContext<Item> registerable) {
         new Bootstrapper(registerable).bootstrap();

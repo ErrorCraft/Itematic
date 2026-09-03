@@ -12,10 +12,7 @@
     "minecraft:quartz",
     "minecraft:amethyst_shard",
     "minecraft:resin_clump",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/nuggets"
-    },
+    "#minecraft:item_group/nuggets",
     "minecraft:iron_ingot",
     "minecraft:copper_ingot",
     "minecraft:gold_ingot",
@@ -29,10 +26,7 @@
     "minecraft:string",
     "minecraft:feather",
     "minecraft:snowball",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/eggs"
-    },
+    "#minecraft:item_group/eggs",
     "minecraft:leather",
     "minecraft:rabbit_hide",
     "minecraft:honeycomb",
@@ -57,10 +51,7 @@
     "minecraft:popped_chorus_fruit",
     "minecraft:echo_shard",
     "minecraft:disc_fragment_5",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/dyes"
-    },
+    "#minecraft:item_group/dyes",
     "minecraft:bowl",
     "minecraft:brick",
     "minecraft:nether_brick",
@@ -68,22 +59,10 @@
     "minecraft:paper",
     "minecraft:book",
     "minecraft:firework_star",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/brewing_ingredients"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/banner_patterns"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:decorated_pot_sherds"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/smithing_templates"
-    },
+    "#minecraft:item_group/brewing_ingredients",
+    "#minecraft:item_group/banner_patterns",
+    "#minecraft:decorated_pot_sherds",
+    "#minecraft:item_group/smithing_templates",
     "minecraft:experience_bottle",
     "minecraft:trial_key",
     "minecraft:ominous_trial_key",
