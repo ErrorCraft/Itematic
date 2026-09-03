@@ -253,11 +253,11 @@
     {
       "type": "minecraft:painting_variant",
       "item": "minecraft:painting",
-      "requires_permissions": true,
-      "tag": {
+      "painting_variants": {
         "id": "minecraft:placeable",
         "expected": false
-      }
+      },
+      "requires_permissions": true
     }
   ]
 }
