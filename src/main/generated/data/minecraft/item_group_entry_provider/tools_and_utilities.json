@@ -57,8 +57,8 @@
     "#minecraft:item_group/minecarts",
     {
       "type": "minecraft:instrument",
-      "item": "minecraft:goat_horn",
-      "tag": "minecraft:goat_horns"
+      "instruments": "#minecraft:goat_horns",
+      "item": "minecraft:goat_horn"
     },
     "#minecraft:item_group/music_discs"
   ]

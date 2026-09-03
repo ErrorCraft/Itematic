@@ -20,6 +20,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.PaintingVariantTags;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.FireworkRocketItem;
+import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.item.component.Fireworks;
@@ -49,6 +50,7 @@ public class ItemGroupEntryProviders {
     public static void bootstrap(BootstrapContext<ItemGroupEntryProvider> registerable) {
         HolderGetter<Item> items = registerable.lookup(Registries.ITEM);
         HolderGetter<BannerPattern> bannerPatterns = registerable.lookup(Registries.BANNER_PATTERN);
+        HolderGetter<Instrument> instruments = registerable.lookup(Registries.INSTRUMENT);
 
         registerable.register(BUILDING_BLOCKS, ItemGroupEntryProvider.builder(items)
             .add(ItemGroupItemTags.WOODEN_BUILDING_BLOCKS)
@@ -285,7 +287,7 @@ public class ItemGroupEntryProviders {
             .add(ItemGroupItemTags.BOATS)
             .add(ItemGroupItemTags.RAILS)
             .add(ItemGroupItemTags.MINECARTS)
-            .add(InstrumentItemGroupEntry.of(items.getOrThrow(ItemIds.GOAT_HORN), InstrumentTags.GOAT_HORNS))
+            .add(InstrumentItemGroupEntry.of(items.getOrThrow(ItemIds.GOAT_HORN), instruments.getOrThrow(InstrumentTags.GOAT_HORNS)))
             .add(ItemGroupItemTags.MUSIC_DISCS)
             .build()
         );
