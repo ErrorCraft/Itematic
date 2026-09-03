@@ -36,20 +36,6 @@ public class ItematicCodecs {
 
     private ItematicCodecs() {}
 
-    public static Codec<Integer> index(int size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("size must be positive: " + size);
-        }
-
-        return Codec.INT.validate(i -> {
-            if (i >= 0 && i <= size) {
-                return DataResult.success(i);
-            }
-
-            return DataResult.error(() -> "Index must be non-negative and less than " + size + ": " + i);
-        });
-    }
-
     public static Codec<Float> positiveFloat(float maxInclusive) {
         if (maxInclusive <= 0.0f) {
             throw new IllegalArgumentException("maxInclusive must be positive, got " + maxInclusive + " instead");

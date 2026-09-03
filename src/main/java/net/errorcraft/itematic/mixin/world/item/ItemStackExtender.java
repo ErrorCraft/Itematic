@@ -8,6 +8,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.access.world.item.ItemInstanceAccess;
 import net.errorcraft.itematic.access.world.item.ItemStackAccess;
@@ -17,6 +18,7 @@ import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
@@ -25,14 +27,18 @@ import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.TypedInstance;
 import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.PatchedDataComponentMap;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -43,6 +49,7 @@ import net.minecraft.stats.StatType;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
@@ -96,6 +103,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
 
     @Shadow
     @Final
+    @Mutable
     private @Nullable Holder<Item> item;
 
     @Shadow
@@ -119,7 +127,38 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     public abstract int getCount();
 
     @Unique
+    private static final Component FAILED_TO_LOAD_NAME = Component.translatable("item.failed_to_load")
+        .withStyle(ChatFormatting.RED);
+
+    @Unique
+    private static final Component FAILED_TO_LOAD_DESCRIPTION_RETAINED_INFORMATION = Component.translatable("item.failed_to_load.retained_information")
+        .withStyle(ChatFormatting.GRAY);
+
+    @Unique
+    private static final Component FAILED_TO_LOAD_DESCRIPTION_UPDATE_DATA_PACKS = Component.translatable("item.failed_to_load.update_data_packs")
+        .withStyle(ChatFormatting.GRAY);
+
+    @Unique
     private static final ScopedValue<ActionContext> ACTION_CONTEXT = ScopedValue.newInstance();
+
+    @Unique
+    @Nullable
+    private ResourceKey<Item> failedKey;
+
+    @WrapOperation(
+        method = {
+            "<clinit>",
+            "lenientOptionalFieldOf"
+        },
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/item/ItemStack;CODEC:Lcom/mojang/serialization/Codec;",
+            opcode = Opcodes.GETSTATIC
+        )
+    )
+    private static Codec<ItemStack> useFailableItemStackCodec(Operation<Codec<ItemStack>> original) {
+        return ItemStacks.POSSIBLY_FAILED_CODEC;
+    }
 
     @ModifyArg(
         method = {
@@ -222,8 +261,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "use"
     )
-    private InteractionResult checkEmptyStackForUse(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original) {
-        if (this.isEmpty()) {
+    private InteractionResult checkInteractableStackForUse(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return InteractionResult.PASS;
         }
 
@@ -233,8 +272,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "useOn"
     )
-    private InteractionResult checkEmptyStackForUseOn(UseOnContext context, Operation<InteractionResult> original) {
-        if (this.isEmpty()) {
+    private InteractionResult checkInteractableStackForUseOn(UseOnContext context, Operation<InteractionResult> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return InteractionResult.PASS;
         }
 
@@ -242,21 +281,10 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     }
 
     @WrapMethod(
-        method = "interactLivingEntity"
-    )
-    private InteractionResult checkEmptyStackForInteractLivingEntity(Player player, LivingEntity target, InteractionHand hand, Operation<InteractionResult> original) {
-        if (this.isEmpty()) {
-            return InteractionResult.PASS;
-        }
-
-        return original.call(player, target, hand);
-    }
-
-    @WrapMethod(
         method = "hurtEnemy"
     )
-    private boolean checkEmptyStackForHurtEnemy(LivingEntity mob, LivingEntity attacker, Operation<Boolean> original) {
-        if (this.isEmpty()) {
+    private boolean checkInteractableStackForHurtEnemy(LivingEntity mob, LivingEntity attacker, Operation<Boolean> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return false;
         }
 
@@ -264,11 +292,34 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     }
 
     @WrapMethod(
+        method = "interactLivingEntity"
+    )
+    private InteractionResult checkInteractableStackForInteractLivingEntity(Player player, LivingEntity target, InteractionHand hand, Operation<InteractionResult> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
+            return InteractionResult.PASS;
+        }
+
+        return original.call(player, target, hand);
+    }
+
+    @ModifyReturnValue(
+        method = "copy",
+        at = @At("TAIL")
+    )
+    private ItemStack setFailedToLoad(ItemStack original) {
+        if (this.failedKey != null) {
+            original.itematic$setFailedKey(this.failedKey);
+        }
+
+        return original;
+    }
+
+    @WrapMethod(
         method = "canDestroyBlock"
     )
-    private boolean checkEmptyStackForCanDestroyBlock(BlockState state, Level level, BlockPos pos, Player player, Operation<Boolean> original) {
-        if (this.isEmpty()) {
-            return true;
+    private boolean checkSuccessfullyLoaded(BlockState state, Level level, BlockPos pos, Player player, Operation<Boolean> original) {
+        if (!this.itematic$isSuccessfullyLoaded()) {
+            return false;
         }
 
         return original.call(state, level, pos, player);
@@ -277,8 +328,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "onUseTick"
     )
-    private void checkEmptyStackForOnUseTick(Level level, LivingEntity livingEntity, int ticksRemaining, Operation<Void> original) {
-        if (this.isEmpty()) {
+    private void checkInteractableStackForOnUseTick(Level level, LivingEntity livingEntity, int ticksRemaining, Operation<Void> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return;
         }
 
@@ -288,8 +339,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "releaseUsing"
     )
-    private void checkEmptyStackForReleaseUsing(Level level, LivingEntity entity, int remainingTime, Operation<Void> original) {
-        if (this.isEmpty()) {
+    private void checkInteractableStackForReleaseUsing(Level level, LivingEntity entity, int remainingTime, Operation<Void> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return;
         }
 
@@ -299,19 +350,34 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "mineBlock"
     )
-    private void checkEmptyStackForMineBlock(Level level, BlockState state, BlockPos pos, Player owner, Operation<Void> original) {
-        if (this.isEmpty()) {
+    private void checkInteractableStackForMineBlock(Level level, BlockState state, BlockPos pos, Player owner, Operation<Void> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return;
         }
 
         original.call(level, state, pos, owner);
     }
+
+    @WrapOperation(
+        method = "inventoryTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/Item;inventoryTick(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/EquipmentSlot;)V"
+        )
+    )
+    private void checkFailed(Item instance, ItemStack itemStack, ServerLevel level, Entity owner, EquipmentSlot slot, Operation<Void> original) {
+        if (!this.itematic$isSuccessfullyLoaded()) {
+            return;
+        }
+
+        original.call(instance, itemStack, level, owner, slot);
+    }
+
     @WrapMethod(
         method = "onCraftedBy"
     )
-
-    private void checkEmptyStackForOnCraftedBy(Player player, int craftCount, Operation<Void> original) {
-        if (this.isEmpty()) {
+    private void checkInteractableStackForOnCraftedBy(Player player, int craftCount, Operation<Void> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return;
         }
 
@@ -332,8 +398,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "getItem"
     )
-    private Item checkEmptyStackForGetItem(Operation<Item> original) {
-        if (this.isEmpty()) {
+    private Item checkInteractableStackForGetItem(Operation<Item> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return Items.AIR;
         }
 
@@ -361,16 +427,22 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
         at = @At("TAIL")
     )
     private boolean checkNullForEmptyStack(boolean original) {
-        return original
-            || this.item == null
-            || this.item.is(ItemIds.AIR);
+        return original || (this.failedKey == null && (this.item == null || this.item.is(ItemIds.AIR)));
+    }
+
+    @ModifyReturnValue(
+        method = "isItemEnabled",
+        at = @At("RETURN")
+    )
+    private boolean checkSuccessfullyLoaded(boolean original) {
+        return original && this.itematic$isSuccessfullyLoaded();
     }
 
     @WrapMethod(
         method = "is(Ljava/util/function/Predicate;)Z"
     )
-    public boolean checkEmptyStackForIsPredicate(Predicate<Holder<Item>> item, Operation<Boolean> original) {
-        if (this.isEmpty()) {
+    public boolean checkInteractableStackForIsPredicate(Predicate<Holder<Item>> item, Operation<Boolean> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return false;
         }
 
@@ -424,8 +496,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
             "isSameItemSameComponents"
         }
     )
-    private static boolean checkEmptyStacksPrematurely(ItemStack a, ItemStack b, Operation<Boolean> original) {
-        if (a.isEmpty() && b.isEmpty()) {
+    private static boolean checkInteractableStacksPrematurely(ItemStack a, ItemStack b, Operation<Boolean> original) {
+        if (a.itematic$cannotBeInteractedWith() && b.itematic$cannotBeInteractedWith()) {
             return true;
         }
 
@@ -462,14 +534,47 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     }
 
     @WrapMethod(
+        method = {
+            "getHoverName",
+            "getDisplayName"
+        }
+    )
+    private Component checkSuccessfullyLoaded(Operation<Component> original) {
+        if (!this.itematic$isSuccessfullyLoaded()) {
+            return FAILED_TO_LOAD_NAME;
+        }
+
+        return original.call();
+    }
+
+    @WrapMethod(
         method = "getItemName"
     )
-    private Component checkEmptyStackForGetItemName(Operation<Component> original) {
-        if (this.isEmpty()) {
+    private Component checkInteractableStackForGetItemName(Operation<Component> original) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return Component.empty();
         }
 
         return original.call();
+    }
+
+    @WrapMethod(
+        method = "addDetailsToTooltip"
+    )
+    private void checkSuccessfullyLoaded(Item.TooltipContext context, TooltipDisplay display, @Nullable Player player, TooltipFlag tooltipFlag, Consumer<Component> builder, Operation<Void> original) {
+        if (this.itematic$isSuccessfullyLoaded()) {
+            original.call(context, display, player, tooltipFlag, builder);
+            return;
+        }
+
+        builder.accept(
+            Component.translatable(
+                "item.failed_to_load.could_not_find_item",
+                Component.translationArg(this.itematic$key().identifier())
+            ).withStyle(ChatFormatting.GRAY)
+        );
+        builder.accept(FAILED_TO_LOAD_DESCRIPTION_RETAINED_INFORMATION);
+        builder.accept(FAILED_TO_LOAD_DESCRIPTION_UPDATE_DATA_PACKS);
     }
 
     @WrapOperation(
@@ -505,8 +610,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "overrideStackedOnOther"
     )
-    private boolean checkEmptyStackForOverrideStackedOnOther(Slot slot, ClickAction clickAction, Player player, Operation<Boolean> original) {
-        if (this.isEmpty()) {
+    private boolean checkInteractableStackForOverrideStackedOnOther(Slot slot, ClickAction clickAction, Player player, Operation<Boolean> original) {
+        if (this.itematic$cannotBeInteractedWith() || slot.getItem().itematic$cannotBeInteractedWith()) {
             return false;
         }
 
@@ -516,8 +621,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "overrideOtherStackedOnMe"
     )
-    private boolean checkEmptyStackForOverrideOtherStackedOnMe(ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, Operation<Boolean> original) {
-        if (this.isEmpty()) {
+    private boolean checkInteractableStackForOverrideOtherStackedOnMe(ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, Operation<Boolean> original) {
+        if (this.itematic$cannotBeInteractedWith() || other.itematic$cannotBeInteractedWith()) {
             return false;
         }
 
@@ -645,8 +750,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @WrapMethod(
         method = "hashItemAndComponents"
     )
-    private static int checkEmptyStack(@Nullable ItemStack item, Operation<Integer> original) {
-        if (item != null && (item.isEmpty() || !item.typeHolder().isBound())) {
+    private static int checkInteractableStackForHashItemAndComponents(@Nullable ItemStack item, Operation<Integer> original) {
+        if (item != null && (item.itematic$cannotBeInteractedWith() || !item.typeHolder().isBound())) {
             return 0;
         }
 
@@ -660,7 +765,26 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     }
 
     @Override
+    public boolean itematic$isSuccessfullyLoaded() {
+        return this.failedKey == null;
+    }
+
+    @Override
+    public boolean itematic$cannotBeInteractedWith() {
+        return !this.itematic$isSuccessfullyLoaded() || this.isEmpty();
+    }
+
+    @Override
+    public void itematic$setFailedKey(ResourceKey<Item> failedKey) {
+        this.failedKey = failedKey;
+    }
+
+    @Override
     public ResourceKey<Item> itematic$key() {
+        if (this.failedKey != null) {
+            return this.failedKey;
+        }
+
         if (this.item == null) {
             return ItemIds.AIR;
         }
@@ -724,7 +848,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     @Override
     @SuppressWarnings("DataFlowIssue")
     public boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
-        if (this.isEmpty()) {
+        if (this.itematic$cannotBeInteractedWith()) {
             return false;
         }
 
@@ -775,5 +899,52 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
         }
 
         this.itematic$invokeEvent(ItemEvent.BREAK_ITEM, context);
+    }
+
+    @Mixin(targets = "net/minecraft/world/item/ItemStack$1")
+    public static class StreamCodecExtender {
+        @WrapMethod(
+            method = "decode(Lnet/minecraft/network/RegistryFriendlyByteBuf;)Lnet/minecraft/world/item/ItemStack;"
+        )
+        @SuppressWarnings("DataFlowIssue")
+        private ItemStack checkForFailed(RegistryFriendlyByteBuf input, Operation<ItemStack> original) {
+            if (input.readBoolean()) {
+                return original.call(input);
+            }
+
+            ResourceKey<Item> item = input.readResourceKey(Registries.ITEM);
+            ItemStack stack = new ItemStack(null, 1, DataComponentPatch.EMPTY);
+            stack.itematic$setFailedKey(item);
+            return stack;
+        }
+
+        @WrapMethod(
+            method = "encode(Lnet/minecraft/network/RegistryFriendlyByteBuf;Lnet/minecraft/world/item/ItemStack;)V"
+        )
+        private void checkForFailed(RegistryFriendlyByteBuf output, ItemStack itemStack, Operation<Void> original) {
+            if (itemStack.itematic$isSuccessfullyLoaded()) {
+                output.writeBoolean(true);
+                original.call(output, itemStack);
+                return;
+            }
+
+            output.writeBoolean(false);
+            output.writeResourceKey(itemStack.itematic$key());
+        }
+    }
+
+    @Mixin(targets = "net/minecraft/world/item/ItemStack$3")
+    public static class ValidatedStreamCodecExtender {
+        @WrapOperation(
+            method = "decode(Lnet/minecraft/network/RegistryFriendlyByteBuf;)Lnet/minecraft/world/item/ItemStack;",
+            at = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/world/item/ItemStack;CODEC:Lcom/mojang/serialization/Codec;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+        private Codec<ItemStack> useFailableItemStackCodec(Operation<Codec<ItemStack>> original) {
+            return ItemStacks.POSSIBLY_FAILED_CODEC;
+        }
     }
 }
