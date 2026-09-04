@@ -21,7 +21,6 @@ import net.errorcraft.itematic.world.action.actions.InvokeGameEventAction;
 import net.errorcraft.itematic.world.action.actions.InvokeItemEventAction;
 import net.errorcraft.itematic.world.action.actions.LightEndPortalAction;
 import net.errorcraft.itematic.world.action.actions.MarkBannerOnItemAction;
-import net.errorcraft.itematic.world.action.actions.ModifyBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.ModifyItemAction;
 import net.errorcraft.itematic.world.action.actions.ModifySignAction;
 import net.errorcraft.itematic.world.action.actions.PlaceBlockAction;
@@ -41,6 +40,7 @@ import net.errorcraft.itematic.world.action.actions.SpawnEntityFromItemAction;
 import net.errorcraft.itematic.world.action.actions.SwingHandAction;
 import net.errorcraft.itematic.world.action.actions.TakeHoneyAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
+import net.errorcraft.itematic.world.action.actions.TransformBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
 import net.errorcraft.itematic.world.action.actions.UseBucketAction;
 import net.errorcraft.itematic.world.action.actions.WaxBlockAction;
@@ -71,9 +71,9 @@ public record ActionType<T extends Action<T>>(MapCodec<T> codec) {
         "exchange_item",
         new ActionType<>(ExchangeItemAction.CODEC)
     );
-    public static final ActionType<ModifyBlockStateAction> MODIFY_BLOCK_STATE = register(
-        "modify_block_state",
-        new ActionType<>(ModifyBlockStateAction.CODEC)
+    public static final ActionType<TransformBlockStateAction> TRANSFORM_BLOCK_STATE = register(
+        "transform_block_state",
+        new ActionType<>(TransformBlockStateAction.CODEC)
     );
     public static final ActionType<SequenceAction> SEQUENCE = register(
         "sequence",

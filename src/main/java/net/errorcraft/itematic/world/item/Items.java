@@ -34,7 +34,6 @@ import net.errorcraft.itematic.world.action.actions.FertilizeAction;
 import net.errorcraft.itematic.world.action.actions.InvokeGameEventAction;
 import net.errorcraft.itematic.world.action.actions.LightEndPortalAction;
 import net.errorcraft.itematic.world.action.actions.MarkBannerOnItemAction;
-import net.errorcraft.itematic.world.action.actions.ModifyBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.ModifyItemAction;
 import net.errorcraft.itematic.world.action.actions.PlaySoundAction;
 import net.errorcraft.itematic.world.action.actions.RemoveStatusEffectsAction;
@@ -42,6 +41,7 @@ import net.errorcraft.itematic.world.action.actions.SetBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.SetEntityNameFromItemAction;
 import net.errorcraft.itematic.world.action.actions.SwingHandAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
+import net.errorcraft.itematic.world.action.actions.TransformBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
 import net.errorcraft.itematic.world.action.actions.WaxBlockAction;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
@@ -102,6 +102,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.UseableItemBehavior
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockItemStatePropertiesBuilder;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
@@ -111,6 +112,7 @@ import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Chargeab
 import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.world.level.block.CompostChances;
 import net.errorcraft.itematic.world.level.block.FuelTimes;
+import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.ApplyPropertiesProvider;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointerLocationItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
@@ -10909,20 +10911,36 @@ public class Items {
                                         .hasProperty(BlockStateProperties.EYE, false)))
                         ),
                         PassingSequenceHandler.builder()
-                            .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
-                                .property(BlockStateProperties.EYE, true)
-                                .pushEntitiesUpwards()
-                                .build())
+                            .add(
+                                TransformBlockStateAction.ofPushingUpwards(
+                                    PositionTarget.INTERACTED,
+                                    new ApplyPropertiesProvider(
+                                        BlockItemStatePropertiesBuilder.create()
+                                            .property(BlockStateProperties.LIT, true)
+                                            .build()
+                                    )
+                                )
+                            )
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.END_PORTAL_FRAME_FILL), SoundSource.BLOCKS))
+                            .add(
+                                PlaySoundAction.of(
+                                    PositionTarget.INTERACTED,
+                                    this.soundEvents.getOrThrow(SoundEventIds.END_PORTAL_FRAME_FILL),
+                                    SoundSource.BLOCKS
+                                )
+                            )
                             .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SMOKE)
                                 .count(16)
-                                .offset(Vec3Provider.of(
-                                    -0.1875d, 0.1875d,
-                                    0.8125d, 0.8125d,
-                                    -0.1875d, 0.1875d))
-                                .build())
+                                .offset(
+                                    Vec3Provider.of(
+                                        -0.1875d, 0.1875d,
+                                        0.8125d, 0.8125d,
+                                        -0.1875d, 0.1875d
+                                    )
+                                )
+                                .build()
+                            )
                             .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED))
                     ))
                     .add(ItemEvent.THROW_PROJECTILE, ActionEntry.of(

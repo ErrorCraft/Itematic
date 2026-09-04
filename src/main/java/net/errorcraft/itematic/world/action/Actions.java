@@ -12,17 +12,19 @@ import net.errorcraft.itematic.world.action.actions.DisplayParticleAction;
 import net.errorcraft.itematic.world.action.actions.DropItemFromBlockAction;
 import net.errorcraft.itematic.world.action.actions.IncrementStatAction;
 import net.errorcraft.itematic.world.action.actions.InvokeGameEventAction;
-import net.errorcraft.itematic.world.action.actions.ModifyBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.ModifySignAction;
 import net.errorcraft.itematic.world.action.actions.PlaceBlockAction;
 import net.errorcraft.itematic.world.action.actions.PlaySoundAction;
 import net.errorcraft.itematic.world.action.actions.PrimeTntAction;
 import net.errorcraft.itematic.world.action.actions.SetBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.SwingHandAction;
+import net.errorcraft.itematic.world.action.actions.TransformBlockStateAction;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
+import net.errorcraft.itematic.world.item.component.BlockItemStatePropertiesBuilder;
+import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.ApplyPropertiesProvider;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
 import net.errorcraft.itematic.world.phys.Vec3Provider;
@@ -122,13 +124,21 @@ public class Actions {
                             .hasProperty(BlockStateProperties.LIT, true)))
             ),
             PassingSequenceHandler.builder()
-                .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
-                    .property(BlockStateProperties.LIT, false)
-                    .build())
+                .add(
+                    TransformBlockStateAction.of(
+                        PositionTarget.INTERACTED,
+                        new ApplyPropertiesProvider(
+                            BlockItemStatePropertiesBuilder.create()
+                                .property(BlockStateProperties.LIT, false)
+                                .build()
+                        )
+                    )
+                )
                 .add(PlaySoundAction.builder(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventIds.FIRE_EXTINGUISH), SoundSource.BLOCKS)
                     .volume(0.5f)
                     .pitch(1.8f, 3.4f)
-                    .build())
+                    .build()
+                )
                 .add(FirstToPassRequirementsSequenceHandler.builder()
                     .add(
                         LocationCheckPredicates.builder(
@@ -153,18 +163,26 @@ public class Actions {
                                 LocationPredicate.Builder.location()
                                     .setBlock(BlockPredicate.Builder.block()
                                         .setProperties(StatePropertiesPredicate.Builder.properties()
-                                            .hasProperty(BlockStateProperties.LIT, false)))),
+                                            .hasProperty(BlockStateProperties.LIT, false)))
+                            ),
                             InvertedLootItemCondition.invert(
                                 LocationCheckPredicates.builder(
                                     PositionTarget.INTERACTED,
                                     LocationPredicate.Builder.location()
                                         .setBlock(BlockPredicate.Builder.block()
                                             .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(BlockStateProperties.WATERLOGGED, true)))))
+                                                .hasProperty(BlockStateProperties.WATERLOGGED, true)))
+                                )
+                            )
                         ),
-                        ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
-                            .property(BlockStateProperties.LIT, true)
-                            .build()
+                        TransformBlockStateAction.of(
+                            PositionTarget.INTERACTED,
+                            new ApplyPropertiesProvider(
+                                BlockItemStatePropertiesBuilder.create()
+                                    .property(BlockStateProperties.LIT, true)
+                                    .build()
+                            )
+                        )
                     )
                     .add(
                         LocationCheckPredicates.builder(

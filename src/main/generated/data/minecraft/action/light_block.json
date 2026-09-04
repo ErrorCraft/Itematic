@@ -10,10 +10,13 @@
           "entries": [
             {
               "action": {
-                "type": "minecraft:modify_block_state",
+                "type": "minecraft:transform_block_state",
                 "position": "interacted",
-                "properties": {
-                  "lit": "true"
+                "provider": {
+                  "type": "minecraft:apply_properties",
+                  "properties": {
+                    "lit": "true"
+                  }
                 }
               },
               "requirements": {
