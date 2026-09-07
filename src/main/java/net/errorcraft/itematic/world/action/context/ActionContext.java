@@ -25,19 +25,23 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 public class ActionContext {
     private final Level level;
     private final ContextMap parameters;
     private final ItemStackExchanger stackExchanger;
+    private final Set<Entry> markedEntries;
 
-    private ActionContext(Level level, ContextMap parameters, ItemStackExchanger stackExchanger) {
+    private ActionContext(Level level, ContextMap parameters, ItemStackExchanger stackExchanger, Set<Entry> markedEntries) {
         this.level = level;
         this.parameters = parameters;
         this.stackExchanger = stackExchanger;
+        this.markedEntries = markedEntries;
     }
 
     public static Builder builder(Level level) {
@@ -170,26 +174,40 @@ public class ActionContext {
         );
     }
 
+    public boolean tryMarkEntry(Object key, Object value) {
+        return this.markedEntries.add(new Entry(key, value));
+    }
+
+    public void unmarkEntry(Object key, Object value) {
+        this.markedEntries.remove(new Entry(key, value));
+    }
+    
+    private record Entry(Object key, Object value) {}
+
     public static class Builder {
         private final Level level;
         private ItemStackExchanger stackExchanger = ItemStackExchanger.EMPTY;
         private final ContextMap.Builder parameters = new ContextMap.Builder();
+        private final Set<Entry> existingMarkedEntries;
 
         private Builder(Level level) {
             this.level = level;
+            this.existingMarkedEntries = new HashSet<>();
         }
 
         private Builder(ActionContext currentContext) {
             this.level = currentContext.level;
             this.stackExchanger = currentContext.stackExchanger;
             this.parameters.itematic$copy(currentContext.parameters);
+            this.existingMarkedEntries = new HashSet<>(currentContext.markedEntries);
         }
 
         public ActionContext build() {
             return new ActionContext(
                 this.level,
                 this.parameters.itematic$build(),
-                this.stackExchanger
+                this.stackExchanger,
+                this.existingMarkedEntries
             );
         }
 

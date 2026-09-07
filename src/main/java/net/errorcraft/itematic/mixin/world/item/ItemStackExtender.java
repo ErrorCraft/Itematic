@@ -852,11 +852,13 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
             return false;
         }
 
-        try {
-            return this.item.value().itematic$invokeEvent(event, context);
-        } catch (StackOverflowError e) {
-            return false;
+        if (context.tryMarkEntry(this, event)) {
+            boolean result = this.item.value().itematic$invokeEvent(event, context);
+            context.unmarkEntry(this, event);
+            return result;
         }
+
+        return false;
     }
 
     @Override

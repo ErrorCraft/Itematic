@@ -28,11 +28,7 @@ public record SequenceAction(SequenceHandler<?> handler) implements Action<Seque
 
     @Override
     public boolean execute(ActionContext context) {
-        try {
-            return this.handler.handle(context);
-        } catch (StackOverflowError e) {
-            return false;
-        }
+        return this.handler.handle(context);
     }
 
     public Stream<Holder.Reference<ActionEntry>> streamReferences() {
