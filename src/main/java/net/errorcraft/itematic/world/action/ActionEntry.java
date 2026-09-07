@@ -13,6 +13,7 @@ import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public record ActionEntry(Action<?> action, Optional<LootItemCondition> requirements) {
     public static final Codec<ActionEntry> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -44,6 +45,14 @@ public record ActionEntry(Action<?> action, Optional<LootItemCondition> requirem
         }
 
         return Optional.of(this.action.execute(context));
+    }
+
+    public Stream<Holder.Reference<ActionEntry>> streamReferences() {
+        if (this.action instanceof SequenceAction sequenceAction) {
+            return sequenceAction.streamReferences();
+        }
+
+        return Stream.empty();
     }
 
     private boolean test(ActionContext context) {

@@ -9,11 +9,14 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.stream.Stream;
+
 public interface SequenceHandler<T extends SequenceHandler<T>> {
     MapCodec<SequenceHandler<?>> CODEC = ItematicBuiltInRegistries.SEQUENCE_HANDLER_TYPE.byNameCodec().dispatchMap("handler", SequenceHandler::type, SequenceHandlerType::codec);
 
     SequenceHandlerType<T> type();
     boolean handle(ActionContext context);
+    Stream<Holder<ActionEntry>> streamEntries();
 
     interface Builder<T extends SequenceHandler<T>, S extends Builder<T, S>> {
         T build();

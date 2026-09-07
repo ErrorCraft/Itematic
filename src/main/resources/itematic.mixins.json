@@ -36,7 +36,6 @@
     "network.protocol.game.GamePacketTypesAccessor",
     "network.protocol.game.GameProtocolsExtender",
     "recipebook.ServerPlaceRecipeExtender",
-    "resources.RegistryDataLoaderAccessor$RegistryDataAccessor",
     "resources.RegistryDataLoaderExtender",
     "server.BootstrapExtender",
     "server.commands.EnchantCommandExtender",

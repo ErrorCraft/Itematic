@@ -9,6 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public record FirstToSucceedSequenceHandler(HolderSet<ActionEntry> entries) implements SequenceHandler<FirstToSucceedSequenceHandler> {
     public static final Codec<FirstToSucceedSequenceHandler> CODEC = ActionEntry.LIST_CODEC.xmap(
@@ -34,6 +35,11 @@ public record FirstToSucceedSequenceHandler(HolderSet<ActionEntry> entries) impl
         }
 
         return false;
+    }
+
+    @Override
+    public Stream<Holder<ActionEntry>> streamEntries() {
+        return this.entries.stream();
     }
 
     public static class Builder implements SequenceHandler.Builder<FirstToSucceedSequenceHandler, FirstToSucceedSequenceHandler.Builder> {

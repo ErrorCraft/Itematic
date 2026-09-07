@@ -12,6 +12,7 @@ import net.minecraft.core.Holder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public record PassingSequenceHandler(List<Entry> entries) implements SequenceHandler<PassingSequenceHandler> {
     public static final Codec<PassingSequenceHandler> CODEC = Entry.CODEC.listOf().xmap(
@@ -37,6 +38,11 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
         }
 
         return true;
+    }
+
+    @Override
+    public Stream<Holder<ActionEntry>> streamEntries() {
+        return this.entries.stream().map(Entry::entry);
     }
 
     public static class Builder implements SequenceHandler.Builder<PassingSequenceHandler, Builder> {
