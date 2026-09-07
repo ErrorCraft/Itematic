@@ -170,7 +170,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextKeys.HAND, hand)
                 .build();
-            if (this.itematic$invokeEvent(ItemEvent.USE, context)) {
+            if (stack.itematic$invokeEvent(ItemEvent.USE, context)) {
                 result = result.max(ItemResult.CONSUME);
             }
         }
@@ -205,7 +205,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .add(ItematicContextKeys.HAND, hand)
             .add(ItematicContextKeys.SIDE, context.getClickedFace())
             .build();
-        if (this.itematic$invokeEvent(ItemEvent.BEFORE_USE_ON_BLOCK, actionContext) && this.cancelsOriginalCallOnSuccess(ItemEvent.BEFORE_USE_ON_BLOCK)) {
+        if (stack.itematic$invokeEvent(ItemEvent.BEFORE_USE_ON_BLOCK, actionContext) && this.cancelsOriginalCallOnSuccess(ItemEvent.BEFORE_USE_ON_BLOCK)) {
             tryUpdateItemStack(user, hand, stack, stackExchanger);
             return InteractionResult.CONSUME.heldItemTransformedTo(stackExchanger.result());
         }
@@ -216,7 +216,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             result = result.max(newResult);
         }
 
-        if (this.itematic$invokeEvent(ItemEvent.USE_ON_BLOCK, actionContext)) {
+        if (stack.itematic$invokeEvent(ItemEvent.USE_ON_BLOCK, actionContext)) {
             result = result.max(ItemResult.CONSUME);
         }
 
@@ -243,7 +243,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .add(LootContextParams.TOOL, itemStack)
             .add(ItematicContextKeys.HAND, type)
             .build();
-        if (this.itematic$invokeEvent(ItemEvent.BEFORE_USE_ON_ENTITY, context) && this.cancelsOriginalCallOnSuccess(ItemEvent.BEFORE_USE_ON_ENTITY)) {
+        if (itemStack.itematic$invokeEvent(ItemEvent.BEFORE_USE_ON_ENTITY, context) && this.cancelsOriginalCallOnSuccess(ItemEvent.BEFORE_USE_ON_ENTITY)) {
             tryUpdateItemStack(player, type, itemStack, stackExchanger);
             return InteractionResult.CONSUME.heldItemTransformedTo(stackExchanger.result());
         }
@@ -254,7 +254,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             result = result.max(newResult);
         }
 
-        if (this.itematic$invokeEvent(ItemEvent.USE_ON_ENTITY, context)) {
+        if (itemStack.itematic$invokeEvent(ItemEvent.USE_ON_ENTITY, context)) {
             result = result.max(ItemResult.CONSUME);
         }
 
@@ -286,7 +286,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.TOOL, itemStack)
                 .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
-            this.itematic$invokeEvent(ItemEvent.HIT_ENTITY, context);
+            itemStack.itematic$invokeEvent(ItemEvent.HIT_ENTITY, context);
         }
 
         tryUpdateItemStack(attacker, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
@@ -320,7 +320,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.TOOL, itemStack)
                 .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
-            this.itematic$invokeEvent(ItemEvent.BROKE_BLOCK, context);
+            itemStack.itematic$invokeEvent(ItemEvent.BROKE_BLOCK, context);
         }
 
         tryUpdateItemStack(owner, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
@@ -367,7 +367,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.TOOL, itemStack)
                 .add(ItematicContextKeys.HAND, entity.getUsedItemHand())
                 .build();
-            this.itematic$invokeEvent(ItemEvent.STOPPED_USING, context);
+            itemStack.itematic$invokeEvent(ItemEvent.STOPPED_USING, context);
         }
 
         tryUpdateItemStack(entity, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
@@ -392,7 +392,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.TOOL, itemStack)
                 .add(ItematicContextKeys.HAND, entity.getUsedItemHand())
                 .build();
-            this.itematic$invokeEvent(ItemEvent.FINISHED_USING, context);
+            itemStack.itematic$invokeEvent(ItemEvent.FINISHED_USING, context);
         }
 
         this.itematic$getBehavior(ItemBehaviorType.CONSUMABLE)

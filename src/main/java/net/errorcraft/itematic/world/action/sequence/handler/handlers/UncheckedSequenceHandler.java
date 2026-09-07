@@ -9,6 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public record UncheckedSequenceHandler(HolderSet<ActionEntry> entries) implements SequenceHandler<UncheckedSequenceHandler> {
     public static final Codec<UncheckedSequenceHandler> CODEC = ActionEntry.LIST_CODEC.xmap(
@@ -33,6 +34,11 @@ public record UncheckedSequenceHandler(HolderSet<ActionEntry> entries) implement
         }
 
         return result;
+    }
+
+    @Override
+    public Stream<Holder<ActionEntry>> streamEntries() {
+        return this.entries.stream();
     }
 
     public static class Builder implements SequenceHandler.Builder<UncheckedSequenceHandler, Builder> {
