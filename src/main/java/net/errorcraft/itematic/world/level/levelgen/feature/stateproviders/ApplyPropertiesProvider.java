@@ -18,8 +18,12 @@ public class ApplyPropertiesProvider extends BlockStateProvider {
 
     private final BlockItemStateProperties properties;
 
-    public ApplyPropertiesProvider(BlockItemStateProperties properties) {
+    private ApplyPropertiesProvider(BlockItemStateProperties properties) {
         this.properties = properties;
+    }
+
+    public static ApplyPropertiesProvider of(BlockItemStateProperties properties) {
+        return new ApplyPropertiesProvider(properties);
     }
 
     @Override

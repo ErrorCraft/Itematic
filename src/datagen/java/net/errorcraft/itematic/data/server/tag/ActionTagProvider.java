@@ -24,5 +24,8 @@ public class ActionTagProvider extends FabricTagsProvider<ActionEntry> {
         this.builder(ActionTags.USE_SHOVEL_ON_BLOCK)
             .add(Actions.FLATTEN_GROUND)
             .add(Actions.EXTINGUISH_CAMPFIRE);
+        this.builder(ActionTags.USE_POTION_ON_BLOCK)
+            .add(Actions.CONVERT_BLOCK_TO_MUD)
+            .add(Actions.ADD_WATER_FROM_BOTTLE_TO_CAULDRON);
     }
 }

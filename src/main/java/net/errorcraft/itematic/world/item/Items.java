@@ -37,7 +37,6 @@ import net.errorcraft.itematic.world.action.actions.MarkBannerOnItemAction;
 import net.errorcraft.itematic.world.action.actions.ModifyItemAction;
 import net.errorcraft.itematic.world.action.actions.PlaySoundAction;
 import net.errorcraft.itematic.world.action.actions.RemoveStatusEffectsAction;
-import net.errorcraft.itematic.world.action.actions.SetBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.SetEntityNameFromItemAction;
 import net.errorcraft.itematic.world.action.actions.SwingHandAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
@@ -137,7 +136,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.predicates.DamagePredicate;
 import net.minecraft.core.component.predicates.DataComponentPredicates;
 import net.minecraft.core.component.predicates.EnchantmentsPredicate;
-import net.minecraft.core.component.predicates.PotionsPredicate;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -338,51 +336,20 @@ public class Items {
                 ItemDisplay.Builder.forItem(ItemIds.POTION).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(1))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_DRINK)
-                        .remainder(this.items.getOrThrow(ItemIds.GLASS_BOTTLE))
-                        .build())
+                    .with(
+                        ConsumableItemBehavior.builder(Consumables.DEFAULT_DRINK)
+                            .remainder(this.items.getOrThrow(ItemIds.GLASS_BOTTLE))
+                            .build()
+                    )
                     .with(PotionHolderItemBehavior.of(1.0f))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
+                    .with(
+                        DispensableItemBehavior.of(
+                            this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)
+                        )
+                    )
                     .build(),
                 ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
-                        AllOfCondition.allOf(
-                            InvertedLootItemCondition.invert(
-                                SideCheckPredicate.builder(Direction.DOWN)
-                            ),
-                            LocationCheckPredicates.builder(
-                                PositionTarget.INTERACTED,
-                                LocationPredicate.Builder.location()
-                                    .setBlock(BlockPredicate.Builder.block()
-                                        .of(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
-                            ),
-                            MatchTool.toolMatches(ItemPredicate.Builder.item()
-                                .withComponents(DataComponentMatchers.Builder.components()
-                                    .partial(
-                                        DataComponentPredicates.POTIONS,
-                                        new PotionsPredicate(HolderSet.direct(
-                                            this.potions.getOrThrow(PotionIds.WATER)
-                                        ))
-                                    ).build()
-                                )
-                            )
-                        ),
-                        UncheckedSequenceHandler.builder()
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.GENERIC_SPLASH), SoundSource.BLOCKS))
-                            .add(ExchangeItemAction.of(this.items.getOrThrow(ItemIds.GLASS_BOTTLE)))
-                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SPLASH)
-                                .count(5)
-                                .offset(Vec3Provider.of(
-                                    -0.5d, 0.5d,
-                                    1.0d, 1.0d,
-                                    -0.5d, 0.5d
-                                ))
-                                .speed(1.0d)
-                                .build())
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.BOTTLE_EMPTY), SoundSource.BLOCKS))
-                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockIds.MUD)))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                    ))
+                    .add(ItemEvent.USE_ON_BLOCK, actions.getOrThrow(Actions.USE_POTION_ON_BLOCK))
                     .build()
             ));
             this.registerable.register(ItemIds.OMINOUS_BOTTLE, create(
@@ -10914,7 +10881,7 @@ public class Items {
                             .add(
                                 TransformBlockStateAction.ofPushingUpwards(
                                     PositionTarget.INTERACTED,
-                                    new ApplyPropertiesProvider(
+                                    ApplyPropertiesProvider.of(
                                         BlockItemStatePropertiesBuilder.create()
                                             .property(BlockStateProperties.LIT, true)
                                             .build()

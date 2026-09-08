@@ -19,6 +19,7 @@ import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.world.level.levelgen.blockpredicates.ItematicBlockPredicateTypes;
 import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.ItematicBlockStateProviderTypes;
 import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.errorcraft.itematic.world.level.storage.loot.functions.ItematicItemModifiers;
@@ -51,5 +52,6 @@ public class Itematic implements ModInitializer {
         MeleeWeaponComponents.init();
         ItematicMenuTypes.init();
         ItematicBlockStateProviderTypes.init();
+        ItematicBlockPredicateTypes.init();
     }
 }

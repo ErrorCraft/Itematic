@@ -11,6 +11,10 @@ public class ItematicBlockStateProviderTypes {
         "apply_properties",
         ApplyPropertiesProvider.CODEC
     );
+    public static final BlockStateProviderType<MapPropertiesProvider> MAP_PROPERTIES = register(
+        "map_properties",
+        MapPropertiesProvider.CODEC
+    );
 
     private ItematicBlockStateProviderTypes() {}
 

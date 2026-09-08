@@ -1,0 +1,41 @@
+{
+  "action": {
+    "type": "minecraft:transform_block_state",
+    "position": "interacted",
+    "provider": {
+      "type": "minecraft:rule_based_state_provider",
+      "rules": [
+        {
+          "if_true": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:cauldron"
+          },
+          "then": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "minecraft:water_cauldron",
+              "Properties": {
+                "level": "1"
+              }
+            }
+          }
+        },
+        {
+          "if_true": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:water_cauldron"
+          },
+          "then": {
+            "type": "minecraft:map_properties",
+            "properties": {
+              "level": {
+                "1": "2",
+                "2": "3"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

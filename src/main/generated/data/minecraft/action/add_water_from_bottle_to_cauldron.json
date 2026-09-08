@@ -1,0 +1,63 @@
+{
+  "action": {
+    "type": "minecraft:sequence",
+    "handler": "minecraft:passing",
+    "entries": [
+      "minecraft:increase_water_cauldron_layer",
+      {
+        "action": {
+          "type": "minecraft:exchange_item",
+          "item": {
+            "id": "minecraft:glass_bottle"
+          }
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:increment_stat",
+          "entity": "this",
+          "stat": {
+            "type": "minecraft:custom",
+            "entry": "minecraft:use_cauldron"
+          }
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:increment_stat",
+          "entity": "this",
+          "stat": {
+            "type": "minecraft:used",
+            "entry": "minecraft:potion"
+          }
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:play_sound",
+          "category": "block",
+          "pitch": 1.0,
+          "position": "interacted",
+          "sound": "minecraft:item.bottle.empty",
+          "volume": 1.0
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:invoke_game_event",
+          "event": "minecraft:fluid_place",
+          "entity": "this",
+          "position": "interacted"
+        }
+      }
+    ]
+  },
+  "requirements": {
+    "condition": "minecraft:match_tool",
+    "predicate": {
+      "predicates": {
+        "minecraft:potion_contents": "minecraft:water"
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "action": {
+    "type": "minecraft:sequence",
+    "handler": "minecraft:first_to_pass_requirements",
+    "entries": "#minecraft:use_potion_on_block"
+  }
+}

@@ -8,6 +8,7 @@ import net.minecraft.tags.TagKey;
 public class ActionTags {
     public static final TagKey<ActionEntry> USE_HOE_ON_BLOCK = of("use_hoe_on_block");
     public static final TagKey<ActionEntry> USE_SHOVEL_ON_BLOCK = of("use_shovel_on_block");
+    public static final TagKey<ActionEntry> USE_POTION_ON_BLOCK = of("use_potion_on_block");
 
     private ActionTags() {}
 

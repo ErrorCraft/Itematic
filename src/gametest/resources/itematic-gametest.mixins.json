@@ -11,6 +11,9 @@
     "GameTestServerExtender",
     "StructureUtilsExtender"
   ],
+  "client": [
+    "TestInstanceBlockEditScreenExtender"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

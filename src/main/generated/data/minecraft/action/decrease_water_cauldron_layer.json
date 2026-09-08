@@ -1,0 +1,53 @@
+{
+  "action": {
+    "type": "minecraft:transform_block_state",
+    "position": "interacted",
+    "provider": {
+      "type": "minecraft:rule_based_state_provider",
+      "rules": [
+        {
+          "if_true": {
+            "type": "minecraft:matching_properties",
+            "properties": {
+              "level": "3"
+            }
+          },
+          "then": {
+            "type": "minecraft:apply_properties",
+            "properties": {
+              "level": "2"
+            }
+          }
+        },
+        {
+          "if_true": {
+            "type": "minecraft:matching_properties",
+            "properties": {
+              "level": "2"
+            }
+          },
+          "then": {
+            "type": "minecraft:apply_properties",
+            "properties": {
+              "level": "1"
+            }
+          }
+        },
+        {
+          "if_true": {
+            "type": "minecraft:matching_properties",
+            "properties": {
+              "level": "1"
+            }
+          },
+          "then": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "minecraft:cauldron"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

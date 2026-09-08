@@ -387,6 +387,7 @@ public class BlockIds {
     public static final ResourceKey<Block> ENCHANTING_TABLE = of("enchanting_table");
     public static final ResourceKey<Block> BREWING_STAND = of("brewing_stand");
     public static final ResourceKey<Block> CAULDRON = of("cauldron");
+    public static final ResourceKey<Block> WATER_CAULDRON = of("water_cauldron");
     public static final ResourceKey<Block> END_PORTAL_FRAME = of("end_portal_frame");
     public static final ResourceKey<Block> END_STONE = of("end_stone");
     public static final ResourceKey<Block> DRAGON_EGG = of("dragon_egg");

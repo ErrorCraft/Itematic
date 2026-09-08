@@ -1,0 +1,6 @@
+{
+  "values": [
+    "minecraft:convert_block_to_mud",
+    "minecraft:add_water_from_bottle_to_cauldron"
+  ]
+}
