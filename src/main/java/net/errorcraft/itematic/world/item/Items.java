@@ -193,6 +193,7 @@ import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
@@ -11312,20 +11313,77 @@ public class Items {
             this.registerable.register(ItemIds.WATER_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.WATER_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluid(this.fluids.getOrThrow(FluidIds.WATER), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluid(
+                            this.fluids.getOrThrow(FluidIds.WATER),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
+                    .build(),
+                ActionEventMap.Builder.item()
+                    .addCancellable(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.fillCauldron(
+                        this.items,
+                        ItemIds.WATER_BUCKET,
+                        this.blocks,
+                        BlockIds.WATER_CAULDRON,
+                        state -> state.setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL),
+                        this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY),
+                        this.fluids,
+                        false
+                    ))
                     .build()
             ));
             this.registerable.register(ItemIds.LAVA_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.LAVA_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluid(this.fluids.getOrThrow(FluidIds.LAVA), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluid(
+                            this.fluids.getOrThrow(FluidIds.LAVA),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_LAVA),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .with(FuelItemBehavior.of(FuelTimes.LAVA, this.items.getOrThrow(ItemIds.BUCKET)))
+                    .build(),
+                ActionEventMap.Builder.item()
+                    .addCancellable(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.fillCauldron(
+                        this.items,
+                        ItemIds.LAVA_BUCKET,
+                        this.blocks,
+                        BlockIds.LAVA_CAULDRON,
+                        state -> state,
+                        this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_LAVA),
+                        this.fluids,
+                        true
+                    ))
                     .build()
             ));
             this.registerable.register(ItemIds.POWDER_SNOW_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.POWDER_SNOW_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeBlock(this.blocks.getOrThrow(BlockIds.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_POWDER_SNOW), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeBlock(
+                            this.blocks.getOrThrow(BlockIds.POWDER_SNOW),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_POWDER_SNOW),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
+                    .build(),
+                ActionEventMap.Builder.item()
+                    .addCancellable(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.fillCauldron(
+                        this.items,
+                        ItemIds.POWDER_SNOW_BUCKET,
+                        this.blocks,
+                        BlockIds.POWDER_SNOW_CAULDRON,
+                        state -> state.setValue(LayeredCauldronBlock.LEVEL, LayeredCauldronBlock.MAX_FILL_LEVEL),
+                        this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_POWDER_SNOW),
+                        this.fluids,
+                        true
+                    ))
                     .build()
             ));
             this.registerable.register(ItemIds.PUFFERFISH_BUCKET, create(

@@ -21,6 +21,10 @@ public record InvokeGameEventAction(Holder<GameEvent> event, PositionTarget posi
         LootContext.EntityTarget.CODEC.optionalFieldOf("entity").forGetter(InvokeGameEventAction::entity)
     ).apply(instance, InvokeGameEventAction::new));
 
+    public static InvokeGameEventAction of(Holder<GameEvent> event, PositionTarget position) {
+        return new InvokeGameEventAction(event, position, Optional.empty());
+    }
+
     public static InvokeGameEventAction of(Holder<GameEvent> event, PositionTarget position, LootContext.EntityTarget entity) {
         return new InvokeGameEventAction(event, position, Optional.of(entity));
     }

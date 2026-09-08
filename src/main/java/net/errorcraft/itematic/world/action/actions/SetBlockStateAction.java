@@ -19,6 +19,10 @@ public record SetBlockStateAction(PositionTarget position, BlockState state) imp
         BlockState.CODEC.fieldOf("state").forGetter(SetBlockStateAction::state)
     ).apply(instance, SetBlockStateAction::new));
 
+    public static SetBlockStateAction of(PositionTarget position, BlockState state) {
+        return new SetBlockStateAction(position, state);
+    }
+
     public static SetBlockStateAction of(PositionTarget position, Holder<Block> entry) {
         return new SetBlockStateAction(position, entry.value().defaultBlockState());
     }

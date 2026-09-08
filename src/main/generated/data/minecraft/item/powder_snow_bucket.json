@@ -16,5 +16,108 @@
   "display": {
     "model": "minecraft:powder_snow_bucket",
     "translation_key": "item.minecraft.powder_snow_bucket"
+  },
+  "events": {
+    "minecraft:before_use_on_block": {
+      "cancel_original_call_on_success": true,
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "handler": "minecraft:passing",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:exchange_item",
+                "item": {
+                  "id": "minecraft:bucket"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:increment_stat",
+                "entity": "this",
+                "stat": {
+                  "type": "minecraft:custom",
+                  "entry": "minecraft:fill_cauldron"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:increment_stat",
+                "entity": "this",
+                "stat": {
+                  "type": "minecraft:used",
+                  "entry": "minecraft:powder_snow_bucket"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:set_block_state",
+                "position": "interacted",
+                "state": {
+                  "Name": "minecraft:powder_snow_cauldron",
+                  "Properties": {
+                    "level": "3"
+                  }
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:play_sound",
+                "category": "block",
+                "pitch": 1.0,
+                "position": "interacted",
+                "sound": "minecraft:item.bucket.empty_powder_snow",
+                "volume": 1.0
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:invoke_game_event",
+                "event": "minecraft:fluid_place",
+                "position": "interacted"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:swing_hand",
+                "entity": "this"
+              }
+            }
+          ]
+        },
+        "requirements": {
+          "condition": "minecraft:all_of",
+          "terms": [
+            {
+              "condition": "minecraft:location_check",
+              "position": "interacted",
+              "predicate": {
+                "block": {
+                  "blocks": "#minecraft:cauldrons"
+                }
+              }
+            },
+            {
+              "condition": "minecraft:inverted",
+              "term": {
+                "condition": "minecraft:location_check",
+                "offsetY": 1,
+                "position": "interacted",
+                "predicate": {
+                  "fluid": {
+                    "fluids": "#minecraft:water"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
   }
 }

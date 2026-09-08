@@ -35,11 +35,13 @@ import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPred
 import net.errorcraft.itematic.world.phys.Vec3Provider;
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.DataComponentMatchers;
+import net.minecraft.advancements.criterion.FluidPredicate;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.predicates.DataComponentPredicates;
@@ -54,14 +56,17 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedStateProvider;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
@@ -392,13 +397,71 @@ public class Actions {
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.location()
                     .setBlock(BlockPredicate.Builder.block()
-                        .of(blocks, blocks.getOrThrow(BlockIds.FLOWER_POT).value()))
+                        .of(blocks, blocks.getOrThrow(BlockIds.FLOWER_POT).value())
+                    )
             ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(pottedBlock)))
                 .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
                 .add(IncrementStatAction.of(LootContext.EntityTarget.THIS, Stats.CUSTOM.get(Stats.POT_FLOWER)))
                 .add(DecrementItemAction.of(1))
+                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+        );
+    }
+
+    public static ActionEntry fillCauldron(HolderGetter<Item> items, ResourceKey<Item> usedItem, HolderGetter<Block> blocks, ResourceKey<Block> placedBlock, UnaryOperator<BlockState> state, Holder<SoundEvent> emptySound, HolderGetter<Fluid> fluids, boolean checkUnderWater) {
+        LootItemCondition.Builder predicate = LocationCheckPredicates.builder(
+            PositionTarget.INTERACTED,
+            LocationPredicate.Builder.location()
+                .setBlock(BlockPredicate.Builder.block()
+                    .of(blocks, BlockTags.CAULDRONS)
+                )
+        );
+
+        if (checkUnderWater) {
+            predicate = AllOfCondition.allOf(
+                predicate,
+                InvertedLootItemCondition.invert(
+                    LocationCheckPredicates.builder(
+                        PositionTarget.INTERACTED,
+                        LocationPredicate.Builder.location()
+                            .setFluid(FluidPredicate.Builder.fluid()
+                                .of(fluids.getOrThrow(FluidTags.WATER))
+                            ),
+                        new BlockPos(0, 1, 0)
+                    )
+                )
+            );
+        }
+
+        return ActionEntry.of(
+            predicate,
+            PassingSequenceHandler.builder()
+                .add(ExchangeItemAction.of(items.getOrThrow(ItemIds.BUCKET)))
+                .add(
+                    IncrementStatAction.of(
+                        LootContext.EntityTarget.THIS,
+                        Stats.CUSTOM.get(Stats.FILL_CAULDRON)
+                    )
+                )
+                .add(
+                    IncrementStatAction.of(
+                        LootContext.EntityTarget.THIS,
+                        Stats.ITEM_USED.itematic$get(items.getOrThrow(usedItem))
+                    )
+                )
+                .add(
+                    SetBlockStateAction.of(
+                        PositionTarget.INTERACTED,
+                        state.apply(
+                            blocks.getOrThrow(placedBlock)
+                                .value()
+                                .defaultBlockState()
+                        )
+                    )
+                )
+                .add(PlaySoundAction.of(PositionTarget.INTERACTED, emptySound, SoundSource.BLOCKS))
+                .add(InvokeGameEventAction.of(GameEvent.FLUID_PLACE, PositionTarget.INTERACTED))
                 .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
         );
     }
