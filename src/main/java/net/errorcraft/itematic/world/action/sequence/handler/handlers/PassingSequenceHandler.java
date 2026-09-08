@@ -12,6 +12,7 @@ import net.minecraft.core.Holder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public record PassingSequenceHandler(List<Entry> entries) implements SequenceHandler<PassingSequenceHandler> {
     public static final Codec<PassingSequenceHandler> CODEC = Entry.CODEC.listOf().xmap(
@@ -37,6 +38,11 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
         }
 
         return true;
+    }
+
+    @Override
+    public Stream<Holder<ActionEntry>> streamEntries() {
+        return this.entries.stream().map(Entry::entry);
     }
 
     public static class Builder implements SequenceHandler.Builder<PassingSequenceHandler, Builder> {
@@ -65,10 +71,10 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
 
     public record Entry(Holder<ActionEntry> entry, boolean optional) {
         public static final Codec<Entry> ELEMENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ActionEntry.REGISTRY_CODEC.fieldOf("entry").forGetter(Entry::entry),
+            ActionEntry.CODEC.fieldOf("entry").forGetter(Entry::entry),
             Codec.BOOL.optionalFieldOf("optional", false).forGetter(Entry::optional)
         ).apply(instance, Entry::new));
-        public static final Codec<Entry> CODEC = Codec.either(ELEMENT_CODEC, ActionEntry.REGISTRY_CODEC)
+        public static final Codec<Entry> CODEC = Codec.either(ELEMENT_CODEC, ActionEntry.CODEC)
             .xmap(
                 either -> either.map(Function.identity(), Entry::required),
                 entry -> entry.optional ? Either.left(entry) : Either.right(entry.entry)

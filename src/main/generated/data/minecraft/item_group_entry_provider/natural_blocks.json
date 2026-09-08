@@ -1,102 +1,39 @@
 {
   "entries": [
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/grass_like_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/dirt_like_blocks"
-    },
+    "#minecraft:item_group/grass_like_blocks",
+    "#minecraft:item_group/dirt_like_blocks",
     "minecraft:gravel",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/sand_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/ice_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/snow_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/moss_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/stone_like_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/nether_blocks"
-    },
+    "#minecraft:item_group/sand_blocks",
+    "#minecraft:item_group/ice_blocks",
+    "#minecraft:item_group/snow_blocks",
+    "#minecraft:item_group/moss_blocks",
+    "#minecraft:item_group/stone_like_blocks",
+    "#minecraft:item_group/nether_blocks",
     "minecraft:end_stone",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/ore_like_blocks"
-    },
+    "#minecraft:item_group/ore_like_blocks",
     "minecraft:glowstone",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/amethyst_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/log_like_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/leaves"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/mushroom_like_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/saplings"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/plants"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/egg_like_blocks"
-    },
+    "#minecraft:item_group/amethyst_blocks",
+    "#minecraft:item_group/log_like_blocks",
+    "#minecraft:item_group/leaves",
+    "#minecraft:item_group/mushroom_like_blocks",
+    "#minecraft:item_group/saplings",
+    "#minecraft:item_group/plants",
+    "#minecraft:item_group/egg_like_blocks",
     "minecraft:dried_ghast",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/seeds"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/water_blocks"
-    },
+    "#minecraft:item_group/seeds",
+    "#minecraft:item_group/water_blocks",
     "minecraft:sponge",
     "minecraft:wet_sponge",
     "minecraft:melon",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/pumpkins"
-    },
+    "#minecraft:item_group/pumpkins",
     "minecraft:hay_block",
     "minecraft:bee_nest",
     "minecraft:honeycomb_block",
     "minecraft:slime_block",
     "minecraft:honey_block",
     "minecraft:resin_block",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/froglights"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/sculk"
-    },
+    "#minecraft:item_group/froglights",
+    "#minecraft:item_group/sculk",
     "minecraft:cobweb",
     "minecraft:bedrock"
   ]

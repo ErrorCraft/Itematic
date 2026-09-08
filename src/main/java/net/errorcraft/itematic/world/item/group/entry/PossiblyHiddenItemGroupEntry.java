@@ -1,13 +1,10 @@
 package net.errorcraft.itematic.world.item.group.entry;
 
 import com.mojang.datafixers.Products;
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.Holder;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
@@ -34,11 +31,6 @@ public abstract class PossiblyHiddenItemGroupEntry<T extends PossiblyHiddenItemG
         }
 
         entries.acceptAll(this.createStacks(context), this.visibility);
-    }
-
-    @Override
-    public Either<ItemGroupEntry<?>, Holder<Item>> createEither() {
-        return Either.left(this);
     }
 
     protected abstract Collection<ItemStack> createStacks(CreativeModeTab.ItemDisplayParameters context);

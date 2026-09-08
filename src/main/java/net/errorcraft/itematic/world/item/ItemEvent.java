@@ -8,8 +8,10 @@ public record ItemEvent() {
     public static final ItemEvent USE = register("use");
     public static final ItemEvent STOPPED_USING = register("stopped_using");
     public static final ItemEvent FINISHED_USING = register("finished_using");
+    public static final ItemEvent BEFORE_USE_ON_BLOCK = register("before_use_on_block");
     public static final ItemEvent USE_ON_BLOCK = register("use_on_block");
     public static final ItemEvent BROKE_BLOCK = register("broke_block");
+    public static final ItemEvent BEFORE_USE_ON_ENTITY = register("before_use_on_entity");
     public static final ItemEvent USE_ON_ENTITY = register("use_on_entity");
     public static final ItemEvent HIT_ENTITY = register("hit_entity");
     public static final ItemEvent EAT_ITEM = register("eat_item");

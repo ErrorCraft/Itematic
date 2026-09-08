@@ -1,12 +1,17 @@
 package net.errorcraft.itematic.mixin.client.renderer;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.objectweb.asm.Opcodes;
@@ -20,6 +25,21 @@ import java.util.OptionalInt;
 
 @Mixin(ItemInHandRenderer.class)
 public class ItemInHandRendererExtender {
+    @WrapOperation(
+        method = "renderItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"
+        )
+    )
+    private void trySubmitUnloadable(ItemStackRenderState instance, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, int outlineColor, Operation<Void> original) {
+        if (instance.itematic$trySubmitUnloadable(poseStack, false, false, null, submitNodeCollector, lightCoords)) {
+            return;
+        }
+
+        original.call(instance, poseStack, submitNodeCollector, lightCoords, overlayCoords, outlineColor);
+    }
+
     @Redirect(
         method = {
             "evaluateWhichHandsToRender",

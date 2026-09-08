@@ -1,39 +1,18 @@
 {
   "entries": [
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/wooden_building_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/stone_like_building_blocks"
-    },
+    "#minecraft:item_group/wooden_building_blocks",
+    "#minecraft:item_group/stone_like_building_blocks",
     "minecraft:coal_block",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/iron_building_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/gold_building_blocks"
-    },
+    "#minecraft:item_group/iron_building_blocks",
+    "#minecraft:item_group/gold_building_blocks",
     "minecraft:redstone_block",
     "minecraft:emerald_block",
     "minecraft:lapis_block",
     "minecraft:diamond_block",
     "minecraft:netherite_block",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/quartz_building_blocks"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/smooth_quartz_building_blocks"
-    },
+    "#minecraft:item_group/quartz_building_blocks",
+    "#minecraft:item_group/smooth_quartz_building_blocks",
     "minecraft:amethyst_block",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/copper_like_building_blocks"
-    }
+    "#minecraft:item_group/copper_like_building_blocks"
   ]
 }

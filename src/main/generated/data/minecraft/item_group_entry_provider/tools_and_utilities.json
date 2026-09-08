@@ -1,13 +1,7 @@
 {
   "entries": [
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/tools"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/buckets"
-    },
+    "#minecraft:item_group/tools",
+    "#minecraft:item_group/buckets",
     "minecraft:fishing_rod",
     "minecraft:flint_and_steel",
     "minecraft:fire_charge",
@@ -16,10 +10,7 @@
     "minecraft:brush",
     "minecraft:name_tag",
     "minecraft:lead",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/bundles"
-    },
+    "#minecraft:item_group/bundles",
     "minecraft:compass",
     "minecraft:recovery_compass",
     "minecraft:clock",
@@ -31,59 +22,44 @@
     "minecraft:ender_eye",
     "minecraft:elytra",
     {
-      "id": "minecraft:firework_rocket",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 1
         }
-      }
+      },
+      "items": "minecraft:firework_rocket"
     },
     {
-      "id": "minecraft:firework_rocket",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 2
         }
-      }
+      },
+      "items": "minecraft:firework_rocket"
     },
     {
-      "id": "minecraft:firework_rocket",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:fireworks": {
           "flight_duration": 3
         }
-      }
+      },
+      "items": "minecraft:firework_rocket"
     },
     "minecraft:saddle",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/harnesses"
-    },
+    "#minecraft:item_group/harnesses",
     "minecraft:carrot_on_a_stick",
     "minecraft:warped_fungus_on_a_stick",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/boats"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/rails"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/minecarts"
-    },
+    "#minecraft:item_group/boats",
+    "#minecraft:item_group/rails",
+    "#minecraft:item_group/minecarts",
     {
       "type": "minecraft:instrument",
-      "item": "minecraft:goat_horn",
-      "tag": "minecraft:goat_horns"
+      "instruments": "#minecraft:goat_horns",
+      "item": "minecraft:goat_horn"
     },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/music_discs"
-    }
+    "#minecraft:item_group/music_discs"
   ]
 }
