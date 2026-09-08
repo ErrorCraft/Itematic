@@ -13,9 +13,9 @@ import java.util.Map;
 public class ActionEventMap<T> {
     private static final ActionEventMap<?> EMPTY = new ActionEventMap<>(Map.of());
 
-    private final Map<T, Holder<ActionEntry>> events;
+    private final Map<T, CancellableActionEntry> events;
 
-    private ActionEventMap(Map<T, Holder<ActionEntry>> events) {
+    private ActionEventMap(Map<T, CancellableActionEntry> events) {
         this.events = events;
     }
 
@@ -25,7 +25,7 @@ public class ActionEventMap<T> {
     }
 
     public static <T> Codec<ActionEventMap<T>> codec(Codec<T> keyCodec, Keyable keys) {
-        return Codec.simpleMap(keyCodec, ActionEntry.REGISTRY_CODEC, keys)
+        return Codec.simpleMap(keyCodec, CancellableActionEntry.CODEC, keys)
             .xmap(ActionEventMap::new, map -> map.events)
             .codec();
     }
@@ -35,14 +35,24 @@ public class ActionEventMap<T> {
     }
 
     public boolean invokeEvent(T event, ActionContext context) {
-        Holder<ActionEntry> entry = this.events.get(event);
+        CancellableActionEntry entry = this.events.get(event);
         if (entry == null) {
             return false;
         }
 
-        return entry.value()
+        return entry.entry()
+            .value()
             .execute(context)
             .orElse(false);
+    }
+
+    public boolean cancelsOriginalCallOnSuccess(T event) {
+        CancellableActionEntry entry = this.events.get(event);
+        if (entry == null) {
+            return false;
+        }
+
+        return entry.cancelOriginalCallOnSuccess();
     }
 
     public boolean hasListener(T event) {
@@ -50,7 +60,7 @@ public class ActionEventMap<T> {
     }
 
     public static class Builder<T> {
-        private final Map<T, Holder<ActionEntry>> events = new HashMap<>();
+        private final Map<T, CancellableActionEntry> events = new HashMap<>();
 
         private Builder() {}
 
@@ -66,7 +76,19 @@ public class ActionEventMap<T> {
             return this.add(event, Holder.direct(action));
         }
 
+        public Builder<T> addCancellable(T event, ActionEntry action) {
+            return this.addCancellable(event, Holder.direct(action));
+        }
+
         public Builder<T> add(T event, Holder<ActionEntry> entry) {
+            return this.add(event, new CancellableActionEntry(entry, false));
+        }
+
+        public Builder<T> addCancellable(T event, Holder<ActionEntry> entry) {
+            return this.add(event, new CancellableActionEntry(entry, true));
+        }
+
+        public Builder<T> add(T event, CancellableActionEntry entry) {
             if (this.events.containsKey(event)) {
                 throw new IllegalArgumentException("Duplicate entry for item event " + event);
             }

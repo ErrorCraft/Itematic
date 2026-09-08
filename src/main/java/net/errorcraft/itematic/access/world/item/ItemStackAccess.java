@@ -10,6 +10,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public interface ItemStackAccess {
+    default boolean itematic$isSuccessfullyLoaded() {
+        return false;
+    }
+    default boolean itematic$cannotBeInteractedWith() {
+        return false;
+    }
+    default void itematic$setFailedKey(ResourceKey<Item> failedKey) {}
     default ResourceKey<Item> itematic$key() {
         throw new AssertionError("Implemented via mixin");
     }

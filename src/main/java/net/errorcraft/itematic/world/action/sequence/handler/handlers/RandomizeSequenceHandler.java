@@ -13,10 +13,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.Util;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public record RandomizeSequenceHandler(HolderSet<ActionEntry> entries, Optional<Integer> count) implements SequenceHandler<RandomizeSequenceHandler> {
     public static final MapCodec<RandomizeSequenceHandler> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ActionEntry.REGISTRY_ENTRY_LIST_CODEC.fieldOf("entries").forGetter(RandomizeSequenceHandler::entries),
+        ActionEntry.LIST_CODEC.fieldOf("entries").forGetter(RandomizeSequenceHandler::entries),
         ExtraCodecs.POSITIVE_INT.optionalFieldOf("count").forGetter(RandomizeSequenceHandler::count)
     ).apply(instance, RandomizeSequenceHandler::new));
 
@@ -33,6 +34,11 @@ public record RandomizeSequenceHandler(HolderSet<ActionEntry> entries, Optional<
         }
 
         return result;
+    }
+
+    @Override
+    public Stream<Holder<ActionEntry>> streamEntries() {
+        return this.entries.stream();
     }
 
     private Iterable<Holder<ActionEntry>> randomEntries(RandomSource random) {
