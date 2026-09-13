@@ -496,8 +496,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
             "isSameItemSameComponents"
         }
     )
-    private static boolean checkInteractableStacksPrematurely(ItemStack a, ItemStack b, Operation<Boolean> original) {
-        if (a.itematic$cannotBeInteractedWith() && b.itematic$cannotBeInteractedWith()) {
+    private static boolean checkEmptyStacksPrematurely(ItemStack a, ItemStack b, Operation<Boolean> original) {
+        if (a.isEmpty() && b.isEmpty()) {
             return true;
         }
 
@@ -514,7 +514,11 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isItemCheckHolder(ItemStack instance, Object o, Operation<Boolean> original, @Local(name = "b", argsOnly = true) ItemStack b) {
+    private static boolean checkSuccessfullyLoadedAndHolder(ItemStack instance, Object o, Operation<Boolean> original, @Local(name = "b", argsOnly = true) ItemStack b) {
+        if (!instance.itematic$isSuccessfullyLoaded() || !b.itematic$isSuccessfullyLoaded()) {
+            return instance.itematic$key() == b.itematic$key();
+        }
+
         return instance.is(b.typeHolder());
     }
 
