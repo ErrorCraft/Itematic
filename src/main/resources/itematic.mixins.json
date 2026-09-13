@@ -284,6 +284,7 @@
     "world.item.component.ChargedProjectilesExtender",
     "world.item.component.ConsumableAccessor",
     "world.item.component.ConsumableExtender",
+    "world.item.component.ItemContainerContentsExtender",
     "world.item.component.KineticWeaponExtender",
     "world.item.component.LodestoneTrackerExtender",
     "world.item.component.PiercingWeaponExtender",
