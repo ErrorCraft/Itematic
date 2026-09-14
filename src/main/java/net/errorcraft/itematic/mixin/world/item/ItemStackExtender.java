@@ -31,7 +31,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
-import net.minecraft.core.TypedInstance;
 import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -57,6 +56,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
@@ -89,7 +89,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackExtender implements DataComponentHolder, TypedInstance<Item>, ItemStackAccess, ItemInstanceAccess, FabricItemStack {
+public abstract class ItemStackExtender implements DataComponentHolder, ItemInstance, ItemStackAccess, ItemInstanceAccess, FabricItemStack {
     @Shadow
     @Final
     private static Logger LOGGER;
@@ -760,6 +760,15 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
         }
 
         return original.call(item);
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        if (this.itematic$isSuccessfullyLoaded()) {
+            return ItemInstance.super.getMaxStackSize();
+        }
+
+        return this.count;
     }
 
     @Override
