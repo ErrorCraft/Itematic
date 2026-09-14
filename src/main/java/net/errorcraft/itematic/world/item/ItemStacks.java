@@ -32,14 +32,14 @@ public class ItemStacks {
     );
     public static final Codec<ItemStack> POSSIBLY_FAILED_CODEC = POSSIBLY_FAILED_MAP_CODEC.codec();
 
+    private ItemStacks() {}
+
     @SuppressWarnings("DataFlowIssue")
-    private static ItemStack createFailed(ResourceKey<Item> item, Integer count, DataComponentPatch components) {
+    public static ItemStack createFailed(ResourceKey<Item> item, int count, DataComponentPatch components) {
         ItemStack stack = new ItemStack(null, count, components);
         stack.itematic$setFailedKey(item);
         return stack;
     }
-
-    private ItemStacks() {}
 
     public static boolean isNullOrEmpty(@Nullable ItemStack stack) {
         return stack == null || stack.isEmpty();
