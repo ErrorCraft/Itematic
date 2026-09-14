@@ -921,16 +921,14 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         @WrapMethod(
             method = "decode(Lnet/minecraft/network/RegistryFriendlyByteBuf;)Lnet/minecraft/world/item/ItemStack;"
         )
-        @SuppressWarnings("DataFlowIssue")
         private ItemStack checkForFailed(RegistryFriendlyByteBuf input, Operation<ItemStack> original) {
             if (input.readBoolean()) {
                 return original.call(input);
             }
 
             ResourceKey<Item> item = input.readResourceKey(Registries.ITEM);
-            ItemStack stack = new ItemStack(null, 1, DataComponentPatch.EMPTY);
-            stack.itematic$setFailedKey(item);
-            return stack;
+            int count = input.readVarInt();
+            return ItemStacks.createFailed(item, count, DataComponentPatch.EMPTY);
         }
 
         @WrapMethod(
@@ -945,6 +943,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
 
             output.writeBoolean(false);
             output.writeResourceKey(itemStack.itematic$key());
+            output.writeVarInt(itemStack.count());
         }
     }
 
