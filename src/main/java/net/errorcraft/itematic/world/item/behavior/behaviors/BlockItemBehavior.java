@@ -8,7 +8,6 @@ import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.placement.block.BlockPlacer;
@@ -111,24 +110,14 @@ public record BlockItemBehavior(BlockPicker<?> block, boolean operatorOnly, Set<
         }
     }
 
-    private boolean isUnuseable(Pass pass) {
-        return !this.passes.contains(pass);
-    }
-
     public boolean place(ActionContext context, PositionTarget position, boolean decrementCount) {
-        BlockPlacer placer = BlockPlacer.of(
-            context,
-            position,
-            this.block,
-            this.operatorOnly,
-            null
-        );
+        BlockPlacer placer = BlockPlacer.of(context, position, this.block, this.operatorOnly, null);
         if (placer == null || !placer.place()) {
             return false;
         }
 
         if (decrementCount) {
-            context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY)
+            context.getOrDefault(LootContextParams.TOOL, ItemStack.class, ItemStack.EMPTY)
                 .consume(
                     1,
                     context.get(LootContextParams.THIS_ENTITY, LivingEntity.class)
@@ -138,10 +127,15 @@ public record BlockItemBehavior(BlockPicker<?> block, boolean operatorOnly, Set<
         return true;
     }
 
+    private boolean isUnuseable(Pass pass) {
+        return !this.passes.contains(pass);
+    }
+
     private ItemResult place(UseOnContext context, ItemStackExchanger stackExchanger) {
-        ActionContext actionContext = new BlockPlaceContext(context)
-            .itematic$actionContext(stackExchanger);
-        if (this.place(actionContext, PositionTarget.INTERACTED, true)) {
+        BlockPlaceContext placeContext = new BlockPlaceContext(context);
+        BlockPlacer placer = BlockPlacer.of(placeContext, stackExchanger, this.block, this.operatorOnly, null);
+        if (placer.place()) {
+            context.getItemInHand().consume(1, context.getPlayer());
             return ItemResult.SUCCEED;
         }
 
