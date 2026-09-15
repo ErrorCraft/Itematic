@@ -85,6 +85,7 @@ loom {
 			name "GameTest"
 			vmArg "-Dfabric-api.gametest"
 			vmArg "-Dfabric-api.gametest.report-file=${project.layout.buildDirectory.file("junit.xml").get()}"
+			vmArg "-Ditematic.gametest.structure-directory=${file("src/gametest/resources")}"
 
 			runDir "build/gametest"
 			source sourceSets.gametest
@@ -92,7 +93,7 @@ loom {
 		gametestClient {
 			inherit client
 			name "GameTest Client"
-			vmArg "-Ditematic.gametest.structure-directory=${file("src/gametest/resources/data")}"
+			vmArg "-Ditematic.gametest.structure-directory=${file("src/gametest/resources")}"
 
 			runDir "run"
 			source sourceSets.gametest

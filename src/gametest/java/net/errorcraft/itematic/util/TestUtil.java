@@ -3,6 +3,7 @@ package net.errorcraft.itematic.util;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -178,6 +179,13 @@ public class TestUtil {
         entity.setPos(Vec3.atBottomCenterOf(absolutePos));
     }
 
+    public static void lookAt(GameTestHelper helper, Entity entity, Vec3 pos) {
+        entity.lookAt(
+            EntityAnchorArgument.Anchor.EYES,
+            helper.absoluteVec(pos)
+        );
+    }
+
     public static InteractionResult interactWithEntity(Entity entity, Player player) {
         return entity.interact(player, InteractionHand.MAIN_HAND, Vec3.ZERO);
     }
@@ -210,7 +218,7 @@ public class TestUtil {
             player,
             new BlockHitResult(
                 Vec3.atCenterOf(absolutePos),
-                direction,
+                helper.getAbsoluteDirection(direction),
                 absolutePos,
                 false
             )
