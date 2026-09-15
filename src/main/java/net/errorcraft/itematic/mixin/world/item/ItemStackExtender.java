@@ -31,7 +31,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
-import net.minecraft.core.TypedInstance;
 import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -57,6 +56,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
@@ -89,7 +89,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackExtender implements DataComponentHolder, TypedInstance<Item>, ItemStackAccess, ItemInstanceAccess, FabricItemStack {
+public abstract class ItemStackExtender implements DataComponentHolder, ItemInstance, ItemStackAccess, ItemInstanceAccess, FabricItemStack {
     @Shadow
     @Final
     private static Logger LOGGER;
@@ -496,8 +496,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
             "isSameItemSameComponents"
         }
     )
-    private static boolean checkInteractableStacksPrematurely(ItemStack a, ItemStack b, Operation<Boolean> original) {
-        if (a.itematic$cannotBeInteractedWith() && b.itematic$cannotBeInteractedWith()) {
+    private static boolean checkEmptyStacksPrematurely(ItemStack a, ItemStack b, Operation<Boolean> original) {
+        if (a.isEmpty() && b.isEmpty()) {
             return true;
         }
 
@@ -514,7 +514,11 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isItemCheckHolder(ItemStack instance, Object o, Operation<Boolean> original, @Local(name = "b", argsOnly = true) ItemStack b) {
+    private static boolean checkSuccessfullyLoadedAndHolder(ItemStack instance, Object o, Operation<Boolean> original, @Local(name = "b", argsOnly = true) ItemStack b) {
+        if (!instance.itematic$isSuccessfullyLoaded() || !b.itematic$isSuccessfullyLoaded()) {
+            return instance.itematic$key() == b.itematic$key();
+        }
+
         return instance.is(b.typeHolder());
     }
 
@@ -759,6 +763,15 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
     }
 
     @Override
+    public int getMaxStackSize() {
+        if (this.itematic$isSuccessfullyLoaded()) {
+            return ItemInstance.super.getMaxStackSize();
+        }
+
+        return this.count;
+    }
+
+    @Override
     public boolean canBeEnchantedWith(Holder<Enchantment> enchantment, EnchantingContext context) {
         // Use the original implementation again
         return enchantment.value().canEnchant((ItemStack)(Object) this);
@@ -908,16 +921,14 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
         @WrapMethod(
             method = "decode(Lnet/minecraft/network/RegistryFriendlyByteBuf;)Lnet/minecraft/world/item/ItemStack;"
         )
-        @SuppressWarnings("DataFlowIssue")
         private ItemStack checkForFailed(RegistryFriendlyByteBuf input, Operation<ItemStack> original) {
             if (input.readBoolean()) {
                 return original.call(input);
             }
 
             ResourceKey<Item> item = input.readResourceKey(Registries.ITEM);
-            ItemStack stack = new ItemStack(null, 1, DataComponentPatch.EMPTY);
-            stack.itematic$setFailedKey(item);
-            return stack;
+            int count = input.readVarInt();
+            return ItemStacks.createFailed(item, count, DataComponentPatch.EMPTY);
         }
 
         @WrapMethod(
@@ -932,6 +943,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, TypedIns
 
             output.writeBoolean(false);
             output.writeResourceKey(itemStack.itematic$key());
+            output.writeVarInt(itemStack.count());
         }
     }
 
