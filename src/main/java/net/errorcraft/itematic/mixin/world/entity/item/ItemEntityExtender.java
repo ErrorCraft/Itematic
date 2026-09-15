@@ -1,25 +1,50 @@
 package net.errorcraft.itematic.mixin.world.entity.item;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.serialization.Codec;
+import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jspecify.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityExtender {
-    @Redirect(
+    @WrapOperation(
+        method = {
+            "addAdditionalSaveData",
+            "readAdditionalSaveData"
+        },
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/item/ItemStack;CODEC:Lcom/mojang/serialization/Codec;",
+            opcode = Opcodes.GETSTATIC
+        )
+    )
+    private Codec<ItemStack> useFailableItemStackCodec(Operation<Codec<ItemStack>> original) {
+        return ItemStacks.POSSIBLY_FAILED_CODEC;
+    }
+
+    @WrapOperation(
         method = "playerTouch",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, @Local(name = "itemStack") ItemStack itemStack) {
+    @Nullable
+    private <T> Stat<Item> getStatCheckInteractableStackUseHolder(StatType<Item> instance, T argument, Operation<Stat<T>> original, @Local(name = "itemStack") ItemStack itemStack) {
+        if (itemStack.itematic$cannotBeInteractedWith()) {
+            return null;
+        }
+
         return instance.itematic$get(itemStack.typeHolder());
     }
 }

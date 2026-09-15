@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class DispenseBehavior extends OptionalDispenseItemBehavior {
     public static final Codec<DispenseBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        ActionEntry.REGISTRY_CODEC.fieldOf("entry").forGetter(dispenseBehavior -> dispenseBehavior.entry),
+        ActionEntry.CODEC.fieldOf("entry").forGetter(dispenseBehavior -> dispenseBehavior.entry),
         Codec.BOOL.optionalFieldOf("dispense_as_item_on_failure", true).forGetter(dispenseBehavior -> dispenseBehavior.dispenseAsItemOnFailure),
         Offset.CODEC.optionalFieldOf("offset", Offset.DEFAULT).forGetter(dispenseBehavior -> dispenseBehavior.offset)
     ).apply(instance, DispenseBehavior::new));

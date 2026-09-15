@@ -23,55 +23,55 @@ import net.minecraft.resources.ResourceKey;
 public class ItematicBuiltInRegistries {
     public static final Registry<ItemBehaviorType<?>> ITEM_BEHAVIOR_TYPE = register(
         ItematicRegistries.ITEM_BEHAVIOR_TYPE,
-        r -> ItemBehaviorType.USEABLE
+        _ -> ItemBehaviorType.USEABLE
     );
     public static final Registry<ItemEvent> ITEM_EVENT = register(
         ItematicRegistries.ITEM_EVENT,
-        r -> ItemEvent.USE
+        _ -> ItemEvent.USE
     );
     public static final Registry<ActionType<?>> ACTION_TYPE = register(
         ItematicRegistries.ACTION_TYPE,
-        r -> ActionType.MODIFY_ITEM
+        _ -> ActionType.MODIFY_ITEM
     );
     public static final Registry<SequenceHandlerType<?>> SEQUENCE_HANDLER_TYPE = register(
         ItematicRegistries.SEQUENCE_HANDLER_TYPE,
-        r -> SequenceHandlerType.UNCHECKED
+        _ -> SequenceHandlerType.UNCHECKED
     );
     public static final Registry<SmithingTemplate> SMITHING_TEMPLATE = register(
         ItematicRegistries.SMITHING_TEMPLATE,
-        r -> SmithingTemplates.TRIM_PATTERN
+        _ -> SmithingTemplates.TRIM_PATTERN
     );
     public static final Registry<BlockPickerType<?>> BLOCK_PICKER_TYPE = register(
         ItematicRegistries.BLOCK_PICKER_TYPE,
-        r -> BlockPickerType.SIMPLE
+        _ -> BlockPickerType.SIMPLE
     );
     public static final Registry<UseDurationProviderType<?>> USE_DURATION_PROVIDER_TYPE = register(
         ItematicRegistries.USE_DURATION_PROVIDER_TYPE,
-        r -> UseDurationProviderType.CONSTANT
+        _ -> UseDurationProviderType.CONSTANT
     );
     public static final Registry<ItemHolderRuleType<?>> ITEM_HOLDER_RULE_TYPE = register(
         ItematicRegistries.ITEM_HOLDER_RULE_TYPE,
-        r -> ItemHolderRuleType.REJECT
+        _ -> ItemHolderRuleType.REJECT
     );
     public static final Registry<ShooterMethodType<?>> SHOOTER_METHOD_TYPE = register(
         ItematicRegistries.SHOOTER_METHOD_TYPE,
-        r -> ShooterMethodType.DIRECT
+        _ -> ShooterMethodType.DIRECT
     );
     public static final Registry<WorldModificationType<?>> WORLD_MODIFICATION_TYPE = register(
         ItematicRegistries.WORLD_MODIFICATION_TYPE,
-        r -> WorldModificationType.DRAIN_FLUID
+        _ -> WorldModificationType.DRAIN_FLUID
     );
     public static final Registry<EntitySpawnRuleType<?>> ENTITY_SPAWN_RULE_TYPE = register(
         ItematicRegistries.ENTITY_SPAWN_RULE_TYPE,
-        r -> EntitySpawnRuleType.DISCARD
+        _ -> EntitySpawnRuleType.DISCARD
     );
     public static final Registry<DataComponentType<?>> MELEE_WEAPON_COMPONENT_TYPE = register(
         ItematicRegistries.MELEE_WEAPON_COMPONENT_TYPE,
-        r -> MeleeWeaponComponents.SMASHING
+        _ -> MeleeWeaponComponents.SMASHING
     );
     public static final Registry<ItemGroupEntryType<?>> ITEM_GROUP_ENTRY_TYPE = register(
         ItematicRegistries.ITEM_GROUP_ENTRY_TYPE,
-        r -> ItemGroupEntryType.STACK
+        _ -> ItemGroupEntryType.ITEM
     );
 
     private ItematicBuiltInRegistries() {}

@@ -1,6 +1,8 @@
 package net.errorcraft.itematic.mixin.world.entity.player;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.world.entity.LivingEntityExtender;
 import net.errorcraft.itematic.references.ItemIds;
@@ -43,6 +45,22 @@ public abstract class PlayerExtender extends LivingEntityExtender {
 
     protected PlayerExtender(EntityType<? extends LivingEntity> type, Level level) {
         super(type, level);
+    }
+
+    @WrapOperation(
+        method = {
+            "blockActionRestricted",
+            "interactOn",
+            "itemAttackInteraction",
+            "getProjectile"
+        },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"
+        )
+    )
+    private static boolean isEmptyCheckInteractableStack(ItemStack instance, Operation<Boolean> original) {
+        return instance.itematic$cannotBeInteractedWith();
     }
 
     @Redirect(

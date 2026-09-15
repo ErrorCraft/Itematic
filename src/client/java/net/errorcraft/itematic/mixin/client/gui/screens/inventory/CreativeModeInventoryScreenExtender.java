@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.client.gui.screens.inventory;
 
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.references.ItemIds;
@@ -23,6 +24,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Mixin(CreativeModeInventoryScreen.class)
@@ -80,5 +83,23 @@ public abstract class CreativeModeInventoryScreenExtender extends AbstractContai
         return this.minecraft.level.registryAccess()
             .lookupOrThrow(Registries.ITEM)
             .getTags();
+    }
+
+    @ModifyExpressionValue(
+        method = "handleHotbarLoadOrSave",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/player/inventory/Hotbar;load(Lnet/minecraft/core/HolderLookup$Provider;)Ljava/util/List;"
+        )
+    )
+    private static List<ItemStack> removeUnsuccessfullyLoadedItemsOnLoad(List<ItemStack> original) {
+        List<ItemStack> modified = new ArrayList<>(original);
+        for (int i = 0; i < modified.size(); i++) {
+            if (!modified.get(i).itematic$isSuccessfullyLoaded()) {
+                modified.set(i, ItemStack.EMPTY);
+            }
+        }
+
+        return modified;
     }
 }

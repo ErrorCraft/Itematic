@@ -10,9 +10,10 @@ import net.minecraft.core.HolderSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public record FirstToPassRequirementsSequenceHandler(HolderSet<ActionEntry> entries) implements SequenceHandler<FirstToPassRequirementsSequenceHandler> {
-    public static final Codec<FirstToPassRequirementsSequenceHandler> CODEC = ActionEntry.REGISTRY_ENTRY_LIST_CODEC.xmap(
+    public static final Codec<FirstToPassRequirementsSequenceHandler> CODEC = ActionEntry.LIST_CODEC.xmap(
         FirstToPassRequirementsSequenceHandler::new,
         FirstToPassRequirementsSequenceHandler::entries
     );
@@ -40,6 +41,11 @@ public record FirstToPassRequirementsSequenceHandler(HolderSet<ActionEntry> entr
         }
 
         return false;
+    }
+
+    @Override
+    public Stream<Holder<ActionEntry>> streamEntries() {
+        return this.entries.stream();
     }
 
     public static class Builder implements SequenceHandler.Builder<FirstToPassRequirementsSequenceHandler, Builder> {

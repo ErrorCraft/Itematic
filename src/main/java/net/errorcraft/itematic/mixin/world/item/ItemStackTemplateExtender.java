@@ -80,11 +80,13 @@ public class ItemStackTemplateExtender implements ItemInstanceAccess {
 
     @Override
     public boolean itematic$invokeEvent(ItemEvent event, ActionContext context) {
-        try {
-            return this.item.value().itematic$invokeEvent(event, context);
-        } catch (StackOverflowError e) {
-            return false;
+        if (context.tryMarkEntry(this, event)) {
+            boolean result = this.item.value().itematic$invokeEvent(event, context);
+            context.unmarkEntry(this, event);
+            return result;
         }
+
+        return false;
     }
 
     @Override

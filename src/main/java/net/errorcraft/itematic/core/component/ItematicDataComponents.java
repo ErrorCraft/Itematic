@@ -42,14 +42,14 @@ public class ItematicDataComponents {
     );
     public static final DataComponentType<HolderSet<Item>> SHOOTER_AMMUNITION = register(
         "shooter_ammunition",
-        builder -> builder.persistent(Items.HOLDER_SET_CODEC)
-            .networkSynchronized(Items.HOLDER_SET_STREAM_CODEC)
+        builder -> builder.persistent(Items.LIST_CODEC)
+            .networkSynchronized(Items.LIST_STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<HolderSet<Item>> SHOOTER_HELD_AMMUNITION = register(
         "shooter_held_ammunition",
-        builder -> builder.persistent(Items.HOLDER_SET_CODEC)
-            .networkSynchronized(Items.HOLDER_SET_STREAM_CODEC)
+        builder -> builder.persistent(Items.LIST_CODEC)
+            .networkSynchronized(Items.LIST_STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<Double> ATTACK_SPEED_MULTIPLIER = register(

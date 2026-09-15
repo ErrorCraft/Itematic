@@ -1,21 +1,9 @@
 {
   "entries": [
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/torches"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/lanterns"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/chains"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/light_emitting_blocks"
-    },
+    "#minecraft:item_group/torches",
+    "#minecraft:item_group/lanterns",
+    "#minecraft:item_group/chains",
+    "#minecraft:item_group/light_emitting_blocks",
     "minecraft:crafting_table",
     "minecraft:stonecutter",
     "minecraft:cartography_table",
@@ -48,10 +36,7 @@
     "minecraft:beehive",
     "minecraft:suspicious_sand",
     "minecraft:suspicious_gravel",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/lightning_rods"
-    },
+    "#minecraft:item_group/lightning_rods",
     "minecraft:flower_pot",
     "minecraft:decorated_pot",
     "minecraft:armor_stand",
@@ -61,46 +46,27 @@
     {
       "type": "minecraft:painting_variant",
       "item": "minecraft:painting",
-      "tag": {
+      "painting_variants": {
         "id": "minecraft:placeable",
         "expected": true
       }
     },
     "minecraft:bookshelf",
     "minecraft:chiseled_bookshelf",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/shelves"
-    },
+    "#minecraft:item_group/shelves",
     "minecraft:lectern",
     "minecraft:tinted_glass",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/signs"
-    },
+    "#minecraft:item_group/signs",
     "minecraft:chest",
     "minecraft:barrel",
     "minecraft:ender_chest",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/shulker_boxes"
-    },
+    "#minecraft:item_group/shulker_boxes",
     "minecraft:respawn_anchor",
+    "#minecraft:item_group/beds",
+    "#minecraft:item_group/candles",
+    "#minecraft:item_group/banners",
     {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/beds"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/candles"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/banners"
-    },
-    {
-      "id": "minecraft:white_banner",
-      "type": "minecraft:stack",
+      "type": "minecraft:item",
       "components": {
         "minecraft:banner_patterns": [
           {
@@ -145,23 +111,15 @@
             "minecraft:banner_patterns"
           ]
         }
-      }
+      },
+      "items": "minecraft:white_banner"
     },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/heads"
-    },
+    "#minecraft:item_group/heads",
     "minecraft:dragon_egg",
     "minecraft:end_portal_frame",
     "minecraft:ender_eye",
     "minecraft:vault",
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/copper_golems"
-    },
-    {
-      "type": "minecraft:tag",
-      "tag": "minecraft:item_group/infested_blocks"
-    }
+    "#minecraft:item_group/copper_golems",
+    "#minecraft:item_group/infested_blocks"
   ]
 }
