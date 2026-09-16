@@ -1,29 +1,27 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
-import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.access.world.level.block.state.BlockBehaviourAccess;
+import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.context.UnplaceableBlockPlaceContext;
-import net.errorcraft.itematic.world.level.ItemAccess;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ScaffoldingBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jspecify.annotations.Nullable;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(ScaffoldingBlock.class)
 public class ScaffoldingBlockExtender extends Block implements BlockBehaviourAccess {
@@ -35,22 +33,15 @@ public class ScaffoldingBlockExtender extends Block implements BlockBehaviourAcc
         super(settings);
     }
 
-    @ModifyArg(
+    @WrapOperation(
         method = "getShape",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/phys/shapes/CollisionContext;isHoldingItem(Lnet/minecraft/world/item/Item;)Z"
         )
     )
-    @Nullable
-    private Item getItemUseDynamicRegistry(Item item, @Local(name = "state", argsOnly = true) BlockState state, @Local(name = "level", argsOnly = true) BlockGetter level) {
-        if (level instanceof ItemAccess itemAccess) {
-            return itemAccess.get(state.getBlock().itematic$asItemId())
-                .map(Holder::value)
-                .orElse(null);
-        }
-
-        return null;
+    private boolean isHoldingScaffoldingCheckId(CollisionContext instance, Item item, Operation<Boolean> original) {
+        return instance.itematic$isHoldingItem(ItemIds.SCAFFOLDING);
     }
 
     @Override
