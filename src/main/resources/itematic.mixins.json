@@ -410,6 +410,7 @@
     "world.level.storage.loot.functions.SetItemFunctionExtender",
     "world.level.storage.loot.functions.SetStewEffectFunctionExtender",
     "world.level.storage.loot.predicates.LocationCheckExtender",
+    "world.phys.shapes.EntityCollisionContextExtender",
     "world.scores.criteria.ObjectiveCriteriaAccessor",
     "world.scores.criteria.ObjectiveCriteriaExtender"
   ],

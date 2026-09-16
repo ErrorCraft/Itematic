@@ -79,6 +79,7 @@ inject-interface    net/minecraft/world/level/block/entity/PotDecorations    net
 inject-interface    net/minecraft/world/level/block/state/BlockBehaviour    net/errorcraft/itematic/access/world/level/block/state/BlockBehaviourAccess
 inject-interface    net/minecraft/world/level/material/Fluid    net/errorcraft/itematic/access/world/level/material/FluidAccess
 inject-interface    net/minecraft/world/level/storage/loot/predicates/LocationCheck    net/errorcraft/itematic/access/world/level/storage/loot/predicates/LocationCheckAccess
+inject-interface    net/minecraft/world/phys/shapes/CollisionContext    net/errorcraft/itematic/access/world/phys/shapes/CollisionContextAccess
 inject-interface    net/minecraft/world/scores/criteria/ObjectiveCriteria    net/errorcraft/itematic/access/world/scores/criteria/ObjectiveCriteriaAccess
 
 extend-enum    net/minecraft/client/gui/screens/recipebook/SearchRecipeBookCategory    ITEMATIC_BREWING
