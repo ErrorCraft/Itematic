@@ -31,5 +31,8 @@ public class BlockTagProvider extends FabricTagsProvider<Block> {
             .add(BlockIds.COARSE_DIRT)
             .add(BlockIds.MYCELIUM)
             .add(BlockIds.ROOTED_DIRT);
+        this.builder(ItematicBlockTags.HAS_MARKER_PARTICLE)
+            .add(BlockIds.BARRIER)
+            .add(BlockIds.LIGHT);
     }
 }
