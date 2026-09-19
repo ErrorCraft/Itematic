@@ -2,6 +2,7 @@ package net.errorcraft.itematic.world.item.placement.block;
 
 import net.errorcraft.itematic.mixin.world.item.BlockItemAccessor;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.ItemStacks;
@@ -45,6 +46,16 @@ public class BlockPlacer {
         this.placeSound = placeSound;
     }
 
+    public static BlockPlacer of(BlockPlaceContext context, ItemStackExchanger stackExchanger, BlockPicker<?> block, boolean operatorOnly, @Nullable Holder<SoundEvent> placeSound) {
+        return new BlockPlacer(
+            context.itematic$actionContext(stackExchanger),
+            block,
+            context,
+            operatorOnly,
+            placeSound
+        );
+    }
+
     @Nullable
     public static BlockPlacer of(ActionContext context, PositionTarget position, BlockPicker<?> block, boolean operatorOnly, @Nullable Holder<SoundEvent> placeSound) {
         BlockPlaceContext placeContext = context.blockPlaceContext(position, block);
@@ -52,13 +63,7 @@ public class BlockPlacer {
             return null;
         }
 
-        return new BlockPlacer(
-            context,
-            block,
-            placeContext,
-            operatorOnly,
-            placeSound
-        );
+        return new BlockPlacer(context, block, placeContext, operatorOnly, placeSound);
     }
 
     public boolean place() {
@@ -66,13 +71,14 @@ public class BlockPlacer {
             return false;
         }
 
-        BlockPos pos = this.placeContext.getClickedPos();
         LivingEntity placer = this.context.get(LootContextParams.THIS_ENTITY, LivingEntity.class);
-        BlockState blockState = this.placementState(pos, placer);
+        BlockPlaceContext updatedPlaceContext = this.block.placeContext(this.placeContext);
+        BlockState blockState = this.placementState(placer, updatedPlaceContext);
         if (blockState == null) {
             return false;
         }
 
+        BlockPos pos = updatedPlaceContext.getClickedPos();
         if (!this.context.level().setBlock(pos, blockState, Block.UPDATE_ALL_IMMEDIATE)) {
             return false;
         }
@@ -115,13 +121,13 @@ public class BlockPlacer {
     }
 
     @Nullable
-    private BlockState placementState(BlockPos pos, @Nullable LivingEntity placer) {
+    private BlockState placementState(@Nullable LivingEntity placer, BlockPlaceContext updatedPlaceContext) {
         if (this.operatorOnly && placer instanceof Player playerPlacer && !playerPlacer.canUseGameMasterBlocks()) {
             return null;
         }
 
-        BlockState state = this.block.placementState(this.placeContext);
-        return this.canPlace(state, pos, placer) ? state : null;
+        BlockState state = this.block.placementState(updatedPlaceContext);
+        return this.canPlace(state, updatedPlaceContext.getClickedPos(), placer) ? state : null;
     }
 
     private boolean canPlace(@Nullable BlockState state, BlockPos pos, @Nullable LivingEntity placer) {
