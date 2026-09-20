@@ -85,6 +85,15 @@ public class ActionContext {
         return this.parameters.getOrDefault(parameter, defaultValue);
     }
 
+    public <T, U extends T> U getOrDefault(ContextKey<T> parameter, Class<U> clazz, U defaultValue) {
+        T value = this.get(parameter);
+        if (clazz.isInstance(value)) {
+            return clazz.cast(value);
+        }
+
+        return defaultValue;
+    }
+
     public <T, U> U getOrDefault(ContextKey<T> parameter, Function<T, U> mapper, U defaultValue) {
         T value = this.get(parameter);
         if (value == null) {
@@ -142,8 +151,7 @@ public class ActionContext {
             return null;
         }
 
-        BlockPlaceContext placeContext = this.blockPlaceContext(pos, side);
-        return block.placeContext(placeContext);
+        return this.blockPlaceContext(pos, side);
     }
 
     private BlockPlaceContext blockPlaceContext(Vec3 pos, Direction side) {

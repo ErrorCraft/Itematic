@@ -426,7 +426,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     public boolean useItemBehavior(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, Operation<Boolean> original) {
         boolean result = false;
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, other);
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntityAlways(player, other);
         for (ItemBehavior<?> behavior : this.behavior) {
             result |= behavior.clickedOnWithStack(self, other, slot, clickAction, player, stackExchanger);
         }

@@ -9,6 +9,7 @@ public class ItematicBlockTags {
     public static final TagKey<Block> END_CRYSTAL_SPAWNABLE_ON = of("end_crystal_spawnable_on");
     public static final TagKey<Block> TILLABLE_INTO_FARMLAND = of("tillable_into_farmland");
     public static final TagKey<Block> FLATTENABLE_INTO_DIRT_PATH = of("flattenable_into_dirt_path");
+    public static final TagKey<Block> HAS_MARKER_PARTICLE = of("has_marker_particle");
 
     private ItematicBlockTags() {}
 
