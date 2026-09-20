@@ -35,6 +35,7 @@ public class ItemStackAssert {
     }
 
     public ItemStackAssert is(ResourceKey<Item> id) {
+        this.isNotEmpty();
         if (this.stack.is(id)) {
             return this;
         }

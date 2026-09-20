@@ -12,8 +12,8 @@ import java.util.function.Predicate;
 
 public class ItemStackExchanger {
     public static final ItemStackExchanger EMPTY = new ItemStackExchanger(
-        stack -> true,
-        stack -> {},
+        _ -> true,
+        _ -> {},
         ItemStack.EMPTY
     );
 
@@ -35,9 +35,17 @@ public class ItemStackExchanger {
         );
     }
 
+    public static ItemStackExchanger forEntityAlways(LivingEntity entity, ItemStack initialStack) {
+        return new ItemStackExchanger(
+            _ -> true,
+            entity::handleExtraItemsCreatedOnUse,
+            initialStack
+        );
+    }
+
     public static ItemStackExchanger forDispenser(Level level, Direction side, Vec3 pos, ItemStack initialStack) {
         return new ItemStackExchanger(
-            stack -> true,
+            _ -> true,
             stack -> DefaultDispenseItemBehavior.spawnItem(level, stack, 6, side, pos),
             initialStack
         );
