@@ -8,12 +8,14 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehav
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.level.GameType;
@@ -31,7 +33,6 @@ public class ItemHolderItemComponentTestSuite {
         ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
         inventory.add(SLOT, level.itematic$createStack(ItemIds.STICK));
         Slot slot = new Slot(inventory, SLOT, 0, 0);
-        level.addFreshEntity(player);
         helper.succeedIf(() -> {
             Assert.isTrue(
                 helper,
@@ -58,7 +59,6 @@ public class ItemHolderItemComponentTestSuite {
         ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
         addToBundleContentsComponent(helper, bundle, level.itematic$createStack(ItemIds.STICK));
         Slot slot = new Slot(inventory, SLOT, 0, 0);
-        level.addFreshEntity(player);
         helper.succeedIf(() -> {
             Assert.isTrue(
                 helper,
@@ -113,6 +113,38 @@ public class ItemHolderItemComponentTestSuite {
         Slot inventorySlot = new Slot(player.getInventory(), SLOT, 0, 0);
         inventorySlot.setByPlayer(bundle);
         SlotAccess carriedSlot = Objects.requireNonNull(player.getSlot(Player.HELD_ITEM_SLOT));
+        helper.succeedIf(() -> {
+            Assert.isTrue(
+                helper,
+                inventorySlot.getItem()
+                    .overrideOtherStackedOnMe(carriedSlot.get(), inventorySlot, ClickAction.SECONDARY, player, carriedSlot),
+                () -> "Expected right clicking on item holder to be successful"
+            );
+            Assert.itemStack(helper, carriedSlot.get())
+                .is(ItemIds.STICK);
+            Assert.itemStack(helper, player.getInventory().getItem(SLOT))
+                .hasComponent(
+                    DataComponents.BUNDLE_CONTENTS,
+                    bundleContents -> Assert.isTrue(
+                        helper,
+                        bundleContents.isEmpty(),
+                        () -> "Expected item holder to be empty"
+                    )
+                );
+        });
+    }
+
+    @GameTest
+    public void rightClickingOnItemHolderWithNoStackInCreativeModeWithSameItemInInventoryDoesNotDeleteStack(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
+        ServerLevel level = helper.getLevel();
+        ResourceKey<Item> itemInInventory = ItemIds.STICK;
+        ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
+        addToBundleContentsComponent(helper, bundle, level.itematic$createStack(itemInInventory));
+        Slot inventorySlot = new Slot(player.getInventory(), SLOT, 0, 0);
+        inventorySlot.setByPlayer(bundle);
+        SlotAccess carriedSlot = Objects.requireNonNull(player.getSlot(Player.HELD_ITEM_SLOT));
+        player.addItem(level.itematic$createStack(itemInInventory));
         helper.succeedIf(() -> {
             Assert.isTrue(
                 helper,
