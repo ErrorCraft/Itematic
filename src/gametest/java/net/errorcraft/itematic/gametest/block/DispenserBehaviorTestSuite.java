@@ -900,7 +900,7 @@ public class DispenserBehaviorTestSuite {
             .thenExecute(() -> helper.pressButton(BUTTON_POSITION))
             .thenExecuteAfter(4, () -> {
                 Assert.blockState(helper, OUTPUT_POSITION)
-                    .is(Blocks.WAXED_COPPER_BLOCK);
+                    .is(Blocks.COPPER_BLOCK.waxed());
                 Assert.itemStack(helper, blockEntity.getItem(0))
                     .isEmpty();
             })

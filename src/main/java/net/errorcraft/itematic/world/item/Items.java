@@ -4453,6 +4453,195 @@ public class Items {
                     .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GOLDEN_DANDELION)))
                     .build()
             ));
+            this.registerable.register(ItemIds.CINNABAR, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.CINNABAR_STAIRS, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_STAIRS).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.CINNABAR_SLAB, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_SLAB).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.CINNABAR_WALL, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_WALL).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.CHISELED_CINNABAR, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_CINNABAR).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_CINNABAR)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.POLISHED_CINNABAR, create(
+                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_CINNABAR).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_CINNABAR)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.POLISHED_CINNABAR_STAIRS, create(
+                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_CINNABAR_STAIRS).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_CINNABAR_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.POLISHED_CINNABAR_SLAB, create(
+                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_CINNABAR_SLAB).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_CINNABAR_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.POLISHED_CINNABAR_WALL, create(
+                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_CINNABAR_WALL).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_CINNABAR_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.CINNABAR_BRICKS, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_BRICKS).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.CINNABAR_BRICK_STAIRS, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_BRICK_STAIRS).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.CINNABAR_BRICK_SLAB, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_BRICK_SLAB).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.CINNABAR_BRICK_WALL, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_BRICK_WALL).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_BRICK_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.POTENT_SULFUR, create(
+                ItemDisplay.Builder.forBlock(ItemIds.POTENT_SULFUR).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POTENT_SULFUR)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR, create(
+                ItemDisplay.Builder.forBlock(ItemIds.SULFUR).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR_STAIRS, create(
+                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_STAIRS).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR_SLAB, create(
+                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_SLAB).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR_WALL, create(
+                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_WALL).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.CHISELED_SULFUR, create(
+                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_SULFUR).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_SULFUR)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.POLISHED_SULFUR, create(
+                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_SULFUR).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_SULFUR)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.POLISHED_SULFUR_STAIRS, create(
+                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_SULFUR_STAIRS).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_SULFUR_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.POLISHED_SULFUR_SLAB, create(
+                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_SULFUR_SLAB).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_SULFUR_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.POLISHED_SULFUR_WALL, create(
+                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_SULFUR_WALL).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_SULFUR_WALL)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR_BRICKS, create(
+                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_BRICKS).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_BRICKS)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR_BRICK_STAIRS, create(
+                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_BRICK_STAIRS).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_BRICK_STAIRS)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR_BRICK_SLAB, create(
+                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_BRICK_SLAB).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_BRICK_SLAB)))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR_BRICK_WALL, create(
+                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_BRICK_WALL).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_BRICK_WALL)))
+                    .build()
+            ));
         }
 
         private void bootstrapAttachedToSideBlocks() {
@@ -7088,6 +7277,13 @@ public class Items {
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.STRIDER), this.dispenseBehaviors))
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR_CUBE_SPAWN_EGG, create(
+                ItemDisplay.Builder.forItem(ItemIds.SULFUR_CUBE_SPAWN_EGG).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SULFUR_CUBE), this.dispenseBehaviors))
                     .build()
             ));
             this.registerable.register(ItemIds.TADPOLE_SPAWN_EGG, create(
@@ -11327,60 +11523,141 @@ public class Items {
             this.registerable.register(ItemIds.WATER_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.WATER_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluid(this.fluids.getOrThrow(FluidIds.WATER), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluid(
+                            this.fluids.getOrThrow(FluidIds.WATER),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.LAVA_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.LAVA_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluid(this.fluids.getOrThrow(FluidIds.LAVA), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_LAVA), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluid(
+                            this.fluids.getOrThrow(FluidIds.LAVA),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_LAVA),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .with(FuelItemBehavior.of(FuelTimes.LAVA, this.items.getOrThrow(ItemIds.BUCKET)))
                     .build()
             ));
             this.registerable.register(ItemIds.POWDER_SNOW_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.POWDER_SNOW_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeBlock(this.blocks.getOrThrow(BlockIds.POWDER_SNOW), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_POWDER_SNOW), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeBlock(
+                            this.blocks.getOrThrow(BlockIds.POWDER_SNOW),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_POWDER_SNOW),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.PUFFERFISH_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.PUFFERFISH_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.PUFFERFISH), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluidWithEntity(
+                            this.fluids.getOrThrow(FluidIds.WATER),
+                            this.entityTypes.getOrThrow(EntityTypeIds.PUFFERFISH),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .with(FoodItemBehavior.of(Foods.PUFFERFISH))
                     .build()
             ));
             this.registerable.register(ItemIds.SALMON_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.SALMON_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.SALMON), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluidWithEntity(
+                            this.fluids.getOrThrow(FluidIds.WATER),
+                            this.entityTypes.getOrThrow(EntityTypeIds.SALMON),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .with(FoodItemBehavior.of(Foods.SALMON))
                     .build()
             ));
             this.registerable.register(ItemIds.COD_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.COD_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.COD), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluidWithEntity(
+                            this.fluids.getOrThrow(FluidIds.WATER),
+                            this.entityTypes.getOrThrow(EntityTypeIds.COD),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .with(FoodItemBehavior.of(Foods.COD))
                     .build()
             ));
             this.registerable.register(ItemIds.TROPICAL_FISH_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.TROPICAL_FISH_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.TROPICAL_FISH), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluidWithEntity(
+                            this.fluids.getOrThrow(FluidIds.WATER),
+                            this.entityTypes.getOrThrow(EntityTypeIds.TROPICAL_FISH),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .with(FoodItemBehavior.of(Foods.TROPICAL_FISH))
                     .build()
             ));
             this.registerable.register(ItemIds.AXOLOTL_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.AXOLOTL_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.AXOLOTL), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_AXOLOTL), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluidWithEntity(
+                            this.fluids.getOrThrow(FluidIds.WATER),
+                            this.entityTypes.getOrThrow(EntityTypeIds.AXOLOTL),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_AXOLOTL),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .build()
             ));
             this.registerable.register(ItemIds.TADPOLE_BUCKET, create(
                 ItemDisplay.Builder.forItem(ItemIds.TADPOLE_BUCKET).build(),
                 ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.placeFluidWithEntity(this.fluids.getOrThrow(FluidIds.WATER), this.entityTypes.getOrThrow(EntityTypeIds.TADPOLE), this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_TADPOLE), this.items, this.dispenseBehaviors))
+                    .with(
+                        BucketItemBehavior.placeFluidWithEntity(
+                            this.fluids.getOrThrow(FluidIds.WATER),
+                            this.entityTypes.getOrThrow(EntityTypeIds.TADPOLE),
+                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_TADPOLE),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
+                    .build()
+            ));
+            this.registerable.register(ItemIds.SULFUR_CUBE_BUCKET, create(
+                ItemDisplay.Builder.forItem(ItemIds.SULFUR_CUBE_BUCKET).build(),
+                ItemBehaviorSet.builder()
+                    .with(
+                        BucketItemBehavior.placeEntity(
+                            this.entityTypes.getOrThrow(EntityTypeIds.SULFUR_CUBE),
+                            this.items,
+                            this.dispenseBehaviors
+                        )
+                    )
                     .build()
             ));
         }

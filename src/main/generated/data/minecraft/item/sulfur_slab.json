@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:sulfur_slab"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sulfur_slab",
+    "translation_key": "block.minecraft.sulfur_slab"
+  }
+}

@@ -45,6 +45,12 @@ public class ItemGroupItemTags {
     public static final TagKey<Item> RED_SANDSTONE_BUILDING_BLOCKS = of("red_sandstone_building_blocks");
     public static final TagKey<Item> SMOOTH_RED_SANDSTONE_BUILDING_BLOCKS = of("smooth_red_sandstone_building_blocks");
     public static final TagKey<Item> CUT_RED_SANDSTONE_BUILDING_BLOCKS = of("cut_red_sandstone_building_blocks");
+    public static final TagKey<Item> CINNABAR_BUILDING_BLOCKS = of("cinnabar_building_blocks");
+    public static final TagKey<Item> POLISHED_CINNABAR_BUILDING_BLOCKS = of("polished_cinnabar_building_blocks");
+    public static final TagKey<Item> CINNABAR_BRICK_BUILDING_BLOCKS = of("cinnabar_brick_building_blocks");
+    public static final TagKey<Item> SULFUR_BUILDING_BLOCKS = of("sulfur_building_blocks");
+    public static final TagKey<Item> POLISHED_SULFUR_BUILDING_BLOCKS = of("polished_sulfur_building_blocks");
+    public static final TagKey<Item> SULFUR_BRICK_BUILDING_BLOCKS = of("sulfur_brick_building_blocks");
     public static final TagKey<Item> PRISMARINE_BUILDING_BLOCKS = of("prismarine_building_blocks");
     public static final TagKey<Item> PRISMARINE_BRICK_BUILDING_BLOCKS = of("prismarine_brick_building_blocks");
     public static final TagKey<Item> DARK_PRISMARINE_BUILDING_BLOCKS = of("dark_prismarine_building_blocks");

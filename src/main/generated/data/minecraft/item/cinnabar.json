@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:cinnabar"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cinnabar",
+    "translation_key": "block.minecraft.cinnabar"
+  }
+}

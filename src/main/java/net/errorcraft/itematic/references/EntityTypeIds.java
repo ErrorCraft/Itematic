@@ -115,6 +115,7 @@ public class EntityTypeIds {
     public static final ResourceKey<EntityType<?>> SQUID = of("squid");
     public static final ResourceKey<EntityType<?>> STRAY = of("stray");
     public static final ResourceKey<EntityType<?>> STRIDER = of("strider");
+    public static final ResourceKey<EntityType<?>> SULFUR_CUBE = of("sulfur_cube");
     public static final ResourceKey<EntityType<?>> TADPOLE = of("tadpole");
     public static final ResourceKey<EntityType<?>> TNT = of("tnt");
     public static final ResourceKey<EntityType<?>> TNT_MINECART = of("tnt_minecart");

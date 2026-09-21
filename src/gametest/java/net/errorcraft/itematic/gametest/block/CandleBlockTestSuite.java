@@ -43,6 +43,6 @@ public class CandleBlockTestSuite {
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
-            .is(Blocks.WHITE_CANDLE));
+            .is(Blocks.DYED_CANDLE.white()));
     }
 }

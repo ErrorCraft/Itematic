@@ -467,6 +467,7 @@ public class ItemGroupEntryProviders {
             .add(ItemIds.SQUID_SPAWN_EGG)
             .add(ItemIds.STRAY_SPAWN_EGG)
             .add(ItemIds.STRIDER_SPAWN_EGG)
+            .add(ItemIds.SULFUR_CUBE_SPAWN_EGG)
             .add(ItemIds.TADPOLE_SPAWN_EGG)
             .add(ItemIds.TRADER_LLAMA_SPAWN_EGG)
             .add(ItemIds.TROPICAL_FISH_SPAWN_EGG)

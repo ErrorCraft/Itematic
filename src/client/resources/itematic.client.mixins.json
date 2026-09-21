@@ -8,8 +8,8 @@
   "client": [
     "MinecraftExtender",
     "gui.BundleMouseActionsExtender",
-    "gui.GuiExtender",
     "gui.GuiGraphicsExtractorExtender",
+    "gui.HudExtender",
     "gui.components.ItemDisplayWidgetExtender",
     "gui.screens.CreateFlatWorldScreenExtender",
     "gui.screens.CreateFlatWorldScreenExtender$DetailsListExtender",

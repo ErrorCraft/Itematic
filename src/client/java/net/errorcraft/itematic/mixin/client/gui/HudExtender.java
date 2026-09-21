@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.client.gui;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(Gui.class)
-public class GuiExtender {
+@Mixin(Hud.class)
+public class HudExtender {
     @Shadow
     private ItemStack lastToolHighlight;
 

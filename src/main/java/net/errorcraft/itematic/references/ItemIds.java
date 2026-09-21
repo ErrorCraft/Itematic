@@ -1032,6 +1032,7 @@ public class ItemIds {
     public static final ResourceKey<Item> TROPICAL_FISH_BUCKET = of("tropical_fish_bucket");
     public static final ResourceKey<Item> AXOLOTL_BUCKET = of("axolotl_bucket");
     public static final ResourceKey<Item> TADPOLE_BUCKET = of("tadpole_bucket");
+    public static final ResourceKey<Item> SULFUR_CUBE_BUCKET = of("sulfur_cube_bucket");
     public static final ResourceKey<Item> BRICK = of("brick");
     public static final ResourceKey<Item> CLAY_BALL = of("clay_ball");
     public static final ResourceKey<Item> DRIED_KELP_BLOCK = of("dried_kelp_block");
@@ -1204,6 +1205,7 @@ public class ItemIds {
     public static final ResourceKey<Item> SQUID_SPAWN_EGG = of("squid_spawn_egg");
     public static final ResourceKey<Item> STRAY_SPAWN_EGG = of("stray_spawn_egg");
     public static final ResourceKey<Item> STRIDER_SPAWN_EGG = of("strider_spawn_egg");
+    public static final ResourceKey<Item> SULFUR_CUBE_SPAWN_EGG = of("sulfur_cube_spawn_egg");
     public static final ResourceKey<Item> TADPOLE_SPAWN_EGG = of("tadpole_spawn_egg");
     public static final ResourceKey<Item> TRADER_LLAMA_SPAWN_EGG = of("trader_llama_spawn_egg");
     public static final ResourceKey<Item> TROPICAL_FISH_SPAWN_EGG = of("tropical_fish_spawn_egg");
@@ -1512,6 +1514,33 @@ public class ItemIds {
     public static final ResourceKey<Item> OMINOUS_TRIAL_KEY = of("ominous_trial_key");
     public static final ResourceKey<Item> VAULT = of("vault");
     public static final ResourceKey<Item> OMINOUS_BOTTLE = of("ominous_bottle");
+    public static final ResourceKey<Item> CINNABAR = of("cinnabar");
+    public static final ResourceKey<Item> CINNABAR_STAIRS = of("cinnabar_stairs");
+    public static final ResourceKey<Item> CINNABAR_SLAB = of("cinnabar_slab");
+    public static final ResourceKey<Item> CINNABAR_WALL = of("cinnabar_wall");
+    public static final ResourceKey<Item> CHISELED_CINNABAR = of("chiseled_cinnabar");
+    public static final ResourceKey<Item> POLISHED_CINNABAR = of("polished_cinnabar");
+    public static final ResourceKey<Item> POLISHED_CINNABAR_STAIRS = of("polished_cinnabar_stairs");
+    public static final ResourceKey<Item> POLISHED_CINNABAR_SLAB = of("polished_cinnabar_slab");
+    public static final ResourceKey<Item> POLISHED_CINNABAR_WALL = of("polished_cinnabar_wall");
+    public static final ResourceKey<Item> CINNABAR_BRICKS = of("cinnabar_bricks");
+    public static final ResourceKey<Item> CINNABAR_BRICK_STAIRS = of("cinnabar_brick_stairs");
+    public static final ResourceKey<Item> CINNABAR_BRICK_SLAB = of("cinnabar_brick_slab");
+    public static final ResourceKey<Item> CINNABAR_BRICK_WALL = of("cinnabar_brick_wall");
+    public static final ResourceKey<Item> POTENT_SULFUR = of("potent_sulfur");
+    public static final ResourceKey<Item> SULFUR = of("sulfur");
+    public static final ResourceKey<Item> SULFUR_STAIRS = of("sulfur_stairs");
+    public static final ResourceKey<Item> SULFUR_SLAB = of("sulfur_slab");
+    public static final ResourceKey<Item> SULFUR_WALL = of("sulfur_wall");
+    public static final ResourceKey<Item> CHISELED_SULFUR = of("chiseled_sulfur");
+    public static final ResourceKey<Item> POLISHED_SULFUR = of("polished_sulfur");
+    public static final ResourceKey<Item> POLISHED_SULFUR_STAIRS = of("polished_sulfur_stairs");
+    public static final ResourceKey<Item> POLISHED_SULFUR_SLAB = of("polished_sulfur_slab");
+    public static final ResourceKey<Item> POLISHED_SULFUR_WALL = of("polished_sulfur_wall");
+    public static final ResourceKey<Item> SULFUR_BRICKS = of("sulfur_bricks");
+    public static final ResourceKey<Item> SULFUR_BRICK_STAIRS = of("sulfur_brick_stairs");
+    public static final ResourceKey<Item> SULFUR_BRICK_SLAB = of("sulfur_brick_slab");
+    public static final ResourceKey<Item> SULFUR_BRICK_WALL = of("sulfur_brick_wall");
 
     private ItemIds() {}
 

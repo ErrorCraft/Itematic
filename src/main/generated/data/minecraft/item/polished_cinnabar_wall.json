@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:polished_cinnabar_wall"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:polished_cinnabar_wall",
+    "translation_key": "block.minecraft.polished_cinnabar_wall"
+  }
+}

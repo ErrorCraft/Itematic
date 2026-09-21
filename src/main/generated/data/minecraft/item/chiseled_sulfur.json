@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:chiseled_sulfur"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:chiseled_sulfur",
+    "translation_key": "block.minecraft.chiseled_sulfur"
+  }
+}

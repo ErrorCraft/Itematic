@@ -55,16 +55,17 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Guardian;
-import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Silverfish;
-import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Strider;
 import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.Zoglin;
+import net.minecraft.world.entity.monster.cubemob.MagmaCube;
+import net.minecraft.world.entity.monster.cubemob.Slime;
+import net.minecraft.world.entity.monster.cubemob.SulfurCube;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.illager.Evoker;
 import net.minecraft.world.entity.monster.illager.Pillager;
@@ -630,6 +631,15 @@ public class PickEntityTestSuite {
         ItemStack stack = strider.getPickResult();
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
             .is(ItemIds.STRIDER_SPAWN_EGG)
+        );
+    }
+
+    @GameTest(structure = "itematic:entity.platform")
+    public void getPickStackOnSulfurCubeGivesStriderSpawnEggItemStack(GameTestHelper helper) {
+        SulfurCube sulfurCube = helper.spawn(EntityType.SULFUR_CUBE, SPAWN_POSITION);
+        ItemStack stack = sulfurCube.getPickResult();
+        helper.succeedIf(() -> Assert.itemStack(helper, stack)
+            .is(ItemIds.SULFUR_CUBE_SPAWN_EGG)
         );
     }
 

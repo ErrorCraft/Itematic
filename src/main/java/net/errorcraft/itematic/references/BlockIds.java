@@ -1134,6 +1134,33 @@ public class BlockIds {
     public static final ResourceKey<Block> POTTED_OPEN_EYEBLOSSOM = of("potted_open_eyeblossom");
     public static final ResourceKey<Block> POTTED_CLOSED_EYEBLOSSOM = of("potted_closed_eyeblossom");
     public static final ResourceKey<Block> FIREFLY_BUSH = of("firefly_bush");
+    public static final ResourceKey<Block> CINNABAR = of("cinnabar");
+    public static final ResourceKey<Block> CINNABAR_STAIRS = of("cinnabar_stairs");
+    public static final ResourceKey<Block> CINNABAR_SLAB = of("cinnabar_slab");
+    public static final ResourceKey<Block> CINNABAR_WALL = of("cinnabar_wall");
+    public static final ResourceKey<Block> CHISELED_CINNABAR = of("chiseled_cinnabar");
+    public static final ResourceKey<Block> POLISHED_CINNABAR = of("polished_cinnabar");
+    public static final ResourceKey<Block> POLISHED_CINNABAR_STAIRS = of("polished_cinnabar_stairs");
+    public static final ResourceKey<Block> POLISHED_CINNABAR_SLAB = of("polished_cinnabar_slab");
+    public static final ResourceKey<Block> POLISHED_CINNABAR_WALL = of("polished_cinnabar_wall");
+    public static final ResourceKey<Block> CINNABAR_BRICKS = of("cinnabar_bricks");
+    public static final ResourceKey<Block> CINNABAR_BRICK_STAIRS = of("cinnabar_brick_stairs");
+    public static final ResourceKey<Block> CINNABAR_BRICK_SLAB = of("cinnabar_brick_slab");
+    public static final ResourceKey<Block> CINNABAR_BRICK_WALL = of("cinnabar_brick_wall");
+    public static final ResourceKey<Block> POTENT_SULFUR = of("potent_sulfur");
+    public static final ResourceKey<Block> SULFUR = of("sulfur");
+    public static final ResourceKey<Block> SULFUR_STAIRS = of("sulfur_stairs");
+    public static final ResourceKey<Block> SULFUR_SLAB = of("sulfur_slab");
+    public static final ResourceKey<Block> SULFUR_WALL = of("sulfur_wall");
+    public static final ResourceKey<Block> CHISELED_SULFUR = of("chiseled_sulfur");
+    public static final ResourceKey<Block> POLISHED_SULFUR = of("polished_sulfur");
+    public static final ResourceKey<Block> POLISHED_SULFUR_STAIRS = of("polished_sulfur_stairs");
+    public static final ResourceKey<Block> POLISHED_SULFUR_SLAB = of("polished_sulfur_slab");
+    public static final ResourceKey<Block> POLISHED_SULFUR_WALL = of("polished_sulfur_wall");
+    public static final ResourceKey<Block> SULFUR_BRICKS = of("sulfur_bricks");
+    public static final ResourceKey<Block> SULFUR_BRICK_STAIRS = of("sulfur_brick_stairs");
+    public static final ResourceKey<Block> SULFUR_BRICK_SLAB = of("sulfur_brick_slab");
+    public static final ResourceKey<Block> SULFUR_BRICK_WALL = of("sulfur_brick_wall");
 
     private BlockIds() {}
 

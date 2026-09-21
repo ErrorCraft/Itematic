@@ -19,6 +19,7 @@ import net.errorcraft.itematic.world.item.placement.EntityPlacer;
 import net.errorcraft.itematic.world.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.world.level.modification.WorldModification;
 import net.errorcraft.itematic.world.level.modification.modifications.DrainFluidWorldModification;
+import net.errorcraft.itematic.world.level.modification.modifications.NoneWorldModification;
 import net.errorcraft.itematic.world.level.modification.modifications.PlaceBlockWorldModification;
 import net.errorcraft.itematic.world.level.modification.modifications.PlaceFluidWorldModification;
 import net.minecraft.core.Holder;
@@ -27,11 +28,11 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Bucketable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -78,6 +79,17 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
             StackableItemBehavior.of(1),
             new BucketItemBehavior(
                 new PlaceFluidWorldModification(fluid, emptyingSound, items.getOrThrow(ItemIds.BUCKET)),
+                Optional.of(EntitySpawner.of(entity))
+            ),
+            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
+        };
+    }
+
+    public static ItemBehavior<?>[] placeEntity(Holder<EntityType<?>> entity, HolderGetter<Item> items, HolderGetter<DispenseBehavior> dispenseBehaviors) {
+        return new ItemBehavior[] {
+            StackableItemBehavior.of(1),
+            new BucketItemBehavior(
+                new NoneWorldModification(items.getOrThrow(ItemIds.BUCKET)),
                 Optional.of(EntitySpawner.of(entity))
             ),
             DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))

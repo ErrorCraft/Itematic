@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.world.level.block;
 import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ColorCollection;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -360,67 +361,7 @@ public class BlocksExtender {
 
     @Shadow
     @Final
-    public static Block WHITE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block ORANGE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block MAGENTA_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block LIGHT_BLUE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block YELLOW_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block LIME_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block PINK_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block GRAY_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block LIGHT_GRAY_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block CYAN_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block PURPLE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block BLUE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block BROWN_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block GREEN_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block RED_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block BLACK_WALL_BANNER;
+    public static ColorCollection<Block> WALL_BANNER;
 
     @Shadow
     @Final
@@ -556,67 +497,7 @@ public class BlocksExtender {
 
     @Shadow
     @Final
-    public static Block WHITE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block ORANGE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block MAGENTA_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block LIGHT_BLUE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block YELLOW_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block LIME_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block PINK_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block GRAY_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block LIGHT_GRAY_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block CYAN_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block PURPLE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block BLUE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block BROWN_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block GREEN_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block RED_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block BLACK_CANDLE_CAKE;
+    public static ColorCollection<Block> DYED_CANDLE_CAKE;
 
     @Shadow
     @Final
@@ -716,22 +597,22 @@ public class BlocksExtender {
         CREEPER_WALL_HEAD.itematic$setAsItemId(ItemIds.CREEPER_HEAD);
         DRAGON_WALL_HEAD.itematic$setAsItemId(ItemIds.DRAGON_HEAD);
         PIGLIN_WALL_HEAD.itematic$setAsItemId(ItemIds.PIGLIN_HEAD);
-        WHITE_WALL_BANNER.itematic$setAsItemId(ItemIds.WHITE_BANNER);
-        ORANGE_WALL_BANNER.itematic$setAsItemId(ItemIds.ORANGE_BANNER);
-        MAGENTA_WALL_BANNER.itematic$setAsItemId(ItemIds.MAGENTA_BANNER);
-        LIGHT_BLUE_WALL_BANNER.itematic$setAsItemId(ItemIds.LIGHT_BLUE_BANNER);
-        YELLOW_WALL_BANNER.itematic$setAsItemId(ItemIds.YELLOW_BANNER);
-        LIME_WALL_BANNER.itematic$setAsItemId(ItemIds.LIME_BANNER);
-        PINK_WALL_BANNER.itematic$setAsItemId(ItemIds.PINK_BANNER);
-        GRAY_WALL_BANNER.itematic$setAsItemId(ItemIds.GRAY_BANNER);
-        LIGHT_GRAY_WALL_BANNER.itematic$setAsItemId(ItemIds.LIGHT_GRAY_BANNER);
-        CYAN_WALL_BANNER.itematic$setAsItemId(ItemIds.CYAN_BANNER);
-        PURPLE_WALL_BANNER.itematic$setAsItemId(ItemIds.PURPLE_BANNER);
-        BLUE_WALL_BANNER.itematic$setAsItemId(ItemIds.BLUE_BANNER);
-        BROWN_WALL_BANNER.itematic$setAsItemId(ItemIds.BROWN_BANNER);
-        GREEN_WALL_BANNER.itematic$setAsItemId(ItemIds.GREEN_BANNER);
-        RED_WALL_BANNER.itematic$setAsItemId(ItemIds.RED_BANNER);
-        BLACK_WALL_BANNER.itematic$setAsItemId(ItemIds.BLACK_BANNER);
+        WALL_BANNER.white().itematic$setAsItemId(ItemIds.WHITE_BANNER);
+        WALL_BANNER.orange().itematic$setAsItemId(ItemIds.ORANGE_BANNER);
+        WALL_BANNER.magenta().itematic$setAsItemId(ItemIds.MAGENTA_BANNER);
+        WALL_BANNER.lightBlue().itematic$setAsItemId(ItemIds.LIGHT_BLUE_BANNER);
+        WALL_BANNER.yellow().itematic$setAsItemId(ItemIds.YELLOW_BANNER);
+        WALL_BANNER.lime().itematic$setAsItemId(ItemIds.LIME_BANNER);
+        WALL_BANNER.pink().itematic$setAsItemId(ItemIds.PINK_BANNER);
+        WALL_BANNER.gray().itematic$setAsItemId(ItemIds.GRAY_BANNER);
+        WALL_BANNER.lightGray().itematic$setAsItemId(ItemIds.LIGHT_GRAY_BANNER);
+        WALL_BANNER.cyan().itematic$setAsItemId(ItemIds.CYAN_BANNER);
+        WALL_BANNER.purple().itematic$setAsItemId(ItemIds.PURPLE_BANNER);
+        WALL_BANNER.blue().itematic$setAsItemId(ItemIds.BLUE_BANNER);
+        WALL_BANNER.brown().itematic$setAsItemId(ItemIds.BROWN_BANNER);
+        WALL_BANNER.green().itematic$setAsItemId(ItemIds.GREEN_BANNER);
+        WALL_BANNER.red().itematic$setAsItemId(ItemIds.RED_BANNER);
+        WALL_BANNER.black().itematic$setAsItemId(ItemIds.BLACK_BANNER);
         DEAD_TUBE_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.DEAD_TUBE_CORAL_FAN);
         DEAD_BRAIN_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.DEAD_BRAIN_CORAL_FAN);
         DEAD_BUBBLE_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.DEAD_BUBBLE_CORAL_FAN);
@@ -762,22 +643,7 @@ public class BlocksExtender {
         WEEPING_VINES_PLANT.itematic$setAsItemId(ItemIds.WEEPING_VINES);
         TWISTING_VINES_PLANT.itematic$setAsItemId(ItemIds.TWISTING_VINES);
         CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        WHITE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        ORANGE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        MAGENTA_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        LIGHT_BLUE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        YELLOW_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        LIME_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        PINK_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        GRAY_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        LIGHT_GRAY_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        CYAN_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        PURPLE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        BLUE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        BROWN_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        GREEN_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        RED_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        BLACK_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
+        DYED_CANDLE_CAKE.forEach(dyedCandleCake -> dyedCandleCake.itematic$setAsItemId(ItemIds.CAKE));
 
         ((GrowingPlantHeadBlock) CAVE_VINES).itematic$setStemItemId(ItemIds.GLOW_BERRIES);
         ((GrowingPlantHeadBlock) KELP).itematic$setStemItemId(ItemIds.KELP);

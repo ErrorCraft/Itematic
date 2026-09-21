@@ -92,7 +92,7 @@ public class CauldronInteractionsExtender {
     }
 
     @Redirect(
-        method = "lambda$bootStrap$5",
+        method = "lambda$bootStrap$7",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
@@ -103,7 +103,7 @@ public class CauldronInteractionsExtender {
     }
 
     @Redirect(
-        method = "lambda$bootStrap$7",
+        method = "lambda$bootStrap$9",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
