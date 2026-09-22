@@ -11,6 +11,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavio
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
@@ -70,5 +71,16 @@ public class ServerGamePacketListenerImplExtender {
     )
     private PlacementInfo placementInfoUseDynamicRegistry(Recipe<?> instance, Operation<PlacementInfo> original) {
         return instance.itematic$placementInfo(this.player.registryAccess().lookupOrThrow(Registries.ITEM));
+    }
+
+    @WrapOperation(
+        method = "handleSetCreativeModeSlot",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;isItemEnabled(Lnet/minecraft/world/flag/FeatureFlagSet;)Z"
+        )
+    )
+    private boolean doNotCheckEnabledItem(ItemStack instance, FeatureFlagSet enabledFeatures, Operation<Boolean> original) {
+        return true;
     }
 }

@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.world.item.group.entry.entries;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
@@ -37,11 +36,6 @@ public record EnchantmentItemGroupEntry(Holder<Item> item) implements ItemGroupE
                     visibility(enchantment, level)
                 ))
             );
-    }
-
-    @Override
-    public Either<ItemGroupEntry<?>, Holder<Item>> createEither() {
-        return Either.left(this);
     }
 
     private ItemStack createStack(Holder<Enchantment> enchantment, int level) {

@@ -21,58 +21,61 @@
     "translation_key": "block.minecraft.torchflower"
   },
   "events": {
-    "minecraft:use_on_block": {
-      "action": {
-        "type": "minecraft:sequence",
-        "handler": "minecraft:passing",
-        "entries": [
-          {
-            "action": {
-              "type": "minecraft:set_block_state",
-              "position": "interacted",
-              "state": {
-                "Name": "minecraft:potted_torchflower"
+    "minecraft:before_use_on_block": {
+      "cancel_original_call_on_success": true,
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "handler": "minecraft:passing",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:set_block_state",
+                "position": "interacted",
+                "state": {
+                  "Name": "minecraft:potted_torchflower"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:invoke_game_event",
+                "event": "minecraft:block_change",
+                "entity": "this",
+                "position": "interacted"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:increment_stat",
+                "entity": "this",
+                "stat": {
+                  "type": "minecraft:custom",
+                  "entry": "minecraft:pot_flower"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:decrement_item",
+                "amount": 1
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:swing_hand",
+                "entity": "this"
               }
             }
-          },
-          {
-            "action": {
-              "type": "minecraft:invoke_game_event",
-              "event": "minecraft:block_change",
-              "entity": "this",
-              "position": "interacted"
+          ]
+        },
+        "requirements": {
+          "condition": "minecraft:location_check",
+          "position": "interacted",
+          "predicate": {
+            "block": {
+              "blocks": "minecraft:flower_pot"
             }
-          },
-          {
-            "action": {
-              "type": "minecraft:increment_stat",
-              "entity": "this",
-              "stat": {
-                "type": "minecraft:custom",
-                "entry": "minecraft:pot_flower"
-              }
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:decrement_item",
-              "amount": 1
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:swing_hand",
-              "entity": "this"
-            }
-          }
-        ]
-      },
-      "requirements": {
-        "condition": "minecraft:location_check",
-        "position": "interacted",
-        "predicate": {
-          "block": {
-            "blocks": "minecraft:flower_pot"
           }
         }
       }

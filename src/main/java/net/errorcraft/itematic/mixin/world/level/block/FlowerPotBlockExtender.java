@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -24,9 +25,9 @@ public abstract class FlowerPotBlockExtender extends BlockBehaviourExtender {
     @WrapMethod(
         method = "useItemOn"
     )
-    public InteractionResult useAction(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, Operation<InteractionResult> original) {
+    public InteractionResult onlyRemovePottedItemWhenAllowed(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, Operation<InteractionResult> original) {
         if (itemStack.is(ItematicItemTags.PREVENTS_TAKING_POTTED_ITEM_OUT)) {
-            return InteractionResult.CONSUME;
+            return InteractionResult.PASS;
         }
 
         return InteractionResult.TRY_WITH_EMPTY_HAND;
@@ -41,6 +42,18 @@ public abstract class FlowerPotBlockExtender extends BlockBehaviourExtender {
     )
     private ItemStack newItemStackUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
         return level.itematic$createStack(this.itematic$asItemId());
+    }
+
+    @ModifyReturnValue(
+        method = "useWithoutItem",
+        at = @At("RETURN")
+    )
+    private InteractionResult passWhenConsumedToRunItemStackInteraction(InteractionResult original) {
+        if (original == InteractionResult.CONSUME) {
+            return InteractionResult.PASS;
+        }
+
+        return original;
     }
 
     @Redirect(
