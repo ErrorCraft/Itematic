@@ -5171,6 +5171,14 @@ public class Items {
                     .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.LAVA_CHICKEN)))
                     .build()
             ));
+            this.registerable.register(ItemIds.MUSIC_DISC_BOUNCE, create(
+                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_BOUNCE)
+                    .rarity(Rarity.UNCOMMON)
+                    .build(),
+                ItemBehaviorSet.builder()
+                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.BOUNCE)))
+                    .build()
+            ));
         }
 
         private void bootstrapBuckets() {

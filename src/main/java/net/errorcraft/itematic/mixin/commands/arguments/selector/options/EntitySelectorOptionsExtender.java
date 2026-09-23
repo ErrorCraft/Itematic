@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(EntitySelectorOptions.class)
 public class EntitySelectorOptionsExtender {
     @WrapOperation(
-        method = "lambda$bootStrap$46",
+        method = "lambda$bootStrap$45",
         at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/world/item/ItemStack;CODEC:Lcom/mojang/serialization/Codec;",
