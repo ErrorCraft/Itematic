@@ -1,7 +1,8 @@
 package net.errorcraft.itematic.mixin.world.entity.ai.behavior;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.ai.behavior.WorkAtComposter;
@@ -21,8 +22,8 @@ import java.util.List;
 public class WorkAtComposterExtender {
     @Unique
     private static final List<ResourceKey<Item>> COMPOSTABLE_KEYS = List.of(
-        ItemIds.WHEAT_SEEDS,
-        ItemIds.BEETROOT_SEEDS
+        BlockItemIds.WHEAT_CROP.item(),
+        BlockItemIds.BEETROOT_CROP.item()
     );
 
     @Redirect(

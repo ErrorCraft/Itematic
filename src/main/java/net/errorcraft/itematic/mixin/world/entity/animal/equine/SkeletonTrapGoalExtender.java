@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.entity.animal.equine;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.entity.animal.equine.SkeletonHorse;
 import net.minecraft.world.entity.animal.equine.SkeletonTrapGoal;
 import net.minecraft.world.item.ItemStack;

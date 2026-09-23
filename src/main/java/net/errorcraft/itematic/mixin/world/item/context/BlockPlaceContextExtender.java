@@ -11,6 +11,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(BlockPlaceContext.class)
@@ -32,7 +33,7 @@ public class BlockPlaceContextExtender extends UseOnContext implements BlockPlac
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, this.getPlayer())
             .addOptional(LootContextParams.ORIGIN, this.getPlayer(), Entity::position)
-            .add(ItematicContextKeys.INTERACTED_POSITION, this.getClickedPos().getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(this.getClickedPos()))
             .add(LootContextParams.TOOL, this.getItemInHand())
             .add(ItematicContextKeys.HAND, this.getHand())
             .add(ItematicContextKeys.SIDE, this.getClickedFace())

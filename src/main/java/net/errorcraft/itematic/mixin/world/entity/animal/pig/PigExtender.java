@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.world.entity.animal.pig;
 
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.tags.ItematicItemTags;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;

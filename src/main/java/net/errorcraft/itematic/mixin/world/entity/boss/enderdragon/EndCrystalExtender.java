@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.entity.boss.enderdragon;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;

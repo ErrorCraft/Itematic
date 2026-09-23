@@ -1,15 +1,16 @@
 package net.errorcraft.itematic.gametest.entity.animal;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.cow.MushroomCow;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
@@ -19,14 +20,14 @@ public class MooshroomTestSuite {
 
     @GameTest(structure = "itematic:entity.platform")
     public void usingFlowerOnBrownMooshroomGivesMooshroomSuspiciousEffects(GameTestHelper helper) {
-        MushroomCow mooshroom = helper.spawn(EntityType.MOOSHROOM, SPAWN_POSITION);
+        MushroomCow mooshroom = helper.spawn(EntityTypes.MOOSHROOM, SPAWN_POSITION);
         mooshroom.setComponent(DataComponents.MOOSHROOM_VARIANT, MushroomCow.Variant.BROWN);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         helper.succeedIf(() -> {
             ServerLevel level = helper.getLevel();
             player.setItemInHand(
                 InteractionHand.MAIN_HAND,
-                level.itematic$createStack(ItemIds.DANDELION)
+                level.itematic$createStack(BlockItemIds.DANDELION.item())
             );
             InteractionResult dandelionResult = mooshroom.mobInteract(player, InteractionHand.MAIN_HAND);
             Assert.isTrue(
@@ -59,7 +60,7 @@ public class MooshroomTestSuite {
 
     @GameTest(structure = "itematic:entity.platform")
     public void usingBowlOnMooshroomGivesMushroomStew(GameTestHelper helper) {
-        MushroomCow mooshroom = helper.spawn(EntityType.MOOSHROOM, SPAWN_POSITION);
+        MushroomCow mooshroom = helper.spawn(EntityTypes.MOOSHROOM, SPAWN_POSITION);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         helper.succeedIf(() -> {
             player.setItemInHand(

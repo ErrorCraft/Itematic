@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.block.TntBlock;

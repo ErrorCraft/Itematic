@@ -2,10 +2,10 @@ package net.errorcraft.itematic.mixin.server.commands;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.raid.ItematicRaids;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.server.commands.RaidCommand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -23,7 +23,7 @@ public class RaidCommandExtender {
     )
     private static ItemStack getOminousBannerInstanceUseHolder(HolderGetter<BannerPattern> patternGetter, Operation<ItemStack> original, CommandSourceStack source) {
         return ItematicRaids.ominousBanner(
-            source.getLevel().itematic$createStack(ItemIds.WHITE_BANNER),
+            source.getLevel().itematic$createStack(BlockItemIds.BANNER.white().item()),
             patternGetter
         );
     }

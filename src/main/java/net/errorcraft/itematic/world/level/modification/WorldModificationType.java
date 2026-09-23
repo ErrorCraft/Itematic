@@ -3,6 +3,7 @@ package net.errorcraft.itematic.world.level.modification;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.level.modification.modifications.DrainFluidWorldModification;
+import net.errorcraft.itematic.world.level.modification.modifications.NoneWorldModification;
 import net.errorcraft.itematic.world.level.modification.modifications.PlaceBlockWorldModification;
 import net.errorcraft.itematic.world.level.modification.modifications.PlaceFluidWorldModification;
 import net.minecraft.core.Registry;
@@ -19,6 +20,10 @@ public record WorldModificationType<T extends WorldModification>(MapCodec<T> cod
     public static final WorldModificationType<PlaceBlockWorldModification> PLACE_BLOCK = register(
         "place_block",
         new WorldModificationType<>(PlaceBlockWorldModification.CODEC)
+    );
+    public static final WorldModificationType<NoneWorldModification> NONE = register(
+        "none",
+        new WorldModificationType<>(NoneWorldModification.CODEC)
     );
 
     public static void init() {}

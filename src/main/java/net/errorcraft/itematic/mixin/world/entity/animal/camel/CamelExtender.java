@@ -3,7 +3,8 @@ package net.errorcraft.itematic.mixin.world.entity.animal.camel;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,7 +30,7 @@ public abstract class CamelExtender extends MobExtender {
         )
     )
     private boolean isHoldingGoldenDandelionCheckId(Player instance, Item item, Operation<Boolean> original) {
-        return instance.itematic$isHolding(ItemIds.GOLDEN_DANDELION);
+        return instance.itematic$isHolding(BlockItemIds.GOLDEN_DANDELION.item());
     }
 
     @Override

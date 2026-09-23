@@ -4,7 +4,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.end.EnderDragonFight;
@@ -18,7 +18,7 @@ public class EndCrystalEntityInitializer implements EntityInitializer<EndCrystal
     @Override
     public @Nullable EndCrystal create(ActionContext context, EntitySpawnReason reason) {
         Level level = context.level();
-        EndCrystal entity = EntityType.END_CRYSTAL.create(level, reason);
+        EndCrystal entity = EntityTypes.END_CRYSTAL.create(level, reason);
         if (entity == null) {
             return null;
         }

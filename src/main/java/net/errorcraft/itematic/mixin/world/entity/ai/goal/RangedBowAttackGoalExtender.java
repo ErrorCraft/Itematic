@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.world.entity.ai.goal;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;

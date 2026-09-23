@@ -1,0 +1,21 @@
+{
+  "behavior": {
+    "minecraft:bucket": {
+      "entity": {
+        "entity": "minecraft:sulfur_cube"
+      },
+      "modification": {
+        "type": "minecraft:none",
+        "transforms_into": "minecraft:bucket"
+      }
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:use_bucket"
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:sulfur_cube_bucket",
+    "translation_key": "item.minecraft.sulfur_cube_bucket"
+  }
+}

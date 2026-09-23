@@ -3,12 +3,12 @@ package net.errorcraft.itematic.mixin.world.level.block;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.access.world.level.block.state.BlockBehaviourAccess;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.context.UnplaceableBlockPlaceContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -41,7 +41,7 @@ public class ScaffoldingBlockExtender extends Block implements BlockBehaviourAcc
         )
     )
     private boolean isHoldingScaffoldingCheckId(CollisionContext instance, Item item, Operation<Boolean> original) {
-        return instance.itematic$isHoldingItem(ItemIds.SCAFFOLDING);
+        return instance.itematic$isHoldingItem(BlockItemIds.SCAFFOLDING.item());
     }
 
     @Override

@@ -12,7 +12,6 @@ public class ItematicItemTags {
     public static final TagKey<Item> VILLAGER_GATHERABLE_ITEMS = of("villager_gatherable_items");
     public static final TagKey<Item> FARMER_VILLAGER_GATHERABLE_ITEMS = of("farmer_villager_gatherable_items");
     public static final TagKey<Item> BANNED_BUNDLE_ITEMS = of("banned_bundle_items");
-    public static final TagKey<Item> SHULKER_BOXES = of("shulker_boxes");
     public static final TagKey<Item> PREVENTS_TAKING_POTTED_ITEM_OUT = of("prevents_taking_potted_item_out");
     public static final TagKey<Item> BREWING_INPUTS = of("brewing_inputs");
     public static final TagKey<Item> MUNDANE_POTION_REAGENTS = of("mundane_potion_reagents");

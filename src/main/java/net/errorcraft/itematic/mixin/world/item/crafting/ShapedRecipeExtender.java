@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.NonNullList;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -48,7 +48,7 @@ public abstract class ShapedRecipeExtender implements CraftingRecipe {
                     .map(ShapedRecipeExtender::ingredientSlotDisplay)
                     .toList(),
                 new SlotDisplay.ItemStackSlotDisplay(this.result),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.CRAFTING_TABLE))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(BlockItemIds.CRAFTING_TABLE.item()))
             )
         );
     }

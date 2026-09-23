@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
 import net.minecraft.world.item.Item;

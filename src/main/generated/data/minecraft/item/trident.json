@@ -68,8 +68,8 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "in_water_or_rain": true,
-              "used_item_ticks": {
+              "minecraft:in_water_or_rain": true,
+              "minecraft:used_item_ticks": {
                 "min": 10
               }
             }

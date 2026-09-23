@@ -1,5 +1,8 @@
 package net.errorcraft.itematic.mixin.world.entity;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -9,13 +12,16 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.errorcraft.itematic.access.world.entity.MobAccess;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SpawnEggItemBehavior;
+import net.minecraft.advancements.triggers.PlayerInteractTrigger;
 import net.minecraft.core.Holder;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Util;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -89,6 +95,29 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
 
     protected MobExtender(EntityType<? extends LivingEntity> type, Level level) {
         super(type, level);
+    }
+
+    @Definition(id = "ServerPlayer", type = ServerPlayer.class)
+    @Definition(id = "player", local = @Local(type = Player.class))
+    @Expression("(ServerPlayer) player")
+    @WrapOperation(
+        method = "shearItem",
+        at = @At("MIXINEXTRAS:EXPRESSION")
+    )
+    @Nullable
+    private ServerPlayer checkForServerPlayer(Object obj, Operation<ServerPlayer> original) {
+        return obj instanceof ServerPlayer serverPlayer ? serverPlayer : null;
+    }
+
+    @WrapWithCondition(
+        method = "shearItem",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/advancements/triggers/PlayerInteractTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/Entity;)V"
+        )
+    )
+    private boolean checkForServerPlayer(PlayerInteractTrigger instance, @Nullable ServerPlayer player, ItemStack itemStack, Entity interactedWith) {
+        return player != null;
     }
 
     @WrapOperation(

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.item;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.util.Util;
 import net.minecraft.world.item.DebugStickItem;
 import org.objectweb.asm.Opcodes;

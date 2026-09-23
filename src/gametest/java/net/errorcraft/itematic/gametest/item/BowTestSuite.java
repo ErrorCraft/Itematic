@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.gametest.item;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -37,7 +37,7 @@ public class BowTestSuite {
             .thenExecute(() -> bow.use(level, player, InteractionHand.MAIN_HAND))
             .thenExecuteAfter(20, () -> {
                 player.releaseUsingItem();
-                helper.assertEntitiesPresent(EntityType.ARROW, 3);
+                helper.assertEntitiesPresent(EntityTypes.ARROW, 3);
             })
             .thenSucceed();
     }

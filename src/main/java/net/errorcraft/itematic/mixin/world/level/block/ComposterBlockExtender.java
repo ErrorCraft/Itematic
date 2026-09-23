@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.world.level.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CompostableItemBehavior;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;

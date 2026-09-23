@@ -1,7 +1,8 @@
 package net.errorcraft.itematic.mixin.client.gui.screens.inventory;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.gui.screens.inventory.CartographyTableScreen;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -65,6 +66,6 @@ public class CartographyTableScreenExtender {
         )
     )
     private boolean isGlassPaneCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.GLASS_PANE);
+        return instance.is(BlockItemIds.GLASS_PANE.item());
     }
 }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.level.storage.loot.functions;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.FillPlayerHead;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +17,6 @@ public class FillPlayerHeadExtender {
         )
     )
     private boolean isPlayerHeadCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.PLAYER_HEAD);
+        return instance.is(BlockItemIds.PLAYER_HEAD.item());
     }
 }

@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.world.level.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.world.level.block.state.BlockBehaviourAccess;
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Bees;
 import net.minecraft.world.level.ItemLike;

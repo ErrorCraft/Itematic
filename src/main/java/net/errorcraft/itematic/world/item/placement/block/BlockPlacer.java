@@ -8,7 +8,7 @@ import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.world.phys.shapes.CollisionContexts;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;

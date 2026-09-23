@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.mixin.client.gui.screens.recipebook;
 
 import net.errorcraft.itematic.access.client.gui.screens.recipebook.RecipeBookComponentAccess;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.level.ItemAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.item.Item;

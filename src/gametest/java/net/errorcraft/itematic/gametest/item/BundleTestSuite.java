@@ -2,11 +2,12 @@ package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -49,7 +50,7 @@ public class BundleTestSuite {
     public void addingShulkerBoxToBundleRejectsIt(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ItemStack bundleStack = level.itematic$createStack(ItemIds.BUNDLE);
-        ItemStack addedStack = level.itematic$createStack(ItemIds.SHULKER_BOX);
+        ItemStack addedStack = level.itematic$createStack(BlockItemIds.SHULKER_BOX.item());
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         Inventory inventory = player.getInventory();
         inventory.add(SLOT_INDEX, addedStack);

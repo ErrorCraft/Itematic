@@ -3,9 +3,10 @@ package net.errorcraft.itematic.mixin.world.entity.monster.illager;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.illager.AbstractIllager;
@@ -42,7 +43,7 @@ public abstract class PillagerExtender extends MobExtender {
         )
     )
     private boolean isWhiteBannerCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.WHITE_BANNER);
+        return instance.is(BlockItemIds.BANNER.white().item());
     }
 
     @Redirect(

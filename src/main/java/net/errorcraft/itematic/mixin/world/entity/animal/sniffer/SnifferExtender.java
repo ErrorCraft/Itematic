@@ -1,7 +1,8 @@
 package net.errorcraft.itematic.mixin.world.entity.animal.sniffer;
 
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
@@ -30,7 +31,7 @@ public abstract class SnifferExtender extends MobExtender {
         )
     )
     private ItemStack newItemStackForSnifferEggUseCreateStack(ItemLike item, ServerLevel level) {
-        return level.itematic$createStack(ItemIds.SNIFFER_EGG);
+        return level.itematic$createStack(BlockItemIds.SNIFFER_EGG.item());
     }
 
     @Override

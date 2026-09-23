@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:sulfur_brick_wall"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sulfur_brick_wall",
+    "translation_key": "block.minecraft.sulfur_brick_wall"
+  }
+}

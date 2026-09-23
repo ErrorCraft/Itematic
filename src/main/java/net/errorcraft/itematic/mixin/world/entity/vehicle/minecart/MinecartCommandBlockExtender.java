@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.entity.vehicle.minecart;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.entity.vehicle.minecart.MinecartCommandBlock;

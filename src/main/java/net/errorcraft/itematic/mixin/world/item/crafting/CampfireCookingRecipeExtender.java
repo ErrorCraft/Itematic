@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -16,6 +16,6 @@ public abstract class CampfireCookingRecipeExtender extends AbstractCookingRecip
 
     @Override
     protected ResourceKey<Item> cookerItemId() {
-        return ItemIds.CAMPFIRE;
+        return BlockItemIds.CAMPFIRE.item();
     }
 }

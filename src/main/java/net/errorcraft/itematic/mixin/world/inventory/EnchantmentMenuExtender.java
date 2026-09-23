@@ -2,10 +2,10 @@ package net.errorcraft.itematic.mixin.world.inventory;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
 import net.minecraft.core.Holder;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

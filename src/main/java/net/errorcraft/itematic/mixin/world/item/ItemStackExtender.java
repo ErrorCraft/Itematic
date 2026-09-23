@@ -13,7 +13,6 @@ import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.access.world.item.ItemInstanceAccess;
 import net.errorcraft.itematic.access.world.item.ItemStackAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -39,6 +38,7 @@ import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -427,7 +427,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         at = @At("TAIL")
     )
     private boolean checkNullForEmptyStack(boolean original) {
-        return original || (this.failedKey == null && (this.item == null || this.item.is(ItemIds.AIR)));
+        return original || (this.failedKey == null && (this.item == null || this.item.is(BlockItemIds.AIR.item())));
     }
 
     @ModifyReturnValue(
@@ -799,10 +799,10 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         }
 
         if (this.item == null) {
-            return ItemIds.AIR;
+            return BlockItemIds.AIR.item();
         }
 
-        return this.item.unwrapKey().orElse(ItemIds.AIR);
+        return this.item.unwrapKey().orElse(BlockItemIds.AIR.item());
     }
 
     @Override

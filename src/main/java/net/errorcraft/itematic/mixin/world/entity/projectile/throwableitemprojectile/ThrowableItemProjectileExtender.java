@@ -3,8 +3,8 @@ package net.errorcraft.itematic.mixin.world.entity.projectile.throwableitemproje
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.ItemStacks;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
@@ -56,6 +56,6 @@ public abstract class ThrowableItemProjectileExtender extends ThrowableProjectil
 
     @Unique
     protected ResourceKey<Item> getDefaultItemId() {
-        return ItemIds.AIR;
+        return BlockItemIds.AIR.item();
     }
 }

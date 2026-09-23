@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.world.item.crafting;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.NonNullList;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -66,7 +66,7 @@ public abstract class ShapelessRecipeExtender implements CraftingRecipe {
             new ShapelessCraftingRecipeDisplay(
                 this.ingredients.stream().map(Ingredient::display).toList(),
                 new SlotDisplay.ItemStackSlotDisplay(this.result),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.CRAFTING_TABLE))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(BlockItemIds.CRAFTING_TABLE.item()))
             )
         );
     }

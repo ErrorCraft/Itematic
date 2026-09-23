@@ -1,12 +1,13 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +35,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.STONE)
+            level.itematic$createStack(BlockItemIds.STONE.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
@@ -48,7 +49,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.OAK_SLAB)
+            level.itematic$createStack(ItematicBlockItemIds.OAK.planks().slab().item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
@@ -62,7 +63,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.OAK_SLAB)
+            level.itematic$createStack(ItematicBlockItemIds.OAK.planks().slab().item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.DOWN);
@@ -76,7 +77,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.OAK_SLAB)
+            level.itematic$createStack(ItematicBlockItemIds.OAK.planks().slab().item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.DOWN);
@@ -90,7 +91,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.TALL_GRASS)
+            level.itematic$createStack(BlockItemIds.TALL_GRASS.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
@@ -108,7 +109,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.TALL_GRASS)
+            level.itematic$createStack(BlockItemIds.TALL_GRASS.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
@@ -123,7 +124,7 @@ public class BlockItemComponentTestSuite {
         player.setXRot(90.0f);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.SKELETON_SKULL)
+            level.itematic$createStack(BlockItemIds.SKELETON_SKULL.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
@@ -137,7 +138,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.SKELETON_SKULL)
+            level.itematic$createStack(BlockItemIds.SKELETON_SKULL.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, WALL_POSITION, player, Direction.NORTH);
@@ -152,7 +153,7 @@ public class BlockItemComponentTestSuite {
         player.setXRot(-90.0f);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.OAK_HANGING_SIGN)
+            level.itematic$createStack(ItematicBlockItemIds.OAK.hangingSign().item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
@@ -166,7 +167,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.OAK_HANGING_SIGN)
+            level.itematic$createStack(ItematicBlockItemIds.OAK.hangingSign().item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, WALL_POSITION, player, Direction.NORTH);
@@ -180,7 +181,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.SCAFFOLDING)
+            level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
@@ -194,7 +195,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.SCAFFOLDING)
+            level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.UP);
@@ -208,7 +209,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.SCAFFOLDING)
+            level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         player.setYRot(0.0f);
         level.addFreshEntity(player);
@@ -223,7 +224,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.SCAFFOLDING)
+            level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.SOUTH);
@@ -237,7 +238,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.SCAFFOLDING)
+            level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.UP);
@@ -251,7 +252,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.SCAFFOLDING)
+            level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.SOUTH);
@@ -265,7 +266,7 @@ public class BlockItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.COMMAND_BLOCK)
+            level.itematic$createStack(BlockItemIds.COMMAND_BLOCK.item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);

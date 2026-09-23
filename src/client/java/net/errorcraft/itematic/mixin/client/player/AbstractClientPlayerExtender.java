@@ -1,10 +1,10 @@
 package net.errorcraft.itematic.mixin.client.player;
 
 import com.mojang.authlib.GameProfile;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;

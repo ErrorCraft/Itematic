@@ -2,9 +2,9 @@ package net.errorcraft.itematic.mixin.world.entity.raid;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.raid.ItematicRaids;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.PatrollingMonster;
@@ -35,7 +35,7 @@ public class RaiderExtender extends PatrollingMonster {
     )
     private ItemStack getOminousBannerInstanceUseHolder(HolderGetter<BannerPattern> patternGetter, Operation<ItemStack> original) {
         return ItematicRaids.ominousBanner(
-            this.level().itematic$createStack(ItemIds.WHITE_BANNER),
+            this.level().itematic$createStack(BlockItemIds.BANNER.white().item()),
             patternGetter
         );
     }
@@ -49,7 +49,7 @@ public class RaiderExtender extends PatrollingMonster {
     )
     private static ItemStack getOminousBannerInstanceUseHolderStatic(HolderGetter<BannerPattern> patternGetter, Operation<ItemStack> original, ItemEntity e) {
         return ItematicRaids.ominousBanner(
-            e.level().itematic$createStack(ItemIds.WHITE_BANNER),
+            e.level().itematic$createStack(BlockItemIds.BANNER.white().item()),
             patternGetter
         );
     }
@@ -69,7 +69,7 @@ public class RaiderExtender extends PatrollingMonster {
         )
         private ItemStack getOminousBannerInstanceUseHolder(HolderGetter<BannerPattern> patternGetter, Operation<ItemStack> original) {
             return ItematicRaids.ominousBanner(
-                this.mob.level().itematic$createStack(ItemIds.WHITE_BANNER),
+                this.mob.level().itematic$createStack(BlockItemIds.BANNER.white().item()),
                 patternGetter
             );
         }

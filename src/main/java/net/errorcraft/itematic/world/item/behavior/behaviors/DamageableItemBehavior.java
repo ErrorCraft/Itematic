@@ -2,7 +2,6 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.references.BlockIds;
 import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
@@ -15,6 +14,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -61,7 +61,7 @@ public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>
             DamageableItemBehavior.of(material.durability()),
             ToolItemBehavior.builder(2)
                 .preventCreativeDestruction()
-                .rule(Tool.Rule.minesAndDrops(HolderSet.direct(blocks.getOrThrow(BlockIds.COBWEB)), 15.0f))
+                .rule(Tool.Rule.minesAndDrops(HolderSet.direct(blocks.getOrThrow(BlockItemIds.COBWEB.block())), 15.0f))
                 .rule(Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f))
                 .build(),
             WeaponItemBehavior.builder(1, 4.0d + material.attackDamageBonus(), 0.4d)

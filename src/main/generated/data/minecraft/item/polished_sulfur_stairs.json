@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:polished_sulfur_stairs"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:polished_sulfur_stairs",
+    "translation_key": "block.minecraft.polished_sulfur_stairs"
+  }
+}

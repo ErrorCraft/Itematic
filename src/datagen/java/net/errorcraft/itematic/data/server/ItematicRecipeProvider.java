@@ -2,8 +2,6 @@ package net.errorcraft.itematic.data.server;
 
 import net.errorcraft.itematic.data.recipe.brewing.AmplifyBrewingRecipeBuilder;
 import net.errorcraft.itematic.data.recipe.brewing.ModifyBrewingRecipeBuilder;
-import net.errorcraft.itematic.references.ItemIds;
-import net.errorcraft.itematic.references.PotionIds;
 import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -13,11 +11,14 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionIds;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -65,13 +66,13 @@ public class ItematicRecipeProvider extends FabricRecipeProvider {
                 .save(this.output);
             this.modify(PotionIds.WATER, ItematicItemTags.MUNDANE_POTION_REAGENTS, PotionIds.MUNDANE)
                 .save(this.output);
-            this.modify(PotionIds.WATER, ItemIds.NETHER_WART, PotionIds.AWKWARD)
+            this.modify(PotionIds.WATER, BlockItemIds.NETHER_WART.item(), PotionIds.AWKWARD)
                 .save(this.output);
             this.modify(PotionIds.AWKWARD, ItemIds.BLAZE_POWDER, PotionIds.STRENGTH)
                 .save(this.output);
             this.modify(PotionIds.AWKWARD, ItemIds.BREEZE_ROD, PotionIds.WIND_CHARGED)
                 .save(this.output);
-            this.modify(PotionIds.AWKWARD, ItemIds.COBWEB, PotionIds.WEAVING)
+            this.modify(PotionIds.AWKWARD, BlockItemIds.COBWEB.item(), PotionIds.WEAVING)
                 .save(this.output);
             this.modify(PotionIds.AWKWARD, ItemIds.GHAST_TEAR, PotionIds.REGENERATION)
                 .save(this.output);
@@ -87,11 +88,11 @@ public class ItematicRecipeProvider extends FabricRecipeProvider {
                 .save(this.output);
             this.modify(PotionIds.AWKWARD, ItemIds.RABBIT_FOOT, PotionIds.LEAPING)
                 .save(this.output);
-            this.modify(PotionIds.AWKWARD, ItemIds.SLIME_BLOCK, PotionIds.OOZING)
+            this.modify(PotionIds.AWKWARD, BlockItemIds.SLIME_BLOCK.item(), PotionIds.OOZING)
                 .save(this.output);
             this.modify(PotionIds.AWKWARD, ItemIds.SPIDER_EYE, PotionIds.POISON)
                 .save(this.output);
-            this.modify(PotionIds.AWKWARD, ItemIds.STONE, PotionIds.INFESTED)
+            this.modify(PotionIds.AWKWARD, BlockItemIds.STONE.item(), PotionIds.INFESTED)
                 .save(this.output);
             this.modify(PotionIds.AWKWARD, ItemIds.SUGAR, PotionIds.SWIFTNESS)
                 .save(this.output);
@@ -199,7 +200,7 @@ public class ItematicRecipeProvider extends FabricRecipeProvider {
         }
 
         private ModifyBrewingRecipeBuilder lengthen(ResourceKey<Potion> from, ResourceKey<Potion> to) {
-            return this.modify(from, ItemIds.REDSTONE, to, potionName(from, to));
+            return this.modify(from, BlockItemIds.REDSTONE_DUST.item(), to, potionName(from, to));
         }
 
         private ModifyBrewingRecipeBuilder strengthen(ResourceKey<Potion> from, ResourceKey<Potion> to) {

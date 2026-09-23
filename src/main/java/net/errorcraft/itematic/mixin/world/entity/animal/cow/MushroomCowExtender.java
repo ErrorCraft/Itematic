@@ -2,8 +2,8 @@ package net.errorcraft.itematic.mixin.world.entity.animal.cow;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.cow.MushroomCow;

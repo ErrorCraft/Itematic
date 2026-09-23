@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.WitherSkullBlock;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +17,6 @@ public class WitherSkullBlockExtender {
         )
     )
     private static boolean isWitherSkeletonSkullCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.WITHER_SKELETON_SKULL);
+        return instance.is(BlockItemIds.WITHER_SKELETON_SKULL.item());
     }
 }

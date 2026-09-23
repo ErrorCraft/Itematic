@@ -1,8 +1,6 @@
 package net.errorcraft.itematic.world.action;
 
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
-import net.errorcraft.itematic.references.BlockIds;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.tags.ActionTags;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
@@ -26,9 +24,9 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedS
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
 import net.errorcraft.itematic.world.phys.Vec3Provider;
-import net.minecraft.advancements.criterion.BlockPredicate;
-import net.minecraft.advancements.criterion.LocationPredicate;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.BlockPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
@@ -36,6 +34,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.references.BlockIds;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -80,22 +80,22 @@ public class Actions {
         ));
         registerable.register(TILL_DIRT, ActionEntry.of(
             setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND)),
-            SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockIds.FARMLAND))
+            SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockItemIds.FARMLAND.block()))
         ));
         registerable.register(TILL_COARSE_DIRT, ActionEntry.of(
-            setBlockConditions(blocks, builder -> builder.of(blocks, blocks.getOrThrow(BlockIds.COARSE_DIRT).value())),
-            SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockIds.DIRT))
+            setBlockConditions(blocks, builder -> builder.of(blocks, blocks.getOrThrow(BlockItemIds.COARSE_DIRT.block()).value())),
+            SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockItemIds.DIRT.block()))
         ));
         registerable.register(TILL_ROOTED_DIRT, ActionEntry.of(
             LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.location()
                     .setBlock(BlockPredicate.Builder.block()
-                        .of(blocks, blocks.getOrThrow(BlockIds.ROOTED_DIRT).value()))
+                        .of(blocks, blocks.getOrThrow(BlockItemIds.ROOTED_DIRT.block()).value()))
             ),
             PassingSequenceHandler.builder()
-                .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockIds.DIRT)))
-                .add(DropItemFromBlockAction.of(PositionTarget.INTERACTED, items.getOrThrow(ItemIds.HANGING_ROOTS)))
+                .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockItemIds.DIRT.block())))
+                .add(DropItemFromBlockAction.of(PositionTarget.INTERACTED, items.getOrThrow(BlockItemIds.HANGING_ROOTS.item())))
         ));
         registerable.register(USE_SHOVEL_ON_BLOCK, ActionEntry.of(
             InvertedLootItemCondition.invert(
@@ -109,7 +109,7 @@ public class Actions {
         registerable.register(FLATTEN_GROUND, ActionEntry.of(
             setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)),
             PassingSequenceHandler.builder()
-                .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockIds.DIRT_PATH)))
+                .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockItemIds.DIRT_PATH.block())))
                 .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventIds.SHOVEL_FLATTEN), SoundSource.BLOCKS))
         ));
         registerable.register(EXTINGUISH_CAMPFIRE, ActionEntry.of(
@@ -171,7 +171,7 @@ public class Actions {
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.location()
                                 .setBlock(BlockPredicate.Builder.block()
-                                    .of(blocks, blocks.getOrThrow(BlockIds.TNT).value()))
+                                    .of(blocks, blocks.getOrThrow(BlockItemIds.TNT.block()).value()))
                         ),
                         PassingSequenceHandler.builder()
                             .add(PrimeTntAction.of(PositionTarget.INTERACTED))
@@ -196,7 +196,7 @@ public class Actions {
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.location()
                     .setBlock(BlockPredicate.Builder.block()
-                        .of(blocks, blocks.getOrThrow(BlockIds.FLOWER_POT).value()))
+                        .of(blocks, blocks.getOrThrow(BlockItemIds.FLOWER_POT.block()).value()))
             ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(pottedBlock)))

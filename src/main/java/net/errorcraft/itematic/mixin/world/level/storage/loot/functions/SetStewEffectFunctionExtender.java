@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.level.storage.loot.functions;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.SetStewEffectFunction;
 import org.spongepowered.asm.mixin.Mixin;

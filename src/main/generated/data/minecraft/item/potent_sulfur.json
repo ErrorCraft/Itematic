@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:potent_sulfur"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:potent_sulfur",
+    "translation_key": "block.minecraft.potent_sulfur"
+  }
+}

@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.gametest.entity.animal;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.armadillo.Armadillo;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +21,7 @@ public class ArmadilloTestSuite {
     @GameTest(structure = "itematic:entity.platform")
     @SuppressWarnings("removal")
     public void holdingSpiderEyeTemptsArmadillo(GameTestHelper helper) {
-        Armadillo armadillo = helper.spawn(EntityType.ARMADILLO, SPAWN_POSITION);
+        Armadillo armadillo = helper.spawn(EntityTypes.ARMADILLO, SPAWN_POSITION);
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setItemInHand(
             InteractionHand.MAIN_HAND,

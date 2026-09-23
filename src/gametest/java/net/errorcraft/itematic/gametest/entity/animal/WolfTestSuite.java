@@ -1,14 +1,14 @@
 package net.errorcraft.itematic.gametest.entity.animal;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
@@ -19,7 +19,7 @@ public class WolfTestSuite {
     @GameTest(structure = "itematic:entity.platform")
     @SuppressWarnings("removal")
     public void holdingBoneTemptsWolf(GameTestHelper helper) {
-        Wolf wolf = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
+        Wolf wolf = helper.spawn(EntityTypes.WOLF, SPAWN_POSITION);
         wolf.setTame(true, true);
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setItemInHand(
@@ -37,7 +37,7 @@ public class WolfTestSuite {
     @GameTest(structure = "itematic:entity.platform")
     @SuppressWarnings("removal")
     public void holdingMeatTemptsWolf(GameTestHelper helper) {
-        Wolf wolf = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
+        Wolf wolf = helper.spawn(EntityTypes.WOLF, SPAWN_POSITION);
         wolf.setTame(true, true);
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setItemInHand(
@@ -54,7 +54,7 @@ public class WolfTestSuite {
 
     @GameTest(structure = "itematic:entity.platform")
     public void feedingWolfMeatHealsWolf(GameTestHelper helper) {
-        Wolf wolf = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
+        Wolf wolf = helper.spawn(EntityTypes.WOLF, SPAWN_POSITION);
         wolf.setTame(true, true);
         helper.withLowHealth(wolf);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);

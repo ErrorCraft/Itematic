@@ -1,11 +1,12 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -22,12 +23,12 @@ public class WaterCauldronBlockTestSuite {
         ServerLevel level = helper.getLevel();
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.WHITE_SHULKER_BOX)
+            level.itematic$createStack(BlockItemIds.DYED_SHULKER_BOX.white().item())
         );
         level.addFreshEntity(player);
         helper.useBlock(WATER_CAULDRON_POSITION, player);
         helper.succeedIf(() -> Assert.itemStack(helper, player.getItemInHand(InteractionHand.MAIN_HAND))
-            .is(ItemIds.SHULKER_BOX));
+            .is(BlockItemIds.SHULKER_BOX.item()));
     }
 
     @GameTest(structure = "itematic:block.water_cauldron")

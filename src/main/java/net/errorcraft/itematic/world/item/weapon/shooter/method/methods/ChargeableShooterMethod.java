@@ -11,7 +11,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargingSounds;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;

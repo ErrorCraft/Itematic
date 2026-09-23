@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.world.item.placement.fluid;
 
-import net.errorcraft.itematic.references.FluidIds;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
@@ -24,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidIds;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public class FluidPlacer {

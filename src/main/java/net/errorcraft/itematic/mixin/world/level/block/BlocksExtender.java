@@ -1,8 +1,11 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.references.ItematicBlockItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ColorCollection;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -360,67 +363,7 @@ public class BlocksExtender {
 
     @Shadow
     @Final
-    public static Block WHITE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block ORANGE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block MAGENTA_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block LIGHT_BLUE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block YELLOW_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block LIME_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block PINK_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block GRAY_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block LIGHT_GRAY_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block CYAN_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block PURPLE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block BLUE_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block BROWN_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block GREEN_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block RED_WALL_BANNER;
-
-    @Shadow
-    @Final
-    public static Block BLACK_WALL_BANNER;
+    public static ColorCollection<Block> WALL_BANNER;
 
     @Shadow
     @Final
@@ -556,67 +499,7 @@ public class BlocksExtender {
 
     @Shadow
     @Final
-    public static Block WHITE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block ORANGE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block MAGENTA_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block LIGHT_BLUE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block YELLOW_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block LIME_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block PINK_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block GRAY_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block LIGHT_GRAY_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block CYAN_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block PURPLE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block BLUE_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block BROWN_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block GREEN_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block RED_CANDLE_CAKE;
-
-    @Shadow
-    @Final
-    public static Block BLACK_CANDLE_CAKE;
+    public static ColorCollection<Block> DYED_CANDLE_CAKE;
 
     @Shadow
     @Final
@@ -627,161 +510,135 @@ public class BlocksExtender {
     public static Block POTTED_CLOSED_EYEBLOSSOM;
 
     static {
-        CAVE_AIR.itematic$setAsItemId(ItemIds.AIR);
-        VOID_AIR.itematic$setAsItemId(ItemIds.AIR);
+        CAVE_AIR.itematic$setAsItemId(BlockItemIds.AIR.item());
+        VOID_AIR.itematic$setAsItemId(BlockItemIds.AIR.item());
         WATER.itematic$setAsItemId(ItemIds.WATER_BUCKET);
         LAVA.itematic$setAsItemId(ItemIds.LAVA_BUCKET);
-        BUBBLE_COLUMN.itematic$setAsItemId(ItemIds.AIR);
-        FROSTED_ICE.itematic$setAsItemId(ItemIds.AIR);
-        FIRE.itematic$setAsItemId(ItemIds.AIR);
-        SOUL_FIRE.itematic$setAsItemId(ItemIds.AIR);
-        NETHER_PORTAL.itematic$setAsItemId(ItemIds.AIR);
-        END_PORTAL.itematic$setAsItemId(ItemIds.AIR);
-        END_GATEWAY.itematic$setAsItemId(ItemIds.AIR);
-        MOVING_PISTON.itematic$setAsItemId(ItemIds.AIR);
-        PISTON_HEAD.itematic$setAsItemId(ItemIds.PISTON);
-        WALL_TORCH.itematic$setAsItemId(ItemIds.TORCH);
-        SOUL_WALL_TORCH.itematic$setAsItemId(ItemIds.SOUL_TORCH);
-        REDSTONE_WALL_TORCH.itematic$setAsItemId(ItemIds.REDSTONE_TORCH);
-        REDSTONE_WIRE.itematic$setAsItemId(ItemIds.REDSTONE);
-        TRIPWIRE.itematic$setAsItemId(ItemIds.STRING);
-        OAK_WALL_SIGN.itematic$setAsItemId(ItemIds.OAK_SIGN);
-        SPRUCE_WALL_SIGN.itematic$setAsItemId(ItemIds.SPRUCE_SIGN);
-        BIRCH_WALL_SIGN.itematic$setAsItemId(ItemIds.BIRCH_SIGN);
-        ACACIA_WALL_SIGN.itematic$setAsItemId(ItemIds.ACACIA_SIGN);
-        CHERRY_WALL_SIGN.itematic$setAsItemId(ItemIds.CHERRY_SIGN);
-        JUNGLE_WALL_SIGN.itematic$setAsItemId(ItemIds.JUNGLE_SIGN);
-        DARK_OAK_WALL_SIGN.itematic$setAsItemId(ItemIds.DARK_OAK_SIGN);
-        PALE_OAK_WALL_SIGN.itematic$setAsItemId(ItemIds.PALE_OAK_SIGN);
-        MANGROVE_WALL_SIGN.itematic$setAsItemId(ItemIds.MANGROVE_SIGN);
-        CRIMSON_WALL_SIGN.itematic$setAsItemId(ItemIds.CRIMSON_SIGN);
-        WARPED_WALL_SIGN.itematic$setAsItemId(ItemIds.WARPED_SIGN);
-        BAMBOO_WALL_SIGN.itematic$setAsItemId(ItemIds.BAMBOO_SIGN);
-        OAK_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.OAK_HANGING_SIGN);
-        SPRUCE_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.SPRUCE_HANGING_SIGN);
-        BIRCH_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.BIRCH_HANGING_SIGN);
-        ACACIA_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.ACACIA_HANGING_SIGN);
-        CHERRY_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.CHERRY_HANGING_SIGN);
-        JUNGLE_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.JUNGLE_HANGING_SIGN);
-        DARK_OAK_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.DARK_OAK_HANGING_SIGN);
-        PALE_OAK_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.PALE_OAK_HANGING_SIGN);
-        MANGROVE_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.MANGROVE_HANGING_SIGN);
-        CRIMSON_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.CRIMSON_HANGING_SIGN);
-        WARPED_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.WARPED_HANGING_SIGN);
-        BAMBOO_WALL_HANGING_SIGN.itematic$setAsItemId(ItemIds.BAMBOO_HANGING_SIGN);
-        WATER_CAULDRON.itematic$setAsItemId(ItemIds.CAULDRON);
-        LAVA_CAULDRON.itematic$setAsItemId(ItemIds.CAULDRON);
-        POWDER_SNOW_CAULDRON.itematic$setAsItemId(ItemIds.CAULDRON);
-        POWDER_SNOW.itematic$setAsItemId(ItemIds.POWDER_SNOW_BUCKET);
-        POTTED_TORCHFLOWER.itematic$setAsItemId(ItemIds.TORCHFLOWER);
-        POTTED_OAK_SAPLING.itematic$setAsItemId(ItemIds.OAK_SAPLING);
-        POTTED_SPRUCE_SAPLING.itematic$setAsItemId(ItemIds.SPRUCE_SAPLING);
-        POTTED_BIRCH_SAPLING.itematic$setAsItemId(ItemIds.BIRCH_SAPLING);
-        POTTED_JUNGLE_SAPLING.itematic$setAsItemId(ItemIds.JUNGLE_SAPLING);
-        POTTED_ACACIA_SAPLING.itematic$setAsItemId(ItemIds.ACACIA_SAPLING);
-        POTTED_CHERRY_SAPLING.itematic$setAsItemId(ItemIds.CHERRY_SAPLING);
-        POTTED_DARK_OAK_SAPLING.itematic$setAsItemId(ItemIds.DARK_OAK_SAPLING);
-        POTTED_MANGROVE_PROPAGULE.itematic$setAsItemId(ItemIds.MANGROVE_PROPAGULE);
-        POTTED_FERN.itematic$setAsItemId(ItemIds.FERN);
-        POTTED_DANDELION.itematic$setAsItemId(ItemIds.DANDELION);
-        POTTED_POPPY.itematic$setAsItemId(ItemIds.POPPY);
-        POTTED_BLUE_ORCHID.itematic$setAsItemId(ItemIds.BLUE_ORCHID);
-        POTTED_ALLIUM.itematic$setAsItemId(ItemIds.ALLIUM);
-        POTTED_AZURE_BLUET.itematic$setAsItemId(ItemIds.AZURE_BLUET);
-        POTTED_RED_TULIP.itematic$setAsItemId(ItemIds.RED_TULIP);
-        POTTED_ORANGE_TULIP.itematic$setAsItemId(ItemIds.ORANGE_TULIP);
-        POTTED_WHITE_TULIP.itematic$setAsItemId(ItemIds.WHITE_TULIP);
-        POTTED_PINK_TULIP.itematic$setAsItemId(ItemIds.PINK_TULIP);
-        POTTED_OXEYE_DAISY.itematic$setAsItemId(ItemIds.OXEYE_DAISY);
-        POTTED_CORNFLOWER.itematic$setAsItemId(ItemIds.CORNFLOWER);
-        POTTED_LILY_OF_THE_VALLEY.itematic$setAsItemId(ItemIds.LILY_OF_THE_VALLEY);
-        POTTED_WITHER_ROSE.itematic$setAsItemId(ItemIds.WITHER_ROSE);
-        POTTED_RED_MUSHROOM.itematic$setAsItemId(ItemIds.RED_MUSHROOM);
-        POTTED_BROWN_MUSHROOM.itematic$setAsItemId(ItemIds.BROWN_MUSHROOM);
-        POTTED_DEAD_BUSH.itematic$setAsItemId(ItemIds.DEAD_BUSH);
-        POTTED_CACTUS.itematic$setAsItemId(ItemIds.CACTUS);
-        POTTED_BAMBOO.itematic$setAsItemId(ItemIds.BAMBOO);
-        POTTED_CRIMSON_FUNGUS.itematic$setAsItemId(ItemIds.CRIMSON_FUNGUS);
-        POTTED_WARPED_FUNGUS.itematic$setAsItemId(ItemIds.WARPED_FUNGUS);
-        POTTED_CRIMSON_ROOTS.itematic$setAsItemId(ItemIds.CRIMSON_ROOTS);
-        POTTED_WARPED_ROOTS.itematic$setAsItemId(ItemIds.WARPED_ROOTS);
-        POTTED_AZALEA.itematic$setAsItemId(ItemIds.AZALEA);
-        POTTED_FLOWERING_AZALEA.itematic$setAsItemId(ItemIds.FLOWERING_AZALEA);
-        POTTED_OPEN_EYEBLOSSOM.itematic$setAsItemId(ItemIds.OPEN_EYEBLOSSOM);
-        POTTED_CLOSED_EYEBLOSSOM.itematic$setAsItemId(ItemIds.CLOSED_EYEBLOSSOM);
-        SKELETON_WALL_SKULL.itematic$setAsItemId(ItemIds.SKELETON_SKULL);
-        WITHER_SKELETON_WALL_SKULL.itematic$setAsItemId(ItemIds.WITHER_SKELETON_SKULL);
-        ZOMBIE_WALL_HEAD.itematic$setAsItemId(ItemIds.ZOMBIE_HEAD);
-        PLAYER_WALL_HEAD.itematic$setAsItemId(ItemIds.PLAYER_HEAD);
-        CREEPER_WALL_HEAD.itematic$setAsItemId(ItemIds.CREEPER_HEAD);
-        DRAGON_WALL_HEAD.itematic$setAsItemId(ItemIds.DRAGON_HEAD);
-        PIGLIN_WALL_HEAD.itematic$setAsItemId(ItemIds.PIGLIN_HEAD);
-        WHITE_WALL_BANNER.itematic$setAsItemId(ItemIds.WHITE_BANNER);
-        ORANGE_WALL_BANNER.itematic$setAsItemId(ItemIds.ORANGE_BANNER);
-        MAGENTA_WALL_BANNER.itematic$setAsItemId(ItemIds.MAGENTA_BANNER);
-        LIGHT_BLUE_WALL_BANNER.itematic$setAsItemId(ItemIds.LIGHT_BLUE_BANNER);
-        YELLOW_WALL_BANNER.itematic$setAsItemId(ItemIds.YELLOW_BANNER);
-        LIME_WALL_BANNER.itematic$setAsItemId(ItemIds.LIME_BANNER);
-        PINK_WALL_BANNER.itematic$setAsItemId(ItemIds.PINK_BANNER);
-        GRAY_WALL_BANNER.itematic$setAsItemId(ItemIds.GRAY_BANNER);
-        LIGHT_GRAY_WALL_BANNER.itematic$setAsItemId(ItemIds.LIGHT_GRAY_BANNER);
-        CYAN_WALL_BANNER.itematic$setAsItemId(ItemIds.CYAN_BANNER);
-        PURPLE_WALL_BANNER.itematic$setAsItemId(ItemIds.PURPLE_BANNER);
-        BLUE_WALL_BANNER.itematic$setAsItemId(ItemIds.BLUE_BANNER);
-        BROWN_WALL_BANNER.itematic$setAsItemId(ItemIds.BROWN_BANNER);
-        GREEN_WALL_BANNER.itematic$setAsItemId(ItemIds.GREEN_BANNER);
-        RED_WALL_BANNER.itematic$setAsItemId(ItemIds.RED_BANNER);
-        BLACK_WALL_BANNER.itematic$setAsItemId(ItemIds.BLACK_BANNER);
-        DEAD_TUBE_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.DEAD_TUBE_CORAL_FAN);
-        DEAD_BRAIN_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.DEAD_BRAIN_CORAL_FAN);
-        DEAD_BUBBLE_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.DEAD_BUBBLE_CORAL_FAN);
-        DEAD_FIRE_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.DEAD_FIRE_CORAL_FAN);
-        DEAD_HORN_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.DEAD_HORN_CORAL_FAN);
-        TUBE_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.TUBE_CORAL_FAN);
-        BRAIN_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.BRAIN_CORAL_FAN);
-        BUBBLE_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.BUBBLE_CORAL_FAN);
-        FIRE_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.FIRE_CORAL_FAN);
-        HORN_CORAL_WALL_FAN.itematic$setAsItemId(ItemIds.HORN_CORAL_FAN);
-        ATTACHED_PUMPKIN_STEM.itematic$setAsItemId(ItemIds.PUMPKIN_SEEDS);
-        ATTACHED_MELON_STEM.itematic$setAsItemId(ItemIds.MELON_SEEDS);
-        PUMPKIN_STEM.itematic$setAsItemId(ItemIds.PUMPKIN_SEEDS);
-        MELON_STEM.itematic$setAsItemId(ItemIds.MELON_SEEDS);
-        CARROTS.itematic$setAsItemId(ItemIds.CARROT);
-        POTATOES.itematic$setAsItemId(ItemIds.POTATO);
-        BEETROOTS.itematic$setAsItemId(ItemIds.BEETROOT);
-        COCOA.itematic$setAsItemId(ItemIds.COCOA_BEANS);
-        TORCHFLOWER_CROP.itematic$setAsItemId(ItemIds.TORCHFLOWER_SEEDS);
-        PITCHER_CROP.itematic$setAsItemId(ItemIds.PITCHER_POD);
-        TALL_SEAGRASS.itematic$setAsItemId(ItemIds.SEAGRASS);
-        KELP_PLANT.itematic$setAsItemId(ItemIds.KELP);
-        BAMBOO_SAPLING.itematic$setAsItemId(ItemIds.BAMBOO);
-        BIG_DRIPLEAF_STEM.itematic$setAsItemId(ItemIds.BIG_DRIPLEAF);
-        CAVE_VINES.itematic$setAsItemId(ItemIds.GLOW_BERRIES);
-        CAVE_VINES_PLANT.itematic$setAsItemId(ItemIds.GLOW_BERRIES);
-        SWEET_BERRY_BUSH.itematic$setAsItemId(ItemIds.SWEET_BERRIES);
-        WEEPING_VINES_PLANT.itematic$setAsItemId(ItemIds.WEEPING_VINES);
-        TWISTING_VINES_PLANT.itematic$setAsItemId(ItemIds.TWISTING_VINES);
-        CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        WHITE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        ORANGE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        MAGENTA_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        LIGHT_BLUE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        YELLOW_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        LIME_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        PINK_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        GRAY_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        LIGHT_GRAY_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        CYAN_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        PURPLE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        BLUE_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        BROWN_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        GREEN_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        RED_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
-        BLACK_CANDLE_CAKE.itematic$setAsItemId(ItemIds.CAKE);
+        BUBBLE_COLUMN.itematic$setAsItemId(BlockItemIds.AIR.item());
+        FROSTED_ICE.itematic$setAsItemId(BlockItemIds.AIR.item());
+        FIRE.itematic$setAsItemId(BlockItemIds.AIR.item());
+        SOUL_FIRE.itematic$setAsItemId(BlockItemIds.AIR.item());
+        NETHER_PORTAL.itematic$setAsItemId(BlockItemIds.AIR.item());
+        END_PORTAL.itematic$setAsItemId(BlockItemIds.AIR.item());
+        END_GATEWAY.itematic$setAsItemId(BlockItemIds.AIR.item());
+        MOVING_PISTON.itematic$setAsItemId(BlockItemIds.AIR.item());
+        PISTON_HEAD.itematic$setAsItemId(BlockItemIds.PISTON.item());
+        WALL_TORCH.itematic$setAsItemId(BlockItemIds.TORCH.item());
+        SOUL_WALL_TORCH.itematic$setAsItemId(BlockItemIds.SOUL_TORCH.item());
+        REDSTONE_WALL_TORCH.itematic$setAsItemId(BlockItemIds.REDSTONE_TORCH.item());
+        REDSTONE_WIRE.itematic$setAsItemId(BlockItemIds.REDSTONE_DUST.item());
+        TRIPWIRE.itematic$setAsItemId(BlockItemIds.TRIPWIRE.item());
+        OAK_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.OAK.sign().item());
+        SPRUCE_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.SPRUCE.sign().item());
+        BIRCH_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.BIRCH.sign().item());
+        ACACIA_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.ACACIA.sign().item());
+        CHERRY_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.CHERRY.sign().item());
+        JUNGLE_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.JUNGLE.sign().item());
+        DARK_OAK_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.DARK_OAK.sign().item());
+        PALE_OAK_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.PALE_OAK.sign().item());
+        MANGROVE_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.MANGROVE.sign().item());
+        CRIMSON_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.CRIMSON.sign().item());
+        WARPED_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.WARPED.sign().item());
+        BAMBOO_WALL_SIGN.itematic$setAsItemId(ItematicBlockItemIds.BAMBOO.sign().item());
+        OAK_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.OAK.hangingSign().item());
+        SPRUCE_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.SPRUCE.hangingSign().item());
+        BIRCH_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.BIRCH.hangingSign().item());
+        ACACIA_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.ACACIA.hangingSign().item());
+        CHERRY_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.CHERRY.hangingSign().item());
+        JUNGLE_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.JUNGLE.hangingSign().item());
+        DARK_OAK_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.DARK_OAK.hangingSign().item());
+        PALE_OAK_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.PALE_OAK.hangingSign().item());
+        MANGROVE_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.MANGROVE.hangingSign().item());
+        CRIMSON_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.CRIMSON.hangingSign().item());
+        WARPED_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.WARPED.hangingSign().item());
+        BAMBOO_WALL_HANGING_SIGN.itematic$setAsItemId(ItematicBlockItemIds.BAMBOO.hangingSign().item());
+        WATER_CAULDRON.itematic$setAsItemId(BlockItemIds.CAULDRON.item());
+        LAVA_CAULDRON.itematic$setAsItemId(BlockItemIds.CAULDRON.item());
+        POWDER_SNOW_CAULDRON.itematic$setAsItemId(BlockItemIds.CAULDRON.item());
+        POWDER_SNOW.itematic$setAsItemId(BlockItemIds.POWDER_SNOW.item());
+        POTTED_TORCHFLOWER.itematic$setAsItemId(BlockItemIds.TORCHFLOWER.item());
+        POTTED_OAK_SAPLING.itematic$setAsItemId(ItematicBlockItemIds.OAK.sapling().item());
+        POTTED_SPRUCE_SAPLING.itematic$setAsItemId(ItematicBlockItemIds.SPRUCE.sapling().item());
+        POTTED_BIRCH_SAPLING.itematic$setAsItemId(ItematicBlockItemIds.BIRCH.sapling().item());
+        POTTED_JUNGLE_SAPLING.itematic$setAsItemId(ItematicBlockItemIds.JUNGLE.sapling().item());
+        POTTED_ACACIA_SAPLING.itematic$setAsItemId(ItematicBlockItemIds.ACACIA.sapling().item());
+        POTTED_CHERRY_SAPLING.itematic$setAsItemId(ItematicBlockItemIds.CHERRY.sapling().item());
+        POTTED_DARK_OAK_SAPLING.itematic$setAsItemId(ItematicBlockItemIds.DARK_OAK.sapling().item());
+        POTTED_MANGROVE_PROPAGULE.itematic$setAsItemId(ItematicBlockItemIds.MANGROVE.sapling().item());
+        POTTED_FERN.itematic$setAsItemId(BlockItemIds.FERN.item());
+        POTTED_DANDELION.itematic$setAsItemId(BlockItemIds.DANDELION.item());
+        POTTED_POPPY.itematic$setAsItemId(BlockItemIds.POPPY.item());
+        POTTED_BLUE_ORCHID.itematic$setAsItemId(BlockItemIds.BLUE_ORCHID.item());
+        POTTED_ALLIUM.itematic$setAsItemId(BlockItemIds.ALLIUM.item());
+        POTTED_AZURE_BLUET.itematic$setAsItemId(BlockItemIds.AZURE_BLUET.item());
+        POTTED_RED_TULIP.itematic$setAsItemId(BlockItemIds.RED_TULIP.item());
+        POTTED_ORANGE_TULIP.itematic$setAsItemId(BlockItemIds.ORANGE_TULIP.item());
+        POTTED_WHITE_TULIP.itematic$setAsItemId(BlockItemIds.WHITE_TULIP.item());
+        POTTED_PINK_TULIP.itematic$setAsItemId(BlockItemIds.PINK_TULIP.item());
+        POTTED_OXEYE_DAISY.itematic$setAsItemId(BlockItemIds.OXEYE_DAISY.item());
+        POTTED_CORNFLOWER.itematic$setAsItemId(BlockItemIds.CORNFLOWER.item());
+        POTTED_LILY_OF_THE_VALLEY.itematic$setAsItemId(BlockItemIds.LILY_OF_THE_VALLEY.item());
+        POTTED_WITHER_ROSE.itematic$setAsItemId(BlockItemIds.WITHER_ROSE.item());
+        POTTED_RED_MUSHROOM.itematic$setAsItemId(BlockItemIds.RED_MUSHROOM.item());
+        POTTED_BROWN_MUSHROOM.itematic$setAsItemId(BlockItemIds.BROWN_MUSHROOM.item());
+        POTTED_DEAD_BUSH.itematic$setAsItemId(BlockItemIds.DEAD_BUSH.item());
+        POTTED_CACTUS.itematic$setAsItemId(BlockItemIds.CACTUS.item());
+        POTTED_BAMBOO.itematic$setAsItemId(BlockItemIds.BAMBOO.item());
+        POTTED_CRIMSON_FUNGUS.itematic$setAsItemId(BlockItemIds.CRIMSON_FUNGUS.item());
+        POTTED_WARPED_FUNGUS.itematic$setAsItemId(BlockItemIds.WARPED_FUNGUS.item());
+        POTTED_CRIMSON_ROOTS.itematic$setAsItemId(BlockItemIds.CRIMSON_ROOTS.item());
+        POTTED_WARPED_ROOTS.itematic$setAsItemId(BlockItemIds.WARPED_ROOTS.item());
+        POTTED_AZALEA.itematic$setAsItemId(BlockItemIds.AZALEA.item());
+        POTTED_FLOWERING_AZALEA.itematic$setAsItemId(BlockItemIds.FLOWERING_AZALEA.item());
+        POTTED_OPEN_EYEBLOSSOM.itematic$setAsItemId(BlockItemIds.OPEN_EYEBLOSSOM.item());
+        POTTED_CLOSED_EYEBLOSSOM.itematic$setAsItemId(BlockItemIds.CLOSED_EYEBLOSSOM.item());
+        SKELETON_WALL_SKULL.itematic$setAsItemId(BlockItemIds.SKELETON_SKULL.item());
+        WITHER_SKELETON_WALL_SKULL.itematic$setAsItemId(BlockItemIds.WITHER_SKELETON_SKULL.item());
+        ZOMBIE_WALL_HEAD.itematic$setAsItemId(BlockItemIds.ZOMBIE_HEAD.item());
+        PLAYER_WALL_HEAD.itematic$setAsItemId(BlockItemIds.PLAYER_HEAD.item());
+        CREEPER_WALL_HEAD.itematic$setAsItemId(BlockItemIds.CREEPER_HEAD.item());
+        DRAGON_WALL_HEAD.itematic$setAsItemId(BlockItemIds.DRAGON_HEAD.item());
+        PIGLIN_WALL_HEAD.itematic$setAsItemId(BlockItemIds.PIGLIN_HEAD.item());
+        ColorCollection.zipApply(
+            WALL_BANNER,
+            BlockItemIds.BANNER,
+            (wallBanner, banner) -> wallBanner.itematic$setAsItemId(banner.item())
+        );
+        DEAD_TUBE_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.TUBE_CORAL.fan().dead().item());
+        DEAD_BRAIN_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.BRAIN_CORAL.fan().dead().item());
+        DEAD_BUBBLE_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.BUBBLE_CORAL.fan().dead().item());
+        DEAD_FIRE_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.FIRE_CORAL.fan().dead().item());
+        DEAD_HORN_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.HORN_CORAL.fan().dead().item());
+        TUBE_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.TUBE_CORAL.fan().alive().item());
+        BRAIN_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.BRAIN_CORAL.fan().alive().item());
+        BUBBLE_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.BUBBLE_CORAL.fan().alive().item());
+        FIRE_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.FIRE_CORAL.fan().alive().item());
+        HORN_CORAL_WALL_FAN.itematic$setAsItemId(ItematicBlockItemIds.HORN_CORAL.fan().alive().item());
+        ATTACHED_PUMPKIN_STEM.itematic$setAsItemId(BlockItemIds.PUMPKIN_CROP.item());
+        ATTACHED_MELON_STEM.itematic$setAsItemId(BlockItemIds.MELON_CROP.item());
+        PUMPKIN_STEM.itematic$setAsItemId(BlockItemIds.PUMPKIN_CROP.item());
+        MELON_STEM.itematic$setAsItemId(BlockItemIds.MELON_CROP.item());
+        CARROTS.itematic$setAsItemId(BlockItemIds.CARROT_CROP.item());
+        POTATOES.itematic$setAsItemId(BlockItemIds.POTATO_CROP.item());
+        BEETROOTS.itematic$setAsItemId(BlockItemIds.BEETROOT_CROP.item());
+        COCOA.itematic$setAsItemId(BlockItemIds.COCOA_CROP.item());
+        TORCHFLOWER_CROP.itematic$setAsItemId(BlockItemIds.TORCHFLOWER_CROP.item());
+        PITCHER_CROP.itematic$setAsItemId(BlockItemIds.PITCHER_CROP.item());
+        TALL_SEAGRASS.itematic$setAsItemId(BlockItemIds.SEAGRASS.item());
+        KELP_PLANT.itematic$setAsItemId(BlockItemIds.KELP.item());
+        BAMBOO_SAPLING.itematic$setAsItemId(BlockItemIds.BAMBOO.item());
+        BIG_DRIPLEAF_STEM.itematic$setAsItemId(BlockItemIds.BIG_DRIPLEAF.item());
+        CAVE_VINES.itematic$setAsItemId(BlockItemIds.GLOW_BERRY_CROP.item());
+        CAVE_VINES_PLANT.itematic$setAsItemId(BlockItemIds.GLOW_BERRY_CROP.item());
+        SWEET_BERRY_BUSH.itematic$setAsItemId(BlockItemIds.SWEET_BERRY_CROP.item());
+        WEEPING_VINES_PLANT.itematic$setAsItemId(BlockItemIds.WEEPING_VINES.item());
+        TWISTING_VINES_PLANT.itematic$setAsItemId(BlockItemIds.TWISTING_VINES.item());
+        CANDLE_CAKE.itematic$setAsItemId(BlockItemIds.CAKE.item());
+        DYED_CANDLE_CAKE.forEach(dyedCandleCake -> dyedCandleCake.itematic$setAsItemId(BlockItemIds.CAKE.item()));
 
-        ((GrowingPlantHeadBlock) CAVE_VINES).itematic$setStemItemId(ItemIds.GLOW_BERRIES);
-        ((GrowingPlantHeadBlock) KELP).itematic$setStemItemId(ItemIds.KELP);
-        ((GrowingPlantHeadBlock) TWISTING_VINES).itematic$setStemItemId(ItemIds.TWISTING_VINES);
-        ((GrowingPlantHeadBlock) WEEPING_VINES).itematic$setStemItemId(ItemIds.WEEPING_VINES);
+        ((GrowingPlantHeadBlock) CAVE_VINES).itematic$setStemItemId(BlockItemIds.GLOW_BERRY_CROP.item());
+        ((GrowingPlantHeadBlock) KELP).itematic$setStemItemId(BlockItemIds.KELP.item());
+        ((GrowingPlantHeadBlock) TWISTING_VINES).itematic$setStemItemId(BlockItemIds.TWISTING_VINES.item());
+        ((GrowingPlantHeadBlock) WEEPING_VINES).itematic$setStemItemId(BlockItemIds.WEEPING_VINES.item());
     }
 }

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.world.level.block.piston;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelReader;
@@ -29,6 +29,6 @@ public class PistonHeadBlockExtender {
         )
     )
     private ItemStack newItemStackUseCreateStack(ItemLike item, LevelReader level, BlockPos pos, BlockState state) {
-        return level.itematic$createStack(state.getValue(TYPE) == PistonType.STICKY ? ItemIds.STICKY_PISTON : ItemIds.PISTON);
+        return level.itematic$createStack(state.getValue(TYPE) == PistonType.STICKY ? BlockItemIds.STICKY_PISTON.item() : BlockItemIds.PISTON.item());
     }
 }

@@ -4,7 +4,7 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.initializer.EntityInitializer;
 import net.errorcraft.itematic.world.item.ItemStacks;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
@@ -41,6 +41,6 @@ public class ThrownTridentEntityInitializer implements EntityInitializer<ThrownT
             return new ThrownTrident(level, user, stack);
         }
 
-        return new ThrownTrident(EntityType.TRIDENT, level);
+        return new ThrownTrident(EntityTypes.TRIDENT, level);
     }
 }

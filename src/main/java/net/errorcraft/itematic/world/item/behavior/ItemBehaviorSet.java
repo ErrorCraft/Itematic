@@ -61,6 +61,14 @@ public class ItemBehaviorSet implements Iterable<ItemBehavior<?>> {
             return this;
         }
 
+        public Builder with(boolean condition, ItemBehavior<?> behavior) {
+            if (condition) {
+                return this.with(behavior);
+            }
+
+            return this;
+        }
+
         public Builder with(ItemBehavior<?>... behavior) {
             Stream.of(behavior).forEach(this::with);
             return this;

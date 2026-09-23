@@ -3,9 +3,10 @@ package net.errorcraft.itematic.mixin.client.particle;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BreakingItemParticle;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,7 +37,7 @@ public class BreakingItemParticleExtender {
             )
         )
         private ItemStackTemplate newItemStackTemplateForCobwebUseCreateStackTemplate(Item item, Operation<ItemStackTemplate> original, @Local(name = "level", argsOnly = true) ClientLevel level) {
-            return level.itematic$createStackTemplate(ItemIds.COBWEB);
+            return level.itematic$createStackTemplate(BlockItemIds.COBWEB.item());
         }
     }
 

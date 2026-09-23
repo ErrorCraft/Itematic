@@ -5,10 +5,11 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
@@ -70,10 +71,10 @@ public class AbstractSkeletonExtender extends Monster {
     )
     private ItemStack newItemStackUseCreateStack(ItemLike item, ServerLevelAccessor level, @Share("randomFloat") LocalFloatRef randomFloat) {
         if (randomFloat.get() < 0.1f) {
-            return level.itematic$createStack(ItemIds.JACK_O_LANTERN);
+            return level.itematic$createStack(BlockItemIds.JACK_O_LANTERN.item());
         }
 
-        return level.itematic$createStack(ItemIds.CARVED_PUMPKIN);
+        return level.itematic$createStack(BlockItemIds.CARVED_PUMPKIN.item());
     }
 
     @Redirect(

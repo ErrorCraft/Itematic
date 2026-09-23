@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -47,7 +47,7 @@ public abstract class SmithingTransformRecipeExtender extends SimpleSmithingReci
                 this.base.display(),
                 Ingredient.optionalIngredientToDisplay(this.addition),
                 new SlotDisplay.ItemStackSlotDisplay(this.result),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.SMITHING_TABLE))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(BlockItemIds.SMITHING_TABLE.item()))
             )
         );
     }

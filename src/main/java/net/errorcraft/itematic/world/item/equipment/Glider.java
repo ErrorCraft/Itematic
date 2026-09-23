@@ -2,8 +2,8 @@ package net.errorcraft.itematic.world.item.equipment;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.advancements.criterion.ItemPredicates;
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.errorcraft.itematic.advancements.predicates.ItemPredicates;
+import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
