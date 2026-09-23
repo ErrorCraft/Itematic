@@ -50,7 +50,7 @@ public class ItemInHandRendererExtender {
     }
 
     @Redirect(
-        method = "renderArmWithItem",
+        method = "submitArmWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
@@ -84,7 +84,7 @@ public class ItemInHandRendererExtender {
     }
 
     @Redirect(
-        method = "renderArmWithItem",
+        method = "submitArmWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/AbstractClientPlayer;getUseItemRemainingTicks()I",
@@ -96,7 +96,7 @@ public class ItemInHandRendererExtender {
     }
 
     @Redirect(
-        method = "renderArmWithItem",
+        method = "submitArmWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;getUseDuration(Lnet/minecraft/world/entity/LivingEntity;)I"
@@ -107,7 +107,7 @@ public class ItemInHandRendererExtender {
     }
 
     @Redirect(
-        method = "renderArmWithItem",
+        method = "submitArmWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/AbstractClientPlayer;getUseItemRemainingTicks()I",
@@ -126,7 +126,7 @@ public class ItemInHandRendererExtender {
     }
 
     @Redirect(
-        method = "renderArmWithItem",
+        method = "submitArmWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/AbstractClientPlayer;getUseItemRemainingTicks()I",
@@ -145,7 +145,7 @@ public class ItemInHandRendererExtender {
     }
 
     @Redirect(
-        method = "renderArmWithItem",
+        method = "submitArmWithItem",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/player/AbstractClientPlayer;getUseItemRemainingTicks()I"
