@@ -18,6 +18,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 
 public record DyeItemBehavior(DyeColor color) implements ItemBehavior<DyeItemBehavior> {
     public static final Codec<DyeItemBehavior> CODEC = DyeColor.CODEC.xmap(DyeItemBehavior::new, DyeItemBehavior::color);
@@ -43,7 +44,7 @@ public record DyeItemBehavior(DyeColor color) implements ItemBehavior<DyeItemBeh
             .possibleStackExchanger(player, stack)
             .addOptional(LootContextParams.THIS_ENTITY, player)
             .addOptional(LootContextParams.ORIGIN, player, Entity::position)
-            .add(ItematicContextKeys.INTERACTED_POSITION, context.getClickedPos().getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(context.getClickedPos()))
             .add(LootContextParams.TOOL, stack)
             .build();
         ModifySignAction action = ModifySignAction.dye(PositionTarget.INTERACTED, this.color);

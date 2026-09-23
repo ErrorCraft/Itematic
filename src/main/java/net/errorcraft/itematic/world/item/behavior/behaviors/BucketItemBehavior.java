@@ -43,6 +43,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 
@@ -123,7 +124,7 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, user)
             .addOptional(LootContextParams.ORIGIN, user, Entity::position)
-            .add(ItematicContextKeys.INTERACTED_POSITION, blockHitResult.getBlockPos().getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(blockHitResult.getBlockPos()))
             .add(LootContextParams.TOOL, stack)
             .add(ItematicContextKeys.HAND, hand)
             .add(ItematicContextKeys.SIDE, blockHitResult.getDirection())

@@ -239,7 +239,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, context.getPlayer())
             .addOptional(LootContextParams.ORIGIN, context.getPlayer(), Entity::position)
-            .add(ItematicContextKeys.INTERACTED_POSITION, context.getClickedPos().getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(context.getClickedPos()))
             .add(LootContextParams.TOOL, context.getItemInHand())
             .add(ItematicContextKeys.HAND, context.getHand())
             .add(ItematicContextKeys.SIDE, context.getClickedFace())

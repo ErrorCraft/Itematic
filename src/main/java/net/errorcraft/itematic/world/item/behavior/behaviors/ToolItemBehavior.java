@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +79,7 @@ public record ToolItemBehavior(Tool tool) implements ItemBehavior<ToolItemBehavi
             .stackExchanger(stackExchanger)
             .add(LootContextParams.THIS_ENTITY, miner)
             .add(LootContextParams.ORIGIN, miner.position())
-            .add(ItematicContextKeys.INTERACTED_POSITION, pos.getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(pos))
             .add(LootContextParams.TOOL, stack)
             .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
             .build();

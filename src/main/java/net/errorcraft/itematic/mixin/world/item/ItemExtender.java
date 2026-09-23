@@ -62,6 +62,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -200,7 +201,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, user)
             .addOptional(LootContextParams.ORIGIN, user, Entity::position)
-            .add(ItematicContextKeys.INTERACTED_POSITION, context.getClickedPos().getCenter())
+            .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(context.getClickedPos()))
             .add(LootContextParams.TOOL, stack)
             .add(ItematicContextKeys.HAND, hand)
             .add(ItematicContextKeys.SIDE, context.getClickedFace())
@@ -316,7 +317,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .stackExchanger(stackExchanger)
                 .add(LootContextParams.THIS_ENTITY, owner)
                 .add(LootContextParams.ORIGIN, owner.position())
-                .add(ItematicContextKeys.INTERACTED_POSITION, pos.getCenter())
+                .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(pos))
                 .add(LootContextParams.TOOL, itemStack)
                 .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
                 .build();
