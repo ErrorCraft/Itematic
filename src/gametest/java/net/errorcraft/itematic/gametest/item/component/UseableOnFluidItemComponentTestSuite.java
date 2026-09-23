@@ -1,17 +1,18 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -36,7 +37,7 @@ public class UseableOnFluidItemComponentTestSuite {
             Vec3.atBottomCenterOf(helper.absolutePos(LOOK_AT_WATER_POSITION_ON_LAND))
         );
         ServerLevel level = helper.getLevel();
-        ItemStack lilyPad = level.itematic$createStack(ItemIds.LILY_PAD);
+        ItemStack lilyPad = level.itematic$createStack(BlockItemIds.LILY_PAD.item());
         player.setItemInHand(InteractionHand.MAIN_HAND, lilyPad);
         helper.succeedIf(() -> {
             InteractionResult result = lilyPad.use(level, player, InteractionHand.MAIN_HAND);
@@ -65,7 +66,7 @@ public class UseableOnFluidItemComponentTestSuite {
                 result.consumesAction(),
                 () -> "Expected Pig Spawn Egg usage to be successful"
             );
-            helper.assertEntityPresent(EntityType.PIG, LOOK_AT_WATER_POSITION_ON_LAND);
+            helper.assertEntityPresent(EntityTypes.PIG, LOOK_AT_WATER_POSITION_ON_LAND);
         });
     }
 
@@ -84,7 +85,7 @@ public class UseableOnFluidItemComponentTestSuite {
                 result.consumesAction(),
                 () -> "Expected Pig Spawn Egg usage to be unsuccessful"
             );
-            helper.assertEntityNotPresent(EntityType.PIG);
+            helper.assertEntityNotPresent(EntityTypes.PIG);
         });
     }
 
@@ -97,7 +98,7 @@ public class UseableOnFluidItemComponentTestSuite {
         ItemStack pigSpawnEgg = level.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
         TestUtil.interactWithBlock(helper, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER, player, Direction.DOWN);
-        helper.succeedIf(() -> helper.assertEntityPresent(EntityType.PIG, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER));
+        helper.succeedIf(() -> helper.assertEntityPresent(EntityTypes.PIG, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER));
     }
 
     @GameTest(structure = "itematic:item.component.useable_on_fluid.water_hole")
@@ -116,7 +117,7 @@ public class UseableOnFluidItemComponentTestSuite {
                 () -> "Expected Pig Spawn Egg usage to be successful"
             );
             BlockPos eyeBlockPos = SPAWN_POSITION_IN_WATER.offset(0, (int) player.getEyeHeight(), 0);
-            helper.assertEntityPresent(EntityType.PIG, eyeBlockPos);
+            helper.assertEntityPresent(EntityTypes.PIG, eyeBlockPos);
         });
     }
 }

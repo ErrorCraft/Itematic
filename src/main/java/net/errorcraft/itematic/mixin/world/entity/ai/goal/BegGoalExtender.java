@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.entity.ai.goal;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.entity.ai.goal.BegGoal;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;

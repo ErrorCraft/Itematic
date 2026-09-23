@@ -1,15 +1,15 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.equine.Horse;
 import net.minecraft.world.entity.animal.pig.Pig;
@@ -28,7 +28,7 @@ public class ShearsTestSuite {
             InteractionHand.MAIN_HAND,
             level.itematic$createStack(ItemIds.SHEARS)
         );
-        Pig target = helper.spawn(EntityType.PIG, SPAWN_POSITION);
+        Pig target = helper.spawn(EntityTypes.PIG, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.SADDLE, level.itematic$createStack(ItemIds.SADDLE));
         helper.succeedIf(() -> {
             InteractionResult result = TestUtil.interactWithEntity(target, player);
@@ -44,7 +44,7 @@ public class ShearsTestSuite {
                 target.isSaddled(),
                 () -> "Expected Pig not to be saddled"
             );
-            Assert.entityType(helper, EntityType.ITEM)
+            Assert.entityType(helper, EntityTypes.ITEM)
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
@@ -61,7 +61,7 @@ public class ShearsTestSuite {
             InteractionHand.MAIN_HAND,
             level.itematic$createStack(ItemIds.SHEARS)
         );
-        Horse target = helper.spawn(EntityType.HORSE, SPAWN_POSITION);
+        Horse target = helper.spawn(EntityTypes.HORSE, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.SADDLE, level.itematic$createStack(ItemIds.SADDLE));
         helper.succeedIf(() -> {
             InteractionResult result = TestUtil.interactWithEntity(target, player);
@@ -77,7 +77,7 @@ public class ShearsTestSuite {
                 target.isSaddled(),
                 () -> "Expected Horse not to be saddled"
             );
-            Assert.entityType(helper, EntityType.ITEM)
+            Assert.entityType(helper, EntityTypes.ITEM)
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
@@ -94,7 +94,7 @@ public class ShearsTestSuite {
             InteractionHand.MAIN_HAND,
             level.itematic$createStack(ItemIds.SHEARS)
         );
-        Horse target = helper.spawn(EntityType.HORSE, SPAWN_POSITION);
+        Horse target = helper.spawn(EntityTypes.HORSE, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.IRON_HORSE_ARMOR));
         helper.succeedIf(() -> {
             InteractionResult result = TestUtil.interactWithEntity(target, player);
@@ -110,7 +110,7 @@ public class ShearsTestSuite {
                 target.isWearingBodyArmor(),
                 () -> "Expected Horse not to be wearing Horse Armor"
             );
-            Assert.entityType(helper, EntityType.ITEM)
+            Assert.entityType(helper, EntityTypes.ITEM)
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
@@ -127,7 +127,7 @@ public class ShearsTestSuite {
             InteractionHand.MAIN_HAND,
             level.itematic$createStack(ItemIds.SHEARS)
         );
-        Wolf target = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
+        Wolf target = helper.spawn(EntityTypes.WOLF, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.WOLF_ARMOR));
         target.setOwner(player);
         helper.succeedIf(() -> {
@@ -144,7 +144,7 @@ public class ShearsTestSuite {
                 target.isWearingBodyArmor(),
                 () -> "Expected Wolf not to be wearing Wolf Armor"
             );
-            Assert.entityType(helper, EntityType.ITEM)
+            Assert.entityType(helper, EntityTypes.ITEM)
                 .exists(
                     Assert::itemEntity,
                     itemEntity -> itemEntity.itemStack(heldStack -> heldStack
@@ -161,7 +161,7 @@ public class ShearsTestSuite {
             InteractionHand.MAIN_HAND,
             level.itematic$createStack(ItemIds.SHEARS)
         );
-        Wolf target = helper.spawn(EntityType.WOLF, SPAWN_POSITION);
+        Wolf target = helper.spawn(EntityTypes.WOLF, SPAWN_POSITION);
         target.setItemSlot(EquipmentSlot.BODY, level.itematic$createStack(ItemIds.WOLF_ARMOR));
         helper.succeedIf(() -> {
             InteractionResult result = TestUtil.interactWithEntity(target, player);
@@ -177,7 +177,7 @@ public class ShearsTestSuite {
                 target.isWearingBodyArmor(),
                 () -> "Expected Wolf to be wearing Wolf Armor"
             );
-            Assert.entityType(helper, EntityType.ITEM)
+            Assert.entityType(helper, EntityTypes.ITEM)
                 .doesNotExist();
         });
     }

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.world.level.storage.loot.predicates;
 
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.minecraft.advancements.criterion.LocationPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;

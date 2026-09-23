@@ -1,13 +1,13 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -21,7 +21,7 @@ public class WeaponItemComponentTestSuite {
     @GameTest
     public void zombieAttackingUnarmedDealsDamageFromTrueBaseValueAttackDamageAttribute(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        Zombie zombie = TestUtil.createEntity(helper, EntityType.ZOMBIE, _ -> {});
+        Zombie zombie = TestUtil.createEntity(helper, EntityTypes.ZOMBIE, _ -> {});
         level.addFreshEntity(zombie);
         Pig victim = spawnVictim(helper);
         helper.startSequence().thenExecuteAfter(1, () -> {
@@ -40,7 +40,7 @@ public class WeaponItemComponentTestSuite {
         ServerLevel level = helper.getLevel();
         Zombie zombie = TestUtil.createEntity(
             helper,
-            EntityType.ZOMBIE,
+            EntityTypes.ZOMBIE,
             entity -> entity.setItemInHand(
                 InteractionHand.MAIN_HAND,
                 level.itematic$createStack(ItemIds.IRON_SWORD)
@@ -64,7 +64,7 @@ public class WeaponItemComponentTestSuite {
         ServerLevel level = helper.getLevel();
         Piglin piglin = TestUtil.createEntity(
             helper,
-            EntityType.PIGLIN,
+            EntityTypes.PIGLIN,
             entity -> level.itematic$createStack(ItemIds.IRON_SWORD)
         );
         level.addFreshEntity(piglin);
@@ -85,7 +85,7 @@ public class WeaponItemComponentTestSuite {
         ServerLevel level = helper.getLevel();
         Piglin piglin = TestUtil.createEntity(
             helper,
-            EntityType.PIGLIN,
+            EntityTypes.PIGLIN,
             entity -> entity.setItemInHand(
                 InteractionHand.MAIN_HAND,
                 level.itematic$createStack(ItemIds.GOLDEN_SWORD)
@@ -105,7 +105,7 @@ public class WeaponItemComponentTestSuite {
     }
 
     private static Pig spawnVictim(GameTestHelper helper) {
-        Pig victim = TestUtil.createEntity(helper, EntityType.PIG, entity -> {
+        Pig victim = TestUtil.createEntity(helper, EntityTypes.PIG, entity -> {
             Objects.requireNonNull(entity.getAttributes().getInstance(Attributes.MAX_HEALTH))
                 .setBaseValue(MAX_HEALTH_VICTIM);
             entity.setHealth((float) MAX_HEALTH_VICTIM);

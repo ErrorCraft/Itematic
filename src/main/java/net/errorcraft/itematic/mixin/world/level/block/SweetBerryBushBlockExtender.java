@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelReader;
@@ -19,7 +20,7 @@ public class SweetBerryBushBlockExtender {
         )
     )
     private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item, LevelReader level) {
-        return level.itematic$createStack(ItemIds.SWEET_BERRIES);
+        return level.itematic$createStack(BlockItemIds.SWEET_BERRY_CROP.item());
     }
 
     @Redirect(

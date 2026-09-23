@@ -3,7 +3,7 @@ package net.errorcraft.itematic.client.resources.item.bar.color.provider;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.advancements.criterion.ItematicMinMaxBounds;
+import net.errorcraft.itematic.advancements.predicates.ItematicMinMaxBounds;
 import net.errorcraft.itematic.client.resources.item.bar.color.ColorProvider;
 import net.errorcraft.itematic.client.resources.item.bar.color.ColorProviderType;
 import net.minecraft.util.ExtraCodecs;

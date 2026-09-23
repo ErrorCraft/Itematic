@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.world.item.ItemAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.ActionEventMap;
@@ -33,6 +32,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
@@ -108,7 +108,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         )
     )
     private static boolean isAirCheckId(Holder<Item> instance, Holder<Item> holder, Operation<Boolean> original) {
-        return instance.is(ItemIds.AIR);
+        return instance.is(BlockItemIds.AIR.item());
     }
 
     @WrapOperation(

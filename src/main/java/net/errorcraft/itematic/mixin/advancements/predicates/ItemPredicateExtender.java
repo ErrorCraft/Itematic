@@ -1,15 +1,15 @@
-package net.errorcraft.itematic.mixin.advancements.criterion;
+package net.errorcraft.itematic.mixin.advancements.predicates;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.access.advancements.criterion.ItemPredicateAccess;
+import net.errorcraft.itematic.access.advancements.predicates.ItemPredicateAccess;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.util.SetCodec;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemInstance;

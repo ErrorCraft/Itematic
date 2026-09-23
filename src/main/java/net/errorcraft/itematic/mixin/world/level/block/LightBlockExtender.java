@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.world.level.block;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -19,6 +19,6 @@ public class LightBlockExtender {
         )
     )
     private boolean isHoldingLightCheckId(CollisionContext instance, Item item, Operation<Boolean> original) {
-        return instance.itematic$isHoldingItem(ItemIds.LIGHT);
+        return instance.itematic$isHoldingItem(BlockItemIds.LIGHT.item());
     }
 }

@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.entity.decoration;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.BlockAttachedEntity;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;

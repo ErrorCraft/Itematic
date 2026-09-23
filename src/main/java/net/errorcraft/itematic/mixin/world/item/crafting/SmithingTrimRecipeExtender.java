@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.world.item.crafting;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SimpleSmithingRecipe;
@@ -50,7 +50,7 @@ public abstract class SmithingTrimRecipeExtender extends SimpleSmithingRecipe {
                 base,
                 material,
                 new SlotDisplay.SmithingTrimDemoSlotDisplay(base, material, this.pattern),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.SMITHING_TABLE))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(BlockItemIds.SMITHING_TABLE.item()))
             )
         );
     }

@@ -1,13 +1,14 @@
 package net.errorcraft.itematic.mixin.core.cauldron;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
 import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteractions;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
 import net.minecraft.world.item.Item;
@@ -47,7 +48,7 @@ public class CauldronInteractionsExtender {
     )
     private static ItemStack transmuteCopyForShulkerBoxUseHolder(ItemStack instance, ItemLike newItem, int newCount, @Local(name = "level", argsOnly = true) Level level) {
         return instance.itematic$transmuteCopy(
-            level.itematic$getItem(ItemIds.SHULKER_BOX),
+            level.itematic$getItem(BlockItemIds.SHULKER_BOX.item()),
             newCount
         );
     }
@@ -110,7 +111,7 @@ public class CauldronInteractionsExtender {
         )
     )
     private static ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) Level level) {
-        return level.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
+        return level.itematic$createStack(BlockItemIds.POWDER_SNOW.item());
     }
 
     @Redirect(

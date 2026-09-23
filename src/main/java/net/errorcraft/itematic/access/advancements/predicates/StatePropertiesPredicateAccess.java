@@ -1,6 +1,6 @@
-package net.errorcraft.itematic.access.advancements.criterion;
+package net.errorcraft.itematic.access.advancements.predicates;
 
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.state.properties.Property;
 

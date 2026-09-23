@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.client.gui.screens.achievement.StatsScreenAccess;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
 import net.minecraft.client.Minecraft;
@@ -15,6 +14,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
@@ -158,7 +158,7 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                 }
             }
 
-            entries.removeIf(item -> item.is(ItemIds.AIR));
+            entries.removeIf(item -> item.is(BlockItemIds.AIR.item()));
             return entries;
         }
 

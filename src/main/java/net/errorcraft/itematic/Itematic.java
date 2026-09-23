@@ -1,5 +1,6 @@
 package net.errorcraft.itematic;
 
+import net.errorcraft.itematic.advancements.predicates.entity.ItematicEntitySubPredicates;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.ActionType;
@@ -23,6 +24,7 @@ import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.errorcraft.itematic.world.level.storage.loot.functions.ItematicItemModifiers;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.ItematicPredicates;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 public class Itematic implements ModInitializer {
     @Override
@@ -49,5 +51,6 @@ public class Itematic implements ModInitializer {
         EntitySpawnRuleType.init();
         MeleeWeaponComponents.init();
         ItematicMenuTypes.init();
+        ItematicEntitySubPredicates.bootstrap(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);
     }
 }

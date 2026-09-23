@@ -1,7 +1,7 @@
-package net.errorcraft.itematic.access.advancements.criterion;
+package net.errorcraft.itematic.access.advancements.predicates;
 
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.Item;
 import java.util.Optional;

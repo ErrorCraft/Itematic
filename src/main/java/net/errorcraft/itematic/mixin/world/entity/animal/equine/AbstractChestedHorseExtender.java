@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.world.entity.animal.equine;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.equine.AbstractChestedHorse;
@@ -34,7 +34,7 @@ public abstract class AbstractChestedHorseExtender extends AbstractHorse {
     )
     @Nullable
     private ItemEntity spawnChestUseId(AbstractChestedHorse instance, ServerLevel level, ItemLike resource, Operation<ItemEntity> original) {
-        return this.itematic$spawnAtLocation(level, ItemIds.CHEST);
+        return this.itematic$spawnAtLocation(level, BlockItemIds.CHEST.item());
     }
 
     @WrapOperation(
@@ -45,7 +45,7 @@ public abstract class AbstractChestedHorseExtender extends AbstractHorse {
         )
     )
     private boolean isHoldingGoldenDandelionCheckId(Player instance, Item item, Operation<Boolean> original) {
-        return instance.itematic$isHolding(ItemIds.GOLDEN_DANDELION);
+        return instance.itematic$isHolding(BlockItemIds.GOLDEN_DANDELION.item());
     }
 
     @WrapOperation(
@@ -56,7 +56,7 @@ public abstract class AbstractChestedHorseExtender extends AbstractHorse {
         )
     )
     private boolean isChestCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
-        return instance.is(ItemIds.CHEST);
+        return instance.is(BlockItemIds.CHEST.item());
     }
 
     @Mixin(targets = "net/minecraft/world/entity/animal/equine/AbstractChestedHorse$1")
@@ -73,7 +73,7 @@ public abstract class AbstractChestedHorseExtender extends AbstractHorse {
             )
         )
         private ItemStack newItemStackForChestUseCreateStack(ItemLike item, Operation<ItemStack> original) {
-            return this.this$0.level().itematic$createStack(ItemIds.CHEST);
+            return this.this$0.level().itematic$createStack(BlockItemIds.CHEST.item());
         }
 
         @WrapOperation(
@@ -84,7 +84,7 @@ public abstract class AbstractChestedHorseExtender extends AbstractHorse {
             )
         )
         private boolean isChestCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
-            return instance.is(ItemIds.CHEST);
+            return instance.is(BlockItemIds.CHEST.item());
         }
     }
 }

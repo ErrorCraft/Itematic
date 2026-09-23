@@ -1,8 +1,8 @@
-package net.errorcraft.itematic.mixin.advancements.criterion;
+package net.errorcraft.itematic.mixin.advancements.predicates;
 
 import com.google.common.collect.ImmutableList;
-import net.errorcraft.itematic.access.advancements.criterion.StatePropertiesPredicateAccess;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.errorcraft.itematic.access.advancements.predicates.StatePropertiesPredicateAccess;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.spongepowered.asm.mixin.Final;

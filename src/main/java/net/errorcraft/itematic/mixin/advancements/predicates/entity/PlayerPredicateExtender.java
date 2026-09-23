@@ -1,4 +1,4 @@
-package net.errorcraft.itematic.mixin.advancements.criterion;
+package net.errorcraft.itematic.mixin.advancements.predicates.entity;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 public class PlayerPredicateExtender {
-    @Mixin(targets = "net/minecraft/advancements/criterion/PlayerPredicate$StatMatcher")
+    @Mixin(targets = "net/minecraft/advancements/predicates/entity/PlayerPredicate$StatMatcher")
     public static class StatMatcherExtender {
         @Redirect(
             method = "lambda$new$0",

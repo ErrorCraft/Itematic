@@ -2,10 +2,10 @@ package net.errorcraft.itematic.world.item.use.duration.provider.providers;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.advancements.criterion.ItemPredicates;
+import net.errorcraft.itematic.advancements.predicates.ItemPredicates;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;

@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.renderer.item.properties.select;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.renderer.item.properties.select.Charge;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ChargedProjectiles;
 import org.spongepowered.asm.mixin.Mixin;

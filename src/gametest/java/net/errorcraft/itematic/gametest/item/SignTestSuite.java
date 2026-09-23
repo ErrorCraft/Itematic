@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.phys.Vec3;
 
 public class SignTestSuite {
@@ -35,14 +35,14 @@ public class SignTestSuite {
         player.setXRot(90.0f);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.OAK_SIGN)
+            level.itematic$createStack(ItematicBlockItemIds.OAK.sign().item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> {
             Assert.blockState(helper, PLACED_GROUND_BLOCK_POSITION)
                 .is(Blocks.OAK_SIGN);
-            Assert.blockEntity(helper, PLACED_GROUND_BLOCK_POSITION, BlockEntityType.SIGN,
+            Assert.blockEntity(helper, PLACED_GROUND_BLOCK_POSITION, BlockEntityTypes.SIGN,
                 blockEntity -> Assert.isTrue(
                     helper,
                     player.getUUID().equals(blockEntity.getPlayerWhoMayEdit()),
@@ -57,11 +57,11 @@ public class SignTestSuite {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setXRot(90.0f);
-        ItemStack oakSign = level.itematic$createStack(ItemIds.OAK_SIGN);
+        ItemStack oakSign = level.itematic$createStack(ItematicBlockItemIds.OAK.sign().item());
         oakSign.set(
             DataComponents.BLOCK_ENTITY_DATA,
             TypedEntityData.of(
-                BlockEntityType.SIGN,
+                BlockEntityTypes.SIGN,
                 new CompoundTag()
             )
         );
@@ -71,7 +71,7 @@ public class SignTestSuite {
         helper.succeedOnTickWhen(1, () -> {
             Assert.blockState(helper, PLACED_GROUND_BLOCK_POSITION)
                 .is(Blocks.OAK_SIGN);
-            Assert.blockEntity(helper, PLACED_GROUND_BLOCK_POSITION, BlockEntityType.SIGN,
+            Assert.blockEntity(helper, PLACED_GROUND_BLOCK_POSITION, BlockEntityTypes.SIGN,
                 blockEntity -> Assert.isFalse(
                     helper,
                     player.getUUID().equals(blockEntity.getPlayerWhoMayEdit()),
@@ -88,14 +88,14 @@ public class SignTestSuite {
         player.setXRot(-90.0f);
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            level.itematic$createStack(ItemIds.OAK_HANGING_SIGN)
+            level.itematic$createStack(ItematicBlockItemIds.OAK.hangingSign().item())
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, CEILING_POSITION, player, Direction.DOWN);
         helper.succeedIf(() -> {
             Assert.blockState(helper, PLACED_CEILING_BLOCK_POSITION)
                 .is(Blocks.OAK_HANGING_SIGN);
-            Assert.blockEntity(helper, PLACED_CEILING_BLOCK_POSITION, BlockEntityType.HANGING_SIGN,
+            Assert.blockEntity(helper, PLACED_CEILING_BLOCK_POSITION, BlockEntityTypes.HANGING_SIGN,
                 blockEntity -> Assert.isTrue(
                     helper,
                     player.getUUID().equals(blockEntity.getPlayerWhoMayEdit()),
@@ -110,11 +110,11 @@ public class SignTestSuite {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setXRot(-90.0f);
-        ItemStack oakHangingSign = level.itematic$createStack(ItemIds.OAK_HANGING_SIGN);
+        ItemStack oakHangingSign = level.itematic$createStack(ItematicBlockItemIds.OAK.hangingSign().item());
         oakHangingSign.set(
             DataComponents.BLOCK_ENTITY_DATA,
             TypedEntityData.of(
-                BlockEntityType.SIGN,
+                BlockEntityTypes.SIGN,
                 new CompoundTag()
             )
         );
@@ -124,7 +124,7 @@ public class SignTestSuite {
         helper.succeedOnTickWhen(1, () -> {
             Assert.blockState(helper, PLACED_CEILING_BLOCK_POSITION)
                 .is(Blocks.OAK_HANGING_SIGN);
-            Assert.blockEntity(helper, PLACED_CEILING_BLOCK_POSITION, BlockEntityType.HANGING_SIGN,
+            Assert.blockEntity(helper, PLACED_CEILING_BLOCK_POSITION, BlockEntityTypes.HANGING_SIGN,
                 blockEntity -> Assert.isFalse(
                     helper,
                     player.getUUID().equals(blockEntity.getPlayerWhoMayEdit()),
@@ -140,7 +140,7 @@ public class SignTestSuite {
         TestUtil.lookAt(helper, player, Vec3.atLowerCornerOf(WALL_POSITION).add(0.5d, 0.0d, 0.1d));
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            helper.getLevel().itematic$createStack(ItemIds.OAK_SIGN)
+            helper.getLevel().itematic$createStack(ItematicBlockItemIds.OAK.sign().item())
         );
         TestUtil.interactWithBlock(helper, WALL_POSITION, player, Direction.NORTH);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_WALL_BLOCK_POSITION)
@@ -153,7 +153,7 @@ public class SignTestSuite {
         TestUtil.lookAt(helper, player, Vec3.atLowerCornerOf(WALL_POSITION).add(0.5d, 0.0d, -0.1d));
         player.setItemInHand(
             InteractionHand.MAIN_HAND,
-            helper.getLevel().itematic$createStack(ItemIds.OAK_SIGN)
+            helper.getLevel().itematic$createStack(ItematicBlockItemIds.OAK.sign().item())
         );
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_GROUND_BLOCK_POSITION)

@@ -2,9 +2,9 @@ package net.errorcraft.itematic.world.item.weapon.melee;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.advancements.criterion.ItemPredicates;
+import net.errorcraft.itematic.advancements.predicates.ItemPredicates;
 import net.errorcraft.itematic.util.ItematicCodecs;
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;

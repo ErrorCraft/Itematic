@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.world.item.crafting;
 
 import com.mojang.serialization.MapCodec;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.errorcraft.itematic.world.item.crafting.display.BrewingRecipeDisplay;
@@ -12,6 +11,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
@@ -87,7 +87,7 @@ public class ModifyBrewingRecipe extends BrewingRecipe<Potion> {
                 new PotionSlotDisplay(this.base()),
                 this.reagent().display(),
                 new PotionSlotDisplay(this.result()),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(ItemIds.BREWING_STAND))
+                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(BlockItemIds.BREWING_STAND.item()))
             )
         );
     }

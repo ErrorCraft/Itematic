@@ -1,12 +1,12 @@
 package net.errorcraft.itematic.gametest.item.component;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 
 public class ImmuneToDamageItemComponentTestSuite {
@@ -24,7 +24,7 @@ public class ImmuneToDamageItemComponentTestSuite {
         );
         TestUtil.spawnEntity(helper, netherStar, SPAWN_POSITION);
         netherStar.hurtServer(level, level.damageSources().explosion(null), Float.MAX_VALUE);
-        helper.succeedIf(() -> helper.assertEntityPresent(EntityType.ITEM));
+        helper.succeedIf(() -> helper.assertEntityPresent(EntityTypes.ITEM));
     }
 
     @GameTest
@@ -39,7 +39,7 @@ public class ImmuneToDamageItemComponentTestSuite {
         );
         TestUtil.spawnEntity(helper, stick, SPAWN_POSITION);
         stick.hurtServer(level, level.damageSources().explosion(null), Float.MAX_VALUE);
-        helper.succeedIf(() -> helper.assertEntityNotPresent(EntityType.ITEM));
+        helper.succeedIf(() -> helper.assertEntityNotPresent(EntityTypes.ITEM));
     }
 
     @GameTest
@@ -54,7 +54,7 @@ public class ImmuneToDamageItemComponentTestSuite {
         );
         TestUtil.spawnEntity(helper, netheriteIngot, SPAWN_POSITION);
         netheriteIngot.hurtServer(level, level.damageSources().inFire(), Float.MAX_VALUE);
-        helper.succeedIf(() -> helper.assertEntityPresent(EntityType.ITEM));
+        helper.succeedIf(() -> helper.assertEntityPresent(EntityTypes.ITEM));
     }
 
     @GameTest
@@ -69,6 +69,6 @@ public class ImmuneToDamageItemComponentTestSuite {
         );
         TestUtil.spawnEntity(helper, stick, SPAWN_POSITION);
         stick.hurtServer(level, level.damageSources().inFire(), Float.MAX_VALUE);
-        helper.succeedIf(() -> helper.assertEntityNotPresent(EntityType.ITEM));
+        helper.succeedIf(() -> helper.assertEntityNotPresent(EntityTypes.ITEM));
     }
 }

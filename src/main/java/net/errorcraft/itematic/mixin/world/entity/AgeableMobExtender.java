@@ -3,7 +3,7 @@ package net.errorcraft.itematic.mixin.world.entity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -29,6 +29,6 @@ public class AgeableMobExtender extends PathfinderMob {
         )
     )
     private static Item getGoldenDandelionUseDynamicRegistry(Operation<Item> original, @Local(name = "mob", argsOnly = true) Mob mob) {
-        return mob.level().itematic$getItem(ItemIds.GOLDEN_DANDELION).value();
+        return mob.level().itematic$getItem(BlockItemIds.GOLDEN_DANDELION.item()).value();
     }
 }

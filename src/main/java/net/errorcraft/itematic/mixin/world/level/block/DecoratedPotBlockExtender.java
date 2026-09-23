@@ -4,10 +4,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.world.level.block.state.BlockBehaviourAccess;
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
@@ -66,7 +66,7 @@ public class DecoratedPotBlockExtender implements BlockBehaviourAccess {
         )
     )
     private ItemStack createDecoratedPotInstanceUseCreateStack(PotDecorations decorations, Operation<ItemStack> original, LevelReader level) {
-        ItemStack stack = level.itematic$createStack(ItemIds.DECORATED_POT);
+        ItemStack stack = level.itematic$createStack(BlockItemIds.DECORATED_POT.item());
         stack.set(DataComponents.POT_DECORATIONS, decorations);
         return stack;
     }

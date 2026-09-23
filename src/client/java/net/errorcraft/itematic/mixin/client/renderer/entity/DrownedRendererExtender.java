@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.client.renderer.entity;
 
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.renderer.entity.DrownedRenderer;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

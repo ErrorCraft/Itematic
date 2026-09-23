@@ -1,7 +1,8 @@
 package net.errorcraft.itematic.mixin.world.entity.animal.fox;
 
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -158,7 +159,7 @@ public abstract class FoxExtender extends MobExtender {
             )
         )
         private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item) {
-            return this.this$0.level().itematic$createStack(ItemIds.SWEET_BERRIES);
+            return this.this$0.level().itematic$createStack(BlockItemIds.SWEET_BERRY_CROP.item());
         }
 
         @Redirect(
@@ -176,7 +177,7 @@ public abstract class FoxExtender extends MobExtender {
             )
         )
         private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item, int count) {
-            return this.this$0.level().itematic$createStack(ItemIds.SWEET_BERRIES, count);
+            return this.this$0.level().itematic$createStack(BlockItemIds.SWEET_BERRY_CROP.item(), count);
         }
     }
 }

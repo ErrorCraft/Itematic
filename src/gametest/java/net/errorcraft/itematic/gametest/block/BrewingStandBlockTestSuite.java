@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.errorcraft.itematic.world.inventory.BrewingStandMenuDelegate;
 import net.errorcraft.itematic.world.inventory.ItematicMenuTypes;
@@ -9,6 +8,8 @@ import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +27,7 @@ public class BrewingStandBlockTestSuite {
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.WATER));
         brewingStandMenu.getSlot(3)
-            .setByPlayer(level.itematic$createStack(ItemIds.NETHER_WART));
+            .setByPlayer(level.itematic$createStack(BlockItemIds.NETHER_WART.item()));
         brewingStandMenu.getSlot(4)
             .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
         helper.startSequence()
@@ -95,7 +96,7 @@ public class BrewingStandBlockTestSuite {
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
-            .setByPlayer(level.itematic$createStack(ItemIds.REDSTONE));
+            .setByPlayer(level.itematic$createStack(BlockItemIds.REDSTONE_DUST.item()));
         brewingStandMenu.getSlot(4)
             .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
         helper.startSequence()
@@ -174,7 +175,7 @@ public class BrewingStandBlockTestSuite {
         brewingStandMenu.getSlot(2)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.LEAPING));
         brewingStandMenu.getSlot(3)
-            .setByPlayer(level.itematic$createStack(ItemIds.NETHER_WART));
+            .setByPlayer(level.itematic$createStack(BlockItemIds.NETHER_WART.item()));
         brewingStandMenu.getSlot(4)
             .setByPlayer(level.itematic$createStack(ItemIds.BLAZE_POWDER));
         helper.startSequence()

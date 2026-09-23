@@ -1,9 +1,6 @@
 package net.errorcraft.itematic.core.dispenser.behavior;
 
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
-import net.errorcraft.itematic.references.BlockIds;
-import net.errorcraft.itematic.references.EntityTypeIds;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
@@ -34,17 +31,21 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSeq
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
-import net.minecraft.advancements.criterion.BlockPredicate;
-import net.minecraft.advancements.criterion.LocationPredicate;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.BlockPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypeIds;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
@@ -90,7 +91,7 @@ public class DispenseBehaviors {
                     PositionTarget.INTERACTED,
                     LocationPredicate.Builder.location()
                         .setBlock(BlockPredicate.Builder.block()
-                            .of(blocks, blocks.getOrThrow(BlockIds.RESPAWN_ANCHOR).value()))
+                            .of(blocks, blocks.getOrThrow(BlockItemIds.RESPAWN_ANCHOR.block()).value()))
                 ),
                 decrement(ChargeRespawnAnchorAction.of(PositionTarget.INTERACTED)))
         ).doNotDispenseOnFailure().build());
@@ -141,9 +142,9 @@ public class DispenseBehaviors {
         registerable.register(SHOOT_FIREWORK_ROCKET, DispenseBehavior.builder(
             shootProjectile(1.0f, 0.5f)
         ).offset(DispenseBehavior.Offset.ofSide(
-            0.5d - EntityType.FIREWORK_ROCKET.getWidth() * 0.5d,
-            -EntityType.FIREWORK_ROCKET.getHeight() + 0.5d,
-            0.5d - EntityType.FIREWORK_ROCKET.getWidth() * 0.5d
+            0.5d - EntityTypes.FIREWORK_ROCKET.getWidth() * 0.5d,
+            -EntityTypes.FIREWORK_ROCKET.getHeight() + 0.5d,
+            0.5d - EntityTypes.FIREWORK_ROCKET.getWidth() * 0.5d
         )).build());
         registerable.register(SHOOT_PROJECTILE, DispenseBehavior.builder(
             shootProjectile(1.1f, 6.0f)

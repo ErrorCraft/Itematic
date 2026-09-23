@@ -2,7 +2,6 @@ package net.errorcraft.itematic.data.server;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricCodecDataProvider;
@@ -13,6 +12,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -39,7 +40,7 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
         HolderLookup.RegistryLookup<Item> items = lookup.lookupOrThrow(Registries.ITEM);
         provider.accept(
             Identifier.withDefaultNamespace("honey_block"),
-            shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(ItemIds.HONEY_BLOCK))
+            shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(BlockItemIds.HONEY_BLOCK.item()))
                 .input('#', items.getOrThrow(ItemIds.HONEY_BOTTLE), items.getOrThrow(ItemIds.GLASS_BOTTLE))
                 .pattern("##")
                 .pattern("##")
@@ -53,7 +54,7 @@ public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
         );
         provider.accept(
             Identifier.withDefaultNamespace("cake"),
-            shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(ItemIds.CAKE))
+            shapedRecipe(RecipeCategory.FOOD, items.getOrThrow(BlockItemIds.CAKE.item()))
                 .input('A', items.getOrThrow(ItemIds.MILK_BUCKET), items.getOrThrow(ItemIds.BUCKET))
                 .input('B', items.getOrThrow(ItemIds.SUGAR))
                 .input('C', items.getOrThrow(ItemIds.WHEAT))

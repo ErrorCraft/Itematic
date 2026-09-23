@@ -12,11 +12,11 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.errorcraft.itematic.access.world.entity.MobAccess;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SpawnEggItemBehavior;
-import net.minecraft.advancements.criterion.PlayerInteractTrigger;
+import net.minecraft.advancements.triggers.PlayerInteractTrigger;
 import net.minecraft.core.Holder;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -113,7 +113,7 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
         method = "shearItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/advancements/criterion/PlayerInteractTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/Entity;)V"
+            target = "Lnet/minecraft/advancements/triggers/PlayerInteractTrigger;trigger(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/Entity;)V"
         )
     )
     private boolean checkForServerPlayer(PlayerInteractTrigger instance, @Nullable ServerPlayer player, ItemStack itemStack, Entity interactedWith) {

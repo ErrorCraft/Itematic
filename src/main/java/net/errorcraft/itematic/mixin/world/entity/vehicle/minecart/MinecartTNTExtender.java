@@ -1,7 +1,7 @@
 package net.errorcraft.itematic.mixin.world.entity.vehicle.minecart;
 
 import net.errorcraft.itematic.mixin.world.entity.vehicle.VehicleEntityExtender;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.minecart.MinecartTNT;

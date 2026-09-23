@@ -8,7 +8,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.world.entity.LivingEntityAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
@@ -18,6 +17,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stat;
@@ -132,7 +132,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isSkeletonSkullCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.SKELETON_SKULL);
+        return instance.is(BlockItemIds.SKELETON_SKULL.item());
     }
 
     @Redirect(
@@ -151,7 +151,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isZombieHeadCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.ZOMBIE_HEAD);
+        return instance.is(BlockItemIds.ZOMBIE_HEAD.item());
     }
 
     @Redirect(
@@ -170,7 +170,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isCreeperHeadCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.CREEPER_HEAD);
+        return instance.is(BlockItemIds.CREEPER_HEAD.item());
     }
 
     @Redirect(
@@ -193,7 +193,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private boolean isPiglinHeadCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.PIGLIN_HEAD);
+        return instance.is(BlockItemIds.PIGLIN_HEAD.item());
     }
 
     @Redirect(
@@ -390,7 +390,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     private ItemStack newItemStackForWitherRoseUseCreateStack(ItemLike item) {
-        return this.level().itematic$createStack(ItemIds.WITHER_ROSE);
+        return this.level().itematic$createStack(BlockItemIds.WITHER_ROSE.item());
     }
 
     @ModifyReturnValue(

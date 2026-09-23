@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.world.inventory;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.inventory.CartographyTableMenu;
 import net.minecraft.world.item.ItemStack;
 import org.objectweb.asm.Opcodes;
@@ -30,7 +31,7 @@ public class CartographyTableMenuExtender {
         )
     )
     private boolean isGlassPaneCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.GLASS_PANE);
+        return instance.is(BlockItemIds.GLASS_PANE.item());
     }
 
     @Redirect(
@@ -107,7 +108,7 @@ public class CartographyTableMenuExtender {
             )
         )
         private boolean isGlassPaneCheckId(ItemStack instance, Object o) {
-            return instance.is(ItemIds.GLASS_PANE);
+            return instance.is(BlockItemIds.GLASS_PANE.item());
         }
 
         @Redirect(

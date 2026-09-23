@@ -1,7 +1,7 @@
 classTweaker    v2    official
 
-accessible    class    net/minecraft/advancements/criterion/StatePropertiesPredicate$PropertyMatcher
-accessible    class    net/minecraft/advancements/criterion/StatePropertiesPredicate$RangedMatcher
+accessible    class    net/minecraft/advancements/predicates/StatePropertiesPredicate$PropertyMatcher
+accessible    class    net/minecraft/advancements/predicates/StatePropertiesPredicate$RangedMatcher
 accessible    class    net/minecraft/client/gui/screens/CreateFlatWorldScreen$DetailsList
 accessible    class    net/minecraft/client/gui/screens/PresetFlatWorldScreen$PresetsList
 accessible    class    net/minecraft/client/gui/screens/achievement/StatsScreen$ItemStatisticsList
@@ -14,11 +14,10 @@ accessible    class    net/minecraft/client/resources/model/ModelBakery$ModelBak
 accessible    class    net/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap
 accessible    class    net/minecraft/world/entity/animal/feline/Ocelot$OcelotTemptGoal
 
-inject-interface    net/minecraft/advancements/criterion/EntityPredicate    net/errorcraft/itematic/access/advancements/criterion/EntityPredicateAccess
-inject-interface    net/minecraft/advancements/criterion/EntityPredicate$Builder    net/errorcraft/itematic/access/advancements/criterion/EntityPredicateAccess$BuilderAccess
-inject-interface    net/minecraft/advancements/criterion/ItemPredicate    net/errorcraft/itematic/access/advancements/criterion/ItemPredicateAccess
-inject-interface    net/minecraft/advancements/criterion/ItemPredicate$Builder    net/errorcraft/itematic/access/advancements/criterion/ItemPredicateAccess$BuilderAccess
-inject-interface    net/minecraft/advancements/criterion/StatePropertiesPredicate$Builder    net/errorcraft/itematic/access/advancements/criterion/StatePropertiesPredicateAccess$BuilderAccess
+inject-interface    net/minecraft/advancements/predicates/entity/EntityPredicate$Builder    net/errorcraft/itematic/access/advancements/predicates/entity/EntityPredicateAccess$BuilderAccess
+inject-interface    net/minecraft/advancements/predicates/ItemPredicate    net/errorcraft/itematic/access/advancements/predicates/ItemPredicateAccess
+inject-interface    net/minecraft/advancements/predicates/ItemPredicate$Builder    net/errorcraft/itematic/access/advancements/predicates/ItemPredicateAccess$BuilderAccess
+inject-interface    net/minecraft/advancements/predicates/StatePropertiesPredicate$Builder    net/errorcraft/itematic/access/advancements/predicates/StatePropertiesPredicateAccess$BuilderAccess
 inject-interface    net/minecraft/client/Minecraft    net/errorcraft/itematic/access/client/MinecraftAccess
 inject-interface    net/minecraft/client/gui/components/ItemDisplayWidget    net/errorcraft/itematic/access/client/gui/components/ItemDisplayWidgetAccess
 inject-interface    net/minecraft/client/gui/screens/CreateFlatWorldScreen    net/errorcraft/itematic/access/client/gui/screens/CreateFlatWorldScreenAccess

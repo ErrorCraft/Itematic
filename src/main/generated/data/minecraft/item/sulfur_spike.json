@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:sulfur_spike"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:sulfur_spike",
+    "translation_key": "block.minecraft.sulfur_spike"
+  }
+}

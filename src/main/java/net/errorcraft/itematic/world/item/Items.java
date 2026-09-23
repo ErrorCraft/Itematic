@@ -9,13 +9,9 @@ import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.mixin.world.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
-import net.errorcraft.itematic.references.BlockIds;
-import net.errorcraft.itematic.references.EntityTypeIds;
-import net.errorcraft.itematic.references.FluidIds;
 import net.errorcraft.itematic.references.ItemBarStyleIds;
-import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
-import net.errorcraft.itematic.references.PotionIds;
 import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.errorcraft.itematic.tags.ItematicItemTags;
@@ -110,21 +106,24 @@ import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.Smashi
 import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.ChargeableShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.world.level.block.CompostChances;
+import net.errorcraft.itematic.world.level.block.CoralCollection;
+import net.errorcraft.itematic.world.level.block.CutoutCollection;
 import net.errorcraft.itematic.world.level.block.FuelTimes;
+import net.errorcraft.itematic.world.level.block.WoodCollection;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointerLocationItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
 import net.errorcraft.itematic.world.phys.Vec3Provider;
-import net.minecraft.advancements.criterion.BlockPredicate;
-import net.minecraft.advancements.criterion.DataComponentMatchers;
-import net.minecraft.advancements.criterion.EnchantmentPredicate;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.FluidPredicate;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.LocationPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.BlockPredicate;
+import net.minecraft.advancements.predicates.DataComponentMatchers;
+import net.minecraft.advancements.predicates.EnchantmentPredicate;
+import net.minecraft.advancements.predicates.FluidPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
@@ -144,6 +143,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.references.BlockIds;
+import net.minecraft.references.BlockItemId;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -159,13 +162,13 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypeIds;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.chicken.ChickenVariant;
 import net.minecraft.world.entity.animal.chicken.ChickenVariants;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.Item;
@@ -179,6 +182,7 @@ import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.PotionIds;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -193,12 +197,14 @@ import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ColorCollection;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidIds;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
@@ -211,6 +217,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class Items {
     public static final int UNSTACKABLE_MAX_STACK_SIZE = 1;
@@ -257,7 +264,7 @@ public class Items {
         return item;
     }
 
-    private static class Bootstrapper {
+    public static class Bootstrapper {
         private final BootstrapContext<Item> registerable;
         private final HolderGetter<Item> items;
         private final HolderGetter<EntityType<?>> entityTypes;
@@ -307,15 +314,230 @@ public class Items {
             this.bootstrapEquipment();
             this.bootstrapFuel();
             this.bootstrapProjectiles();
-            this.bootstrapDyes();
             this.bootstrapRecords();
             this.bootstrapBuckets();
             this.bootstrapSmithingTemplates();
-            this.bootstrapBanners();
+            this.bootstrapBannerPatterns();
             this.bootstrapDecoratedPotPatterns();
             this.bootstrapImmuneToDamage();
             this.bootstrapTrimMaterialProviders();
             this.bootstrapMiscellaneous();
+
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.OAK,
+                this,
+                BlockIds.OAK_WALL_SIGN,
+                BlockIds.OAK_WALL_HANGING_SIGN,
+                BlockIds.POTTED_OAK_SAPLING,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.SPRUCE,
+                this,
+                BlockIds.SPRUCE_WALL_SIGN,
+                BlockIds.SPRUCE_WALL_HANGING_SIGN,
+                BlockIds.POTTED_SPRUCE_SAPLING,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.BIRCH,
+                this,
+                BlockIds.BIRCH_WALL_SIGN,
+                BlockIds.BIRCH_WALL_HANGING_SIGN,
+                BlockIds.POTTED_BIRCH_SAPLING,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.JUNGLE,
+                this,
+                BlockIds.JUNGLE_WALL_SIGN,
+                BlockIds.JUNGLE_WALL_HANGING_SIGN,
+                BlockIds.POTTED_JUNGLE_SAPLING,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.ACACIA,
+                this,
+                BlockIds.ACACIA_WALL_SIGN,
+                BlockIds.ACACIA_WALL_HANGING_SIGN,
+                BlockIds.POTTED_ACACIA_SAPLING,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.CHERRY,
+                this,
+                BlockIds.CHERRY_WALL_SIGN,
+                BlockIds.CHERRY_WALL_HANGING_SIGN,
+                BlockIds.POTTED_CHERRY_SAPLING,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.DARK_OAK,
+                this,
+                BlockIds.DARK_OAK_WALL_SIGN,
+                BlockIds.DARK_OAK_WALL_HANGING_SIGN,
+                BlockIds.POTTED_DARK_OAK_SAPLING,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.PALE_OAK,
+                this,
+                BlockIds.PALE_OAK_WALL_SIGN,
+                BlockIds.PALE_OAK_WALL_HANGING_SIGN,
+                BlockIds.POTTED_PALE_OAK_SAPLING,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.MANGROVE,
+                this,
+                BlockIds.MANGROVE_WALL_SIGN,
+                BlockIds.MANGROVE_WALL_HANGING_SIGN,
+                BlockIds.POTTED_MANGROVE_PROPAGULE,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.BAMBOO,
+                this,
+                BlockIds.BAMBOO_WALL_SIGN,
+                BlockIds.BAMBOO_WALL_HANGING_SIGN,
+                BlockIds.POTTED_BAMBOO,
+                FuelTimes.BAMBOO
+            );
+            CutoutCollection.registerBurningItems(ItematicBlockItemIds.BAMBOO_MOSAIC, this);
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.CRIMSON,
+                this,
+                BlockIds.CRIMSON_WALL_SIGN,
+                BlockIds.CRIMSON_WALL_HANGING_SIGN,
+                BlockIds.POTTED_CRIMSON_FUNGUS
+            );
+            WoodCollection.registerItems(
+                ItematicBlockItemIds.WARPED,
+                this,
+                BlockIds.WARPED_WALL_SIGN,
+                BlockIds.WARPED_WALL_HANGING_SIGN,
+                BlockIds.POTTED_WARPED_FUNGUS
+            );
+            this.registerBlockAttachedToSide(BlockItemIds.TORCH, BlockIds.WALL_TORCH, Direction.DOWN);
+            this.registerBlockAttachedToSide(BlockItemIds.SOUL_TORCH, BlockIds.SOUL_WALL_TORCH, Direction.DOWN);
+            this.registerBlockAttachedToSide(BlockItemIds.COPPER_TORCH, BlockIds.COPPER_WALL_TORCH, Direction.DOWN);
+            this.registerBlockAttachedToSide(BlockItemIds.REDSTONE_TORCH, BlockIds.REDSTONE_WALL_TORCH, Direction.DOWN);
+            ColorCollection.zipApply(ItemIds.DYE, ColorCollection.VALUES, (dye, dyeColor) -> this.registerable.register(
+                dye,
+                create(
+                    ItemDisplay.Builder.forItem(dye).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(DyeItemBehavior.of(dyeColor))
+                        .build()
+                )
+            ));
+            BlockItemIds.WOOL.forEach(wool -> this.registerable.register(
+                wool.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(wool.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(wool.block())))
+                        .with(FuelItemBehavior.of(FuelTimes.WOOL))
+                        .build()
+                )
+            ));
+            ColorCollection.zipApply(BlockItemIds.CARPET, ColorCollection.VALUES, (carpet, dyeColor) -> this.registerable.register(
+                carpet.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(carpet.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(carpet.block())))
+                        .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
+                        .with(EquipmentItemBehavior.of(Equippable.llamaSwag(dyeColor)))
+                        .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                        .build()
+                )
+            ));
+            BlockItemIds.BED.forEach(this::registerUnstackableBlock);
+            this.registerBlock(BlockItemIds.GLASS);
+            this.registerBlock(BlockItemIds.TINTED_GLASS);
+            BlockItemIds.STAINED_GLASS.forEach(this::registerBlock);
+            this.registerBlock(BlockItemIds.GLASS_PANE);
+            BlockItemIds.STAINED_GLASS_PANE.forEach(this::registerBlock);
+            this.registerBlock(BlockItemIds.TERRACOTTA);
+            BlockItemIds.DYED_TERRACOTTA.forEach(this::registerBlock);
+            BlockItemIds.GLAZED_TERRACOTTA.forEach(this::registerBlock);
+            BlockItemIds.CONCRETE.forEach(this::registerBlock);
+            BlockItemIds.CONCRETE_POWDER.forEach(this::registerBlock);
+            this.registerShulkerBox(BlockItemIds.SHULKER_BOX);
+            BlockItemIds.DYED_SHULKER_BOX.forEach(this::registerShulkerBox);
+            this.registerBlock(BlockItemIds.CANDLE);
+            BlockItemIds.DYED_CANDLE.forEach(this::registerBlock);
+            ColorCollection.zipApply(BlockItemIds.BANNER, ColorCollection.VALUES, (banner, dyeColor) -> this.registerable.register(
+                banner.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(banner.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(16))
+                        .with(
+                            BlockItemBehavior.attachedToSide(
+                                this.blocks.getOrThrow(banner.block()),
+                                this.blocks.getOrThrow(BlockIds.WALL_BANNER.pick(dyeColor)),
+                                Direction.DOWN
+                            )
+                        )
+                        .with(FuelItemBehavior.of(FuelTimes.WOOD))
+                        .with(BannerPatternHolderItemBehavior.of(dyeColor))
+                        .build()
+                )
+            ));
+            this.registerable.register(ItemIds.BUNDLE, create(
+                ItemDisplay.Builder.forItem(ItemIds.BUNDLE)
+                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
+                    .build(),
+                ItemBehaviorSet.builder()
+                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
+                    .build()
+            ));
+            ItemIds.DYED_BUNDLE.forEach(dyedBundle -> this.registerable.register(
+                dyedBundle,
+                create(
+                    ItemDisplay.Builder.forItem(dyedBundle)
+                        .itemBarStyle(ItemBarStyleIds.BUNDLE)
+                        .build(),
+                    ItemBehaviorSet.builder()
+                        .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
+                        .build()
+                )
+            ));
+            CoralCollection.registerItems(ItematicBlockItemIds.TUBE_CORAL, this);
+            CoralCollection.registerItems(ItematicBlockItemIds.BRAIN_CORAL, this);
+            CoralCollection.registerItems(ItematicBlockItemIds.BUBBLE_CORAL, this);
+            CoralCollection.registerItems(ItematicBlockItemIds.FIRE_CORAL, this);
+            CoralCollection.registerItems(ItematicBlockItemIds.HORN_CORAL, this);
+            BlockItemIds.COPPER_BLOCK.forEach(this::registerBlock);
+            BlockItemIds.COPPER_BARS.forEach(this::registerBlock);
+            BlockItemIds.COPPER_CHAIN.forEach(this::registerBlock);
+            BlockItemIds.COPPER_LANTERN.forEach(this::registerBlock);
+            BlockItemIds.CUT_COPPER.forEach(this::registerBlock);
+            BlockItemIds.CHISELED_COPPER.forEach(this::registerBlock);
+            BlockItemIds.CUT_COPPER_STAIRS.forEach(this::registerBlock);
+            BlockItemIds.CUT_COPPER_SLAB.forEach(this::registerBlock);
+            BlockItemIds.COPPER_DOOR.forEach(this::registerBlock);
+            BlockItemIds.COPPER_TRAPDOOR.forEach(this::registerBlock);
+            BlockItemIds.COPPER_GRATE.forEach(this::registerBlock);
+            BlockItemIds.COPPER_BULB.forEach(this::registerBlock);
+            BlockItemIds.COPPER_CHEST.forEach(this::registerBlock);
+            BlockItemIds.COPPER_GOLEM_STATUE.forEach(this::registerBlock);
+            BlockItemIds.LIGHTNING_ROD.forEach(this::registerBlock);
+            CutoutCollection.registerItems(ItematicBlockItemIds.CINNABAR, this);
+            CutoutCollection.registerItems(ItematicBlockItemIds.POLISHED_CINNABAR, this);
+            CutoutCollection.registerItems(ItematicBlockItemIds.CINNABAR_BRICKS, this);
+            this.registerBlock(BlockItemIds.CHISELED_CINNABAR);
+            CutoutCollection.registerItems(ItematicBlockItemIds.SULFUR, this);
+            this.registerBlock(BlockItemIds.POTENT_SULFUR);
+            CutoutCollection.registerItems(ItematicBlockItemIds.POLISHED_SULFUR, this);
+            CutoutCollection.registerItems(ItematicBlockItemIds.SULFUR_BRICKS, this);
+            this.registerBlock(BlockItemIds.CHISELED_SULFUR);
+            this.registerBlock(BlockItemIds.SULFUR_SPIKE);
         }
 
         private void bootstrapConsumables() {
@@ -378,7 +600,7 @@ public class Items {
                                 .speed(1.0d)
                                 .build())
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.BOTTLE_EMPTY), SoundSource.BLOCKS))
-                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockIds.MUD)))
+                            .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockItemIds.MUD.block())))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     ))
                     .build()
@@ -429,25 +651,25 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.CARROT, create(
-                ItemDisplay.Builder.forItem(ItemIds.CARROT).build(),
+            this.registerable.register(BlockItemIds.CARROT_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.CARROT_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
                         .food(Foods.CARROT)
                         .build())
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CARROTS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARROT_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.POTATO, create(
-                ItemDisplay.Builder.forItem(ItemIds.POTATO).build(),
+            this.registerable.register(BlockItemIds.POTATO_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.POTATO_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
                         .food(Foods.POTATO)
                         .build())
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POTATOES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.POTATO_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
@@ -483,25 +705,25 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.SWEET_BERRIES, create(
-                ItemDisplay.Builder.forItem(ItemIds.SWEET_BERRIES).build(),
+            this.registerable.register(BlockItemIds.SWEET_BERRY_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.SWEET_BERRY_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
                         .food(Foods.SWEET_BERRIES)
                         .build())
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SWEET_BERRY_BUSH)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SWEET_BERRY_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.GLOW_BERRIES, create(
-                ItemDisplay.Builder.forItem(ItemIds.GLOW_BERRIES).build(),
+            this.registerable.register(BlockItemIds.GLOW_BERRY_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.GLOW_BERRY_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
                         .food(Foods.GLOW_BERRIES)
                         .build())
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CAVE_VINES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOW_BERRY_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
@@ -861,5018 +1083,492 @@ public class Items {
         }
 
         private void bootstrapBlocks() {
-            this.bootstrapAttachedToSideBlocks();
-            this.bootstrapColoredBlocks();
             this.bootstrapItemNameBlocks();
             this.bootstrapOperatorOnlyBlocks();
-            this.registerable.register(ItemIds.STONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRANITE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRANITE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRANITE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_GRANITE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_GRANITE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_GRANITE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIORITE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DIORITE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DIORITE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_DIORITE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_DIORITE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_DIORITE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ANDESITE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ANDESITE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ANDESITE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_ANDESITE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_ANDESITE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_ANDESITE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COBBLED_DEEPSLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COBBLED_DEEPSLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COBBLED_DEEPSLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_DEEPSLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_DEEPSLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_DEEPSLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CALCITE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CALCITE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CALCITE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUFF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUFF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUFF)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUFF_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUFF_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUFF_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUFF_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUFF_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUFF_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUFF_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUFF_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUFF_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_TUFF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_TUFF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_TUFF)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_TUFF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_TUFF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_TUFF)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_TUFF_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_TUFF_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_TUFF_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_TUFF_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_TUFF_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_TUFF_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_TUFF_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_TUFF_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_TUFF_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUFF_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUFF_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUFF_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUFF_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUFF_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUFF_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUFF_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUFF_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUFF_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUFF_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUFF_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUFF_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_TUFF_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_TUFF_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_TUFF_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DRIPSTONE_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DRIPSTONE_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DRIPSTONE_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRASS_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRASS_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRASS_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIRT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DIRT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DIRT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COARSE_DIRT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COARSE_DIRT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COARSE_DIRT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PODZOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PODZOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PODZOL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ROOTED_DIRT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ROOTED_DIRT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ROOTED_DIRT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MUD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MUD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_NYLIUM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_NYLIUM).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_NYLIUM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_NYLIUM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_NYLIUM).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_NYLIUM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COBBLESTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COBBLESTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COBBLESTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_PLANKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_PLANKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BEDROCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BEDROCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BEDROCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SAND, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SAND).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SAND)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SUSPICIOUS_SAND, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SUSPICIOUS_SAND).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SUSPICIOUS_SAND)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SUSPICIOUS_GRAVEL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SUSPICIOUS_GRAVEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SUSPICIOUS_GRAVEL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_SAND, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_SAND).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_SAND)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAVEL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAVEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAVEL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COAL_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COAL_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COAL_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_COAL_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_COAL_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_COAL_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.IRON_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.IRON_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_IRON_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_IRON_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_IRON_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_COPPER_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_COPPER_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_COPPER_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLD_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GOLD_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GOLD_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_GOLD_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_GOLD_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_GOLD_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.REDSTONE_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.REDSTONE_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.REDSTONE_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_REDSTONE_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_REDSTONE_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_REDSTONE_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EMERALD_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EMERALD_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EMERALD_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_EMERALD_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_EMERALD_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_EMERALD_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LAPIS_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LAPIS_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LAPIS_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_LAPIS_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_LAPIS_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_LAPIS_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DIAMOND_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DIAMOND_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_DIAMOND_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_DIAMOND_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_DIAMOND_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHER_GOLD_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHER_GOLD_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_GOLD_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHER_QUARTZ_ORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHER_QUARTZ_ORE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_QUARTZ_ORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RAW_IRON_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RAW_IRON_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RAW_IRON_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RAW_COPPER_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RAW_COPPER_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RAW_COPPER_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RAW_GOLD_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RAW_GOLD_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RAW_GOLD_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HEAVY_CORE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HEAVY_CORE)
+            this.registerBlock(BlockItemIds.STONE);
+            this.registerBlock(BlockItemIds.GRANITE);
+            this.registerBlock(BlockItemIds.POLISHED_GRANITE);
+            this.registerBlock(BlockItemIds.DIORITE);
+            this.registerBlock(BlockItemIds.POLISHED_DIORITE);
+            this.registerBlock(BlockItemIds.ANDESITE);
+            this.registerBlock(BlockItemIds.POLISHED_ANDESITE);
+            this.registerBlock(BlockItemIds.DEEPSLATE);
+            this.registerBlock(BlockItemIds.COBBLED_DEEPSLATE);
+            this.registerBlock(BlockItemIds.POLISHED_DEEPSLATE);
+            this.registerBlock(BlockItemIds.CALCITE);
+            this.registerBlock(BlockItemIds.TUFF);
+            this.registerBlock(BlockItemIds.TUFF_SLAB);
+            this.registerBlock(BlockItemIds.TUFF_STAIRS);
+            this.registerBlock(BlockItemIds.TUFF_WALL);
+            this.registerBlock(BlockItemIds.CHISELED_TUFF);
+            this.registerBlock(BlockItemIds.POLISHED_TUFF);
+            this.registerBlock(BlockItemIds.POLISHED_TUFF_SLAB);
+            this.registerBlock(BlockItemIds.POLISHED_TUFF_STAIRS);
+            this.registerBlock(BlockItemIds.POLISHED_TUFF_WALL);
+            this.registerBlock(BlockItemIds.TUFF_BRICKS);
+            this.registerBlock(BlockItemIds.TUFF_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.TUFF_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.TUFF_BRICK_WALL);
+            this.registerBlock(BlockItemIds.CHISELED_TUFF_BRICKS);
+            this.registerBlock(BlockItemIds.DRIPSTONE_BLOCK);
+            this.registerBlock(BlockItemIds.GRASS_BLOCK);
+            this.registerBlock(BlockItemIds.DIRT);
+            this.registerBlock(BlockItemIds.COARSE_DIRT);
+            this.registerBlock(BlockItemIds.PODZOL);
+            this.registerBlock(BlockItemIds.ROOTED_DIRT);
+            this.registerBlock(BlockItemIds.MUD);
+            this.registerBlock(BlockItemIds.CRIMSON_NYLIUM);
+            this.registerBlock(BlockItemIds.WARPED_NYLIUM);
+            this.registerBlock(BlockItemIds.COBBLESTONE);
+            this.registerBlock(BlockItemIds.BEDROCK);
+            this.registerBlock(BlockItemIds.SAND);
+            this.registerBlock(BlockItemIds.SUSPICIOUS_SAND);
+            this.registerBlock(BlockItemIds.SUSPICIOUS_GRAVEL);
+            this.registerBlock(BlockItemIds.RED_SAND);
+            this.registerBlock(BlockItemIds.GRAVEL);
+            this.registerBlock(BlockItemIds.COAL_ORE);
+            this.registerBlock(BlockItemIds.DEEPSLATE_COAL_ORE);
+            this.registerBlock(BlockItemIds.IRON_ORE);
+            this.registerBlock(BlockItemIds.DEEPSLATE_IRON_ORE);
+            this.registerBlock(BlockItemIds.COPPER_ORE);
+            this.registerBlock(BlockItemIds.DEEPSLATE_COPPER_ORE);
+            this.registerBlock(BlockItemIds.GOLD_ORE);
+            this.registerBlock(BlockItemIds.DEEPSLATE_GOLD_ORE);
+            this.registerBlock(BlockItemIds.REDSTONE_ORE);
+            this.registerBlock(BlockItemIds.DEEPSLATE_REDSTONE_ORE);
+            this.registerBlock(BlockItemIds.EMERALD_ORE);
+            this.registerBlock(BlockItemIds.DEEPSLATE_EMERALD_ORE);
+            this.registerBlock(BlockItemIds.LAPIS_ORE);
+            this.registerBlock(BlockItemIds.DEEPSLATE_LAPIS_ORE);
+            this.registerBlock(BlockItemIds.DIAMOND_ORE);
+            this.registerBlock(BlockItemIds.DEEPSLATE_DIAMOND_ORE);
+            this.registerBlock(BlockItemIds.NETHER_GOLD_ORE);
+            this.registerBlock(BlockItemIds.NETHER_QUARTZ_ORE);
+            this.registerBlock(BlockItemIds.RAW_IRON_BLOCK);
+            this.registerBlock(BlockItemIds.RAW_COPPER_BLOCK);
+            this.registerBlock(BlockItemIds.RAW_GOLD_BLOCK);
+            this.registerable.register(BlockItemIds.HEAVY_CORE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.HEAVY_CORE.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.HEAVY_CORE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.AMETHYST_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.AMETHYST_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.AMETHYST_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BUDDING_AMETHYST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BUDDING_AMETHYST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BUDDING_AMETHYST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.IRON_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.IRON_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLD_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GOLD_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GOLD_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DIAMOND_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DIAMOND_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_CHISELED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_CHISELED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_CHISELED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_CHISELED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_CHISELED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_CHISELED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_CHISELED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_CHISELED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_CHISELED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CUT_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CUT_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CUT_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_CUT_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_CUT_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_CUT_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_CUT_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_CUT_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_CUT_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_CUT_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_CUT_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_CUT_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CUT_COPPER_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CUT_COPPER_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CUT_COPPER_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_CUT_COPPER_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_CUT_COPPER_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_CUT_COPPER_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_CUT_COPPER_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_CUT_COPPER_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_CUT_COPPER_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_CUT_COPPER_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_CUT_COPPER_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_CUT_COPPER_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CUT_COPPER_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CUT_COPPER_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CUT_COPPER_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_CUT_COPPER_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_CUT_COPPER_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_CUT_COPPER_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_CUT_COPPER_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_CUT_COPPER_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_CUT_COPPER_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_CUT_COPPER_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_CUT_COPPER_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_CUT_COPPER_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_CHISELED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_CHISELED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_CHISELED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_CHISELED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_CHISELED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_CHISELED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_CHISELED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_CHISELED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_CHISELED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_CHISELED_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_CHISELED_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_CHISELED_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_CUT_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_CUT_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_CUT_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_CUT_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_CUT_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_CUT_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_CUT_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_CUT_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_CUT_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_CUT_COPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_CUT_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_CUT_COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_CUT_COPPER_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_CUT_COPPER_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_CUT_COPPER_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_CUT_COPPER_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_CUT_COPPER_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_CUT_COPPER_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_CUT_COPPER_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_CUT_COPPER_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_CUT_COPPER_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_CUT_COPPER_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_CUT_COPPER_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_CUT_COPPER_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_CUT_COPPER_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_CUT_COPPER_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_CUT_COPPER_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_CUT_COPPER_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_CUT_COPPER_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_CUT_COPPER_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_CUT_COPPER_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_CUT_COPPER_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_CUT_COPPER_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_CUT_COPPER_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_CUT_COPPER_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_CUT_COPPER_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUDDY_MANGROVE_ROOTS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MUDDY_MANGROVE_ROOTS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MUDDY_MANGROVE_ROOTS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_STEM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_STEM).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_STEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_STEM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_STEM).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_STEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_CRIMSON_STEM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_CRIMSON_STEM).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_CRIMSON_STEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_WARPED_STEM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_WARPED_STEM).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_WARPED_STEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_CRIMSON_HYPHAE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_CRIMSON_HYPHAE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_CRIMSON_HYPHAE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_WARPED_HYPHAE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_WARPED_HYPHAE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_WARPED_HYPHAE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_HYPHAE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_HYPHAE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_HYPHAE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_HYPHAE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_HYPHAE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_HYPHAE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPONGE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPONGE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPONGE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WET_SPONGE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WET_SPONGE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WET_SPONGE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TINTED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TINTED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TINTED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LAPIS_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LAPIS_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LAPIS_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SANDSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SANDSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SANDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_SANDSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_SANDSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_SANDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CUT_SANDSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CUT_SANDSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CUT_SANDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COBWEB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COBWEB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COBWEB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_STONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_STONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_STONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SANDSTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SANDSTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SANDSTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CUT_SANDSTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CUT_SANDSTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CUT_SANDSTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PETRIFIED_OAK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PETRIFIED_OAK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PETRIFIED_OAK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COBBLESTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COBBLESTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COBBLESTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONE_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONE_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUD_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MUD_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MUD_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHER_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHER_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.QUARTZ_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.QUARTZ_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.QUARTZ_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_SANDSTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_SANDSTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_SANDSTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CUT_RED_SANDSTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CUT_RED_SANDSTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CUT_RED_SANDSTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPUR_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPUR_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPUR_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRISMARINE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PRISMARINE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRISMARINE_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PRISMARINE_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_PRISMARINE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_PRISMARINE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_PRISMARINE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_QUARTZ, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_QUARTZ).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_QUARTZ)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_RED_SANDSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_RED_SANDSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_RED_SANDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_SANDSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_SANDSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_SANDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_STONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_STONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_STONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DECORATED_POT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DECORATED_POT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DECORATED_POT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOSSY_COBBLESTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSSY_COBBLESTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSSY_COBBLESTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OBSIDIAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OBSIDIAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OBSIDIAN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.END_ROD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.END_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.END_ROD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHORUS_PLANT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHORUS_PLANT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHORUS_PLANT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHORUS_FLOWER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHORUS_FLOWER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHORUS_FLOWER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPUR_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPUR_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPUR_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPUR_PILLAR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPUR_PILLAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPUR_PILLAR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPUR_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPUR_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPUR_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPAWNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPAWNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPAWNER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CREAKING_HEART, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CREAKING_HEART).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CREAKING_HEART)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FARMLAND, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FARMLAND).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FARMLAND)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FURNACE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FURNACE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FURNACE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COBBLESTONE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COBBLESTONE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COBBLESTONE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SNOW, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SNOW).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SNOW)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ICE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ICE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ICE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SNOW_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SNOW_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SNOW_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CLAY, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CLAY).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CLAY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_FENCE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_FENCE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JACK_O_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JACK_O_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JACK_O_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERRACK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHERRACK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHERRACK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SOUL_SAND, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SOUL_SAND).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SOUL_SAND)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SOUL_SOIL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SOUL_SOIL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SOUL_SOIL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BASALT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BASALT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BASALT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BASALT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BASALT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BASALT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_BASALT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_BASALT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_BASALT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLOWSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GLOWSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GLOWSTONE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.HEAVY_CORE.block())))
+                    .build()
+            ));
+            this.registerBlock(BlockItemIds.AMETHYST_BLOCK);
+            this.registerBlock(BlockItemIds.BUDDING_AMETHYST);
+            this.registerBlock(BlockItemIds.IRON_BLOCK);
+            this.registerBlock(BlockItemIds.GOLD_BLOCK);
+            this.registerBlock(BlockItemIds.DIAMOND_BLOCK);
+            this.registerBlock(BlockItemIds.MUDDY_MANGROVE_ROOTS);
+            this.registerBlock(BlockItemIds.SPONGE);
+            this.registerBlock(BlockItemIds.WET_SPONGE);
+            this.registerBlock(BlockItemIds.LAPIS_BLOCK);
+            this.registerBlock(BlockItemIds.SANDSTONE);
+            this.registerBlock(BlockItemIds.CHISELED_SANDSTONE);
+            this.registerBlock(BlockItemIds.CUT_SANDSTONE);
+            this.registerBlock(BlockItemIds.COBWEB);
+            this.registerBlock(BlockItemIds.STONE_SLAB);
+            this.registerBlock(BlockItemIds.SMOOTH_STONE_SLAB);
+            this.registerBlock(BlockItemIds.SANDSTONE_SLAB);
+            this.registerBlock(BlockItemIds.CUT_SANDSTONE_SLAB);
+            this.registerBlock(BlockItemIds.PETRIFIED_OAK_SLAB);
+            this.registerBlock(BlockItemIds.COBBLESTONE_SLAB);
+            this.registerBlock(BlockItemIds.BRICK_SLAB);
+            this.registerBlock(BlockItemIds.STONE_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.MUD_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.NETHER_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.QUARTZ_SLAB);
+            this.registerBlock(BlockItemIds.RED_SANDSTONE_SLAB);
+            this.registerBlock(BlockItemIds.CUT_RED_SANDSTONE_SLAB);
+            this.registerBlock(BlockItemIds.PURPUR_SLAB);
+            this.registerBlock(BlockItemIds.PRISMARINE_SLAB);
+            this.registerBlock(BlockItemIds.PRISMARINE_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.DARK_PRISMARINE_SLAB);
+            this.registerBlock(BlockItemIds.SMOOTH_QUARTZ);
+            this.registerBlock(BlockItemIds.SMOOTH_RED_SANDSTONE);
+            this.registerBlock(BlockItemIds.SMOOTH_SANDSTONE);
+            this.registerBlock(BlockItemIds.SMOOTH_STONE);
+            this.registerBlock(BlockItemIds.BRICKS);
+            this.registerBlock(BlockItemIds.DECORATED_POT);
+            this.registerBlock(BlockItemIds.MOSSY_COBBLESTONE);
+            this.registerBlock(BlockItemIds.OBSIDIAN);
+            this.registerBlock(BlockItemIds.END_ROD);
+            this.registerBlock(BlockItemIds.CHORUS_PLANT);
+            this.registerBlock(BlockItemIds.CHORUS_FLOWER);
+            this.registerBlock(BlockItemIds.PURPUR_BLOCK);
+            this.registerBlock(BlockItemIds.PURPUR_PILLAR);
+            this.registerBlock(BlockItemIds.PURPUR_STAIRS);
+            this.registerBlock(BlockItemIds.SPAWNER);
+            this.registerBlock(BlockItemIds.CREAKING_HEART);
+            this.registerBlock(BlockItemIds.FARMLAND);
+            this.registerBlock(BlockItemIds.FURNACE);
+            this.registerBlock(BlockItemIds.COBBLESTONE_STAIRS);
+            this.registerBlock(BlockItemIds.SNOW);
+            this.registerBlock(BlockItemIds.ICE);
+            this.registerBlock(BlockItemIds.SNOW_BLOCK);
+            this.registerBlock(BlockItemIds.CLAY);
+            this.registerBlock(BlockItemIds.JACK_O_LANTERN);
+            this.registerBlock(BlockItemIds.NETHERRACK);
+            this.registerBlock(BlockItemIds.SOUL_SAND);
+            this.registerBlock(BlockItemIds.SOUL_SOIL);
+            this.registerBlock(BlockItemIds.BASALT);
+            this.registerBlock(BlockItemIds.POLISHED_BASALT);
+            this.registerBlock(BlockItemIds.SMOOTH_BASALT);
+            this.registerable.register(BlockItemIds.GLOWSTONE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.GLOWSTONE.item()).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOWSTONE.block())))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.CHARGE_RESPAWN_ANCHOR)))
                     .build()
             ));
-            this.registerable.register(ItemIds.INFESTED_STONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.INFESTED_STONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.INFESTED_STONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.INFESTED_COBBLESTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.INFESTED_COBBLESTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.INFESTED_COBBLESTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.INFESTED_STONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.INFESTED_STONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.INFESTED_STONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.INFESTED_MOSSY_STONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.INFESTED_MOSSY_STONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.INFESTED_MOSSY_STONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.INFESTED_CRACKED_STONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.INFESTED_CRACKED_STONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.INFESTED_CRACKED_STONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.INFESTED_CHISELED_STONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.INFESTED_CHISELED_STONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.INFESTED_CHISELED_STONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.INFESTED_DEEPSLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.INFESTED_DEEPSLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.INFESTED_DEEPSLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOSSY_STONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSSY_STONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSSY_STONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRACKED_STONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRACKED_STONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRACKED_STONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_STONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_STONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_STONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PACKED_MUD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PACKED_MUD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PACKED_MUD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUD_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MUD_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MUD_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRACKED_DEEPSLATE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRACKED_DEEPSLATE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRACKED_DEEPSLATE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_TILES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_TILES).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_TILES)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRACKED_DEEPSLATE_TILES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRACKED_DEEPSLATE_TILES).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRACKED_DEEPSLATE_TILES)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_DEEPSLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_DEEPSLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_DEEPSLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.REINFORCED_DEEPSLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.REINFORCED_DEEPSLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.REINFORCED_DEEPSLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_BARS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.IRON_BARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.IRON_BARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_BARS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_BARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_BARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER_BARS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER_BARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_BARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER_BARS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER_BARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_BARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER_BARS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER_BARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_BARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_BARS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_BARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_BARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER_BARS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER_BARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_BARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER_BARS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER_BARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_BARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER_BARS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER_BARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_BARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.IRON_CHAIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.IRON_CHAIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_CHAIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_CHAIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER_CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER_CHAIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_CHAIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER_CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER_CHAIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_CHAIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER_CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER_CHAIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_CHAIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_CHAIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_CHAIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER_CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER_CHAIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_CHAIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER_CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER_CHAIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_CHAIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER_CHAIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER_CHAIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_CHAIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONE_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONE_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUD_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MUD_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MUD_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MYCELIUM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MYCELIUM).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MYCELIUM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHER_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHER_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRACKED_NETHER_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRACKED_NETHER_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRACKED_NETHER_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_NETHER_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_NETHER_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_NETHER_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHER_BRICK_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHER_BRICK_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICK_FENCE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHER_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHER_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SCULK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SCULK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SCULK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SCULK_VEIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SCULK_VEIN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SCULK_VEIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SCULK_CATALYST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SCULK_CATALYST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SCULK_CATALYST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SCULK_SHRIEKER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SCULK_SHRIEKER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SCULK_SHRIEKER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ENCHANTING_TABLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ENCHANTING_TABLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ENCHANTING_TABLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.END_PORTAL_FRAME, create(
-                ItemDisplay.Builder.forBlock(ItemIds.END_PORTAL_FRAME).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.END_PORTAL_FRAME)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.END_STONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.END_STONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.END_STONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.END_STONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.END_STONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.END_STONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DRAGON_EGG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DRAGON_EGG)
+            this.registerBlock(BlockItemIds.INFESTED_STONE);
+            this.registerBlock(BlockItemIds.INFESTED_COBBLESTONE);
+            this.registerBlock(BlockItemIds.INFESTED_STONE_BRICKS);
+            this.registerBlock(BlockItemIds.INFESTED_MOSSY_STONE_BRICKS);
+            this.registerBlock(BlockItemIds.INFESTED_CRACKED_STONE_BRICKS);
+            this.registerBlock(BlockItemIds.INFESTED_CHISELED_STONE_BRICKS);
+            this.registerBlock(BlockItemIds.INFESTED_DEEPSLATE);
+            this.registerBlock(BlockItemIds.STONE_BRICKS);
+            this.registerBlock(BlockItemIds.MOSSY_STONE_BRICKS);
+            this.registerBlock(BlockItemIds.CRACKED_STONE_BRICKS);
+            this.registerBlock(BlockItemIds.CHISELED_STONE_BRICKS);
+            this.registerBlock(BlockItemIds.PACKED_MUD);
+            this.registerBlock(BlockItemIds.MUD_BRICKS);
+            this.registerBlock(BlockItemIds.DEEPSLATE_BRICKS);
+            this.registerBlock(BlockItemIds.CRACKED_DEEPSLATE_BRICKS);
+            this.registerBlock(BlockItemIds.DEEPSLATE_TILES);
+            this.registerBlock(BlockItemIds.CRACKED_DEEPSLATE_TILES);
+            this.registerBlock(BlockItemIds.CHISELED_DEEPSLATE);
+            this.registerBlock(BlockItemIds.REINFORCED_DEEPSLATE);
+            this.registerBlock(BlockItemIds.IRON_BARS);
+            this.registerBlock(BlockItemIds.IRON_CHAIN);
+            this.registerBlock(BlockItemIds.BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.STONE_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.MUD_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.MYCELIUM);
+            this.registerBlock(BlockItemIds.NETHER_BRICKS);
+            this.registerBlock(BlockItemIds.CRACKED_NETHER_BRICKS);
+            this.registerBlock(BlockItemIds.CHISELED_NETHER_BRICKS);
+            this.registerBlock(BlockItemIds.NETHER_BRICK_FENCE);
+            this.registerBlock(BlockItemIds.NETHER_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.SCULK);
+            this.registerBlock(BlockItemIds.SCULK_VEIN);
+            this.registerBlock(BlockItemIds.SCULK_CATALYST);
+            this.registerBlock(BlockItemIds.SCULK_SHRIEKER);
+            this.registerBlock(BlockItemIds.ENCHANTING_TABLE);
+            this.registerBlock(BlockItemIds.END_PORTAL_FRAME);
+            this.registerBlock(BlockItemIds.END_STONE);
+            this.registerBlock(BlockItemIds.END_STONE_BRICKS);
+            this.registerable.register(BlockItemIds.DRAGON_EGG.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.DRAGON_EGG.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DRAGON_EGG)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DRAGON_EGG.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.SANDSTONE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SANDSTONE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SANDSTONE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ENDER_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ENDER_CHEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ENDER_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EMERALD_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EMERALD_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EMERALD_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BEACON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BEACON)
+            this.registerBlock(BlockItemIds.SANDSTONE_STAIRS);
+            this.registerBlock(BlockItemIds.ENDER_CHEST);
+            this.registerBlock(BlockItemIds.EMERALD_BLOCK);
+            this.registerable.register(BlockItemIds.BEACON.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.BEACON.item())
                     .rarity(Rarity.RARE)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BEACON)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BEACON.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.COBBLESTONE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COBBLESTONE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COBBLESTONE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOSSY_COBBLESTONE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSSY_COBBLESTONE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSSY_COBBLESTONE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRISMARINE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PRISMARINE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_SANDSTONE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_SANDSTONE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_SANDSTONE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOSSY_STONE_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSSY_STONE_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSSY_STONE_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRANITE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRANITE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRANITE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONE_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONE_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUD_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MUD_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MUD_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHER_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHER_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ANDESITE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ANDESITE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ANDESITE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_NETHER_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_NETHER_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_NETHER_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SANDSTONE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SANDSTONE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SANDSTONE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.END_STONE_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.END_STONE_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.END_STONE_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIORITE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DIORITE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DIORITE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACKSTONE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACKSTONE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACKSTONE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COBBLED_DEEPSLATE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COBBLED_DEEPSLATE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COBBLED_DEEPSLATE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_DEEPSLATE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_DEEPSLATE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_DEEPSLATE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_TILE_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_TILE_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_TILE_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ANVIL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ANVIL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ANVIL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHIPPED_ANVIL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHIPPED_ANVIL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHIPPED_ANVIL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DAMAGED_ANVIL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DAMAGED_ANVIL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DAMAGED_ANVIL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_QUARTZ_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_QUARTZ_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_QUARTZ_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.QUARTZ_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.QUARTZ_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.QUARTZ_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.QUARTZ_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.QUARTZ_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.QUARTZ_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.QUARTZ_PILLAR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.QUARTZ_PILLAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.QUARTZ_PILLAR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.QUARTZ_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.QUARTZ_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.QUARTZ_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BARRIER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BARRIER)
+            this.registerBlock(BlockItemIds.COBBLESTONE_WALL);
+            this.registerBlock(BlockItemIds.MOSSY_COBBLESTONE_WALL);
+            this.registerBlock(BlockItemIds.BRICK_WALL);
+            this.registerBlock(BlockItemIds.PRISMARINE_WALL);
+            this.registerBlock(BlockItemIds.RED_SANDSTONE_WALL);
+            this.registerBlock(BlockItemIds.MOSSY_STONE_BRICK_WALL);
+            this.registerBlock(BlockItemIds.GRANITE_WALL);
+            this.registerBlock(BlockItemIds.STONE_BRICK_WALL);
+            this.registerBlock(BlockItemIds.MUD_BRICK_WALL);
+            this.registerBlock(BlockItemIds.NETHER_BRICK_WALL);
+            this.registerBlock(BlockItemIds.ANDESITE_WALL);
+            this.registerBlock(BlockItemIds.RED_NETHER_BRICK_WALL);
+            this.registerBlock(BlockItemIds.SANDSTONE_WALL);
+            this.registerBlock(BlockItemIds.END_STONE_BRICK_WALL);
+            this.registerBlock(BlockItemIds.DIORITE_WALL);
+            this.registerBlock(BlockItemIds.BLACKSTONE_WALL);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_WALL);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_BRICK_WALL);
+            this.registerBlock(BlockItemIds.COBBLED_DEEPSLATE_WALL);
+            this.registerBlock(BlockItemIds.POLISHED_DEEPSLATE_WALL);
+            this.registerBlock(BlockItemIds.DEEPSLATE_BRICK_WALL);
+            this.registerBlock(BlockItemIds.DEEPSLATE_TILE_WALL);
+            this.registerBlock(BlockItemIds.ANVIL);
+            this.registerBlock(BlockItemIds.CHIPPED_ANVIL);
+            this.registerBlock(BlockItemIds.DAMAGED_ANVIL);
+            this.registerBlock(BlockItemIds.CHISELED_QUARTZ_BLOCK);
+            this.registerBlock(BlockItemIds.QUARTZ_BLOCK);
+            this.registerBlock(BlockItemIds.QUARTZ_BRICKS);
+            this.registerBlock(BlockItemIds.QUARTZ_PILLAR);
+            this.registerBlock(BlockItemIds.QUARTZ_STAIRS);
+            this.registerable.register(BlockItemIds.BARRIER.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.BARRIER.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BARRIER)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BARRIER.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.LIGHT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT)
+            this.registerable.register(BlockItemIds.LIGHT.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.LIGHT.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LIGHT.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PACKED_ICE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PACKED_ICE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PACKED_ICE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIRT_PATH, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DIRT_PATH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DIRT_PATH)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRISMARINE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PRISMARINE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PRISMARINE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRISMARINE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PRISMARINE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_PRISMARINE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_PRISMARINE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_PRISMARINE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRISMARINE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PRISMARINE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRISMARINE_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PRISMARINE_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PRISMARINE_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_PRISMARINE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_PRISMARINE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_PRISMARINE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SEA_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SEA_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SEA_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_SANDSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_SANDSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_SANDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_RED_SANDSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_RED_SANDSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_RED_SANDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CUT_RED_SANDSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CUT_RED_SANDSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CUT_RED_SANDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_SANDSTONE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_SANDSTONE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_SANDSTONE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGMA_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGMA_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGMA_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_NETHER_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_NETHER_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_NETHER_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BONE_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BONE_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BONE_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRUCTURE_VOID, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRUCTURE_VOID)
+            this.registerBlock(BlockItemIds.PACKED_ICE);
+            this.registerBlock(BlockItemIds.DIRT_PATH);
+            this.registerBlock(BlockItemIds.PRISMARINE);
+            this.registerBlock(BlockItemIds.PRISMARINE_BRICKS);
+            this.registerBlock(BlockItemIds.DARK_PRISMARINE);
+            this.registerBlock(BlockItemIds.PRISMARINE_STAIRS);
+            this.registerBlock(BlockItemIds.PRISMARINE_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.DARK_PRISMARINE_STAIRS);
+            this.registerBlock(BlockItemIds.SEA_LANTERN);
+            this.registerBlock(BlockItemIds.RED_SANDSTONE);
+            this.registerBlock(BlockItemIds.CHISELED_RED_SANDSTONE);
+            this.registerBlock(BlockItemIds.CUT_RED_SANDSTONE);
+            this.registerBlock(BlockItemIds.RED_SANDSTONE_STAIRS);
+            this.registerBlock(BlockItemIds.MAGMA_BLOCK);
+            this.registerBlock(BlockItemIds.RED_NETHER_BRICKS);
+            this.registerBlock(BlockItemIds.BONE_BLOCK);
+            this.registerable.register(BlockItemIds.STRUCTURE_VOID.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.STRUCTURE_VOID.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRUCTURE_VOID)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.STRUCTURE_VOID.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.TURTLE_EGG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TURTLE_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TURTLE_EGG)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SNIFFER_EGG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SNIFFER_EGG)
+            this.registerBlock(BlockItemIds.TURTLE_EGG);
+            this.registerable.register(BlockItemIds.SNIFFER_EGG.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SNIFFER_EGG.item())
                     .rarity(Rarity.UNCOMMON)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SNIFFER_EGG)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SNIFFER_EGG.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.DRIED_GHAST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DRIED_GHAST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DRIED_GHAST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_TUBE_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_TUBE_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_TUBE_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_BRAIN_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_BRAIN_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_BRAIN_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_BUBBLE_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_BUBBLE_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_BUBBLE_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_FIRE_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_FIRE_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_FIRE_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_HORN_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_HORN_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_HORN_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUBE_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUBE_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUBE_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BRAIN_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BRAIN_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BRAIN_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BUBBLE_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BUBBLE_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BUBBLE_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FIRE_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FIRE_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FIRE_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HORN_CORAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HORN_CORAL_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.HORN_CORAL_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUBE_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUBE_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TUBE_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BRAIN_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BRAIN_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BRAIN_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BUBBLE_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BUBBLE_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BUBBLE_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FIRE_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FIRE_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FIRE_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HORN_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HORN_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.HORN_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_BRAIN_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_BRAIN_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_BRAIN_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_BUBBLE_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_BUBBLE_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_BUBBLE_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_FIRE_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_FIRE_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_FIRE_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_HORN_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_HORN_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_HORN_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_TUBE_CORAL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_TUBE_CORAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_TUBE_CORAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_ICE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_ICE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_ICE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CONDUIT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CONDUIT)
+            this.registerBlock(BlockItemIds.DRIED_GHAST);
+            this.registerBlock(BlockItemIds.BLUE_ICE);
+            this.registerable.register(BlockItemIds.CONDUIT.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CONDUIT.item())
                     .rarity(Rarity.RARE)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CONDUIT)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CONDUIT.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.POLISHED_GRANITE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_GRANITE_STAIRS).build(),
+            this.registerBlock(BlockItemIds.POLISHED_GRANITE_STAIRS);
+            this.registerBlock(BlockItemIds.SMOOTH_RED_SANDSTONE_STAIRS);
+            this.registerBlock(BlockItemIds.MOSSY_STONE_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.POLISHED_DIORITE_STAIRS);
+            this.registerBlock(BlockItemIds.MOSSY_COBBLESTONE_STAIRS);
+            this.registerBlock(BlockItemIds.END_STONE_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.STONE_STAIRS);
+            this.registerBlock(BlockItemIds.SMOOTH_SANDSTONE_STAIRS);
+            this.registerBlock(BlockItemIds.SMOOTH_QUARTZ_STAIRS);
+            this.registerBlock(BlockItemIds.GRANITE_STAIRS);
+            this.registerBlock(BlockItemIds.ANDESITE_STAIRS);
+            this.registerBlock(BlockItemIds.RED_NETHER_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.POLISHED_ANDESITE_STAIRS);
+            this.registerBlock(BlockItemIds.DIORITE_STAIRS);
+            this.registerBlock(BlockItemIds.COBBLED_DEEPSLATE_STAIRS);
+            this.registerBlock(BlockItemIds.POLISHED_DEEPSLATE_STAIRS);
+            this.registerBlock(BlockItemIds.DEEPSLATE_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.DEEPSLATE_TILE_STAIRS);
+            this.registerBlock(BlockItemIds.POLISHED_GRANITE_SLAB);
+            this.registerBlock(BlockItemIds.SMOOTH_RED_SANDSTONE_SLAB);
+            this.registerBlock(BlockItemIds.MOSSY_STONE_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.POLISHED_DIORITE_SLAB);
+            this.registerBlock(BlockItemIds.MOSSY_COBBLESTONE_SLAB);
+            this.registerBlock(BlockItemIds.END_STONE_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.SMOOTH_SANDSTONE_SLAB);
+            this.registerBlock(BlockItemIds.SMOOTH_QUARTZ_SLAB);
+            this.registerBlock(BlockItemIds.GRANITE_SLAB);
+            this.registerBlock(BlockItemIds.ANDESITE_SLAB);
+            this.registerBlock(BlockItemIds.RED_NETHER_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.POLISHED_ANDESITE_SLAB);
+            this.registerBlock(BlockItemIds.DIORITE_SLAB);
+            this.registerBlock(BlockItemIds.COBBLED_DEEPSLATE_SLAB);
+            this.registerBlock(BlockItemIds.POLISHED_DEEPSLATE_SLAB);
+            this.registerBlock(BlockItemIds.DEEPSLATE_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.DEEPSLATE_TILE_SLAB);
+            this.registerBlock(BlockItemIds.REDSTONE_BLOCK);
+            this.registerBlock(BlockItemIds.REPEATER);
+            this.registerBlock(BlockItemIds.COMPARATOR);
+            this.registerBlock(BlockItemIds.PISTON);
+            this.registerBlock(BlockItemIds.STICKY_PISTON);
+            this.registerBlock(BlockItemIds.SLIME_BLOCK);
+            this.registerBlock(BlockItemIds.HONEY_BLOCK);
+            this.registerBlock(BlockItemIds.OBSERVER);
+            this.registerBlock(BlockItemIds.HOPPER);
+            this.registerBlock(BlockItemIds.DISPENSER);
+            this.registerBlock(BlockItemIds.DROPPER);
+            this.registerBlock(BlockItemIds.TARGET);
+            this.registerBlock(BlockItemIds.LEVER);
+            this.registerBlock(BlockItemIds.SCULK_SENSOR);
+            this.registerBlock(BlockItemIds.CALIBRATED_SCULK_SENSOR);
+            this.registerBlock(BlockItemIds.TRIPWIRE_HOOK);
+            this.registerable.register(BlockItemIds.TNT.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.TNT.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_GRANITE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_RED_SANDSTONE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_RED_SANDSTONE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_RED_SANDSTONE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOSSY_STONE_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSSY_STONE_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSSY_STONE_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_DIORITE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_DIORITE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_DIORITE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOSSY_COBBLESTONE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSSY_COBBLESTONE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSSY_COBBLESTONE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.END_STONE_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.END_STONE_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.END_STONE_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_SANDSTONE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_SANDSTONE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_SANDSTONE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_QUARTZ_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_QUARTZ_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_QUARTZ_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRANITE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRANITE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRANITE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ANDESITE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ANDESITE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ANDESITE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_NETHER_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_NETHER_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_NETHER_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_ANDESITE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_ANDESITE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_ANDESITE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIORITE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DIORITE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DIORITE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COBBLED_DEEPSLATE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COBBLED_DEEPSLATE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COBBLED_DEEPSLATE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_DEEPSLATE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_DEEPSLATE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_DEEPSLATE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_TILE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_TILE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_TILE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_GRANITE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_GRANITE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_GRANITE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_RED_SANDSTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_RED_SANDSTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_RED_SANDSTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOSSY_STONE_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSSY_STONE_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSSY_STONE_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_DIORITE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_DIORITE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_DIORITE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOSSY_COBBLESTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSSY_COBBLESTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSSY_COBBLESTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.END_STONE_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.END_STONE_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.END_STONE_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_SANDSTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_SANDSTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_SANDSTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOOTH_QUARTZ_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOOTH_QUARTZ_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOOTH_QUARTZ_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRANITE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRANITE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRANITE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ANDESITE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ANDESITE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ANDESITE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_NETHER_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_NETHER_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_NETHER_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_ANDESITE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_ANDESITE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_ANDESITE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIORITE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DIORITE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DIORITE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COBBLED_DEEPSLATE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COBBLED_DEEPSLATE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COBBLED_DEEPSLATE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_DEEPSLATE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_DEEPSLATE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_DEEPSLATE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEEPSLATE_TILE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEEPSLATE_TILE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEEPSLATE_TILE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.REDSTONE_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.REDSTONE_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.REDSTONE_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.REPEATER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.REPEATER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.REPEATER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COMPARATOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COMPARATOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COMPARATOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PISTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PISTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PISTON)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STICKY_PISTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STICKY_PISTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STICKY_PISTON)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SLIME_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SLIME_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SLIME_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HONEY_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HONEY_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.HONEY_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OBSERVER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OBSERVER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OBSERVER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HOPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HOPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.HOPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DISPENSER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DISPENSER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DISPENSER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DROPPER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DROPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DROPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TARGET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TARGET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TARGET)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LEVER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LEVER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LEVER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHTNING_ROD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHTNING_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHTNING_ROD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_LIGHTNING_ROD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_LIGHTNING_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_LIGHTNING_ROD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_LIGHTNING_ROD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_LIGHTNING_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_LIGHTNING_ROD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_LIGHTNING_ROD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_LIGHTNING_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_LIGHTNING_ROD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_LIGHTNING_ROD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_LIGHTNING_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_LIGHTNING_ROD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_LIGHTNING_ROD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_LIGHTNING_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_LIGHTNING_ROD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_LIGHTNING_ROD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_LIGHTNING_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_LIGHTNING_ROD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_LIGHTNING_ROD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_LIGHTNING_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_LIGHTNING_ROD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SCULK_SENSOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SCULK_SENSOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SCULK_SENSOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CALIBRATED_SCULK_SENSOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CALIBRATED_SCULK_SENSOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CALIBRATED_SCULK_SENSOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TRIPWIRE_HOOK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TRIPWIRE_HOOK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TRIPWIRE_HOOK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TNT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TNT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TNT)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TNT.block())))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_TNT)))
                     .build()
             ));
-            this.registerable.register(ItemIds.REDSTONE_LAMP, create(
-                ItemDisplay.Builder.forBlock(ItemIds.REDSTONE_LAMP).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.REDSTONE_LAMP)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONE_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONE_BUTTON)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BUTTON)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_BUTTON)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_BUTTON)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONE_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONE_PRESSURE_PLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_PRESSURE_PLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_WEIGHTED_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_WEIGHTED_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_WEIGHTED_PRESSURE_PLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HEAVY_WEIGHTED_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HEAVY_WEIGHTED_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.HEAVY_WEIGHTED_PRESSURE_PLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_PRESSURE_PLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_PRESSURE_PLATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.IRON_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.IRON_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_DOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.IRON_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.IRON_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_TRAPDOOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_FENCE_GATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_FENCE_GATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POWERED_RAIL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POWERED_RAIL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POWERED_RAIL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DETECTOR_RAIL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DETECTOR_RAIL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DETECTOR_RAIL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RAIL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RAIL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RAIL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACTIVATOR_RAIL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACTIVATOR_RAIL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACTIVATOR_RAIL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BREWING_STAND, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BREWING_STAND).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BREWING_STAND)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CAULDRON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CAULDRON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CAULDRON)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FLOWER_POT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FLOWER_POT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FLOWER_POT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMOKER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMOKER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMOKER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLAST_FURNACE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLAST_FURNACE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLAST_FURNACE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRINDSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRINDSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRINDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONECUTTER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STONECUTTER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STONECUTTER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BELL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BELL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BELL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SOUL_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SOUL_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SOUL_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER_LANTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER_LANTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_LANTERN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CAMPFIRE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CAMPFIRE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CAMPFIRE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SOUL_CAMPFIRE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SOUL_CAMPFIRE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SOUL_CAMPFIRE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BEE_NEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BEE_NEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BEE_NEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BEEHIVE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BEEHIVE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BEEHIVE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HONEYCOMB_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HONEYCOMB_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.HONEYCOMB_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LODESTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LODESTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LODESTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRYING_OBSIDIAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRYING_OBSIDIAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRYING_OBSIDIAN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACKSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACKSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACKSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACKSTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACKSTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACKSTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACKSTONE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACKSTONE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACKSTONE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GILDED_BLACKSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GILDED_BLACKSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GILDED_BLACKSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_POLISHED_BLACKSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_POLISHED_BLACKSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_POLISHED_BLACKSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_BLACKSTONE_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_BLACKSTONE_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_BLACKSTONE_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRACKED_POLISHED_BLACKSTONE_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRACKED_POLISHED_BLACKSTONE_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRACKED_POLISHED_BLACKSTONE_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RESPAWN_ANCHOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RESPAWN_ANCHOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RESPAWN_ANCHOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMALL_AMETHYST_BUD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMALL_AMETHYST_BUD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMALL_AMETHYST_BUD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MEDIUM_AMETHYST_BUD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MEDIUM_AMETHYST_BUD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MEDIUM_AMETHYST_BUD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LARGE_AMETHYST_BUD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LARGE_AMETHYST_BUD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LARGE_AMETHYST_BUD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.AMETHYST_CLUSTER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.AMETHYST_CLUSTER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.AMETHYST_CLUSTER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POINTED_DRIPSTONE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POINTED_DRIPSTONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POINTED_DRIPSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OCHRE_FROGLIGHT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OCHRE_FROGLIGHT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OCHRE_FROGLIGHT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.VERDANT_FROGLIGHT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.VERDANT_FROGLIGHT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.VERDANT_FROGLIGHT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PEARLESCENT_FROGLIGHT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PEARLESCENT_FROGLIGHT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PEARLESCENT_FROGLIGHT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FROGSPAWN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FROGSPAWN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FROGSPAWN), BlockItemBehavior.Pass.FLUID))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_GRATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_GRATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_GRATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER_GRATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER_GRATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_GRATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER_GRATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER_GRATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_GRATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER_GRATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER_GRATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_GRATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_GRATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_GRATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_GRATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER_GRATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER_GRATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_GRATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER_GRATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER_GRATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_GRATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER_GRATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER_GRATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_GRATE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_BULB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_BULB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_BULB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER_BULB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER_BULB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_BULB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER_BULB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER_BULB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_BULB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER_BULB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER_BULB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_BULB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_BULB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_BULB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_BULB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER_BULB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER_BULB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_BULB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER_BULB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER_BULB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_BULB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER_BULB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER_BULB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_BULB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TRIAL_SPAWNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TRIAL_SPAWNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TRIAL_SPAWNER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.VAULT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.VAULT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.VAULT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRAFTER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRAFTER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRAFTER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RESIN_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RESIN_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RESIN_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RESIN_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RESIN_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RESIN_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RESIN_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RESIN_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RESIN_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RESIN_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RESIN_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RESIN_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RESIN_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RESIN_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RESIN_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_RESIN_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_RESIN_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_RESIN_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TEST_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TEST_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TEST_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TEST_INSTANCE_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TEST_INSTANCE_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TEST_INSTANCE_BLOCK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_CHEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER_CHEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER_CHEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER_CHEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_CHEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER_CHEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER_CHEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER_CHEST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_GOLEM_STATUE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_GOLEM_STATUE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COPPER_GOLEM_STATUE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPOSED_COPPER_GOLEM_STATUE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.EXPOSED_COPPER_GOLEM_STATUE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.EXPOSED_COPPER_GOLEM_STATUE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WEATHERED_COPPER_GOLEM_STATUE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEATHERED_COPPER_GOLEM_STATUE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEATHERED_COPPER_GOLEM_STATUE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OXIDIZED_COPPER_GOLEM_STATUE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXIDIZED_COPPER_GOLEM_STATUE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXIDIZED_COPPER_GOLEM_STATUE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_COPPER_GOLEM_STATUE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_COPPER_GOLEM_STATUE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_COPPER_GOLEM_STATUE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_EXPOSED_COPPER_GOLEM_STATUE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_EXPOSED_COPPER_GOLEM_STATUE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_EXPOSED_COPPER_GOLEM_STATUE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_WEATHERED_COPPER_GOLEM_STATUE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_WEATHERED_COPPER_GOLEM_STATUE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_WEATHERED_COPPER_GOLEM_STATUE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAXED_OXIDIZED_COPPER_GOLEM_STATUE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WAXED_OXIDIZED_COPPER_GOLEM_STATUE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WAXED_OXIDIZED_COPPER_GOLEM_STATUE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_SHELF)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_SHELF)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_DANDELION, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GOLDEN_DANDELION).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GOLDEN_DANDELION)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CINNABAR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CINNABAR_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CINNABAR_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CINNABAR_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_CINNABAR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_CINNABAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_CINNABAR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_CINNABAR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_CINNABAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_CINNABAR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_CINNABAR_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_CINNABAR_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_CINNABAR_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_CINNABAR_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_CINNABAR_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_CINNABAR_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_CINNABAR_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_CINNABAR_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_CINNABAR_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CINNABAR_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CINNABAR_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CINNABAR_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CINNABAR_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CINNABAR_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CINNABAR_BRICK_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POTENT_SULFUR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POTENT_SULFUR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POTENT_SULFUR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SULFUR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHISELED_SULFUR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_SULFUR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_SULFUR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_SULFUR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_SULFUR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_SULFUR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_SULFUR_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_SULFUR_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_SULFUR_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_SULFUR_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_SULFUR_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_SULFUR_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLISHED_SULFUR_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POLISHED_SULFUR_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POLISHED_SULFUR_WALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR_BRICKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_BRICKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_BRICKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR_BRICK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_BRICK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_BRICK_STAIRS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR_BRICK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_BRICK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_BRICK_SLAB)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR_BRICK_WALL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SULFUR_BRICK_WALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SULFUR_BRICK_WALL)))
-                    .build()
-            ));
-        }
-
-        private void bootstrapAttachedToSideBlocks() {
-            this.registerable.register(ItemIds.TORCH, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TORCH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.TORCH), this.blocks.getOrThrow(BlockIds.WALL_TORCH), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SOUL_TORCH, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SOUL_TORCH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.SOUL_TORCH), this.blocks.getOrThrow(BlockIds.SOUL_WALL_TORCH), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_TORCH, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COPPER_TORCH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.COPPER_TORCH), this.blocks.getOrThrow(BlockIds.COPPER_WALL_TORCH), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TUBE_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TUBE_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.TUBE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.TUBE_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BRAIN_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BRAIN_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.BRAIN_CORAL_FAN), this.blocks.getOrThrow(BlockIds.BRAIN_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BUBBLE_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BUBBLE_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.BUBBLE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.BUBBLE_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FIRE_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FIRE_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.FIRE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.FIRE_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HORN_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HORN_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.HORN_CORAL_FAN), this.blocks.getOrThrow(BlockIds.HORN_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_TUBE_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_TUBE_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_TUBE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_TUBE_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_BRAIN_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_BRAIN_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_BRAIN_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_BRAIN_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_BUBBLE_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_BUBBLE_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_BUBBLE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_BUBBLE_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_FIRE_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_FIRE_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_FIRE_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_FIRE_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_HORN_CORAL_FAN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_HORN_CORAL_FAN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.DEAD_HORN_CORAL_FAN), this.blocks.getOrThrow(BlockIds.DEAD_HORN_CORAL_WALL_FAN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.REDSTONE_TORCH, create(
-                ItemDisplay.Builder.forBlock(ItemIds.REDSTONE_TORCH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.REDSTONE_TORCH), this.blocks.getOrThrow(BlockIds.REDSTONE_WALL_TORCH), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.CRIMSON_SIGN), this.blocks.getOrThrow(BlockIds.CRIMSON_WALL_SIGN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.WARPED_SIGN), this.blocks.getOrThrow(BlockIds.WARPED_WALL_SIGN), Direction.DOWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.CRIMSON_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.CRIMSON_WALL_HANGING_SIGN), Direction.UP))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.WARPED_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.WARPED_WALL_HANGING_SIGN), Direction.UP))
-                    .build()
-            ));
-        }
-
-        private void bootstrapColoredBlocks() {
-            this.bootstrapShulkerBoxes();
-            this.registerable.register(ItemIds.WHITE_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_STAINED_GLASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_STAINED_GLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_STAINED_GLASS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_STAINED_GLASS_PANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_STAINED_GLASS_PANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_STAINED_GLASS_PANE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_GLAZED_TERRACOTTA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_GLAZED_TERRACOTTA).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_GLAZED_TERRACOTTA)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_CONCRETE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_CONCRETE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_CONCRETE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_CONCRETE_POWDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_CONCRETE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_CONCRETE_POWDER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_BED, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_BED).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_BED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_CANDLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_CANDLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_CANDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_CANDLE)))
-                    .build()
-            ));
-        }
-
-        private void bootstrapShulkerBoxes() {
-            this.registerable.register(ItemIds.SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_SHULKER_BOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_SHULKER_BOX).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_SHULKER_BOX)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                    .build()
-            ));
+            this.registerBlock(BlockItemIds.REDSTONE_LAMP);
+            this.registerBlock(BlockItemIds.STONE_BUTTON);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_BUTTON);
+            this.registerBlock(BlockItemIds.STONE_PRESSURE_PLATE);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_PRESSURE_PLATE);
+            this.registerBlock(BlockItemIds.LIGHT_WEIGHTED_PRESSURE_PLATE);
+            this.registerBlock(BlockItemIds.HEAVY_WEIGHTED_PRESSURE_PLATE);
+            this.registerBlock(BlockItemIds.IRON_DOOR);
+            this.registerBlock(BlockItemIds.IRON_TRAPDOOR);
+            this.registerBlock(BlockItemIds.POWERED_RAIL);
+            this.registerBlock(BlockItemIds.DETECTOR_RAIL);
+            this.registerBlock(BlockItemIds.RAIL);
+            this.registerBlock(BlockItemIds.ACTIVATOR_RAIL);
+            this.registerBlock(BlockItemIds.BREWING_STAND);
+            this.registerBlock(BlockItemIds.CAULDRON);
+            this.registerBlock(BlockItemIds.FLOWER_POT);
+            this.registerBlock(BlockItemIds.SMOKER);
+            this.registerBlock(BlockItemIds.BLAST_FURNACE);
+            this.registerBlock(BlockItemIds.GRINDSTONE);
+            this.registerBlock(BlockItemIds.STONECUTTER);
+            this.registerBlock(BlockItemIds.BELL);
+            this.registerBlock(BlockItemIds.LANTERN);
+            this.registerBlock(BlockItemIds.SOUL_LANTERN);
+            this.registerBlock(BlockItemIds.CAMPFIRE);
+            this.registerBlock(BlockItemIds.SOUL_CAMPFIRE);
+            this.registerBlock(BlockItemIds.BEE_NEST);
+            this.registerBlock(BlockItemIds.BEEHIVE);
+            this.registerBlock(BlockItemIds.HONEYCOMB_BLOCK);
+            this.registerBlock(BlockItemIds.LODESTONE);
+            this.registerBlock(BlockItemIds.CRYING_OBSIDIAN);
+            this.registerBlock(BlockItemIds.BLACKSTONE);
+            this.registerBlock(BlockItemIds.BLACKSTONE_SLAB);
+            this.registerBlock(BlockItemIds.BLACKSTONE_STAIRS);
+            this.registerBlock(BlockItemIds.GILDED_BLACKSTONE);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_SLAB);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_STAIRS);
+            this.registerBlock(BlockItemIds.CHISELED_POLISHED_BLACKSTONE);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_BRICKS);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.CRACKED_POLISHED_BLACKSTONE_BRICKS);
+            this.registerBlock(BlockItemIds.RESPAWN_ANCHOR);
+            this.registerBlock(BlockItemIds.SMALL_AMETHYST_BUD);
+            this.registerBlock(BlockItemIds.MEDIUM_AMETHYST_BUD);
+            this.registerBlock(BlockItemIds.LARGE_AMETHYST_BUD);
+            this.registerBlock(BlockItemIds.AMETHYST_CLUSTER);
+            this.registerBlock(BlockItemIds.POINTED_DRIPSTONE);
+            this.registerBlock(BlockItemIds.OCHRE_FROGLIGHT);
+            this.registerBlock(BlockItemIds.VERDANT_FROGLIGHT);
+            this.registerBlock(BlockItemIds.PEARLESCENT_FROGLIGHT);
+            this.registerable.register(BlockItemIds.FROGSPAWN.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.FROGSPAWN.item()).build(),
+                ItemBehaviorSet.builder()
+                    .with(StackableItemBehavior.of(64))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FROGSPAWN.block()), BlockItemBehavior.Pass.FLUID))
+                    .build()
+            ));
+            this.registerBlock(BlockItemIds.TRIAL_SPAWNER);
+            this.registerBlock(BlockItemIds.VAULT);
+            this.registerBlock(BlockItemIds.CRAFTER);
+            this.registerBlock(BlockItemIds.RESIN_BLOCK);
+            this.registerBlock(BlockItemIds.RESIN_BRICKS);
+            this.registerBlock(BlockItemIds.RESIN_BRICK_STAIRS);
+            this.registerBlock(BlockItemIds.RESIN_BRICK_SLAB);
+            this.registerBlock(BlockItemIds.RESIN_BRICK_WALL);
+            this.registerBlock(BlockItemIds.CHISELED_RESIN_BRICKS);
+            this.registerBlock(BlockItemIds.TEST_BLOCK);
+            this.registerBlock(BlockItemIds.TEST_INSTANCE_BLOCK);
+            this.registerBlock(BlockItemIds.GOLDEN_DANDELION);
         }
 
         private void bootstrapItemNameBlocks() {
-            this.registerable.register(ItemIds.STRING, create(
-                ItemDisplay.Builder.forItem(ItemIds.STRING).build(),
+            this.registerable.register(BlockItemIds.TRIPWIRE.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.TRIPWIRE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TRIPWIRE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TRIPWIRE.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.RESIN_CLUMP, create(
-                ItemDisplay.Builder.forItem(ItemIds.RESIN_CLUMP).build(),
+            this.registerable.register(BlockItemIds.RESIN_CLUMP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.RESIN_CLUMP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RESIN_CLUMP)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RESIN_CLUMP.block())))
                     .build()
             ));
         }
 
         private void bootstrapOperatorOnlyBlocks() {
-            this.registerable.register(ItemIds.COMMAND_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COMMAND_BLOCK)
+            this.registerable.register(BlockItemIds.COMMAND_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.COMMAND_BLOCK.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockIds.COMMAND_BLOCK)))
+                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.COMMAND_BLOCK.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.REPEATING_COMMAND_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.REPEATING_COMMAND_BLOCK)
+            this.registerable.register(BlockItemIds.REPEATING_COMMAND_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.REPEATING_COMMAND_BLOCK.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockIds.REPEATING_COMMAND_BLOCK)))
+                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.REPEATING_COMMAND_BLOCK.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.CHAIN_COMMAND_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHAIN_COMMAND_BLOCK)
+            this.registerable.register(BlockItemIds.CHAIN_COMMAND_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CHAIN_COMMAND_BLOCK.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockIds.CHAIN_COMMAND_BLOCK)))
+                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.CHAIN_COMMAND_BLOCK.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.STRUCTURE_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRUCTURE_BLOCK)
+            this.registerable.register(BlockItemIds.STRUCTURE_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.STRUCTURE_BLOCK.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockIds.STRUCTURE_BLOCK)))
+                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.STRUCTURE_BLOCK.block())))
                     .build()
             ));
-            this.registerable.register(ItemIds.JIGSAW, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JIGSAW)
+            this.registerable.register(BlockItemIds.JIGSAW.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.JIGSAW.item())
                     .rarity(Rarity.EPIC)
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockIds.JIGSAW)))
+                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.JIGSAW.block())))
                     .build()
             ));
         }
@@ -6296,10 +1992,10 @@ public class Items {
                     .with(StackableItemBehavior.of(1))
                     .with(DamageableItemBehavior.of(238))
                     .with(ToolItemBehavior.builder(1)
-                        .rule(Tool.Rule.minesAndDrops(HolderSet.direct(this.blocks.getOrThrow(BlockIds.COBWEB)), 15.0f))
+                        .rule(Tool.Rule.minesAndDrops(HolderSet.direct(this.blocks.getOrThrow(BlockItemIds.COBWEB.block())), 15.0f))
                         .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.LEAVES), 15.0f))
                         .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.WOOL), 5.0f))
-                        .rule(Tool.Rule.overrideSpeed(HolderSet.direct(this.blocks.getOrThrow(BlockIds.VINE), this.blocks.getOrThrow(BlockIds.GLOW_LICHEN)), 2.0f))
+                        .rule(Tool.Rule.overrideSpeed(HolderSet.direct(this.blocks.getOrThrow(BlockItemIds.VINE.block()), this.blocks.getOrThrow(BlockItemIds.GLOW_LICHEN.block())), 2.0f))
                         .build())
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHEAR)))
                     .build()
@@ -7422,451 +3118,244 @@ public class Items {
         }
 
         private void bootstrapCompostables() {
-            this.registerable.register(ItemIds.OAK_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_LEAVES).build(),
+            this.registerable.register(BlockItemIds.AZALEA_LEAVES.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.AZALEA_LEAVES.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.AZALEA_LEAVES.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.SPRUCE_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_LEAVES).build(),
+            this.registerable.register(BlockItemIds.SHORT_GRASS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SHORT_GRASS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SHORT_GRASS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.BIRCH_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_LEAVES).build(),
+            this.registerable.register(BlockItemIds.KELP.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.KELP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.KELP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.JUNGLE_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_LEAVES).build(),
+            this.registerable.register(BlockItemIds.MOSS_CARPET.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.MOSS_CARPET.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MOSS_CARPET.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.ACACIA_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_LEAVES).build(),
+            this.registerable.register(BlockItemIds.PALE_MOSS_CARPET.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PALE_MOSS_CARPET.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PALE_MOSS_CARPET.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.CHERRY_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_LEAVES).build(),
+            this.registerable.register(BlockItemIds.PINK_PETALS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PINK_PETALS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PINK_PETALS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.DARK_OAK_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_LEAVES).build(),
+            this.registerable.register(BlockItemIds.HANGING_ROOTS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.HANGING_ROOTS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.HANGING_ROOTS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.PALE_OAK_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_LEAVES).build(),
+            this.registerable.register(BlockItemIds.SMALL_DRIPLEAF.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SMALL_DRIPLEAF.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SMALL_DRIPLEAF.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.MANGROVE_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_LEAVES).build(),
+            this.registerable.register(BlockItemIds.WHEAT_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.WHEAT_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WHEAT_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.AZALEA_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.AZALEA_LEAVES).build(),
+            this.registerable.register(BlockItemIds.PUMPKIN_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.PUMPKIN_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.AZALEA_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PUMPKIN_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.OAK_SAPLING, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_SAPLING).build(),
+            this.registerable.register(BlockItemIds.MELON_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.MELON_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_SAPLING)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_OAK_SAPLING)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_SAPLING, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_SAPLING).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_SAPLING)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_SPRUCE_SAPLING)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_SAPLING, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_SAPLING).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_SAPLING)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_BIRCH_SAPLING)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_SAPLING, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_SAPLING).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_SAPLING)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_JUNGLE_SAPLING)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_SAPLING, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_SAPLING).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_SAPLING)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_ACACIA_SAPLING)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_SAPLING, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_SAPLING).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_SAPLING)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_CHERRY_SAPLING)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_SAPLING, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_SAPLING).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_SAPLING)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_DARK_OAK_SAPLING)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_SAPLING, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_SAPLING).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_SAPLING)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_PALE_OAK_SAPLING)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_PROPAGULE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_PROPAGULE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_PROPAGULE)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_MANGROVE_PROPAGULE)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHORT_GRASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SHORT_GRASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SHORT_GRASS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MELON_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.KELP, create(
-                ItemDisplay.Builder.forBlock(ItemIds.KELP).build(),
+            this.registerable.register(BlockItemIds.TORCHFLOWER_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.TORCHFLOWER_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.KELP)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TORCHFLOWER_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.MOSS_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSS_CARPET).build(),
+            this.registerable.register(BlockItemIds.PITCHER_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.PITCHER_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSS_CARPET)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PITCHER_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.PALE_MOSS_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_MOSS_CARPET).build(),
+            this.registerable.register(BlockItemIds.BEETROOT_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.BEETROOT_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_MOSS_CARPET)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BEETROOT_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.PINK_PETALS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_PETALS).build(),
+            this.registerable.register(BlockItemIds.MANGROVE_ROOTS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.MANGROVE_ROOTS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_PETALS)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HANGING_ROOTS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HANGING_ROOTS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.HANGING_ROOTS)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SMALL_DRIPLEAF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMALL_DRIPLEAF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMALL_DRIPLEAF)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHEAT_SEEDS, create(
-                ItemDisplay.Builder.forItem(ItemIds.WHEAT_SEEDS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHEAT)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PUMPKIN_SEEDS, create(
-                ItemDisplay.Builder.forItem(ItemIds.PUMPKIN_SEEDS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PUMPKIN_STEM)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MELON_SEEDS, create(
-                ItemDisplay.Builder.forItem(ItemIds.MELON_SEEDS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MELON_STEM)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TORCHFLOWER_SEEDS, create(
-                ItemDisplay.Builder.forItem(ItemIds.TORCHFLOWER_SEEDS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TORCHFLOWER_CROP)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PITCHER_POD, create(
-                ItemDisplay.Builder.forItem(ItemIds.PITCHER_POD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PITCHER_CROP)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BEETROOT_SEEDS, create(
-                ItemDisplay.Builder.forItem(ItemIds.BEETROOT_SEEDS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BEETROOTS)))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_ROOTS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_ROOTS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_ROOTS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MANGROVE_ROOTS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.SEAGRASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SEAGRASS).build(),
+            this.registerable.register(BlockItemIds.SEAGRASS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SEAGRASS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SEAGRASS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SEAGRASS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.PALE_HANGING_MOSS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_HANGING_MOSS).build(),
+            this.registerable.register(BlockItemIds.PALE_HANGING_MOSS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PALE_HANGING_MOSS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_HANGING_MOSS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PALE_HANGING_MOSS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.WILDFLOWERS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WILDFLOWERS).build(),
+            this.registerable.register(BlockItemIds.WILDFLOWERS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.WILDFLOWERS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WILDFLOWERS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WILDFLOWERS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.BUSH, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BUSH).build(),
+            this.registerable.register(BlockItemIds.BUSH.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.BUSH.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BUSH)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BUSH.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.FIREFLY_BUSH, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FIREFLY_BUSH).build(),
+            this.registerable.register(BlockItemIds.FIREFLY_BUSH.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.FIREFLY_BUSH.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FIREFLY_BUSH)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FIREFLY_BUSH.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.CACTUS_FLOWER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CACTUS_FLOWER).build(),
+            this.registerable.register(BlockItemIds.CACTUS_FLOWER.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CACTUS_FLOWER.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CACTUS_FLOWER)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CACTUS_FLOWER.block())))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.FLOWERING_AZALEA_LEAVES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FLOWERING_AZALEA_LEAVES).build(),
+            this.registerable.register(BlockItemIds.FLOWERING_AZALEA_LEAVES.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.FLOWERING_AZALEA_LEAVES.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FLOWERING_AZALEA_LEAVES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FLOWERING_AZALEA_LEAVES.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
-            this.registerable.register(ItemIds.NETHER_SPROUTS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHER_SPROUTS).build(),
+            this.registerable.register(BlockItemIds.NETHER_SPROUTS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.NETHER_SPROUTS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_SPROUTS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NETHER_SPROUTS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
-            this.registerable.register(ItemIds.WEEPING_VINES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WEEPING_VINES).build(),
+            this.registerable.register(BlockItemIds.WEEPING_VINES.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.WEEPING_VINES.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WEEPING_VINES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WEEPING_VINES.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
-            this.registerable.register(ItemIds.TWISTING_VINES, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TWISTING_VINES).build(),
+            this.registerable.register(BlockItemIds.TWISTING_VINES.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.TWISTING_VINES.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TWISTING_VINES)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TWISTING_VINES.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
-            this.registerable.register(ItemIds.SUGAR_CANE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SUGAR_CANE).build(),
+            this.registerable.register(BlockItemIds.SUGAR_CANE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SUGAR_CANE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SUGAR_CANE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SUGAR_CANE.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
-            this.registerable.register(ItemIds.VINE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.VINE).build(),
+            this.registerable.register(BlockItemIds.VINE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.VINE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.VINE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.VINE.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
-            this.registerable.register(ItemIds.GLOW_LICHEN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GLOW_LICHEN).build(),
+            this.registerable.register(BlockItemIds.GLOW_LICHEN.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.GLOW_LICHEN.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GLOW_LICHEN)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOW_LICHEN.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
-            this.registerable.register(ItemIds.TALL_GRASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TALL_GRASS).build(),
+            this.registerable.register(BlockItemIds.TALL_GRASS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.TALL_GRASS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TALL_GRASS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TALL_GRASS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build()
             ));
-            this.registerable.register(ItemIds.CACTUS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CACTUS).build(),
+            this.registerable.register(BlockItemIds.CACTUS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CACTUS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CACTUS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CACTUS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .build(),
                 ActionEventMap.Builder.item()
@@ -7876,20 +3365,20 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.DRIED_KELP_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DRIED_KELP_BLOCK).build(),
+            this.registerable.register(BlockItemIds.DRIED_KELP_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.DRIED_KELP_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DRIED_KELP_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DRIED_KELP_BLOCK.block())))
                     .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
                     .with(FuelItemBehavior.of(FuelTimes.DRIED_KELP_BLOCK))
                     .build()
             ));
-            this.registerable.register(ItemIds.FERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FERN).build(),
+            this.registerable.register(BlockItemIds.FERN.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.FERN.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FERN)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FERN.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
@@ -7899,52 +3388,52 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.LILY_PAD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LILY_PAD).build(),
+            this.registerable.register(BlockItemIds.LILY_PAD.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.LILY_PAD.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LILY_PAD), BlockItemBehavior.Pass.FLUID))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LILY_PAD.block()), BlockItemBehavior.Pass.FLUID))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.NETHER_WART, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHER_WART).build(),
+            this.registerable.register(BlockItemIds.NETHER_WART.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.NETHER_WART.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_WART)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NETHER_WART.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.COCOA_BEANS, create(
-                ItemDisplay.Builder.forItem(ItemIds.COCOA_BEANS).build(),
+            this.registerable.register(BlockItemIds.COCOA_CROP.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.COCOA_CROP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COCOA)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.COCOA_CROP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.BIG_DRIPLEAF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIG_DRIPLEAF).build(),
+            this.registerable.register(BlockItemIds.BIG_DRIPLEAF.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.BIG_DRIPLEAF.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIG_DRIPLEAF)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BIG_DRIPLEAF.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.PUMPKIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PUMPKIN).build(),
+            this.registerable.register(BlockItemIds.PUMPKIN.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PUMPKIN.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PUMPKIN)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PUMPKIN.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.CARVED_PUMPKIN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CARVED_PUMPKIN).build(),
+            this.registerable.register(BlockItemIds.CARVED_PUMPKIN.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CARVED_PUMPKIN.item()).build(),
                 AttributeModifiers.hideFromLocatorBar(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CARVED_PUMPKIN)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARVED_PUMPKIN.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.HEAD)
                         .setSwappable(false)
@@ -7953,19 +3442,19 @@ public class Items {
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_CARVED_PUMPKIN)))
                     .build()
             ));
-            this.registerable.register(ItemIds.MELON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MELON).build(),
+            this.registerable.register(BlockItemIds.MELON.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.MELON.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MELON)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MELON.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.SEA_PICKLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SEA_PICKLE).build(),
+            this.registerable.register(BlockItemIds.SEA_PICKLE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SEA_PICKLE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SEA_PICKLE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SEA_PICKLE.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
@@ -7976,11 +3465,11 @@ public class Items {
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.DANDELION, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DANDELION).build(),
+            this.registerable.register(BlockItemIds.DANDELION.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.DANDELION.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DANDELION)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DANDELION.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.SATURATION), 140)
@@ -7993,11 +3482,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.OPEN_EYEBLOSSOM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OPEN_EYEBLOSSOM).build(),
+            this.registerable.register(BlockItemIds.OPEN_EYEBLOSSOM.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.OPEN_EYEBLOSSOM.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OPEN_EYEBLOSSOM)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.OPEN_EYEBLOSSOM.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.BLINDNESS), 140)
@@ -8010,11 +3499,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.CLOSED_EYEBLOSSOM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CLOSED_EYEBLOSSOM).build(),
+            this.registerable.register(BlockItemIds.CLOSED_EYEBLOSSOM.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CLOSED_EYEBLOSSOM.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CLOSED_EYEBLOSSOM)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CLOSED_EYEBLOSSOM.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.NAUSEA), 140)
@@ -8027,11 +3516,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.POPPY, create(
-                ItemDisplay.Builder.forBlock(ItemIds.POPPY).build(),
+            this.registerable.register(BlockItemIds.POPPY.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.POPPY.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.POPPY)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.POPPY.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.NIGHT_VISION), 100)
@@ -8044,11 +3533,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.BLUE_ORCHID, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_ORCHID).build(),
+            this.registerable.register(BlockItemIds.BLUE_ORCHID.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.BLUE_ORCHID.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_ORCHID)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BLUE_ORCHID.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.SATURATION), 140)
@@ -8061,11 +3550,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.ALLIUM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ALLIUM).build(),
+            this.registerable.register(BlockItemIds.ALLIUM.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.ALLIUM.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ALLIUM)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.ALLIUM.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 80)
@@ -8078,11 +3567,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.AZURE_BLUET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.AZURE_BLUET).build(),
+            this.registerable.register(BlockItemIds.AZURE_BLUET.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.AZURE_BLUET.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.AZURE_BLUET)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.AZURE_BLUET.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.BLINDNESS), 160)
@@ -8095,11 +3584,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.RED_TULIP, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_TULIP).build(),
+            this.registerable.register(BlockItemIds.RED_TULIP.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.RED_TULIP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_TULIP)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RED_TULIP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
@@ -8112,11 +3601,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.ORANGE_TULIP, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_TULIP).build(),
+            this.registerable.register(BlockItemIds.ORANGE_TULIP.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.ORANGE_TULIP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_TULIP)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.ORANGE_TULIP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
@@ -8129,11 +3618,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.WHITE_TULIP, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_TULIP).build(),
+            this.registerable.register(BlockItemIds.WHITE_TULIP.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.WHITE_TULIP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_TULIP)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WHITE_TULIP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
@@ -8146,11 +3635,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.PINK_TULIP, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_TULIP).build(),
+            this.registerable.register(BlockItemIds.PINK_TULIP.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PINK_TULIP.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_TULIP)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PINK_TULIP.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
@@ -8163,11 +3652,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.OXEYE_DAISY, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OXEYE_DAISY).build(),
+            this.registerable.register(BlockItemIds.OXEYE_DAISY.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.OXEYE_DAISY.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OXEYE_DAISY)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.OXEYE_DAISY.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 160)
@@ -8180,11 +3669,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.CORNFLOWER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CORNFLOWER).build(),
+            this.registerable.register(BlockItemIds.CORNFLOWER.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CORNFLOWER.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CORNFLOWER)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CORNFLOWER.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.JUMP_BOOST), 120)
@@ -8197,11 +3686,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.LILY_OF_THE_VALLEY, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LILY_OF_THE_VALLEY).build(),
+            this.registerable.register(BlockItemIds.LILY_OF_THE_VALLEY.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.LILY_OF_THE_VALLEY.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LILY_OF_THE_VALLEY)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LILY_OF_THE_VALLEY.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.POISON), 240)
@@ -8214,11 +3703,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.WITHER_ROSE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WITHER_ROSE).build(),
+            this.registerable.register(BlockItemIds.WITHER_ROSE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.WITHER_ROSE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WITHER_ROSE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WITHER_ROSE.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WITHER), 160)
@@ -8231,11 +3720,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.AZALEA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.AZALEA).build(),
+            this.registerable.register(BlockItemIds.AZALEA.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.AZALEA.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.AZALEA)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.AZALEA.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
@@ -8246,59 +3735,59 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.SUNFLOWER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SUNFLOWER).build(),
+            this.registerable.register(BlockItemIds.SUNFLOWER.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SUNFLOWER.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SUNFLOWER)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SUNFLOWER.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.LILAC, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LILAC).build(),
+            this.registerable.register(BlockItemIds.LILAC.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.LILAC.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LILAC)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LILAC.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.ROSE_BUSH, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ROSE_BUSH).build(),
+            this.registerable.register(BlockItemIds.ROSE_BUSH.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.ROSE_BUSH.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ROSE_BUSH)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.ROSE_BUSH.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.PEONY, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PEONY).build(),
+            this.registerable.register(BlockItemIds.PEONY.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PEONY.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PEONY)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PEONY.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.LARGE_FERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LARGE_FERN).build(),
+            this.registerable.register(BlockItemIds.LARGE_FERN.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.LARGE_FERN.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LARGE_FERN)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LARGE_FERN.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.SPORE_BLOSSOM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPORE_BLOSSOM).build(),
+            this.registerable.register(BlockItemIds.SPORE_BLOSSOM.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SPORE_BLOSSOM.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPORE_BLOSSOM)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SPORE_BLOSSOM.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.BROWN_MUSHROOM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_MUSHROOM).build(),
+            this.registerable.register(BlockItemIds.BROWN_MUSHROOM.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.BROWN_MUSHROOM.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_MUSHROOM)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BROWN_MUSHROOM.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
@@ -8308,11 +3797,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.RED_MUSHROOM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_MUSHROOM).build(),
+            this.registerable.register(BlockItemIds.RED_MUSHROOM.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.RED_MUSHROOM.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_MUSHROOM)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RED_MUSHROOM.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
@@ -8322,39 +3811,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.CRIMSON_FUNGUS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_FUNGUS).build(),
+            this.registerable.register(BlockItemIds.CRIMSON_ROOTS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CRIMSON_ROOTS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_FUNGUS)))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_FUNGUS)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_FUNGUS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_FUNGUS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_FUNGUS)))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_FUNGUS)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CRIMSON_ROOTS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRIMSON_ROOTS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRIMSON_ROOTS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CRIMSON_ROOTS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
@@ -8364,11 +3825,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.WARPED_ROOTS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_ROOTS).build(),
+            this.registerable.register(BlockItemIds.WARPED_ROOTS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.WARPED_ROOTS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_ROOTS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WARPED_ROOTS.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build(),
                 ActionEventMap.Builder.item()
@@ -8378,67 +3839,67 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.MOSS_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MOSS_BLOCK).build(),
+            this.registerable.register(BlockItemIds.MOSS_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.MOSS_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MOSS_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MOSS_BLOCK.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.PALE_MOSS_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_MOSS_BLOCK).build(),
+            this.registerable.register(BlockItemIds.PALE_MOSS_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PALE_MOSS_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_MOSS_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PALE_MOSS_BLOCK.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.MUSHROOM_STEM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MUSHROOM_STEM).build(),
+            this.registerable.register(BlockItemIds.MUSHROOM_STEM.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.MUSHROOM_STEM.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MUSHROOM_STEM)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MUSHROOM_STEM.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.SHROOMLIGHT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SHROOMLIGHT).build(),
+            this.registerable.register(BlockItemIds.SHROOMLIGHT.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SHROOMLIGHT.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SHROOMLIGHT)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SHROOMLIGHT.block())))
                     .with(CompostableItemBehavior.of(CompostChances.BIG))
                     .build()
             ));
-            this.registerable.register(ItemIds.NETHER_WART_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHER_WART_BLOCK).build(),
+            this.registerable.register(BlockItemIds.NETHER_WART_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.NETHER_WART_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHER_WART_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NETHER_WART_BLOCK.block())))
                     .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
-            this.registerable.register(ItemIds.WARPED_WART_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WARPED_WART_BLOCK).build(),
+            this.registerable.register(BlockItemIds.WARPED_WART_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.WARPED_WART_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WARPED_WART_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WARPED_WART_BLOCK.block())))
                     .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
-            this.registerable.register(ItemIds.HAY_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.HAY_BLOCK).build(),
+            this.registerable.register(BlockItemIds.HAY_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.HAY_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.HAY_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.HAY_BLOCK.block())))
                     .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
-            this.registerable.register(ItemIds.FLOWERING_AZALEA, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FLOWERING_AZALEA).build(),
+            this.registerable.register(BlockItemIds.FLOWERING_AZALEA.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.FLOWERING_AZALEA.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FLOWERING_AZALEA)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FLOWERING_AZALEA.block())))
                     .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
@@ -8449,11 +3910,11 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.TORCHFLOWER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TORCHFLOWER).build(),
+            this.registerable.register(BlockItemIds.TORCHFLOWER.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.TORCHFLOWER.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TORCHFLOWER)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TORCHFLOWER.block())))
                     .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
                     .with(SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.NIGHT_VISION), 100)
@@ -8466,35 +3927,35 @@ public class Items {
                     )
                     .build()
             ));
-            this.registerable.register(ItemIds.PITCHER_PLANT, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PITCHER_PLANT).build(),
+            this.registerable.register(BlockItemIds.PITCHER_PLANT.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PITCHER_PLANT.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PITCHER_PLANT)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PITCHER_PLANT.block())))
                     .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
-            this.registerable.register(ItemIds.BROWN_MUSHROOM_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_MUSHROOM_BLOCK).build(),
+            this.registerable.register(BlockItemIds.BROWN_MUSHROOM_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.BROWN_MUSHROOM_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_MUSHROOM_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BROWN_MUSHROOM_BLOCK.block())))
                     .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
-            this.registerable.register(ItemIds.RED_MUSHROOM_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_MUSHROOM_BLOCK).build(),
+            this.registerable.register(BlockItemIds.RED_MUSHROOM_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.RED_MUSHROOM_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_MUSHROOM_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RED_MUSHROOM_BLOCK.block())))
                     .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
                     .build()
             ));
-            this.registerable.register(ItemIds.CAKE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CAKE).build(),
+            this.registerable.register(BlockItemIds.CAKE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CAKE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CAKE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CAKE.block())))
                     .with(CompostableItemBehavior.of(CompostChances.GUARANTEED))
                     .build()
             ));
@@ -8944,117 +4405,22 @@ public class Items {
                     ))
                     .build()
             ));
-            this.registerable.register(ItemIds.WHITE_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.WHITE_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.WHITE, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.ORANGE_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.ORANGE, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.MAGENTA_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.MAGENTA, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.LIGHT_BLUE_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.LIGHT_BLUE, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.YELLOW_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.YELLOW, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.LIME_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.LIME, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.PINK_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.PINK, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.GRAY_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.GRAY, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.LIGHT_GRAY_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.LIGHT_GRAY, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.CYAN_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.CYAN, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.PURPLE_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.PURPLE, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLUE_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.BLUE, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.BROWN_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.BROWN, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.GREEN_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.GREEN, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.RED_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.RED, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_HARNESS, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLACK_HARNESS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHarness(DyeColor.BLACK, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
+            ColorCollection.zipApply(ItemIds.HARNESS, ColorCollection.VALUES, (harness, dyeColor) -> this.registerable.register(
+                harness,
+                create(
+                    ItemDisplay.Builder.forItem(harness).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(1))
+                        .with(
+                            EquipmentItemBehavior.ofHarness(
+                                dyeColor,
+                                this.soundEvents,
+                                this.entityTypes,
+                                this.dispenseBehaviors
+                            )
+                        )
+                        .build()
+                )
             ));
             this.registerable.register(ItemIds.COPPER_NAUTILUS_ARMOR, create(
                 ItemDisplay.Builder.forItem(ItemIds.COPPER_NAUTILUS_ARMOR).build(),
@@ -9094,99 +4460,99 @@ public class Items {
         }
 
         private void bootstrapSkulls() {
-            this.registerable.register(ItemIds.SKELETON_SKULL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SKELETON_SKULL)
+            this.registerable.register(BlockItemIds.SKELETON_SKULL.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SKELETON_SKULL.item())
                     .rarity(Rarity.UNCOMMON)
                     .build(),
                 AttributeModifiers.hideFromLocatorBar(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockIds.SKELETON_SKULL),
+                        this.blocks.getOrThrow(BlockItemIds.SKELETON_SKULL.block()),
                         this.blocks.getOrThrow(BlockIds.SKELETON_WALL_SKULL),
                         this.dispenseBehaviors
                     ))
                     .build()
             ));
-            this.registerable.register(ItemIds.WITHER_SKELETON_SKULL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WITHER_SKELETON_SKULL)
+            this.registerable.register(BlockItemIds.WITHER_SKELETON_SKULL.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.WITHER_SKELETON_SKULL.item())
                     .rarity(Rarity.UNCOMMON)
                     .build(),
                 AttributeModifiers.hideFromLocatorBar(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockIds.WITHER_SKELETON_SKULL),
+                        this.blocks.getOrThrow(BlockItemIds.WITHER_SKELETON_SKULL.block()),
                         this.blocks.getOrThrow(BlockIds.WITHER_SKELETON_WALL_SKULL),
                         this.dispenseBehaviors
                     ))
                     .build()
             ));
-            this.registerable.register(ItemIds.PLAYER_HEAD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PLAYER_HEAD)
+            this.registerable.register(BlockItemIds.PLAYER_HEAD.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PLAYER_HEAD.item())
                     .rarity(Rarity.UNCOMMON)
                     .build(),
                 AttributeModifiers.hideFromLocatorBar(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockIds.PLAYER_HEAD),
+                        this.blocks.getOrThrow(BlockItemIds.PLAYER_HEAD.block()),
                         this.blocks.getOrThrow(BlockIds.PLAYER_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
                     .build()
             ));
-            this.registerable.register(ItemIds.ZOMBIE_HEAD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ZOMBIE_HEAD)
+            this.registerable.register(BlockItemIds.ZOMBIE_HEAD.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.ZOMBIE_HEAD.item())
                     .rarity(Rarity.UNCOMMON)
                     .build(),
                 AttributeModifiers.hideFromLocatorBar(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockIds.ZOMBIE_HEAD),
+                        this.blocks.getOrThrow(BlockItemIds.ZOMBIE_HEAD.block()),
                         this.blocks.getOrThrow(BlockIds.ZOMBIE_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
                     .build()
             ));
-            this.registerable.register(ItemIds.CREEPER_HEAD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CREEPER_HEAD)
+            this.registerable.register(BlockItemIds.CREEPER_HEAD.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CREEPER_HEAD.item())
                     .rarity(Rarity.UNCOMMON)
                     .build(),
                 AttributeModifiers.hideFromLocatorBar(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockIds.CREEPER_HEAD),
+                        this.blocks.getOrThrow(BlockItemIds.CREEPER_HEAD.block()),
                         this.blocks.getOrThrow(BlockIds.CREEPER_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
                     .build()
             ));
-            this.registerable.register(ItemIds.DRAGON_HEAD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DRAGON_HEAD)
+            this.registerable.register(BlockItemIds.DRAGON_HEAD.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.DRAGON_HEAD.item())
                     .rarity(Rarity.RARE)
                     .build(),
                 AttributeModifiers.hideFromLocatorBar(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockIds.DRAGON_HEAD),
+                        this.blocks.getOrThrow(BlockItemIds.DRAGON_HEAD.block()),
                         this.blocks.getOrThrow(BlockIds.DRAGON_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
                     .build()
             ));
-            this.registerable.register(ItemIds.PIGLIN_HEAD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PIGLIN_HEAD)
+            this.registerable.register(BlockItemIds.PIGLIN_HEAD.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.PIGLIN_HEAD.item())
                     .rarity(Rarity.UNCOMMON)
                     .build(),
                 AttributeModifiers.hideFromLocatorBar(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
                     .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockIds.PIGLIN_HEAD),
+                        this.blocks.getOrThrow(BlockItemIds.PIGLIN_HEAD.block()),
                         this.blocks.getOrThrow(BlockIds.PIGLIN_WALL_HEAD),
                         this.dispenseBehaviors
                     ))
@@ -9195,11 +4561,11 @@ public class Items {
         }
 
         private void bootstrapFuel() {
-            this.registerable.register(ItemIds.COAL_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COAL_BLOCK).build(),
+            this.registerable.register(BlockItemIds.COAL_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.COAL_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COAL_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.COAL_BLOCK.block())))
                     .with(FuelItemBehavior.of(FuelTimes.COAL_BLOCK))
                     .build()
             ));
@@ -9224,1268 +4590,140 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.COAL))
                     .build()
             ));
-            this.registerable.register(ItemIds.OAK_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_HANGING_SIGN).build(),
+            this.registerable.register(BlockItemIds.BOOKSHELF.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.BOOKSHELF.item()).build(),
                 ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.OAK_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.SPRUCE_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.SPRUCE_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.BIRCH_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.BIRCH_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.JUNGLE_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.JUNGLE_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.ACACIA_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.ACACIA_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.CHERRY_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.CHERRY_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.DARK_OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.DARK_OAK_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.PALE_OAK_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.PALE_OAK_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.MANGROVE_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.MANGROVE_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_HANGING_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_HANGING_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.BAMBOO_HANGING_SIGN), this.blocks.getOrThrow(BlockIds.BAMBOO_WALL_HANGING_SIGN), Direction.UP))
-                    .with(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.OAK_SIGN), this.blocks.getOrThrow(BlockIds.OAK_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.SPRUCE_SIGN), this.blocks.getOrThrow(BlockIds.SPRUCE_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.BIRCH_SIGN), this.blocks.getOrThrow(BlockIds.BIRCH_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.JUNGLE_SIGN), this.blocks.getOrThrow(BlockIds.JUNGLE_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.ACACIA_SIGN), this.blocks.getOrThrow(BlockIds.ACACIA_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.CHERRY_SIGN), this.blocks.getOrThrow(BlockIds.CHERRY_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.DARK_OAK_SIGN), this.blocks.getOrThrow(BlockIds.DARK_OAK_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.PALE_OAK_SIGN), this.blocks.getOrThrow(BlockIds.PALE_OAK_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.MANGROVE_SIGN), this.blocks.getOrThrow(BlockIds.MANGROVE_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_SIGN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_SIGN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.BAMBOO_SIGN), this.blocks.getOrThrow(BlockIds.BAMBOO_WALL_SIGN), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.SIGN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_PLANKS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_PLANKS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_PLANKS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_MOSAIC, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_MOSAIC).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_MOSAIC)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_BLOCK)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_OAK_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_OAK_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_OAK_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_SPRUCE_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_SPRUCE_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_SPRUCE_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_BIRCH_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_BIRCH_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_BIRCH_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_JUNGLE_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_JUNGLE_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_JUNGLE_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_ACACIA_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_ACACIA_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_ACACIA_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_CHERRY_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_CHERRY_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_CHERRY_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_DARK_OAK_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_DARK_OAK_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_DARK_OAK_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_PALE_OAK_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_PALE_OAK_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_PALE_OAK_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_MANGROVE_LOG, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_MANGROVE_LOG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_MANGROVE_LOG)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_OAK_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_OAK_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_OAK_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_SPRUCE_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_SPRUCE_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_SPRUCE_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_BIRCH_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_BIRCH_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_BIRCH_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_JUNGLE_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_JUNGLE_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_JUNGLE_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_ACACIA_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_ACACIA_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_ACACIA_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_CHERRY_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_CHERRY_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_CHERRY_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_DARK_OAK_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_DARK_OAK_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_DARK_OAK_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_PALE_OAK_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_PALE_OAK_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_PALE_OAK_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_MANGROVE_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_MANGROVE_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_MANGROVE_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIPPED_BAMBOO_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.STRIPPED_BAMBOO_BLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.STRIPPED_BAMBOO_BLOCK)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_WOOD, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_WOOD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_WOOD)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_FENCE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_FENCE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_FENCE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_MOSAIC_STAIRS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_MOSAIC_STAIRS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_MOSAIC_STAIRS)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_PRESSURE_PLATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_PRESSURE_PLATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_PRESSURE_PLATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_TRAPDOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_TRAPDOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_TRAPDOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_FENCE_GATE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_FENCE_GATE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_FENCE_GATE)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BOOKSHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BOOKSHELF).build(),
-                ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BOOKSHELF)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BOOKSHELF.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.CHISELED_BOOKSHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHISELED_BOOKSHELF).build(),
+            this.registerable.register(BlockItemIds.CHISELED_BOOKSHELF.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CHISELED_BOOKSHELF.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHISELED_BOOKSHELF)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CHISELED_BOOKSHELF.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.LECTERN, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LECTERN).build(),
+            this.registerable.register(BlockItemIds.LECTERN.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.LECTERN.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LECTERN)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LECTERN.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHEST).build(),
+            this.registerable.register(BlockItemIds.CHEST.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CHEST.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHEST)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CHEST.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_CHEST)))
                     .build()
             ));
-            this.registerable.register(ItemIds.TRAPPED_CHEST, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TRAPPED_CHEST).build(),
+            this.registerable.register(BlockItemIds.TRAPPED_CHEST.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.TRAPPED_CHEST.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TRAPPED_CHEST)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TRAPPED_CHEST.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.LADDER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LADDER).build(),
+            this.registerable.register(BlockItemIds.LADDER.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.LADDER.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LADDER)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LADDER.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.CRAFTING_TABLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CRAFTING_TABLE).build(),
+            this.registerable.register(BlockItemIds.CRAFTING_TABLE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CRAFTING_TABLE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CRAFTING_TABLE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CRAFTING_TABLE.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.JUKEBOX, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUKEBOX).build(),
+            this.registerable.register(BlockItemIds.JUKEBOX.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.JUKEBOX.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUKEBOX)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.JUKEBOX.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.NOTE_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NOTE_BLOCK).build(),
+            this.registerable.register(BlockItemIds.NOTE_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.NOTE_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NOTE_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NOTE_BLOCK.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.LOOM, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LOOM).build(),
+            this.registerable.register(BlockItemIds.LOOM.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.LOOM.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LOOM)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LOOM.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.COMPOSTER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.COMPOSTER).build(),
+            this.registerable.register(BlockItemIds.COMPOSTER.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.COMPOSTER.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.COMPOSTER)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.COMPOSTER.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.BARREL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BARREL).build(),
+            this.registerable.register(BlockItemIds.BARREL.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.BARREL.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BARREL)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BARREL.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.CARTOGRAPHY_TABLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CARTOGRAPHY_TABLE).build(),
+            this.registerable.register(BlockItemIds.CARTOGRAPHY_TABLE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.CARTOGRAPHY_TABLE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CARTOGRAPHY_TABLE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARTOGRAPHY_TABLE.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.FLETCHING_TABLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.FLETCHING_TABLE).build(),
+            this.registerable.register(BlockItemIds.FLETCHING_TABLE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.FLETCHING_TABLE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.FLETCHING_TABLE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FLETCHING_TABLE.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.SMITHING_TABLE, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SMITHING_TABLE).build(),
+            this.registerable.register(BlockItemIds.SMITHING_TABLE.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SMITHING_TABLE.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SMITHING_TABLE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SMITHING_TABLE.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.DAYLIGHT_DETECTOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DAYLIGHT_DETECTOR).build(),
+            this.registerable.register(BlockItemIds.DAYLIGHT_DETECTOR.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.DAYLIGHT_DETECTOR.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DAYLIGHT_DETECTOR)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DAYLIGHT_DETECTOR.block())))
                     .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
-            this.registerable.register(ItemIds.OAK_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_DOOR).build(),
+            this.registerable.register(BlockItemIds.DEAD_BUSH.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.DEAD_BUSH.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_DOOR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_DOOR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_DOOR)))
-                    .with(FuelItemBehavior.of(FuelTimes.DOOR))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_MOSAIC_SLAB, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_MOSAIC_SLAB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_MOSAIC_SLAB)))
-                    .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEAD_BUSH, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DEAD_BUSH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DEAD_BUSH)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DEAD_BUSH.block())))
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .build(),
                 ActionEventMap.Builder.item()
@@ -10493,86 +4731,6 @@ public class Items {
                         ItemEvent.BEFORE_USE_ON_BLOCK,
                         Actions.potBlock(this.blocks, BlockIds.POTTED_DEAD_BUSH)
                     )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_BUTTON, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_BUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_BUTTON)))
-                    .with(FuelItemBehavior.of(FuelTimes.BUTTON))
                     .build()
             ));
             this.registerable.register(ItemIds.STICK, create(
@@ -10589,421 +4747,39 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.SMALL_WOODEN_ITEM))
                     .build()
             ));
-            this.registerable.register(ItemIds.BAMBOO, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO).build(),
+            this.registerable.register(BlockItemIds.SCAFFOLDING.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SCAFFOLDING.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO)))
-                    .with(FuelItemBehavior.of(FuelTimes.BAMBOO))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_BAMBOO)
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SCAFFOLDING, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SCAFFOLDING).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SCAFFOLDING)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SCAFFOLDING.block())))
                     .with(FuelItemBehavior.of(FuelTimes.SCAFFOLDING))
                     .build()
             ));
-            this.registerable.register(ItemIds.WHITE_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_WOOL).build(),
+            this.registerable.register(BlockItemIds.SHORT_DRY_GRASS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.SHORT_DRY_GRASS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_WOOL, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_WOOL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_WOOL)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.WHITE_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.WHITE)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ORANGE_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.ORANGE)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MAGENTA_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.MAGENTA)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.LIGHT_BLUE)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.YELLOW_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.YELLOW)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIME_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.LIME)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PINK_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.PINK)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GRAY_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.GRAY)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.LIGHT_GRAY)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CYAN_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.CYAN)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PURPLE_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.PURPLE)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLUE_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.BLUE)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BROWN_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.BROWN)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.GREEN_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.GREEN)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.RED_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.RED)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_CARPET, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_CARPET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BLACK_CARPET)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                    .with(EquipmentItemBehavior.of(Equippable.llamaSwag(DyeColor.BLACK)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHORT_DRY_GRASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SHORT_DRY_GRASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SHORT_DRY_GRASS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SHORT_DRY_GRASS.block())))
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.TALL_DRY_GRASS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.TALL_DRY_GRASS).build(),
+            this.registerable.register(BlockItemIds.TALL_DRY_GRASS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.TALL_DRY_GRASS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.TALL_DRY_GRASS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TALL_DRY_GRASS.block())))
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
                     .build()
             ));
-            this.registerable.register(ItemIds.LEAF_LITTER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LEAF_LITTER).build(),
+            this.registerable.register(BlockItemIds.LEAF_LITTER.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.LEAF_LITTER.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.LEAF_LITTER)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LEAF_LITTER.block())))
                     .with(FuelItemBehavior.of(FuelTimes.PLANT))
                     .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ACACIA_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ACACIA_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BAMBOO_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BAMBOO_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BIRCH_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.BIRCH_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CHERRY_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.CHERRY_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.DARK_OAK_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.DARK_OAK_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.JUNGLE_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.JUNGLE_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MANGROVE_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.MANGROVE_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.OAK_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.OAK_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PALE_OAK_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.PALE_OAK_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_SHELF, create(
-                ItemDisplay.Builder.forBlock(ItemIds.SPRUCE_SHELF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.SPRUCE_SHELF)))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
                     .build()
             ));
         }
@@ -11100,7 +4876,7 @@ public class Items {
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.location()
                                 .setBlock(BlockPredicate.Builder.block()
-                                    .of(this.blocks, this.blocks.getOrThrow(BlockIds.END_PORTAL_FRAME).value())
+                                    .of(this.blocks, this.blocks.getOrThrow(BlockItemIds.END_PORTAL_FRAME.block()).value())
                                     .setProperties(StatePropertiesPredicate.Builder.properties()
                                         .hasProperty(BlockStateProperties.EYE, false)))
                         ),
@@ -11212,121 +4988,6 @@ public class Items {
                     .with(ThrowableItemBehavior.of(0.5f, -20.0f))
                     .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.LINGERING_POTION)))
                     .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
-                    .build()
-            ));
-        }
-
-        private void bootstrapDyes() {
-            this.registerable.register(ItemIds.WHITE_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.WHITE_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.WHITE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.ORANGE_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.ORANGE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.MAGENTA_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.MAGENTA))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.LIGHT_BLUE_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.LIGHT_BLUE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.YELLOW_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.YELLOW))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.LIME_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.LIME))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.PINK_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.PINK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GRAY_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.GRAY))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.LIGHT_GRAY_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.LIGHT_GRAY))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.CYAN_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.CYAN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.PURPLE_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.PURPLE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLUE_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.BLUE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BROWN_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.BROWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GREEN_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.GREEN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.RED_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.RED))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_DYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLACK_DYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DyeItemBehavior.of(DyeColor.BLACK))
                     .build()
             ));
         }
@@ -11547,12 +5208,12 @@ public class Items {
                     .with(FuelItemBehavior.of(FuelTimes.LAVA, this.items.getOrThrow(ItemIds.BUCKET)))
                     .build()
             ));
-            this.registerable.register(ItemIds.POWDER_SNOW_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.POWDER_SNOW_BUCKET).build(),
+            this.registerable.register(BlockItemIds.POWDER_SNOW.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.POWDER_SNOW.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(
                         BucketItemBehavior.placeBlock(
-                            this.blocks.getOrThrow(BlockIds.POWDER_SNOW),
+                            this.blocks.getOrThrow(BlockItemIds.POWDER_SNOW.block()),
                             this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_POWDER_SNOW),
                             this.items,
                             this.dispenseBehaviors
@@ -11855,154 +5516,6 @@ public class Items {
             ));
         }
 
-        private void bootstrapBanners() {
-            this.bootstrapBannerPatterns();
-            this.registerable.register(ItemIds.WHITE_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.WHITE_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.WHITE_BANNER), this.blocks.getOrThrow(BlockIds.WHITE_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.WHITE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ORANGE_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.ORANGE_BANNER), this.blocks.getOrThrow(BlockIds.ORANGE_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.ORANGE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.MAGENTA_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.MAGENTA_BANNER), this.blocks.getOrThrow(BlockIds.MAGENTA_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.MAGENTA))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_BLUE_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_BANNER), this.blocks.getOrThrow(BlockIds.LIGHT_BLUE_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.LIGHT_BLUE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.YELLOW_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.YELLOW_BANNER), this.blocks.getOrThrow(BlockIds.YELLOW_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.YELLOW))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIME_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.LIME_BANNER), this.blocks.getOrThrow(BlockIds.LIME_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.LIME))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PINK_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.PINK_BANNER), this.blocks.getOrThrow(BlockIds.PINK_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.PINK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GRAY_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.GRAY_BANNER), this.blocks.getOrThrow(BlockIds.GRAY_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.GRAY))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.LIGHT_GRAY_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_BANNER), this.blocks.getOrThrow(BlockIds.LIGHT_GRAY_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.LIGHT_GRAY))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.CYAN_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.CYAN_BANNER), this.blocks.getOrThrow(BlockIds.CYAN_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.CYAN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.PURPLE_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.PURPLE_BANNER), this.blocks.getOrThrow(BlockIds.PURPLE_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.PURPLE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLUE_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.BLUE_BANNER), this.blocks.getOrThrow(BlockIds.BLUE_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.BLUE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BROWN_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.BROWN_BANNER), this.blocks.getOrThrow(BlockIds.BROWN_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.BROWN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.GREEN_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.GREEN_BANNER), this.blocks.getOrThrow(BlockIds.GREEN_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.GREEN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.RED_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.RED_BANNER), this.blocks.getOrThrow(BlockIds.RED_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.RED))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_BANNER, create(
-                ItemDisplay.Builder.forBlock(ItemIds.BLACK_BANNER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(BlockItemBehavior.attachedToSide(this.blocks.getOrThrow(BlockIds.BLACK_BANNER), this.blocks.getOrThrow(BlockIds.BLACK_WALL_BANNER), Direction.DOWN))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(BannerPatternHolderItemBehavior.of(DyeColor.BLACK))
-                    .build()
-            ));
-        }
-
         private void bootstrapBannerPatterns() {
             this.registerable.register(ItemIds.FLOWER_BANNER_PATTERN, create(
                 ItemDisplay.Builder.forItem(ItemIds.FLOWER_BANNER_PATTERN).build(),
@@ -12277,19 +5790,19 @@ public class Items {
         }
 
         private void bootstrapImmuneToDamage() {
-            this.registerable.register(ItemIds.ANCIENT_DEBRIS, create(
-                ItemDisplay.Builder.forBlock(ItemIds.ANCIENT_DEBRIS).build(),
+            this.registerable.register(BlockItemIds.ANCIENT_DEBRIS.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.ANCIENT_DEBRIS.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.ANCIENT_DEBRIS)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.ANCIENT_DEBRIS.block())))
                     .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build()
             ));
-            this.registerable.register(ItemIds.NETHERITE_BLOCK, create(
-                ItemDisplay.Builder.forBlock(ItemIds.NETHERITE_BLOCK).build(),
+            this.registerable.register(BlockItemIds.NETHERITE_BLOCK.item(), create(
+                ItemDisplay.Builder.forBlock(BlockItemIds.NETHERITE_BLOCK.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.NETHERITE_BLOCK)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NETHERITE_BLOCK.block())))
                     .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
                     .build()
             ));
@@ -12321,11 +5834,11 @@ public class Items {
         }
 
         private void bootstrapTrimMaterialProviders() {
-            this.registerable.register(ItemIds.REDSTONE, create(
-                ItemDisplay.Builder.forItem(ItemIds.REDSTONE).build(),
+            this.registerable.register(BlockItemIds.REDSTONE_DUST.item(), create(
+                ItemDisplay.Builder.forItem(BlockItemIds.REDSTONE_DUST.item()).build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockIds.REDSTONE_WIRE)))
+                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.REDSTONE_DUST.block())))
                     .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.REDSTONE)))
                     .build()
             ));
@@ -12395,9 +5908,12 @@ public class Items {
         }
 
         private void bootstrapMiscellaneous() {
-            this.registerable.register(ItemIds.AIR, create(
-                ItemDisplay.Builder.forBlock(ItemIds.AIR).build()
-            ));
+            this.registerable.register(
+                BlockItemIds.AIR.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(BlockItemIds.AIR.item()).build()
+                )
+            );
             this.registerable.register(ItemIds.SADDLE, create(
                 ItemDisplay.Builder.forItem(ItemIds.SADDLE).build(),
                 ItemBehaviorSet.builder()
@@ -12504,7 +6020,7 @@ public class Items {
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.location()
                                 .setBlock(BlockPredicate.Builder.block()
-                                    .of(this.blocks, this.blocks.getOrThrow(BlockIds.LODESTONE).value()))
+                                    .of(this.blocks, this.blocks.getOrThrow(BlockItemIds.LODESTONE.block()).value()))
                         ),
                         PassingSequenceHandler.builder()
                             .add(ModifyItemAction.of(
@@ -12535,142 +6051,6 @@ public class Items {
                     .build(),
                 ItemBehaviorSet.builder()
                     .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHITE_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.WHITE_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ORANGE_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.ORANGE_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGENTA_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.MAGENTA_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_BLUE_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.LIGHT_BLUE_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.YELLOW_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.YELLOW_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIME_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.LIME_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PINK_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.PINK_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GRAY_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GRAY_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LIGHT_GRAY_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.LIGHT_GRAY_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CYAN_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.CYAN_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PURPLE_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.PURPLE_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLUE_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BROWN_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GREEN_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GREEN_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RED_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.RED_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLACK_BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLACK_BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
                     .build()
             ));
             this.registerable.register(ItemIds.CLOCK, create(
@@ -13059,6 +6439,182 @@ public class Items {
                     .with(StackableItemBehavior.of(64))
                     .build()
             ));
+        }
+
+        public void registerBlock(BlockItemId blockItem) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
+                        .build()
+                )
+            );
+        }
+
+        public void registerUnstackableBlock(BlockItemId blockItem) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(1))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
+                        .build()
+                )
+            );
+        }
+
+        public void registerShulkerBox(BlockItemId blockItem) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(1))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
+                        .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
+                        .build()
+                )
+            );
+        }
+
+        public void registerBurningWoodBlock(BlockItemId blockItem) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
+                        .with(FuelItemBehavior.of(FuelTimes.WOOD))
+                        .build()
+                )
+            );
+        }
+
+        public void registerBurningSlab(BlockItemId blockItem) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
+                        .with(FuelItemBehavior.of(FuelTimes.SLAB))
+                        .build()
+                )
+            );
+        }
+
+        public Consumer<BlockItemId> registerBurningBlock(int fuelTicks) {
+            return blockItem -> this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
+                        .with(FuelItemBehavior.of(fuelTicks))
+                        .build()
+                )
+            );
+        }
+
+        public void registerPottableSapling(BlockItemId blockItem, ResourceKey<Block> pottedBlock, int fuelTicks, float compostChance) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
+                        .with(compostChance > 0.0f, CompostableItemBehavior.of(compostChance))
+                        .with(fuelTicks > 0, FuelItemBehavior.of(fuelTicks))
+                        .build(),
+                    ActionEventMap.Builder.item()
+                        .addCancellable(
+                            ItemEvent.BEFORE_USE_ON_BLOCK,
+                            Actions.potBlock(this.blocks, pottedBlock)
+                        )
+                        .build()
+                )
+            );
+        }
+
+        public void registerCompostableLeaves(BlockItemId blockItem) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
+                        .with(CompostableItemBehavior.of(CompostChances.SMALL))
+                        .build()
+                )
+            );
+        }
+
+        public void registerBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction direction) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
+                        .with(
+                            BlockItemBehavior.attachedToSide(
+                                this.blocks.getOrThrow(blockItem.block()),
+                                this.blocks.getOrThrow(otherBlock),
+                                direction
+                            )
+                        )
+                        .build()
+                )
+            );
+        }
+
+        public void registerSign(BlockItemId blockItem, ResourceKey<Block> wallSign, boolean burns) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(16))
+                        .with(
+                            BlockItemBehavior.attachedToSide(
+                                this.blocks.getOrThrow(blockItem.block()),
+                                this.blocks.getOrThrow(wallSign),
+                                Direction.DOWN
+                            )
+                        )
+                        .with(burns, FuelItemBehavior.of(FuelTimes.SIGN))
+                        .build()
+                )
+            );
+        }
+
+        public void registerHangingSign(BlockItemId blockItem, ResourceKey<Block> hangingWallSign, boolean burns) {
+            this.registerable.register(
+                blockItem.item(),
+                create(
+                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
+                    ItemBehaviorSet.builder()
+                        .with(StackableItemBehavior.of(16))
+                        .with(
+                            BlockItemBehavior.attachedToSide(
+                                this.blocks.getOrThrow(blockItem.block()),
+                                this.blocks.getOrThrow(hangingWallSign),
+                                Direction.UP
+                            )
+                        )
+                        .with(burns, FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
+                        .build()
+                )
+            );
         }
     }
 }

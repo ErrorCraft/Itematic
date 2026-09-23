@@ -1,10 +1,11 @@
 package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
+import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -17,7 +18,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PISTON)
+            .is(BlockItemIds.PISTON.item())
         );
     }
 
@@ -27,7 +28,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.STICKY_PISTON)
+            .is(BlockItemIds.STICKY_PISTON.item())
         );
     }
 
@@ -37,7 +38,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.REDSTONE)
+            .is(BlockItemIds.REDSTONE_DUST.item())
         );
     }
 
@@ -47,7 +48,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.STRING)
+            .is(BlockItemIds.TRIPWIRE.item())
         );
     }
 
@@ -57,7 +58,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.TORCH)
+            .is(BlockItemIds.TORCH.item())
         );
     }
 
@@ -67,7 +68,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.REDSTONE_TORCH)
+            .is(BlockItemIds.REDSTONE_TORCH.item())
         );
     }
 
@@ -77,7 +78,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.SOUL_TORCH)
+            .is(BlockItemIds.SOUL_TORCH.item())
         );
     }
 
@@ -87,7 +88,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.OAK_SIGN)
+            .is(ItematicBlockItemIds.OAK.sign().item())
         );
     }
 
@@ -97,7 +98,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.SPRUCE_SIGN)
+            .is(ItematicBlockItemIds.SPRUCE.sign().item())
         );
     }
 
@@ -107,7 +108,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BIRCH_SIGN)
+            .is(ItematicBlockItemIds.BIRCH.sign().item())
         );
     }
 
@@ -117,7 +118,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.ACACIA_SIGN)
+            .is(ItematicBlockItemIds.ACACIA.sign().item())
         );
     }
 
@@ -127,7 +128,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CHERRY_SIGN)
+            .is(ItematicBlockItemIds.CHERRY.sign().item())
         );
     }
 
@@ -137,7 +138,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PALE_OAK_SIGN)
+            .is(ItematicBlockItemIds.PALE_OAK.sign().item())
         );
     }
 
@@ -147,7 +148,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.JUNGLE_SIGN)
+            .is(ItematicBlockItemIds.JUNGLE.sign().item())
         );
     }
 
@@ -157,7 +158,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DARK_OAK_SIGN)
+            .is(ItematicBlockItemIds.DARK_OAK.sign().item())
         );
     }
 
@@ -167,7 +168,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.MANGROVE_SIGN)
+            .is(ItematicBlockItemIds.MANGROVE.sign().item())
         );
     }
 
@@ -177,7 +178,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BAMBOO_SIGN)
+            .is(ItematicBlockItemIds.BAMBOO.sign().item())
         );
     }
 
@@ -187,7 +188,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CRIMSON_SIGN)
+            .is(ItematicBlockItemIds.CRIMSON.sign().item())
         );
     }
 
@@ -197,7 +198,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.WARPED_SIGN)
+            .is(ItematicBlockItemIds.WARPED.sign().item())
         );
     }
 
@@ -207,7 +208,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.OAK_HANGING_SIGN)
+            .is(ItematicBlockItemIds.OAK.hangingSign().item())
         );
     }
 
@@ -217,7 +218,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.SPRUCE_HANGING_SIGN)
+            .is(ItematicBlockItemIds.SPRUCE.hangingSign().item())
         );
     }
 
@@ -227,7 +228,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BIRCH_HANGING_SIGN)
+            .is(ItematicBlockItemIds.BIRCH.hangingSign().item())
         );
     }
 
@@ -237,7 +238,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.ACACIA_HANGING_SIGN)
+            .is(ItematicBlockItemIds.ACACIA.hangingSign().item())
         );
     }
 
@@ -247,7 +248,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CHERRY_HANGING_SIGN)
+            .is(ItematicBlockItemIds.CHERRY.hangingSign().item())
         );
     }
 
@@ -257,7 +258,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PALE_OAK_HANGING_SIGN)
+            .is(ItematicBlockItemIds.PALE_OAK.hangingSign().item())
         );
     }
 
@@ -267,7 +268,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.JUNGLE_HANGING_SIGN)
+            .is(ItematicBlockItemIds.JUNGLE.hangingSign().item())
         );
     }
 
@@ -277,7 +278,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DARK_OAK_HANGING_SIGN)
+            .is(ItematicBlockItemIds.DARK_OAK.hangingSign().item())
         );
     }
 
@@ -287,7 +288,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.MANGROVE_HANGING_SIGN)
+            .is(ItematicBlockItemIds.MANGROVE.hangingSign().item())
         );
     }
 
@@ -297,7 +298,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CRIMSON_HANGING_SIGN)
+            .is(ItematicBlockItemIds.CRIMSON.hangingSign().item())
         );
     }
 
@@ -307,7 +308,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.WARPED_HANGING_SIGN)
+            .is(ItematicBlockItemIds.WARPED.hangingSign().item())
         );
     }
 
@@ -317,7 +318,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BAMBOO_HANGING_SIGN)
+            .is(ItematicBlockItemIds.BAMBOO.hangingSign().item())
         );
     }
 
@@ -327,7 +328,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PUMPKIN_SEEDS)
+            .is(BlockItemIds.PUMPKIN_CROP.item())
         );
     }
 
@@ -337,7 +338,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.MELON_SEEDS)
+            .is(BlockItemIds.MELON_CROP.item())
         );
     }
 
@@ -347,7 +348,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PUMPKIN_SEEDS)
+            .is(BlockItemIds.PUMPKIN_CROP.item())
         );
     }
 
@@ -357,7 +358,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.MELON_SEEDS)
+            .is(BlockItemIds.MELON_CROP.item())
         );
     }
 
@@ -367,7 +368,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.COCOA_BEANS)
+            .is(BlockItemIds.COCOA_CROP.item())
         );
     }
 
@@ -377,7 +378,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CARROT)
+            .is(BlockItemIds.CARROT_CROP.item())
         );
     }
 
@@ -387,7 +388,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.POTATO)
+            .is(BlockItemIds.POTATO_CROP.item())
         );
     }
 
@@ -397,7 +398,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.TORCHFLOWER_SEEDS)
+            .is(BlockItemIds.TORCHFLOWER_CROP.item())
         );
     }
 
@@ -407,7 +408,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PITCHER_POD)
+            .is(BlockItemIds.PITCHER_CROP.item())
         );
     }
 
@@ -417,7 +418,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BEETROOT_SEEDS)
+            .is(BlockItemIds.BEETROOT_CROP.item())
         );
     }
 
@@ -427,7 +428,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.GLOW_BERRIES)
+            .is(BlockItemIds.GLOW_BERRY_CROP.item())
         );
     }
 
@@ -437,7 +438,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.GLOW_BERRIES)
+            .is(BlockItemIds.GLOW_BERRY_CROP.item())
         );
     }
 
@@ -447,7 +448,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BIG_DRIPLEAF)
+            .is(BlockItemIds.BIG_DRIPLEAF.item())
         );
     }
 
@@ -457,7 +458,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.SEAGRASS)
+            .is(BlockItemIds.SEAGRASS.item())
         );
     }
 
@@ -467,7 +468,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.KELP)
+            .is(BlockItemIds.KELP.item())
         );
     }
 
@@ -477,7 +478,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAULDRON)
+            .is(BlockItemIds.CAULDRON.item())
         );
     }
 
@@ -487,7 +488,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAULDRON)
+            .is(BlockItemIds.CAULDRON.item())
         );
     }
 
@@ -497,7 +498,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAULDRON)
+            .is(BlockItemIds.CAULDRON.item())
         );
     }
 
@@ -507,7 +508,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.POWDER_SNOW_BUCKET)
+            .is(BlockItemIds.POWDER_SNOW.item())
         );
     }
 
@@ -517,7 +518,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.TORCHFLOWER)
+            .is(BlockItemIds.TORCHFLOWER.item())
         );
     }
 
@@ -527,7 +528,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.OAK_SAPLING)
+            .is(ItematicBlockItemIds.OAK.sapling().item())
         );
     }
 
@@ -537,7 +538,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.SPRUCE_SAPLING)
+            .is(ItematicBlockItemIds.SPRUCE.sapling().item())
         );
     }
 
@@ -547,7 +548,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BIRCH_SAPLING)
+            .is(ItematicBlockItemIds.BIRCH.sapling().item())
         );
     }
 
@@ -557,7 +558,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.JUNGLE_SAPLING)
+            .is(ItematicBlockItemIds.JUNGLE.sapling().item())
         );
     }
 
@@ -567,7 +568,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.ACACIA_SAPLING)
+            .is(ItematicBlockItemIds.ACACIA.sapling().item())
         );
     }
 
@@ -577,7 +578,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CHERRY_SAPLING)
+            .is(ItematicBlockItemIds.CHERRY.sapling().item())
         );
     }
 
@@ -587,7 +588,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DARK_OAK_SAPLING)
+            .is(ItematicBlockItemIds.DARK_OAK.sapling().item())
         );
     }
 
@@ -597,7 +598,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.MANGROVE_PROPAGULE)
+            .is(ItematicBlockItemIds.MANGROVE.sapling().item())
         );
     }
 
@@ -607,7 +608,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.FERN)
+            .is(BlockItemIds.FERN.item())
         );
     }
 
@@ -617,7 +618,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DANDELION)
+            .is(BlockItemIds.DANDELION.item())
         );
     }
 
@@ -627,7 +628,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.POPPY)
+            .is(BlockItemIds.POPPY.item())
         );
     }
 
@@ -637,7 +638,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BLUE_ORCHID)
+            .is(BlockItemIds.BLUE_ORCHID.item())
         );
     }
 
@@ -647,7 +648,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.ALLIUM)
+            .is(BlockItemIds.ALLIUM.item())
         );
     }
 
@@ -657,7 +658,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.AZURE_BLUET)
+            .is(BlockItemIds.AZURE_BLUET.item())
         );
     }
 
@@ -667,7 +668,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.RED_TULIP)
+            .is(BlockItemIds.RED_TULIP.item())
         );
     }
 
@@ -677,7 +678,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.ORANGE_TULIP)
+            .is(BlockItemIds.ORANGE_TULIP.item())
         );
     }
 
@@ -687,7 +688,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.WHITE_TULIP)
+            .is(BlockItemIds.WHITE_TULIP.item())
         );
     }
 
@@ -697,7 +698,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PINK_TULIP)
+            .is(BlockItemIds.PINK_TULIP.item())
         );
     }
 
@@ -707,7 +708,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.OXEYE_DAISY)
+            .is(BlockItemIds.OXEYE_DAISY.item())
         );
     }
 
@@ -717,7 +718,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CORNFLOWER)
+            .is(BlockItemIds.CORNFLOWER.item())
         );
     }
 
@@ -727,7 +728,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.LILY_OF_THE_VALLEY)
+            .is(BlockItemIds.LILY_OF_THE_VALLEY.item())
         );
     }
 
@@ -737,7 +738,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.WITHER_ROSE)
+            .is(BlockItemIds.WITHER_ROSE.item())
         );
     }
 
@@ -747,7 +748,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.RED_MUSHROOM)
+            .is(BlockItemIds.RED_MUSHROOM.item())
         );
     }
 
@@ -757,7 +758,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BROWN_MUSHROOM)
+            .is(BlockItemIds.BROWN_MUSHROOM.item())
         );
     }
 
@@ -767,7 +768,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DEAD_BUSH)
+            .is(BlockItemIds.DEAD_BUSH.item())
         );
     }
 
@@ -777,7 +778,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CACTUS)
+            .is(BlockItemIds.CACTUS.item())
         );
     }
 
@@ -787,7 +788,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BAMBOO)
+            .is(BlockItemIds.BAMBOO.item())
         );
     }
 
@@ -797,7 +798,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CRIMSON_FUNGUS)
+            .is(BlockItemIds.CRIMSON_FUNGUS.item())
         );
     }
 
@@ -807,7 +808,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.WARPED_FUNGUS)
+            .is(BlockItemIds.WARPED_FUNGUS.item())
         );
     }
 
@@ -817,7 +818,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CRIMSON_ROOTS)
+            .is(BlockItemIds.CRIMSON_ROOTS.item())
         );
     }
 
@@ -827,7 +828,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.WARPED_ROOTS)
+            .is(BlockItemIds.WARPED_ROOTS.item())
         );
     }
 
@@ -837,7 +838,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.AZALEA)
+            .is(BlockItemIds.AZALEA.item())
         );
     }
 
@@ -847,7 +848,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.FLOWERING_AZALEA)
+            .is(BlockItemIds.FLOWERING_AZALEA.item())
         );
     }
 
@@ -857,7 +858,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.OPEN_EYEBLOSSOM)
+            .is(BlockItemIds.OPEN_EYEBLOSSOM.item())
         );
     }
 
@@ -867,7 +868,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CLOSED_EYEBLOSSOM)
+            .is(BlockItemIds.CLOSED_EYEBLOSSOM.item())
         );
     }
 
@@ -877,7 +878,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.SKELETON_SKULL)
+            .is(BlockItemIds.SKELETON_SKULL.item())
         );
     }
 
@@ -887,7 +888,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.WITHER_SKELETON_SKULL)
+            .is(BlockItemIds.WITHER_SKELETON_SKULL.item())
         );
     }
 
@@ -897,7 +898,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.ZOMBIE_HEAD)
+            .is(BlockItemIds.ZOMBIE_HEAD.item())
         );
     }
 
@@ -907,7 +908,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PLAYER_HEAD)
+            .is(BlockItemIds.PLAYER_HEAD.item())
         );
     }
 
@@ -917,7 +918,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CREEPER_HEAD)
+            .is(BlockItemIds.CREEPER_HEAD.item())
         );
     }
 
@@ -927,7 +928,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DRAGON_HEAD)
+            .is(BlockItemIds.DRAGON_HEAD.item())
         );
     }
 
@@ -937,7 +938,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PIGLIN_HEAD)
+            .is(BlockItemIds.PIGLIN_HEAD.item())
         );
     }
 
@@ -947,7 +948,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.WHITE_BANNER)
+            .is(BlockItemIds.BANNER.white().item())
         );
     }
 
@@ -957,7 +958,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.ORANGE_BANNER)
+            .is(BlockItemIds.BANNER.orange().item())
         );
     }
 
@@ -967,7 +968,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.MAGENTA_BANNER)
+            .is(BlockItemIds.BANNER.magenta().item())
         );
     }
 
@@ -977,7 +978,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.LIGHT_BLUE_BANNER)
+            .is(BlockItemIds.BANNER.lightBlue().item())
         );
     }
 
@@ -987,7 +988,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.YELLOW_BANNER)
+            .is(BlockItemIds.BANNER.yellow().item())
         );
     }
 
@@ -997,7 +998,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.LIME_BANNER)
+            .is(BlockItemIds.BANNER.lime().item())
         );
     }
 
@@ -1007,7 +1008,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PINK_BANNER)
+            .is(BlockItemIds.BANNER.pink().item())
         );
     }
 
@@ -1017,7 +1018,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.GRAY_BANNER)
+            .is(BlockItemIds.BANNER.gray().item())
         );
     }
 
@@ -1027,7 +1028,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.LIGHT_GRAY_BANNER)
+            .is(BlockItemIds.BANNER.lightGray().item())
         );
     }
 
@@ -1037,7 +1038,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CYAN_BANNER)
+            .is(BlockItemIds.BANNER.cyan().item())
         );
     }
 
@@ -1047,7 +1048,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.PURPLE_BANNER)
+            .is(BlockItemIds.BANNER.purple().item())
         );
     }
 
@@ -1057,7 +1058,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BLUE_BANNER)
+            .is(BlockItemIds.BANNER.blue().item())
         );
     }
 
@@ -1067,7 +1068,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BROWN_BANNER)
+            .is(BlockItemIds.BANNER.brown().item())
         );
     }
 
@@ -1077,7 +1078,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.GREEN_BANNER)
+            .is(BlockItemIds.BANNER.green().item())
         );
     }
 
@@ -1087,7 +1088,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.RED_BANNER)
+            .is(BlockItemIds.BANNER.red().item())
         );
     }
 
@@ -1097,7 +1098,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BLACK_BANNER)
+            .is(BlockItemIds.BANNER.black().item())
         );
     }
 
@@ -1107,7 +1108,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DEAD_TUBE_CORAL_FAN)
+            .is(BlockItemIds.DEAD_TUBE_CORAL_FAN.item())
         );
     }
 
@@ -1117,7 +1118,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DEAD_BRAIN_CORAL_FAN)
+            .is(BlockItemIds.DEAD_BRAIN_CORAL_FAN.item())
         );
     }
 
@@ -1127,7 +1128,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DEAD_BUBBLE_CORAL_FAN)
+            .is(BlockItemIds.DEAD_BUBBLE_CORAL_FAN.item())
         );
     }
 
@@ -1137,7 +1138,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DEAD_FIRE_CORAL_FAN)
+            .is(BlockItemIds.DEAD_FIRE_CORAL_FAN.item())
         );
     }
 
@@ -1147,7 +1148,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.DEAD_HORN_CORAL_FAN)
+            .is(BlockItemIds.DEAD_HORN_CORAL_FAN.item())
         );
     }
 
@@ -1157,7 +1158,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.TUBE_CORAL_FAN)
+            .is(BlockItemIds.TUBE_CORAL_FAN.item())
         );
     }
 
@@ -1167,7 +1168,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BRAIN_CORAL_FAN)
+            .is(BlockItemIds.BRAIN_CORAL_FAN.item())
         );
     }
 
@@ -1177,7 +1178,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BUBBLE_CORAL_FAN)
+            .is(BlockItemIds.BUBBLE_CORAL_FAN.item())
         );
     }
 
@@ -1187,7 +1188,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.FIRE_CORAL_FAN)
+            .is(BlockItemIds.FIRE_CORAL_FAN.item())
         );
     }
 
@@ -1197,7 +1198,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.HORN_CORAL_FAN)
+            .is(BlockItemIds.HORN_CORAL_FAN.item())
         );
     }
 
@@ -1207,7 +1208,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.BAMBOO)
+            .is(BlockItemIds.BAMBOO.item())
         );
     }
 
@@ -1217,7 +1218,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.SWEET_BERRIES)
+            .is(BlockItemIds.SWEET_BERRY_CROP.item())
         );
     }
 
@@ -1227,7 +1228,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.WEEPING_VINES)
+            .is(BlockItemIds.WEEPING_VINES.item())
         );
     }
 
@@ -1237,7 +1238,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.TWISTING_VINES)
+            .is(BlockItemIds.TWISTING_VINES.item())
         );
     }
 
@@ -1247,7 +1248,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1257,7 +1258,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1267,7 +1268,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1277,7 +1278,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1287,7 +1288,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1297,7 +1298,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1307,7 +1308,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1317,7 +1318,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1327,7 +1328,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1337,7 +1338,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1347,7 +1348,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1357,7 +1358,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1367,7 +1368,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1377,7 +1378,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1387,7 +1388,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1397,7 +1398,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 
@@ -1407,7 +1408,7 @@ public class PickBlockTestSuite {
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
         ItemStack stack = state.getCloneItemStack(helper.getLevel(), absolutePos, false);
         helper.succeedIf(() -> Assert.itemStack(helper, stack)
-            .is(ItemIds.CAKE)
+            .is(BlockItemIds.CAKE.item())
         );
     }
 }

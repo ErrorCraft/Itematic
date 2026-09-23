@@ -1,12 +1,13 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -43,7 +44,7 @@ public class FoodItemComponentTestSuite {
     public void eatingSuspiciousStewAddsSuspiciousEffects(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ItemStack suspiciousStew = level.itematic$createStack(ItemIds.SUSPICIOUS_STEW);
-        List<SuspiciousStewEffects.Entry> effects = TestUtil.getItemBehavior(helper, level.itematic$createStack(ItemIds.DANDELION), ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT)
+        List<SuspiciousStewEffects.Entry> effects = TestUtil.getItemBehavior(helper, level.itematic$createStack(BlockItemIds.DANDELION.item()), ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT)
             .effects();
         suspiciousStew.set(DataComponents.SUSPICIOUS_STEW_EFFECTS, new SuspiciousStewEffects(effects));
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);

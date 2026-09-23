@@ -4,7 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalFloatRef;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
@@ -55,10 +56,10 @@ public abstract class ZombieExtender extends MobExtender {
     )
     private ItemStack newItemStackUseCreateStack(ItemLike item, ServerLevelAccessor level, @Share("jackOLanternChance") LocalFloatRef jackOLanternChance) {
         if (jackOLanternChance.get() < 0.1f) {
-            return level.itematic$createStack(ItemIds.JACK_O_LANTERN);
+            return level.itematic$createStack(BlockItemIds.JACK_O_LANTERN.item());
         }
 
-        return level.itematic$createStack(ItemIds.CARVED_PUMPKIN);
+        return level.itematic$createStack(BlockItemIds.CARVED_PUMPKIN.item());
     }
 
     @Redirect(

@@ -2,12 +2,13 @@ package net.errorcraft.itematic.mixin.client.gui.screens.debug;
 
 
 import net.errorcraft.itematic.access.client.gui.screens.debug.GameModeSwitcherScreenAccess;
-import net.errorcraft.itematic.references.ItemIds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.debug.GameModeSwitcherScreen;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -65,7 +66,7 @@ public class GameModeSwitcherScreenExtender {
         private ResourceKey<Item> icon;
 
         static {
-            CREATIVE.itematic$setIcon(ItemIds.GRASS_BLOCK);
+            CREATIVE.itematic$setIcon(BlockItemIds.GRASS_BLOCK.item());
             SURVIVAL.itematic$setIcon(ItemIds.IRON_SWORD);
             ADVENTURE.itematic$setIcon(ItemIds.MAP);
             SPECTATOR.itematic$setIcon(ItemIds.ENDER_EYE);

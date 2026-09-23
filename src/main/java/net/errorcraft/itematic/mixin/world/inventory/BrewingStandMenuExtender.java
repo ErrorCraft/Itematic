@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.world.inventory;
 
 import net.errorcraft.itematic.access.world.inventory.BrewingStandMenuAccess;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.tags.ItematicItemTags;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.inventory.BrewingStandMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;

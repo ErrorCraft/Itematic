@@ -3,7 +3,8 @@ package net.errorcraft.itematic.mixin.world.entity.animal.equine;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,7 +52,7 @@ public abstract class LlamaExtender extends MobExtender {
         )
     )
     private boolean isHayBlockCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
-        return instance.is(ItemIds.HAY_BLOCK);
+        return instance.is(BlockItemIds.HAY_BLOCK.item());
     }
 
     @Override

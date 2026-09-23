@@ -19,9 +19,9 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.placement.EntityPlacer;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
-import net.minecraft.advancements.criterion.BlockPredicate;
-import net.minecraft.advancements.criterion.LocationPredicate;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.BlockPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -33,6 +33,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -43,7 +44,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -195,7 +196,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
 
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag tooltipFlag) {
-        if (this.entity.entity().value() != EntityType.PAINTING) {
+        if (this.entity.entity().value() != EntityTypes.PAINTING) {
             return;
         }
 
@@ -258,7 +259,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
             return false;
         }
 
-        Optional<SpawnerBlockEntity> blockEntity = level.getBlockEntity(pos, BlockEntityType.MOB_SPAWNER);
+        Optional<SpawnerBlockEntity> blockEntity = level.getBlockEntity(pos, BlockEntityTypes.MOB_SPAWNER);
         if (blockEntity.isEmpty()) {
             return false;
         }

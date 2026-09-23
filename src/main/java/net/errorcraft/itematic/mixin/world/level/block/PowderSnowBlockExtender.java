@@ -1,7 +1,8 @@
 package net.errorcraft.itematic.mixin.world.level.block;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelAccessor;
@@ -31,6 +32,6 @@ public class PowderSnowBlockExtender {
         )
     )
     private ItemStack newItemStackForPowderSnowBucketUseCreateStack(ItemLike item, @Local(name = "level", argsOnly = true) LevelAccessor level) {
-        return level.itematic$createStack(ItemIds.POWDER_SNOW_BUCKET);
+        return level.itematic$createStack(BlockItemIds.POWDER_SNOW.item());
     }
 }

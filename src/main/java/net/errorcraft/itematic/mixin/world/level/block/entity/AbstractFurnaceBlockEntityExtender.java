@@ -3,10 +3,11 @@ package net.errorcraft.itematic.mixin.world.level.block.entity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
 import net.minecraft.core.NonNullList;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -67,7 +68,7 @@ public class AbstractFurnaceBlockEntityExtender {
         )
     )
     private static boolean isWetSpongeCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
-        return instance.is(ItemIds.WET_SPONGE);
+        return instance.is(BlockItemIds.WET_SPONGE.item());
     }
 
     @WrapOperation(

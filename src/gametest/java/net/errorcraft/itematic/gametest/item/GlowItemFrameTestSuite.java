@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -10,9 +9,10 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -33,7 +33,7 @@ public class GlowItemFrameTestSuite {
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
-        helper.succeedIf(() -> Assert.entityType(helper, EntityType.GLOW_ITEM_FRAME)
+        helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.GLOW_ITEM_FRAME)
             .existsAt(GLOW_ITEM_FRAME_POSITION));
     }
 
@@ -53,14 +53,14 @@ public class GlowItemFrameTestSuite {
         glowItemFrame.set(
             DataComponents.ENTITY_DATA,
             TypedEntityData.of(
-                EntityType.GLOW_ITEM_FRAME,
+                EntityTypes.GLOW_ITEM_FRAME,
                 entityData
             )
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, glowItemFrame);
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
-        helper.succeedIf(() -> Assert.entityType(helper, EntityType.GLOW_ITEM_FRAME)
+        helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.GLOW_ITEM_FRAME)
             .existsAt(GLOW_ITEM_FRAME_POSITION, glowItemFrameAssert -> glowItemFrameAssert.test(
                 ItemFrame::getItem,
                 stack -> Assert.itemStack(helper, stack)

@@ -1,7 +1,7 @@
-package net.errorcraft.itematic.mixin.advancements.criterion;
+package net.errorcraft.itematic.mixin.advancements.predicates;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 

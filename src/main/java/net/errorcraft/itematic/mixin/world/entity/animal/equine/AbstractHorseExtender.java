@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.world.entity.animal.equine;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.BlockItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
@@ -65,7 +66,7 @@ public abstract class AbstractHorseExtender extends Animal {
         )
     )
     private boolean isHayBlockCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.HAY_BLOCK);
+        return instance.is(BlockItemIds.HAY_BLOCK.item());
     }
 
     @Redirect(
@@ -103,7 +104,7 @@ public abstract class AbstractHorseExtender extends Animal {
         )
     )
     private boolean isCarrotCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.CARROT);
+        return instance.is(BlockItemIds.CARROT_CROP.item());
     }
 
     @Redirect(

@@ -1,8 +1,8 @@
-package net.errorcraft.itematic.advancements.criterion;
+package net.errorcraft.itematic.advancements.predicates;
 
 import com.mojang.serialization.Codec;
-import net.errorcraft.itematic.mixin.advancements.criterion.MinMaxBoundsAccessor;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.errorcraft.itematic.mixin.advancements.predicates.MinMaxBoundsAccessor;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 
 public class ItematicMinMaxBounds {
     private ItematicMinMaxBounds() {}

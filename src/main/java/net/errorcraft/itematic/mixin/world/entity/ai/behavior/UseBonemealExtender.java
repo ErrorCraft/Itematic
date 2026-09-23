@@ -1,6 +1,6 @@
 package net.errorcraft.itematic.mixin.world.entity.ai.behavior;
 
-import net.errorcraft.itematic.references.ItemIds;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.behavior.UseBonemeal;
 import net.minecraft.world.item.Item;

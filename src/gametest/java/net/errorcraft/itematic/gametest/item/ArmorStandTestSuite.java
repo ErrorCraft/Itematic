@@ -1,15 +1,15 @@
 package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
-import net.errorcraft.itematic.references.ItemIds;
 import net.errorcraft.itematic.util.TestUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 
@@ -30,7 +30,7 @@ public class ArmorStandTestSuite {
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
-        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
+        helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.ARMOR_STAND)
             .existsAt(PLACED_ENTITY_POSITION));
     }
 
@@ -44,7 +44,7 @@ public class ArmorStandTestSuite {
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, HIGH_POSITION, player, Direction.DOWN);
-        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
+        helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.ARMOR_STAND)
             .doesNotExist());
     }
 
@@ -58,7 +58,7 @@ public class ArmorStandTestSuite {
         );
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
-        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
+        helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.ARMOR_STAND)
             .doesNotExist());
     }
 
@@ -73,7 +73,7 @@ public class ArmorStandTestSuite {
         player.setYRot(USER_ANGLE);
         level.addFreshEntity(player);
         TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
-        helper.succeedIf(() -> Assert.entityType(helper, EntityType.ARMOR_STAND)
+        helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.ARMOR_STAND)
             .existsAt(
                 PLACED_ENTITY_POSITION,
                 armorStand -> armorStand.yaw(yaw -> yaw.equals(SPAWNED_ENTITY_ANGLE))
