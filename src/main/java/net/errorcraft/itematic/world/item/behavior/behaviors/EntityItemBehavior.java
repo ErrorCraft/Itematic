@@ -2,8 +2,6 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
-import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.mixin.world.item.HangingEntityItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
 import net.errorcraft.itematic.util.SetCodec;
@@ -13,21 +11,13 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
-import net.errorcraft.itematic.world.entity.spawn.rule.rules.DiscardEntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.rules.OffsetSpawnPositionEntitySpawnRule;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.placement.EntityPlacer;
-import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
-import net.minecraft.advancements.predicates.BlockPredicate;
-import net.minecraft.advancements.predicates.LocationPredicate;
-import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -47,11 +37,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -69,26 +56,10 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     ).apply(instance, EntityItemBehavior::new));
     private static final Component RANDOM_VARIANT_TOOLTIP = HangingEntityItemAccessor.randomVariantTooltip();
 
-    public static EntityItemBehavior of(Holder<EntityType<?>> entity) {
-        return new EntityItemBehavior(
-            EntitySpawner.of(entity),
-            false,
-            Pass.DEFAULT_PASSES
-        );
-    }
-
     public static EntityItemBehavior of(EntitySpawner entity) {
         return new EntityItemBehavior(
             entity,
             false,
-            Pass.DEFAULT_PASSES
-        );
-    }
-
-    public static EntityItemBehavior of(EntitySpawner entity, boolean allowSpawnerModification) {
-        return new EntityItemBehavior(
-            entity,
-            allowSpawnerModification,
             Pass.DEFAULT_PASSES
         );
     }
@@ -99,60 +70,6 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
             allowSpawnerModification,
             Set.of(passes)
         );
-    }
-
-    public static ItemBehavior<?>[] ofDispensing(Holder<EntityType<?>> entity, HolderGetter<DispenseBehavior> dispenseBehaviors) {
-        return ofDispensing(EntitySpawner.of(entity), dispenseBehaviors);
-    }
-
-    public static ItemBehavior<?>[] ofDispensing(EntitySpawner entity, HolderGetter<DispenseBehavior> dispenseBehaviors) {
-        return new ItemBehavior<?>[] {
-            of(entity),
-            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
-        };
-    }
-
-    public static ItemBehavior<?>[] minecart(Holder<EntityType<?>> entity, HolderGetter<Block> blocks, HolderGetter<DispenseBehavior> dispenseBehaviors) {
-        return ofDispensing(
-            EntitySpawner.builder(entity)
-                .spawnRule(
-                    DiscardEntitySpawnRule.INSTANCE,
-                    InvertedLootItemCondition.invert(
-                        LocationCheckPredicates.builder(
-                            PositionTarget.INTERACTED,
-                            LocationPredicate.Builder.location()
-                                .setBlock(BlockPredicate.Builder.block()
-                                    .of(blocks, BlockTags.RAILS))
-                        )
-                    ))
-                .spawnRule(OffsetSpawnPositionEntitySpawnRule.of(new Vec3(0.0d, 0.0625d, 0.0d)))
-                .spawnRule(
-                    OffsetSpawnPositionEntitySpawnRule.of(new Vec3(0.0d, 0.5d, 0.0d)),
-                    LocationCheckPredicates.builder(
-                        PositionTarget.INTERACTED,
-                        LocationPredicate.Builder.location()
-                            .setBlock(BlockPredicate.Builder.block()
-                                .setProperties(StatePropertiesPredicate.Builder.properties()
-                                    .itematic$range(BlockStateProperties.RAIL_SHAPE, RailShape.ASCENDING_EAST, RailShape.ASCENDING_SOUTH)))
-                    ))
-                .build(),
-            dispenseBehaviors
-        );
-    }
-
-    public static ItemBehavior<?>[] spawnEgg(Holder<EntityType<?>> entity, HolderGetter<DispenseBehavior> dispenseBehaviors) {
-        return new ItemBehavior<?>[] {
-            of(
-                EntitySpawner.builder(entity)
-                    .allowItemData()
-                    .build(),
-                true,
-                EntityItemBehavior.Pass.BLOCK,
-                EntityItemBehavior.Pass.FLUID
-            ),
-            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)),
-            SpawnEggItemBehavior.INSTANCE
-        };
     }
 
     @Override

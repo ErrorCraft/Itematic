@@ -1,6 +1,12 @@
 {
   "behavior": {
     "minecraft:castable": {},
+    "minecraft:damageable": {
+      "durability": 64
+    },
+    "minecraft:enchantable": {
+      "enchantability": 1
+    },
     "minecraft:fuel": {
       "ticks": 300
     },

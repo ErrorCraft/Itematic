@@ -24,6 +24,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.item.context.UseOnContext;
@@ -41,6 +42,26 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
         UseEffects.CODEC.optionalFieldOf("effects", UseEffects.DEFAULT).forGetter(UseableItemBehavior::effects),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemBehavior::passes)
     ).apply(instance, UseableItemBehavior::new));
+
+    public static UseableItemBehavior of(Consumable consumable) {
+        return new UseableItemBehavior(
+            Optional.of(new UseDuration(consumable.consumeTicks())),
+            consumable.animation(),
+            Optional.empty(),
+            UseEffects.DEFAULT,
+            Pass.DEFAULT_PASSES
+        );
+    }
+
+    public static UseableItemBehavior of(Consumable consumable, Holder<Item> remainder) {
+        return new UseableItemBehavior(
+            Optional.of(new UseDuration(consumable.consumeTicks())),
+            consumable.animation(),
+            Optional.of(ItemStackTemplates.of(remainder)),
+            UseEffects.DEFAULT,
+            Pass.DEFAULT_PASSES
+        );
+    }
 
     public static Builder builder() {
         return new Builder();

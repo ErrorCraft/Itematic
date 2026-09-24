@@ -7,7 +7,6 @@ import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.PlayableUseDurationProvider;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
@@ -20,7 +19,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.InstrumentComponent;
 import net.minecraft.world.level.Level;
 
@@ -31,14 +29,8 @@ public record PlayableItemBehavior(Holder<Instrument> defaultInstrument) impleme
         RegistryFixedCodec.create(Registries.INSTRUMENT).fieldOf("default_instrument").forGetter(PlayableItemBehavior::defaultInstrument)
     ).apply(instance, PlayableItemBehavior::new));
 
-    public static ItemBehavior<?>[] of(Holder<Instrument> defaultInstrument) {
-        return new ItemBehavior<?>[] {
-            UseableItemBehavior.builder()
-                .useFor(PlayableUseDurationProvider.INSTANCE)
-                .animation(ItemUseAnimation.TOOT_HORN)
-                .build(),
-            new PlayableItemBehavior(defaultInstrument)
-        };
+    public static PlayableItemBehavior of(Holder<Instrument> defaultInstrument) {
+        return new PlayableItemBehavior(defaultInstrument);
     }
 
     @Override

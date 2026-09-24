@@ -31,6 +31,10 @@ public record ItemDisplay(String translationKey, Identifier model, Rarity rarity
         Identifier.CODEC.optionalFieldOf("tooltip_style").forGetter(ItemDisplay::tooltipStyle)
     ).apply(instance, ItemDisplay::new));
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.ITEM_NAME, Component.translatable(this.translationKey));
         builder.set(DataComponents.ITEM_MODEL, this.model);
@@ -44,8 +48,7 @@ public record ItemDisplay(String translationKey, Identifier model, Rarity rarity
         private static final DependantName<Item, String> ITEM_NAME_SUPPLIER = ItemAccessor.PropertiesAccessor.itemNameSupplier();
         private static final DependantName<Item, String> BLOCK_NAME_SUPPLIER = ItemAccessor.PropertiesAccessor.blockNameSupplier();
 
-        private final String translationKey;
-        private final Identifier model;
+        private DependantName<Item, String> nameSupplier = ITEM_NAME_SUPPLIER;
         private Rarity rarity = Rarity.COMMON;
         @Nullable
         private List<Component> tooltip;
@@ -53,29 +56,28 @@ public record ItemDisplay(String translationKey, Identifier model, Rarity rarity
         private Boolean glint;
         private Identifier itemBarStyle = ItemBarStyleIds.DAMAGE;
 
-        private Builder(ResourceKey<Item> name, DependantName<Item, String> nameSupplier) {
-            this.translationKey = nameSupplier.get(name);
-            this.model = name.identifier();
-        }
+        private Builder() {}
 
-        public static Builder forItem(ResourceKey<Item> name) {
-            return new Builder(name, ITEM_NAME_SUPPLIER);
-        }
-
-        public static Builder forBlock(ResourceKey<Item> name) {
-            return new Builder(name, BLOCK_NAME_SUPPLIER);
-        }
-
-        public ItemDisplay build() {
+        public ItemDisplay build(ResourceKey<Item> id) {
             return new ItemDisplay(
-                this.translationKey,
-                this.model,
+                this.nameSupplier.get(id),
+                id.identifier(),
                 this.rarity,
                 Optional.ofNullable(this.tooltip),
                 Optional.ofNullable(this.glint),
                 this.itemBarStyle,
                 Optional.empty()
             );
+        }
+
+        public Builder blockName() {
+            this.nameSupplier = BLOCK_NAME_SUPPLIER;
+            return this;
+        }
+
+        public Builder itemName() {
+            this.nameSupplier = ITEM_NAME_SUPPLIER;
+            return this;
         }
 
         public Builder rarity(Rarity rarity) {

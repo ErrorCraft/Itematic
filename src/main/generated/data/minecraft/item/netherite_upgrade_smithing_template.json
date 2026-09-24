@@ -19,7 +19,7 @@
       {
         "extra": [
           {
-            "translate": "smithing_template.minecraft.netherite_upgrade.applies_to"
+            "translate": "item.minecraft.smithing_template.netherite_upgrade.applies_to"
           }
         ],
         "text": " "
@@ -31,7 +31,7 @@
       {
         "extra": [
           {
-            "translate": "smithing_template.minecraft.netherite_upgrade.ingredients"
+            "translate": "item.minecraft.smithing_template.netherite_upgrade.ingredients"
           }
         ],
         "text": " "

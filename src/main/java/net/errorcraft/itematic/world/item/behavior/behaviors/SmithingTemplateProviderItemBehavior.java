@@ -19,5 +19,4 @@ public record SmithingTemplateProviderItemBehavior(SmithingTemplate template) im
     public ItemBehaviorType<SmithingTemplateProviderItemBehavior> type() {
         return ItemBehaviorType.SMITHING_TEMPLATE_PROVIDER;
     }
-
 }

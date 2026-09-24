@@ -11,7 +11,6 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.TridentUseDurationProvider;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
@@ -45,14 +43,8 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
         return new ThrowableItemBehavior(speed, angleOffset, Optional.empty());
     }
 
-    public static ItemBehavior<?>[] trident(float speed, float angleOffset, int minDrawDuration) {
-        return new ItemBehavior<?>[] {
-            UseableItemBehavior.builder()
-                .useFor(TridentUseDurationProvider.INSTANCE)
-                .animation(ItemUseAnimation.TRIDENT)
-                .build(),
-            new ThrowableItemBehavior(speed, angleOffset, Optional.of(MinMaxBounds.Ints.atLeast(minDrawDuration)))
-        };
+    public static ThrowableItemBehavior ofMinDrawDuration(float speed, float angleOffset, int minDrawDuration) {
+        return new ThrowableItemBehavior(speed, angleOffset, Optional.of(MinMaxBounds.Ints.atLeast(minDrawDuration)));
     }
 
     @Override

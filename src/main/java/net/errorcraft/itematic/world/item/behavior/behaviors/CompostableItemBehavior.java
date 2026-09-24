@@ -18,5 +18,4 @@ public record CompostableItemBehavior(float levelIncreaseChance) implements Item
     public ItemBehaviorType<CompostableItemBehavior> type() {
         return ItemBehaviorType.COMPOSTABLE;
     }
-
 }

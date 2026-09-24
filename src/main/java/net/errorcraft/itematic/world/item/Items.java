@@ -7,8 +7,10 @@ import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.mixin.world.item.BrushItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.BundleItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
 import net.errorcraft.itematic.references.ItemBarStyleIds;
 import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
@@ -48,6 +50,8 @@ import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.AlignYawEntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.DiscardEntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.FitsInVolumeEntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.rules.OffsetSpawnPositionEntitySpawnRule;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.behaviors.AttackBlockingItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
@@ -86,6 +90,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SpawnEggItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
@@ -99,9 +104,19 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
+import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
+import net.errorcraft.itematic.world.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
+import net.errorcraft.itematic.world.item.holder.rule.rules.RejectItemHolderRule;
+import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.PlayableUseDurationProvider;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.ShooterUseDurationProvider;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.TridentUseDurationProvider;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
+import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.KineticMeleeWeapon;
+import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.PiercingMeleeWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.SmashingMeleeWeapon;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.ChargeableShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.DirectShooterMethod;
@@ -115,6 +130,7 @@ import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModif
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
 import net.errorcraft.itematic.world.phys.Vec3Provider;
+import net.minecraft.SharedConstants;
 import net.minecraft.advancements.predicates.BlockPredicate;
 import net.minecraft.advancements.predicates.DataComponentMatchers;
 import net.minecraft.advancements.predicates.EnchantmentPredicate;
@@ -126,6 +142,7 @@ import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
@@ -157,8 +174,10 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Util;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
@@ -178,18 +197,26 @@ import net.minecraft.world.item.JukeboxSongs;
 import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SpyglassItem;
+import net.minecraft.world.item.SwingAnimationType;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.PotionIds;
+import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.KineticWeapon;
+import net.minecraft.world.item.component.PiercingWeapon;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAssets;
@@ -202,6 +229,7 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidIds;
@@ -214,10 +242,12 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyC
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.lang3.math.Fraction;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 public class Items {
     public static final int UNSTACKABLE_MAX_STACK_SIZE = 1;
@@ -239,22 +269,6 @@ public class Items {
         return ResourceKey.create(Registries.ITEM, id);
     }
 
-    private static Item create(ItemDisplay display) {
-        return create(display, ItemBehaviorSet.EMPTY);
-    }
-
-    private static Item create(ItemDisplay display, ItemBehaviorSet behavior) {
-        return create(display, behavior, ActionEventMap.empty());
-    }
-
-    private static Item create(ItemDisplay display, ItemBehaviorSet behavior, ActionEventMap<ItemEvent> events) {
-        return create(display, ItemAttributeModifiers.EMPTY, behavior, events);
-    }
-
-    private static Item create(ItemDisplay display, ItemAttributeModifiers attributeModifiers, ItemBehaviorSet behavior) {
-        return create(display, attributeModifiers, behavior, ActionEventMap.empty());
-    }
-
     private static Item create(ItemDisplay display, ItemAttributeModifiers attributeModifiers, ItemBehaviorSet behavior, ActionEventMap<ItemEvent> events) {
         Item item = new Item(new Item.Properties());
         item.itematic$setDisplay(display);
@@ -262,6 +276,82 @@ public class Items {
         item.itematic$setBehavior(behavior);
         item.itematic$setEvents(events);
         return item;
+    }
+
+    public static class Builder {
+        private final ResourceKey<Item> item;
+        private final BootstrapContext<Item> bootstrapper;
+        private final ItemDisplay.Builder display = ItemDisplay.builder();
+        private final ItemAttributeModifiers.Builder attributeModifiers = ItemAttributeModifiers.builder();
+        private final ItemBehaviorSet.Builder behavior = ItemBehaviorSet.builder();
+        private final ActionEventMap.Builder<ItemEvent> events = ItemEvent.mapBuilder();
+
+        private Builder(ResourceKey<Item> item, BootstrapContext<Item> bootstrapper) {
+            this.item = item;
+            this.bootstrapper = bootstrapper;
+        }
+
+        public void register() {
+            this.bootstrapper.register(
+                this.item,
+                create(
+                    this.display.build(this.item),
+                    this.attributeModifiers.build(),
+                    this.behavior.build(),
+                    this.events.build()
+                )
+            );
+        }
+
+        public Builder display(UnaryOperator<ItemDisplay.Builder> display) {
+            display.apply(this.display);
+            return this;
+        }
+
+        public Builder attributeModifiers(UnaryOperator<ItemAttributeModifiers.Builder> attributeModifiers) {
+            attributeModifiers.apply(this.attributeModifiers);
+            return this;
+        }
+
+        public Builder behavior(boolean condition, ItemBehavior<?> behavior) {
+            if (condition) {
+                this.behavior.add(behavior);
+            }
+
+            return this;
+        }
+
+        public Builder behavior(ItemBehavior<?> behavior) {
+            this.behavior.add(behavior);
+            return this;
+        }
+
+        public Builder event(ItemEvent event, ActionEntry action) {
+            this.events.add(event, action);
+            return this;
+        }
+
+        public Builder event(ItemEvent event, Holder<ActionEntry> action) {
+            this.events.add(event, action);
+            return this;
+        }
+
+        public Builder cancellableEvent(ItemEvent event, ActionEntry action) {
+            this.events.addCancellable(event, action);
+            return this;
+        }
+
+        public Builder apply(UnaryOperator<Builder> builder) {
+            return builder.apply(this);
+        }
+
+        public Builder apply(UnaryOperator<Builder> builder, boolean condition) {
+            if (condition) {
+                return this.apply(builder);
+            }
+
+            return this;
+        }
     }
 
     public static class Bootstrapper {
@@ -303,6 +393,101 @@ public class Items {
             this.chickenVariants = registerable.lookup(Registries.CHICKEN_VARIANT);
             this.damageTypes = registerable.lookup(Registries.DAMAGE_TYPE);
             this.bannerPatterns = registerable.lookup(Registries.BANNER_PATTERN);
+        }
+
+        private Builder builder(ResourceKey<Item> item) {
+            return this.builder(item, Item.DEFAULT_MAX_STACK_SIZE);
+        }
+
+        private Builder builder(ResourceKey<Item> item, int maxStackSize) {
+            return new Builder(item, this.registerable)
+                .behavior(StackableItemBehavior.of(maxStackSize));
+        }
+
+        private Builder builderForBlock(BlockItemId blockItem) {
+            return this.builderForBlock(blockItem, Item.DEFAULT_MAX_STACK_SIZE);
+        }
+
+        private Builder builderForBlock(BlockItemId blockItem, int maxStackSize) {
+            return this.builder(blockItem.item(), maxStackSize)
+                .display(ItemDisplay.Builder::blockName)
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())));
+        }
+
+        private void registerOperatorBlock(BlockItemId blockItem) {
+            this.builder(blockItem.item())
+                .display(display -> display.blockName().rarity(Rarity.EPIC))
+                .behavior(BlockItemBehavior.operator(this.blocks.getOrThrow(blockItem.block())))
+                .register();
+        }
+
+        private Builder builderForBlockOnFluid(BlockItemId blockItem) {
+            return this.builder(blockItem.item())
+                .display(ItemDisplay.Builder::blockName)
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block()), BlockItemBehavior.Pass.FLUID));
+        }
+
+        private Builder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side) {
+            return this.builderForBlockAttachedToSide(blockItem, otherBlock, side, Item.DEFAULT_MAX_STACK_SIZE);
+        }
+
+        private Builder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side, int maxStackSize) {
+            return this.builder(blockItem.item(), maxStackSize)
+                .display(ItemDisplay.Builder::blockName)
+                .behavior(
+                    BlockItemBehavior.attachedToSide(
+                        this.blocks.getOrThrow(blockItem.block()),
+                        this.blocks.getOrThrow(otherBlock),
+                        side
+                    )
+                );
+        }
+
+        private Builder builderForConsumable(ResourceKey<Item> item, Consumable consumable) {
+            return this.builder(item)
+                .behavior(UseableItemBehavior.of(consumable))
+                .behavior(ConsumableItemBehavior.of(consumable));
+        }
+
+        private Builder builderForConsumable(ResourceKey<Item> item, Consumable consumable, ResourceKey<Item> remainder) {
+            return this.builder(item, 1)
+                .behavior(UseableItemBehavior.of(consumable, this.items.getOrThrow(remainder)))
+                .behavior(ConsumableItemBehavior.of(consumable));
+        }
+
+        private Builder builderForConsumableBowl(ResourceKey<Item> item) {
+            return this.builderForConsumable(item, Consumables.DEFAULT_FOOD, ItemIds.BOWL);
+        }
+
+        private Builder builderForBucket(ResourceKey<Item> item, int maxStackSize, BucketItemBehavior bucket) {
+            return this.builder(item, maxStackSize)
+                .behavior(bucket)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET)));
+        }
+
+        private Builder builderForBucketWithFluid(ResourceKey<Item> item, ResourceKey<Fluid> fluid, ResourceKey<SoundEvent> placeSound) {
+            return this.builderForBucket(
+                item,
+                1,
+                BucketItemBehavior.placeFluid(
+                    this.fluids.getOrThrow(fluid),
+                    this.soundEvents.getOrThrow(placeSound),
+                    this.items
+                )
+            );
+        }
+
+        private Builder builderForBucketWithEntity(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity, ResourceKey<SoundEvent> placeSound) {
+            return this.builderForBucket(
+                item,
+                1,
+                BucketItemBehavior.placeFluidWithEntity(
+                    this.fluids.getOrThrow(FluidIds.WATER),
+                    this.entityTypes.getOrThrow(entity),
+                    this.soundEvents.getOrThrow(placeSound),
+                    this.items
+                )
+            );
         }
 
         private void bootstrap() {
@@ -422,41 +607,21 @@ public class Items {
             this.registerBlockAttachedToSide(BlockItemIds.SOUL_TORCH, BlockIds.SOUL_WALL_TORCH, Direction.DOWN);
             this.registerBlockAttachedToSide(BlockItemIds.COPPER_TORCH, BlockIds.COPPER_WALL_TORCH, Direction.DOWN);
             this.registerBlockAttachedToSide(BlockItemIds.REDSTONE_TORCH, BlockIds.REDSTONE_WALL_TORCH, Direction.DOWN);
-            ColorCollection.zipApply(ItemIds.DYE, ColorCollection.VALUES, (dye, dyeColor) -> this.registerable.register(
-                dye,
-                create(
-                    ItemDisplay.Builder.forItem(dye).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(DyeItemBehavior.of(dyeColor))
-                        .build()
-                )
-            ));
-            BlockItemIds.WOOL.forEach(wool -> this.registerable.register(
-                wool.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(wool.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(wool.block())))
-                        .with(FuelItemBehavior.of(FuelTimes.WOOL))
-                        .build()
-                )
-            ));
-            ColorCollection.zipApply(BlockItemIds.CARPET, ColorCollection.VALUES, (carpet, dyeColor) -> this.registerable.register(
-                carpet.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(carpet.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(carpet.block())))
-                        .with(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
-                        .with(EquipmentItemBehavior.of(Equippable.llamaSwag(dyeColor)))
-                        .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                        .build()
-                )
-            ));
-            BlockItemIds.BED.forEach(this::registerUnstackableBlock);
+            ColorCollection.zipApply(ItemIds.DYE, ColorCollection.VALUES, (dye, dyeColor) -> this.builder(dye)
+                .behavior(DyeItemBehavior.of(dyeColor))
+                .register()
+            );
+            BlockItemIds.WOOL.forEach(wool -> this.builderForBlock(wool)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOL))
+                .register()
+            );
+            ColorCollection.zipApply(BlockItemIds.CARPET, ColorCollection.VALUES, (carpet, dyeColor) -> this.builderForBlock(carpet)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
+                .behavior(EquipmentItemBehavior.of(Equippable.llamaSwag(dyeColor)))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                .register()
+            );
+            BlockItemIds.BED.forEach(bed -> this.builderForBlock(bed, 1).register());
             this.registerBlock(BlockItemIds.GLASS);
             this.registerBlock(BlockItemIds.TINTED_GLASS);
             BlockItemIds.STAINED_GLASS.forEach(this::registerBlock);
@@ -471,43 +636,16 @@ public class Items {
             BlockItemIds.DYED_SHULKER_BOX.forEach(this::registerShulkerBox);
             this.registerBlock(BlockItemIds.CANDLE);
             BlockItemIds.DYED_CANDLE.forEach(this::registerBlock);
-            ColorCollection.zipApply(BlockItemIds.BANNER, ColorCollection.VALUES, (banner, dyeColor) -> this.registerable.register(
-                banner.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(banner.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(16))
-                        .with(
-                            BlockItemBehavior.attachedToSide(
-                                this.blocks.getOrThrow(banner.block()),
-                                this.blocks.getOrThrow(BlockIds.WALL_BANNER.pick(dyeColor)),
-                                Direction.DOWN
-                            )
-                        )
-                        .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                        .with(BannerPatternHolderItemBehavior.of(dyeColor))
-                        .build()
-                )
-            ));
-            this.registerable.register(ItemIds.BUNDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BUNDLE)
-                    .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                    .build()
-            ));
-            ItemIds.DYED_BUNDLE.forEach(dyedBundle -> this.registerable.register(
-                dyedBundle,
-                create(
-                    ItemDisplay.Builder.forItem(dyedBundle)
-                        .itemBarStyle(ItemBarStyleIds.BUNDLE)
-                        .build(),
-                    ItemBehaviorSet.builder()
-                        .with(ItemHolderItemBehavior.of(this.items, this.soundEvents))
-                        .build()
-                )
-            ));
+            ColorCollection.zipApply(
+                BlockItemIds.BANNER,
+                ColorCollection.VALUES,
+                (banner, dyeColor) -> this.builderForBlockAttachedToSide(banner, BlockIds.WALL_BANNER.pick(dyeColor), Direction.DOWN, 16)
+                    .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                    .behavior(BannerPatternHolderItemBehavior.of(dyeColor))
+                    .register()
+            );
+            this.registerBundle(ItemIds.BUNDLE);
+            ItemIds.DYED_BUNDLE.forEach(this::registerBundle);
             CoralCollection.registerItems(ItematicBlockItemIds.TUBE_CORAL, this);
             CoralCollection.registerItems(ItematicBlockItemIds.BRAIN_CORAL, this);
             CoralCollection.registerItems(ItematicBlockItemIds.BUBBLE_CORAL, this);
@@ -542,30 +680,18 @@ public class Items {
 
         private void bootstrapConsumables() {
             this.bootstrapFood();
-            this.registerable.register(ItemIds.MILK_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.MILK_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(ConsumableItemBehavior.builder(Consumables.MILK_BUCKET)
-                        .remainder(this.items.getOrThrow(ItemIds.BUCKET))
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(ClearStatusEffectsAction.of(LootContext.EntityTarget.THIS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POTION, create(
-                ItemDisplay.Builder.forItem(ItemIds.POTION).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_DRINK)
-                        .remainder(this.items.getOrThrow(ItemIds.GLASS_BOTTLE))
-                        .build())
-                    .with(PotionHolderItemBehavior.of(1.0f))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+            this.builderForConsumable(ItemIds.MILK_BUCKET, Consumables.DEFAULT_DRINK, ItemIds.BUCKET)
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(ClearStatusEffectsAction.of(LootContext.EntityTarget.THIS))
+                )
+                .register();
+            this.builderForConsumable(ItemIds.POTION, Consumables.DEFAULT_DRINK, ItemIds.GLASS_BOTTLE)
+                .behavior(PotionHolderItemBehavior.of(1.0f))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         AllOfCondition.allOf(
                             InvertedLootItemCondition.invert(
                                 SideCheckPredicate.builder(Direction.DOWN)
@@ -602,484 +728,241 @@ public class Items {
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.BOTTLE_EMPTY), SoundSource.BLOCKS))
                             .add(SetBlockStateAction.of(PositionTarget.INTERACTED, this.blocks.getOrThrow(BlockItemIds.MUD.block())))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OMINOUS_BOTTLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.OMINOUS_BOTTLE)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.OMINOUS_BOTTLE).build())
-                    .with(OminousEffectProviderItemBehavior.INSTANCE)
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.OMINOUS_BOTTLE_DISPOSE))))
-                    .build()
-            ));
+                    )
+                )
+                .register();
+            this.builderForConsumable(ItemIds.OMINOUS_BOTTLE, Consumables.DEFAULT_DRINK)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .behavior(OminousEffectProviderItemBehavior.INSTANCE)
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.OMINOUS_BOTTLE_DISPOSE)))
+                )
+                .register();
         }
 
         private void bootstrapFood() {
-            this.registerable.register(ItemIds.APPLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.APPLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.APPLE)
-                        .build())
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MELON_SLICE, create(
-                ItemDisplay.Builder.forItem(ItemIds.MELON_SLICE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.MELON_SLICE)
-                        .build())
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DRIED_KELP, create(
-                ItemDisplay.Builder.forItem(ItemIds.DRIED_KELP).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DRIED_KELP)
-                        .food(Foods.DRIED_KELP)
-                        .build())
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CARROT_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.CARROT_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.CARROT)
-                        .build())
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARROT_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.POTATO_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.POTATO_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.POTATO)
-                        .build())
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.POTATO_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAKED_POTATO, create(
-                ItemDisplay.Builder.forItem(ItemIds.BAKED_POTATO).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.BAKED_POTATO)
-                        .build())
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHORUS_FRUIT, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHORUS_FRUIT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.CHORUS_FRUIT)
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(TeleportAction.of(16, LootContext.EntityTarget.THIS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BEETROOT, create(
-                ItemDisplay.Builder.forItem(ItemIds.BEETROOT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.BEETROOT)
-                        .build())
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SWEET_BERRY_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.SWEET_BERRY_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.SWEET_BERRIES)
-                        .build())
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SWEET_BERRY_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.GLOW_BERRY_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.GLOW_BERRY_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.GLOW_BERRIES)
-                        .build())
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOW_BERRY_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BREAD, create(
-                ItemDisplay.Builder.forItem(ItemIds.BREAD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.BREAD)
-                        .build())
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COOKIE, create(
-                ItemDisplay.Builder.forItem(ItemIds.COOKIE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.COOKIE)
-                        .build())
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PORKCHOP, create(
-                ItemDisplay.Builder.forItem(ItemIds.PORKCHOP).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.PORKCHOP)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COOKED_PORKCHOP, create(
-                ItemDisplay.Builder.forItem(ItemIds.COOKED_PORKCHOP).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.COOKED_PORKCHOP)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BEEF, create(
-                ItemDisplay.Builder.forItem(ItemIds.BEEF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.BEEF)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COOKED_BEEF, create(
-                ItemDisplay.Builder.forItem(ItemIds.COOKED_BEEF).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.COOKED_BEEF)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHICKEN, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHICKEN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.CHICKEN)
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(
+            this.builderForConsumable(ItemIds.APPLE, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.APPLE))
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForConsumable(ItemIds.MELON_SLICE, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.MELON_SLICE))
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .register();
+            this.builderForConsumable(ItemIds.DRIED_KELP, Consumables.DRIED_KELP)
+                .behavior(FoodItemBehavior.of(Foods.DRIED_KELP))
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForConsumable(BlockItemIds.CARROT_CROP.item(), Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.CARROT))
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARROT_CROP.block())))
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForConsumable(BlockItemIds.POTATO_CROP.item(), Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.POTATO))
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.POTATO_CROP.block())))
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForConsumable(ItemIds.BAKED_POTATO, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.BAKED_POTATO))
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .register();
+            this.builderForConsumable(ItemIds.CHORUS_FRUIT, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.CHORUS_FRUIT))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(TeleportAction.of(16, LootContext.EntityTarget.THIS))
+                )
+                .register();
+            this.builderForConsumable(ItemIds.BEETROOT, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.BEETROOT))
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForConsumable(BlockItemIds.SWEET_BERRY_CROP.item(), Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.SWEET_BERRIES))
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SWEET_BERRY_CROP.block())))
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForConsumable(BlockItemIds.GLOW_BERRY_CROP.item(), Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.GLOW_BERRIES))
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOW_BERRY_CROP.block())))
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForConsumable(ItemIds.BREAD, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.BREAD))
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .register();
+            this.builderForConsumable(ItemIds.COOKIE, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.COOKIE))
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .register();
+            this.builderForConsumable(ItemIds.PORKCHOP, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.PORKCHOP))
+                .register();
+            this.builderForConsumable(ItemIds.COOKED_PORKCHOP, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.COOKED_PORKCHOP))
+                .register();
+            this.builderForConsumable(ItemIds.BEEF, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.BEEF))
+                .register();
+            this.builderForConsumable(ItemIds.COOKED_BEEF, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.COOKED_BEEF))
+                .register();
+            this.builderForConsumable(ItemIds.CHICKEN, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.CHICKEN))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.3f),
                         AddStatusEffectsAction.of(
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 600)
                         )
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COOKED_CHICKEN, create(
-                ItemDisplay.Builder.forItem(ItemIds.COOKED_CHICKEN).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.COOKED_CHICKEN)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RABBIT, create(
-                ItemDisplay.Builder.forItem(ItemIds.RABBIT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.RABBIT)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COOKED_RABBIT, create(
-                ItemDisplay.Builder.forItem(ItemIds.COOKED_RABBIT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.COOKED_RABBIT)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUTTON, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.MUTTON)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COOKED_MUTTON, create(
-                ItemDisplay.Builder.forItem(ItemIds.COOKED_MUTTON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.COOKED_MUTTON)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COD, create(
-                ItemDisplay.Builder.forItem(ItemIds.COD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.COD)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SALMON, create(
-                ItemDisplay.Builder.forItem(ItemIds.SALMON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.SALMON)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TROPICAL_FISH, create(
-                ItemDisplay.Builder.forItem(ItemIds.TROPICAL_FISH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.TROPICAL_FISH)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PUFFERFISH, create(
-                ItemDisplay.Builder.forItem(ItemIds.PUFFERFISH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.PUFFERFISH)
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builderForConsumable(ItemIds.COOKED_CHICKEN, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.COOKED_CHICKEN))
+                .register();
+            this.builderForConsumable(ItemIds.RABBIT, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.RABBIT))
+                .register();
+            this.builderForConsumable(ItemIds.COOKED_RABBIT, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.COOKED_RABBIT))
+                .register();
+            this.builderForConsumable(ItemIds.MUTTON, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.MUTTON))
+                .register();
+            this.builderForConsumable(ItemIds.COOKED_MUTTON, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.COOKED_MUTTON))
+                .register();
+            this.builderForConsumable(ItemIds.COD, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.COD))
+                .register();
+            this.builderForConsumable(ItemIds.SALMON, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.SALMON))
+                .register();
+            this.builderForConsumable(ItemIds.TROPICAL_FISH, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.TROPICAL_FISH))
+                .register();
+            this.builderForConsumable(ItemIds.PUFFERFISH, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.PUFFERFISH))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(
                         AddStatusEffectsAction.of(
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 1200, 1),
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.HUNGER), 300, 2),
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.NAUSEA), 300)
                         )
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COOKED_COD, create(
-                ItemDisplay.Builder.forItem(ItemIds.COOKED_COD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.COOKED_COD)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COOKED_SALMON, create(
-                ItemDisplay.Builder.forItem(ItemIds.COOKED_SALMON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.COOKED_SALMON)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSHROOM_STEW, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSHROOM_STEW).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.MUSHROOM_STEW)
-                        .remainder(this.items.getOrThrow(ItemIds.BOWL))
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RABBIT_STEW, create(
-                ItemDisplay.Builder.forItem(ItemIds.RABBIT_STEW).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.RABBIT_STEW)
-                        .remainder(this.items.getOrThrow(ItemIds.BOWL))
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BEETROOT_SOUP, create(
-                ItemDisplay.Builder.forItem(ItemIds.BEETROOT_SOUP).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.BEETROOT_SOUP)
-                        .remainder(this.items.getOrThrow(ItemIds.BOWL))
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SUSPICIOUS_STEW, create(
-                ItemDisplay.Builder.forItem(ItemIds.SUSPICIOUS_STEW).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.SUSPICIOUS_STEW)
-                        .remainder(this.items.getOrThrow(ItemIds.BOWL))
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(LootContext.EntityTarget.THIS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ROTTEN_FLESH, create(
-                ItemDisplay.Builder.forItem(ItemIds.ROTTEN_FLESH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.ROTTEN_FLESH)
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builderForConsumable(ItemIds.COOKED_COD, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.COOKED_COD))
+                .register();
+            this.builderForConsumable(ItemIds.COOKED_SALMON, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.COOKED_SALMON))
+                .register();
+            this.builderForConsumableBowl(ItemIds.MUSHROOM_STEW)
+                .behavior(FoodItemBehavior.of(Foods.MUSHROOM_STEW))
+                .register();
+            this.builderForConsumableBowl(ItemIds.RABBIT_STEW)
+                .behavior(FoodItemBehavior.of(Foods.RABBIT_STEW))
+                .register();
+            this.builderForConsumableBowl(ItemIds.BEETROOT_SOUP)
+                .behavior(FoodItemBehavior.of(Foods.BEETROOT_SOUP))
+                .register();
+            this.builderForConsumableBowl(ItemIds.SUSPICIOUS_STEW)
+                .behavior(FoodItemBehavior.of(Foods.SUSPICIOUS_STEW))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(LootContext.EntityTarget.THIS))
+                )
+                .register();
+            this.builderForConsumable(ItemIds.ROTTEN_FLESH, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.ROTTEN_FLESH))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.8f),
                         AddStatusEffectsAction.of(
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.HUNGER), 600)
                         )
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPIDER_EYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.SPIDER_EYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.SPIDER_EYE)
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builderForConsumable(ItemIds.SPIDER_EYE, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.SPIDER_EYE))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(
                         AddStatusEffectsAction.of(
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 100)
                         )
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POISONOUS_POTATO, create(
-                ItemDisplay.Builder.forItem(ItemIds.POISONOUS_POTATO).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.POISONOUS_POTATO)
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builderForConsumable(ItemIds.POISONOUS_POTATO, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.POISONOUS_POTATO))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.6f),
                         AddStatusEffectsAction.of(
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 100)
                         )
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_APPLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_APPLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.GOLDEN_APPLE)
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builderForConsumable(ItemIds.GOLDEN_APPLE, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.GOLDEN_APPLE))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(
                         AddStatusEffectsAction.of(
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 100, 1),
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 2400)
                         )
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ENCHANTED_GOLDEN_APPLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.ENCHANTED_GOLDEN_APPLE)
-                    .rarity(Rarity.RARE)
-                    .glint()
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.ENCHANTED_GOLDEN_APPLE)
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builderForConsumable(ItemIds.ENCHANTED_GOLDEN_APPLE, Consumables.DEFAULT_FOOD)
+                .display(display -> display.rarity(Rarity.RARE).glint())
+                .behavior(FoodItemBehavior.of(Foods.ENCHANTED_GOLDEN_APPLE))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(
                         AddStatusEffectsAction.of(
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 400, 1),
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.RESISTANCE), 6000),
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 6000),
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 2400)
                         )
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_CARROT, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_CARROT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.GOLDEN_CARROT)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PUMPKIN_PIE, create(
-                ItemDisplay.Builder.forItem(ItemIds.PUMPKIN_PIE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ConsumableItemBehavior.builder(Consumables.DEFAULT_FOOD)
-                        .food(Foods.PUMPKIN_PIE)
-                        .build())
-                    .with(CompostableItemBehavior.of(CompostChances.GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HONEY_BOTTLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.HONEY_BOTTLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(ConsumableItemBehavior.builder(Consumables.HONEY_BOTTLE)
-                        .food(Foods.HONEY_BOTTLE)
-                        .useAnimation(ItemUseAnimation.DRINK)
-                        .remainder(this.items.getOrThrow(ItemIds.GLASS_BOTTLE))
-                        .noConsumeParticles()
-                        .consumeSound(this.soundEvents.getOrThrow(SoundEventIds.HONEY_BOTTLE_DRINK))
-                        .build())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.CONSUME_ITEM, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builderForConsumable(ItemIds.GOLDEN_CARROT, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.GOLDEN_CARROT))
+                .register();
+            this.builderForConsumable(ItemIds.PUMPKIN_PIE, Consumables.DEFAULT_FOOD)
+                .behavior(FoodItemBehavior.of(Foods.PUMPKIN_PIE))
+                .behavior(CompostableItemBehavior.of(CompostChances.GUARANTEED))
+                .register();
+            this.builder(ItemIds.HONEY_BOTTLE, 16)
+                .behavior(UseableItemBehavior.of(Consumables.HONEY_BOTTLE, this.items.getOrThrow(ItemIds.GLASS_BOTTLE)))
+                .behavior(ConsumableItemBehavior.of(Consumables.HONEY_BOTTLE))
+                .behavior(FoodItemBehavior.of(Foods.HONEY_BOTTLE))
+                .event(
+                    ItemEvent.CONSUME_ITEM,
+                    ActionEntry.of(
                         RemoveStatusEffectsAction.of(
                             LootContext.EntityTarget.THIS,
                             this.statusEffects.getOrThrow(MobEffectIds.POISON)
                         )
-                    ))
-                    .build()
-            ));
+                    )
+                )
+                .register();
         }
 
         private void bootstrapBlocks() {
@@ -1147,15 +1030,9 @@ public class Items {
             this.registerBlock(BlockItemIds.RAW_IRON_BLOCK);
             this.registerBlock(BlockItemIds.RAW_COPPER_BLOCK);
             this.registerBlock(BlockItemIds.RAW_GOLD_BLOCK);
-            this.registerable.register(BlockItemIds.HEAVY_CORE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.HEAVY_CORE.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.HEAVY_CORE.block())))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.HEAVY_CORE)
+                .display(display -> display.rarity(Rarity.EPIC))
+                .register();
             this.registerBlock(BlockItemIds.AMETHYST_BLOCK);
             this.registerBlock(BlockItemIds.BUDDING_AMETHYST);
             this.registerBlock(BlockItemIds.IRON_BLOCK);
@@ -1216,14 +1093,9 @@ public class Items {
             this.registerBlock(BlockItemIds.BASALT);
             this.registerBlock(BlockItemIds.POLISHED_BASALT);
             this.registerBlock(BlockItemIds.SMOOTH_BASALT);
-            this.registerable.register(BlockItemIds.GLOWSTONE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.GLOWSTONE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOWSTONE.block())))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.CHARGE_RESPAWN_ANCHOR)))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.GLOWSTONE)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.CHARGE_RESPAWN_ANCHOR)))
+                .register();
             this.registerBlock(BlockItemIds.INFESTED_STONE);
             this.registerBlock(BlockItemIds.INFESTED_COBBLESTONE);
             this.registerBlock(BlockItemIds.INFESTED_STONE_BRICKS);
@@ -1262,27 +1134,15 @@ public class Items {
             this.registerBlock(BlockItemIds.END_PORTAL_FRAME);
             this.registerBlock(BlockItemIds.END_STONE);
             this.registerBlock(BlockItemIds.END_STONE_BRICKS);
-            this.registerable.register(BlockItemIds.DRAGON_EGG.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.DRAGON_EGG.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DRAGON_EGG.block())))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.DRAGON_EGG)
+                .display(display -> display.rarity(Rarity.EPIC))
+                .register();
             this.registerBlock(BlockItemIds.SANDSTONE_STAIRS);
             this.registerBlock(BlockItemIds.ENDER_CHEST);
             this.registerBlock(BlockItemIds.EMERALD_BLOCK);
-            this.registerable.register(BlockItemIds.BEACON.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.BEACON.item())
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BEACON.block())))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.BEACON)
+                .display(display -> display.rarity(Rarity.RARE))
+                .register();
             this.registerBlock(BlockItemIds.COBBLESTONE_WALL);
             this.registerBlock(BlockItemIds.MOSSY_COBBLESTONE_WALL);
             this.registerBlock(BlockItemIds.BRICK_WALL);
@@ -1313,24 +1173,12 @@ public class Items {
             this.registerBlock(BlockItemIds.QUARTZ_BRICKS);
             this.registerBlock(BlockItemIds.QUARTZ_PILLAR);
             this.registerBlock(BlockItemIds.QUARTZ_STAIRS);
-            this.registerable.register(BlockItemIds.BARRIER.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.BARRIER.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BARRIER.block())))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.LIGHT.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.LIGHT.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LIGHT.block())))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.BARRIER)
+                .display(display -> display.rarity(Rarity.EPIC))
+                .register();
+            this.builderForBlock(BlockItemIds.LIGHT)
+                .display(display -> display.rarity(Rarity.EPIC))
+                .register();
             this.registerBlock(BlockItemIds.PACKED_ICE);
             this.registerBlock(BlockItemIds.DIRT_PATH);
             this.registerBlock(BlockItemIds.PRISMARINE);
@@ -1347,36 +1195,18 @@ public class Items {
             this.registerBlock(BlockItemIds.MAGMA_BLOCK);
             this.registerBlock(BlockItemIds.RED_NETHER_BRICKS);
             this.registerBlock(BlockItemIds.BONE_BLOCK);
-            this.registerable.register(BlockItemIds.STRUCTURE_VOID.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.STRUCTURE_VOID.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.STRUCTURE_VOID.block())))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.STRUCTURE_VOID)
+                .display(display -> display.rarity(Rarity.EPIC))
+                .register();
             this.registerBlock(BlockItemIds.TURTLE_EGG);
-            this.registerable.register(BlockItemIds.SNIFFER_EGG.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SNIFFER_EGG.item())
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SNIFFER_EGG.block())))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.SNIFFER_EGG)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
             this.registerBlock(BlockItemIds.DRIED_GHAST);
             this.registerBlock(BlockItemIds.BLUE_ICE);
-            this.registerable.register(BlockItemIds.CONDUIT.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CONDUIT.item())
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CONDUIT.block())))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.CONDUIT)
+                .display(display -> display.rarity(Rarity.RARE))
+                .register();
             this.registerBlock(BlockItemIds.POLISHED_GRANITE_STAIRS);
             this.registerBlock(BlockItemIds.SMOOTH_RED_SANDSTONE_STAIRS);
             this.registerBlock(BlockItemIds.MOSSY_STONE_BRICK_STAIRS);
@@ -1428,14 +1258,9 @@ public class Items {
             this.registerBlock(BlockItemIds.SCULK_SENSOR);
             this.registerBlock(BlockItemIds.CALIBRATED_SCULK_SENSOR);
             this.registerBlock(BlockItemIds.TRIPWIRE_HOOK);
-            this.registerable.register(BlockItemIds.TNT.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.TNT.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TNT.block())))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_TNT)))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.TNT)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_TNT)))
+                .register();
             this.registerBlock(BlockItemIds.REDSTONE_LAMP);
             this.registerBlock(BlockItemIds.STONE_BUTTON);
             this.registerBlock(BlockItemIds.POLISHED_BLACKSTONE_BUTTON);
@@ -1487,13 +1312,8 @@ public class Items {
             this.registerBlock(BlockItemIds.OCHRE_FROGLIGHT);
             this.registerBlock(BlockItemIds.VERDANT_FROGLIGHT);
             this.registerBlock(BlockItemIds.PEARLESCENT_FROGLIGHT);
-            this.registerable.register(BlockItemIds.FROGSPAWN.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.FROGSPAWN.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FROGSPAWN.block()), BlockItemBehavior.Pass.FLUID))
-                    .build()
-            ));
+            this.builderForBlockOnFluid(BlockItemIds.FROGSPAWN)
+                .register();
             this.registerBlock(BlockItemIds.TRIAL_SPAWNER);
             this.registerBlock(BlockItemIds.VAULT);
             this.registerBlock(BlockItemIds.CRAFTER);
@@ -1509,520 +1329,136 @@ public class Items {
         }
 
         private void bootstrapItemNameBlocks() {
-            this.registerable.register(BlockItemIds.TRIPWIRE.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.TRIPWIRE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TRIPWIRE.block())))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.RESIN_CLUMP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.RESIN_CLUMP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RESIN_CLUMP.block())))
-                    .build()
-            ));
+            this.builder(BlockItemIds.TRIPWIRE.item())
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TRIPWIRE.block())))
+                .register();
+            this.builder(BlockItemIds.RESIN_CLUMP.item())
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RESIN_CLUMP.block())))
+                .register();
         }
 
         private void bootstrapOperatorOnlyBlocks() {
-            this.registerable.register(BlockItemIds.COMMAND_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.COMMAND_BLOCK.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.COMMAND_BLOCK.block())))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.REPEATING_COMMAND_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.REPEATING_COMMAND_BLOCK.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.REPEATING_COMMAND_BLOCK.block())))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CHAIN_COMMAND_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CHAIN_COMMAND_BLOCK.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.CHAIN_COMMAND_BLOCK.block())))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.STRUCTURE_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.STRUCTURE_BLOCK.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.STRUCTURE_BLOCK.block())))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.JIGSAW.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.JIGSAW.item())
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.operator(this.blocks.getOrThrow(BlockItemIds.JIGSAW.block())))
-                    .build()
-            ));
+            this.registerOperatorBlock(BlockItemIds.COMMAND_BLOCK);
+            this.registerOperatorBlock(BlockItemIds.REPEATING_COMMAND_BLOCK);
+            this.registerOperatorBlock(BlockItemIds.CHAIN_COMMAND_BLOCK);
+            this.registerOperatorBlock(BlockItemIds.STRUCTURE_BLOCK);
+            this.registerOperatorBlock(BlockItemIds.JIGSAW);
         }
 
         private void bootstrapToolsAndWeapons() {
-            this.registerable.register(ItemIds.WOODEN_SWORD, create(
-                ItemDisplay.Builder.forItem(ItemIds.WOODEN_SWORD).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.sword(this.blocks, ToolMaterial.WOOD, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
-                    .with(FuelItemBehavior.of(FuelTimes.TOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WOODEN_SHOVEL, create(
-                ItemDisplay.Builder.forItem(ItemIds.WOODEN_SHOVEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.shovel(this.blocks, ToolMaterial.WOOD, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
-                    .with(FuelItemBehavior.of(FuelTimes.TOOL))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WOODEN_PICKAXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.WOODEN_PICKAXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.pickaxe(this.blocks, ToolMaterial.WOOD, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
-                    .with(FuelItemBehavior.of(FuelTimes.TOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WOODEN_AXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.WOODEN_AXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.axe(this.blocks, ToolMaterial.WOOD, 7.0d, 0.2d, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
-                    .with(FuelItemBehavior.of(FuelTimes.TOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WOODEN_HOE, create(
-                ItemDisplay.Builder.forItem(ItemIds.WOODEN_HOE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.hoe(this.blocks, ToolMaterial.WOOD, 1.0d, 0.25d, this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
-                    .with(FuelItemBehavior.of(FuelTimes.TOOL))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WOODEN_SPEAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.WOODEN_SPEAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.spear(
-                        ToolMaterial.WOOD,
-                        this.damageTypes,
-                        0.65f,
-                        0.7f,
-                        0.75f,
-                        5.0f,
-                        14.0f,
-                        10.0f,
-                        5.1f,
-                        15.0f,
-                        4.6f,
-                        this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS),
-                        this.soundEvents
-                    ))
-                    .with(FuelItemBehavior.of(FuelTimes.TOOL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_SPEAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.STONE_SPEAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.spear(
-                        ToolMaterial.STONE,
-                        this.damageTypes,
-                        0.75f,
-                        0.82f,
-                        0.7f,
-                        4.5f,
-                        13.0f,
-                        9.0f,
-                        5.1f,
-                        13.75f,
-                        4.6f,
-                        this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS),
-                        this.soundEvents
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_SPEAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_SPEAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.spear(
-                        ToolMaterial.COPPER,
-                        this.damageTypes,
-                        0.85f,
-                        0.82f,
-                        0.65f,
-                        4.0f,
-                        12.0f,
-                        8.25f,
-                        5.1f,
-                        12.5f,
-                        4.6f,
-                        this.items.getOrThrow(ItemTags.COPPER_TOOL_MATERIALS),
-                        this.soundEvents
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_SPEAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_SPEAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.spear(
-                        ToolMaterial.IRON,
-                        this.damageTypes,
-                        0.95f,
-                        0.95f,
-                        0.6f,
-                        2.5f,
-                        11.0f,
-                        6.75f,
-                        5.1f,
-                        11.25f,
-                        4.6f,
-                        this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS),
-                        this.soundEvents
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_SPEAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_SPEAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.spear(
-                        ToolMaterial.GOLD,
-                        this.damageTypes,
-                        0.95f,
-                        0.7f,
-                        0.7f,
-                        3.5f,
-                        13.0f,
-                        8.5f,
-                        5.1f,
-                        13.75f,
-                        4.6f,
-                        this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS),
-                        this.soundEvents
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_SPEAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_SPEAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.spear(
-                        ToolMaterial.DIAMOND,
-                        this.damageTypes,
-                        1.05f,
-                        1.075f,
-                        0.5f,
-                        3.0f,
-                        10.0f,
-                        6.5f,
-                        5.1f,
-                        10.0f,
-                        4.6f,
-                        this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS),
-                        this.soundEvents
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_SPEAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_SPEAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.spear(
-                        ToolMaterial.NETHERITE,
-                        this.damageTypes,
-                        1.15f,
-                        1.2f,
-                        0.4f,
-                        2.5f,
-                        9.0f,
-                        5.5f,
-                        5.1f,
-                        8.75f,
-                        4.6f,
-                        this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS),
-                        this.soundEvents
-                    ))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_SWORD, create(
-                ItemDisplay.Builder.forItem(ItemIds.STONE_SWORD).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.sword(this.blocks, ToolMaterial.STONE, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_SHOVEL, create(
-                ItemDisplay.Builder.forItem(ItemIds.STONE_SHOVEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.shovel(this.blocks, ToolMaterial.STONE, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_PICKAXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.STONE_PICKAXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.pickaxe(this.blocks, ToolMaterial.STONE, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_AXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.STONE_AXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.axe(this.blocks, ToolMaterial.STONE, 8.0d, 0.2d, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STONE_HOE, create(
-                ItemDisplay.Builder.forItem(ItemIds.STONE_HOE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.hoe(this.blocks, ToolMaterial.STONE, 2.0d, 0.5d, this.items.getOrThrow(ItemTags.STONE_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_SWORD, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_SWORD).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.sword(this.blocks, ToolMaterial.GOLD, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_SHOVEL, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_SHOVEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.shovel(this.blocks, ToolMaterial.GOLD, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_PICKAXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_PICKAXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.pickaxe(this.blocks, ToolMaterial.GOLD, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_AXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_AXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.axe(this.blocks, ToolMaterial.GOLD, 7.0d, 0.25d, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_HOE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_HOE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.hoe(this.blocks, ToolMaterial.GOLD, 1.0d, 0.25d, this.items.getOrThrow(ItemTags.GOLD_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_SWORD, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_SWORD).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.sword(this.blocks, ToolMaterial.COPPER, this.items.getOrThrow(ItemTags.COPPER_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_SHOVEL, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_SHOVEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.shovel(this.blocks, ToolMaterial.COPPER, this.items.getOrThrow(ItemTags.COPPER_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_PICKAXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_PICKAXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.pickaxe(this.blocks, ToolMaterial.COPPER, this.items.getOrThrow(ItemTags.COPPER_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_AXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_AXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.axe(this.blocks, ToolMaterial.COPPER, 8.0d, 0.2d, this.items.getOrThrow(ItemTags.COPPER_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_HOE, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_HOE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.hoe(this.blocks, ToolMaterial.COPPER, 2.0d, 0.5d, this.items.getOrThrow(ItemTags.COPPER_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_SWORD, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_SWORD).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.sword(this.blocks, ToolMaterial.IRON, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_SHOVEL, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_SHOVEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.shovel(this.blocks, ToolMaterial.IRON, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_PICKAXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_PICKAXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.pickaxe(this.blocks, ToolMaterial.IRON, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_AXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_AXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.axe(this.blocks, ToolMaterial.IRON, 7.0d, 0.225d, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_HOE, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_HOE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.hoe(this.blocks, ToolMaterial.IRON, 3.0d, 0.75d, this.items.getOrThrow(ItemTags.IRON_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_SWORD, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_SWORD).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.sword(this.blocks, ToolMaterial.DIAMOND, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_SHOVEL, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_SHOVEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.shovel(this.blocks, ToolMaterial.DIAMOND, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_PICKAXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_PICKAXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.pickaxe(this.blocks, ToolMaterial.DIAMOND, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_AXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_AXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.axe(this.blocks, ToolMaterial.DIAMOND, 6.0d, 0.25d, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_HOE, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_HOE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.hoe(this.blocks, ToolMaterial.DIAMOND, 4.0d, 1.0d, this.items.getOrThrow(ItemTags.DIAMOND_TOOL_MATERIALS)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_SWORD, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_SWORD).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.sword(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_SHOVEL, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_SHOVEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.shovel(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_PICKAXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_PICKAXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.pickaxe(this.blocks, ToolMaterial.NETHERITE, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_AXE, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_AXE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.axe(this.blocks, ToolMaterial.NETHERITE, 6.0d, 0.25d, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_HOE, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_HOE).build(),
-                ItemBehaviorSet.builder()
-                    .with(DamageableItemBehavior.hoe(this.blocks, ToolMaterial.NETHERITE, 5.0d, 1.0d, this.items.getOrThrow(ItemTags.NETHERITE_TOOL_MATERIALS)))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FISHING_ROD, create(
-                ItemDisplay.Builder.forItem(ItemIds.FISHING_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(CastableItemBehavior.INSTANCE)
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHEARS, create(
-                ItemDisplay.Builder.forItem(ItemIds.SHEARS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.of(238))
-                    .with(ToolItemBehavior.builder(1)
+            this.builderForSword(ItemIds.WOODEN_SWORD, ToolMaterial.WOOD, ItemTags.WOODEN_TOOL_MATERIALS)
+                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .register();
+            this.builderForSpear(ItemIds.WOODEN_SPEAR, ToolMaterial.WOOD, 0.65f, 0.7f, 0.75f, 5.0f, 14.0f, 10.0f, 5.1f, 15.0f, 4.6f, ItemTags.WOODEN_TOOL_MATERIALS)
+                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .register();
+            this.builderForShovel(ItemIds.WOODEN_SHOVEL, ToolMaterial.WOOD, ItemTags.WOODEN_TOOL_MATERIALS)
+                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .register();
+            this.builderForPickaxe(ItemIds.WOODEN_PICKAXE, ToolMaterial.WOOD, ItemTags.WOODEN_TOOL_MATERIALS)
+                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .register();
+            this.builderForAxe(ItemIds.WOODEN_AXE, ToolMaterial.WOOD, 7.0d, 0.2d, ItemTags.WOODEN_TOOL_MATERIALS)
+                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .register();
+            this.builderForHoe(ItemIds.WOODEN_HOE, ToolMaterial.WOOD, 1.0d, 0.25d, ItemTags.WOODEN_TOOL_MATERIALS)
+                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .register();
+            this.registerSword(ItemIds.STONE_SWORD, ToolMaterial.STONE, ItemTags.STONE_TOOL_MATERIALS);
+            this.registerSpear(ItemIds.STONE_SPEAR, ToolMaterial.STONE, 0.75f, 0.82f, 0.7f, 4.5f, 13.0f, 9.0f, 13.75f, ItemTags.STONE_TOOL_MATERIALS);
+            this.registerShovel(ItemIds.STONE_SHOVEL, ToolMaterial.STONE, ItemTags.STONE_TOOL_MATERIALS);
+            this.registerPickaxe(ItemIds.STONE_PICKAXE, ToolMaterial.STONE, ItemTags.STONE_TOOL_MATERIALS);
+            this.registerAxe(ItemIds.STONE_AXE, ToolMaterial.STONE, 8.0d, 0.2d, ItemTags.STONE_TOOL_MATERIALS);
+            this.registerHoe(ItemIds.STONE_HOE, ToolMaterial.STONE, 2.0d, 0.5d, ItemTags.STONE_TOOL_MATERIALS);
+            this.registerSword(ItemIds.GOLDEN_SWORD, ToolMaterial.GOLD, ItemTags.GOLD_TOOL_MATERIALS);
+            this.registerSpear(ItemIds.GOLDEN_SPEAR, ToolMaterial.GOLD, 0.95f, 0.7f, 0.7f, 3.5f, 13.0f, 8.5f, 13.75f, ItemTags.GOLD_TOOL_MATERIALS);
+            this.registerShovel(ItemIds.GOLDEN_SHOVEL, ToolMaterial.GOLD, ItemTags.GOLD_TOOL_MATERIALS);
+            this.registerPickaxe(ItemIds.GOLDEN_PICKAXE, ToolMaterial.GOLD, ItemTags.GOLD_TOOL_MATERIALS);
+            this.registerAxe(ItemIds.GOLDEN_AXE, ToolMaterial.GOLD, 7.0d, 0.25d, ItemTags.GOLD_TOOL_MATERIALS);
+            this.registerHoe(ItemIds.GOLDEN_HOE, ToolMaterial.GOLD, 1.0d, 0.25d, ItemTags.GOLD_TOOL_MATERIALS);
+            this.registerSword(ItemIds.COPPER_SWORD, ToolMaterial.COPPER, ItemTags.COPPER_TOOL_MATERIALS);
+            this.registerSpear(ItemIds.COPPER_SPEAR, ToolMaterial.COPPER, 0.85f, 0.82f, 0.65f, 4.0f, 12.0f, 8.25f, 12.5f, ItemTags.COPPER_TOOL_MATERIALS);
+            this.registerShovel(ItemIds.COPPER_SHOVEL, ToolMaterial.COPPER, ItemTags.COPPER_TOOL_MATERIALS);
+            this.registerPickaxe(ItemIds.COPPER_PICKAXE, ToolMaterial.COPPER, ItemTags.COPPER_TOOL_MATERIALS);
+            this.registerAxe(ItemIds.COPPER_AXE, ToolMaterial.COPPER, 8.0d, 0.2d, ItemTags.COPPER_TOOL_MATERIALS);
+            this.registerHoe(ItemIds.COPPER_HOE, ToolMaterial.COPPER, 2.0d, 0.5d, ItemTags.COPPER_TOOL_MATERIALS);
+            this.registerSword(ItemIds.IRON_SWORD, ToolMaterial.IRON, ItemTags.IRON_TOOL_MATERIALS);
+            this.registerSpear(ItemIds.IRON_SPEAR, ToolMaterial.IRON, 0.95f, 0.95f, 0.6f, 2.5f, 11.0f, 6.75f, 11.25f, ItemTags.IRON_TOOL_MATERIALS);
+            this.registerShovel(ItemIds.IRON_SHOVEL, ToolMaterial.IRON, ItemTags.IRON_TOOL_MATERIALS);
+            this.registerPickaxe(ItemIds.IRON_PICKAXE, ToolMaterial.IRON, ItemTags.IRON_TOOL_MATERIALS);
+            this.registerAxe(ItemIds.IRON_AXE, ToolMaterial.IRON, 7.0d, 0.225d, ItemTags.IRON_TOOL_MATERIALS);
+            this.registerHoe(ItemIds.IRON_HOE, ToolMaterial.IRON, 3.0d, 0.75d, ItemTags.IRON_TOOL_MATERIALS);
+            this.registerSword(ItemIds.DIAMOND_SWORD, ToolMaterial.DIAMOND, ItemTags.DIAMOND_TOOL_MATERIALS);
+            this.registerSpear(ItemIds.DIAMOND_SPEAR, ToolMaterial.DIAMOND, 1.05f, 1.075f, 0.5f, 3.0f, 10.0f, 6.5f, 10.0f, ItemTags.DIAMOND_TOOL_MATERIALS);
+            this.registerShovel(ItemIds.DIAMOND_SHOVEL, ToolMaterial.DIAMOND, ItemTags.DIAMOND_TOOL_MATERIALS);
+            this.registerPickaxe(ItemIds.DIAMOND_PICKAXE, ToolMaterial.DIAMOND, ItemTags.DIAMOND_TOOL_MATERIALS);
+            this.registerAxe(ItemIds.DIAMOND_AXE, ToolMaterial.DIAMOND, 6.0d, 0.25d, ItemTags.DIAMOND_TOOL_MATERIALS);
+            this.registerHoe(ItemIds.DIAMOND_HOE, ToolMaterial.DIAMOND, 4.0d, 1.0d, ItemTags.DIAMOND_TOOL_MATERIALS);
+            this.builderForSword(ItemIds.NETHERITE_SWORD, ToolMaterial.NETHERITE, ItemTags.NETHERITE_TOOL_MATERIALS)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builderForSpear(ItemIds.NETHERITE_SPEAR, ToolMaterial.NETHERITE, 1.15f, 1.2f, 0.4f, 2.5f, 9.0f, 5.5f, 5.1f, 8.75f, 4.6f, ItemTags.NETHERITE_TOOL_MATERIALS)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builderForShovel(ItemIds.NETHERITE_SHOVEL, ToolMaterial.NETHERITE, ItemTags.NETHERITE_TOOL_MATERIALS)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builderForPickaxe(ItemIds.NETHERITE_PICKAXE, ToolMaterial.NETHERITE, ItemTags.NETHERITE_TOOL_MATERIALS)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builderForAxe(ItemIds.NETHERITE_AXE, ToolMaterial.NETHERITE, 6.0d, 0.25d, ItemTags.NETHERITE_TOOL_MATERIALS)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builderForHoe(ItemIds.NETHERITE_HOE, ToolMaterial.NETHERITE, 5.0d, 1.0d, ItemTags.NETHERITE_TOOL_MATERIALS)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builder(ItemIds.FISHING_ROD, 1)
+                .behavior(DamageableItemBehavior.of(64))
+                .behavior(EnchantableItemBehavior.of(1))
+                .behavior(CastableItemBehavior.INSTANCE)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builder(ItemIds.SHEARS, 1)
+                .behavior(DamageableItemBehavior.of(238))
+                .behavior(
+                    ToolItemBehavior.builder(1)
                         .rule(Tool.Rule.minesAndDrops(HolderSet.direct(this.blocks.getOrThrow(BlockItemIds.COBWEB.block())), 15.0f))
-                        .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.LEAVES), 15.0f))
-                        .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.WOOL), 5.0f))
-                        .rule(Tool.Rule.overrideSpeed(HolderSet.direct(this.blocks.getOrThrow(BlockItemIds.VINE.block()), this.blocks.getOrThrow(BlockItemIds.GLOW_LICHEN.block())), 2.0f))
-                        .build())
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHEAR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BOW, create(
-                ItemDisplay.Builder.forItem(ItemIds.BOW).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.of(384))
-                    .with(ShooterItemBehavior.of(
-                        ItemUseAnimation.BOW,
+                        .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.SHEARS_EXTREME_BREAKING_SPEED), 15.0f))
+                        .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.SHEARS_MAJOR_BREAKING_SPEED), 5.0f))
+                        .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.SHEARS_MINOR_BREAKING_SPEED), 2.0f))
+                        .build()
+                )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHEAR)))
+                .register();
+            this.builder(ItemIds.BOW, 1)
+                .behavior(DamageableItemBehavior.of(384))
+                .behavior(
+                    UseableItemBehavior.builder()
+                        .useFor(ShooterUseDurationProvider.INSTANCE)
+                        .animation(ItemUseAnimation.BOW)
+                        .build()
+                )
+                .behavior(
+                    ShooterItemBehavior.of(
                         this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
                         this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
                         BowItem.DEFAULT_RANGE,
                         DirectShooterMethod.of()
-                    ))
-                    .with(EnchantableItemBehavior.of(1))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CROSSBOW, create(
-                ItemDisplay.Builder.forItem(ItemIds.CROSSBOW).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.of(465))
-                    .with(ShooterItemBehavior.of(
-                        ItemUseAnimation.CROSSBOW,
+                    )
+                )
+                .behavior(EnchantableItemBehavior.of(1))
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builder(ItemIds.CROSSBOW, 1)
+                .behavior(DamageableItemBehavior.of(465))
+                .behavior(
+                    UseableItemBehavior.builder()
+                        .useFor(ShooterUseDurationProvider.INSTANCE)
+                        .animation(ItemUseAnimation.CROSSBOW)
+                        .build()
+                )
+                .behavior(
+                    ShooterItemBehavior.of(
                         this.items.getOrThrow(ItematicItemTags.CROSSBOW_AMMUNITION),
                         this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
                         CrossbowItem.DEFAULT_RANGE,
@@ -2037,29 +1473,34 @@ public class Items {
                             HolderSet.direct(this.items.getOrThrow(ItemIds.FIREWORK_ROCKET)),
                             3
                         )
-                    ))
-                    .with(EnchantableItemBehavior.of(1))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TRIDENT, create(
-                ItemDisplay.Builder.forItem(ItemIds.TRIDENT)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.ofPreserved(250))
-                    .with(ToolItemBehavior.builder(2)
+                    )
+                )
+                .behavior(EnchantableItemBehavior.of(1))
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForProjectile(ItemIds.TRIDENT, 1, EntityTypeIds.TRIDENT)
+                .display(display -> display.rarity(Rarity.RARE))
+                .behavior(DamageableItemBehavior.ofPreserved(250))
+                .behavior(
+                    ToolItemBehavior.builder(2)
                         .preventCreativeDestruction()
-                        .build())
-                    .with(WeaponItemBehavior.builder(1, TridentItem.BASE_DAMAGE, 0.275d)
-                        .build())
-                    .with(ThrowableItemBehavior.trident(TridentItem.PROJECTILE_SHOOT_POWER, 0.0f, TridentItem.THROW_THRESHOLD_TIME))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.TRIDENT)))
-                    .with(EnchantableItemBehavior.of(1))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.STOPPED_USING, ActionEntry.of(
+                        .build()
+                )
+                .behavior(
+                    WeaponItemBehavior.builder(1, TridentItem.BASE_DAMAGE, 0.275d)
+                        .build()
+                )
+                .behavior(
+                    UseableItemBehavior.builder()
+                        .useFor(TridentUseDurationProvider.INSTANCE)
+                        .animation(ItemUseAnimation.TRIDENT)
+                        .build()
+                )
+                .behavior(ThrowableItemBehavior.ofMinDrawDuration(TridentItem.PROJECTILE_SHOOT_POWER, 0.0f, TridentItem.THROW_THRESHOLD_TIME))
+                .behavior(EnchantableItemBehavior.of(1))
+                .event(
+                    ItemEvent.STOPPED_USING,
+                    ActionEntry.of(
                         AllOfCondition.allOf(
                             LootItemEntityPropertyCondition.hasProperties(
                                 LootContext.EntityTarget.THIS,
@@ -2081,326 +1522,113 @@ public class Items {
                         PassingSequenceHandler.builder()
                             .add(TwirlPlayerAction.INSTANCE)
                             .add(DamageItemAction.of(1))
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CARROT_ON_A_STICK, create(
-                ItemDisplay.Builder.forItem(ItemIds.CARROT_ON_A_STICK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.of(25))
-                    .with(SteeringItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.PIG), 7))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemIds.FISHING_ROD))))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARPED_FUNGUS_ON_A_STICK, create(
-                ItemDisplay.Builder.forItem(ItemIds.WARPED_FUNGUS_ON_A_STICK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.of(100))
-                    .with(SteeringItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.STRIDER), 1))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.BREAK_ITEM, ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemIds.FISHING_ROD))))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FLINT_AND_STEEL, create(
-                ItemDisplay.Builder.forItem(ItemIds.FLINT_AND_STEEL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.of(64))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builder(ItemIds.CARROT_ON_A_STICK, 1)
+                .behavior(DamageableItemBehavior.of(25))
+                .behavior(SteeringItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.PIG), 7))
+                .event(
+                    ItemEvent.BREAK_ITEM,
+                    ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemIds.FISHING_ROD)))
+                )
+                .register();
+            this.builder(ItemIds.WARPED_FUNGUS_ON_A_STICK, 1)
+                .behavior(DamageableItemBehavior.of(100))
+                .behavior(SteeringItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.STRIDER), 1))
+                .event(
+                    ItemEvent.BREAK_ITEM,
+                    ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemIds.FISHING_ROD)))
+                )
+                .register();
+            this.builder(ItemIds.FLINT_AND_STEEL, 1)
+                .behavior(DamageableItemBehavior.of(64))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DamageItemAction.of(1))
                             .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.FLINT_AND_STEEL_USE), SoundSource.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BRUSH, create(
-                ItemDisplay.Builder.forItem(ItemIds.BRUSH).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(UseableItemBehavior.builder()
+                    )
+                )
+                .register();
+            this.builder(ItemIds.BRUSH, 1)
+                .behavior(DamageableItemBehavior.of(64))
+                .behavior(
+                    UseableItemBehavior.builder()
                         .useFor(BrushItemAccessor.useDuration())
                         .animation(ItemUseAnimation.BRUSH)
                         .passes(UseableItemBehavior.Pass.BLOCK)
-                        .build())
-                    .with(BrushItemBehavior.INSTANCE)
-                    .with(DamageableItemBehavior.of(64))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MACE, create(
-                ItemDisplay.Builder.forItem(ItemIds.MACE)
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.of(500))
-                    .with(ToolItemBehavior.builder(2).build())
-                    .with(WeaponItemBehavior.builder(1, 5.0d, 0.15d)
-                        .type(MeleeWeaponComponents.SMASHING, SmashingMeleeWeapon.of(SmashingWeapon.of(
-                            SmashingWeapon.HitSounds.of(
-                                this.soundEvents.getOrThrow(SoundEventIds.MACE_SMASH_AIR),
-                                this.soundEvents.getOrThrow(SoundEventIds.MACE_SMASH_GROUND),
-                                this.soundEvents.getOrThrow(SoundEventIds.MACE_SMASH_GROUND_HEAVY)
-                            ),
-                            MaceItem.SMASH_ATTACK_FALL_THRESHOLD,
-                            MaceItemAccessor.heavySmashAttackFallDistance(),
-                            MaceItemAccessor.knockbackPower()
-                        )))
-                        .build())
-                    .with(EnchantableItemBehavior.of(15))
-                    .with(RepairableItemBehavior.of(HolderSet.direct(
-                        this.items.getOrThrow(ItemIds.BREEZE_ROD)
-                    )))
-                    .build()
-            ));
+                        .build()
+                )
+                .behavior(BrushItemBehavior.INSTANCE)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH)))
+                .register();
+            this.builder(ItemIds.MACE, 1)
+                .display(display -> display.rarity(Rarity.EPIC))
+                .behavior(DamageableItemBehavior.of(500))
+                .behavior(ToolItemBehavior.builder(2).build())
+                .behavior(
+                    WeaponItemBehavior.builder(1, 5.0d, 0.15d)
+                        .type(
+                            MeleeWeaponComponents.SMASHING,
+                            SmashingMeleeWeapon.of(
+                                SmashingWeapon.of(
+                                    SmashingWeapon.HitSounds.of(
+                                        this.soundEvents.getOrThrow(SoundEventIds.MACE_SMASH_AIR),
+                                        this.soundEvents.getOrThrow(SoundEventIds.MACE_SMASH_GROUND),
+                                        this.soundEvents.getOrThrow(SoundEventIds.MACE_SMASH_GROUND_HEAVY)
+                                    ),
+                                    MaceItem.SMASH_ATTACK_FALL_THRESHOLD,
+                                    MaceItemAccessor.heavySmashAttackFallDistance(),
+                                    MaceItemAccessor.knockbackPower()
+                                )
+                            )
+                        )
+                        .build()
+                )
+                .behavior(EnchantableItemBehavior.of(15))
+                .behavior(RepairableItemBehavior.of(HolderSet.direct(this.items.getOrThrow(ItemIds.BREEZE_ROD))))
+                .register();
         }
 
         private void bootstrapEntities() {
             this.bootstrapSpawnEggs();
-            this.registerable.register(ItemIds.MINECART, create(
-                ItemDisplay.Builder.forItem(ItemIds.MINECART).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeIds.MINECART),
-                        this.blocks,
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHEST_MINECART, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHEST_MINECART).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeIds.CHEST_MINECART),
-                        this.blocks,
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FURNACE_MINECART, create(
-                ItemDisplay.Builder.forItem(ItemIds.FURNACE_MINECART).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeIds.FURNACE_MINECART),
-                        this.blocks,
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TNT_MINECART, create(
-                ItemDisplay.Builder.forItem(ItemIds.TNT_MINECART).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeIds.TNT_MINECART),
-                        this.blocks,
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HOPPER_MINECART, create(
-                ItemDisplay.Builder.forItem(ItemIds.HOPPER_MINECART).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeIds.HOPPER_MINECART),
-                        this.blocks,
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COMMAND_BLOCK_MINECART, create(
-                ItemDisplay.Builder.forItem(ItemIds.COMMAND_BLOCK_MINECART)
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.minecart(
-                        this.entityTypes.getOrThrow(EntityTypeIds.COMMAND_BLOCK_MINECART),
-                        this.blocks,
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.OAK_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.OAK_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OAK_CHEST_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.OAK_CHEST_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.OAK_CHEST_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.SPRUCE_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.SPRUCE_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPRUCE_CHEST_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.SPRUCE_CHEST_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.SPRUCE_CHEST_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.BIRCH_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.BIRCH_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BIRCH_CHEST_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.BIRCH_CHEST_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.BIRCH_CHEST_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.JUNGLE_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.JUNGLE_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.JUNGLE_CHEST_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.JUNGLE_CHEST_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.JUNGLE_CHEST_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.ACACIA_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.ACACIA_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ACACIA_CHEST_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.ACACIA_CHEST_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.ACACIA_CHEST_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHERRY_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.CHERRY_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHERRY_CHEST_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHERRY_CHEST_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.CHERRY_CHEST_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.DARK_OAK_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.DARK_OAK_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DARK_OAK_CHEST_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.DARK_OAK_CHEST_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.DARK_OAK_CHEST_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.PALE_OAK_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.PALE_OAK_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PALE_OAK_CHEST_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.PALE_OAK_CHEST_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.PALE_OAK_CHEST_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.MANGROVE_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.MANGROVE_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MANGROVE_CHEST_BOAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.MANGROVE_CHEST_BOAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.MANGROVE_CHEST_BOAT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_RAFT, create(
-                ItemDisplay.Builder.forItem(ItemIds.BAMBOO_RAFT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.BAMBOO_RAFT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAMBOO_CHEST_RAFT, create(
-                ItemDisplay.Builder.forItem(ItemIds.BAMBOO_CHEST_RAFT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EntityItemBehavior.ofDispensing(this.entityTypes.getOrThrow(EntityTypeIds.BAMBOO_CHEST_RAFT), this.dispenseBehaviors))
-                    .with(FuelItemBehavior.of(FuelTimes.BOAT))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PAINTING, create(
-                ItemDisplay.Builder.forItem(ItemIds.PAINTING).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.of(
+            this.registerMinecart(ItemIds.MINECART, EntityTypeIds.MINECART);
+            this.registerMinecart(ItemIds.CHEST_MINECART, EntityTypeIds.CHEST_MINECART);
+            this.registerMinecart(ItemIds.FURNACE_MINECART, EntityTypeIds.FURNACE_MINECART);
+            this.registerMinecart(ItemIds.TNT_MINECART, EntityTypeIds.TNT_MINECART);
+            this.registerMinecart(ItemIds.HOPPER_MINECART, EntityTypeIds.HOPPER_MINECART);
+            this.builderForMinecart(ItemIds.COMMAND_BLOCK_MINECART, EntityTypeIds.COMMAND_BLOCK_MINECART)
+                .display(display -> display.rarity(Rarity.EPIC))
+                .register();
+            this.registerBoat(ItemIds.OAK_BOAT, EntityTypeIds.OAK_BOAT);
+            this.registerBoat(ItemIds.OAK_CHEST_BOAT, EntityTypeIds.OAK_CHEST_BOAT);
+            this.registerBoat(ItemIds.SPRUCE_BOAT, EntityTypeIds.SPRUCE_BOAT);
+            this.registerBoat(ItemIds.SPRUCE_CHEST_BOAT, EntityTypeIds.SPRUCE_CHEST_BOAT);
+            this.registerBoat(ItemIds.BIRCH_BOAT, EntityTypeIds.BIRCH_BOAT);
+            this.registerBoat(ItemIds.BIRCH_CHEST_BOAT, EntityTypeIds.BIRCH_CHEST_BOAT);
+            this.registerBoat(ItemIds.JUNGLE_BOAT, EntityTypeIds.JUNGLE_BOAT);
+            this.registerBoat(ItemIds.JUNGLE_CHEST_BOAT, EntityTypeIds.JUNGLE_CHEST_BOAT);
+            this.registerBoat(ItemIds.ACACIA_BOAT, EntityTypeIds.ACACIA_BOAT);
+            this.registerBoat(ItemIds.ACACIA_CHEST_BOAT, EntityTypeIds.ACACIA_CHEST_BOAT);
+            this.registerBoat(ItemIds.CHERRY_BOAT, EntityTypeIds.CHERRY_BOAT);
+            this.registerBoat(ItemIds.CHERRY_CHEST_BOAT, EntityTypeIds.CHERRY_CHEST_BOAT);
+            this.registerBoat(ItemIds.DARK_OAK_BOAT, EntityTypeIds.DARK_OAK_BOAT);
+            this.registerBoat(ItemIds.DARK_OAK_CHEST_BOAT, EntityTypeIds.DARK_OAK_CHEST_BOAT);
+            this.registerBoat(ItemIds.PALE_OAK_BOAT, EntityTypeIds.PALE_OAK_BOAT);
+            this.registerBoat(ItemIds.PALE_OAK_CHEST_BOAT, EntityTypeIds.PALE_OAK_CHEST_BOAT);
+            this.registerBoat(ItemIds.MANGROVE_BOAT, EntityTypeIds.MANGROVE_BOAT);
+            this.registerBoat(ItemIds.MANGROVE_CHEST_BOAT, EntityTypeIds.MANGROVE_CHEST_BOAT);
+            this.registerBoat(ItemIds.BAMBOO_RAFT, EntityTypeIds.BAMBOO_RAFT);
+            this.registerBoat(ItemIds.BAMBOO_CHEST_RAFT, EntityTypeIds.BAMBOO_CHEST_RAFT);
+            this.builder(ItemIds.PAINTING)
+                .behavior(
+                    EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.PAINTING))
                             .allowItemData()
                             .spawnRule(
@@ -2411,36 +1639,30 @@ public class Items {
                                 )
                             )
                             .build()
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ITEM_FRAME, create(
-                ItemDisplay.Builder.forItem(ItemIds.ITEM_FRAME).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.of(
+                    )
+                )
+                .register();
+            this.builder(ItemIds.ITEM_FRAME)
+                .behavior(
+                    EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.ITEM_FRAME))
                             .allowItemData()
                             .build()
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLOW_ITEM_FRAME, create(
-                ItemDisplay.Builder.forItem(ItemIds.GLOW_ITEM_FRAME).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.of(
+                    )
+                )
+                .register();
+            this.builder(ItemIds.GLOW_ITEM_FRAME)
+                .behavior(
+                    EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.GLOW_ITEM_FRAME))
                             .allowItemData()
                             .build()
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ARMOR_STAND, create(
-                ItemDisplay.Builder.forItem(ItemIds.ARMOR_STAND).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(EntityItemBehavior.ofDispensing(
+                    )
+                )
+                .register();
+            this.builder(ItemIds.ARMOR_STAND, 16)
+                .behavior(
+                    EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.ARMOR_STAND))
                             .spawnRule(
                                 DiscardEntitySpawnRule.INSTANCE,
@@ -2449,18 +1671,15 @@ public class Items {
                             .spawnRule(FitsInVolumeEntitySpawnRule.entityDimensions())
                             .spawnRule(AlignYawEntitySpawnRule.of(8))
                             .spawnSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_STAND_PLACE))
-                            .build(),
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.END_CRYSTAL, create(
-                ItemDisplay.Builder.forItem(ItemIds.END_CRYSTAL)
-                    .glint()
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.of(
+                            .build()
+                    )
+                )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))
+                .register();
+            this.builder(ItemIds.END_CRYSTAL)
+                .display(ItemDisplay.Builder::glint)
+                .behavior(
+                    EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.END_CRYSTAL))
                             .spawnRule(
                                 DiscardEntitySpawnRule.INSTANCE,
@@ -2493,2385 +1712,662 @@ public class Items {
                                 )
                             )
                             .build()
-                    ))
-                    .build()
-            ));
+                    )
+                )
+                .register();
         }
 
         private void bootstrapSpawnEggs() {
-            this.registerable.register(ItemIds.ARMADILLO_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ARMADILLO_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ARMADILLO), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ALLAY_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ALLAY_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ALLAY), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.AXOLOTL_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.AXOLOTL_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.AXOLOTL), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BAT_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.BAT_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BAT), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BEE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.BEE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BEE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLAZE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLAZE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BLAZE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BOGGED_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.BOGGED_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BOGGED), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BREEZE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.BREEZE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.BREEZE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CAT_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.CAT_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CAT), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CAMEL_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.CAMEL_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CAMEL), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CAMEL_HUSK_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.CAMEL_HUSK_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CAMEL_HUSK), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CAVE_SPIDER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.CAVE_SPIDER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CAVE_SPIDER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHICKEN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHICKEN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CHICKEN), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COD_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.COD_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.COD), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_GOLEM_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_GOLEM_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.COPPER_GOLEM), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COW_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.COW_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.COW), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CREAKING_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.CREAKING_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CREAKING), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CREEPER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.CREEPER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.CREEPER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DOLPHIN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.DOLPHIN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.DOLPHIN), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DONKEY_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.DONKEY_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.DONKEY), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DROWNED_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.DROWNED_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.DROWNED), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ELDER_GUARDIAN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ELDER_GUARDIAN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ELDER_GUARDIAN), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ENDER_DRAGON_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ENDER_DRAGON_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ENDER_DRAGON), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ENDERMAN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ENDERMAN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ENDERMAN), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ENDERMITE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ENDERMITE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ENDERMITE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EVOKER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.EVOKER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.EVOKER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FOX_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.FOX_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.FOX), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FROG_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.FROG_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.FROG), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GHAST_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.GHAST_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.GHAST), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HAPPY_GHAST_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.HAPPY_GHAST_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.HAPPY_GHAST), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLOW_SQUID_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.GLOW_SQUID_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.GLOW_SQUID), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOAT_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOAT_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.GOAT), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GUARDIAN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.GUARDIAN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.GUARDIAN), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HOGLIN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.HOGLIN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.HOGLIN), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HORSE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.HORSE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.HORSE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HUSK_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.HUSK_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.HUSK), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_GOLEM_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_GOLEM_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.IRON_GOLEM), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LLAMA_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.LLAMA_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.LLAMA), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGMA_CUBE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.MAGMA_CUBE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.MAGMA_CUBE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOOSHROOM_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.MOOSHROOM_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.MOOSHROOM), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MULE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.MULE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.MULE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NAUTILUS_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.NAUTILUS_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.NAUTILUS), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OCELOT_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.OCELOT_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.OCELOT), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PANDA_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.PANDA_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PANDA), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PARCHED_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.PARCHED_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PARCHED), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PARROT_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.PARROT_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PARROT), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PHANTOM_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.PHANTOM_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PHANTOM), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PIG_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.PIG_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PIG), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PIGLIN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.PIGLIN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PIGLIN), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PIGLIN_BRUTE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.PIGLIN_BRUTE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PIGLIN_BRUTE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PILLAGER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.PILLAGER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PILLAGER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POLAR_BEAR_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.POLAR_BEAR_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.POLAR_BEAR), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PUFFERFISH_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.PUFFERFISH_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.PUFFERFISH), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RABBIT_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.RABBIT_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.RABBIT), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RAVAGER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.RAVAGER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.RAVAGER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SALMON_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SALMON_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SALMON), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHEEP_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SHEEP_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SHEEP), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHULKER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SHULKER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SHULKER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SILVERFISH_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SILVERFISH_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SILVERFISH), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SKELETON_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SKELETON_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SKELETON), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SKELETON_HORSE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SKELETON_HORSE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SKELETON_HORSE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SLIME_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SLIME_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SLIME), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SNIFFER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SNIFFER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SNIFFER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SNOW_GOLEM_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SNOW_GOLEM_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SNOW_GOLEM), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPIDER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SPIDER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SPIDER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SQUID_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SQUID_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SQUID), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRAY_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.STRAY_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.STRAY), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STRIDER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.STRIDER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.STRIDER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR_CUBE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.SULFUR_CUBE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.SULFUR_CUBE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TADPOLE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.TADPOLE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.TADPOLE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TRADER_LLAMA_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.TRADER_LLAMA_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.TRADER_LLAMA), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TROPICAL_FISH_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.TROPICAL_FISH_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.TROPICAL_FISH), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TURTLE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.TURTLE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.TURTLE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.VEX_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.VEX_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.VEX), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.VILLAGER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.VILLAGER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.VILLAGER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.VINDICATOR_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.VINDICATOR_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.VINDICATOR), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WANDERING_TRADER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.WANDERING_TRADER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WANDERING_TRADER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARDEN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.WARDEN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WARDEN), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WITCH_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.WITCH_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WITCH), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WITHER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.WITHER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WITHER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WITHER_SKELETON_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.WITHER_SKELETON_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WITHER_SKELETON), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WOLF_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.WOLF_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.WOLF), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ZOGLIN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ZOGLIN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOGLIN), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ZOMBIE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ZOMBIE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ZOMBIE_HORSE_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ZOMBIE_HORSE_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIE_HORSE), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ZOMBIE_NAUTILUS_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ZOMBIE_NAUTILUS_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIE_NAUTILUS), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ZOMBIE_VILLAGER_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ZOMBIE_VILLAGER_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIE_VILLAGER), this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ZOMBIFIED_PIGLIN_SPAWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.ZOMBIFIED_PIGLIN_SPAWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EntityItemBehavior.spawnEgg(this.entityTypes.getOrThrow(EntityTypeIds.ZOMBIFIED_PIGLIN), this.dispenseBehaviors))
-                    .build()
-            ));
+            this.registerSpawnEgg(ItemIds.ALLAY_SPAWN_EGG, EntityTypeIds.ALLAY);
+            this.registerSpawnEgg(ItemIds.ARMADILLO_SPAWN_EGG, EntityTypeIds.ARMADILLO);
+            this.registerSpawnEgg(ItemIds.AXOLOTL_SPAWN_EGG, EntityTypeIds.AXOLOTL);
+            this.registerSpawnEgg(ItemIds.BAT_SPAWN_EGG, EntityTypeIds.BAT);
+            this.registerSpawnEgg(ItemIds.BEE_SPAWN_EGG, EntityTypeIds.BEE);
+            this.registerSpawnEgg(ItemIds.BLAZE_SPAWN_EGG, EntityTypeIds.BLAZE);
+            this.registerSpawnEgg(ItemIds.BOGGED_SPAWN_EGG, EntityTypeIds.BOGGED);
+            this.registerSpawnEgg(ItemIds.BREEZE_SPAWN_EGG, EntityTypeIds.BREEZE);
+            this.registerSpawnEgg(ItemIds.CAMEL_HUSK_SPAWN_EGG, EntityTypeIds.CAMEL_HUSK);
+            this.registerSpawnEgg(ItemIds.CAMEL_SPAWN_EGG, EntityTypeIds.CAMEL);
+            this.registerSpawnEgg(ItemIds.CAT_SPAWN_EGG, EntityTypeIds.CAT);
+            this.registerSpawnEgg(ItemIds.CAVE_SPIDER_SPAWN_EGG, EntityTypeIds.CAVE_SPIDER);
+            this.registerSpawnEgg(ItemIds.CHICKEN_SPAWN_EGG, EntityTypeIds.CHICKEN);
+            this.registerSpawnEgg(ItemIds.COD_SPAWN_EGG, EntityTypeIds.COD);
+            this.registerSpawnEgg(ItemIds.COPPER_GOLEM_SPAWN_EGG, EntityTypeIds.COPPER_GOLEM);
+            this.registerSpawnEgg(ItemIds.COW_SPAWN_EGG, EntityTypeIds.COW);
+            this.registerSpawnEgg(ItemIds.CREAKING_SPAWN_EGG, EntityTypeIds.CREAKING);
+            this.registerSpawnEgg(ItemIds.CREEPER_SPAWN_EGG, EntityTypeIds.CREEPER);
+            this.registerSpawnEgg(ItemIds.DOLPHIN_SPAWN_EGG, EntityTypeIds.DOLPHIN);
+            this.registerSpawnEgg(ItemIds.DONKEY_SPAWN_EGG, EntityTypeIds.DONKEY);
+            this.registerSpawnEgg(ItemIds.DROWNED_SPAWN_EGG, EntityTypeIds.DROWNED);
+            this.registerSpawnEgg(ItemIds.ELDER_GUARDIAN_SPAWN_EGG, EntityTypeIds.ELDER_GUARDIAN);
+            this.registerSpawnEgg(ItemIds.ENDERMAN_SPAWN_EGG, EntityTypeIds.ENDERMAN);
+            this.registerSpawnEgg(ItemIds.ENDERMITE_SPAWN_EGG, EntityTypeIds.ENDERMITE);
+            this.registerSpawnEgg(ItemIds.ENDER_DRAGON_SPAWN_EGG, EntityTypeIds.ENDER_DRAGON);
+            this.registerSpawnEgg(ItemIds.EVOKER_SPAWN_EGG, EntityTypeIds.EVOKER);
+            this.registerSpawnEgg(ItemIds.FOX_SPAWN_EGG, EntityTypeIds.FOX);
+            this.registerSpawnEgg(ItemIds.FROG_SPAWN_EGG, EntityTypeIds.FROG);
+            this.registerSpawnEgg(ItemIds.GHAST_SPAWN_EGG, EntityTypeIds.GHAST);
+            this.registerSpawnEgg(ItemIds.GLOW_SQUID_SPAWN_EGG, EntityTypeIds.GLOW_SQUID);
+            this.registerSpawnEgg(ItemIds.GOAT_SPAWN_EGG, EntityTypeIds.GOAT);
+            this.registerSpawnEgg(ItemIds.GUARDIAN_SPAWN_EGG, EntityTypeIds.GUARDIAN);
+            this.registerSpawnEgg(ItemIds.HAPPY_GHAST_SPAWN_EGG, EntityTypeIds.HAPPY_GHAST);
+            this.registerSpawnEgg(ItemIds.HOGLIN_SPAWN_EGG, EntityTypeIds.HOGLIN);
+            this.registerSpawnEgg(ItemIds.HORSE_SPAWN_EGG, EntityTypeIds.HORSE);
+            this.registerSpawnEgg(ItemIds.HUSK_SPAWN_EGG, EntityTypeIds.HUSK);
+            this.registerSpawnEgg(ItemIds.IRON_GOLEM_SPAWN_EGG, EntityTypeIds.IRON_GOLEM);
+            this.registerSpawnEgg(ItemIds.LLAMA_SPAWN_EGG, EntityTypeIds.LLAMA);
+            this.registerSpawnEgg(ItemIds.MAGMA_CUBE_SPAWN_EGG, EntityTypeIds.MAGMA_CUBE);
+            this.registerSpawnEgg(ItemIds.MOOSHROOM_SPAWN_EGG, EntityTypeIds.MOOSHROOM);
+            this.registerSpawnEgg(ItemIds.MULE_SPAWN_EGG, EntityTypeIds.MULE);
+            this.registerSpawnEgg(ItemIds.NAUTILUS_SPAWN_EGG, EntityTypeIds.NAUTILUS);
+            this.registerSpawnEgg(ItemIds.OCELOT_SPAWN_EGG, EntityTypeIds.OCELOT);
+            this.registerSpawnEgg(ItemIds.PANDA_SPAWN_EGG, EntityTypeIds.PANDA);
+            this.registerSpawnEgg(ItemIds.PARCHED_SPAWN_EGG, EntityTypeIds.PARCHED);
+            this.registerSpawnEgg(ItemIds.PARROT_SPAWN_EGG, EntityTypeIds.PARROT);
+            this.registerSpawnEgg(ItemIds.PHANTOM_SPAWN_EGG, EntityTypeIds.PHANTOM);
+            this.registerSpawnEgg(ItemIds.PIGLIN_BRUTE_SPAWN_EGG, EntityTypeIds.PIGLIN_BRUTE);
+            this.registerSpawnEgg(ItemIds.PIGLIN_SPAWN_EGG, EntityTypeIds.PIGLIN);
+            this.registerSpawnEgg(ItemIds.PIG_SPAWN_EGG, EntityTypeIds.PIG);
+            this.registerSpawnEgg(ItemIds.PILLAGER_SPAWN_EGG, EntityTypeIds.PILLAGER);
+            this.registerSpawnEgg(ItemIds.POLAR_BEAR_SPAWN_EGG, EntityTypeIds.POLAR_BEAR);
+            this.registerSpawnEgg(ItemIds.PUFFERFISH_SPAWN_EGG, EntityTypeIds.PUFFERFISH);
+            this.registerSpawnEgg(ItemIds.RABBIT_SPAWN_EGG, EntityTypeIds.RABBIT);
+            this.registerSpawnEgg(ItemIds.RAVAGER_SPAWN_EGG, EntityTypeIds.RAVAGER);
+            this.registerSpawnEgg(ItemIds.SALMON_SPAWN_EGG, EntityTypeIds.SALMON);
+            this.registerSpawnEgg(ItemIds.SHEEP_SPAWN_EGG, EntityTypeIds.SHEEP);
+            this.registerSpawnEgg(ItemIds.SHULKER_SPAWN_EGG, EntityTypeIds.SHULKER);
+            this.registerSpawnEgg(ItemIds.SILVERFISH_SPAWN_EGG, EntityTypeIds.SILVERFISH);
+            this.registerSpawnEgg(ItemIds.SKELETON_HORSE_SPAWN_EGG, EntityTypeIds.SKELETON_HORSE);
+            this.registerSpawnEgg(ItemIds.SKELETON_SPAWN_EGG, EntityTypeIds.SKELETON);
+            this.registerSpawnEgg(ItemIds.SLIME_SPAWN_EGG, EntityTypeIds.SLIME);
+            this.registerSpawnEgg(ItemIds.SNIFFER_SPAWN_EGG, EntityTypeIds.SNIFFER);
+            this.registerSpawnEgg(ItemIds.SNOW_GOLEM_SPAWN_EGG, EntityTypeIds.SNOW_GOLEM);
+            this.registerSpawnEgg(ItemIds.SPIDER_SPAWN_EGG, EntityTypeIds.SPIDER);
+            this.registerSpawnEgg(ItemIds.SQUID_SPAWN_EGG, EntityTypeIds.SQUID);
+            this.registerSpawnEgg(ItemIds.STRAY_SPAWN_EGG, EntityTypeIds.STRAY);
+            this.registerSpawnEgg(ItemIds.STRIDER_SPAWN_EGG, EntityTypeIds.STRIDER);
+            this.registerSpawnEgg(ItemIds.SULFUR_CUBE_SPAWN_EGG, EntityTypeIds.SULFUR_CUBE);
+            this.registerSpawnEgg(ItemIds.TADPOLE_SPAWN_EGG, EntityTypeIds.TADPOLE);
+            this.registerSpawnEgg(ItemIds.TRADER_LLAMA_SPAWN_EGG, EntityTypeIds.TRADER_LLAMA);
+            this.registerSpawnEgg(ItemIds.TROPICAL_FISH_SPAWN_EGG, EntityTypeIds.TROPICAL_FISH);
+            this.registerSpawnEgg(ItemIds.TURTLE_SPAWN_EGG, EntityTypeIds.TURTLE);
+            this.registerSpawnEgg(ItemIds.VEX_SPAWN_EGG, EntityTypeIds.VEX);
+            this.registerSpawnEgg(ItemIds.VILLAGER_SPAWN_EGG, EntityTypeIds.VILLAGER);
+            this.registerSpawnEgg(ItemIds.VINDICATOR_SPAWN_EGG, EntityTypeIds.VINDICATOR);
+            this.registerSpawnEgg(ItemIds.WANDERING_TRADER_SPAWN_EGG, EntityTypeIds.WANDERING_TRADER);
+            this.registerSpawnEgg(ItemIds.WARDEN_SPAWN_EGG, EntityTypeIds.WARDEN);
+            this.registerSpawnEgg(ItemIds.WITCH_SPAWN_EGG, EntityTypeIds.WITCH);
+            this.registerSpawnEgg(ItemIds.WITHER_SKELETON_SPAWN_EGG, EntityTypeIds.WITHER_SKELETON);
+            this.registerSpawnEgg(ItemIds.WITHER_SPAWN_EGG, EntityTypeIds.WITHER);
+            this.registerSpawnEgg(ItemIds.WOLF_SPAWN_EGG, EntityTypeIds.WOLF);
+            this.registerSpawnEgg(ItemIds.ZOGLIN_SPAWN_EGG, EntityTypeIds.ZOGLIN);
+            this.registerSpawnEgg(ItemIds.ZOMBIE_HORSE_SPAWN_EGG, EntityTypeIds.ZOMBIE_HORSE);
+            this.registerSpawnEgg(ItemIds.ZOMBIE_NAUTILUS_SPAWN_EGG, EntityTypeIds.ZOMBIE_NAUTILUS);
+            this.registerSpawnEgg(ItemIds.ZOMBIE_SPAWN_EGG, EntityTypeIds.ZOMBIE);
+            this.registerSpawnEgg(ItemIds.ZOMBIE_VILLAGER_SPAWN_EGG, EntityTypeIds.ZOMBIE_VILLAGER);
+            this.registerSpawnEgg(ItemIds.ZOMBIFIED_PIGLIN_SPAWN_EGG, EntityTypeIds.ZOMBIFIED_PIGLIN);
         }
 
         private void bootstrapCompostables() {
-            this.registerable.register(BlockItemIds.AZALEA_LEAVES.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.AZALEA_LEAVES.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.AZALEA_LEAVES.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SHORT_GRASS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SHORT_GRASS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SHORT_GRASS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.KELP.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.KELP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.KELP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.MOSS_CARPET.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.MOSS_CARPET.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MOSS_CARPET.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PALE_MOSS_CARPET.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PALE_MOSS_CARPET.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PALE_MOSS_CARPET.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PINK_PETALS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PINK_PETALS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PINK_PETALS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.HANGING_ROOTS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.HANGING_ROOTS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.HANGING_ROOTS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SMALL_DRIPLEAF.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SMALL_DRIPLEAF.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SMALL_DRIPLEAF.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.WHEAT_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.WHEAT_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WHEAT_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PUMPKIN_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.PUMPKIN_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PUMPKIN_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.MELON_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.MELON_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MELON_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.TORCHFLOWER_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.TORCHFLOWER_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TORCHFLOWER_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PITCHER_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.PITCHER_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PITCHER_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.BEETROOT_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.BEETROOT_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BEETROOT_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.MANGROVE_ROOTS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.MANGROVE_ROOTS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MANGROVE_ROOTS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SEAGRASS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SEAGRASS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SEAGRASS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PALE_HANGING_MOSS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PALE_HANGING_MOSS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PALE_HANGING_MOSS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.WILDFLOWERS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.WILDFLOWERS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WILDFLOWERS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.BUSH.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.BUSH.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BUSH.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.FIREFLY_BUSH.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.FIREFLY_BUSH.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FIREFLY_BUSH.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CACTUS_FLOWER.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CACTUS_FLOWER.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CACTUS_FLOWER.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.FLOWERING_AZALEA_LEAVES.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.FLOWERING_AZALEA_LEAVES.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FLOWERING_AZALEA_LEAVES.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.NETHER_SPROUTS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.NETHER_SPROUTS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NETHER_SPROUTS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.WEEPING_VINES.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.WEEPING_VINES.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WEEPING_VINES.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.TWISTING_VINES.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.TWISTING_VINES.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TWISTING_VINES.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SUGAR_CANE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SUGAR_CANE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SUGAR_CANE.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.VINE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.VINE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.VINE.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.GLOW_LICHEN.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.GLOW_LICHEN.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOW_LICHEN.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.TALL_GRASS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.TALL_GRASS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TALL_GRASS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CACTUS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CACTUS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CACTUS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_CACTUS)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.DRIED_KELP_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.DRIED_KELP_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DRIED_KELP_BLOCK.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
-                    .with(FuelItemBehavior.of(FuelTimes.DRIED_KELP_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.FERN.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.FERN.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FERN.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_FERN)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.LILY_PAD.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.LILY_PAD.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LILY_PAD.block()), BlockItemBehavior.Pass.FLUID))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.NETHER_WART.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.NETHER_WART.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NETHER_WART.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.COCOA_CROP.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.COCOA_CROP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.COCOA_CROP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.BIG_DRIPLEAF.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.BIG_DRIPLEAF.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BIG_DRIPLEAF.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PUMPKIN.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PUMPKIN.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PUMPKIN.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CARVED_PUMPKIN.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CARVED_PUMPKIN.item()).build(),
-                AttributeModifiers.hideFromLocatorBar(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARVED_PUMPKIN.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.HEAD)
+            this.builderForBlock(BlockItemIds.AZALEA_LEAVES)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.SHORT_GRASS)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.KELP)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.MOSS_CARPET)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.PALE_MOSS_CARPET)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.PINK_PETALS)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.HANGING_ROOTS)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.SMALL_DRIPLEAF)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.WHEAT_CROP)
+                .display(ItemDisplay.Builder::itemName)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.PUMPKIN_CROP)
+                .display(ItemDisplay.Builder::itemName)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.MELON_CROP)
+                .display(ItemDisplay.Builder::itemName)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.TORCHFLOWER_CROP)
+                .display(ItemDisplay.Builder::itemName)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.PITCHER_CROP)
+                .display(ItemDisplay.Builder::itemName)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.BEETROOT_CROP)
+                .display(ItemDisplay.Builder::itemName)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.MANGROVE_ROOTS)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.SEAGRASS)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.PALE_HANGING_MOSS)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.WILDFLOWERS)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.BUSH)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.FIREFLY_BUSH)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.CACTUS_FLOWER)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.FLOWERING_AZALEA_LEAVES)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .register();
+            this.builderForBlock(BlockItemIds.NETHER_SPROUTS)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .register();
+            this.builderForBlock(BlockItemIds.WEEPING_VINES)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .register();
+            this.builderForBlock(BlockItemIds.TWISTING_VINES)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .register();
+            this.builderForBlock(BlockItemIds.SUGAR_CANE)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .register();
+            this.builderForBlock(BlockItemIds.VINE)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .register();
+            this.builderForBlock(BlockItemIds.GLOW_LICHEN)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .register();
+            this.builderForBlock(BlockItemIds.TALL_GRASS)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .register();
+            this.builderForBlock(BlockItemIds.CACTUS)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, BlockIds.POTTED_CACTUS)
+                )
+                .register();
+            this.builderForBlock(BlockItemIds.DRIED_KELP_BLOCK)
+                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(FuelItemBehavior.of(FuelTimes.DRIED_KELP_BLOCK))
+                .register();
+            this.builderForBlock(BlockItemIds.FERN)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, BlockIds.POTTED_FERN)
+                )
+                .register();
+            this.builderForBlockOnFluid(BlockItemIds.LILY_PAD)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.NETHER_WART)
+                .display(ItemDisplay.Builder::itemName)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.COCOA_CROP)
+                .display(ItemDisplay.Builder::itemName)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.BIG_DRIPLEAF)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.PUMPKIN)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.CARVED_PUMPKIN)
+                .attributeModifiers(AttributeModifiers::hideFromLocatorBar)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(
+                    EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.HEAD)
                         .setSwappable(false)
                         .setCameraOverlay(Identifier.withDefaultNamespace("misc/pumpkinblur"))
-                        .build()))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_CARVED_PUMPKIN)))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.MELON.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.MELON.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MELON.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SEA_PICKLE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SEA_PICKLE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SEA_PICKLE.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WHEAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.WHEAT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.DANDELION.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.DANDELION.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DANDELION.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.SATURATION), 140)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_DANDELION)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.OPEN_EYEBLOSSOM.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.OPEN_EYEBLOSSOM.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.OPEN_EYEBLOSSOM.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.BLINDNESS), 140)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_OPEN_EYEBLOSSOM)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CLOSED_EYEBLOSSOM.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CLOSED_EYEBLOSSOM.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CLOSED_EYEBLOSSOM.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.NAUSEA), 140)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_CLOSED_EYEBLOSSOM)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.POPPY.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.POPPY.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.POPPY.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.NIGHT_VISION), 100)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_POPPY)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.BLUE_ORCHID.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.BLUE_ORCHID.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BLUE_ORCHID.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.SATURATION), 140)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_BLUE_ORCHID)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.ALLIUM.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.ALLIUM.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.ALLIUM.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 80)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_ALLIUM)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.AZURE_BLUET.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.AZURE_BLUET.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.AZURE_BLUET.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.BLINDNESS), 160)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_AZURE_BLUET)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.RED_TULIP.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.RED_TULIP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RED_TULIP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_RED_TULIP)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.ORANGE_TULIP.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.ORANGE_TULIP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.ORANGE_TULIP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_ORANGE_TULIP)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.WHITE_TULIP.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.WHITE_TULIP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WHITE_TULIP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_WHITE_TULIP)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PINK_TULIP.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PINK_TULIP.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PINK_TULIP.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WEAKNESS), 180)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_PINK_TULIP)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.OXEYE_DAISY.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.OXEYE_DAISY.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.OXEYE_DAISY.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 160)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_OXEYE_DAISY)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CORNFLOWER.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CORNFLOWER.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CORNFLOWER.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.JUMP_BOOST), 120)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_CORNFLOWER)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.LILY_OF_THE_VALLEY.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.LILY_OF_THE_VALLEY.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LILY_OF_THE_VALLEY.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.POISON), 240)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_LILY_OF_THE_VALLEY)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.WITHER_ROSE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.WITHER_ROSE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WITHER_ROSE.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.WITHER), 160)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_WITHER_ROSE)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.AZALEA.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.AZALEA.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.AZALEA.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_AZALEA_BUSH)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SUNFLOWER.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SUNFLOWER.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SUNFLOWER.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.LILAC.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.LILAC.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LILAC.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.ROSE_BUSH.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.ROSE_BUSH.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.ROSE_BUSH.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PEONY.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PEONY.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PEONY.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.LARGE_FERN.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.LARGE_FERN.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LARGE_FERN.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SPORE_BLOSSOM.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SPORE_BLOSSOM.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SPORE_BLOSSOM.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.BROWN_MUSHROOM.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.BROWN_MUSHROOM.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BROWN_MUSHROOM.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_BROWN_MUSHROOM)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.RED_MUSHROOM.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.RED_MUSHROOM.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RED_MUSHROOM.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_RED_MUSHROOM)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CRIMSON_ROOTS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CRIMSON_ROOTS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CRIMSON_ROOTS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_ROOTS)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.WARPED_ROOTS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.WARPED_ROOTS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WARPED_ROOTS.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_ROOTS)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.MOSS_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.MOSS_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MOSS_BLOCK.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PALE_MOSS_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PALE_MOSS_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PALE_MOSS_BLOCK.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.MUSHROOM_STEM.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.MUSHROOM_STEM.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.MUSHROOM_STEM.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SHROOMLIGHT.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SHROOMLIGHT.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SHROOMLIGHT.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.BIG))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.NETHER_WART_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.NETHER_WART_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NETHER_WART_BLOCK.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.WARPED_WART_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.WARPED_WART_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.WARPED_WART_BLOCK.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.HAY_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.HAY_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.HAY_BLOCK.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.FLOWERING_AZALEA.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.FLOWERING_AZALEA.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FLOWERING_AZALEA.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_FLOWERING_AZALEA_BUSH)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.TORCHFLOWER.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.TORCHFLOWER.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TORCHFLOWER.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .with(SuspiciousEffectIngredientItemBehavior.of(
-                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(MobEffectIds.NIGHT_VISION), 100)
-                    ))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_TORCHFLOWER)
-                    )
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PITCHER_PLANT.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PITCHER_PLANT.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.PITCHER_PLANT.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.BROWN_MUSHROOM_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.BROWN_MUSHROOM_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BROWN_MUSHROOM_BLOCK.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.RED_MUSHROOM_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.RED_MUSHROOM_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RED_MUSHROOM_BLOCK.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CAKE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CAKE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CAKE.block())))
-                    .with(CompostableItemBehavior.of(CompostChances.GUARANTEED))
-                    .build()
-            ));
+                        .build())
+                )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_CARVED_PUMPKIN)))
+                .register();
+            this.builderForBlock(BlockItemIds.MELON)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.SEA_PICKLE)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builder(ItemIds.WHEAT)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.registerSuspiciousEffectIngredient(BlockItemIds.DANDELION, CompostChances.BIG, MobEffectIds.SATURATION, 140, BlockIds.POTTED_DANDELION);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.OPEN_EYEBLOSSOM, CompostChances.BIG, MobEffectIds.BLINDNESS, 140, BlockIds.POTTED_OPEN_EYEBLOSSOM);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.CLOSED_EYEBLOSSOM, CompostChances.BIG, MobEffectIds.NAUSEA, 140, BlockIds.POTTED_CLOSED_EYEBLOSSOM);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.POPPY, CompostChances.BIG, MobEffectIds.NIGHT_VISION, 100, BlockIds.POTTED_POPPY);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.BLUE_ORCHID, CompostChances.BIG, MobEffectIds.SATURATION, 140, BlockIds.POTTED_BLUE_ORCHID);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.ALLIUM, CompostChances.BIG, MobEffectIds.FIRE_RESISTANCE, 80, BlockIds.POTTED_ALLIUM);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.AZURE_BLUET, CompostChances.BIG, MobEffectIds.BLINDNESS, 160, BlockIds.POTTED_AZURE_BLUET);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.RED_TULIP, CompostChances.BIG, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_RED_TULIP);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.ORANGE_TULIP, CompostChances.BIG, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_ORANGE_TULIP);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.WHITE_TULIP, CompostChances.BIG, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_WHITE_TULIP);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.PINK_TULIP, CompostChances.BIG, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_PINK_TULIP);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.OXEYE_DAISY, CompostChances.BIG, MobEffectIds.REGENERATION, 160, BlockIds.POTTED_OXEYE_DAISY);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.CORNFLOWER, CompostChances.BIG, MobEffectIds.JUMP_BOOST, 120, BlockIds.POTTED_CORNFLOWER);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.LILY_OF_THE_VALLEY, CompostChances.BIG, MobEffectIds.POISON, 240, BlockIds.POTTED_LILY_OF_THE_VALLEY);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.WITHER_ROSE, CompostChances.BIG, MobEffectIds.WITHER, 160, BlockIds.POTTED_WITHER_ROSE);
+            this.builderForBlock(BlockItemIds.AZALEA)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, BlockIds.POTTED_AZALEA_BUSH)
+                )
+                .register();
+            this.builderForBlock(BlockItemIds.SUNFLOWER)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.LILAC)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.ROSE_BUSH)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.PEONY)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.LARGE_FERN)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.SPORE_BLOSSOM)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.BROWN_MUSHROOM)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, BlockIds.POTTED_BROWN_MUSHROOM)
+                )
+                .register();
+            this.builderForBlock(BlockItemIds.RED_MUSHROOM)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, BlockIds.POTTED_RED_MUSHROOM)
+                )
+                .register();
+            this.builderForBlock(BlockItemIds.CRIMSON_ROOTS)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_ROOTS)
+                )
+                .register();
+            this.builderForBlock(BlockItemIds.WARPED_ROOTS)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_ROOTS)
+                )
+                .register();
+            this.builderForBlock(BlockItemIds.MOSS_BLOCK)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.PALE_MOSS_BLOCK)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.MUSHROOM_STEM)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.SHROOMLIGHT)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
+            this.builderForBlock(BlockItemIds.NETHER_WART_BLOCK)
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .register();
+            this.builderForBlock(BlockItemIds.WARPED_WART_BLOCK)
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .register();
+            this.builderForBlock(BlockItemIds.HAY_BLOCK)
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .register();
+            this.builderForBlock(BlockItemIds.FLOWERING_AZALEA)
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, BlockIds.POTTED_FLOWERING_AZALEA_BUSH)
+                )
+                .register();
+            this.registerSuspiciousEffectIngredient(BlockItemIds.TORCHFLOWER, CompostChances.ALMOST_GUARANTEED, MobEffectIds.NIGHT_VISION, 100, BlockIds.POTTED_TORCHFLOWER);
+            this.builderForBlock(BlockItemIds.PITCHER_PLANT)
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .register();
+            this.builderForBlock(BlockItemIds.BROWN_MUSHROOM_BLOCK)
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .register();
+            this.builderForBlock(BlockItemIds.RED_MUSHROOM_BLOCK)
+                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .register();
+            this.builderForBlock(BlockItemIds.CAKE, 1)
+                .behavior(CompostableItemBehavior.of(CompostChances.GUARANTEED))
+                .register();
         }
 
         private void bootstrapEquipment() {
             this.bootstrapArmor();
             this.bootstrapSkulls();
-            this.registerable.register(ItemIds.ELYTRA, create(
-                ItemDisplay.Builder.forItem(ItemIds.ELYTRA)
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.ofPreserved(432))
-                    .with(GliderItemBehavior.of(ItemPredicate.Builder.item()
-                        .withComponents(DataComponentMatchers.Builder.components()
-                            .partial(
-                                DataComponentPredicates.DAMAGE,
-                                DamagePredicate.durability(MinMaxBounds.Ints.atLeast(2))
+            this.builder(ItemIds.ELYTRA, 1)
+                .display(display -> display.rarity(Rarity.EPIC))
+                .behavior(DamageableItemBehavior.ofPreserved(432))
+                .behavior(
+                    GliderItemBehavior.of(
+                        ItemPredicate.Builder.item()
+                            .withComponents(DataComponentMatchers.Builder.components()
+                                .partial(
+                                    DataComponentPredicates.DAMAGE,
+                                    DamagePredicate.durability(MinMaxBounds.Ints.atLeast(2))
+                                ).build()
                             ).build()
-                        ).build()
-                    ))
-                    .with(EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.CHEST)
-                        .setSwappable(true)
-                        .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_ELYTRA))
-                        .setAsset(EquipmentAssets.ELYTRA)
-                        .build()))
-                    .with(RepairableItemBehavior.of(HolderSet.direct(
-                        this.items.getOrThrow(ItemIds.PHANTOM_MEMBRANE)
-                    )))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHIELD, create(
-                ItemDisplay.Builder.forItem(ItemIds.SHIELD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(UseableItemBehavior.builder()
+                    )
+                )
+                .behavior(
+                    EquipmentItemBehavior.of(
+                        Equippable.builder(EquipmentSlot.CHEST)
+                            .setSwappable(true)
+                            .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_ELYTRA))
+                            .setAsset(EquipmentAssets.ELYTRA)
+                            .build()
+                    )
+                )
+                .behavior(RepairableItemBehavior.of(HolderSet.direct(this.items.getOrThrow(ItemIds.PHANTOM_MEMBRANE))))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                .register();
+            this.builder(ItemIds.SHIELD, 1)
+                .behavior(
+                    UseableItemBehavior.builder()
                         .useIndefinitely()
                         .animation(ItemUseAnimation.BLOCK)
                         .build()
+                )
+                .behavior(DamageableItemBehavior.of(336))
+                .behavior(
+                    AttackBlockingItemBehavior.of(
+                        new BlocksAttacks(
+                            0.25f,
+                            1.0f,
+                            List.of(new BlocksAttacks.DamageReduction(90.0f, Optional.empty(), 0.0f, 1.0f)),
+                            new BlocksAttacks.ItemDamageFunction(3.0f, 1.0f, 1.0f),
+                            Optional.of(this.damageTypes.getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
+                            Optional.of(this.soundEvents.getOrThrow(SoundEventIds.SHIELD_BLOCK)),
+                            Optional.of(this.soundEvents.getOrThrow(SoundEventIds.SHIELD_BREAK))
+                        )
                     )
-                    .with(DamageableItemBehavior.of(336))
-                    .with(AttackBlockingItemBehavior.of(new BlocksAttacks(
-                        0.25f,
-                        1.0f,
-                        List.of(
-                            new BlocksAttacks.DamageReduction(90.0f, Optional.empty(), 0.0f, 1.0f)
-                        ),
-                        new BlocksAttacks.ItemDamageFunction(3.0f, 1.0f, 1.0f),
-                        Optional.of(this.damageTypes.getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
-                        Optional.of(this.soundEvents.getOrThrow(SoundEventIds.SHIELD_BLOCK)),
-                        Optional.of(this.soundEvents.getOrThrow(SoundEventIds.SHIELD_BREAK))
-                    )))
-                    .with(EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.OFFHAND)
-                        .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_GENERIC))
-                        .setSwappable(false)
-                        .build()
-                    ))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .with(BannerPatternHolderItemBehavior.of())
-                    .build()
-            ));
+                )
+                .behavior(
+                    EquipmentItemBehavior.of(
+                        Equippable.builder(EquipmentSlot.OFFHAND)
+                            .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_GENERIC))
+                            .setSwappable(false)
+                            .build()
+                    )
+                )
+                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                .behavior(BannerPatternHolderItemBehavior.of())
+                .register();
         }
-
+        
         private void bootstrapArmor() {
-            this.registerable.register(ItemIds.LEATHER_HELMET, create(
-                ItemDisplay.Builder.forItem(ItemIds.LEATHER_HELMET).build(),
-                AttributeModifiers.armor(ArmorMaterials.LEATHER, ArmorType.HELMET),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.LEATHER, ArmorType.HELMET))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LEATHER_CHESTPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.LEATHER_CHESTPLATE).build(),
-                AttributeModifiers.armor(ArmorMaterials.LEATHER, ArmorType.CHESTPLATE),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.LEATHER, ArmorType.CHESTPLATE))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LEATHER_LEGGINGS, create(
-                ItemDisplay.Builder.forItem(ItemIds.LEATHER_LEGGINGS).build(),
-                AttributeModifiers.armor(ArmorMaterials.LEATHER, ArmorType.LEGGINGS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.LEATHER, ArmorType.LEGGINGS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LEATHER_BOOTS, create(
-                ItemDisplay.Builder.forItem(ItemIds.LEATHER_BOOTS).build(),
-                AttributeModifiers.armor(ArmorMaterials.LEATHER, ArmorType.BOOTS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.LEATHER, ArmorType.BOOTS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.LEATHER))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_LEATHER_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_HELMET, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_HELMET).build(),
-                AttributeModifiers.armor(ArmorMaterials.COPPER, ArmorType.HELMET),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.COPPER, ArmorType.HELMET))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.COPPER))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_COPPER_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_CHESTPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_CHESTPLATE).build(),
-                AttributeModifiers.armor(ArmorMaterials.COPPER, ArmorType.CHESTPLATE),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.COPPER, ArmorType.CHESTPLATE))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.COPPER))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_COPPER_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_LEGGINGS, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_LEGGINGS).build(),
-                AttributeModifiers.armor(ArmorMaterials.COPPER, ArmorType.LEGGINGS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.COPPER, ArmorType.LEGGINGS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.COPPER))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_COPPER_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_BOOTS, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_BOOTS).build(),
-                AttributeModifiers.armor(ArmorMaterials.COPPER, ArmorType.BOOTS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.COPPER, ArmorType.BOOTS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.COPPER))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_COPPER_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHAINMAIL_HELMET, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHAINMAIL_HELMET)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.armor(ArmorMaterials.CHAINMAIL, ArmorType.HELMET),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.CHAINMAIL, ArmorType.HELMET))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.CHAINMAIL))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_CHAIN_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHAINMAIL_CHESTPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHAINMAIL_CHESTPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.armor(ArmorMaterials.CHAINMAIL, ArmorType.CHESTPLATE),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.CHAINMAIL, ArmorType.CHESTPLATE))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.CHAINMAIL))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_CHAIN_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHAINMAIL_LEGGINGS, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHAINMAIL_LEGGINGS)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.armor(ArmorMaterials.CHAINMAIL, ArmorType.LEGGINGS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.CHAINMAIL, ArmorType.LEGGINGS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.CHAINMAIL))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_CHAIN_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHAINMAIL_BOOTS, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHAINMAIL_BOOTS)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.armor(ArmorMaterials.CHAINMAIL, ArmorType.BOOTS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.CHAINMAIL, ArmorType.BOOTS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.CHAINMAIL))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_CHAIN_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_HELMET, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_HELMET).build(),
-                AttributeModifiers.armor(ArmorMaterials.IRON, ArmorType.HELMET),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.IRON, ArmorType.HELMET))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.IRON))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_IRON_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_CHESTPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_CHESTPLATE).build(),
-                AttributeModifiers.armor(ArmorMaterials.IRON, ArmorType.CHESTPLATE),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.IRON, ArmorType.CHESTPLATE))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.IRON))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_IRON_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_LEGGINGS, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_LEGGINGS).build(),
-                AttributeModifiers.armor(ArmorMaterials.IRON, ArmorType.LEGGINGS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.IRON, ArmorType.LEGGINGS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.IRON))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_IRON_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_BOOTS, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_BOOTS).build(),
-                AttributeModifiers.armor(ArmorMaterials.IRON, ArmorType.BOOTS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.IRON, ArmorType.BOOTS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.IRON))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_IRON_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_HELMET, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_HELMET).build(),
-                AttributeModifiers.armor(ArmorMaterials.DIAMOND, ArmorType.HELMET),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.DIAMOND, ArmorType.HELMET))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.DIAMOND))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_DIAMOND_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_CHESTPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_CHESTPLATE).build(),
-                AttributeModifiers.armor(ArmorMaterials.DIAMOND, ArmorType.CHESTPLATE),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.DIAMOND, ArmorType.CHESTPLATE))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.DIAMOND))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_DIAMOND_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_LEGGINGS, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_LEGGINGS).build(),
-                AttributeModifiers.armor(ArmorMaterials.DIAMOND, ArmorType.LEGGINGS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.DIAMOND, ArmorType.LEGGINGS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.DIAMOND))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_DIAMOND_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_BOOTS, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_BOOTS).build(),
-                AttributeModifiers.armor(ArmorMaterials.DIAMOND, ArmorType.BOOTS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.DIAMOND, ArmorType.BOOTS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.DIAMOND))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_DIAMOND_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_HELMET, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_HELMET).build(),
-                AttributeModifiers.armor(ArmorMaterials.GOLD, ArmorType.HELMET),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.GOLD, ArmorType.HELMET))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.GOLD))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_GOLD_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_CHESTPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_CHESTPLATE).build(),
-                AttributeModifiers.armor(ArmorMaterials.GOLD, ArmorType.CHESTPLATE),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.GOLD, ArmorType.CHESTPLATE))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.GOLD))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_GOLD_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_LEGGINGS, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_LEGGINGS).build(),
-                AttributeModifiers.armor(ArmorMaterials.GOLD, ArmorType.LEGGINGS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.GOLD, ArmorType.LEGGINGS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.GOLD))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_GOLD_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_BOOTS, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_BOOTS).build(),
-                AttributeModifiers.armor(ArmorMaterials.GOLD, ArmorType.BOOTS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.GOLD, ArmorType.BOOTS))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.GOLD))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_GOLD_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_HELMET, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_HELMET).build(),
-                AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.HELMET),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.NETHERITE, ArmorType.HELMET))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.NETHERITE))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_NETHERITE_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_CHESTPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_CHESTPLATE).build(),
-                AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.CHESTPLATE),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.NETHERITE, ArmorType.CHESTPLATE))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.NETHERITE))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_NETHERITE_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_LEGGINGS, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_LEGGINGS).build(),
-                AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.LEGGINGS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.NETHERITE, ArmorType.LEGGINGS))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.NETHERITE))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_NETHERITE_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_BOOTS, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_BOOTS).build(),
-                AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.BOOTS),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.NETHERITE, ArmorType.BOOTS))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.NETHERITE))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_NETHERITE_ARMOR)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TURTLE_HELMET, create(
-                ItemDisplay.Builder.forItem(ItemIds.TURTLE_HELMET).build(),
-                AttributeModifiers.armor(ArmorMaterials.TURTLE_SCUTE, ArmorType.HELMET),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.forArmor(ArmorMaterials.TURTLE_SCUTE, ArmorType.HELMET))
-                    .with(EnchantableItemBehavior.of(ArmorMaterials.TURTLE_SCUTE))
-                    .with(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.REPAIRS_TURTLE_HELMET)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LEATHER_HORSE_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.LEATHER_HORSE_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.LEATHER, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHorseArmor(ArmorMaterials.LEATHER, this.soundEvents, this.entityTypes))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_HORSE_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_HORSE_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.COPPER, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHorseArmor(ArmorMaterials.COPPER, this.soundEvents, this.entityTypes))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_HORSE_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_HORSE_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.IRON, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHorseArmor(ArmorMaterials.IRON, this.soundEvents, this.entityTypes))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_HORSE_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_HORSE_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.GOLD, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHorseArmor(ArmorMaterials.GOLD, this.soundEvents, this.entityTypes))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_HORSE_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_HORSE_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.DIAMOND, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHorseArmor(ArmorMaterials.DIAMOND, this.soundEvents, this.entityTypes))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_HORSE_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_HORSE_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.ofHorseArmor(ArmorMaterials.NETHERITE, this.soundEvents, this.entityTypes))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WOLF_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.WOLF_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.ARMADILLO_SCUTE, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DamageableItemBehavior.of(
+            this.registerArmor(ItemIds.LEATHER_HELMET, ArmorMaterials.LEATHER, ArmorType.HELMET, ItemTags.REPAIRS_LEATHER_ARMOR);
+            this.registerArmor(ItemIds.LEATHER_CHESTPLATE, ArmorMaterials.LEATHER, ArmorType.CHESTPLATE, ItemTags.REPAIRS_LEATHER_ARMOR);
+            this.registerArmor(ItemIds.LEATHER_LEGGINGS, ArmorMaterials.LEATHER, ArmorType.LEGGINGS, ItemTags.REPAIRS_LEATHER_ARMOR);
+            this.registerArmor(ItemIds.LEATHER_BOOTS, ArmorMaterials.LEATHER, ArmorType.BOOTS, ItemTags.REPAIRS_LEATHER_ARMOR);
+            this.registerArmor(ItemIds.COPPER_HELMET, ArmorMaterials.COPPER, ArmorType.HELMET, ItemTags.REPAIRS_COPPER_ARMOR);
+            this.registerArmor(ItemIds.COPPER_CHESTPLATE, ArmorMaterials.COPPER, ArmorType.CHESTPLATE, ItemTags.REPAIRS_COPPER_ARMOR);
+            this.registerArmor(ItemIds.COPPER_LEGGINGS, ArmorMaterials.COPPER, ArmorType.LEGGINGS, ItemTags.REPAIRS_COPPER_ARMOR);
+            this.registerArmor(ItemIds.COPPER_BOOTS, ArmorMaterials.COPPER, ArmorType.BOOTS, ItemTags.REPAIRS_COPPER_ARMOR);
+            this.builderForArmor(ItemIds.CHAINMAIL_HELMET, ArmorMaterials.CHAINMAIL, ArmorType.HELMET, ItemTags.REPAIRS_CHAIN_ARMOR)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
+            this.builderForArmor(ItemIds.CHAINMAIL_CHESTPLATE, ArmorMaterials.CHAINMAIL, ArmorType.CHESTPLATE, ItemTags.REPAIRS_CHAIN_ARMOR)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
+            this.builderForArmor(ItemIds.CHAINMAIL_LEGGINGS, ArmorMaterials.CHAINMAIL, ArmorType.LEGGINGS, ItemTags.REPAIRS_CHAIN_ARMOR)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
+            this.builderForArmor(ItemIds.CHAINMAIL_BOOTS, ArmorMaterials.CHAINMAIL, ArmorType.BOOTS, ItemTags.REPAIRS_CHAIN_ARMOR)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
+            this.registerArmor(ItemIds.IRON_HELMET, ArmorMaterials.IRON, ArmorType.HELMET, ItemTags.REPAIRS_IRON_ARMOR);
+            this.registerArmor(ItemIds.IRON_CHESTPLATE, ArmorMaterials.IRON, ArmorType.CHESTPLATE, ItemTags.REPAIRS_IRON_ARMOR);
+            this.registerArmor(ItemIds.IRON_LEGGINGS, ArmorMaterials.IRON, ArmorType.LEGGINGS, ItemTags.REPAIRS_IRON_ARMOR);
+            this.registerArmor(ItemIds.IRON_BOOTS, ArmorMaterials.IRON, ArmorType.BOOTS, ItemTags.REPAIRS_IRON_ARMOR);
+            this.registerArmor(ItemIds.DIAMOND_HELMET, ArmorMaterials.DIAMOND, ArmorType.HELMET, ItemTags.REPAIRS_DIAMOND_ARMOR);
+            this.registerArmor(ItemIds.DIAMOND_CHESTPLATE, ArmorMaterials.DIAMOND, ArmorType.CHESTPLATE, ItemTags.REPAIRS_DIAMOND_ARMOR);
+            this.registerArmor(ItemIds.DIAMOND_LEGGINGS, ArmorMaterials.DIAMOND, ArmorType.LEGGINGS, ItemTags.REPAIRS_DIAMOND_ARMOR);
+            this.registerArmor(ItemIds.DIAMOND_BOOTS, ArmorMaterials.DIAMOND, ArmorType.BOOTS, ItemTags.REPAIRS_DIAMOND_ARMOR);
+            this.registerArmor(ItemIds.GOLDEN_HELMET, ArmorMaterials.GOLD, ArmorType.HELMET, ItemTags.REPAIRS_GOLD_ARMOR);
+            this.registerArmor(ItemIds.GOLDEN_CHESTPLATE, ArmorMaterials.GOLD, ArmorType.CHESTPLATE, ItemTags.REPAIRS_GOLD_ARMOR);
+            this.registerArmor(ItemIds.GOLDEN_LEGGINGS, ArmorMaterials.GOLD, ArmorType.LEGGINGS, ItemTags.REPAIRS_GOLD_ARMOR);
+            this.registerArmor(ItemIds.GOLDEN_BOOTS, ArmorMaterials.GOLD, ArmorType.BOOTS, ItemTags.REPAIRS_GOLD_ARMOR);
+            this.builderForArmor(ItemIds.NETHERITE_HELMET, ArmorMaterials.NETHERITE, ArmorType.HELMET, ItemTags.REPAIRS_NETHERITE_ARMOR)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builderForArmor(ItemIds.NETHERITE_CHESTPLATE, ArmorMaterials.NETHERITE, ArmorType.CHESTPLATE, ItemTags.REPAIRS_NETHERITE_ARMOR)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builderForArmor(ItemIds.NETHERITE_LEGGINGS, ArmorMaterials.NETHERITE, ArmorType.LEGGINGS, ItemTags.REPAIRS_NETHERITE_ARMOR)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builderForArmor(ItemIds.NETHERITE_BOOTS, ArmorMaterials.NETHERITE, ArmorType.BOOTS, ItemTags.REPAIRS_NETHERITE_ARMOR)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.registerArmor(ItemIds.TURTLE_HELMET, ArmorMaterials.TURTLE_SCUTE, ArmorType.HELMET, ItemTags.REPAIRS_TURTLE_HELMET);
+            this.registerHorseArmor(ItemIds.LEATHER_HORSE_ARMOR, ArmorMaterials.LEATHER);
+            this.registerHorseArmor(ItemIds.COPPER_HORSE_ARMOR, ArmorMaterials.COPPER);
+            this.registerHorseArmor(ItemIds.IRON_HORSE_ARMOR, ArmorMaterials.IRON);
+            this.registerHorseArmor(ItemIds.GOLDEN_HORSE_ARMOR, ArmorMaterials.GOLD);
+            this.registerHorseArmor(ItemIds.DIAMOND_HORSE_ARMOR, ArmorMaterials.DIAMOND);
+            this.builderForHorseArmor(ItemIds.NETHERITE_HORSE_ARMOR, ArmorMaterials.NETHERITE)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builder(ItemIds.WOLF_ARMOR, 1)
+                .attributeModifiers(builder -> AttributeModifiers.armor(builder, ArmorMaterials.ARMADILLO_SCUTE, ArmorType.BODY))
+                .behavior(
+                    DamageableItemBehavior.of(
                         ArmorType.BODY.getDurability(ArmorMaterials.ARMADILLO_SCUTE.durability()),
                         this.soundEvents.getOrThrow(SoundEventIds.WOLF_ARMOR_BREAK)
-                    ))
-                    .with(RepairableItemBehavior.of(
-                        this.items.getOrThrow(ArmorMaterials.ARMADILLO_SCUTE.repairIngredient())
-                    ))
-                    .with(EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.BODY)
-                        .setEquipSound(ArmorMaterials.ARMADILLO_SCUTE.equipSound())
-                        .setAsset(ArmorMaterials.ARMADILLO_SCUTE.assetId())
-                        .setAllowedEntities(HolderSet.direct(
-                            this.entityTypes.getOrThrow(EntityTypeIds.WOLF)
-                        ))
-                        .setCanBeSheared(true)
-                        .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_WOLF))
-                        .build()
-                    ))
-                    .build()
-            ));
-            ColorCollection.zipApply(ItemIds.HARNESS, ColorCollection.VALUES, (harness, dyeColor) -> this.registerable.register(
-                harness,
-                create(
-                    ItemDisplay.Builder.forItem(harness).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(1))
-                        .with(
-                            EquipmentItemBehavior.ofHarness(
-                                dyeColor,
-                                this.soundEvents,
-                                this.entityTypes,
-                                this.dispenseBehaviors
-                            )
-                        )
-                        .build()
+                    )
                 )
-            ));
-            this.registerable.register(ItemIds.COPPER_NAUTILUS_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_NAUTILUS_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.COPPER, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.ofNautilusArmor(ArmorMaterials.COPPER, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_NAUTILUS_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_NAUTILUS_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.IRON, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.ofNautilusArmor(ArmorMaterials.IRON, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLDEN_NAUTILUS_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLDEN_NAUTILUS_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.GOLD, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.ofNautilusArmor(ArmorMaterials.GOLD, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND_NAUTILUS_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND_NAUTILUS_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.DIAMOND, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.ofNautilusArmor(ArmorMaterials.DIAMOND, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_NAUTILUS_ARMOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_NAUTILUS_ARMOR).build(),
-                AttributeModifiers.armor(ArmorMaterials.NETHERITE, ArmorType.BODY),
-                ItemBehaviorSet.builder()
-                    .with(EquipmentItemBehavior.ofNautilusArmor(ArmorMaterials.NETHERITE, this.soundEvents, this.entityTypes, this.dispenseBehaviors))
-                    .build()
-            ));
+                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(ArmorMaterials.ARMADILLO_SCUTE.repairIngredient())))
+                .behavior(
+                    EquipmentItemBehavior.of(
+                        Equippable.builder(EquipmentSlot.BODY)
+                            .setEquipSound(ArmorMaterials.ARMADILLO_SCUTE.equipSound())
+                            .setAsset(ArmorMaterials.ARMADILLO_SCUTE.assetId())
+                            .setAllowedEntities(HolderSet.direct(this.entityTypes.getOrThrow(EntityTypeIds.WOLF)))
+                            .setCanBeSheared(true)
+                            .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_WOLF))
+                            .build()
+                    )
+                )
+                .register();
+            ColorCollection.zipApply(ItemIds.HARNESS, ColorCollection.VALUES, (harness, dyeColor) -> this.builder(harness, 1)
+                .behavior(
+                    EquipmentItemBehavior.of(
+                        Equippable.builder(EquipmentSlot.BODY)
+                            .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.HAPPY_GHAST_EQUIP))
+                            .setAsset(EquipmentAssets.HARNESSES.get(dyeColor))
+                            .setAllowedEntities(this.entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_HARNESS))
+                            .setEquipOnInteract(true)
+                            .setCanBeSheared(true)
+                            .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.HAPPY_GHAST_UNEQUIP))
+                            .build()
+                    )
+                )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                .register()
+            );
+            this.registerNautilusArmor(ItemIds.COPPER_NAUTILUS_ARMOR, ArmorMaterials.COPPER);
+            this.registerNautilusArmor(ItemIds.IRON_NAUTILUS_ARMOR, ArmorMaterials.IRON);
+            this.registerNautilusArmor(ItemIds.GOLDEN_NAUTILUS_ARMOR, ArmorMaterials.GOLD);
+            this.registerNautilusArmor(ItemIds.DIAMOND_NAUTILUS_ARMOR, ArmorMaterials.DIAMOND);
+            this.builderForNautilusArmor(ItemIds.NETHERITE_NAUTILUS_ARMOR, ArmorMaterials.NETHERITE)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
         }
 
         private void bootstrapSkulls() {
-            this.registerable.register(BlockItemIds.SKELETON_SKULL.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SKELETON_SKULL.item())
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.hideFromLocatorBar(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockItemIds.SKELETON_SKULL.block()),
-                        this.blocks.getOrThrow(BlockIds.SKELETON_WALL_SKULL),
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.WITHER_SKELETON_SKULL.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.WITHER_SKELETON_SKULL.item())
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.hideFromLocatorBar(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockItemIds.WITHER_SKELETON_SKULL.block()),
-                        this.blocks.getOrThrow(BlockIds.WITHER_SKELETON_WALL_SKULL),
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PLAYER_HEAD.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PLAYER_HEAD.item())
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.hideFromLocatorBar(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockItemIds.PLAYER_HEAD.block()),
-                        this.blocks.getOrThrow(BlockIds.PLAYER_WALL_HEAD),
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.ZOMBIE_HEAD.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.ZOMBIE_HEAD.item())
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.hideFromLocatorBar(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockItemIds.ZOMBIE_HEAD.block()),
-                        this.blocks.getOrThrow(BlockIds.ZOMBIE_WALL_HEAD),
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CREEPER_HEAD.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CREEPER_HEAD.item())
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.hideFromLocatorBar(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockItemIds.CREEPER_HEAD.block()),
-                        this.blocks.getOrThrow(BlockIds.CREEPER_WALL_HEAD),
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.DRAGON_HEAD.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.DRAGON_HEAD.item())
-                    .rarity(Rarity.RARE)
-                    .build(),
-                AttributeModifiers.hideFromLocatorBar(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockItemIds.DRAGON_HEAD.block()),
-                        this.blocks.getOrThrow(BlockIds.DRAGON_WALL_HEAD),
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.PIGLIN_HEAD.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.PIGLIN_HEAD.item())
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                AttributeModifiers.hideFromLocatorBar(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EquipmentItemBehavior.forSkull(
-                        this.blocks.getOrThrow(BlockItemIds.PIGLIN_HEAD.block()),
-                        this.blocks.getOrThrow(BlockIds.PIGLIN_WALL_HEAD),
-                        this.dispenseBehaviors
-                    ))
-                    .build()
-            ));
+            this.registerSkull(BlockItemIds.SKELETON_SKULL, Rarity.UNCOMMON, BlockIds.SKELETON_WALL_SKULL);
+            this.registerSkull(BlockItemIds.WITHER_SKELETON_SKULL, Rarity.UNCOMMON, BlockIds.WITHER_SKELETON_WALL_SKULL);
+            this.registerSkull(BlockItemIds.PLAYER_HEAD, Rarity.UNCOMMON, BlockIds.PLAYER_WALL_HEAD);
+            this.registerSkull(BlockItemIds.ZOMBIE_HEAD, Rarity.UNCOMMON, BlockIds.ZOMBIE_WALL_HEAD);
+            this.registerSkull(BlockItemIds.CREEPER_HEAD, Rarity.UNCOMMON, BlockIds.CREEPER_WALL_HEAD);
+            this.registerSkull(BlockItemIds.DRAGON_HEAD, Rarity.RARE, BlockIds.DRAGON_WALL_HEAD);
+            this.registerSkull(BlockItemIds.PIGLIN_HEAD, Rarity.UNCOMMON, BlockIds.PIGLIN_WALL_HEAD);
         }
 
         private void bootstrapFuel() {
-            this.registerable.register(BlockItemIds.COAL_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.COAL_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.COAL_BLOCK.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.COAL_BLOCK))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLAZE_ROD, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLAZE_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(FuelItemBehavior.of(FuelTimes.BLAZE_ROD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COAL, create(
-                ItemDisplay.Builder.forItem(ItemIds.COAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(FuelItemBehavior.of(FuelTimes.COAL))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CHARCOAL, create(
-                ItemDisplay.Builder.forItem(ItemIds.CHARCOAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(FuelItemBehavior.of(FuelTimes.COAL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.BOOKSHELF.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.BOOKSHELF.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BOOKSHELF.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CHISELED_BOOKSHELF.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CHISELED_BOOKSHELF.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CHISELED_BOOKSHELF.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.LECTERN.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.LECTERN.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LECTERN.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CHEST.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CHEST.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CHEST.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_CHEST)))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.TRAPPED_CHEST.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.TRAPPED_CHEST.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TRAPPED_CHEST.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.LADDER.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.LADDER.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LADDER.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CRAFTING_TABLE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CRAFTING_TABLE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CRAFTING_TABLE.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.JUKEBOX.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.JUKEBOX.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.JUKEBOX.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.NOTE_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.NOTE_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NOTE_BLOCK.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.LOOM.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.LOOM.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LOOM.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.COMPOSTER.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.COMPOSTER.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.COMPOSTER.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.BARREL.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.BARREL.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.BARREL.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.CARTOGRAPHY_TABLE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.CARTOGRAPHY_TABLE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARTOGRAPHY_TABLE.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.FLETCHING_TABLE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.FLETCHING_TABLE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.FLETCHING_TABLE.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SMITHING_TABLE.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SMITHING_TABLE.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SMITHING_TABLE.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.DAYLIGHT_DETECTOR.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.DAYLIGHT_DETECTOR.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DAYLIGHT_DETECTOR.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.DEAD_BUSH.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.DEAD_BUSH.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.DEAD_BUSH.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .addCancellable(
-                        ItemEvent.BEFORE_USE_ON_BLOCK,
-                        Actions.potBlock(this.blocks, BlockIds.POTTED_DEAD_BUSH)
+            this.builderForBlock(BlockItemIds.COAL_BLOCK)
+                .behavior(FuelItemBehavior.of(FuelTimes.COAL_BLOCK))
+                .register();
+            this.registerFuel(ItemIds.BLAZE_ROD, FuelTimes.BLAZE_ROD);
+            this.registerFuel(ItemIds.COAL, FuelTimes.COAL);
+            this.registerFuel(ItemIds.CHARCOAL, FuelTimes.COAL);
+            this.builderForBlock(BlockItemIds.BOOKSHELF)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.CHISELED_BOOKSHELF)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.LECTERN)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.CHEST)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_CHEST)))
+                .register();
+            this.builderForBlock(BlockItemIds.TRAPPED_CHEST)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.LADDER)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.CRAFTING_TABLE)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.JUKEBOX)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.NOTE_BLOCK)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.LOOM)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.COMPOSTER)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.BARREL)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.CARTOGRAPHY_TABLE)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.FLETCHING_TABLE)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.SMITHING_TABLE)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.DAYLIGHT_DETECTOR)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
+            this.builderForBlock(BlockItemIds.DEAD_BUSH)
+                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, BlockIds.POTTED_DEAD_BUSH)
+                )
+                .register();
+            this.registerFuel(ItemIds.STICK, FuelTimes.SMALL_WOODEN_ITEM);
+            this.registerFuel(ItemIds.BOWL, FuelTimes.SMALL_WOODEN_ITEM);
+            this.builderForBlock(BlockItemIds.SCAFFOLDING)
+                .behavior(FuelItemBehavior.of(FuelTimes.SCAFFOLDING))
+                .register();
+            this.builderForBlock(BlockItemIds.SHORT_DRY_GRASS)
+                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.TALL_DRY_GRASS)
+                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.LEAF_LITTER)
+                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+        }
+
+        private Builder builderForProjectile(ResourceKey<Item> item, int maxStackSize, ResourceKey<EntityType<?>> entity) {
+            return this.builder(item, maxStackSize)
+                .behavior(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(entity)));
+        }
+
+        private void registerThrowableEgg(ResourceKey<Item> item, ResourceKey<ChickenVariant> chickenVariant) {
+            this.builder(item, 16)
+                .behavior(ThrowableItemBehavior.of(1.5f))
+                .behavior(
+                    ProjectileItemBehavior.of(
+                        this.entityTypes.getOrThrow(EntityTypeIds.EGG),
+                        DataComponentPatch.builder()
+                            .set(DataComponents.CHICKEN_VARIANT, this.chickenVariants.getOrThrow(chickenVariant))
+                            .build()
                     )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.STICK, create(
-                ItemDisplay.Builder.forItem(ItemIds.STICK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(FuelItemBehavior.of(FuelTimes.SMALL_WOODEN_ITEM))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BOWL, create(
-                ItemDisplay.Builder.forItem(ItemIds.BOWL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(FuelItemBehavior.of(FuelTimes.SMALL_WOODEN_ITEM))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SCAFFOLDING.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SCAFFOLDING.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SCAFFOLDING.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.SCAFFOLDING))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.SHORT_DRY_GRASS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.SHORT_DRY_GRASS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SHORT_DRY_GRASS.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.TALL_DRY_GRASS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.TALL_DRY_GRASS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TALL_DRY_GRASS.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.LEAF_LITTER.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.LEAF_LITTER.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.LEAF_LITTER.block())))
-                    .with(FuelItemBehavior.of(FuelTimes.PLANT))
-                    .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                    .build()
-            ));
+                )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .register();
         }
 
         private void bootstrapProjectiles() {
-            this.registerable.register(ItemIds.ARROW, create(
-                ItemDisplay.Builder.forItem(ItemIds.ARROW).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.ARROW)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SNOWBALL, create(
-                ItemDisplay.Builder.forItem(ItemIds.SNOWBALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(ThrowableItemBehavior.of(1.5f))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.SNOWBALL)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(ThrowableItemBehavior.of(1.5f))
-                    .with(ProjectileItemBehavior.of(
-                        this.entityTypes.getOrThrow(EntityTypeIds.EGG),
-                        DataComponentPatch.builder()
-                            .set(
-                                DataComponents.CHICKEN_VARIANT,
-                                this.chickenVariants.getOrThrow(ChickenVariants.TEMPERATE)
-                            )
-                            .build()
-                    ))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLUE_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLUE_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(ThrowableItemBehavior.of(1.5f))
-                    .with(ProjectileItemBehavior.of(
-                        this.entityTypes.getOrThrow(EntityTypeIds.EGG),
-                        DataComponentPatch.builder()
-                            .set(
-                                DataComponents.CHICKEN_VARIANT,
-                                this.chickenVariants.getOrThrow(ChickenVariants.COLD)
-                            )
-                            .build()
-                    ))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BROWN_EGG, create(
-                ItemDisplay.Builder.forItem(ItemIds.BROWN_EGG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(ThrowableItemBehavior.of(1.5f))
-                    .with(ProjectileItemBehavior.of(
-                        this.entityTypes.getOrThrow(EntityTypeIds.EGG),
-                        DataComponentPatch.builder()
-                            .set(
-                                DataComponents.CHICKEN_VARIANT,
-                                this.chickenVariants.getOrThrow(ChickenVariants.WARM)
-                            )
-                            .build()
-                    ))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ENDER_PEARL, create(
-                ItemDisplay.Builder.forItem(ItemIds.ENDER_PEARL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(ThrowableItemBehavior.of(1.5f))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.ENDER_PEARL)))
-                    .with(CooldownItemBehavior.of(20))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ENDER_EYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.ENDER_EYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ThrowableItemBehavior.of())
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.EYE_OF_ENDER)))
-                    .with(PreventUseWhenUsedOnTargetItemBehavior.forBlock())
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+            this.builderForProjectile(ItemIds.ARROW, 64, EntityTypeIds.ARROW)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .register();
+            this.builderForProjectile(ItemIds.SNOWBALL, 16, EntityTypeIds.SNOWBALL)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .behavior(ThrowableItemBehavior.of(1.5f))
+                .register();
+            this.registerThrowableEgg(ItemIds.EGG, ChickenVariants.TEMPERATE);
+            this.registerThrowableEgg(ItemIds.BLUE_EGG, ChickenVariants.COLD);
+            this.registerThrowableEgg(ItemIds.BROWN_EGG, ChickenVariants.WARM);
+            this.builderForProjectile(ItemIds.ENDER_PEARL, 16, EntityTypeIds.ENDER_PEARL)
+                .behavior(ThrowableItemBehavior.of(1.5f))
+                .behavior(CooldownItemBehavior.of(20))
+                .register();
+            this.builderForProjectile(ItemIds.ENDER_EYE, 64, EntityTypeIds.EYE_OF_ENDER)
+                .behavior(ThrowableItemBehavior.of())
+                .behavior(PreventUseWhenUsedOnTargetItemBehavior.forBlock())
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.location()
@@ -4896,1134 +2392,275 @@ public class Items {
                                     -0.1875d, 0.1875d))
                                 .build())
                             .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED))
-                    ))
-                    .add(ItemEvent.THROW_PROJECTILE, ActionEntry.of(
+                    )
+                )
+                .event(
+                    ItemEvent.THROW_PROJECTILE,
+                    ActionEntry.of(
                         PlaySoundAction.builder(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.ENDER_EYE_LAUNCH), SoundSource.NEUTRAL)
                             .pitch(0.33f, 0.5f)
                             .build()
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPERIENCE_BOTTLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.EXPERIENCE_BOTTLE)
-                    .rarity(Rarity.UNCOMMON)
-                    .glint()
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ThrowableItemBehavior.of(0.7f, -20.0f))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.EXPERIENCE_BOTTLE)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FIRE_CHARGE, create(
-                ItemDisplay.Builder.forItem(ItemIds.FIRE_CHARGE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.SMALL_FIREBALL)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_CHARGE)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builderForProjectile(ItemIds.EXPERIENCE_BOTTLE, 64, EntityTypeIds.EXPERIENCE_BOTTLE)
+                .display(display -> display.rarity(Rarity.UNCOMMON).glint())
+                .behavior(ThrowableItemBehavior.of(0.7f, -20.0f))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
+                .register();
+            this.builderForProjectile(ItemIds.FIRE_CHARGE, 64, EntityTypeIds.SMALL_FIREBALL)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_CHARGE)))
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(this.actions.getOrThrow(Actions.LIGHT_BLOCK))
                             .add(DecrementItemAction.of(1))
                             .add(PlaySoundAction.builder(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.FIRE_CHARGE_USE), SoundSource.BLOCKS)
                                 .pitch(0.8f, 1.2f)
                                 .build())
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WIND_CHARGE, create(
-                ItemDisplay.Builder.forItem(ItemIds.WIND_CHARGE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ThrowableItemBehavior.of(1.5f))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.WIND_CHARGE)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .with(CooldownItemBehavior.of(10))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FIREWORK_ROCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.FIREWORK_ROCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(FireworkItemBehavior.INSTANCE)
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.FIREWORK_ROCKET)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPLASH_POTION, create(
-                ItemDisplay.Builder.forItem(ItemIds.SPLASH_POTION).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(PotionHolderItemBehavior.of(1.0f))
-                    .with(ThrowableItemBehavior.of(0.5f, -20.0f))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.SPLASH_POTION)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPECTRAL_ARROW, create(
-                ItemDisplay.Builder.forItem(ItemIds.SPECTRAL_ARROW).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.SPECTRAL_ARROW)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TIPPED_ARROW, create(
-                ItemDisplay.Builder.forItem(ItemIds.TIPPED_ARROW).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(PotionHolderItemBehavior.of(0.125f))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.ARROW)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LINGERING_POTION, create(
-                ItemDisplay.Builder.forItem(ItemIds.LINGERING_POTION).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(PotionHolderItemBehavior.of(0.25f))
-                    .with(ThrowableItemBehavior.of(0.5f, -20.0f))
-                    .with(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.LINGERING_POTION)))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
-                    .build()
-            ));
+                    )
+                )
+                .register();
+            this.builderForProjectile(ItemIds.WIND_CHARGE, 64, EntityTypeIds.WIND_CHARGE)
+                .behavior(ThrowableItemBehavior.of(1.5f))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .behavior(CooldownItemBehavior.of(10))
+                .register();
+            this.builderForProjectile(ItemIds.FIREWORK_ROCKET, 64, EntityTypeIds.FIREWORK_ROCKET)
+                .behavior(FireworkItemBehavior.INSTANCE)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
+                .register();
+            this.builderForProjectile(ItemIds.SPLASH_POTION, 1, EntityTypeIds.SPLASH_POTION)
+                .behavior(PotionHolderItemBehavior.of(1.0f))
+                .behavior(ThrowableItemBehavior.of(0.5f, -20.0f))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
+                .register();
+            this.builderForProjectile(ItemIds.SPECTRAL_ARROW, 64, EntityTypeIds.SPECTRAL_ARROW)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .register();
+            this.builderForProjectile(ItemIds.TIPPED_ARROW, 64, EntityTypeIds.ARROW)
+                .behavior(PotionHolderItemBehavior.of(0.125f))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .register();
+            this.builderForProjectile(ItemIds.LINGERING_POTION, 1, EntityTypeIds.LINGERING_POTION)
+                .behavior(PotionHolderItemBehavior.of(0.25f))
+                .behavior(ThrowableItemBehavior.of(0.5f, -20.0f))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
+                .register();
         }
 
         private void bootstrapRecords() {
-            this.registerable.register(ItemIds.MUSIC_DISC_13, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_13)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.THIRTEEN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_CAT, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_CAT)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CAT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_BLOCKS, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_BLOCKS)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.BLOCKS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_CHIRP, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_CHIRP)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CHIRP)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_CREATOR, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_CREATOR)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CREATOR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_CREATOR_MUSIC_BOX, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_CREATOR_MUSIC_BOX)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.CREATOR_MUSIC_BOX)))
-                    .build()
-            ));
-
-            this.registerable.register(ItemIds.MUSIC_DISC_FAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_FAR)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.FAR)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_MALL, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_MALL)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.MALL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_MELLOHI, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_MELLOHI)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.MELLOHI)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_STAL, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_STAL)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.STAL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_STRAD, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_STRAD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.STRAD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_WARD, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_WARD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.WARD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_11, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_11)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.ELEVEN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_WAIT, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_WAIT)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.WAIT)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_OTHERSIDE, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_OTHERSIDE)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.OTHERSIDE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_RELIC, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_RELIC)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.RELIC)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_PIGSTEP, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_PIGSTEP)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.PIGSTEP)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_PRECIPICE, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_PRECIPICE)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.PRECIPICE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_5, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_5)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.FIVE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DISC_FRAGMENT_5, create(
-                ItemDisplay.Builder.forItem(ItemIds.DISC_FRAGMENT_5)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.description(ItemIds.DISC_FRAGMENT_5))
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_TEARS, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_TEARS)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.TEARS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_LAVA_CHICKEN, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_LAVA_CHICKEN)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.LAVA_CHICKEN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MUSIC_DISC_BOUNCE, create(
-                ItemDisplay.Builder.forItem(ItemIds.MUSIC_DISC_BOUNCE)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(JukeboxSongs.BOUNCE)))
-                    .build()
-            ));
+            this.builder(ItemIds.DISC_FRAGMENT_5)
+                .display(display -> display.rarity(Rarity.UNCOMMON).tooltip(Tooltips.description(ItemIds.DISC_FRAGMENT_5)))
+                .register();
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_5, Rarity.UNCOMMON, JukeboxSongs.FIVE);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_11, Rarity.UNCOMMON, JukeboxSongs.ELEVEN);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_13, Rarity.UNCOMMON, JukeboxSongs.THIRTEEN);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_BLOCKS, Rarity.UNCOMMON, JukeboxSongs.BLOCKS);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_BOUNCE, Rarity.UNCOMMON, JukeboxSongs.BOUNCE);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_CAT, Rarity.UNCOMMON, JukeboxSongs.CAT);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_CHIRP, Rarity.UNCOMMON, JukeboxSongs.CHIRP);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_CREATOR, Rarity.RARE, JukeboxSongs.CREATOR);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_CREATOR_MUSIC_BOX, Rarity.UNCOMMON, JukeboxSongs.CREATOR_MUSIC_BOX);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_FAR, Rarity.UNCOMMON, JukeboxSongs.FAR);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_LAVA_CHICKEN, Rarity.RARE, JukeboxSongs.LAVA_CHICKEN);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_MALL, Rarity.UNCOMMON, JukeboxSongs.MALL);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_MELLOHI, Rarity.UNCOMMON, JukeboxSongs.MELLOHI);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_OTHERSIDE, Rarity.RARE, JukeboxSongs.OTHERSIDE);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_PIGSTEP, Rarity.RARE, JukeboxSongs.PIGSTEP);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_PRECIPICE, Rarity.UNCOMMON, JukeboxSongs.PRECIPICE);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_RELIC, Rarity.UNCOMMON, JukeboxSongs.RELIC);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_STAL, Rarity.UNCOMMON, JukeboxSongs.STAL);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_STRAD, Rarity.UNCOMMON, JukeboxSongs.STRAD);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_TEARS, Rarity.UNCOMMON, JukeboxSongs.TEARS);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_WAIT, Rarity.UNCOMMON, JukeboxSongs.WAIT);
+            this.registerMusicDisc(ItemIds.MUSIC_DISC_WARD, Rarity.UNCOMMON, JukeboxSongs.WARD);
         }
 
         private void bootstrapBuckets() {
-            this.registerable.register(ItemIds.BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(BucketItemBehavior.drainFluid(this.dispenseBehaviors))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WATER_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.WATER_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeFluid(
-                            this.fluids.getOrThrow(FluidIds.WATER),
-                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LAVA_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.LAVA_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeFluid(
-                            this.fluids.getOrThrow(FluidIds.LAVA),
-                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_LAVA),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .with(FuelItemBehavior.of(FuelTimes.LAVA, this.items.getOrThrow(ItemIds.BUCKET)))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.POWDER_SNOW.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.POWDER_SNOW.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeBlock(
-                            this.blocks.getOrThrow(BlockItemIds.POWDER_SNOW.block()),
-                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_POWDER_SNOW),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PUFFERFISH_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.PUFFERFISH_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeFluidWithEntity(
-                            this.fluids.getOrThrow(FluidIds.WATER),
-                            this.entityTypes.getOrThrow(EntityTypeIds.PUFFERFISH),
-                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .with(FoodItemBehavior.of(Foods.PUFFERFISH))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SALMON_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.SALMON_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeFluidWithEntity(
-                            this.fluids.getOrThrow(FluidIds.WATER),
-                            this.entityTypes.getOrThrow(EntityTypeIds.SALMON),
-                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .with(FoodItemBehavior.of(Foods.SALMON))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COD_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.COD_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeFluidWithEntity(
-                            this.fluids.getOrThrow(FluidIds.WATER),
-                            this.entityTypes.getOrThrow(EntityTypeIds.COD),
-                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .with(FoodItemBehavior.of(Foods.COD))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TROPICAL_FISH_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.TROPICAL_FISH_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeFluidWithEntity(
-                            this.fluids.getOrThrow(FluidIds.WATER),
-                            this.entityTypes.getOrThrow(EntityTypeIds.TROPICAL_FISH),
-                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_FISH),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .with(FoodItemBehavior.of(Foods.TROPICAL_FISH))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.AXOLOTL_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.AXOLOTL_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeFluidWithEntity(
-                            this.fluids.getOrThrow(FluidIds.WATER),
-                            this.entityTypes.getOrThrow(EntityTypeIds.AXOLOTL),
-                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_AXOLOTL),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TADPOLE_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.TADPOLE_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeFluidWithEntity(
-                            this.fluids.getOrThrow(FluidIds.WATER),
-                            this.entityTypes.getOrThrow(EntityTypeIds.TADPOLE),
-                            this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_TADPOLE),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SULFUR_CUBE_BUCKET, create(
-                ItemDisplay.Builder.forItem(ItemIds.SULFUR_CUBE_BUCKET).build(),
-                ItemBehaviorSet.builder()
-                    .with(
-                        BucketItemBehavior.placeEntity(
-                            this.entityTypes.getOrThrow(EntityTypeIds.SULFUR_CUBE),
-                            this.items,
-                            this.dispenseBehaviors
-                        )
-                    )
-                    .build()
-            ));
+            this.registerBucket(ItemIds.BUCKET, 16, BucketItemBehavior.drainFluid());
+            this.builderForBucketWithFluid(ItemIds.WATER_BUCKET, FluidIds.WATER, SoundEventIds.BUCKET_EMPTY)
+                .register();
+            this.builderForBucketWithFluid(ItemIds.LAVA_BUCKET, FluidIds.LAVA, SoundEventIds.BUCKET_EMPTY_LAVA)
+                .behavior(FuelItemBehavior.of(FuelTimes.LAVA, this.items.getOrThrow(ItemIds.BUCKET)))
+                .register();
+            this.registerBucket(
+                BlockItemIds.POWDER_SNOW.item(),
+                1,
+                BucketItemBehavior.placeBlock(
+                    this.blocks.getOrThrow(BlockItemIds.POWDER_SNOW.block()),
+                    this.soundEvents.getOrThrow(SoundEventIds.BUCKET_EMPTY_POWDER_SNOW),
+                    this.items
+                )
+            );
+            this.builderForBucketWithEntity(ItemIds.PUFFERFISH_BUCKET, EntityTypeIds.PUFFERFISH, SoundEventIds.BUCKET_EMPTY_FISH)
+                .behavior(FoodItemBehavior.of(Foods.PUFFERFISH))
+                .register();
+            this.builderForBucketWithEntity(ItemIds.SALMON_BUCKET, EntityTypeIds.SALMON, SoundEventIds.BUCKET_EMPTY_FISH)
+                .behavior(FoodItemBehavior.of(Foods.SALMON))
+                .register();
+            this.builderForBucketWithEntity(ItemIds.COD_BUCKET, EntityTypeIds.COD, SoundEventIds.BUCKET_EMPTY_FISH)
+                .behavior(FoodItemBehavior.of(Foods.COD))
+                .register();
+            this.builderForBucketWithEntity(ItemIds.TROPICAL_FISH_BUCKET, EntityTypeIds.TROPICAL_FISH, SoundEventIds.BUCKET_EMPTY_FISH)
+                .behavior(FoodItemBehavior.of(Foods.TROPICAL_FISH))
+                .register();
+            this.builderForBucketWithEntity(ItemIds.AXOLOTL_BUCKET, EntityTypeIds.AXOLOTL, SoundEventIds.BUCKET_EMPTY_AXOLOTL)
+                .register();
+            this.builderForBucketWithEntity(ItemIds.TADPOLE_BUCKET, EntityTypeIds.TADPOLE, SoundEventIds.BUCKET_EMPTY_TADPOLE)
+                .register();
+            this.registerBucket(
+                ItemIds.SULFUR_CUBE_BUCKET,
+                1,
+                BucketItemBehavior.placeEntity(
+                    this.entityTypes.getOrThrow(EntityTypeIds.SULFUR_CUBE),
+                    this.items
+                )
+            );
         }
 
         private void bootstrapSmithingTemplates() {
-            this.registerable.register(ItemIds.NETHERITE_UPGRADE_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingUpgrade(Identifier.withDefaultNamespace("netherite_upgrade")))
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.ITEM_UPGRADE))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.COAST_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.WILD_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WARD_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.WARD_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EYE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.EYE_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.VEX_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RIB_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.RIB_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.EPIC)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.HOST_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE)
-                    .rarity(Rarity.UNCOMMON)
-                    .tooltip(Tooltips.smithingTrimPattern())
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(SmithingTemplateProviderItemBehavior.of(SmithingTemplates.TRIM_PATTERN))
-                    .build()
-            ));
+            this.registerSmithingTemplate(
+                ItemIds.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
+                Rarity.UNCOMMON,
+                Tooltips.smithingUpgrade(Identifier.withDefaultNamespace("netherite_upgrade")),
+                SmithingTemplates.ITEM_UPGRADE
+            );
+            this.registerTrimSmithingTemplate(ItemIds.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.COAST_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.WILD_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.WARD_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.EYE_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.VEX_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.RIB_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.EPIC);
+            this.registerTrimSmithingTemplate(ItemIds.RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
+            this.registerTrimSmithingTemplate(ItemIds.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
         }
 
         private void bootstrapBannerPatterns() {
-            this.registerable.register(ItemIds.FLOWER_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.FLOWER_BANNER_PATTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_FLOWER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CREEPER_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.CREEPER_BANNER_PATTERN)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_CREEPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SKULL_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.SKULL_BANNER_PATTERN)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_SKULL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOJANG_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.MOJANG_BANNER_PATTERN)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_MOJANG)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLOBE_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.GLOBE_BANNER_PATTERN).build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_GLOBE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PIGLIN_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.PIGLIN_BANNER_PATTERN)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_PIGLIN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FLOW_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.FLOW_BANNER_PATTERN)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_FLOW)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GUSTER_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.GUSTER_BANNER_PATTERN)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_GUSTER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FIELD_MASONED_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.FIELD_MASONED_BANNER_PATTERN)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_FIELD_MASONED)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BORDURE_INDENTED_BANNER_PATTERN, create(
-                ItemDisplay.Builder.forItem(ItemIds.BORDURE_INDENTED_BANNER_PATTERN)
-                    .rarity(Rarity.RARE)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(BannerPatternTags.PATTERN_ITEM_BORDURE_INDENTED)))
-                    .build()
-            ));
+            this.registerBannerPattern(ItemIds.FLOWER_BANNER_PATTERN, Rarity.COMMON, BannerPatternTags.PATTERN_ITEM_FLOWER);
+            this.registerBannerPattern(ItemIds.CREEPER_BANNER_PATTERN, Rarity.UNCOMMON, BannerPatternTags.PATTERN_ITEM_CREEPER);
+            this.registerBannerPattern(ItemIds.SKULL_BANNER_PATTERN, Rarity.RARE, BannerPatternTags.PATTERN_ITEM_SKULL);
+            this.registerBannerPattern(ItemIds.MOJANG_BANNER_PATTERN, Rarity.RARE, BannerPatternTags.PATTERN_ITEM_MOJANG);
+            this.registerBannerPattern(ItemIds.GLOBE_BANNER_PATTERN, Rarity.COMMON, BannerPatternTags.PATTERN_ITEM_GLOBE);
+            this.registerBannerPattern(ItemIds.PIGLIN_BANNER_PATTERN, Rarity.UNCOMMON, BannerPatternTags.PATTERN_ITEM_PIGLIN);
+            this.registerBannerPattern(ItemIds.FLOW_BANNER_PATTERN, Rarity.RARE, BannerPatternTags.PATTERN_ITEM_FLOW);
+            this.registerBannerPattern(ItemIds.GUSTER_BANNER_PATTERN, Rarity.RARE, BannerPatternTags.PATTERN_ITEM_GUSTER);
+            this.registerBannerPattern(ItemIds.FIELD_MASONED_BANNER_PATTERN, Rarity.RARE, BannerPatternTags.PATTERN_ITEM_FIELD_MASONED);
+            this.registerBannerPattern(ItemIds.BORDURE_INDENTED_BANNER_PATTERN, Rarity.RARE, BannerPatternTags.PATTERN_ITEM_BORDURE_INDENTED);
         }
 
         private void bootstrapDecoratedPotPatterns() {
-            this.registerable.register(ItemIds.BRICK, create(
-                ItemDisplay.Builder.forItem(ItemIds.BRICK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BLANK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ANGLER_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.ANGLER_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ANGLER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ARCHER_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.ARCHER_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ARCHER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ARMS_UP_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.ARMS_UP_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.ARMS_UP)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLADE_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLADE_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BLADE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BREWER_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.BREWER_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BREWER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BURN_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.BURN_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.BURN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DANGER_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.DANGER_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.DANGER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EXPLORER_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.EXPLORER_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.EXPLORER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FLOW_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.FLOW_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.FLOW)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FRIEND_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.FRIEND_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.FRIEND)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GUSTER_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.GUSTER_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.GUSTER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HEART_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.HEART_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HEART)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HEARTBREAK_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.HEARTBREAK_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HEARTBREAK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HOWL_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.HOWL_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.HOWL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MINER_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.MINER_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.MINER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MOURNER_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.MOURNER_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.MOURNER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PLENTY_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.PLENTY_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.PLENTY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRIZE_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.PRIZE_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.PRIZE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SCRAPE_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.SCRAPE_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SCRAPE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHEAF_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.SHEAF_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SHEAF)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHELTER_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.SHELTER_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SHELTER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SKULL_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.SKULL_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SKULL)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SNORT_POTTERY_SHERD, create(
-                ItemDisplay.Builder.forItem(ItemIds.SNORT_POTTERY_SHERD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(DecoratedPotPatterns.SNORT)))
-                    .build()
-            ));
+            this.registerDecoratedPotPattern(ItemIds.BRICK, Rarity.COMMON, DecoratedPotPatterns.BLANK);
+            this.registerDecoratedPotPattern(ItemIds.ANGLER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.ANGLER);
+            this.registerDecoratedPotPattern(ItemIds.ARCHER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.ARCHER);
+            this.registerDecoratedPotPattern(ItemIds.ARMS_UP_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.ARMS_UP);
+            this.registerDecoratedPotPattern(ItemIds.BLADE_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.BLADE);
+            this.registerDecoratedPotPattern(ItemIds.BREWER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.BREWER);
+            this.registerDecoratedPotPattern(ItemIds.BURN_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.BURN);
+            this.registerDecoratedPotPattern(ItemIds.DANGER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.DANGER);
+            this.registerDecoratedPotPattern(ItemIds.EXPLORER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.EXPLORER);
+            this.registerDecoratedPotPattern(ItemIds.FLOW_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.FLOW);
+            this.registerDecoratedPotPattern(ItemIds.FRIEND_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.FRIEND);
+            this.registerDecoratedPotPattern(ItemIds.GUSTER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.GUSTER);
+            this.registerDecoratedPotPattern(ItemIds.HEART_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.HEART);
+            this.registerDecoratedPotPattern(ItemIds.HEARTBREAK_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.HEARTBREAK);
+            this.registerDecoratedPotPattern(ItemIds.HOWL_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.HOWL);
+            this.registerDecoratedPotPattern(ItemIds.MINER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.MINER);
+            this.registerDecoratedPotPattern(ItemIds.MOURNER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.MOURNER);
+            this.registerDecoratedPotPattern(ItemIds.PLENTY_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.PLENTY);
+            this.registerDecoratedPotPattern(ItemIds.PRIZE_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.PRIZE);
+            this.registerDecoratedPotPattern(ItemIds.SCRAPE_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SCRAPE);
+            this.registerDecoratedPotPattern(ItemIds.SHEAF_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SHEAF);
+            this.registerDecoratedPotPattern(ItemIds.SHELTER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SHELTER);
+            this.registerDecoratedPotPattern(ItemIds.SKULL_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SKULL);
+            this.registerDecoratedPotPattern(ItemIds.SNORT_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SNORT);
         }
 
         private void bootstrapImmuneToDamage() {
-            this.registerable.register(BlockItemIds.ANCIENT_DEBRIS.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.ANCIENT_DEBRIS.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.ANCIENT_DEBRIS.block())))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .build()
-            ));
-            this.registerable.register(BlockItemIds.NETHERITE_BLOCK.item(), create(
-                ItemDisplay.Builder.forBlock(BlockItemIds.NETHERITE_BLOCK.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.NETHERITE_BLOCK.block())))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_INGOT, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_INGOT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.NETHERITE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHERITE_SCRAP, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHERITE_SCRAP).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHER_STAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHER_STAR)
-                    .rarity(Rarity.RARE)
-                    .glint()
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_EXPLOSION)))
-                    .build()
-            ));
+            this.builderForBlock(BlockItemIds.ANCIENT_DEBRIS)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builderForBlock(BlockItemIds.NETHERITE_BLOCK)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builder(ItemIds.NETHERITE_INGOT)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.NETHERITE)))
+                .register();
+            this.builder(ItemIds.NETHERITE_SCRAP)
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .register();
+            this.builder(ItemIds.NETHER_STAR)
+                .display(display -> display.rarity(Rarity.RARE).glint())
+                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_EXPLOSION)))
+                .register();
         }
 
         private void bootstrapTrimMaterialProviders() {
-            this.registerable.register(BlockItemIds.REDSTONE_DUST.item(), create(
-                ItemDisplay.Builder.forItem(BlockItemIds.REDSTONE_DUST.item()).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.REDSTONE_DUST.block())))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.REDSTONE)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DIAMOND, create(
-                ItemDisplay.Builder.forItem(ItemIds.DIAMOND).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.DIAMOND)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.EMERALD, create(
-                ItemDisplay.Builder.forItem(ItemIds.EMERALD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.EMERALD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LAPIS_LAZULI, create(
-                ItemDisplay.Builder.forItem(ItemIds.LAPIS_LAZULI).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.LAPIS)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.QUARTZ, create(
-                ItemDisplay.Builder.forItem(ItemIds.QUARTZ).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.QUARTZ)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.AMETHYST_SHARD, create(
-                ItemDisplay.Builder.forItem(ItemIds.AMETHYST_SHARD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.AMETHYST)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_INGOT, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_INGOT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.IRON)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_INGOT, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_INGOT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.COPPER)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLD_INGOT, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLD_INGOT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.GOLD)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RESIN_BRICK, create(
-                ItemDisplay.Builder.forItem(ItemIds.RESIN_BRICK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.RESIN)))
-                    .build()
-            ));
+            this.builder(BlockItemIds.REDSTONE_DUST.item())
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.REDSTONE_DUST.block())))
+                .behavior(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.REDSTONE)))
+                .register();
+            this.registerTrimMaterialProvider(ItemIds.DIAMOND, TrimMaterials.DIAMOND);
+            this.registerTrimMaterialProvider(ItemIds.EMERALD, TrimMaterials.EMERALD);
+            this.registerTrimMaterialProvider(ItemIds.LAPIS_LAZULI, TrimMaterials.LAPIS);
+            this.registerTrimMaterialProvider(ItemIds.QUARTZ, TrimMaterials.QUARTZ);
+            this.registerTrimMaterialProvider(ItemIds.AMETHYST_SHARD, TrimMaterials.AMETHYST);
+            this.registerTrimMaterialProvider(ItemIds.IRON_INGOT, TrimMaterials.IRON);
+            this.registerTrimMaterialProvider(ItemIds.COPPER_INGOT, TrimMaterials.COPPER);
+            this.registerTrimMaterialProvider(ItemIds.GOLD_INGOT, TrimMaterials.GOLD);
+            this.registerTrimMaterialProvider(ItemIds.RESIN_BRICK, TrimMaterials.RESIN);
         }
 
         private void bootstrapMiscellaneous() {
-            this.registerable.register(
-                BlockItemIds.AIR.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(BlockItemIds.AIR.item()).build()
+            new Builder(BlockItemIds.AIR.item(), this.registerable)
+                .display(ItemDisplay.Builder::blockName)
+                .register();
+            this.builder(ItemIds.SADDLE, 1)
+                .behavior(
+                    EquipmentItemBehavior.of(
+                        Equippable.builder(EquipmentSlot.SADDLE)
+                            .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.HORSE_SADDLE))
+                            .setAsset(EquipmentAssets.SADDLE)
+                            .setAllowedEntities(this.entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_SADDLE))
+                            .setEquipOnInteract(true)
+                            .setCanBeSheared(true)
+                            .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.SADDLE_UNEQUIP))
+                            .build()
+                    )
                 )
-            );
-            this.registerable.register(ItemIds.SADDLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.SADDLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.SADDLE)
-                        .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.HORSE_SADDLE))
-                        .setAsset(EquipmentAssets.SADDLE)
-                        .setAllowedEntities(this.entityTypes.getOrThrow(EntityTypeTags.CAN_EQUIP_SADDLE))
-                        .setEquipOnInteract(true)
-                        .setCanBeSheared(true)
-                        .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.SADDLE_UNEQUIP))
-                        .build()
-                    ))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TURTLE_SCUTE, create(
-                ItemDisplay.Builder.forItem(ItemIds.TURTLE_SCUTE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ARMADILLO_SCUTE, create(
-                ItemDisplay.Builder.forItem(ItemIds.ARMADILLO_SCUTE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RAW_IRON, create(
-                ItemDisplay.Builder.forItem(ItemIds.RAW_IRON).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RAW_COPPER, create(
-                ItemDisplay.Builder.forItem(ItemIds.RAW_COPPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RAW_GOLD, create(
-                ItemDisplay.Builder.forItem(ItemIds.RAW_GOLD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FEATHER, create(
-                ItemDisplay.Builder.forItem(ItemIds.FEATHER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GUNPOWDER, create(
-                ItemDisplay.Builder.forItem(ItemIds.GUNPOWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FLINT, create(
-                ItemDisplay.Builder.forItem(ItemIds.FLINT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LEATHER, create(
-                ItemDisplay.Builder.forItem(ItemIds.LEATHER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CLAY_BALL, create(
-                ItemDisplay.Builder.forItem(ItemIds.CLAY_BALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PAPER, create(
-                ItemDisplay.Builder.forItem(ItemIds.PAPER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BOOK, create(
-                ItemDisplay.Builder.forItem(ItemIds.BOOK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(EnchantableItemBehavior.ofTransforming(1, this.items.getOrThrow(ItemIds.ENCHANTED_BOOK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SLIME_BALL, create(
-                ItemDisplay.Builder.forItem(ItemIds.SLIME_BALL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COMPASS, create(
-                ItemDisplay.Builder.forItem(ItemIds.COMPASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                .register();
+            this.registerItem(ItemIds.TURTLE_SCUTE);
+            this.registerItem(ItemIds.ARMADILLO_SCUTE);
+            this.registerItem(ItemIds.RAW_IRON);
+            this.registerItem(ItemIds.RAW_COPPER);
+            this.registerItem(ItemIds.RAW_GOLD);
+            this.registerItem(ItemIds.FEATHER);
+            this.registerItem(ItemIds.GUNPOWDER);
+            this.registerItem(ItemIds.FLINT);
+            this.registerItem(ItemIds.LEATHER);
+            this.registerItem(ItemIds.CLAY_BALL);
+            this.registerItem(ItemIds.PAPER);
+            this.builder(ItemIds.BOOK)
+                .behavior(EnchantableItemBehavior.ofTransforming(1, this.items.getOrThrow(ItemIds.ENCHANTED_BOOK)))
+                .register();
+            this.registerItem(ItemIds.SLIME_BALL);
+            this.builder(ItemIds.COMPASS)
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.location()
@@ -6050,123 +2687,73 @@ public class Items {
                                 SoundSource.PLAYERS
                             ))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RECOVERY_COMPASS, create(
-                ItemDisplay.Builder.forItem(ItemIds.RECOVERY_COMPASS)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.CLOCK, create(
-                ItemDisplay.Builder.forItem(ItemIds.CLOCK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SPYGLASS, create(
-                ItemDisplay.Builder.forItem(ItemIds.SPYGLASS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(ZoomItemBehavior.of(SpyglassItem.ZOOM_FOV_MODIFIER, this.soundEvents.getOrThrow(SoundEventIds.SPYGLASS_USE), this.soundEvents.getOrThrow(SoundEventIds.SPYGLASS_STOP_USING)))
-                    .with(UseableItemBehavior.builder()
+                    )
+                )
+                .register();
+            this.builder(ItemIds.RECOVERY_COMPASS)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
+            this.registerItem(ItemIds.CLOCK);
+            this.builder(ItemIds.SPYGLASS, 1)
+                .behavior(
+                    UseableItemBehavior.builder()
                         .useFor(SpyglassItem.USE_DURATION)
                         .animation(ItemUseAnimation.SPYGLASS)
-                        .build())
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLOWSTONE_DUST, create(
-                ItemDisplay.Builder.forItem(ItemIds.GLOWSTONE_DUST).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.INK_SAC, create(
-                ItemDisplay.Builder.forItem(ItemIds.INK_SAC).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.glowSign(this.blocks, false))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLOW_INK_SAC, create(
-                ItemDisplay.Builder.forItem(ItemIds.GLOW_INK_SAC).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, Actions.glowSign(this.blocks, true))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BONE_MEAL, create(
-                ItemDisplay.Builder.forItem(ItemIds.BONE_MEAL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+                        .build()
+                )
+                .behavior(
+                    ZoomItemBehavior.of(
+                        SpyglassItem.ZOOM_FOV_MODIFIER,
+                        this.soundEvents.getOrThrow(SoundEventIds.SPYGLASS_USE),
+                        this.soundEvents.getOrThrow(SoundEventIds.SPYGLASS_STOP_USING)
+                    )
+                )
+                .register();
+            this.registerItem(ItemIds.GLOWSTONE_DUST);
+            this.builder(ItemIds.INK_SAC)
+                .event(ItemEvent.USE_ON_BLOCK, Actions.glowSign(this.blocks, false))
+                .register();
+            this.builder(ItemIds.GLOW_INK_SAC)
+                .event(ItemEvent.USE_ON_BLOCK, Actions.glowSign(this.blocks, true))
+                .register();
+            this.builder(ItemIds.BONE_MEAL)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(FertilizeAction.of(PositionTarget.INTERACTED))
-                            .add(InvokeGameEventAction.of(
-                                GameEvent.ITEM_INTERACT_FINISH,
-                                PositionTarget.ORIGIN,
-                                LootContext.EntityTarget.THIS
-                            ))
+                            .add(
+                                InvokeGameEventAction.of(
+                                    GameEvent.ITEM_INTERACT_FINISH,
+                                    PositionTarget.ORIGIN,
+                                    LootContext.EntityTarget.THIS
+                                )
+                            )
                             .add(DecrementItemAction.of(1))
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BONE, create(
-                ItemDisplay.Builder.forItem(ItemIds.BONE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SUGAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.SUGAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FILLED_MAP, create(
-                ItemDisplay.Builder.forItem(ItemIds.FILLED_MAP).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(MapHolderItemBehavior.INSTANCE)
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.registerItem(ItemIds.BONE);
+            this.registerItem(ItemIds.SUGAR);
+            this.builder(ItemIds.FILLED_MAP)
+                .behavior(MapHolderItemBehavior.INSTANCE)
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(MarkBannerOnItemAction.of(PositionTarget.INTERACTED))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GHAST_TEAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.GHAST_TEAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOLD_NUGGET, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOLD_NUGGET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLASS_BOTTLE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GLASS_BOTTLE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.GLASS_BOTTLE)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.registerItem(ItemIds.GHAST_TEAR);
+            this.registerItem(ItemIds.GOLD_NUGGET);
+            this.builder(ItemIds.GLASS_BOTTLE)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.GLASS_BOTTLE)))
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.location()
@@ -6182,447 +2769,609 @@ public class Items {
                             .add(InvokeGameEventAction.of(GameEvent.FLUID_PICKUP, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
                             .add(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.BOTTLE_FILL), SoundSource.NEUTRAL))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FERMENTED_SPIDER_EYE, create(
-                ItemDisplay.Builder.forItem(ItemIds.FERMENTED_SPIDER_EYE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BLAZE_POWDER, create(
-                ItemDisplay.Builder.forItem(ItemIds.BLAZE_POWDER).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAGMA_CREAM, create(
-                ItemDisplay.Builder.forItem(ItemIds.MAGMA_CREAM).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GLISTERING_MELON_SLICE, create(
-                ItemDisplay.Builder.forItem(ItemIds.GLISTERING_MELON_SLICE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WRITABLE_BOOK, create(
-                ItemDisplay.Builder.forItem(ItemIds.WRITABLE_BOOK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(WritableItemBehavior.of(this.items.getOrThrow(ItemIds.WRITTEN_BOOK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.WRITTEN_BOOK, create(
-                ItemDisplay.Builder.forItem(ItemIds.WRITTEN_BOOK)
-                    .glint()
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(16))
-                    .with(TextHolderItemBehavior.INSTANCE)
-                    .build()
-            ));
-            this.registerable.register(ItemIds.MAP, create(
-                ItemDisplay.Builder.forItem(ItemIds.MAP).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(MappableItemBehavior.of(this.items.getOrThrow(ItemIds.FILLED_MAP)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.FIREWORK_STAR, create(
-                ItemDisplay.Builder.forItem(ItemIds.FIREWORK_STAR).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(FireworkExplosionHolderItemBehavior.INSTANCE)
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ENCHANTED_BOOK, create(
-                ItemDisplay.Builder.forItem(ItemIds.ENCHANTED_BOOK)
-                    .rarity(Rarity.UNCOMMON)
-                    .glint()
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(EnchantmentHolderItemBehavior.of(this.items.getOrThrow(ItemIds.BOOK)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NETHER_BRICK, create(
-                ItemDisplay.Builder.forItem(ItemIds.NETHER_BRICK).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRISMARINE_SHARD, create(
-                ItemDisplay.Builder.forItem(ItemIds.PRISMARINE_SHARD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PRISMARINE_CRYSTALS, create(
-                ItemDisplay.Builder.forItem(ItemIds.PRISMARINE_CRYSTALS).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RABBIT_FOOT, create(
-                ItemDisplay.Builder.forItem(ItemIds.RABBIT_FOOT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.RABBIT_HIDE, create(
-                ItemDisplay.Builder.forItem(ItemIds.RABBIT_HIDE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.LEAD, create(
-                ItemDisplay.Builder.forItem(ItemIds.LEAD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.registerItem(ItemIds.FERMENTED_SPIDER_EYE);
+            this.registerItem(ItemIds.BLAZE_POWDER);
+            this.registerItem(ItemIds.MAGMA_CREAM);
+            this.registerItem(ItemIds.GLISTERING_MELON_SLICE);
+            this.builder(ItemIds.WRITABLE_BOOK, 1)
+                .behavior(WritableItemBehavior.of(this.items.getOrThrow(ItemIds.WRITTEN_BOOK)))
+                .register();
+            this.builder(ItemIds.WRITTEN_BOOK, 16)
+                .display(ItemDisplay.Builder::glint)
+                .behavior(TextHolderItemBehavior.INSTANCE)
+                .register();
+            this.builder(ItemIds.MAP)
+                .behavior(MappableItemBehavior.of(this.items.getOrThrow(ItemIds.FILLED_MAP)))
+                .register();
+            this.builder(ItemIds.FIREWORK_STAR)
+                .behavior(FireworkExplosionHolderItemBehavior.INSTANCE)
+                .register();
+            this.builder(ItemIds.ENCHANTED_BOOK, 1)
+                .display(display -> display.rarity(Rarity.UNCOMMON).glint())
+                .behavior(EnchantmentHolderItemBehavior.of(this.items.getOrThrow(ItemIds.BOOK)))
+                .register();
+            this.registerItem(ItemIds.NETHER_BRICK);
+            this.registerItem(ItemIds.PRISMARINE_SHARD);
+            this.registerItem(ItemIds.PRISMARINE_CRYSTALS);
+            this.registerItem(ItemIds.RABBIT_FOOT);
+            this.registerItem(ItemIds.RABBIT_HIDE);
+            this.builder(ItemIds.LEAD)
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(AttachLeashedEntitiesOnBlockAction.of(PositionTarget.INTERACTED))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NAME_TAG, create(
-                ItemDisplay.Builder.forItem(ItemIds.NAME_TAG).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_ENTITY, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.builder(ItemIds.NAME_TAG)
+                .event(
+                    ItemEvent.USE_ON_ENTITY,
+                    ActionEntry.of(
                         PassingSequenceHandler.builder()
                             .add(SetEntityNameFromItemAction.of(LootContext.EntityTarget.TARGET_ENTITY))
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.POPPED_CHORUS_FRUIT, create(
-                ItemDisplay.Builder.forItem(ItemIds.POPPED_CHORUS_FRUIT).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DRAGON_BREATH, create(
-                ItemDisplay.Builder.forItem(ItemIds.DRAGON_BREATH)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TOTEM_OF_UNDYING, create(
-                ItemDisplay.Builder.forItem(ItemIds.TOTEM_OF_UNDYING)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.BEFORE_DEATH_HOLDER, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.registerItem(ItemIds.POPPED_CHORUS_FRUIT);
+            this.builder(ItemIds.DRAGON_BREATH)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
+            this.builder(ItemIds.TOTEM_OF_UNDYING, 1)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .event(
+                    ItemEvent.BEFORE_DEATH_HOLDER,
+                    ActionEntry.of(
                         AddStatusEffectsAction.of(
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 900, 1),
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 100, 1),
                             new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 800, 0)
                         )
-                    ))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.SHULKER_SHELL, create(
-                ItemDisplay.Builder.forItem(ItemIds.SHULKER_SHELL).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.IRON_NUGGET, create(
-                ItemDisplay.Builder.forItem(ItemIds.IRON_NUGGET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.KNOWLEDGE_BOOK, create(
-                ItemDisplay.Builder.forItem(ItemIds.KNOWLEDGE_BOOK)
-                    .rarity(Rarity.EPIC)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(UnlockRecipesItemBehavior.INSTANCE)
-                    .build()
-            ));
-            this.registerable.register(ItemIds.DEBUG_STICK, create(
-                ItemDisplay.Builder.forItem(ItemIds.DEBUG_STICK)
-                    .rarity(Rarity.EPIC)
-                    .glint()
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(DebugStickItemBehavior.INSTANCE)
-                    .build()
-            ));
-            this.registerable.register(ItemIds.PHANTOM_MEMBRANE, create(
-                ItemDisplay.Builder.forItem(ItemIds.PHANTOM_MEMBRANE).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.NAUTILUS_SHELL, create(
-                ItemDisplay.Builder.forItem(ItemIds.NAUTILUS_SHELL)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HEART_OF_THE_SEA, create(
-                ItemDisplay.Builder.forItem(ItemIds.HEART_OF_THE_SEA)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.GOAT_HORN, create(
-                ItemDisplay.Builder.forItem(ItemIds.GOAT_HORN)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(1))
-                    .with(PlayableItemBehavior.of(this.instruments.getOrThrow(Instruments.PONDER_GOAT_HORN)))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.HONEYCOMB, create(
-                ItemDisplay.Builder.forItem(ItemIds.HONEYCOMB).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.WAX_BLOCK)))
-                    .build(),
-                ActionEventMap.Builder.item()
-                    .add(ItemEvent.USE_ON_BLOCK, ActionEntry.of(
+                    )
+                )
+                .register();
+            this.registerItem(ItemIds.SHULKER_SHELL);
+            this.registerItem(ItemIds.IRON_NUGGET);
+            this.builder(ItemIds.KNOWLEDGE_BOOK, 1)
+                .display(display -> display.rarity(Rarity.EPIC))
+                .behavior(UnlockRecipesItemBehavior.INSTANCE)
+                .register();
+            this.builder(ItemIds.DEBUG_STICK, 1)
+                .display(display -> display.rarity(Rarity.EPIC).glint())
+                .behavior(DebugStickItemBehavior.INSTANCE)
+                .register();
+            this.registerItem(ItemIds.PHANTOM_MEMBRANE);
+            this.builder(ItemIds.NAUTILUS_SHELL)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
+            this.builder(ItemIds.HEART_OF_THE_SEA)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
+            this.builder(ItemIds.GOAT_HORN, 1)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .behavior(
+                    UseableItemBehavior.builder()
+                        .useFor(PlayableUseDurationProvider.INSTANCE)
+                        .animation(ItemUseAnimation.TOOT_HORN)
+                        .build()
+                )
+                .behavior(PlayableItemBehavior.of(this.instruments.getOrThrow(Instruments.PONDER_GOAT_HORN)))
+                .register();
+            this.builder(ItemIds.HONEYCOMB)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.WAX_BLOCK)))
+                .event(
+                    ItemEvent.USE_ON_BLOCK,
+                    ActionEntry.of(
                         FirstToPassRequirementsSequenceHandler.builder()
                             .add(Actions.waxSign(this.blocks, true))
                             .add(PassingSequenceHandler.builder()
                                 .add(WaxBlockAction.of(PositionTarget.INTERACTED))
                                 .add(DecrementItemAction.of(1))
-                                .add(SwingHandAction.of(LootContext.EntityTarget.THIS)))))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.ECHO_SHARD, create(
-                ItemDisplay.Builder.forItem(ItemIds.ECHO_SHARD)
-                    .rarity(Rarity.UNCOMMON)
-                    .build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.TRIAL_KEY, create(
-                ItemDisplay.Builder.forItem(ItemIds.TRIAL_KEY).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.OMINOUS_TRIAL_KEY, create(
-                ItemDisplay.Builder.forItem(ItemIds.OMINOUS_TRIAL_KEY).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.BREEZE_ROD, create(
-                ItemDisplay.Builder.forItem(ItemIds.BREEZE_ROD).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
-            this.registerable.register(ItemIds.COPPER_NUGGET, create(
-                ItemDisplay.Builder.forItem(ItemIds.COPPER_NUGGET).build(),
-                ItemBehaviorSet.builder()
-                    .with(StackableItemBehavior.of(64))
-                    .build()
-            ));
+                                .add(SwingHandAction.of(LootContext.EntityTarget.THIS)))
+                    )
+                )
+                .register();
+            this.builder(ItemIds.ECHO_SHARD)
+                .display(display -> display.rarity(Rarity.UNCOMMON))
+                .register();
+            this.registerItem(ItemIds.TRIAL_KEY);
+            this.registerItem(ItemIds.OMINOUS_TRIAL_KEY);
+            this.registerItem(ItemIds.BREEZE_ROD);
+            this.registerItem(ItemIds.COPPER_NUGGET);
+        }
+
+        public void registerItem(ResourceKey<Item> item) {
+            this.builder(item).register();
         }
 
         public void registerBlock(BlockItemId blockItem) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
-                        .build()
+            this.builderForBlock(blockItem).register();
+        }
+
+        private void registerBucket(ResourceKey<Item> item, int maxStackSize, BucketItemBehavior bucket) {
+            this.builderForBucket(item, maxStackSize, bucket).register();
+        }
+
+        private void registerSpawnEgg(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
+            this.builder(item)
+                .behavior(
+                    EntityItemBehavior.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(entity))
+                            .allowItemData()
+                            .build(),
+                        true,
+                        EntityItemBehavior.Pass.BLOCK,
+                        EntityItemBehavior.Pass.FLUID
+                    )
                 )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))
+                .behavior(SpawnEggItemBehavior.INSTANCE)
+                .register();
+        }
+
+        private void registerMusicDisc(ResourceKey<Item> item, Rarity rarity, ResourceKey<JukeboxSong> jukeboxSong) {
+            this.builder(item, 1)
+                .display(display -> display.rarity(rarity))
+                .behavior(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(jukeboxSong)))
+                .register();
+        }
+
+        private void registerSuspiciousEffectIngredient(BlockItemId blockItem, float compostChance, ResourceKey<MobEffect> effect, int effectDuration, ResourceKey<Block> pottedBlock) {
+            this.builderForBlock(blockItem)
+                .behavior(CompostableItemBehavior.of(compostChance))
+                .behavior(
+                    SuspiciousEffectIngredientItemBehavior.of(
+                        new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(effect), effectDuration)
+                    )
+                )
+                .cancellableEvent(
+                    ItemEvent.BEFORE_USE_ON_BLOCK,
+                    Actions.potBlock(this.blocks, pottedBlock)
+                )
+                .register();
+        }
+
+        private void registerTrimSmithingTemplate(ResourceKey<Item> item, Rarity rarity) {
+            this.registerSmithingTemplate(
+                item,
+                rarity,
+                Tooltips.smithingTrimPattern(),
+                SmithingTemplates.TRIM_PATTERN
             );
         }
 
-        public void registerUnstackableBlock(BlockItemId blockItem) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(1))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
+        private void registerSmithingTemplate(ResourceKey<Item> item, Rarity rarity, Component[] tooltip, SmithingTemplate smithingTemplate) {
+            this.builder(item)
+                .display(display -> display.rarity(rarity).tooltip(tooltip))
+                .behavior(SmithingTemplateProviderItemBehavior.of(smithingTemplate))
+                .register();
+        }
+
+        private void registerBannerPattern(ResourceKey<Item> item, Rarity rarity, TagKey<BannerPattern> bannerPatterns) {
+            this.builder(item, 1)
+                .display(display -> display.rarity(rarity))
+                .behavior(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(bannerPatterns)))
+                .register();
+        }
+
+        private void registerDecoratedPotPattern(ResourceKey<Item> item, Rarity rarity, ResourceKey<DecoratedPotPattern> decoratedPotPattern) {
+            this.builder(item)
+                .display(display -> display.rarity(rarity))
+                .behavior(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(decoratedPotPattern)))
+                .register();
+        }
+
+        private void registerTrimMaterialProvider(ResourceKey<Item> item, ResourceKey<TrimMaterial> trimMaterial) {
+            this.builder(item)
+                .behavior(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(trimMaterial)))
+                .register();
+        }
+
+        private void registerBundle(ResourceKey<Item> item) {
+            this.builder(item, 1)
+                .display(display -> display.itemBarStyle(ItemBarStyleIds.BUNDLE))
+                .behavior(UseableItemBehavior.builder().useFor(BundleItemAccessor.useDuration()).build())
+                .behavior(
+                    ItemHolderItemBehavior.of(
+                        Fraction.ONE,
+                        ItemHolderRules.builder()
+                            .rule(
+                                RejectItemHolderRule.INSTANCE,
+                                ItemPredicate.Builder.item()
+                                    .itematic$items(this.items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
+                                    .build()
+                            )
+                            .rule(
+                                OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsAccessor.nestedBundleOccupancy()),
+                                ItemPredicate.Builder.item()
+                                    .withComponents(DataComponentMatchers.Builder.components()
+                                        .any(DataComponents.BUNDLE_CONTENTS)
+                                        .build())
+                                    .build()
+                            )
+                            .rule(
+                                FractionItemHolderRule.of(Fraction.ONE),
+                                ItemPredicate.Builder.item()
+                                    .withComponents(DataComponentMatchers.Builder.components()
+                                        .any(DataComponents.BEES)
+                                        .build())
+                                    .build()
+                            )
+                            .build(),
+                        this.soundEvents.getOrThrow(SoundEventIds.BUNDLE_INSERT),
+                        this.soundEvents.getOrThrow(SoundEventIds.BUNDLE_INSERT_FAIL),
+                        this.soundEvents.getOrThrow(SoundEventIds.BUNDLE_REMOVE_ONE),
+                        this.soundEvents.getOrThrow(SoundEventIds.BUNDLE_DROP_CONTENTS)
+                    )
+                )
+                .register();
+        }
+
+        private void registerSkull(BlockItemId blockItem, Rarity rarity, ResourceKey<Block> wallSkull) {
+            this.builderForBlockAttachedToSide(blockItem, wallSkull, Direction.DOWN)
+                .display(display -> display.rarity(rarity))
+                .attributeModifiers(AttributeModifiers::hideFromLocatorBar)
+                .behavior(
+                    EquipmentItemBehavior.of(
+                        Equippable.builder(EquipmentSlot.HEAD)
+                            .setSwappable(false)
+                            .build()
+                    )
+                )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)))
+                .register();
+        }
+
+        private void registerFuel(ResourceKey<Item> item, int fuelTicks) {
+            this.builder(item)
+                .behavior(FuelItemBehavior.of(fuelTicks))
+                .register();
+        }
+
+        private void registerSword(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
+            this.builderForSword(item, material, repairItems)
+                .register();
+        }
+
+        private Builder builderForSword(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
+            return this.builder(item, 1)
+                .behavior(DamageableItemBehavior.of(material.durability()))
+                .behavior(
+                    ToolItemBehavior.builder(2)
+                        .preventCreativeDestruction()
+                        .rule(Tool.Rule.minesAndDrops(HolderSet.direct(this.blocks.getOrThrow(BlockItemIds.COBWEB.block())), 15.0f))
+                        .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5f))
                         .build()
                 )
-            );
+                .behavior(
+                    WeaponItemBehavior.builder(1, 4.0d + material.attackDamageBonus(), 0.4d)
+                        .build()
+                )
+                .behavior(EnchantableItemBehavior.of(material))
+                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(repairItems)));
+        }
+
+        private void registerSpear(ResourceKey<Item> item, ToolMaterial material, float attackDuration, float damageMultiplier, float delay, float dismountTime, float dismountSpeedThreshold, float knockbackTime, float damageTime, TagKey<Item> repairItems) {
+            this.builderForSpear(item, material, attackDuration, damageMultiplier, delay, dismountTime, dismountSpeedThreshold, knockbackTime, 5.1f, damageTime, 4.6f, repairItems)
+                .register();
+        }
+
+        public Builder builderForSpear(ResourceKey<Item> item, ToolMaterial material, float attackDuration, float damageMultiplier, float delay, float dismountTime, float dismountSpeedThreshold, float knockbackTime, float knockbackSpeedThreshold, float damageTime, float damageSpeedThreshold, TagKey<Item> repairItems) {
+            return this.builder(item, 1)
+                .behavior(DamageableItemBehavior.of(material.durability()))
+                .behavior(
+                    UseableItemBehavior.builder()
+                        .useIndefinitely()
+                        .animation(ItemUseAnimation.SPEAR)
+                        .effects(new UseEffects(
+                            true,
+                            false,
+                            1.0f
+                        ))
+                        .build()
+                )
+                .behavior(
+                    WeaponItemBehavior.builder(1, material.attackDamageBonus(), 1 / (4 * attackDuration))
+                        .type(
+                            MeleeWeaponComponents.KINETIC,
+                            KineticMeleeWeapon.of(
+                                new KineticWeapon(
+                                    10,
+                                    (int)(delay * SharedConstants.TICKS_PER_SECOND),
+                                    KineticWeapon.Condition.ofAttackerSpeed(
+                                        (int)(dismountTime * SharedConstants.TICKS_PER_SECOND),
+                                        dismountSpeedThreshold
+                                    ),
+                                    KineticWeapon.Condition.ofAttackerSpeed(
+                                        (int)(knockbackTime * SharedConstants.TICKS_PER_SECOND),
+                                        knockbackSpeedThreshold
+                                    ),
+                                    KineticWeapon.Condition.ofRelativeSpeed(
+                                        (int)(damageTime * SharedConstants.TICKS_PER_SECOND),
+                                        damageSpeedThreshold
+                                    ),
+                                    0.38f,
+                                    damageMultiplier,
+                                    Optional.of(
+                                        material == ToolMaterial.WOOD
+                                            ? this.soundEvents.getOrThrow(SoundEventIds.SPEAR_WOOD_USE)
+                                            : this.soundEvents.getOrThrow(SoundEventIds.SPEAR_USE)
+                                    ),
+                                    Optional.of(
+                                        material == ToolMaterial.WOOD
+                                            ? this.soundEvents.getOrThrow(SoundEventIds.SPEAR_WOOD_HIT)
+                                            : this.soundEvents.getOrThrow(SoundEventIds.SPEAR_HIT)
+                                    )
+                                )
+                            )
+                        )
+                        .type(
+                            MeleeWeaponComponents.PIERCING,
+                            PiercingMeleeWeapon.of(
+                                new PiercingWeapon(
+                                    true,
+                                    false,
+                                    Optional.of(material == ToolMaterial.WOOD
+                                        ? this.soundEvents.getOrThrow(SoundEventIds.SPEAR_WOOD_ATTACK)
+                                        : this.soundEvents.getOrThrow(SoundEventIds.SPEAR_ATTACK)
+                                    ),
+                                    Optional.of(material == ToolMaterial.WOOD
+                                        ? this.soundEvents.getOrThrow(SoundEventIds.SPEAR_WOOD_HIT)
+                                        : this.soundEvents.getOrThrow(SoundEventIds.SPEAR_HIT)
+                                    )
+                                )
+                            )
+                        )
+                        .damageType(this.damageTypes.getOrThrow(DamageTypes.SPEAR))
+                        .swingAnimation(
+                            new SwingAnimation(
+                                SwingAnimationType.STAB,
+                                (int)(attackDuration * SharedConstants.TICKS_PER_SECOND)
+                            )
+                        )
+                        .attackRange(
+                            new AttackRange(
+                                2.0f,
+                                4.5f,
+                                2.0f,
+                                6.5f,
+                                0.125f,
+                                0.5f
+                            )
+                        )
+                        .minimumAttackCharge(1.0f)
+                        .build()
+                )
+                .behavior(EnchantableItemBehavior.of(material))
+                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(repairItems)));
+        }
+
+        private Builder builderForTool(ResourceKey<Item> item, ToolMaterial material, float disableBlockingForSeconds, double baseAttackDamage, double attackSpeed, TagKey<Block> mineableBlocks, TagKey<Item> repairItems) {
+            return this.builder(item, 1)
+                .behavior(DamageableItemBehavior.of(material.durability()))
+                .behavior(ToolItemBehavior.of(this.blocks, material, mineableBlocks))
+                .behavior(
+                    WeaponItemBehavior.builder(2, baseAttackDamage + material.attackDamageBonus(), attackSpeed)
+                        .disableBlockingForSeconds(disableBlockingForSeconds)
+                        .build()
+                )
+                .behavior(EnchantableItemBehavior.of(material))
+                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(repairItems)));
+        }
+
+        private void registerShovel(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
+            this.builderForShovel(item, material, repairItems)
+                .register();
+        }
+
+        private Builder builderForShovel(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
+            return this.builderForTool(item, material, 0.0f, 2.5d, 0.25d, BlockTags.MINEABLE_WITH_SHOVEL, repairItems)
+                .event(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK));
+        }
+
+        private void registerPickaxe(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
+            this.builderForPickaxe(item, material, repairItems)
+                .register();
+        }
+
+        private Builder builderForPickaxe(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
+            return this.builderForTool(item, material, 0.0f, 2.0d, 0.3d, BlockTags.MINEABLE_WITH_PICKAXE, repairItems);
+        }
+
+        private void registerAxe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
+            this.builderForAxe(item, material, attackDamage, attackSpeed, repairItems)
+                .register();
+        }
+
+        private Builder builderForAxe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
+            return this.builderForTool(item, material, 5.0f, attackDamage, attackSpeed, BlockTags.MINEABLE_WITH_AXE, repairItems);
+        }
+
+        private void registerHoe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
+            this.builderForHoe(item, material, attackDamage, attackSpeed, repairItems)
+                .register();
+        }
+
+        private Builder builderForHoe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
+            return this.builderForTool(item, material, 0.0f, attackDamage, attackSpeed, BlockTags.MINEABLE_WITH_HOE, repairItems)
+                .event(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK));
+        }
+
+        private void registerArmor(ResourceKey<Item> item, ArmorMaterial material, ArmorType type, TagKey<Item> repairItems) {
+            this.builderForArmor(item, material, type, repairItems)
+                .register();
+        }
+
+        private Builder builderForArmor(ResourceKey<Item> item, ArmorMaterial material, ArmorType type, TagKey<Item> repairItems) {
+            return this.builder(item, 1)
+                .attributeModifiers(builder -> AttributeModifiers.armor(builder, material, type))
+                .behavior(
+                    EquipmentItemBehavior.of(
+                        Equippable.builder(type.getSlot())
+                            .setSwappable(true)
+                            .setEquipSound(material.equipSound())
+                            .setAsset(material.assetId())
+                            .build()
+                    )
+                )
+                .behavior(DamageableItemBehavior.of(type.getDurability(material.durability())))
+                .behavior(EnchantableItemBehavior.of(material))
+                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(repairItems)))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)));
+        }
+
+        private void registerHorseArmor(ResourceKey<Item> item, ArmorMaterial material) {
+            this.builderForHorseArmor(item, material)
+                .register();
+        }
+
+        private Builder builderForHorseArmor(ResourceKey<Item> item, ArmorMaterial material) {
+            return this.builder(item, 1)
+                .attributeModifiers(builder -> AttributeModifiers.armor(builder, material, ArmorType.BODY))
+                .behavior(
+                    EquipmentItemBehavior.of(
+                        Equippable.builder(EquipmentSlot.BODY)
+                            .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.HORSE_ARMOR))
+                            .setAsset(material.assetId())
+                            .setAllowedEntities(this.entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_HORSE_ARMOR))
+                            .setDamageOnHurt(false)
+                            .setCanBeSheared(true)
+                            .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.HORSE_ARMOR_UNEQUIP))
+                            .build()
+                    )
+                )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)));
+        }
+
+        private void registerNautilusArmor(ResourceKey<Item> item, ArmorMaterial material) {
+            this.builderForNautilusArmor(item, material)
+                .register();
+        }
+
+        private Builder builderForNautilusArmor(ResourceKey<Item> item, ArmorMaterial material) {
+            return this.builder(item, 1)
+                .attributeModifiers(builder -> AttributeModifiers.armor(builder, material, ArmorType.BODY))
+                .behavior(
+                    EquipmentItemBehavior.of(
+                        Equippable.builder(EquipmentSlot.BODY)
+                            .setEquipSound(soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_NAUTILUS))
+                            .setAsset(material.assetId())
+                            .setAllowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_NAUTILUS_ARMOR))
+                            .setDamageOnHurt(false)
+                            .setEquipOnInteract(true)
+                            .setCanBeSheared(true)
+                            .setShearingSound(soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_NAUTILUS))
+                            .build()
+                    )
+                )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)));
+        }
+
+        private void registerMinecart(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
+            this.builderForMinecart(item, entity)
+                .register();
+        }
+
+        private Builder builderForMinecart(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
+            return this.builder(item, 1)
+                .behavior(
+                    EntityItemBehavior.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(entity))
+                            .spawnRule(
+                                DiscardEntitySpawnRule.INSTANCE,
+                                InvertedLootItemCondition.invert(
+                                    LocationCheckPredicates.builder(
+                                        PositionTarget.INTERACTED,
+                                        LocationPredicate.Builder.location()
+                                            .setBlock(BlockPredicate.Builder.block()
+                                                .of(blocks, BlockTags.RAILS))
+                                    )
+                                )
+                            )
+                            .spawnRule(OffsetSpawnPositionEntitySpawnRule.of(new Vec3(0.0d, 0.0625d, 0.0d)))
+                            .spawnRule(
+                                OffsetSpawnPositionEntitySpawnRule.of(new Vec3(0.0d, 0.5d, 0.0d)),
+                                LocationCheckPredicates.builder(
+                                    PositionTarget.INTERACTED,
+                                    LocationPredicate.Builder.location()
+                                        .setBlock(BlockPredicate.Builder.block()
+                                            .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                .itematic$range(BlockStateProperties.RAIL_SHAPE, RailShape.ASCENDING_EAST, RailShape.ASCENDING_SOUTH)))
+                                )
+                            )
+                            .build()
+                    )
+                )
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)));
+        }
+
+        private void registerBoat(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
+            this.builder(item, 1)
+                .behavior(EntityItemBehavior.of(EntitySpawner.of(this.entityTypes.getOrThrow(entity))))
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))
+                .behavior(FuelItemBehavior.of(FuelTimes.BOAT))
+                .register();
         }
 
         public void registerShulkerBox(BlockItemId blockItem) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(1))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
-                        .with(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                        .build()
-                )
-            );
+            this.builderForBlock(blockItem, 1)
+                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
+                .register();
         }
 
         public void registerBurningWoodBlock(BlockItemId blockItem) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
-                        .with(FuelItemBehavior.of(FuelTimes.WOOD))
-                        .build()
-                )
-            );
+            this.builderForBlock(blockItem)
+                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .register();
         }
 
         public void registerBurningSlab(BlockItemId blockItem) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
-                        .with(FuelItemBehavior.of(FuelTimes.SLAB))
-                        .build()
-                )
-            );
+            this.builderForBlock(blockItem)
+                .behavior(FuelItemBehavior.of(FuelTimes.SLAB))
+                .register();
         }
 
         public Consumer<BlockItemId> registerBurningBlock(int fuelTicks) {
-            return blockItem -> this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
-                        .with(FuelItemBehavior.of(fuelTicks))
-                        .build()
-                )
-            );
+            return blockItem -> this.builderForBlock(blockItem)
+                .behavior(FuelItemBehavior.of(fuelTicks))
+                .register();
         }
 
         public void registerPottableSapling(BlockItemId blockItem, ResourceKey<Block> pottedBlock, int fuelTicks, float compostChance) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
-                        .with(compostChance > 0.0f, CompostableItemBehavior.of(compostChance))
-                        .with(fuelTicks > 0, FuelItemBehavior.of(fuelTicks))
-                        .build(),
-                    ActionEventMap.Builder.item()
-                        .addCancellable(
-                            ItemEvent.BEFORE_USE_ON_BLOCK,
-                            Actions.potBlock(this.blocks, pottedBlock)
-                        )
-                        .build()
-                )
-            );
+            this.builderForBlock(blockItem)
+                .behavior(compostChance > 0.0f, CompostableItemBehavior.of(compostChance))
+                .behavior(fuelTicks > 0, FuelItemBehavior.of(fuelTicks))
+                .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, pottedBlock))
+                .register();
         }
 
         public void registerCompostableLeaves(BlockItemId blockItem) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())))
-                        .with(CompostableItemBehavior.of(CompostChances.SMALL))
-                        .build()
-                )
-            );
+            this.builderForBlock(blockItem)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
         }
 
         public void registerBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction direction) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(Item.DEFAULT_MAX_STACK_SIZE))
-                        .with(
-                            BlockItemBehavior.attachedToSide(
-                                this.blocks.getOrThrow(blockItem.block()),
-                                this.blocks.getOrThrow(otherBlock),
-                                direction
-                            )
-                        )
-                        .build()
-                )
-            );
+            this.builderForBlockAttachedToSide(blockItem, otherBlock, direction)
+                .register();
         }
 
         public void registerSign(BlockItemId blockItem, ResourceKey<Block> wallSign, boolean burns) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(16))
-                        .with(
-                            BlockItemBehavior.attachedToSide(
-                                this.blocks.getOrThrow(blockItem.block()),
-                                this.blocks.getOrThrow(wallSign),
-                                Direction.DOWN
-                            )
-                        )
-                        .with(burns, FuelItemBehavior.of(FuelTimes.SIGN))
-                        .build()
-                )
-            );
+            this.builderForBlockAttachedToSide(blockItem, wallSign, Direction.DOWN, 16)
+                .behavior(burns, FuelItemBehavior.of(FuelTimes.SIGN))
+                .register();
         }
 
         public void registerHangingSign(BlockItemId blockItem, ResourceKey<Block> hangingWallSign, boolean burns) {
-            this.registerable.register(
-                blockItem.item(),
-                create(
-                    ItemDisplay.Builder.forBlock(blockItem.item()).build(),
-                    ItemBehaviorSet.builder()
-                        .with(StackableItemBehavior.of(16))
-                        .with(
-                            BlockItemBehavior.attachedToSide(
-                                this.blocks.getOrThrow(blockItem.block()),
-                                this.blocks.getOrThrow(hangingWallSign),
-                                Direction.UP
-                            )
-                        )
-                        .with(burns, FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
-                        .build()
-                )
-            );
+            this.builderForBlockAttachedToSide(blockItem, hangingWallSign, Direction.UP, 16)
+                .behavior(burns, FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
+                .register();
         }
     }
 }

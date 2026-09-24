@@ -2,8 +2,6 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
-import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.ItemResult;
@@ -53,59 +51,39 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
         EntitySpawner.CODEC.optionalFieldOf("entity").forGetter(BucketItemBehavior::entity)
     ).apply(instance, BucketItemBehavior::new));
 
-    public static ItemBehavior<?>[] drainFluid(HolderGetter<DispenseBehavior> dispenseBehaviors) {
-        return new ItemBehavior<?>[] {
-            StackableItemBehavior.of(16),
-            new BucketItemBehavior(
-                DrainFluidWorldModification.INSTANCE,
-                Optional.empty()
-            ),
-            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
-        };
+    public static BucketItemBehavior drainFluid() {
+        return new BucketItemBehavior(
+            DrainFluidWorldModification.INSTANCE,
+            Optional.empty()
+        );
     }
 
-    public static ItemBehavior<?>[] placeFluid(Holder<Fluid> fluid, Holder<SoundEvent> emptyingSound, HolderGetter<Item> items, HolderGetter<DispenseBehavior> dispenseBehaviors) {
-        return new ItemBehavior<?>[] {
-            StackableItemBehavior.of(1),
-            new BucketItemBehavior(
-                new PlaceFluidWorldModification(fluid, emptyingSound, items.getOrThrow(ItemIds.BUCKET)),
-                Optional.empty()
-            ),
-            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
-        };
+    public static BucketItemBehavior placeFluid(Holder<Fluid> fluid, Holder<SoundEvent> placeSound, HolderGetter<Item> items) {
+        return new BucketItemBehavior(
+            new PlaceFluidWorldModification(fluid, placeSound, items.getOrThrow(ItemIds.BUCKET)),
+            Optional.empty()
+        );
     }
 
-    public static ItemBehavior<?>[] placeFluidWithEntity(Holder<Fluid> fluid, Holder<EntityType<?>> entity, Holder<SoundEvent> emptyingSound, HolderGetter<Item> items, HolderGetter<DispenseBehavior> dispenseBehaviors) {
-        return new ItemBehavior[] {
-            StackableItemBehavior.of(1),
-            new BucketItemBehavior(
-                new PlaceFluidWorldModification(fluid, emptyingSound, items.getOrThrow(ItemIds.BUCKET)),
-                Optional.of(EntitySpawner.of(entity))
-            ),
-            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
-        };
+    public static BucketItemBehavior placeFluidWithEntity(Holder<Fluid> fluid, Holder<EntityType<?>> entity, Holder<SoundEvent> placeSound, HolderGetter<Item> items) {
+        return new BucketItemBehavior(
+            new PlaceFluidWorldModification(fluid, placeSound, items.getOrThrow(ItemIds.BUCKET)),
+            Optional.of(EntitySpawner.of(entity))
+        );
     }
 
-    public static ItemBehavior<?>[] placeEntity(Holder<EntityType<?>> entity, HolderGetter<Item> items, HolderGetter<DispenseBehavior> dispenseBehaviors) {
-        return new ItemBehavior[] {
-            StackableItemBehavior.of(1),
-            new BucketItemBehavior(
-                new NoneWorldModification(items.getOrThrow(ItemIds.BUCKET)),
-                Optional.of(EntitySpawner.of(entity))
-            ),
-            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
-        };
+    public static BucketItemBehavior placeEntity(Holder<EntityType<?>> entity, HolderGetter<Item> items) {
+        return new BucketItemBehavior(
+            new NoneWorldModification(items.getOrThrow(ItemIds.BUCKET)),
+            Optional.of(EntitySpawner.of(entity))
+        );
     }
 
-    public static ItemBehavior<?>[] placeBlock(Holder<Block> block, Holder<SoundEvent> emptyingSound, HolderGetter<Item> items, HolderGetter<DispenseBehavior> dispenseBehaviors) {
-        return new ItemBehavior[] {
-            StackableItemBehavior.of(1),
-            new BucketItemBehavior(
-                new PlaceBlockWorldModification(new SimpleBlockPicker(block), emptyingSound, items.getOrThrow(ItemIds.BUCKET)),
-                Optional.empty()
-            ),
-            DispensableItemBehavior.of(dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
-        };
+    public static BucketItemBehavior placeBlock(Holder<Block> block, Holder<SoundEvent> placeSound, HolderGetter<Item> items) {
+        return new BucketItemBehavior(
+            new PlaceBlockWorldModification(new SimpleBlockPicker(block), placeSound, items.getOrThrow(ItemIds.BUCKET)),
+            Optional.empty()
+        );
     }
 
     @Override

@@ -14,16 +14,12 @@ public record DecoratedPotPatternItemBehavior(Holder<DecoratedPotPattern> patter
         RegistryFixedCodec.create(Registries.DECORATED_POT_PATTERN).fieldOf("pattern").forGetter(DecoratedPotPatternItemBehavior::pattern)
     ).apply(instance, DecoratedPotPatternItemBehavior::new));
 
-    public static ItemBehavior<?>[] of(Holder<DecoratedPotPattern> pattern) {
-        return new ItemBehavior<?>[] {
-            StackableItemBehavior.of(64),
-            new DecoratedPotPatternItemBehavior(pattern)
-        };
+    public static DecoratedPotPatternItemBehavior of(Holder<DecoratedPotPattern> pattern) {
+        return new DecoratedPotPatternItemBehavior(pattern);
     }
 
     @Override
     public ItemBehaviorType<DecoratedPotPatternItemBehavior> type() {
         return ItemBehaviorType.DECORATED_POT_PATTERN;
     }
-
 }
