@@ -34,12 +34,7 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
 
     private static WoodCollection<String> suffixes(String log, @Nullable String wood, String sapling, @Nullable String leaves) {
         return new WoodCollection<>(
-            new CutoutCollection<>(
-                "_planks",
-                "_stairs",
-                "_slab",
-                "_fence"
-            ),
+            CutoutCollection.create("_planks", "", "", ""),
             Strippable.create(log),
             Strippable.create(wood),
             sapling,
@@ -55,9 +50,9 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         );
     }
 
-    public static <T> WoodCollection<T> create(T value) {
+    public static WoodCollection<String> create(String value) {
         return new WoodCollection<>(
-            CutoutCollection.create(value),
+            CutoutCollection.builder(value).fence().build(),
             Strippable.create(value),
             Strippable.create(value),
             value,
