@@ -431,7 +431,7 @@ public class Items {
             return this.builderForBlockAttachedToSide(blockItem, otherBlock, side, Item.DEFAULT_MAX_STACK_SIZE);
         }
 
-        private Builder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side, int maxStackSize) {
+        public Builder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side, int maxStackSize) {
             return this.builder(blockItem.item(), maxStackSize)
                 .display(ItemDisplay.Builder::blockName)
                 .behavior(
@@ -3256,18 +3256,6 @@ public class Items {
 
         public void registerBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction direction) {
             this.builderForBlockAttachedToSide(blockItem, otherBlock, direction)
-                .register();
-        }
-
-        public void registerSign(BlockItemId blockItem, ResourceKey<Block> wallSign, boolean burns) {
-            this.builderForBlockAttachedToSide(blockItem, wallSign, Direction.DOWN, 16)
-                .behavior(burns, FuelItemBehavior.of(FuelTimes.SIGN))
-                .register();
-        }
-
-        public void registerHangingSign(BlockItemId blockItem, ResourceKey<Block> hangingWallSign, boolean burns) {
-            this.builderForBlockAttachedToSide(blockItem, hangingWallSign, Direction.UP, 16)
-                .behavior(burns, FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
                 .register();
         }
     }

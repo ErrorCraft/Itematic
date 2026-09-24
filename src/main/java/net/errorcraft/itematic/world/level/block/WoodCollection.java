@@ -2,6 +2,8 @@ package net.errorcraft.itematic.world.level.block;
 
 import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.world.item.Items;
+import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
+import net.minecraft.core.Direction;
 import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
@@ -112,8 +114,10 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         }
 
         bootstrapper.registerBlock(blockItems.fenceGate);
-        bootstrapper.registerSign(blockItems.sign, wallSign, false);
-        bootstrapper.registerHangingSign(blockItems.hangingSign, hangingWallSign, false);
+        bootstrapper.builderForBlockAttachedToSide(blockItems.sign, wallSign, Direction.DOWN, 16)
+            .register();
+        bootstrapper.builderForBlockAttachedToSide(blockItems.hangingSign, hangingWallSign, Direction.UP, 16)
+            .register();
         bootstrapper.registerBlock(blockItems.door);
         bootstrapper.registerBlock(blockItems.trapdoor);
         bootstrapper.registerBlock(blockItems.button);
@@ -139,8 +143,12 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         }
 
         bootstrapper.registerBurningBlock(FuelTimes.WOOD).accept(blockItems.fenceGate);
-        bootstrapper.registerSign(blockItems.sign, wallSign, true);
-        bootstrapper.registerHangingSign(blockItems.hangingSign, hangingWallSign, true);
+        bootstrapper.builderForBlockAttachedToSide(blockItems.sign, wallSign, Direction.DOWN, 16)
+            .behavior(FuelItemBehavior.of(FuelTimes.SIGN))
+            .register();
+        bootstrapper.builderForBlockAttachedToSide(blockItems.hangingSign, hangingWallSign, Direction.UP, 16)
+            .behavior(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
+            .register();
         bootstrapper.registerBurningBlock(FuelTimes.DOOR).accept(blockItems.door);
         bootstrapper.registerBurningBlock(FuelTimes.WOOD).accept(blockItems.trapdoor);
         bootstrapper.registerBurningBlock(FuelTimes.BUTTON).accept(blockItems.button);
