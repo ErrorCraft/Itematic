@@ -1,12 +1,14 @@
 {
   "behavior": {
     "minecraft:block": {
-      "block": "minecraft:test_block"
+      "block": "minecraft:test_block",
+      "operator_only": true
     },
     "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:test_block",
+    "rarity": "epic",
     "translation_key": "block.minecraft.test_block"
   }
 }
