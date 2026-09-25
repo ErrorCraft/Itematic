@@ -27,7 +27,7 @@ public record UseDuration(UseDurationProvider ticks) {
     public static final int NONE = 0;
     public static final int INDEFINITE = -1;
 
-    private UseDuration(int ticks) {
+    public UseDuration(int ticks) {
         this(new ConstantUseDurationProvider(ticks));
     }
 

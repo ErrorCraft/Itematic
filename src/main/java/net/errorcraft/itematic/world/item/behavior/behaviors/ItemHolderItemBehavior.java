@@ -5,21 +5,12 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.world.item.BundleItemAccessor;
-import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
-import net.errorcraft.itematic.references.SoundEventIds;
-import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
-import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
-import net.errorcraft.itematic.world.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
-import net.errorcraft.itematic.world.item.holder.rule.rules.RejectItemHolderRule;
-import net.minecraft.advancements.predicates.DataComponentMatchers;
-import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
@@ -32,7 +23,6 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
@@ -58,48 +48,8 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
     private static final int TICKS_AFTER_FIRST_THROW = BundleItemAccessor.ticksAfterFirstThrow();
     private static final int TICKS_BETWEEN_THROWS = BundleItemAccessor.ticksBetweenThrows();
 
-    public static ItemHolderItemBehavior of(int capacity, ItemHolderRules rules, Holder<SoundEvent> insertItemSound, Holder<SoundEvent> insertFailItemSound, Holder<SoundEvent> removeItemSound, Holder<SoundEvent> emptySound) {
-        return new ItemHolderItemBehavior(Fraction.getFraction(capacity, 1), rules, insertItemSound, insertFailItemSound, removeItemSound, emptySound);
-    }
-
-    public static ItemBehavior<?>[] of(HolderGetter<Item> items, HolderGetter<SoundEvent> soundEvents) {
-        return new ItemBehavior<?>[] {
-            StackableItemBehavior.of(1),
-            UseableItemBehavior.builder()
-                .useFor(BundleItemAccessor.useDuration())
-                .build(),
-            of(
-                1,
-                ItemHolderRules.builder()
-                    .rule(
-                        RejectItemHolderRule.INSTANCE,
-                        ItemPredicate.Builder.item()
-                            .itematic$items(items.getOrThrow(ItematicItemTags.BANNED_BUNDLE_ITEMS))
-                            .build()
-                    )
-                    .rule(
-                        OccupancyHeldItemsWithPenaltyItemHolderRule.of(BundleContentsAccessor.nestedBundleOccupancy()),
-                        ItemPredicate.Builder.item()
-                            .withComponents(DataComponentMatchers.Builder.components()
-                                .any(DataComponents.BUNDLE_CONTENTS)
-                                .build())
-                            .build()
-                    )
-                    .rule(
-                        FractionItemHolderRule.of(Fraction.ONE),
-                        ItemPredicate.Builder.item()
-                            .withComponents(DataComponentMatchers.Builder.components()
-                                .any(DataComponents.BEES)
-                                .build())
-                            .build()
-                    )
-                    .build(),
-                soundEvents.getOrThrow(SoundEventIds.BUNDLE_INSERT),
-                soundEvents.getOrThrow(SoundEventIds.BUNDLE_INSERT_FAIL),
-                soundEvents.getOrThrow(SoundEventIds.BUNDLE_REMOVE_ONE),
-                soundEvents.getOrThrow(SoundEventIds.BUNDLE_DROP_CONTENTS)
-            )
-        };
+    public static ItemHolderItemBehavior of(Fraction capacity, ItemHolderRules rules, Holder<SoundEvent> insertItemSound, Holder<SoundEvent> insertFailItemSound, Holder<SoundEvent> removeItemSound, Holder<SoundEvent> emptySound) {
+        return new ItemHolderItemBehavior(capacity, rules, insertItemSound, insertFailItemSound, removeItemSound, emptySound);
     }
 
     @Override

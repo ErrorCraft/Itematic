@@ -22,5 +22,4 @@ public record DispensableItemBehavior(Holder<DispenseBehavior> behavior) impleme
     public ItemBehaviorType<DispensableItemBehavior> type() {
         return ItemBehaviorType.DISPENSABLE;
     }
-
 }

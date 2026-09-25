@@ -7,6 +7,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.Item;
 
 public class Tooltips {
@@ -19,8 +20,18 @@ public class Tooltips {
 
     public static Component[] smithingUpgrade(Identifier upgradeName) {
         return smithing(
-            Component.translatable(ItematicUtil.descriptionKey("smithing_template", upgradeName, "applies_to")),
-            Component.translatable(ItematicUtil.descriptionKey("smithing_template", upgradeName, "ingredients"))
+            Component.translatable(
+                Util.makeDescriptionId(
+                    "item",
+                    upgradeName.withPath(path -> "smithing_template." + path + ".applies_to")
+                )
+            ),
+            Component.translatable(
+                Util.makeDescriptionId(
+                    "item",
+                    upgradeName.withPath(path -> "smithing_template." + path + ".ingredients")
+                )
+            )
         );
     }
 

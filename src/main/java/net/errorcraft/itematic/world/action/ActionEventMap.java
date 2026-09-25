@@ -3,7 +3,6 @@ package net.errorcraft.itematic.world.action;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Keyable;
 import net.errorcraft.itematic.world.action.context.ActionContext;
-import net.errorcraft.itematic.world.item.ItemEvent;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 
@@ -22,6 +21,10 @@ public class ActionEventMap<T> {
     @SuppressWarnings("unchecked")
     public static <T> ActionEventMap<T> empty() {
         return (ActionEventMap<T>) EMPTY;
+    }
+
+    public static <T> Builder<T> builder() {
+        return new Builder<>();
     }
 
     public static <T> Codec<ActionEventMap<T>> codec(Codec<T> keyCodec, Keyable keys) {
@@ -64,11 +67,11 @@ public class ActionEventMap<T> {
 
         private Builder() {}
 
-        public static Builder<ItemEvent> item() {
-            return new Builder<>();
-        }
-
         public ActionEventMap<T> build() {
+            if (this.events.isEmpty()) {
+                return empty();
+            }
+
             return new ActionEventMap<>(this.events);
         }
 

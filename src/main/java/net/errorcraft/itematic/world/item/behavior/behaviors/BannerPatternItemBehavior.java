@@ -16,11 +16,8 @@ public record BannerPatternItemBehavior(HolderSet<BannerPattern> patterns) imple
         RegistryCodecs.homogeneousList(Registries.BANNER_PATTERN).fieldOf("patterns").forGetter(BannerPatternItemBehavior::patterns)
     ).apply(instance, BannerPatternItemBehavior::new));
 
-    public static ItemBehavior<?>[] of(HolderSet<BannerPattern> patterns) {
-        return new ItemBehavior<?>[] {
-            StackableItemBehavior.of(1),
-            new BannerPatternItemBehavior(patterns)
-        };
+    public static BannerPatternItemBehavior of(HolderSet<BannerPattern> patterns) {
+        return new BannerPatternItemBehavior(patterns);
     }
 
     @Override

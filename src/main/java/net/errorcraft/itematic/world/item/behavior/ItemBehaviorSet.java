@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class ItemBehaviorSet implements Iterable<ItemBehavior<?>> {
     public static final ItemBehaviorSet EMPTY = new ItemBehaviorSet(Map.of());
@@ -53,25 +52,15 @@ public class ItemBehaviorSet implements Iterable<ItemBehavior<?>> {
         private Builder() {}
 
         public ItemBehaviorSet build() {
+            if (this.behavior.isEmpty()) {
+                return EMPTY;
+            }
+
             return new ItemBehaviorSet(this.behavior);
         }
 
-        public Builder with(ItemBehavior<?> behavior) {
+        public void add(ItemBehavior<?> behavior) {
             this.behavior.put(behavior.type(), behavior);
-            return this;
-        }
-
-        public Builder with(boolean condition, ItemBehavior<?> behavior) {
-            if (condition) {
-                return this.with(behavior);
-            }
-
-            return this;
-        }
-
-        public Builder with(ItemBehavior<?>... behavior) {
-            Stream.of(behavior).forEach(this::with);
-            return this;
         }
     }
 }

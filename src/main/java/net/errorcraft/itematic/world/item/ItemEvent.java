@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.world.item;
 
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
+import net.errorcraft.itematic.world.action.ActionEventMap;
 import net.minecraft.core.Registry;
 import net.minecraft.util.Util;
 
@@ -27,6 +28,10 @@ public record ItemEvent() {
     public static final ItemEvent BEFORE_DEATH_HOLDER = register("before_death_holder");
 
     public static void init() {}
+
+    public static ActionEventMap.Builder<ItemEvent> mapBuilder() {
+        return ActionEventMap.builder();
+    }
 
     private static ItemEvent register(String id) {
         return Registry.register(ItematicBuiltInRegistries.ITEM_EVENT, id, new ItemEvent());

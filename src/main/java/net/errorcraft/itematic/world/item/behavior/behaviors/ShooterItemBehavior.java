@@ -10,7 +10,6 @@ import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.ShooterUseDurationProvider;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.core.HolderSet;
@@ -26,7 +25,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -45,20 +43,14 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
         ItemDamageRules.CODEC.fieldOf("item_damage").forGetter(ShooterItemBehavior::itemDamage)
     ).apply(instance, ShooterItemBehavior::new));
 
-    public static ItemBehavior<?>[] of(ItemUseAnimation animation, HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRules.Rule... rules) {
-        return new ItemBehavior<?>[] {
-            UseableItemBehavior.builder()
-                .useFor(ShooterUseDurationProvider.INSTANCE)
-                .animation(animation)
-                .build(),
-            new ShooterItemBehavior(
-                heldAmmunition,
-                ammunition,
-                range,
-                method,
-                new ItemDamageRules(List.of(rules), 1)
-            )
-        };
+    public static ShooterItemBehavior of(HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRules.Rule... rules) {
+        return new ShooterItemBehavior(
+            heldAmmunition,
+            ammunition,
+            range,
+            method,
+            new ItemDamageRules(List.of(rules), 1)
+        );
     }
 
     @Override
