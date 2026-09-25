@@ -821,12 +821,12 @@ public class Items {
                     )
                 )
                 .register();
-            this.builderForProjectile(ItemIds.SPLASH_POTION, 1, EntityTypeIds.SPLASH_POTION)
+            this.builderForProjectile(ItemIds.SPLASH_POTION, EntityTypeIds.SPLASH_POTION, 1)
                 .behavior(PotionHolderItemBehavior.of(1.0f))
                 .behavior(ThrowableItemBehavior.of(0.5f, -20.0f))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                 .register();
-            this.builderForProjectile(ItemIds.LINGERING_POTION, 1, EntityTypeIds.LINGERING_POTION)
+            this.builderForProjectile(ItemIds.LINGERING_POTION, EntityTypeIds.LINGERING_POTION, 1)
                 .behavior(PotionHolderItemBehavior.of(0.25f))
                 .behavior(ThrowableItemBehavior.of(0.5f, -20.0f))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
@@ -1368,17 +1368,17 @@ public class Items {
                 .behavior(EnchantableItemBehavior.of(1))
                 .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
                 .register();
-            this.builderForProjectile(ItemIds.ARROW, 64, EntityTypeIds.ARROW)
+            this.builderForProjectile(ItemIds.ARROW, EntityTypeIds.ARROW)
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                 .register();
-            this.builderForProjectile(ItemIds.SPECTRAL_ARROW, 64, EntityTypeIds.SPECTRAL_ARROW)
+            this.builderForProjectile(ItemIds.SPECTRAL_ARROW, EntityTypeIds.SPECTRAL_ARROW)
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                 .register();
-            this.builderForProjectile(ItemIds.TIPPED_ARROW, 64, EntityTypeIds.ARROW)
+            this.builderForProjectile(ItemIds.TIPPED_ARROW, EntityTypeIds.ARROW)
                 .behavior(PotionHolderItemBehavior.of(0.125f))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                 .register();
-            this.builderForProjectile(ItemIds.TRIDENT, 1, EntityTypeIds.TRIDENT)
+            this.builderForProjectile(ItemIds.TRIDENT, EntityTypeIds.TRIDENT, 1)
                 .display(display -> display.rarity(Rarity.RARE))
                 .behavior(DamageableItemBehavior.ofPreserved(250))
                 .behavior(
@@ -1998,15 +1998,15 @@ public class Items {
                     )
                 )
                 .register();
-            this.builderForProjectile(ItemIds.SNOWBALL, 16, EntityTypeIds.SNOWBALL)
+            this.builderForProjectile(ItemIds.SNOWBALL, EntityTypeIds.SNOWBALL, 16)
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                 .behavior(ThrowableItemBehavior.of(1.5f))
                 .register();
-            this.builderForProjectile(ItemIds.ENDER_PEARL, 16, EntityTypeIds.ENDER_PEARL)
+            this.builderForProjectile(ItemIds.ENDER_PEARL, EntityTypeIds.ENDER_PEARL, 16)
                 .behavior(ThrowableItemBehavior.of(1.5f))
                 .behavior(CooldownItemBehavior.of(20))
                 .register();
-            this.builderForProjectile(ItemIds.ENDER_EYE, 64, EntityTypeIds.EYE_OF_ENDER)
+            this.builderForProjectile(ItemIds.ENDER_EYE, EntityTypeIds.EYE_OF_ENDER)
                 .behavior(ThrowableItemBehavior.of())
                 .behavior(PreventUseWhenUsedOnTargetItemBehavior.forBlock())
                 .event(
@@ -2047,12 +2047,12 @@ public class Items {
                     )
                 )
                 .register();
-            this.builderForProjectile(ItemIds.EXPERIENCE_BOTTLE, 64, EntityTypeIds.EXPERIENCE_BOTTLE)
+            this.builderForProjectile(ItemIds.EXPERIENCE_BOTTLE, EntityTypeIds.EXPERIENCE_BOTTLE)
                 .display(display -> display.rarity(Rarity.UNCOMMON).glint())
                 .behavior(ThrowableItemBehavior.of(0.7f, -20.0f))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
                 .register();
-            this.builderForProjectile(ItemIds.FIRE_CHARGE, 64, EntityTypeIds.SMALL_FIREBALL)
+            this.builderForProjectile(ItemIds.FIRE_CHARGE, EntityTypeIds.SMALL_FIREBALL)
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_CHARGE)))
                 .event(
                     ItemEvent.USE_ON_BLOCK,
@@ -2066,7 +2066,7 @@ public class Items {
                     )
                 )
                 .register();
-            this.builderForProjectile(ItemIds.WIND_CHARGE, 64, EntityTypeIds.WIND_CHARGE)
+            this.builderForProjectile(ItemIds.WIND_CHARGE, EntityTypeIds.WIND_CHARGE)
                 .behavior(ThrowableItemBehavior.of(1.5f))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
                 .behavior(CooldownItemBehavior.of(10))
@@ -2490,7 +2490,7 @@ public class Items {
             this.builder(ItemIds.FIREWORK_STAR)
                 .behavior(FireworkExplosionHolderItemBehavior.INSTANCE)
                 .register();
-            this.builderForProjectile(ItemIds.FIREWORK_ROCKET, 64, EntityTypeIds.FIREWORK_ROCKET)
+            this.builderForProjectile(ItemIds.FIREWORK_ROCKET, EntityTypeIds.FIREWORK_ROCKET)
                 .behavior(FireworkItemBehavior.INSTANCE)
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
                 .register();
@@ -2992,7 +2992,11 @@ public class Items {
                 .register();
         }
 
-        private ItemBuilder builderForProjectile(ResourceKey<Item> item, int maxStackSize, ResourceKey<EntityType<?>> entity) {
+        private ItemBuilder builderForProjectile(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
+            return this.builderForProjectile(item, entity, Item.DEFAULT_MAX_STACK_SIZE);
+        }
+
+        private ItemBuilder builderForProjectile(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity, int maxStackSize) {
             return this.builder(item, maxStackSize)
                 .behavior(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(entity)));
         }
