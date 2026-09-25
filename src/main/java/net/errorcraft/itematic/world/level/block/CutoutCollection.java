@@ -2,6 +2,7 @@ package net.errorcraft.itematic.world.level.block;
 
 import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.world.item.Items;
+import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
 import net.minecraft.references.BlockItemId;
 import org.jspecify.annotations.Nullable;
 
@@ -53,15 +54,23 @@ public record CutoutCollection<T>(T block, @Nullable T stairs, T slab, @Nullable
     }
 
     public static void registerBurningItems(CutoutCollection<BlockItemId> blockItems, Items.Bootstrapper bootstrapper) {
-        bootstrapper.registerBurningWoodBlock(blockItems.block);
+        registerBurningItem(bootstrapper, blockItems.block);
         if (blockItems.stairs != null) {
-            bootstrapper.registerBurningWoodBlock(blockItems.stairs);
+            registerBurningItem(bootstrapper, blockItems.stairs);
         }
 
-        bootstrapper.registerBurningSlab(blockItems.slab);
+        bootstrapper.builderForBlock(blockItems.slab)
+            .behavior(FuelItemBehavior.of(FuelTimes.SLAB))
+            .register();
         if (blockItems.wall != null) {
-            bootstrapper.registerBurningWoodBlock(blockItems.wall);
+            registerBurningItem(bootstrapper, blockItems.wall);
         }
+    }
+
+    private static void registerBurningItem(Items.Bootstrapper bootstrapper, BlockItemId blockItem) {
+        bootstrapper.builderForBlock(blockItem)
+            .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+            .register();
     }
 
     public <U> CutoutCollection<U> map(Function<T, U> mapper) {

@@ -51,7 +51,6 @@ import net.errorcraft.itematic.world.entity.spawn.rule.rules.AlignYawEntitySpawn
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.DiscardEntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.FitsInVolumeEntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.OffsetSpawnPositionEntitySpawnRule;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.behaviors.AttackBlockingItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
@@ -142,7 +141,6 @@ import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
@@ -247,7 +245,6 @@ import org.apache.commons.lang3.math.Fraction;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 public class Items {
     public static final int UNSTACKABLE_MAX_STACK_SIZE = 1;
@@ -260,8 +257,8 @@ public class Items {
     public static final Codec<HolderSet<Item>> LIST_CODEC = RegistryCodecs.homogeneousList(Registries.ITEM);
     public static final StreamCodec<RegistryFriendlyByteBuf, HolderSet<Item>> LIST_STREAM_CODEC = ByteBufCodecs.holderSet(Registries.ITEM);
 
-    public static void bootstrap(BootstrapContext<Item> registerable) {
-        new Bootstrapper(registerable).bootstrap();
+    public static void bootstrap(BootstrapContext<Item> context) {
+        new Bootstrapper(context).bootstrap();
     }
 
     public static ResourceKey<Item> keyFromBlock(Block block) {
@@ -269,7 +266,7 @@ public class Items {
         return ResourceKey.create(Registries.ITEM, id);
     }
 
-    private static Item create(ItemDisplay display, ItemAttributeModifiers attributeModifiers, ItemBehaviorSet behavior, ActionEventMap<ItemEvent> events) {
+    public static Item create(ItemDisplay display, ItemAttributeModifiers attributeModifiers, ItemBehaviorSet behavior, ActionEventMap<ItemEvent> events) {
         Item item = new Item(new Item.Properties());
         item.itematic$setDisplay(display);
         item.itematic$setAttributeModifiers(attributeModifiers);
@@ -278,84 +275,8 @@ public class Items {
         return item;
     }
 
-    public static class Builder {
-        private final ResourceKey<Item> item;
-        private final BootstrapContext<Item> bootstrapper;
-        private final ItemDisplay.Builder display = ItemDisplay.builder();
-        private final ItemAttributeModifiers.Builder attributeModifiers = ItemAttributeModifiers.builder();
-        private final ItemBehaviorSet.Builder behavior = ItemBehaviorSet.builder();
-        private final ActionEventMap.Builder<ItemEvent> events = ItemEvent.mapBuilder();
-
-        private Builder(ResourceKey<Item> item, BootstrapContext<Item> bootstrapper) {
-            this.item = item;
-            this.bootstrapper = bootstrapper;
-        }
-
-        public void register() {
-            this.bootstrapper.register(
-                this.item,
-                create(
-                    this.display.build(this.item),
-                    this.attributeModifiers.build(),
-                    this.behavior.build(),
-                    this.events.build()
-                )
-            );
-        }
-
-        public Builder display(UnaryOperator<ItemDisplay.Builder> display) {
-            display.apply(this.display);
-            return this;
-        }
-
-        public Builder attributeModifiers(UnaryOperator<ItemAttributeModifiers.Builder> attributeModifiers) {
-            attributeModifiers.apply(this.attributeModifiers);
-            return this;
-        }
-
-        public Builder behavior(boolean condition, ItemBehavior<?> behavior) {
-            if (condition) {
-                this.behavior.add(behavior);
-            }
-
-            return this;
-        }
-
-        public Builder behavior(ItemBehavior<?> behavior) {
-            this.behavior.add(behavior);
-            return this;
-        }
-
-        public Builder event(ItemEvent event, ActionEntry action) {
-            this.events.add(event, action);
-            return this;
-        }
-
-        public Builder event(ItemEvent event, Holder<ActionEntry> action) {
-            this.events.add(event, action);
-            return this;
-        }
-
-        public Builder cancellableEvent(ItemEvent event, ActionEntry action) {
-            this.events.addCancellable(event, action);
-            return this;
-        }
-
-        public Builder apply(UnaryOperator<Builder> builder) {
-            return builder.apply(this);
-        }
-
-        public Builder apply(UnaryOperator<Builder> builder, boolean condition) {
-            if (condition) {
-                return this.apply(builder);
-            }
-
-            return this;
-        }
-    }
-
     public static class Bootstrapper {
-        private final BootstrapContext<Item> registerable;
+        private final BootstrapContext<Item> context;
         private final HolderGetter<Item> items;
         private final HolderGetter<EntityType<?>> entityTypes;
         private final HolderGetter<Block> blocks;
@@ -374,72 +295,57 @@ public class Items {
         private final HolderGetter<DamageType> damageTypes;
         private final HolderGetter<BannerPattern> bannerPatterns;
 
-        private Bootstrapper(BootstrapContext<Item> registerable) {
-            this.registerable = registerable;
-            this.items = registerable.lookup(Registries.ITEM);
-            this.entityTypes = registerable.lookup(Registries.ENTITY_TYPE);
-            this.blocks = registerable.lookup(Registries.BLOCK);
-            this.dispenseBehaviors = registerable.lookup(ItematicRegistries.DISPENSE_BEHAVIOR);
-            this.soundEvents = registerable.lookup(Registries.SOUND_EVENT);
-            this.fluids = registerable.lookup(Registries.FLUID);
-            this.actions = registerable.lookup(ItematicRegistries.ACTION);
-            this.decoratedPotPatterns = registerable.lookup(Registries.DECORATED_POT_PATTERN);
-            this.statusEffects = registerable.lookup(Registries.MOB_EFFECT);
-            this.potions = registerable.lookup(Registries.POTION);
-            this.enchantments = registerable.lookup(Registries.ENCHANTMENT);
-            this.jukeboxSongs = registerable.lookup(Registries.JUKEBOX_SONG);
-            this.instruments = registerable.lookup(Registries.INSTRUMENT);
-            this.trimMaterials = registerable.lookup(Registries.TRIM_MATERIAL);
-            this.chickenVariants = registerable.lookup(Registries.CHICKEN_VARIANT);
-            this.damageTypes = registerable.lookup(Registries.DAMAGE_TYPE);
-            this.bannerPatterns = registerable.lookup(Registries.BANNER_PATTERN);
+        private Bootstrapper(BootstrapContext<Item> context) {
+            this.context = context;
+            this.items = context.lookup(Registries.ITEM);
+            this.entityTypes = context.lookup(Registries.ENTITY_TYPE);
+            this.blocks = context.lookup(Registries.BLOCK);
+            this.dispenseBehaviors = context.lookup(ItematicRegistries.DISPENSE_BEHAVIOR);
+            this.soundEvents = context.lookup(Registries.SOUND_EVENT);
+            this.fluids = context.lookup(Registries.FLUID);
+            this.actions = context.lookup(ItematicRegistries.ACTION);
+            this.decoratedPotPatterns = context.lookup(Registries.DECORATED_POT_PATTERN);
+            this.statusEffects = context.lookup(Registries.MOB_EFFECT);
+            this.potions = context.lookup(Registries.POTION);
+            this.enchantments = context.lookup(Registries.ENCHANTMENT);
+            this.jukeboxSongs = context.lookup(Registries.JUKEBOX_SONG);
+            this.instruments = context.lookup(Registries.INSTRUMENT);
+            this.trimMaterials = context.lookup(Registries.TRIM_MATERIAL);
+            this.chickenVariants = context.lookup(Registries.CHICKEN_VARIANT);
+            this.damageTypes = context.lookup(Registries.DAMAGE_TYPE);
+            this.bannerPatterns = context.lookup(Registries.BANNER_PATTERN);
         }
 
-        private Builder builder(ResourceKey<Item> item) {
-            return this.builder(item, Item.DEFAULT_MAX_STACK_SIZE);
-        }
-
-        private Builder builder(ResourceKey<Item> item, int maxStackSize) {
-            return new Builder(item, this.registerable)
+        private ItemBuilder builder(ResourceKey<Item> item, int maxStackSize) {
+            return ItemBuilder.create(item, this.context)
                 .behavior(StackableItemBehavior.of(maxStackSize));
         }
 
-        public void registerItem(ResourceKey<Item> item) {
-            this.builder(item).register();
+        private ItemBuilder builder(ResourceKey<Item> item) {
+            return this.builder(item, Item.DEFAULT_MAX_STACK_SIZE);
         }
 
-        public void registerBlock(BlockItemId blockItem) {
-            this.builderForBlock(blockItem).register();
-        }
-
-        private Builder builderForBlock(BlockItemId blockItem) {
+        public ItemBuilder builderForBlock(BlockItemId blockItem) {
             return this.builderForBlock(blockItem, Item.DEFAULT_MAX_STACK_SIZE);
         }
 
-        private Builder builderForBlock(BlockItemId blockItem, int maxStackSize) {
+        public ItemBuilder builderForBlock(BlockItemId blockItem, int maxStackSize) {
             return this.builder(blockItem.item(), maxStackSize)
                 .display(ItemDisplay.Builder::blockName)
                 .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())));
         }
 
-        private void registerOperatorBlock(BlockItemId blockItem) {
-            this.builder(blockItem.item())
-                .display(display -> display.blockName().rarity(Rarity.EPIC))
-                .behavior(BlockItemBehavior.operator(this.blocks.getOrThrow(blockItem.block())))
-                .register();
-        }
-
-        private Builder builderForBlockOnFluid(BlockItemId blockItem) {
+        private ItemBuilder builderForBlockOnFluid(BlockItemId blockItem) {
             return this.builder(blockItem.item())
                 .display(ItemDisplay.Builder::blockName)
                 .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block()), BlockItemBehavior.Pass.FLUID));
         }
 
-        private Builder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side) {
+        private ItemBuilder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side) {
             return this.builderForBlockAttachedToSide(blockItem, otherBlock, side, Item.DEFAULT_MAX_STACK_SIZE);
         }
 
-        public Builder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side, int maxStackSize) {
+        public ItemBuilder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side, int maxStackSize) {
             return this.builder(blockItem.item(), maxStackSize)
                 .display(ItemDisplay.Builder::blockName)
                 .behavior(
@@ -451,8 +357,23 @@ public class Items {
                 );
         }
 
+        public void registerItem(ResourceKey<Item> item) {
+            this.builder(item).register();
+        }
+
+        public void registerBlock(BlockItemId blockItem) {
+            this.builderForBlock(blockItem).register();
+        }
+
+        private void registerOperatorBlock(BlockItemId blockItem) {
+            this.builder(blockItem.item())
+                .display(display -> display.blockName().rarity(Rarity.EPIC))
+                .behavior(BlockItemBehavior.operator(this.blocks.getOrThrow(blockItem.block())))
+                .register();
+        }
+
         private void bootstrap() {
-            new Builder(BlockItemIds.AIR.item(), this.registerable)
+            ItemBuilder.create(BlockItemIds.AIR.item(), this.context)
                 .display(ItemDisplay.Builder::blockName)
                 .register();
             WoodCollection.registerItems(
@@ -2608,19 +2529,19 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForConsumable(ResourceKey<Item> item, Consumable consumable) {
+        private ItemBuilder builderForConsumable(ResourceKey<Item> item, Consumable consumable) {
             return this.builder(item)
                 .behavior(UseableItemBehavior.of(consumable))
                 .behavior(ConsumableItemBehavior.of(consumable));
         }
 
-        private Builder builderForConsumable(ResourceKey<Item> item, Consumable consumable, ResourceKey<Item> remainder) {
+        private ItemBuilder builderForConsumable(ResourceKey<Item> item, Consumable consumable, ResourceKey<Item> remainder) {
             return this.builder(item, 1)
                 .behavior(UseableItemBehavior.of(consumable, this.items.getOrThrow(remainder)))
                 .behavior(ConsumableItemBehavior.of(consumable));
         }
 
-        private Builder builderForConsumableBowl(ResourceKey<Item> item) {
+        private ItemBuilder builderForConsumableBowl(ResourceKey<Item> item) {
             return this.builderForConsumable(item, Consumables.DEFAULT_FOOD, ItemIds.BOWL);
         }
 
@@ -2628,13 +2549,13 @@ public class Items {
             this.builderForBucket(item, maxStackSize, bucket).register();
         }
 
-        private Builder builderForBucket(ResourceKey<Item> item, int maxStackSize, BucketItemBehavior bucket) {
+        private ItemBuilder builderForBucket(ResourceKey<Item> item, int maxStackSize, BucketItemBehavior bucket) {
             return this.builder(item, maxStackSize)
                 .behavior(bucket)
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET)));
         }
 
-        private Builder builderForBucketWithFluid(ResourceKey<Item> item, ResourceKey<Fluid> fluid, ResourceKey<SoundEvent> placeSound) {
+        private ItemBuilder builderForBucketWithFluid(ResourceKey<Item> item, ResourceKey<Fluid> fluid, ResourceKey<SoundEvent> placeSound) {
             return this.builderForBucket(
                 item,
                 1,
@@ -2646,7 +2567,7 @@ public class Items {
             );
         }
 
-        private Builder builderForBucketWithEntity(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity, ResourceKey<SoundEvent> placeSound) {
+        private ItemBuilder builderForBucketWithEntity(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity, ResourceKey<SoundEvent> placeSound) {
             return this.builderForBucket(
                 item,
                 1,
@@ -2797,7 +2718,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForSword(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
+        private ItemBuilder builderForSword(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
             return this.builder(item, 1)
                 .behavior(DamageableItemBehavior.of(material.durability()))
                 .behavior(
@@ -2820,7 +2741,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForSpear(ResourceKey<Item> item, ToolMaterial material, float attackDuration, float damageMultiplier, float delay, float dismountTime, float dismountSpeedThreshold, float knockbackTime, float damageTime, TagKey<Item> repairItems) {
+        private ItemBuilder builderForSpear(ResourceKey<Item> item, ToolMaterial material, float attackDuration, float damageMultiplier, float delay, float dismountTime, float dismountSpeedThreshold, float knockbackTime, float damageTime, TagKey<Item> repairItems) {
             return this.builder(item, 1)
                 .behavior(DamageableItemBehavior.of(material.durability()))
                 .behavior(
@@ -2904,7 +2825,7 @@ public class Items {
                 .behavior(RepairableItemBehavior.of(this.items.getOrThrow(repairItems)));
         }
 
-        private Builder builderForTool(ResourceKey<Item> item, ToolMaterial material, float disableBlockingForSeconds, double baseAttackDamage, double attackSpeed, TagKey<Block> mineableBlocks, TagKey<Item> repairItems) {
+        private ItemBuilder builderForTool(ResourceKey<Item> item, ToolMaterial material, float disableBlockingForSeconds, double baseAttackDamage, double attackSpeed, TagKey<Block> mineableBlocks, TagKey<Item> repairItems) {
             return this.builder(item, 1)
                 .behavior(DamageableItemBehavior.of(material.durability()))
                 .behavior(ToolItemBehavior.of(this.blocks, material, mineableBlocks))
@@ -2922,7 +2843,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForShovel(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
+        private ItemBuilder builderForShovel(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
             return this.builderForTool(item, material, 0.0f, 2.5d, 0.25d, BlockTags.MINEABLE_WITH_SHOVEL, repairItems)
                 .event(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_SHOVEL_ON_BLOCK));
         }
@@ -2932,7 +2853,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForPickaxe(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
+        private ItemBuilder builderForPickaxe(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
             return this.builderForTool(item, material, 0.0f, 2.0d, 0.3d, BlockTags.MINEABLE_WITH_PICKAXE, repairItems);
         }
 
@@ -2941,7 +2862,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForAxe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
+        private ItemBuilder builderForAxe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
             return this.builderForTool(item, material, 5.0f, attackDamage, attackSpeed, BlockTags.MINEABLE_WITH_AXE, repairItems);
         }
 
@@ -2950,7 +2871,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForHoe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
+        private ItemBuilder builderForHoe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
             return this.builderForTool(item, material, 0.0f, attackDamage, attackSpeed, BlockTags.MINEABLE_WITH_HOE, repairItems)
                 .event(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_HOE_ON_BLOCK));
         }
@@ -2960,7 +2881,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForArmor(ResourceKey<Item> item, ArmorMaterial material, ArmorType type, TagKey<Item> repairItems) {
+        private ItemBuilder builderForArmor(ResourceKey<Item> item, ArmorMaterial material, ArmorType type, TagKey<Item> repairItems) {
             return this.builder(item, 1)
                 .attributeModifiers(builder -> AttributeModifiers.armor(builder, material, type))
                 .behavior(
@@ -2983,7 +2904,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForHorseArmor(ResourceKey<Item> item, ArmorMaterial material) {
+        private ItemBuilder builderForHorseArmor(ResourceKey<Item> item, ArmorMaterial material) {
             return this.builder(item, 1)
                 .attributeModifiers(builder -> AttributeModifiers.armor(builder, material, ArmorType.BODY))
                 .behavior(
@@ -3006,7 +2927,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForNautilusArmor(ResourceKey<Item> item, ArmorMaterial material) {
+        private ItemBuilder builderForNautilusArmor(ResourceKey<Item> item, ArmorMaterial material) {
             return this.builder(item, 1)
                 .attributeModifiers(builder -> AttributeModifiers.armor(builder, material, ArmorType.BODY))
                 .behavior(
@@ -3030,7 +2951,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForMinecart(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
+        private ItemBuilder builderForMinecart(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
             return this.builder(item, 1)
                 .behavior(
                     EntityItemBehavior.of(
@@ -3071,7 +2992,7 @@ public class Items {
                 .register();
         }
 
-        private Builder builderForProjectile(ResourceKey<Item> item, int maxStackSize, ResourceKey<EntityType<?>> entity) {
+        private ItemBuilder builderForProjectile(ResourceKey<Item> item, int maxStackSize, ResourceKey<EntityType<?>> entity) {
             return this.builder(item, maxStackSize)
                 .behavior(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(entity)));
         }
@@ -3094,18 +3015,6 @@ public class Items {
         public void registerShulkerBox(BlockItemId blockItem) {
             this.builderForBlock(blockItem, 1)
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
-                .register();
-        }
-
-        public void registerBurningWoodBlock(BlockItemId blockItem) {
-            this.builderForBlock(blockItem)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
-                .register();
-        }
-
-        public void registerBurningSlab(BlockItemId blockItem) {
-            this.builderForBlock(blockItem)
-                .behavior(FuelItemBehavior.of(FuelTimes.SLAB))
                 .register();
         }
 
