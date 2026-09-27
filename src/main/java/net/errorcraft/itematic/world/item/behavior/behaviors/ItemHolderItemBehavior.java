@@ -187,7 +187,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
     public void onDestroyed(ItemEntity item) {
         BundleContents bundleContents = item.getItem().get(DataComponents.BUNDLE_CONTENTS);
         if (bundleContents != null) {
-            ItemUtils.onContainerDestroyed(item, bundleContents.itemCopyStream());
+            ItemUtils.onContainerDestroyed(item, bundleContents.itemCopies());
         }
     }
 
@@ -211,9 +211,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
             return null;
         }
 
-        BundleContents.Mutable newContents = new BundleContents.Mutable(existingBundleContents);
-        newContents.itematic$setFields(existingBundleContents, capacity, rules);
-        return newContents;
+        return existingBundleContents.itematic$asMutable(capacity, rules);
     }
 
     public static void toggleSelectedItem(ItemStack stack, int selectedItem) {

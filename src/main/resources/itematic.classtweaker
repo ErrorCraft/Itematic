@@ -61,6 +61,7 @@ inject-interface    net/minecraft/world/item/ItemStack    net/errorcraft/itemati
 inject-interface    net/minecraft/world/item/component/BundleContents    net/errorcraft/itematic/access/world/item/component/BundleContentsAccess
 inject-interface    net/minecraft/world/item/component/BundleContents$Mutable    net/errorcraft/itematic/access/world/item/component/BundleContentsAccess$MutableAccess
 inject-interface    net/minecraft/world/item/component/ChargedProjectiles    net/errorcraft/itematic/access/world/item/component/ChargedProjectilesAccess
+inject-interface    net/minecraft/world/item/component/ContainerComponent    net/errorcraft/itematic/access/world/item/component/ContainerComponentAccess<TT;>
 inject-interface    net/minecraft/world/item/component/Tool    net/errorcraft/itematic/access/world/item/component/ToolAccess
 inject-interface    net/minecraft/world/item/component/Tool$Rule    net/errorcraft/itematic/access/world/item/component/ToolAccess$RuleAccess
 inject-interface    net/minecraft/world/item/context/BlockPlaceContext    net/errorcraft/itematic/access/world/item/context/BlockPlaceContextAccess
@@ -74,7 +75,6 @@ inject-interface    net/minecraft/world/level/block/CropBlock    net/errorcraft/
 inject-interface    net/minecraft/world/level/block/GrowingPlantHeadBlock    net/errorcraft/itematic/access/world/level/block/GrowingPlantHeadBlockAccess
 inject-interface    net/minecraft/world/level/block/entity/BlockEntity    net/errorcraft/itematic/access/world/level/block/entity/BlockEntityAccess
 inject-interface    net/minecraft/world/level/block/entity/BrewingStandBlockEntity    net/errorcraft/itematic/access/world/level/block/entity/BrewingStandBlockEntityAccess
-inject-interface    net/minecraft/world/level/block/entity/PotDecorations    net/errorcraft/itematic/access/world/level/block/entity/PotDecorationsAccess
 inject-interface    net/minecraft/world/level/block/state/BlockBehaviour    net/errorcraft/itematic/access/world/level/block/state/BlockBehaviourAccess
 inject-interface    net/minecraft/world/level/material/Fluid    net/errorcraft/itematic/access/world/level/material/FluidAccess
 inject-interface    net/minecraft/world/level/storage/loot/predicates/LocationCheck    net/errorcraft/itematic/access/world/level/storage/loot/predicates/LocationCheckAccess

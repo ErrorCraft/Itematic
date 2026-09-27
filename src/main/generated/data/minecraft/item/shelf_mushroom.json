@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:shelf_mushroom"
+    },
+    "minecraft:compostable": {
+      "level_increase_chance": 0.65
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:shelf_mushroom",
+    "translation_key": "block.minecraft.shelf_mushroom"
+  }
+}

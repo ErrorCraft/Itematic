@@ -72,6 +72,8 @@ public class ItemGroupEntryProviders {
         );
         registerable.register(COLORED_BLOCKS, ItemGroupEntryProvider.builder(items)
             .add(ItemGroupItemTags.WOOL)
+            .add(ItemGroupItemTags.WOOL_STAIRS)
+            .add(ItemGroupItemTags.WOOL_SLABS)
             .add(ItemGroupItemTags.WOOL_CARPETS)
             .add(ItemGroupItemTags.TERRACOTTA)
             .add(ItemGroupItemTags.CONCRETE)

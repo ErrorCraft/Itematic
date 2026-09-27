@@ -1,6 +1,8 @@
 {
   "entries": [
     "#minecraft:item_group/wool",
+    "#minecraft:item_group/wool_stairs",
+    "#minecraft:item_group/wool_slabs",
     "#minecraft:item_group/wool_carpets",
     "#minecraft:item_group/terracotta",
     "#minecraft:item_group/concrete",

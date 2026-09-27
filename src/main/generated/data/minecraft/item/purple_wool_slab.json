@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:purple_wool_slab"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:purple_wool_slab",
+    "translation_key": "block.minecraft.purple_wool_slab"
+  }
+}

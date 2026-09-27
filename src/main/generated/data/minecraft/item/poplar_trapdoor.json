@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:poplar_trapdoor"
+    },
+    "minecraft:fuel": {
+      "ticks": 300
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:poplar_trapdoor",
+    "translation_key": "block.minecraft.poplar_trapdoor"
+  }
+}

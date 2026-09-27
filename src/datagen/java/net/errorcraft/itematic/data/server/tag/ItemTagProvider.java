@@ -6,14 +6,39 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.references.BlockItemId;
 import net.minecraft.references.BlockItemIds;
 import net.minecraft.references.ItemIds;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.ColorCollection;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 public class ItemTagProvider extends FabricTagsProvider<Item> {
+    private static final List<DyeColor> GAMEPLAY_COLOR_ORDER = List.of(
+        DyeColor.WHITE,
+        DyeColor.LIGHT_GRAY,
+        DyeColor.GRAY,
+        DyeColor.BLACK,
+        DyeColor.BROWN,
+        DyeColor.RED,
+        DyeColor.ORANGE,
+        DyeColor.YELLOW,
+        DyeColor.LIME,
+        DyeColor.GREEN,
+        DyeColor.CYAN,
+        DyeColor.LIGHT_BLUE,
+        DyeColor.BLUE,
+        DyeColor.PURPLE,
+        DyeColor.MAGENTA,
+        DyeColor.PINK
+    );
+
     public ItemTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, Registries.ITEM, registriesFuture);
     }
@@ -141,6 +166,20 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(BlockItemIds.MANGROVE_TRAPDOOR.item())
             .add(BlockItemIds.MANGROVE_PRESSURE_PLATE.item())
             .add(BlockItemIds.MANGROVE_BUTTON.item());
+        this.builder(ItemGroupItemTags.POPLAR_BUILDING_BLOCKS)
+            .add(BlockItemIds.POPLAR_LOG.item())
+            .add(BlockItemIds.POPLAR_WOOD.item())
+            .add(BlockItemIds.STRIPPED_POPLAR_LOG.item())
+            .add(BlockItemIds.STRIPPED_POPLAR_WOOD.item())
+            .add(BlockItemIds.POPLAR_PLANKS.item())
+            .add(BlockItemIds.POPLAR_STAIRS.item())
+            .add(BlockItemIds.POPLAR_SLAB.item())
+            .add(BlockItemIds.POPLAR_FENCE.item())
+            .add(BlockItemIds.POPLAR_FENCE_GATE.item())
+            .add(BlockItemIds.POPLAR_DOOR.item())
+            .add(BlockItemIds.POPLAR_TRAPDOOR.item())
+            .add(BlockItemIds.POPLAR_PRESSURE_PLATE.item())
+            .add(BlockItemIds.POPLAR_BUTTON.item());
         this.builder(ItemGroupItemTags.CHERRY_BUILDING_BLOCKS)
             .add(BlockItemIds.CHERRY_LOG.item())
             .add(BlockItemIds.CHERRY_WOOD.item())
@@ -632,215 +671,39 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .addTag(ItemGroupItemTags.WAXED_WEATHERED_COPPER_BUILDING_BLOCKS)
             .addTag(ItemGroupItemTags.WAXED_OXIDIZED_COPPER_BUILDING_BLOCKS);
         this.builder(ItemGroupItemTags.WOOL)
-            .add(BlockItemIds.WOOL.white().item())
-            .add(BlockItemIds.WOOL.lightGray().item())
-            .add(BlockItemIds.WOOL.gray().item())
-            .add(BlockItemIds.WOOL.black().item())
-            .add(BlockItemIds.WOOL.brown().item())
-            .add(BlockItemIds.WOOL.red().item())
-            .add(BlockItemIds.WOOL.orange().item())
-            .add(BlockItemIds.WOOL.yellow().item())
-            .add(BlockItemIds.WOOL.lime().item())
-            .add(BlockItemIds.WOOL.green().item())
-            .add(BlockItemIds.WOOL.cyan().item())
-            .add(BlockItemIds.WOOL.lightBlue().item())
-            .add(BlockItemIds.WOOL.blue().item())
-            .add(BlockItemIds.WOOL.purple().item())
-            .add(BlockItemIds.WOOL.magenta().item())
-            .add(BlockItemIds.WOOL.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.WOOL));
+        this.builder(ItemGroupItemTags.WOOL_STAIRS)
+            .addAll(orderColoredBlockItems(BlockItemIds.WOOL_STAIRS));
+        this.builder(ItemGroupItemTags.WOOL_SLABS)
+            .addAll(orderColoredBlockItems(BlockItemIds.WOOL_SLAB));
         this.builder(ItemGroupItemTags.WOOL_CARPETS)
-            .add(BlockItemIds.CARPET.white().item())
-            .add(BlockItemIds.CARPET.lightGray().item())
-            .add(BlockItemIds.CARPET.gray().item())
-            .add(BlockItemIds.CARPET.black().item())
-            .add(BlockItemIds.CARPET.brown().item())
-            .add(BlockItemIds.CARPET.red().item())
-            .add(BlockItemIds.CARPET.orange().item())
-            .add(BlockItemIds.CARPET.yellow().item())
-            .add(BlockItemIds.CARPET.lime().item())
-            .add(BlockItemIds.CARPET.green().item())
-            .add(BlockItemIds.CARPET.cyan().item())
-            .add(BlockItemIds.CARPET.lightBlue().item())
-            .add(BlockItemIds.CARPET.blue().item())
-            .add(BlockItemIds.CARPET.purple().item())
-            .add(BlockItemIds.CARPET.magenta().item())
-            .add(BlockItemIds.CARPET.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.CARPET));
         this.builder(ItemGroupItemTags.TERRACOTTA)
             .add(BlockItemIds.TERRACOTTA.item())
-            .add(BlockItemIds.DYED_TERRACOTTA.white().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.lightGray().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.gray().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.black().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.brown().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.red().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.orange().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.yellow().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.lime().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.green().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.cyan().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.lightBlue().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.blue().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.purple().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.magenta().item())
-            .add(BlockItemIds.DYED_TERRACOTTA.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.DYED_TERRACOTTA));
         this.builder(ItemGroupItemTags.CONCRETE)
-            .add(BlockItemIds.CONCRETE.white().item())
-            .add(BlockItemIds.CONCRETE.lightGray().item())
-            .add(BlockItemIds.CONCRETE.gray().item())
-            .add(BlockItemIds.CONCRETE.black().item())
-            .add(BlockItemIds.CONCRETE.brown().item())
-            .add(BlockItemIds.CONCRETE.red().item())
-            .add(BlockItemIds.CONCRETE.orange().item())
-            .add(BlockItemIds.CONCRETE.yellow().item())
-            .add(BlockItemIds.CONCRETE.lime().item())
-            .add(BlockItemIds.CONCRETE.green().item())
-            .add(BlockItemIds.CONCRETE.cyan().item())
-            .add(BlockItemIds.CONCRETE.lightBlue().item())
-            .add(BlockItemIds.CONCRETE.blue().item())
-            .add(BlockItemIds.CONCRETE.purple().item())
-            .add(BlockItemIds.CONCRETE.magenta().item())
-            .add(BlockItemIds.CONCRETE.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.CONCRETE));
         this.builder(ItemGroupItemTags.CONCRETE_POWDER)
-            .add(BlockItemIds.CONCRETE_POWDER.white().item())
-            .add(BlockItemIds.CONCRETE_POWDER.lightGray().item())
-            .add(BlockItemIds.CONCRETE_POWDER.gray().item())
-            .add(BlockItemIds.CONCRETE_POWDER.black().item())
-            .add(BlockItemIds.CONCRETE_POWDER.brown().item())
-            .add(BlockItemIds.CONCRETE_POWDER.red().item())
-            .add(BlockItemIds.CONCRETE_POWDER.orange().item())
-            .add(BlockItemIds.CONCRETE_POWDER.yellow().item())
-            .add(BlockItemIds.CONCRETE_POWDER.lime().item())
-            .add(BlockItemIds.CONCRETE_POWDER.green().item())
-            .add(BlockItemIds.CONCRETE_POWDER.cyan().item())
-            .add(BlockItemIds.CONCRETE_POWDER.lightBlue().item())
-            .add(BlockItemIds.CONCRETE_POWDER.blue().item())
-            .add(BlockItemIds.CONCRETE_POWDER.purple().item())
-            .add(BlockItemIds.CONCRETE_POWDER.magenta().item())
-            .add(BlockItemIds.CONCRETE_POWDER.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.CONCRETE_POWDER));
         this.builder(ItemGroupItemTags.GLAZED_TERRACOTTA)
-            .add(BlockItemIds.GLAZED_TERRACOTTA.white().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.lightGray().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.gray().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.black().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.brown().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.red().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.orange().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.yellow().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.lime().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.green().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.cyan().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.lightBlue().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.blue().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.purple().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.magenta().item())
-            .add(BlockItemIds.GLAZED_TERRACOTTA.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.GLAZED_TERRACOTTA));
         this.builder(ItemGroupItemTags.GLASS)
             .add(BlockItemIds.GLASS.item())
             .add(BlockItemIds.TINTED_GLASS.item())
-            .add(BlockItemIds.STAINED_GLASS.white().item())
-            .add(BlockItemIds.STAINED_GLASS.lightGray().item())
-            .add(BlockItemIds.STAINED_GLASS.gray().item())
-            .add(BlockItemIds.STAINED_GLASS.black().item())
-            .add(BlockItemIds.STAINED_GLASS.brown().item())
-            .add(BlockItemIds.STAINED_GLASS.red().item())
-            .add(BlockItemIds.STAINED_GLASS.orange().item())
-            .add(BlockItemIds.STAINED_GLASS.yellow().item())
-            .add(BlockItemIds.STAINED_GLASS.lime().item())
-            .add(BlockItemIds.STAINED_GLASS.green().item())
-            .add(BlockItemIds.STAINED_GLASS.cyan().item())
-            .add(BlockItemIds.STAINED_GLASS.lightBlue().item())
-            .add(BlockItemIds.STAINED_GLASS.blue().item())
-            .add(BlockItemIds.STAINED_GLASS.purple().item())
-            .add(BlockItemIds.STAINED_GLASS.magenta().item())
-            .add(BlockItemIds.STAINED_GLASS.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.STAINED_GLASS));
         this.builder(ItemGroupItemTags.GLASS_PANES)
             .add(BlockItemIds.GLASS_PANE.item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.white().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.lightGray().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.gray().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.black().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.brown().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.red().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.orange().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.yellow().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.lime().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.green().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.cyan().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.lightBlue().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.blue().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.purple().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.magenta().item())
-            .add(BlockItemIds.STAINED_GLASS_PANE.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.STAINED_GLASS_PANE));
         this.builder(ItemGroupItemTags.SHULKER_BOXES)
             .add(BlockItemIds.SHULKER_BOX.item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.white().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.lightGray().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.gray().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.black().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.brown().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.red().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.orange().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.yellow().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.lime().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.green().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.cyan().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.lightBlue().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.blue().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.purple().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.magenta().item())
-            .add(BlockItemIds.DYED_SHULKER_BOX.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.DYED_SHULKER_BOX));
         this.builder(ItemGroupItemTags.BEDS)
-            .add(BlockItemIds.BED.white().item())
-            .add(BlockItemIds.BED.lightGray().item())
-            .add(BlockItemIds.BED.gray().item())
-            .add(BlockItemIds.BED.black().item())
-            .add(BlockItemIds.BED.brown().item())
-            .add(BlockItemIds.BED.red().item())
-            .add(BlockItemIds.BED.orange().item())
-            .add(BlockItemIds.BED.yellow().item())
-            .add(BlockItemIds.BED.lime().item())
-            .add(BlockItemIds.BED.green().item())
-            .add(BlockItemIds.BED.cyan().item())
-            .add(BlockItemIds.BED.lightBlue().item())
-            .add(BlockItemIds.BED.blue().item())
-            .add(BlockItemIds.BED.purple().item())
-            .add(BlockItemIds.BED.magenta().item())
-            .add(BlockItemIds.BED.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.BED));
         this.builder(ItemGroupItemTags.CANDLES)
             .add(BlockItemIds.CANDLE.item())
-            .add(BlockItemIds.DYED_CANDLE.white().item())
-            .add(BlockItemIds.DYED_CANDLE.lightGray().item())
-            .add(BlockItemIds.DYED_CANDLE.gray().item())
-            .add(BlockItemIds.DYED_CANDLE.black().item())
-            .add(BlockItemIds.DYED_CANDLE.brown().item())
-            .add(BlockItemIds.DYED_CANDLE.red().item())
-            .add(BlockItemIds.DYED_CANDLE.orange().item())
-            .add(BlockItemIds.DYED_CANDLE.yellow().item())
-            .add(BlockItemIds.DYED_CANDLE.lime().item())
-            .add(BlockItemIds.DYED_CANDLE.green().item())
-            .add(BlockItemIds.DYED_CANDLE.cyan().item())
-            .add(BlockItemIds.DYED_CANDLE.lightBlue().item())
-            .add(BlockItemIds.DYED_CANDLE.blue().item())
-            .add(BlockItemIds.DYED_CANDLE.purple().item())
-            .add(BlockItemIds.DYED_CANDLE.magenta().item())
-            .add(BlockItemIds.DYED_CANDLE.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.DYED_CANDLE));
         this.builder(ItemGroupItemTags.BANNERS)
-            .add(BlockItemIds.BANNER.white().item())
-            .add(BlockItemIds.BANNER.lightGray().item())
-            .add(BlockItemIds.BANNER.gray().item())
-            .add(BlockItemIds.BANNER.black().item())
-            .add(BlockItemIds.BANNER.brown().item())
-            .add(BlockItemIds.BANNER.red().item())
-            .add(BlockItemIds.BANNER.orange().item())
-            .add(BlockItemIds.BANNER.yellow().item())
-            .add(BlockItemIds.BANNER.lime().item())
-            .add(BlockItemIds.BANNER.green().item())
-            .add(BlockItemIds.BANNER.cyan().item())
-            .add(BlockItemIds.BANNER.lightBlue().item())
-            .add(BlockItemIds.BANNER.blue().item())
-            .add(BlockItemIds.BANNER.purple().item())
-            .add(BlockItemIds.BANNER.magenta().item())
-            .add(BlockItemIds.BANNER.pink().item());
+            .addAll(orderColoredBlockItems(BlockItemIds.BANNER));
         this.builder(ItemGroupItemTags.GRASS_LIKE_BLOCKS)
             .add(BlockItemIds.GRASS_BLOCK.item())
             .add(BlockItemIds.PODZOL.item())
@@ -934,6 +797,7 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(BlockItemIds.MANGROVE_LOG.item())
             .add(BlockItemIds.MANGROVE_ROOTS.item())
             .add(BlockItemIds.MUDDY_MANGROVE_ROOTS.item())
+            .add(BlockItemIds.POPLAR_LOG.item())
             .add(BlockItemIds.CHERRY_LOG.item())
             .add(BlockItemIds.PALE_OAK_LOG.item())
             .add(BlockItemIds.MUSHROOM_STEM.item())
@@ -947,6 +811,9 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(BlockItemIds.ACACIA_LEAVES.item())
             .add(BlockItemIds.DARK_OAK_LEAVES.item())
             .add(BlockItemIds.MANGROVE_LEAVES.item())
+            .add(BlockItemIds.RED_POPLAR_LEAVES.item())
+            .add(BlockItemIds.ORANGE_POPLAR_LEAVES.item())
+            .add(BlockItemIds.YELLOW_POPLAR_LEAVES.item())
             .add(BlockItemIds.CHERRY_LEAVES.item())
             .add(BlockItemIds.PALE_OAK_LEAVES.item())
             .add(BlockItemIds.AZALEA_LEAVES.item())
@@ -965,6 +832,7 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(BlockItemIds.ACACIA_SAPLING.item())
             .add(BlockItemIds.DARK_OAK_SAPLING.item())
             .add(BlockItemIds.MANGROVE_PROPAGULE.item())
+            .add(BlockItemIds.POPLAR_SAPLING.item())
             .add(BlockItemIds.CHERRY_SAPLING.item())
             .add(BlockItemIds.PALE_OAK_SAPLING.item());
         this.builder(ItemGroupItemTags.PLANTS)
@@ -972,12 +840,14 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(BlockItemIds.FLOWERING_AZALEA.item())
             .add(BlockItemIds.BROWN_MUSHROOM.item())
             .add(BlockItemIds.RED_MUSHROOM.item())
+            .add(BlockItemIds.SHELF_MUSHROOM.item())
             .add(BlockItemIds.CRIMSON_FUNGUS.item())
             .add(BlockItemIds.WARPED_FUNGUS.item())
             .add(BlockItemIds.SHORT_GRASS.item())
             .add(BlockItemIds.FERN.item())
             .add(BlockItemIds.SHORT_DRY_GRASS.item())
             .add(BlockItemIds.BUSH.item())
+            .add(BlockItemIds.RED_SHRUB.item())
             .add(BlockItemIds.DEAD_BUSH.item())
             .add(BlockItemIds.DANDELION.item())
             .add(BlockItemIds.POPPY.item())
@@ -1158,6 +1028,7 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(BlockItemIds.MANGROVE_SHELF.item())
             .add(BlockItemIds.CHERRY_SHELF.item())
             .add(BlockItemIds.PALE_OAK_SHELF.item())
+            .add(BlockItemIds.POPLAR_SHELF.item())
             .add(BlockItemIds.BAMBOO_SHELF.item())
             .add(BlockItemIds.CRIMSON_SHELF.item())
             .add(BlockItemIds.WARPED_SHELF.item());
@@ -1176,6 +1047,8 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(BlockItemIds.DARK_OAK_HANGING_SIGN.item())
             .add(BlockItemIds.MANGROVE_SIGN.item())
             .add(BlockItemIds.MANGROVE_HANGING_SIGN.item())
+            .add(BlockItemIds.POPLAR_SIGN.item())
+            .add(BlockItemIds.POPLAR_HANGING_SIGN.item())
             .add(BlockItemIds.CHERRY_SIGN.item())
             .add(BlockItemIds.CHERRY_HANGING_SIGN.item())
             .add(BlockItemIds.PALE_OAK_SIGN.item())
@@ -1280,39 +1153,9 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(ItemIds.MILK_BUCKET);
         this.builder(ItemGroupItemTags.BUNDLES)
             .add(ItemIds.BUNDLE)
-            .add(ItemIds.DYED_BUNDLE.white())
-            .add(ItemIds.DYED_BUNDLE.lightGray())
-            .add(ItemIds.DYED_BUNDLE.gray())
-            .add(ItemIds.DYED_BUNDLE.black())
-            .add(ItemIds.DYED_BUNDLE.brown())
-            .add(ItemIds.DYED_BUNDLE.red())
-            .add(ItemIds.DYED_BUNDLE.orange())
-            .add(ItemIds.DYED_BUNDLE.yellow())
-            .add(ItemIds.DYED_BUNDLE.lime())
-            .add(ItemIds.DYED_BUNDLE.green())
-            .add(ItemIds.DYED_BUNDLE.cyan())
-            .add(ItemIds.DYED_BUNDLE.lightBlue())
-            .add(ItemIds.DYED_BUNDLE.blue())
-            .add(ItemIds.DYED_BUNDLE.purple())
-            .add(ItemIds.DYED_BUNDLE.magenta())
-            .add(ItemIds.DYED_BUNDLE.pink());
+            .addAll(orderColoredItems(ItemIds.DYED_BUNDLE));
         this.builder(ItemGroupItemTags.HARNESSES)
-            .add(ItemIds.HARNESS.white())
-            .add(ItemIds.HARNESS.lightGray())
-            .add(ItemIds.HARNESS.gray())
-            .add(ItemIds.HARNESS.black())
-            .add(ItemIds.HARNESS.brown())
-            .add(ItemIds.HARNESS.red())
-            .add(ItemIds.HARNESS.orange())
-            .add(ItemIds.HARNESS.yellow())
-            .add(ItemIds.HARNESS.lime())
-            .add(ItemIds.HARNESS.green())
-            .add(ItemIds.HARNESS.cyan())
-            .add(ItemIds.HARNESS.lightBlue())
-            .add(ItemIds.HARNESS.blue())
-            .add(ItemIds.HARNESS.purple())
-            .add(ItemIds.HARNESS.magenta())
-            .add(ItemIds.HARNESS.pink());
+            .addAll(orderColoredItems(ItemIds.HARNESS));
         this.builder(ItemGroupItemTags.BOATS)
             .add(ItemIds.OAK_BOAT)
             .add(ItemIds.OAK_CHEST_BOAT)
@@ -1332,6 +1175,8 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(ItemIds.CHERRY_CHEST_BOAT)
             .add(ItemIds.PALE_OAK_BOAT)
             .add(ItemIds.PALE_OAK_CHEST_BOAT)
+            .add(ItemIds.POPLAR_BOAT)
+            .add(ItemIds.POPLAR_CHEST_BOAT)
             .add(ItemIds.BAMBOO_RAFT)
             .add(ItemIds.BAMBOO_CHEST_RAFT);
         this.builder(ItemGroupItemTags.MUSIC_DISCS)
@@ -1473,22 +1318,7 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(ItemIds.BEETROOT_SOUP)
             .add(ItemIds.RABBIT_STEW);
         this.builder(ItemGroupItemTags.DYES)
-            .add(ItemIds.DYE.white())
-            .add(ItemIds.DYE.lightGray())
-            .add(ItemIds.DYE.gray())
-            .add(ItemIds.DYE.black())
-            .add(ItemIds.DYE.brown())
-            .add(ItemIds.DYE.red())
-            .add(ItemIds.DYE.orange())
-            .add(ItemIds.DYE.yellow())
-            .add(ItemIds.DYE.lime())
-            .add(ItemIds.DYE.green())
-            .add(ItemIds.DYE.cyan())
-            .add(ItemIds.DYE.lightBlue())
-            .add(ItemIds.DYE.blue())
-            .add(ItemIds.DYE.purple())
-            .add(ItemIds.DYE.magenta())
-            .add(ItemIds.DYE.pink());
+            .addAll(orderColoredItems(ItemIds.DYE));
         this.builder(ItemGroupItemTags.BREWING_INGREDIENTS)
             .add(ItemIds.GLASS_BOTTLE)
             .add(BlockItemIds.NETHER_WART.item())
@@ -1596,5 +1426,13 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(ItemIds.SUGAR)
             .add(BlockItemIds.COBWEB.item())
             .add(ItemIds.BREEZE_ROD);
+    }
+
+    private static Stream<ResourceKey<Item>> orderColoredItems(ColorCollection<ResourceKey<Item>> itemIds) {
+        return GAMEPLAY_COLOR_ORDER.stream().map(itemIds::pick);
+    }
+
+    private static Stream<ResourceKey<Item>> orderColoredBlockItems(ColorCollection<BlockItemId> blockItemIds) {
+        return GAMEPLAY_COLOR_ORDER.stream().map(blockItemIds::pick).map(BlockItemId::item);
     }
 }

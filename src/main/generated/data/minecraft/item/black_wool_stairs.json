@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:black_wool_stairs"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:black_wool_stairs",
+    "translation_key": "block.minecraft.black_wool_stairs"
+  }
+}

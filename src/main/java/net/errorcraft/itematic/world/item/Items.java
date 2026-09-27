@@ -438,6 +438,14 @@ public class Items {
                 .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
                 .register();
             WoodCollection.registerItems(
+                ItematicBlockItemIds.POPLAR,
+                this,
+                BlockIds.POPLAR_WALL_SIGN,
+                BlockIds.POPLAR_WALL_HANGING_SIGN,
+                BlockIds.POTTED_POPLAR_SAPLING,
+                FuelTimes.PLANT
+            );
+            WoodCollection.registerItems(
                 ItematicBlockItemIds.CHERRY,
                 this,
                 BlockIds.CHERRY_WALL_SIGN,
@@ -639,6 +647,8 @@ public class Items {
                 .behavior(FuelItemBehavior.of(FuelTimes.WOOL))
                 .register()
             );
+            BlockItemIds.WOOL_STAIRS.forEach(this::registerBlock);
+            BlockItemIds.WOOL_SLAB.forEach(this::registerBlock);
             ColorCollection.zipApply(BlockItemIds.CARPET, ColorCollection.VALUES, (carpet, dyeColor) -> this.builderForBlock(carpet)
                 .behavior(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
                 .behavior(EquipmentItemBehavior.of(Equippable.llamaSwag(dyeColor)))
@@ -938,6 +948,9 @@ public class Items {
                 .behavior(CompostableItemBehavior.of(CompostChances.BIG))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_RED_MUSHROOM))
                 .register();
+            this.builderForBlock(BlockItemIds.SHELF_MUSHROOM)
+                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .register();
             this.builderForBlock(BlockItemIds.SHROOMLIGHT)
                 .behavior(CompostableItemBehavior.of(CompostChances.BIG))
                 .register();
@@ -953,6 +966,9 @@ public class Items {
                 .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
                 .register();
             this.builderForBlock(BlockItemIds.BUSH)
+                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .register();
+            this.builderForBlock(BlockItemIds.RED_SHRUB)
                 .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
                 .register();
             this.builderForBlock(BlockItemIds.DEAD_BUSH)
@@ -1907,6 +1923,8 @@ public class Items {
             this.registerBoat(ItemIds.PALE_OAK_CHEST_BOAT, EntityTypeIds.PALE_OAK_CHEST_BOAT);
             this.registerBoat(ItemIds.MANGROVE_BOAT, EntityTypeIds.MANGROVE_BOAT);
             this.registerBoat(ItemIds.MANGROVE_CHEST_BOAT, EntityTypeIds.MANGROVE_CHEST_BOAT);
+            this.registerBoat(ItemIds.POPLAR_BOAT, EntityTypeIds.POPLAR_BOAT);
+            this.registerBoat(ItemIds.POPLAR_CHEST_BOAT, EntityTypeIds.POPLAR_CHEST_BOAT);
             this.registerBoat(ItemIds.BAMBOO_RAFT, EntityTypeIds.BAMBOO_RAFT);
             this.registerBoat(ItemIds.BAMBOO_CHEST_RAFT, EntityTypeIds.BAMBOO_CHEST_RAFT);
             this.builder(ItemIds.ARMOR_STAND, 16)
@@ -2130,30 +2148,30 @@ public class Items {
             this.registerTrimSmithingTemplate(ItemIds.HOST_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
             this.registerTrimSmithingTemplate(ItemIds.FLOW_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
             this.registerTrimSmithingTemplate(ItemIds.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
-            this.registerDecoratedPotPattern(ItemIds.BRICK, Rarity.COMMON, DecoratedPotPatterns.BLANK);
-            this.registerDecoratedPotPattern(ItemIds.ANGLER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.ANGLER);
-            this.registerDecoratedPotPattern(ItemIds.ARCHER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.ARCHER);
-            this.registerDecoratedPotPattern(ItemIds.ARMS_UP_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.ARMS_UP);
-            this.registerDecoratedPotPattern(ItemIds.BLADE_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.BLADE);
-            this.registerDecoratedPotPattern(ItemIds.BREWER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.BREWER);
-            this.registerDecoratedPotPattern(ItemIds.BURN_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.BURN);
-            this.registerDecoratedPotPattern(ItemIds.DANGER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.DANGER);
-            this.registerDecoratedPotPattern(ItemIds.EXPLORER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.EXPLORER);
-            this.registerDecoratedPotPattern(ItemIds.FLOW_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.FLOW);
-            this.registerDecoratedPotPattern(ItemIds.FRIEND_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.FRIEND);
-            this.registerDecoratedPotPattern(ItemIds.GUSTER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.GUSTER);
-            this.registerDecoratedPotPattern(ItemIds.HEART_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.HEART);
-            this.registerDecoratedPotPattern(ItemIds.HEARTBREAK_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.HEARTBREAK);
-            this.registerDecoratedPotPattern(ItemIds.HOWL_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.HOWL);
-            this.registerDecoratedPotPattern(ItemIds.MINER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.MINER);
-            this.registerDecoratedPotPattern(ItemIds.MOURNER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.MOURNER);
-            this.registerDecoratedPotPattern(ItemIds.PLENTY_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.PLENTY);
-            this.registerDecoratedPotPattern(ItemIds.PRIZE_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.PRIZE);
-            this.registerDecoratedPotPattern(ItemIds.SCRAPE_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SCRAPE);
-            this.registerDecoratedPotPattern(ItemIds.SHEAF_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SHEAF);
-            this.registerDecoratedPotPattern(ItemIds.SHELTER_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SHELTER);
-            this.registerDecoratedPotPattern(ItemIds.SKULL_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SKULL);
-            this.registerDecoratedPotPattern(ItemIds.SNORT_POTTERY_SHERD, Rarity.UNCOMMON, DecoratedPotPatterns.SNORT);
+            this.registerItem(ItemIds.BRICK);
+            this.registerDecoratedPotPattern(ItemIds.ANGLER_POTTERY_SHERD, DecoratedPotPatterns.ANGLER);
+            this.registerDecoratedPotPattern(ItemIds.ARCHER_POTTERY_SHERD, DecoratedPotPatterns.ARCHER);
+            this.registerDecoratedPotPattern(ItemIds.ARMS_UP_POTTERY_SHERD, DecoratedPotPatterns.ARMS_UP);
+            this.registerDecoratedPotPattern(ItemIds.BLADE_POTTERY_SHERD, DecoratedPotPatterns.BLADE);
+            this.registerDecoratedPotPattern(ItemIds.BREWER_POTTERY_SHERD, DecoratedPotPatterns.BREWER);
+            this.registerDecoratedPotPattern(ItemIds.BURN_POTTERY_SHERD, DecoratedPotPatterns.BURN);
+            this.registerDecoratedPotPattern(ItemIds.DANGER_POTTERY_SHERD, DecoratedPotPatterns.DANGER);
+            this.registerDecoratedPotPattern(ItemIds.EXPLORER_POTTERY_SHERD, DecoratedPotPatterns.EXPLORER);
+            this.registerDecoratedPotPattern(ItemIds.FLOW_POTTERY_SHERD, DecoratedPotPatterns.FLOW);
+            this.registerDecoratedPotPattern(ItemIds.FRIEND_POTTERY_SHERD, DecoratedPotPatterns.FRIEND);
+            this.registerDecoratedPotPattern(ItemIds.GUSTER_POTTERY_SHERD, DecoratedPotPatterns.GUSTER);
+            this.registerDecoratedPotPattern(ItemIds.HEART_POTTERY_SHERD, DecoratedPotPatterns.HEART);
+            this.registerDecoratedPotPattern(ItemIds.HEARTBREAK_POTTERY_SHERD, DecoratedPotPatterns.HEARTBREAK);
+            this.registerDecoratedPotPattern(ItemIds.HOWL_POTTERY_SHERD, DecoratedPotPatterns.HOWL);
+            this.registerDecoratedPotPattern(ItemIds.MINER_POTTERY_SHERD, DecoratedPotPatterns.MINER);
+            this.registerDecoratedPotPattern(ItemIds.MOURNER_POTTERY_SHERD, DecoratedPotPatterns.MOURNER);
+            this.registerDecoratedPotPattern(ItemIds.PLENTY_POTTERY_SHERD, DecoratedPotPatterns.PLENTY);
+            this.registerDecoratedPotPattern(ItemIds.PRIZE_POTTERY_SHERD, DecoratedPotPatterns.PRIZE);
+            this.registerDecoratedPotPattern(ItemIds.SCRAPE_POTTERY_SHERD, DecoratedPotPatterns.SCRAPE);
+            this.registerDecoratedPotPattern(ItemIds.SHEAF_POTTERY_SHERD, DecoratedPotPatterns.SHEAF);
+            this.registerDecoratedPotPattern(ItemIds.SHELTER_POTTERY_SHERD, DecoratedPotPatterns.SHELTER);
+            this.registerDecoratedPotPattern(ItemIds.SKULL_POTTERY_SHERD, DecoratedPotPatterns.SKULL);
+            this.registerDecoratedPotPattern(ItemIds.SNORT_POTTERY_SHERD, DecoratedPotPatterns.SNORT);
             this.builderForBlock(BlockItemIds.WHEAT_CROP)
                 .display(ItemDisplay.Builder::itemName)
                 .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
@@ -2639,9 +2657,9 @@ public class Items {
                 .register();
         }
 
-        private void registerDecoratedPotPattern(ResourceKey<Item> item, Rarity rarity, ResourceKey<DecoratedPotPattern> decoratedPotPattern) {
+        private void registerDecoratedPotPattern(ResourceKey<Item> item, ResourceKey<DecoratedPotPattern> decoratedPotPattern) {
             this.builder(item)
-                .display(display -> display.rarity(rarity))
+                .display(display -> display.rarity(Rarity.UNCOMMON))
                 .behavior(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(decoratedPotPattern)))
                 .register();
         }

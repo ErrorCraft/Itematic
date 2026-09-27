@@ -14,12 +14,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.TntBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(TntBlock.class)
 public class TntBlockExtender {
-    @Redirect(
+    @WrapOperation(
         method = "useItemOn",
         at = @At(
             value = "INVOKE",
@@ -32,12 +31,12 @@ public class TntBlockExtender {
             )
         )
     )
-    private boolean isFlintAndSteelCheckId(ItemStack instance, Object o) {
+    private boolean isFlintAndSteelCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
         return instance.is(ItemIds.FLINT_AND_STEEL);
     }
 
     @ModifyExpressionValue(
-        method = "prime(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/LivingEntity;)Z",
+        method = "prime(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)Z",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/entity/item/PrimedTnt;"
@@ -49,7 +48,7 @@ public class TntBlockExtender {
     }
 
     @WrapOperation(
-        method = "prime(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/LivingEntity;)Z",
+        method = "prime(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)Z",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/Entity;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V"
