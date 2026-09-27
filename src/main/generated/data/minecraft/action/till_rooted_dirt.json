@@ -14,10 +14,9 @@
       },
       {
         "action": {
-          "type": "minecraft:drop_item_from_block",
-          "item": {
-            "id": "minecraft:hanging_roots"
-          },
+          "type": "minecraft:drop_loot",
+          "drop_strategy": "clicked_face",
+          "loot_table": "minecraft:till/rooted_dirt",
           "position": "interacted"
         }
       }

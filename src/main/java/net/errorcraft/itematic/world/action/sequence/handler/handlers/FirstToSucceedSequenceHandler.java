@@ -17,6 +17,10 @@ public record FirstToSucceedSequenceHandler(HolderSet<ActionEntry> entries) impl
         FirstToSucceedSequenceHandler::entries
     );
 
+    public static FirstToSucceedSequenceHandler of(HolderSet<ActionEntry> entries) {
+        return new FirstToSucceedSequenceHandler(entries);
+    }
+
     public static Builder builder() {
         return new Builder();
     }

@@ -11,18 +11,19 @@ import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.BlockTransformer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.level.block.Block;
 
-public record DropItemFromBlockAction(PositionTarget position, ItemStackTemplate item) implements Action<DropItemFromBlockAction> {
+public record DropItemFromBlockAction(PositionTarget position, ItemStackTemplate item, BlockTransformer.DropStrategy dropStrategy) implements Action<DropItemFromBlockAction> {
     public static final MapCodec<DropItemFromBlockAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(DropItemFromBlockAction::position),
-        ItemStackTemplate.CODEC.fieldOf("item").forGetter(DropItemFromBlockAction::item)
+        ItemStackTemplate.CODEC.fieldOf("item").forGetter(DropItemFromBlockAction::item),
+        BlockTransformer.DropStrategy.CODEC.optionalFieldOf("drop_strategy", BlockTransformer.DropStrategy.CLICKED_FACE).forGetter(DropItemFromBlockAction::dropStrategy)
     ).apply(instance, DropItemFromBlockAction::new));
 
     public static DropItemFromBlockAction of(PositionTarget position, Holder<Item> item) {
-        return new DropItemFromBlockAction(position, ItemStackTemplates.of(item));
+        return new DropItemFromBlockAction(position, ItemStackTemplates.of(item), BlockTransformer.DropStrategy.CLICKED_FACE);
     }
 
     @Override
@@ -42,7 +43,7 @@ public record DropItemFromBlockAction(PositionTarget position, ItemStackTemplate
             return false;
         }
 
-        Block.popResourceFromFace(context.level(), pos, side, this.item.create());
+        this.dropStrategy.pop(context.level(), pos, side, this.item.create());
         return true;
     }
 }

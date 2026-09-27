@@ -32,7 +32,6 @@ import net.errorcraft.itematic.world.action.actions.FertilizeAction;
 import net.errorcraft.itematic.world.action.actions.InvokeGameEventAction;
 import net.errorcraft.itematic.world.action.actions.LightEndPortalAction;
 import net.errorcraft.itematic.world.action.actions.MarkBannerOnItemAction;
-import net.errorcraft.itematic.world.action.actions.ModifyBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.ModifyItemAction;
 import net.errorcraft.itematic.world.action.actions.PlaySoundAction;
 import net.errorcraft.itematic.world.action.actions.RemoveStatusEffectsAction;
@@ -40,6 +39,7 @@ import net.errorcraft.itematic.world.action.actions.SetBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.SetEntityNameFromItemAction;
 import net.errorcraft.itematic.world.action.actions.SwingHandAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
+import net.errorcraft.itematic.world.action.actions.TransformBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
 import net.errorcraft.itematic.world.action.actions.WaxBlockAction;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
@@ -102,6 +102,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.UseableItemBehavior
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockItemStatePropertiesBuilder;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
@@ -124,6 +125,7 @@ import net.errorcraft.itematic.world.level.block.CoralCollection;
 import net.errorcraft.itematic.world.level.block.CutoutCollection;
 import net.errorcraft.itematic.world.level.block.FuelTimes;
 import net.errorcraft.itematic.world.level.block.WoodCollection;
+import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.ApplyPropertiesProvider;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointerLocationItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
@@ -2039,10 +2041,16 @@ public class Items {
                                         .hasProperty(BlockStateProperties.EYE, false)))
                         ),
                         PassingSequenceHandler.builder()
-                            .add(ModifyBlockStateAction.builder(PositionTarget.INTERACTED)
-                                .property(BlockStateProperties.EYE, true)
-                                .pushEntitiesUpwards()
-                                .build())
+                            .add(
+                                TransformBlockStateAction.ofPushingUpwards(
+                                    PositionTarget.INTERACTED,
+                                    new ApplyPropertiesProvider(
+                                        BlockItemStatePropertiesBuilder.create()
+                                            .property(BlockStateProperties.EYE, false)
+                                            .build()
+                                    )
+                                )
+                            )
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.END_PORTAL_FRAME_FILL), SoundSource.BLOCKS))
@@ -2881,7 +2889,8 @@ public class Items {
         }
 
         private ItemBuilder builderForAxe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
-            return this.builderForTool(item, material, 5.0f, attackDamage, attackSpeed, BlockTags.MINEABLE_WITH_AXE, repairItems);
+            return this.builderForTool(item, material, 5.0f, attackDamage, attackSpeed, BlockTags.MINEABLE_WITH_AXE, repairItems)
+                .event(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.USE_AXE_ON_BLOCK));
         }
 
         private void registerHoe(ResourceKey<Item> item, ToolMaterial material, double attackDamage, double attackSpeed, TagKey<Item> repairItems) {
