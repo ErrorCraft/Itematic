@@ -11,7 +11,8 @@
     "#minecraft:item_group/glass",
     "#minecraft:item_group/glass_panes",
     "#minecraft:item_group/shulker_boxes",
-    "#minecraft:item_group/beds",
+    "#minecraft:item_group/colored_beds",
+    "#minecraft:item_group/cushions",
     "#minecraft:item_group/candles",
     "#minecraft:item_group/banners"
   ]

@@ -20,11 +20,10 @@ public class LevelEventHandlerExtender {
     private ClientLevel level;
 
     @WrapOperation(
-        method = "levelEvent",
+        method = "potionSplashParticles",
         at = @At(
             value = "NEW",
-            target = "(Lnet/minecraft/core/particles/ParticleType;Lnet/minecraft/world/item/Item;)Lnet/minecraft/core/particles/ItemParticleOption;",
-            ordinal = 1
+            target = "(Lnet/minecraft/core/particles/ParticleType;Lnet/minecraft/world/item/Item;)Lnet/minecraft/core/particles/ItemParticleOption;"
         )
     )
     private ItemParticleOption newItemStackTemplateForSplashPotionUseCreateStackTemplate(ParticleType<ItemParticleOption> type, Item item, Operation<ItemParticleOption> original) {

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:splash_potion",
+    "potion_contents": {
+      "potions": "minecraft:long_swiftness"
+    }
+  },
+  "output": {
+    "id": "minecraft:lingering_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:long_swiftness"
+      }
+    }
+  },
+  "reagent": {
+    "item": {
+      "items": "minecraft:dragon_breath",
+      "remainder": {
+        "id": "minecraft:glass_bottle"
+      }
+    }
+  }
+}

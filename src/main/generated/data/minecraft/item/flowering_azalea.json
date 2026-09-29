@@ -4,7 +4,7 @@
       "block": "minecraft:flowering_azalea"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.85
+      "layers": "minecraft:compostable/medium_high"
     },
     "minecraft:fuel": {
       "ticks": 100

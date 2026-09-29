@@ -132,7 +132,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     }
 
     private void modifyOrPlace(UseOnContext context, ItemStackExchanger stackExchanger) {
-        if (!this.tryModifyOrPlace(context, stackExchanger)) {
+        if (!this.tryModifyOrPlace(context, stackExchanger, context.getClickLocation().y())) {
             return;
         }
 
@@ -142,7 +142,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
         );
     }
 
-    private boolean tryModifyOrPlace(UseOnContext context, ItemStackExchanger stackExchanger) {
+    private boolean tryModifyOrPlace(UseOnContext context, ItemStackExchanger stackExchanger, double exactY) {
         Level level = context.getLevel();
         if (level.isClientSide()) {
             return false;
@@ -161,7 +161,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
             .add(ItematicContextKeys.HAND, context.getHand())
             .add(ItematicContextKeys.SIDE, context.getClickedFace())
             .build();
-        return this.place(actionContext, PositionTarget.INTERACTED) != null;
+        return this.place(actionContext, PositionTarget.INTERACTED, exactY) != null;
     }
 
     private boolean modifySpawner(UseOnContext context) {
@@ -198,9 +198,9 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     }
 
     @Nullable
-    public Entity place(ActionContext context, PositionTarget position) {
+    public Entity place(ActionContext context, PositionTarget position, @Nullable Double exactY) {
         return EntityPlacer.of(this.entity, null)
-            .place(context, position, EntitySpawnReason.SPAWN_ITEM_USE);
+            .place(context, position, exactY, EntitySpawnReason.SPAWN_ITEM_USE);
     }
 
     public enum Pass implements StringRepresentable {

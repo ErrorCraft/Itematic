@@ -1,6 +1,0 @@
-{
-  "type": "minecraft:brewing_modify",
-  "base": "minecraft:water_breathing",
-  "reagent": "minecraft:redstone",
-  "result": "minecraft:long_water_breathing"
-}

@@ -117,7 +117,7 @@
             "position": "interacted",
             "predicate": {
               "block": {
-                "blocks": "#minecraft:convertable_to_mud"
+                "blocks": "#minecraft:convertible_to_mud"
               }
             }
           },
@@ -125,7 +125,9 @@
             "condition": "minecraft:match_tool",
             "predicate": {
               "predicates": {
-                "minecraft:potion_contents": "minecraft:water"
+                "minecraft:potion_contents": {
+                  "potions": "minecraft:water"
+                }
               }
             }
           }

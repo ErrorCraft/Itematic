@@ -1,14 +1,11 @@
 package net.errorcraft.itematic.data;
 
 import net.errorcraft.itematic.data.client.ItemBarStyleProvider;
-import net.errorcraft.itematic.data.server.ItematicRecipeProvider;
+import net.errorcraft.itematic.data.server.ItematicDynamicRegistryProvider;
 import net.errorcraft.itematic.data.server.ModifiedRecipeProvider;
-import net.errorcraft.itematic.data.server.registry.ActionProvider;
-import net.errorcraft.itematic.data.server.registry.DispenseBehaviorProvider;
-import net.errorcraft.itematic.data.server.registry.ItemGroupEntryProviderProvider;
-import net.errorcraft.itematic.data.server.registry.ItemProvider;
 import net.errorcraft.itematic.data.server.tag.ActionTagProvider;
 import net.errorcraft.itematic.data.server.tag.BlockTagProvider;
+import net.errorcraft.itematic.data.server.tag.EntityTypeTagProvider;
 import net.errorcraft.itematic.data.server.tag.ItemGroupEntryProviderTagProvider;
 import net.errorcraft.itematic.data.server.tag.ItemTagProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
@@ -26,16 +23,13 @@ public class ItematicData implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
-        pack.addProvider(ItemProvider::new);
+        pack.addProvider(ItematicDynamicRegistryProvider::new);
         pack.addProvider(ItemTagProvider::new);
         pack.addProvider(BlockTagProvider::new);
-        pack.addProvider(ItemGroupEntryProviderProvider::new);
         pack.addProvider(ItemGroupEntryProviderTagProvider::new);
-        pack.addProvider(ActionProvider::new);
         pack.addProvider(ActionTagProvider::new);
         pack.addProvider(ModifiedRecipeProvider::new);
-        pack.addProvider(DispenseBehaviorProvider::new);
         pack.addProvider(ItemBarStyleProvider::new);
-        pack.addProvider(ItematicRecipeProvider::new);
+        pack.addProvider(EntityTypeTagProvider::new);
     }
 }

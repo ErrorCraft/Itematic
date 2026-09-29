@@ -71,6 +71,7 @@ public record ProjectileItemBehavior(EntitySpawner entity) implements ItemBehavi
         return this.entity.spawn(
             context,
             pos,
+            null,
             EntitySpawnReason.SPAWN_ITEM_USE,
             (projectile, stack) -> {
                 if (projectile instanceof ThrowableItemProjectile thrownItemEntity) {

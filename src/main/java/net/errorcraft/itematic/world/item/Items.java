@@ -2,6 +2,7 @@ package net.errorcraft.itematic.world.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
@@ -15,7 +16,6 @@ import net.errorcraft.itematic.references.ItemBarStyleIds;
 import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
 import net.errorcraft.itematic.references.SoundEventIds;
-import net.errorcraft.itematic.tags.ItematicBlockTags;
 import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionEventMap;
@@ -47,10 +47,8 @@ import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPas
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
-import net.errorcraft.itematic.world.entity.spawn.rule.rules.AlignYawEntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.rules.DiscardEntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.rules.FitsInVolumeEntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.rules.OffsetSpawnPositionEntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSet;
+import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSets;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.behaviors.AttackBlockingItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
@@ -120,7 +118,6 @@ import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.Pierci
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.SmashingMeleeWeapon;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.ChargeableShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.DirectShooterMethod;
-import net.errorcraft.itematic.world.level.block.CompostChances;
 import net.errorcraft.itematic.world.level.block.CoralCollection;
 import net.errorcraft.itematic.world.level.block.CutoutCollection;
 import net.errorcraft.itematic.world.level.block.FuelTimes;
@@ -141,7 +138,6 @@ import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -229,7 +225,6 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidIds;
@@ -241,8 +236,10 @@ import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemConditi
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.apache.commons.lang3.math.Fraction;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -296,6 +293,7 @@ public class Items {
         private final HolderGetter<ChickenVariant> chickenVariants;
         private final HolderGetter<DamageType> damageTypes;
         private final HolderGetter<BannerPattern> bannerPatterns;
+        private final HolderGetter<EntitySpawnRuleSet> entitySpawnRuleSets;
 
         private Bootstrapper(BootstrapContext<Item> context) {
             this.context = context;
@@ -316,6 +314,7 @@ public class Items {
             this.chickenVariants = context.lookup(Registries.CHICKEN_VARIANT);
             this.damageTypes = context.lookup(Registries.DAMAGE_TYPE);
             this.bannerPatterns = context.lookup(Registries.BANNER_PATTERN);
+            this.entitySpawnRuleSets = context.lookup(ItematicRegistries.ENTITY_SPAWN_RULE_SET);
         }
 
         private ItemBuilder builder(ResourceKey<Item> item, int maxStackSize) {
@@ -436,7 +435,7 @@ public class Items {
             );
             this.registerBlock(BlockItemIds.MUDDY_MANGROVE_ROOTS);
             this.builderForBlock(BlockItemIds.MANGROVE_ROOTS)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
                 .register();
             WoodCollection.registerItems(
@@ -480,7 +479,7 @@ public class Items {
                 BlockIds.POTTED_CRIMSON_FUNGUS
             );
             this.builderForBlock(BlockItemIds.NETHER_WART_BLOCK)
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             WoodCollection.registerItems(
                 ItematicBlockItemIds.WARPED,
@@ -490,7 +489,7 @@ public class Items {
                 BlockIds.POTTED_WARPED_FUNGUS
             );
             this.builderForBlock(BlockItemIds.WARPED_WART_BLOCK)
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             CutoutCollection.registerItems(ItematicBlockItemIds.STONE, this);
             this.registerBlock(BlockItemIds.STONE_BUTTON);
@@ -668,6 +667,8 @@ public class Items {
             this.registerBlock(BlockItemIds.GLASS_PANE);
             BlockItemIds.STAINED_GLASS_PANE.forEach(this::registerBlock);
             BlockItemIds.BED.forEach(bed -> this.builderForBlock(bed, 1).register());
+            this.builderForBlock(BlockItemIds.STRAW_BED, 16)
+                .register();
             this.registerBlock(BlockItemIds.CANDLE);
             BlockItemIds.DYED_CANDLE.forEach(this::registerBlock);
             ColorCollection.zipApply(
@@ -802,18 +803,14 @@ public class Items {
                                 PositionTarget.INTERACTED,
                                 LocationPredicate.Builder.location()
                                     .setBlock(BlockPredicate.Builder.block()
-                                        .of(this.blocks, BlockTags.CONVERTABLE_TO_MUD))
+                                        .of(this.blocks, BlockTags.CONVERTIBLE_TO_MUD))
                             ),
                             MatchTool.toolMatches(ItemPredicate.Builder.item()
                                 .withComponents(DataComponentMatchers.Builder.components()
                                     .partial(
                                         DataComponentPredicates.POTIONS,
-                                        new PotionsPredicate(HolderSet.direct(
-                                            this.potions.getOrThrow(PotionIds.WATER)
-                                        ))
-                                    ).build()
-                                )
-                            )
+                                        PotionsPredicate.ofPotion(this.potions.getOrThrow(PotionIds.WATER))
+                                    ).build()))
                         ),
                         UncheckedSequenceHandler.builder()
                             .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.GENERIC_SPLASH), SoundSource.BLOCKS))
@@ -918,165 +915,165 @@ public class Items {
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_TNT)))
                 .register();
             this.builderForBlock(BlockItemIds.AZALEA)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_AZALEA_BUSH))
                 .register();
             this.builderForBlock(BlockItemIds.AZALEA_LEAVES)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.FLOWERING_AZALEA)
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FLOWERING_AZALEA_BUSH))
                 .register();
             this.builderForBlock(BlockItemIds.FLOWERING_AZALEA_LEAVES)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.MUSHROOM_STEM)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.BROWN_MUSHROOM_BLOCK)
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             this.builderForBlock(BlockItemIds.BROWN_MUSHROOM)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BROWN_MUSHROOM))
                 .register();
             this.builderForBlock(BlockItemIds.RED_MUSHROOM_BLOCK)
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             this.builderForBlock(BlockItemIds.RED_MUSHROOM)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_RED_MUSHROOM))
                 .register();
             this.builderForBlock(BlockItemIds.SHELF_MUSHROOM)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.SHROOMLIGHT)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.SHORT_GRASS)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.FERN)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FERN))
                 .register();
             this.builderForBlock(BlockItemIds.SHORT_DRY_GRASS)
                 .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.BUSH)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.RED_SHRUB)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.DEAD_BUSH)
                 .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_DEAD_BUSH))
                 .register();
-            this.registerSuspiciousEffectIngredient(BlockItemIds.DANDELION, CompostChances.BIG, MobEffectIds.SATURATION, 140, BlockIds.POTTED_DANDELION);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.POPPY, CompostChances.BIG, MobEffectIds.NIGHT_VISION, 100, BlockIds.POTTED_POPPY);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.BLUE_ORCHID, CompostChances.BIG, MobEffectIds.SATURATION, 140, BlockIds.POTTED_BLUE_ORCHID);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.ALLIUM, CompostChances.BIG, MobEffectIds.FIRE_RESISTANCE, 80, BlockIds.POTTED_ALLIUM);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.AZURE_BLUET, CompostChances.BIG, MobEffectIds.BLINDNESS, 160, BlockIds.POTTED_AZURE_BLUET);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.RED_TULIP, CompostChances.BIG, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_RED_TULIP);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.ORANGE_TULIP, CompostChances.BIG, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_ORANGE_TULIP);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.WHITE_TULIP, CompostChances.BIG, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_WHITE_TULIP);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.PINK_TULIP, CompostChances.BIG, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_PINK_TULIP);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.OXEYE_DAISY, CompostChances.BIG, MobEffectIds.REGENERATION, 160, BlockIds.POTTED_OXEYE_DAISY);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.CORNFLOWER, CompostChances.BIG, MobEffectIds.JUMP_BOOST, 120, BlockIds.POTTED_CORNFLOWER);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.LILY_OF_THE_VALLEY, CompostChances.BIG, MobEffectIds.POISON, 240, BlockIds.POTTED_LILY_OF_THE_VALLEY);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.TORCHFLOWER, CompostChances.ALMOST_GUARANTEED, MobEffectIds.NIGHT_VISION, 100, BlockIds.POTTED_TORCHFLOWER);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.DANDELION, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.SATURATION, 140, BlockIds.POTTED_DANDELION);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.POPPY, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.NIGHT_VISION, 100, BlockIds.POTTED_POPPY);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.BLUE_ORCHID, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.SATURATION, 140, BlockIds.POTTED_BLUE_ORCHID);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.ALLIUM, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.FIRE_RESISTANCE, 80, BlockIds.POTTED_ALLIUM);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.AZURE_BLUET, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.BLINDNESS, 160, BlockIds.POTTED_AZURE_BLUET);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.RED_TULIP, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_RED_TULIP);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.ORANGE_TULIP, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_ORANGE_TULIP);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.WHITE_TULIP, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_WHITE_TULIP);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.PINK_TULIP, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.WEAKNESS, 180, BlockIds.POTTED_PINK_TULIP);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.OXEYE_DAISY, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.REGENERATION, 160, BlockIds.POTTED_OXEYE_DAISY);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.CORNFLOWER, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.JUMP_BOOST, 120, BlockIds.POTTED_CORNFLOWER);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.LILY_OF_THE_VALLEY, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.POISON, 240, BlockIds.POTTED_LILY_OF_THE_VALLEY);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.TORCHFLOWER, NumberProviders.COMPOSTABLE_MEDIUM_HIGH, MobEffectIds.NIGHT_VISION, 100, BlockIds.POTTED_TORCHFLOWER);
             this.builderForBlock(BlockItemIds.CACTUS_FLOWER)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
-            this.registerSuspiciousEffectIngredient(BlockItemIds.CLOSED_EYEBLOSSOM, CompostChances.BIG, MobEffectIds.NAUSEA, 140, BlockIds.POTTED_CLOSED_EYEBLOSSOM);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.OPEN_EYEBLOSSOM, CompostChances.BIG, MobEffectIds.BLINDNESS, 140, BlockIds.POTTED_OPEN_EYEBLOSSOM);
-            this.registerSuspiciousEffectIngredient(BlockItemIds.WITHER_ROSE, CompostChances.BIG, MobEffectIds.WITHER, 160, BlockIds.POTTED_WITHER_ROSE);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.CLOSED_EYEBLOSSOM, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.NAUSEA, 140, BlockIds.POTTED_CLOSED_EYEBLOSSOM);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.OPEN_EYEBLOSSOM, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.BLINDNESS, 140, BlockIds.POTTED_OPEN_EYEBLOSSOM);
+            this.registerSuspiciousEffectIngredient(BlockItemIds.WITHER_ROSE, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.WITHER, 160, BlockIds.POTTED_WITHER_ROSE);
             this.builderForBlock(BlockItemIds.PINK_PETALS)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.WILDFLOWERS)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.LEAF_LITTER)
                 .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.SPORE_BLOSSOM)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.FIREFLY_BUSH)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.SUGAR_CANE)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.CACTUS)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CACTUS))
                 .register();
             this.builderForBlock(BlockItemIds.CRIMSON_ROOTS)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_ROOTS))
                 .register();
             this.builderForBlock(BlockItemIds.WARPED_ROOTS)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_ROOTS))
                 .register();
             this.builderForBlock(BlockItemIds.NETHER_SPROUTS)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.WEEPING_VINES)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.TWISTING_VINES)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.VINE)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.TALL_GRASS)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.LARGE_FERN)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.TALL_DRY_GRASS)
                 .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.SUNFLOWER)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.LILAC)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.ROSE_BUSH)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.PEONY)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.PITCHER_PLANT)
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             this.builderForBlock(BlockItemIds.BIG_DRIPLEAF)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.SMALL_DRIPLEAF)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.registerBlock(BlockItemIds.CHORUS_PLANT);
             this.registerBlock(BlockItemIds.CHORUS_FLOWER);
             this.builderForBlock(BlockItemIds.GLOW_LICHEN)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.HANGING_ROOTS)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.registerBlock(BlockItemIds.FLOWER_POT);
             this.registerBlock(BlockItemIds.BEE_NEST);
@@ -1113,43 +1110,43 @@ public class Items {
                 .register();
             this.registerBlock(BlockItemIds.GOLDEN_DANDELION);
             this.builderForBlockOnFluid(BlockItemIds.LILY_PAD)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.SEAGRASS)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.SEA_PICKLE)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.KELP)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.DRIED_KELP_BLOCK)
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .behavior(FuelItemBehavior.of(FuelTimes.DRIED_KELP_BLOCK))
                 .register();
             this.builderForBlock(BlockItemIds.MOSS_BLOCK)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.MOSS_CARPET)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.PALE_MOSS_BLOCK)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.PALE_MOSS_CARPET)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.PALE_HANGING_MOSS)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.TORCHFLOWER_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.PITCHER_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.registerBlock(BlockItemIds.SPONGE);
             this.registerBlock(BlockItemIds.WET_SPONGE);
@@ -1179,31 +1176,31 @@ public class Items {
             this.registerBlock(BlockItemIds.DETECTOR_RAIL);
             this.registerBlock(BlockItemIds.ACTIVATOR_RAIL);
             this.builderForBlock(BlockItemIds.MELON)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.MELON_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForConsumable(ItemIds.MELON_SLICE, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.MELON_SLICE))
-                .behavior(CompostableItemBehavior.of(CompostChances.FIFTY_FIFTY))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
                 .register();
             this.registerItem(ItemIds.GLISTERING_MELON_SLICE);
             this.builderForBlock(BlockItemIds.PUMPKIN)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.PUMPKIN_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForConsumable(ItemIds.PUMPKIN_PIE, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.PUMPKIN_PIE))
-                .behavior(CompostableItemBehavior.of(CompostChances.GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_ALWAYS_ADD_ONE))
                 .register();
             this.builderForBlock(BlockItemIds.CARVED_PUMPKIN)
                 .attributeModifiers(AttributeModifiers::hideFromLocatorBar)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .behavior(
                     EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.HEAD)
                         .setSwappable(false)
@@ -1933,12 +1930,7 @@ public class Items {
                 .behavior(
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.ARMOR_STAND))
-                            .spawnRule(
-                                DiscardEntitySpawnRule.INSTANCE,
-                                SideCheckPredicate.builder(Direction.DOWN)
-                            )
-                            .spawnRule(FitsInVolumeEntitySpawnRule.entityDimensions())
-                            .spawnRule(AlignYawEntitySpawnRule.of(8))
+                            .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.ARMOR_STAND))
                             .spawnSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_STAND_PLACE))
                             .build()
                     )
@@ -1968,13 +1960,7 @@ public class Items {
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.PAINTING))
                             .allowItemData()
-                            .spawnRule(
-                                DiscardEntitySpawnRule.INSTANCE,
-                                SideCheckPredicate.builder(
-                                    Direction.DOWN,
-                                    Direction.UP
-                                )
-                            )
+                            .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.PAINTING))
                             .build()
                     )
                 )
@@ -1984,36 +1970,7 @@ public class Items {
                 .behavior(
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.END_CRYSTAL))
-                            .spawnRule(
-                                DiscardEntitySpawnRule.INSTANCE,
-                                InvertedLootItemCondition.invert(
-                                    LocationCheckPredicates.builder(
-                                        PositionTarget.INTERACTED,
-                                        LocationPredicate.Builder.location()
-                                            .setBlock(BlockPredicate.Builder.block()
-                                                .of(this.blocks, ItematicBlockTags.END_CRYSTAL_SPAWNABLE_ON)),
-                                        new BlockPos(0, -1, 0)
-                                    )
-                                )
-                            )
-                            .spawnRule(
-                                DiscardEntitySpawnRule.INSTANCE,
-                                InvertedLootItemCondition.invert(
-                                    LocationCheckPredicates.builder(
-                                        PositionTarget.INTERACTED,
-                                        LocationPredicate.Builder.location()
-                                            .setBlock(BlockPredicate.Builder.block()
-                                                .of(this.blocks, BlockTags.AIR))
-                                    )
-                                )
-                            )
-                            .spawnRule(
-                                FitsInVolumeEntitySpawnRule.of(
-                                    false,
-                                    true,
-                                    new Vec3(1.0d, 2.0d, 1.0d)
-                                )
-                            )
+                            .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.END_CRYSTAL))
                             .build()
                     )
                 )
@@ -2182,25 +2139,25 @@ public class Items {
             this.registerDecoratedPotPattern(ItemIds.SNORT_POTTERY_SHERD, DecoratedPotPatterns.SNORT);
             this.builderForBlock(BlockItemIds.WHEAT_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builder(ItemIds.WHEAT)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.HAY_BLOCK)
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             this.builderForConsumable(ItemIds.BREAD, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.BREAD))
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             this.builderForBlock(BlockItemIds.CAKE, 1)
-                .behavior(CompostableItemBehavior.of(CompostChances.GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_ALWAYS_ADD_ONE))
                 .register();
             this.builderForConsumable(BlockItemIds.CARROT_CROP.item(), Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.CARROT))
                 .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARROT_CROP.block())))
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForConsumable(ItemIds.GOLDEN_CARROT, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.GOLDEN_CARROT))
@@ -2208,11 +2165,11 @@ public class Items {
             this.builderForConsumable(BlockItemIds.POTATO_CROP.item(), Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.POTATO))
                 .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.POTATO_CROP.block())))
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForConsumable(ItemIds.BAKED_POTATO, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.BAKED_POTATO))
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             this.builderForConsumable(ItemIds.POISONOUS_POTATO, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.POISONOUS_POTATO))
@@ -2228,33 +2185,33 @@ public class Items {
                 .register();
             this.builderForBlock(BlockItemIds.BEETROOT_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForConsumable(ItemIds.BEETROOT, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.BEETROOT))
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.COCOA_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForConsumable(ItemIds.COOKIE, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.COOKIE))
-                .behavior(CompostableItemBehavior.of(CompostChances.ALMOST_GUARANTEED))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             this.builderForConsumable(BlockItemIds.SWEET_BERRY_CROP.item(), Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.SWEET_BERRIES))
                 .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SWEET_BERRY_CROP.block())))
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForConsumable(BlockItemIds.GLOW_BERRY_CROP.item(), Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.GLOW_BERRIES))
                 .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOW_BERRY_CROP.block())))
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForConsumable(ItemIds.APPLE, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.APPLE))
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForConsumable(ItemIds.GOLDEN_APPLE, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.GOLDEN_APPLE))
@@ -2285,7 +2242,7 @@ public class Items {
                 .register();
             this.builderForConsumable(ItemIds.DRIED_KELP, Consumables.DRIED_KELP)
                 .behavior(FoodItemBehavior.of(Foods.DRIED_KELP))
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForConsumable(ItemIds.CHORUS_FRUIT, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.CHORUS_FRUIT))
@@ -2462,6 +2419,22 @@ public class Items {
             );
             this.registerBundle(ItemIds.BUNDLE);
             ItemIds.DYED_BUNDLE.forEach(this::registerBundle);
+            ColorCollection.zipApply(ItemIds.CUSHION, ColorCollection.VALUES, (cushion, dyeColor) -> this.builder(cushion, 16)
+                .behavior(
+                    EntityItemBehavior.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.CUSHION))
+                            .allowItemData()
+                            .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.CUSHION))
+                            .components(
+                                DataComponentPatch.builder()
+                                    .set(ItematicDataComponents.CUSHION_COLOR, dyeColor)
+                                    .build()
+                            )
+                            .build()
+                    )
+                )
+                .register()
+            );
             this.registerFuel(ItemIds.COAL, FuelTimes.COAL);
             this.registerFuel(ItemIds.CHARCOAL, FuelTimes.COAL);
             this.registerTrimMaterialProvider(ItemIds.IRON_INGOT, TrimMaterials.IRON);
@@ -2532,7 +2505,7 @@ public class Items {
                 .register();
             this.builderForBlock(BlockItemIds.NETHER_WART)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(CompostChances.BIG))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.registerFuel(ItemIds.BLAZE_ROD, FuelTimes.BLAZE_ROD);
             this.registerItem(ItemIds.BLAZE_POWDER);
@@ -2630,9 +2603,9 @@ public class Items {
                 .register();
         }
 
-        private void registerSuspiciousEffectIngredient(BlockItemId blockItem, float compostChance, ResourceKey<MobEffect> effect, int effectDuration, ResourceKey<Block> pottedBlock) {
+        private void registerSuspiciousEffectIngredient(BlockItemId blockItem, ResourceKey<NumberProvider> compostLayers, ResourceKey<MobEffect> effect, int effectDuration, ResourceKey<Block> pottedBlock) {
             this.builderForBlock(blockItem)
-                .behavior(CompostableItemBehavior.of(compostChance))
+                .behavior(CompostableItemBehavior.of(compostLayers))
                 .behavior(
                     SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(effect), effectDuration)
@@ -2983,28 +2956,7 @@ public class Items {
                 .behavior(
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(entity))
-                            .spawnRule(
-                                DiscardEntitySpawnRule.INSTANCE,
-                                InvertedLootItemCondition.invert(
-                                    LocationCheckPredicates.builder(
-                                        PositionTarget.INTERACTED,
-                                        LocationPredicate.Builder.location()
-                                            .setBlock(BlockPredicate.Builder.block()
-                                                .of(blocks, BlockTags.RAILS))
-                                    )
-                                )
-                            )
-                            .spawnRule(OffsetSpawnPositionEntitySpawnRule.of(new Vec3(0.0d, 0.0625d, 0.0d)))
-                            .spawnRule(
-                                OffsetSpawnPositionEntitySpawnRule.of(new Vec3(0.0d, 0.5d, 0.0d)),
-                                LocationCheckPredicates.builder(
-                                    PositionTarget.INTERACTED,
-                                    LocationPredicate.Builder.location()
-                                        .setBlock(BlockPredicate.Builder.block()
-                                            .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                .itematic$range(BlockStateProperties.RAIL_SHAPE, RailShape.ASCENDING_EAST, RailShape.ASCENDING_SOUTH)))
-                                )
-                            )
+                            .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.MINECART))
                             .build()
                     )
                 )
@@ -3055,17 +3007,20 @@ public class Items {
                 .register();
         }
 
-        public void registerPottableSapling(BlockItemId blockItem, ResourceKey<Block> pottedBlock, int fuelTicks, float compostChance) {
-            this.builderForBlock(blockItem)
-                .behavior(compostChance > 0.0f, CompostableItemBehavior.of(compostChance))
+        public void registerPottableSapling(BlockItemId blockItem, ResourceKey<Block> pottedBlock, int fuelTicks, @Nullable ResourceKey<NumberProvider> compostLayers) {
+            ItemBuilder builder = this.builderForBlock(blockItem)
                 .behavior(fuelTicks > 0, FuelItemBehavior.of(fuelTicks))
-                .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, pottedBlock))
-                .register();
+                .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, pottedBlock));
+            if (compostLayers != null) {
+                builder.behavior(CompostableItemBehavior.of(compostLayers));
+            }
+
+            builder.register();
         }
 
         public void registerCompostableLeaves(BlockItemId blockItem) {
             this.builderForBlock(blockItem)
-                .behavior(CompostableItemBehavior.of(CompostChances.SMALL))
+                .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
         }
 

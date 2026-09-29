@@ -89,6 +89,8 @@ public class ItemGroupItemTags {
     public static final TagKey<Item> GLASS_PANES = of("glass_panes");
     public static final TagKey<Item> SHULKER_BOXES = of("shulker_boxes");
     public static final TagKey<Item> BEDS = of("beds");
+    public static final TagKey<Item> COLORED_BEDS = of("colored_beds");
+    public static final TagKey<Item> CUSHIONS = of("cushions");
     public static final TagKey<Item> CANDLES = of("candles");
     public static final TagKey<Item> BANNERS = of("banners");
     public static final TagKey<Item> GRASS_LIKE_BLOCKS = of("grass_like_blocks");

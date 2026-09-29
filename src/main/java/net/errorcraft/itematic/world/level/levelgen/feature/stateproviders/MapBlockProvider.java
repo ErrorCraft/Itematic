@@ -9,13 +9,12 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapBlockProvider extends BlockStateProvider {
+public class MapBlockProvider implements BlockStateProvider {
     public static final Codec<Block> BLOCK_CODEC = BuiltInRegistries.BLOCK.byNameCodec();
     public static final MapCodec<MapBlockProvider> CODEC = Codec.unboundedMap(BLOCK_CODEC, BLOCK_CODEC).fieldOf("blocks")
         .xmap(
@@ -34,8 +33,8 @@ public class MapBlockProvider extends BlockStateProvider {
     }
 
     @Override
-    protected BlockStateProviderType<?> type() {
-        return ItematicBlockStateProviderTypes.MAP_BLOCK;
+    public MapCodec<? extends BlockStateProvider> codec() {
+        return CODEC;
     }
 
     @Override

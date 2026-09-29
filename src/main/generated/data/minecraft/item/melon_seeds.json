@@ -4,7 +4,7 @@
       "block": "minecraft:melon_stem"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.3
+      "layers": "minecraft:compostable/low"
     },
     "minecraft:stackable": 64
   },

@@ -31,7 +31,7 @@ public class EntityPlacer {
     }
 
     @Nullable
-    public Entity place(ActionContext context, PositionTarget position, EntitySpawnReason spawnReason) {
+    public Entity place(ActionContext context, PositionTarget position, @Nullable Double exactY, EntitySpawnReason spawnReason) {
         Level level = context.level();
         if (level.isClientSide()) {
             return null;
@@ -50,6 +50,7 @@ public class EntityPlacer {
         return this.spawner.spawn(
             context,
             Vec3.atBottomCenterOf(truePos),
+            exactY,
             spawnReason,
             this.spawnCallback,
             !Objects.equals(pos, truePos) && side == Direction.UP

@@ -28,7 +28,7 @@ public record SpawnEntityFromItemAction(PositionTarget position) implements Acti
     public boolean execute(ActionContext context) {
         return context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
             .itematic$getBehavior(ItemBehaviorType.ENTITY)
-            .map(entity -> entity.place(context, this.position))
+            .map(entity -> entity.place(context, this.position, null))
             .isPresent();
     }
 }

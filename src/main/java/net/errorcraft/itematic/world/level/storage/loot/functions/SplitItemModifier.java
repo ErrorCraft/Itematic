@@ -16,16 +16,12 @@ import java.util.List;
 
 public class SplitItemModifier extends LootItemConditionalFunction {
     public static final MapCodec<SplitItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(
-        NumberProviders.CODEC.fieldOf("count").forGetter(split -> split.count)
+        NumberProviders.DIRECT_CODEC.fieldOf("count").forGetter(split -> split.count)
     ).apply(instance, SplitItemModifier::new));
 
     private final NumberProvider count;
 
-    public SplitItemModifier(NumberProvider count) {
-        this(List.of(), count);
-    }
-
-    public SplitItemModifier(List<LootItemCondition> conditions, NumberProvider count) {
+    private SplitItemModifier(List<LootItemCondition> conditions, NumberProvider count) {
         super(conditions);
         this.count = count;
     }

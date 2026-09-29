@@ -697,8 +697,13 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
         this.builder(ItemGroupItemTags.SHULKER_BOXES)
             .add(BlockItemIds.SHULKER_BOX.item())
             .addAll(orderColoredBlockItems(BlockItemIds.DYED_SHULKER_BOX));
-        this.builder(ItemGroupItemTags.BEDS)
+        this.builder(ItemGroupItemTags.COLORED_BEDS)
             .addAll(orderColoredBlockItems(BlockItemIds.BED));
+        this.builder(ItemGroupItemTags.BEDS)
+            .addTag(ItemGroupItemTags.COLORED_BEDS)
+            .add(BlockItemIds.STRAW_BED.item());
+        this.builder(ItemGroupItemTags.CUSHIONS)
+            .addAll(orderColoredItems(ItemIds.CUSHION));
         this.builder(ItemGroupItemTags.CANDLES)
             .add(BlockItemIds.CANDLE.item())
             .addAll(orderColoredBlockItems(BlockItemIds.DYED_CANDLE));
@@ -1409,10 +1414,6 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(BlockItemIds.TORCHFLOWER.item())
             .add(BlockItemIds.RED_MUSHROOM.item())
             .add(BlockItemIds.BROWN_MUSHROOM.item());
-        this.builder(ItematicItemTags.BREWING_INPUTS)
-            .add(ItemIds.POTION)
-            .add(ItemIds.SPLASH_POTION)
-            .add(ItemIds.LINGERING_POTION);
         this.builder(ItematicItemTags.MUNDANE_POTION_REAGENTS)
             .add(BlockItemIds.REDSTONE_DUST.item())
             .add(ItemIds.MAGMA_CREAM)

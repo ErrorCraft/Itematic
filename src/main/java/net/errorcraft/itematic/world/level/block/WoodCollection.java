@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
@@ -111,7 +112,7 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
             blockItems.sapling,
             pottedSapling,
             0,
-            CompostChances.BIG
+            NumberProviders.COMPOSTABLE_MEDIUM
         );
         blockItems.leaves.forEach(bootstrapper::registerCompostableLeaves);
         bootstrapper.registerBlock(blockItems.fenceGate);
@@ -137,7 +138,7 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
             blockItems.sapling,
             pottedSapling,
             saplingFuelTicks,
-            saplingFuelTicks == FuelTimes.PLANT ? CompostChances.SMALL : 0.0f
+            saplingFuelTicks == FuelTimes.PLANT ? NumberProviders.COMPOSTABLE_LOW : null
         );
         blockItems.leaves.forEach(bootstrapper::registerCompostableLeaves);
         bootstrapper.registerBurningBlock(FuelTimes.WOOD).accept(blockItems.fenceGate);

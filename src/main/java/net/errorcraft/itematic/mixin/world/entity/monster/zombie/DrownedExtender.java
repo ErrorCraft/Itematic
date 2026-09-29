@@ -87,22 +87,19 @@ public abstract class DrownedExtender extends MobExtender {
         return instance.is(ItemIds.NAUTILUS_SHELL);
     }
 
+    @Redirect(
+        method = "shouldDoRangedAttack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
+        )
+    )
+    private boolean isTridentCheckId(ItemStack instance, Object o) {
+        return instance.is(ItemIds.TRIDENT);
+    }
+
     @Override
     protected @Nullable ResourceKey<Item> pickResultItem() {
         return ItemIds.DROWNED_SPAWN_EGG;
-    }
-
-    @Mixin(targets = "net/minecraft/world/entity/monster/zombie/Drowned$DrownedTridentAttackGoal")
-    public static class DrownedTridentAttackGoalExtender {
-        @Redirect(
-            method = "canUse",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
-            )
-        )
-        private boolean isTridentCheckId(ItemStack instance, Object o) {
-            return instance.is(ItemIds.TRIDENT);
-        }
     }
 }

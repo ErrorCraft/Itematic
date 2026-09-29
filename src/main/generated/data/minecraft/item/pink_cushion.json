@@ -1,0 +1,19 @@
+{
+  "behavior": {
+    "minecraft:entity": {
+      "entity": {
+        "allow_item_data": true,
+        "components": {
+          "minecraft:cushion/color": "pink"
+        },
+        "entity": "minecraft:cushion",
+        "spawn_rules": "minecraft:cushion"
+      }
+    },
+    "minecraft:stackable": 16
+  },
+  "display": {
+    "model": "minecraft:pink_cushion",
+    "translation_key": "item.minecraft.pink_cushion"
+  }
+}

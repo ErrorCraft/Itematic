@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:compostable": {
-      "level_increase_chance": 1.0
+      "layers": "minecraft:compostable/always_add_one"
     },
     "minecraft:consumable": {},
     "minecraft:food": {

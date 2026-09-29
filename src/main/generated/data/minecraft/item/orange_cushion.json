@@ -1,0 +1,19 @@
+{
+  "behavior": {
+    "minecraft:entity": {
+      "entity": {
+        "allow_item_data": true,
+        "components": {
+          "minecraft:cushion/color": "orange"
+        },
+        "entity": "minecraft:cushion",
+        "spawn_rules": "minecraft:cushion"
+      }
+    },
+    "minecraft:stackable": 16
+  },
+  "display": {
+    "model": "minecraft:orange_cushion",
+    "translation_key": "item.minecraft.orange_cushion"
+  }
+}

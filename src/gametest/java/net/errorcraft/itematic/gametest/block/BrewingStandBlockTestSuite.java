@@ -2,8 +2,6 @@ package net.errorcraft.itematic.gametest.block;
 
 import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.util.TestUtil;
-import net.errorcraft.itematic.world.inventory.BrewingStandMenuDelegate;
-import net.errorcraft.itematic.world.inventory.ItematicMenuTypes;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
@@ -12,6 +10,8 @@ import net.minecraft.references.BlockItemIds;
 import net.minecraft.references.ItemIds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.BrewingStandMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.GameType;
@@ -23,7 +23,7 @@ public class BrewingStandBlockTestSuite {
     public void brewingWaterBottleWithNetherWartTurnsItIntoAwkwardPotion(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
+        BrewingStandMenu brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.BREWING_STAND);
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.WATER));
         brewingStandMenu.getSlot(3)
@@ -44,7 +44,7 @@ public class BrewingStandBlockTestSuite {
     public void brewingAwkwardPotionWithSugarTurnsItIntoSwiftnessPotion(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
+        BrewingStandMenu brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.BREWING_STAND);
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.AWKWARD));
         brewingStandMenu.getSlot(3)
@@ -68,7 +68,7 @@ public class BrewingStandBlockTestSuite {
     public void brewingSwiftnessPotionWithGlowstoneDustTurnsItIntoStrongSwiftnessPotion(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
+        BrewingStandMenu brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.BREWING_STAND);
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
@@ -92,7 +92,7 @@ public class BrewingStandBlockTestSuite {
     public void brewingSwiftnessPotionWithRedstoneTurnsItIntoLongSwiftnessPotion(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
+        BrewingStandMenu brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.BREWING_STAND);
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
@@ -116,7 +116,7 @@ public class BrewingStandBlockTestSuite {
     public void brewingSwiftnessPotionWithGunpowderTurnsItIntoSwiftnessSplashPotion(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
+        BrewingStandMenu brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.BREWING_STAND);
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
@@ -140,7 +140,7 @@ public class BrewingStandBlockTestSuite {
     public void brewingSwiftnessSplashPotionWithDragonBreathTurnsItIntoSwiftnessLingeringPotionAndLeavesGlassBottle(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
+        BrewingStandMenu brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.BREWING_STAND);
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.SPLASH_POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(3)
@@ -167,7 +167,7 @@ public class BrewingStandBlockTestSuite {
     public void brewingDifferentPotionsOnlyModifiesCorrectTargets(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
+        BrewingStandMenu brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.BREWING_STAND);
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.SWIFTNESS));
         brewingStandMenu.getSlot(1)
@@ -203,7 +203,7 @@ public class BrewingStandBlockTestSuite {
     public void brewingPotionsTargetingMultipleValidRecipesModifiesBoth(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        BrewingStandMenuDelegate brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, ItematicMenuTypes.BREWING_STAND);
+        BrewingStandMenu brewingStandMenu = TestUtil.getMenuFromBlock(helper, BLOCK_POSITION, player, MenuType.BREWING_STAND);
         brewingStandMenu.getSlot(0)
             .setByPlayer(PotionContentsUtil.setPotion(level.itematic$createStack(ItemIds.POTION), Potions.WATER));
         brewingStandMenu.getSlot(1)

@@ -4,7 +4,7 @@
       "block": "minecraft:mushroom_stem"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.65
+      "layers": "minecraft:compostable/medium"
     },
     "minecraft:stackable": 64
   },

@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawnContext;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleType;
 import net.minecraft.world.phys.Vec3;
 
 public record OffsetSpawnPositionEntitySpawnRule(Vec3 offset) implements EntitySpawnRule<OffsetSpawnPositionEntitySpawnRule> {
@@ -17,8 +16,8 @@ public record OffsetSpawnPositionEntitySpawnRule(Vec3 offset) implements EntityS
     }
 
     @Override
-    public EntitySpawnRuleType<OffsetSpawnPositionEntitySpawnRule> type() {
-        return EntitySpawnRuleType.OFFSET_SPAWN_POSITION;
+    public MapCodec<OffsetSpawnPositionEntitySpawnRule> codec() {
+        return CODEC;
     }
 
     @Override

@@ -3,7 +3,6 @@ package net.errorcraft.itematic.world.entity.spawn.rule.rules;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawnContext;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleType;
 
 public class DiscardEntitySpawnRule implements EntitySpawnRule<DiscardEntitySpawnRule> {
     public static final DiscardEntitySpawnRule INSTANCE = new DiscardEntitySpawnRule();
@@ -12,8 +11,8 @@ public class DiscardEntitySpawnRule implements EntitySpawnRule<DiscardEntitySpaw
     private DiscardEntitySpawnRule() {}
 
     @Override
-    public EntitySpawnRuleType<DiscardEntitySpawnRule> type() {
-        return EntitySpawnRuleType.DISCARD;
+    public MapCodec<DiscardEntitySpawnRule> codec() {
+        return CODEC;
     }
 
     @Override

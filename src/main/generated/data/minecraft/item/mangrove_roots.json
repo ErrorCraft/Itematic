@@ -4,7 +4,7 @@
       "block": "minecraft:mangrove_roots"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.3
+      "layers": "minecraft:compostable/low"
     },
     "minecraft:fuel": {
       "ticks": 300

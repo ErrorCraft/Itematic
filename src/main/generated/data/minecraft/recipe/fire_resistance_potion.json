@@ -1,6 +1,0 @@
-{
-  "type": "minecraft:brewing_modify",
-  "base": "minecraft:awkward",
-  "reagent": "minecraft:magma_cream",
-  "result": "minecraft:fire_resistance"
-}

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.client.gui;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import net.errorcraft.itematic.client.resources.item.bar.ItemBarStyle;
 import net.errorcraft.itematic.client.resources.item.bar.ItemBarStyleManager;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;

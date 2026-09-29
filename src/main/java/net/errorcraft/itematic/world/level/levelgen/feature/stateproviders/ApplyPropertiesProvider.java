@@ -7,9 +7,8 @@ import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 
-public class ApplyPropertiesProvider extends BlockStateProvider {
+public class ApplyPropertiesProvider implements BlockStateProvider {
     public static final MapCodec<ApplyPropertiesProvider> CODEC = BlockItemStateProperties.CODEC.fieldOf("properties")
         .xmap(
             ApplyPropertiesProvider::new,
@@ -23,8 +22,8 @@ public class ApplyPropertiesProvider extends BlockStateProvider {
     }
 
     @Override
-    protected BlockStateProviderType<?> type() {
-        return ItematicBlockStateProviderTypes.APPLY_PROPERTIES;
+    public MapCodec<? extends BlockStateProvider> codec() {
+        return CODEC;
     }
 
     @Override

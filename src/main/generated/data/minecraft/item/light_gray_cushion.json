@@ -1,0 +1,19 @@
+{
+  "behavior": {
+    "minecraft:entity": {
+      "entity": {
+        "allow_item_data": true,
+        "components": {
+          "minecraft:cushion/color": "light_gray"
+        },
+        "entity": "minecraft:cushion",
+        "spawn_rules": "minecraft:cushion"
+      }
+    },
+    "minecraft:stackable": 16
+  },
+  "display": {
+    "model": "minecraft:light_gray_cushion",
+    "translation_key": "item.minecraft.light_gray_cushion"
+  }
+}

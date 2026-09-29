@@ -4,7 +4,7 @@
       "block": "minecraft:weeping_vines"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.5
+      "layers": "minecraft:compostable/low_medium"
     },
     "minecraft:stackable": 64
   },

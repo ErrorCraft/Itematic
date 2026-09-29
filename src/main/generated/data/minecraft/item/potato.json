@@ -4,7 +4,7 @@
       "block": "minecraft:potatoes"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.65
+      "layers": "minecraft:compostable/medium"
     },
     "minecraft:consumable": {},
     "minecraft:food": {

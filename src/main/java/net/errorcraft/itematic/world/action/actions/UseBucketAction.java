@@ -29,7 +29,7 @@ public record UseBucketAction(PositionTarget position) implements Action<UseBuck
     public boolean execute(ActionContext context) {
         ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStacks::fromItemInstance, ItemStack.EMPTY);
         return stack.itematic$getBehavior(ItemBehaviorType.BUCKET)
-            .map(bucket -> bucket.use(context, this.position, false))
+            .map(bucket -> bucket.use(context, this.position, false, null))
             .orElse(false);
     }
 }
