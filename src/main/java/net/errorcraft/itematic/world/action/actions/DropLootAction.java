@@ -13,7 +13,6 @@ import net.minecraft.core.component.BlockTransformer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
@@ -44,12 +43,12 @@ public record DropLootAction(PositionTarget position, ResourceKey<LootTable> loo
             return false;
         }
 
-        BlockState state = level.getBlockState(pos);
         Direction interactedSide = context.getOrDefault(ItematicContextKeys.SIDE, Direction.UP);
         return Block.dropFromBlockInteractLootTable(
             level,
             this.lootTable,
-            state,
+            pos,
+            level.getBlockState(pos),
             context.get(LootContextParams.BLOCK_ENTITY),
             context.get(LootContextParams.TOOL),
             context.get(LootContextParams.THIS_ENTITY),
