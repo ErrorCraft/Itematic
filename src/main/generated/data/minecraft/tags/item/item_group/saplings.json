@@ -7,8 +7,8 @@
     "minecraft:acacia_sapling",
     "minecraft:dark_oak_sapling",
     "minecraft:mangrove_propagule",
-    "minecraft:poplar_sapling",
     "minecraft:cherry_sapling",
-    "minecraft:pale_oak_sapling"
+    "minecraft:pale_oak_sapling",
+    "minecraft:poplar_sapling"
   ]
 }

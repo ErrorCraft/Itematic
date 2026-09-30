@@ -1,5 +1,9 @@
 {
   "behavior": {
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_boats",
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
     "minecraft:dispensable": {
       "behavior": "minecraft:spawn_entity_from_item"
     },
@@ -7,9 +11,6 @@
       "entity": {
         "entity": "minecraft:bamboo_raft"
       }
-    },
-    "minecraft:fuel": {
-      "ticks": 1200
     },
     "minecraft:stackable": 1
   },

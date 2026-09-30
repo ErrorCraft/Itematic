@@ -1,13 +1,14 @@
 {
   "behavior": {
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_wood_items_large",
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
     "minecraft:damageable": {
       "durability": 59
     },
     "minecraft:enchantable": {
       "enchantability": 15
-    },
-    "minecraft:fuel": {
-      "ticks": 200
     },
     "minecraft:repairable": {
       "items": "#minecraft:wooden_tool_materials"

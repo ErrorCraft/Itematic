@@ -7,9 +7,9 @@ import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.world.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.advancements.predicates.TagPredicate;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -38,12 +38,12 @@ public class PaintingVariantItemGroupEntry extends PossiblyHiddenItemGroupEntry<
         this.tag = tag;
     }
 
-    public static PaintingVariantItemGroupEntry expected(Holder<Item> item, TagKey<PaintingVariant> tag) {
-        return new PaintingVariantItemGroupEntry(false, item, TagPredicate.is(tag));
+    public static PaintingVariantItemGroupEntry expected(Holder<Item> item, HolderSet<PaintingVariant> paintingVariants) {
+        return new PaintingVariantItemGroupEntry(false, item, TagPredicate.is(paintingVariants));
     }
 
-    public static PaintingVariantItemGroupEntry unexpected(Holder<Item> item, TagKey<PaintingVariant> tag) {
-        return new PaintingVariantItemGroupEntry(true, item, TagPredicate.isNot(tag));
+    public static PaintingVariantItemGroupEntry unexpected(Holder<Item> item, HolderSet<PaintingVariant> paintingVariants) {
+        return new PaintingVariantItemGroupEntry(true, item, TagPredicate.isNot(paintingVariants));
     }
 
     @Override

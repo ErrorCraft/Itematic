@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignTextSlot;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +18,7 @@ public class SignBlockEntityExtender implements BlockEntityAccess {
     public boolean itematic$placedFromItemStack(Level level, @Nullable Player player, BlockState state, BlockPos pos, ItemStack stack) {
         boolean successful = BlockEntityAccess.super.itematic$placedFromItemStack(level, player, state, pos, stack);
         if (!level.isClientSide() && !successful && player != null && state.getBlock() instanceof SignBlock signBlock) {
-            signBlock.openTextEdit(player, (SignBlockEntity)(Object) this, true);
+            signBlock.openTextEdit(player, (SignBlockEntity)(Object) this, SignTextSlot.FRONT);
         }
 
         return successful;

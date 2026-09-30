@@ -2,9 +2,9 @@
   {
     "type": "minecraft:discard",
     "condition": {
-      "condition": "minecraft:inverted",
+      "type": "minecraft:inverted",
       "term": {
-        "condition": "minecraft:side_check",
+        "type": "minecraft:side_check",
         "sides": [
           "up"
         ]

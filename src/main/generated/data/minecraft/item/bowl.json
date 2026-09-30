@@ -1,7 +1,8 @@
 {
   "behavior": {
-    "minecraft:fuel": {
-      "ticks": 100
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_wood_items_extra_small",
+      "speed_multiplier": "minecraft:cooking/speed_default"
     },
     "minecraft:stackable": 64
   },

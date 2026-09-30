@@ -1,5 +1,9 @@
 {
   "behavior": {
+    "minecraft:brewing_fuel": {
+      "speed_multiplier": "minecraft:cooking/speed_default",
+      "uses": "minecraft:brewing/uses_default"
+    },
     "minecraft:stackable": 64
   },
   "display": {

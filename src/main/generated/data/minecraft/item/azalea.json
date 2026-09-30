@@ -6,8 +6,9 @@
     "minecraft:compostable": {
       "layers": "minecraft:compostable/medium"
     },
-    "minecraft:fuel": {
-      "ticks": 100
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_dry_plants",
+      "speed_multiplier": "minecraft:cooking/speed_default"
     },
     "minecraft:stackable": 64
   },
@@ -65,7 +66,7 @@
           ]
         },
         "requirements": {
-          "condition": "minecraft:location_check",
+          "type": "minecraft:location_check",
           "position": "interacted",
           "predicate": {
             "block": {

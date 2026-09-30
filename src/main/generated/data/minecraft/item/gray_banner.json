@@ -11,8 +11,9 @@
         "other_block": "minecraft:gray_wall_banner"
       }
     },
-    "minecraft:fuel": {
-      "ticks": 300
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_wood_blocks",
+      "speed_multiplier": "minecraft:cooking/speed_default"
     },
     "minecraft:stackable": 16
   },

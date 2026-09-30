@@ -2,7 +2,7 @@
   {
     "type": "minecraft:discard",
     "condition": {
-      "condition": "minecraft:side_check",
+      "type": "minecraft:side_check",
       "sides": [
         "down"
       ]

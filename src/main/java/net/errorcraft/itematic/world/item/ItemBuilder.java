@@ -52,14 +52,6 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder behavior(boolean condition, ItemBehavior<?> behavior) {
-        if (condition) {
-            this.behavior.add(behavior);
-        }
-
-        return this;
-    }
-
     public ItemBuilder behavior(ItemBehavior<?> behavior) {
         this.behavior.add(behavior);
         return this;

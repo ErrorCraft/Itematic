@@ -18,6 +18,9 @@
         "type": "minecraft:constant",
         "amount": 32
       }
+    },
+    "minecraft:villager_food": {
+      "nutrition": 1
     }
   },
   "display": {

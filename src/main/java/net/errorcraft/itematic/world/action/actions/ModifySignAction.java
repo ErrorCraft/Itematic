@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignTextSlot;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
@@ -64,13 +65,13 @@ public record ModifySignAction(PositionTarget position, Optional<DyeColor> color
             return false;
         }
 
-        boolean front = blockEntity.isFacingFrontText(player);
+        SignTextSlot signTextSlot = blockEntity.getSlotPlayerIsFacing(player);
         boolean result = false;
-        result |= this.glow.map(glow -> blockEntity.updateText(text -> text.setHasGlowingText(glow), front))
+        result |= this.glow.map(glow -> blockEntity.updateText(text -> text.withGlowingText(glow), signTextSlot))
             .orElse(false);
         result |= this.wax.map(blockEntity::setWaxed)
             .orElse(false);
-        result |= this.color.map(color -> blockEntity.updateText(text -> text.setColor(color), front))
+        result |= this.color.map(color -> blockEntity.updateText(text -> text.withColor(color), signTextSlot))
             .orElse(false);
         return result;
     }

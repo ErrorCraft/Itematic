@@ -7,6 +7,7 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.level.storage.loot.ItemStackTargets;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
 public record ModifyItemAction(LootContext.ItemStackTarget stack, LootItemFunction itemModifier) implements Action<ModifyItemAction> {
     public static final MapCodec<ModifyItemAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ItemStackTargets.CODEC.optionalFieldOf("stack", LootContext.ItemStackTarget.TOOL).forGetter(ModifyItemAction::stack),
-        LootItemFunctions.ROOT_CODEC.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier)
+        LootItemFunctions.DIRECT_CODEC.fieldOf("item_modifier").forGetter(ModifyItemAction::itemModifier)
     ).apply(instance, ModifyItemAction::new));
 
     public static ModifyItemAction of(LootContext.ItemStackTarget stack, LootItemFunction.Builder itemModifier) {
@@ -29,6 +30,7 @@ public record ModifyItemAction(LootContext.ItemStackTarget stack, LootItemFuncti
         SequenceFunction itemModifier = SequenceFunction.of(
             Stream.of(itemModifiers)
                 .map(LootItemFunction.Builder::build)
+                .map(Holder::direct)
                 .toList()
         );
         return new ModifyItemAction(stack, itemModifier);

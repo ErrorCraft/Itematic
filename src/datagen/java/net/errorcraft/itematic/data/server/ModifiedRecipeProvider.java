@@ -42,7 +42,7 @@ import java.util.function.BiConsumer;
 
 public class ModifiedRecipeProvider extends FabricCodecDataProvider<Recipe<?>> {
     public ModifiedRecipeProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, registriesFuture, PackOutput.Target.DATA_PACK, "recipe", Recipe.CODEC);
+        super(output, registriesFuture, PackOutput.Target.DATA_PACK, "recipe", Recipe.DIRECT_CODEC);
     }
 
     @Override

@@ -2,7 +2,6 @@ package net.errorcraft.itematic.world.item;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
@@ -54,11 +53,13 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.AttackBlockingItemB
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BrewingFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BrushItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BucketItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CastableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CompostableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ConsumableItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.CookingFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CooldownItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DamageableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
@@ -72,7 +73,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavi
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
@@ -97,6 +97,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ToolItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.TrimMaterialProviderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.UnlockRecipesItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.UseableItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.VillagerFoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
@@ -120,7 +121,6 @@ import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Chargeab
 import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.DirectShooterMethod;
 import net.errorcraft.itematic.world.level.block.CoralCollection;
 import net.errorcraft.itematic.world.level.block.CutoutCollection;
-import net.errorcraft.itematic.world.level.block.FuelTimes;
 import net.errorcraft.itematic.world.level.block.WoodCollection;
 import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.ApplyPropertiesProvider;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointerLocationItemModifier;
@@ -205,6 +205,7 @@ import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
+import net.minecraft.world.item.component.MobVisibility;
 import net.minecraft.world.item.component.PiercingWeapon;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.item.component.SwingAnimation;
@@ -241,9 +242,9 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.apache.commons.lang3.math.Fraction;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class Items {
     public static final int UNSTACKABLE_MAX_STACK_SIZE = 1;
@@ -383,7 +384,7 @@ public class Items {
                 BlockIds.OAK_WALL_SIGN,
                 BlockIds.OAK_WALL_HANGING_SIGN,
                 BlockIds.POTTED_OAK_SAPLING,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             WoodCollection.registerItems(
                 ItematicBlockItemIds.SPRUCE,
@@ -391,7 +392,7 @@ public class Items {
                 BlockIds.SPRUCE_WALL_SIGN,
                 BlockIds.SPRUCE_WALL_HANGING_SIGN,
                 BlockIds.POTTED_SPRUCE_SAPLING,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             WoodCollection.registerItems(
                 ItematicBlockItemIds.BIRCH,
@@ -399,7 +400,7 @@ public class Items {
                 BlockIds.BIRCH_WALL_SIGN,
                 BlockIds.BIRCH_WALL_HANGING_SIGN,
                 BlockIds.POTTED_BIRCH_SAPLING,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             WoodCollection.registerItems(
                 ItematicBlockItemIds.JUNGLE,
@@ -407,7 +408,7 @@ public class Items {
                 BlockIds.JUNGLE_WALL_SIGN,
                 BlockIds.JUNGLE_WALL_HANGING_SIGN,
                 BlockIds.POTTED_JUNGLE_SAPLING,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             WoodCollection.registerItems(
                 ItematicBlockItemIds.ACACIA,
@@ -415,7 +416,7 @@ public class Items {
                 BlockIds.ACACIA_WALL_SIGN,
                 BlockIds.ACACIA_WALL_HANGING_SIGN,
                 BlockIds.POTTED_ACACIA_SAPLING,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             WoodCollection.registerItems(
                 ItematicBlockItemIds.DARK_OAK,
@@ -423,7 +424,7 @@ public class Items {
                 BlockIds.DARK_OAK_WALL_SIGN,
                 BlockIds.DARK_OAK_WALL_HANGING_SIGN,
                 BlockIds.POTTED_DARK_OAK_SAPLING,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             WoodCollection.registerItems(
                 ItematicBlockItemIds.MANGROVE,
@@ -431,12 +432,12 @@ public class Items {
                 BlockIds.MANGROVE_WALL_SIGN,
                 BlockIds.MANGROVE_WALL_HANGING_SIGN,
                 BlockIds.POTTED_MANGROVE_PROPAGULE,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             this.registerBlock(BlockItemIds.MUDDY_MANGROVE_ROOTS);
             this.builderForBlock(BlockItemIds.MANGROVE_ROOTS)
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_ROOTS))
                 .register();
             WoodCollection.registerItems(
                 ItematicBlockItemIds.POPLAR,
@@ -444,7 +445,7 @@ public class Items {
                 BlockIds.POPLAR_WALL_SIGN,
                 BlockIds.POPLAR_WALL_HANGING_SIGN,
                 BlockIds.POTTED_POPLAR_SAPLING,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             WoodCollection.registerItems(
                 ItematicBlockItemIds.CHERRY,
@@ -452,7 +453,7 @@ public class Items {
                 BlockIds.CHERRY_WALL_SIGN,
                 BlockIds.CHERRY_WALL_HANGING_SIGN,
                 BlockIds.POTTED_CHERRY_SAPLING,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             WoodCollection.registerItems(
                 ItematicBlockItemIds.PALE_OAK,
@@ -460,7 +461,7 @@ public class Items {
                 BlockIds.PALE_OAK_WALL_SIGN,
                 BlockIds.PALE_OAK_WALL_HANGING_SIGN,
                 BlockIds.POTTED_PALE_OAK_SAPLING,
-                FuelTimes.PLANT
+                NumberProviders.COOKING_TIME_DRY_PLANTS
             );
             WoodCollection.registerItems(
                 ItematicBlockItemIds.BAMBOO,
@@ -468,7 +469,7 @@ public class Items {
                 BlockIds.BAMBOO_WALL_SIGN,
                 BlockIds.BAMBOO_WALL_HANGING_SIGN,
                 BlockIds.POTTED_BAMBOO,
-                FuelTimes.BAMBOO
+                NumberProviders.COOKING_TIME_BAMBOO
             );
             CutoutCollection.registerBurningItems(ItematicBlockItemIds.BAMBOO_MOSAIC, this);
             WoodCollection.registerItems(
@@ -578,7 +579,7 @@ public class Items {
             CutoutCollection.registerItems(ItematicBlockItemIds.PURPUR, this);
             this.registerBlock(BlockItemIds.PURPUR_PILLAR);
             this.builderForBlock(BlockItemIds.COAL_BLOCK)
-                .behavior(FuelItemBehavior.of(FuelTimes.COAL_BLOCK))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_COAL_BLOCK))
                 .register();
             this.registerBlock(BlockItemIds.COAL_ORE);
             this.registerBlock(BlockItemIds.DEEPSLATE_COAL_ORE);
@@ -645,13 +646,19 @@ public class Items {
             BlockItemIds.COPPER_GOLEM_STATUE.forEach(this::registerBlock);
             BlockItemIds.LIGHTNING_ROD.forEach(this::registerBlock);
             BlockItemIds.WOOL.forEach(wool -> this.builderForBlock(wool)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOL))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOL))
                 .register()
             );
-            BlockItemIds.WOOL_STAIRS.forEach(this::registerBlock);
-            BlockItemIds.WOOL_SLAB.forEach(this::registerBlock);
+            BlockItemIds.WOOL_STAIRS.forEach(woolStairs -> this.builderForBlock(woolStairs)
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOL))
+                .register()
+            );
+            BlockItemIds.WOOL_SLAB.forEach(woolSlab -> this.builderForBlock(woolSlab)
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOL_SLABS))
+                .register()
+            );
             ColorCollection.zipApply(BlockItemIds.CARPET, ColorCollection.VALUES, (carpet, dyeColor) -> this.builderForBlock(carpet)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOL_CARPET))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOL_CARPETS))
                 .behavior(EquipmentItemBehavior.of(Equippable.llamaSwag(dyeColor)))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
                 .register()
@@ -675,7 +682,7 @@ public class Items {
                 BlockItemIds.BANNER,
                 ColorCollection.VALUES,
                 (banner, dyeColor) -> this.builderForBlockAttachedToSide(banner, BlockIds.WALL_BANNER.pick(dyeColor), Direction.DOWN, 16)
-                    .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                    .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                     .behavior(BannerPatternHolderItemBehavior.of(dyeColor))
                     .register()
             );
@@ -722,7 +729,7 @@ public class Items {
             this.registerBlock(BlockItemIds.WARPED_NYLIUM);
             this.registerBlock(BlockItemIds.NETHERRACK);
             this.builderForBlock(BlockItemIds.CRAFTING_TABLE)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.registerBlock(BlockItemIds.CRAFTER);
             this.registerBlock(BlockItemIds.FURNACE);
@@ -731,16 +738,16 @@ public class Items {
             this.registerBlock(BlockItemIds.CAMPFIRE);
             this.registerBlock(BlockItemIds.SOUL_CAMPFIRE);
             this.builderForBlock(BlockItemIds.CHEST)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_CHEST)))
                 .register();
             this.builderForBlock(BlockItemIds.TRAPPED_CHEST)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             BlockItemIds.COPPER_CHEST.forEach(this::registerBlock);
             this.registerBlock(BlockItemIds.ENDER_CHEST);
             this.builderForBlock(BlockItemIds.BARREL)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.registerShulkerBox(BlockItemIds.SHULKER_BOX);
             BlockItemIds.DYED_SHULKER_BOX.forEach(this::registerShulkerBox);
@@ -750,19 +757,19 @@ public class Items {
             this.registerBlock(BlockItemIds.DAMAGED_ANVIL);
             this.registerBlock(BlockItemIds.ENCHANTING_TABLE);
             this.builderForBlock(BlockItemIds.BOOKSHELF)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.CHISELED_BOOKSHELF)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.LECTERN)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.LADDER)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.SCAFFOLDING)
-                .behavior(FuelItemBehavior.of(FuelTimes.SCAFFOLDING))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_BAMBOO))
                 .register();
             this.registerBlock(BlockItemIds.BREWING_STAND);
             this.registerBlock(BlockItemIds.CAULDRON);
@@ -863,25 +870,25 @@ public class Items {
             this.registerBlock(BlockItemIds.GRINDSTONE);
             this.registerBlock(BlockItemIds.STONECUTTER);
             this.builderForBlock(BlockItemIds.LOOM)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.CARTOGRAPHY_TABLE)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.SMITHING_TABLE)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.FLETCHING_TABLE)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.JUKEBOX)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.NOTE_BLOCK)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.builderForBlock(BlockItemIds.COMPOSTER)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.registerBlock(BlockItemIds.LODESTONE);
             this.registerBlock(BlockItemIds.RESPAWN_ANCHOR);
@@ -903,7 +910,7 @@ public class Items {
             this.registerBlock(BlockItemIds.TARGET);
             this.registerBlock(BlockItemIds.OBSERVER);
             this.builderForBlock(BlockItemIds.DAYLIGHT_DETECTOR)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
                 .register();
             this.registerBlock(BlockItemIds.SCULK_SENSOR);
             this.registerBlock(BlockItemIds.CALIBRATED_SCULK_SENSOR);
@@ -916,7 +923,7 @@ public class Items {
                 .register();
             this.builderForBlock(BlockItemIds.AZALEA)
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
-                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_DRY_PLANTS))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_AZALEA_BUSH))
                 .register();
             this.builderForBlock(BlockItemIds.AZALEA_LEAVES)
@@ -924,7 +931,7 @@ public class Items {
                 .register();
             this.builderForBlock(BlockItemIds.FLOWERING_AZALEA)
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
-                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_DRY_PLANTS))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FLOWERING_AZALEA_BUSH))
                 .register();
             this.builderForBlock(BlockItemIds.FLOWERING_AZALEA_LEAVES)
@@ -961,7 +968,7 @@ public class Items {
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FERN))
                 .register();
             this.builderForBlock(BlockItemIds.SHORT_DRY_GRASS)
-                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_DRY_PLANTS))
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.BUSH)
@@ -971,7 +978,7 @@ public class Items {
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.DEAD_BUSH)
-                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_DRY_PLANTS))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_DEAD_BUSH))
                 .register();
             this.registerSuspiciousEffectIngredient(BlockItemIds.DANDELION, NumberProviders.COMPOSTABLE_MEDIUM, MobEffectIds.SATURATION, 140, BlockIds.POTTED_DANDELION);
@@ -1000,7 +1007,7 @@ public class Items {
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.LEAF_LITTER)
-                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_DRY_PLANTS))
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.SPORE_BLOSSOM)
@@ -1043,7 +1050,7 @@ public class Items {
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.TALL_DRY_GRASS)
-                .behavior(FuelItemBehavior.of(FuelTimes.PLANT))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_DRY_PLANTS))
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW))
                 .register();
             this.builderForBlock(BlockItemIds.SUNFLOWER)
@@ -1123,7 +1130,7 @@ public class Items {
                 .register();
             this.builderForBlock(BlockItemIds.DRIED_KELP_BLOCK)
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_LOW_MEDIUM))
-                .behavior(FuelItemBehavior.of(FuelTimes.DRIED_KELP_BLOCK))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_DRIED_KELP_BLOCK))
                 .register();
             this.builderForBlock(BlockItemIds.MOSS_BLOCK)
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
@@ -1252,22 +1259,22 @@ public class Items {
             this.registerOperatorBlock(BlockItemIds.TEST_BLOCK);
             this.registerOperatorBlock(BlockItemIds.TEST_INSTANCE_BLOCK);
             this.builderForSword(ItemIds.WOODEN_SWORD, ToolMaterial.WOOD, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
                 .register();
             this.builderForSpear(ItemIds.WOODEN_SPEAR, ToolMaterial.WOOD, 0.65f, 0.7f, 0.75f, 5.0f, 14.0f, 10.0f, 15.0f, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
                 .register();
             this.builderForShovel(ItemIds.WOODEN_SHOVEL, ToolMaterial.WOOD, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
                 .register();
             this.builderForPickaxe(ItemIds.WOODEN_PICKAXE, ToolMaterial.WOOD, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
                 .register();
             this.builderForAxe(ItemIds.WOODEN_AXE, ToolMaterial.WOOD, 7.0d, 0.2d, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
                 .register();
             this.builderForHoe(ItemIds.WOODEN_HOE, ToolMaterial.WOOD, 1.0d, 0.25d, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(FuelItemBehavior.of(FuelTimes.TOOL))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
                 .register();
             this.registerSword(ItemIds.STONE_SWORD, ToolMaterial.STONE, ItemTags.STONE_TOOL_MATERIALS);
             this.registerSpear(ItemIds.STONE_SPEAR, ToolMaterial.STONE, 0.75f, 0.82f, 0.7f, 4.5f, 13.0f, 9.0f, 13.75f, ItemTags.STONE_TOOL_MATERIALS);
@@ -1321,7 +1328,7 @@ public class Items {
                 .behavior(DamageableItemBehavior.of(64))
                 .behavior(EnchantableItemBehavior.of(1))
                 .behavior(CastableItemBehavior.INSTANCE)
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_SMALL))
                 .register();
             this.builder(ItemIds.SHEARS, 1)
                 .behavior(DamageableItemBehavior.of(238))
@@ -1352,7 +1359,7 @@ public class Items {
                     )
                 )
                 .behavior(EnchantableItemBehavior.of(1))
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_SMALL))
                 .register();
             this.builder(ItemIds.CROSSBOW, 1)
                 .behavior(DamageableItemBehavior.of(465))
@@ -1381,7 +1388,7 @@ public class Items {
                     )
                 )
                 .behavior(EnchantableItemBehavior.of(1))
-                .behavior(FuelItemBehavior.of(FuelTimes.WOOD))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_SMALL))
                 .register();
             this.builderForProjectile(ItemIds.ARROW, EntityTypeIds.ARROW)
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
@@ -1762,18 +1769,18 @@ public class Items {
                 .display(display -> display.rarity(Rarity.UNCOMMON))
                 .register();
             this.registerItem(ItemIds.CLOCK);
-            this.registerSkull(BlockItemIds.SKELETON_SKULL, Rarity.UNCOMMON, BlockIds.SKELETON_WALL_SKULL);
+            this.registerSkull(BlockItemIds.SKELETON_SKULL, Rarity.UNCOMMON, BlockIds.SKELETON_WALL_SKULL, EntityTypeIds.SKELETON);
             this.registerSkull(BlockItemIds.WITHER_SKELETON_SKULL, Rarity.UNCOMMON, BlockIds.WITHER_SKELETON_WALL_SKULL);
             this.registerSkull(BlockItemIds.PLAYER_HEAD, Rarity.UNCOMMON, BlockIds.PLAYER_WALL_HEAD);
-            this.registerSkull(BlockItemIds.ZOMBIE_HEAD, Rarity.UNCOMMON, BlockIds.ZOMBIE_WALL_HEAD);
-            this.registerSkull(BlockItemIds.CREEPER_HEAD, Rarity.UNCOMMON, BlockIds.CREEPER_WALL_HEAD);
+            this.registerSkull(BlockItemIds.ZOMBIE_HEAD, Rarity.UNCOMMON, BlockIds.ZOMBIE_WALL_HEAD, EntityTypeIds.ZOMBIE);
+            this.registerSkull(BlockItemIds.CREEPER_HEAD, Rarity.UNCOMMON, BlockIds.CREEPER_WALL_HEAD, EntityTypeIds.CREEPER);
             this.registerSkull(BlockItemIds.DRAGON_HEAD, Rarity.RARE, BlockIds.DRAGON_WALL_HEAD);
-            this.registerSkull(BlockItemIds.PIGLIN_HEAD, Rarity.UNCOMMON, BlockIds.PIGLIN_WALL_HEAD);
+            this.registerSkull(BlockItemIds.PIGLIN_HEAD, Rarity.UNCOMMON, BlockIds.PIGLIN_WALL_HEAD, EntityTypeIds.PIGLIN, EntityTypeIds.PIGLIN_BRUTE);
             this.registerBucket(ItemIds.BUCKET, 16, BucketItemBehavior.drainFluid());
             this.builderForBucketWithFluid(ItemIds.WATER_BUCKET, FluidIds.WATER, SoundEventIds.BUCKET_EMPTY)
                 .register();
             this.builderForBucketWithFluid(ItemIds.LAVA_BUCKET, FluidIds.LAVA, SoundEventIds.BUCKET_EMPTY_LAVA)
-                .behavior(FuelItemBehavior.of(FuelTimes.LAVA, this.items.getOrThrow(ItemIds.BUCKET)))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_LAVA_BUCKET, this.items.getOrThrow(ItemIds.BUCKET)))
                 .register();
             this.registerBucket(
                 BlockItemIds.POWDER_SNOW.item(),
@@ -2149,6 +2156,7 @@ public class Items {
                 .register();
             this.builderForConsumable(ItemIds.BREAD, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.BREAD))
+                .behavior(VillagerFoodItemBehavior.of(4))
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM_HIGH))
                 .register();
             this.builderForBlock(BlockItemIds.CAKE, 1)
@@ -2156,6 +2164,7 @@ public class Items {
                 .register();
             this.builderForConsumable(BlockItemIds.CARROT_CROP.item(), Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.CARROT))
+                .behavior(VillagerFoodItemBehavior.of(1))
                 .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARROT_CROP.block())))
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
@@ -2164,6 +2173,7 @@ public class Items {
                 .register();
             this.builderForConsumable(BlockItemIds.POTATO_CROP.item(), Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.POTATO))
+                .behavior(VillagerFoodItemBehavior.of(1))
                 .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.POTATO_CROP.block())))
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
@@ -2189,6 +2199,7 @@ public class Items {
                 .register();
             this.builderForConsumable(ItemIds.BEETROOT, Consumables.DEFAULT_FOOD)
                 .behavior(FoodItemBehavior.of(Foods.BEETROOT))
+                .behavior(VillagerFoodItemBehavior.of(1))
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
             this.builderForBlock(BlockItemIds.COCOA_CROP)
@@ -2316,7 +2327,7 @@ public class Items {
                     )
                 )
                 .register();
-            this.registerFuel(ItemIds.BOWL, FuelTimes.SMALL_WOODEN_ITEM);
+            this.registerCookingFuel(ItemIds.BOWL, NumberProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL);
             this.builderForConsumableBowl(ItemIds.MUSHROOM_STEW)
                 .behavior(FoodItemBehavior.of(Foods.MUSHROOM_STEW))
                 .register();
@@ -2427,16 +2438,18 @@ public class Items {
                             .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.CUSHION))
                             .components(
                                 DataComponentPatch.builder()
-                                    .set(ItematicDataComponents.CUSHION_COLOR, dyeColor)
+                                    .set(DataComponents.CUSHION_COLOR, dyeColor)
                                     .build()
                             )
-                            .build()
+                            .build(),
+                        this.blocks.getOrThrow(BlockTags.CUSHION_USES_COLLISION_SHAPE)
                     )
                 )
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOL_SLABS))
                 .register()
             );
-            this.registerFuel(ItemIds.COAL, FuelTimes.COAL);
-            this.registerFuel(ItemIds.CHARCOAL, FuelTimes.COAL);
+            this.registerCookingFuel(ItemIds.COAL, NumberProviders.COOKING_TIME_COAL);
+            this.registerCookingFuel(ItemIds.CHARCOAL, NumberProviders.COOKING_TIME_COAL);
             this.registerTrimMaterialProvider(ItemIds.IRON_INGOT, TrimMaterials.IRON);
             this.registerItem(ItemIds.RAW_IRON);
             this.registerItem(ItemIds.IRON_NUGGET);
@@ -2463,7 +2476,7 @@ public class Items {
                 .display(display -> display.rarity(Rarity.RARE).glint())
                 .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_EXPLOSION)))
                 .register();
-            this.registerFuel(ItemIds.STICK, FuelTimes.SMALL_WOODEN_ITEM);
+            this.registerCookingFuel(ItemIds.STICK, NumberProviders.COOKING_TIME_DRY_PLANTS);
             this.registerItem(ItemIds.FLINT);
             this.registerItem(ItemIds.BONE);
             this.builder(ItemIds.BONE_MEAL)
@@ -2507,8 +2520,10 @@ public class Items {
                 .display(ItemDisplay.Builder::itemName)
                 .behavior(CompostableItemBehavior.of(NumberProviders.COMPOSTABLE_MEDIUM))
                 .register();
-            this.registerFuel(ItemIds.BLAZE_ROD, FuelTimes.BLAZE_ROD);
-            this.registerItem(ItemIds.BLAZE_POWDER);
+            this.registerCookingFuel(ItemIds.BLAZE_ROD, NumberProviders.COOKING_TIME_BLAZE_ROD);
+            this.builder(ItemIds.BLAZE_POWDER)
+                .behavior(BrewingFuelItemBehavior.of(NumberProviders.BREWING_DEFAULT_USES))
+                .register();
             this.registerItem(ItemIds.SUGAR);
             this.registerItem(ItemIds.GHAST_TEAR);
             this.registerItem(ItemIds.FERMENTED_SPIDER_EYE);
@@ -2691,24 +2706,36 @@ public class Items {
                 .register();
         }
 
-        private void registerSkull(BlockItemId blockItem, Rarity rarity, ResourceKey<Block> wallSkull) {
+        @SafeVarargs
+        private void registerSkull(BlockItemId blockItem, Rarity rarity, ResourceKey<Block> wallSkull, ResourceKey<EntityType<?>>... reducedEntityVisibilityTypes) {
+            Equippable equippable = Equippable.builder(EquipmentSlot.HEAD)
+                .setSwappable(false)
+                .build();
             this.builderForBlockAttachedToSide(blockItem, wallSkull, Direction.DOWN)
                 .display(display -> display.rarity(rarity))
                 .attributeModifiers(AttributeModifiers::hideFromLocatorBar)
                 .behavior(
-                    EquipmentItemBehavior.of(
-                        Equippable.builder(EquipmentSlot.HEAD)
-                            .setSwappable(false)
-                            .build()
-                    )
+                    reducedEntityVisibilityTypes.length == 0
+                        ? EquipmentItemBehavior.of(equippable)
+                        : EquipmentItemBehavior.of(
+                            equippable,
+                            new MobVisibility(
+                                HolderSet.direct(
+                                    Arrays.stream(reducedEntityVisibilityTypes)
+                                        .map(this.entityTypes::getOrThrow)
+                                        .toList()
+                                ),
+                                0.5f
+                            )
+                        )
                 )
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)))
                 .register();
         }
 
-        private void registerFuel(ResourceKey<Item> item, int fuelTicks) {
+        private void registerCookingFuel(ResourceKey<Item> item, ResourceKey<NumberProvider> burnTime) {
             this.builder(item)
-                .behavior(FuelItemBehavior.of(fuelTicks))
+                .behavior(CookingFuelItemBehavior.of(burnTime))
                 .register();
         }
 
@@ -2761,13 +2788,13 @@ public class Items {
                             KineticMeleeWeapon.of(
                                 new KineticWeapon(
                                     10,
-                                    (int)(delay * SharedConstants.TICKS_PER_SECOND),
+                                    (int) (delay * SharedConstants.TICKS_PER_SECOND),
                                     KineticWeapon.Condition.ofAttackerSpeed(
-                                        (int)(dismountTime * SharedConstants.TICKS_PER_SECOND),
+                                        (int) (dismountTime * SharedConstants.TICKS_PER_SECOND),
                                         dismountSpeedThreshold
                                     ),
-                                    KineticWeapon.Condition.ofAttackerSpeed((int)(knockbackTime * SharedConstants.TICKS_PER_SECOND), 5.1f),
-                                    KineticWeapon.Condition.ofRelativeSpeed((int)(damageTime * SharedConstants.TICKS_PER_SECOND), 4.6f),
+                                    KineticWeapon.Condition.ofAttackerSpeed((int) (knockbackTime * SharedConstants.TICKS_PER_SECOND), 5.1f),
+                                    KineticWeapon.Condition.ofRelativeSpeed((int) (damageTime * SharedConstants.TICKS_PER_SECOND), 4.6f),
                                     0.38f,
                                     damageMultiplier,
                                     Optional.of(
@@ -2804,7 +2831,7 @@ public class Items {
                         .swingAnimation(
                             new SwingAnimation(
                                 SwingAnimationType.STAB,
-                                (int)(attackDuration * SharedConstants.TICKS_PER_SECOND)
+                                (int) (attackDuration * SharedConstants.TICKS_PER_SECOND)
                             )
                         )
                         .attackRange(
@@ -2967,7 +2994,7 @@ public class Items {
             this.builder(item, 1)
                 .behavior(EntityItemBehavior.of(EntitySpawner.of(this.entityTypes.getOrThrow(entity))))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))
-                .behavior(FuelItemBehavior.of(FuelTimes.BOAT))
+                .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_BOATS))
                 .register();
         }
 
@@ -3001,16 +3028,19 @@ public class Items {
                 .register();
         }
 
-        public Consumer<BlockItemId> registerBurningBlock(int fuelTicks) {
-            return blockItem -> this.builderForBlock(blockItem)
-                .behavior(FuelItemBehavior.of(fuelTicks))
+        public void registerBurningBlock(BlockItemId blockItem, ResourceKey<NumberProvider> burnTime) {
+            this.builderForBlock(blockItem)
+                .behavior(CookingFuelItemBehavior.of(burnTime))
                 .register();
         }
 
-        public void registerPottableSapling(BlockItemId blockItem, ResourceKey<Block> pottedBlock, int fuelTicks, @Nullable ResourceKey<NumberProvider> compostLayers) {
+        public void registerPottableSapling(BlockItemId blockItem, ResourceKey<Block> pottedBlock, @Nullable ResourceKey<NumberProvider> burnTime, @Nullable ResourceKey<NumberProvider> compostLayers) {
             ItemBuilder builder = this.builderForBlock(blockItem)
-                .behavior(fuelTicks > 0, FuelItemBehavior.of(fuelTicks))
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, pottedBlock));
+            if (burnTime != null) {
+                builder.behavior(CookingFuelItemBehavior.of(burnTime));
+            }
+
             if (compostLayers != null) {
                 builder.behavior(CompostableItemBehavior.of(compostLayers));
             }

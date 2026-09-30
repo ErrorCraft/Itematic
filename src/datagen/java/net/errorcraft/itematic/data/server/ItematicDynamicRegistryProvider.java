@@ -1,7 +1,6 @@
 package net.errorcraft.itematic.data.server;
 
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
-import net.errorcraft.itematic.data.util.RegistryUtil;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
@@ -16,15 +15,19 @@ public class ItematicDynamicRegistryProvider extends FabricDynamicRegistryProvid
 
     @Override
     protected void configure(HolderLookup.Provider registries, Entries entries) {
-        RegistryUtil.addAll(entries, registries.lookupOrThrow(Registries.ITEM));
-        RegistryUtil.addAll(entries, registries.lookupOrThrow(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER));
-        RegistryUtil.addAll(entries, registries.lookupOrThrow(ItematicRegistries.ACTION));
-        RegistryUtil.addAll(entries, registries.lookupOrThrow(ItematicRegistries.DISPENSE_BEHAVIOR));
-        RegistryUtil.addAll(entries, registries.lookupOrThrow(ItematicRegistries.ENTITY_SPAWN_RULE_SET));
+        addAll(entries, registries.lookupOrThrow(Registries.ITEM));
+        addAll(entries, registries.lookupOrThrow(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER));
+        addAll(entries, registries.lookupOrThrow(ItematicRegistries.ACTION));
+        addAll(entries, registries.lookupOrThrow(ItematicRegistries.DISPENSE_BEHAVIOR));
+        addAll(entries, registries.lookupOrThrow(ItematicRegistries.ENTITY_SPAWN_RULE_SET));
     }
 
     @Override
     public String getName() {
-        return "Itematic Registries";
+        return "Itematic Dynamic Registries";
+    }
+
+    private static <T> void addAll(Entries entries, HolderLookup.RegistryLookup<T> registry) {
+        registry.listElementIds().forEach(key -> entries.add(registry, key));
     }
 }

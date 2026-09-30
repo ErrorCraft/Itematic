@@ -21,8 +21,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.ItemUseAnimation;
 import org.apache.commons.lang3.math.Fraction;
 
@@ -123,10 +123,10 @@ public class ItematicDataComponents {
             .networkSynchronized(SmashingWeapon.STREAM_CODEC)
             .cacheEncoding()
     );
-    public static final DataComponentType<DyeColor> CUSHION_COLOR = register(
-        "cushion/color",
-        builder -> builder.persistent(DyeColor.CODEC)
-            .networkSynchronized(DyeColor.STREAM_CODEC)
+    public static final DataComponentType<ItemStackTemplate> COOKING_FUEL_REMAINDER = register(
+        "cooking_fuel_remainder",
+        builder -> builder.persistent(ItemStackTemplate.CODEC)
+            .networkSynchronized(ItemStackTemplate.STREAM_CODEC)
     );
 
     private ItematicDataComponents() {}

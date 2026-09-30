@@ -22,7 +22,7 @@
             }
           ],
           "requirements": {
-            "condition": "minecraft:location_check",
+            "type": "minecraft:location_check",
             "position": "interacted",
             "predicate": {
               "block": {

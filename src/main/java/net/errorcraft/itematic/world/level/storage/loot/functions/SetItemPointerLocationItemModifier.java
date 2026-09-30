@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.LodestoneTracker;
@@ -13,7 +14,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
 import java.util.Optional;
 
 public class SetItemPointerLocationItemModifier extends LootItemConditionalFunction {
@@ -23,12 +23,8 @@ public class SetItemPointerLocationItemModifier extends LootItemConditionalFunct
 
     private final PositionTarget position;
 
-    public SetItemPointerLocationItemModifier(PositionTarget position) {
-        this(List.of(), position);
-    }
-
-    public SetItemPointerLocationItemModifier(List<LootItemCondition> conditions, PositionTarget position) {
-        super(conditions);
+    private SetItemPointerLocationItemModifier(Optional<Holder<LootItemCondition>> condition, PositionTarget position) {
+        super(condition);
         this.position = position;
     }
 

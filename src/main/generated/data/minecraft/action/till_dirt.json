@@ -10,10 +10,10 @@
     }
   },
   "requirements": {
-    "condition": "minecraft:all_of",
+    "type": "minecraft:all_of",
     "terms": [
       {
-        "condition": "minecraft:location_check",
+        "type": "minecraft:location_check",
         "position": "interacted",
         "predicate": {
           "block": {
@@ -22,16 +22,16 @@
         }
       },
       {
-        "condition": "minecraft:inverted",
+        "type": "minecraft:inverted",
         "term": {
-          "condition": "minecraft:side_check",
+          "type": "minecraft:side_check",
           "sides": [
             "down"
           ]
         }
       },
       {
-        "condition": "minecraft:location_check",
+        "type": "minecraft:location_check",
         "offsetY": 1,
         "position": "interacted",
         "predicate": {

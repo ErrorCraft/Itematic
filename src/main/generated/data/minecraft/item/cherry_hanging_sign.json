@@ -8,8 +8,9 @@
         "other_block": "minecraft:cherry_wall_hanging_sign"
       }
     },
-    "minecraft:fuel": {
-      "ticks": 800
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_hanging_signs",
+      "speed_multiplier": "minecraft:cooking/speed_default"
     },
     "minecraft:stackable": 16
   },

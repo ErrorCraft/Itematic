@@ -46,7 +46,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -114,86 +113,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
             info.cancel();
         }
-    }
-
-    @Redirect(
-        method = "getVisibilityPercent",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/Items;SKELETON_SKULL:Lnet/minecraft/world/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private boolean isSkeletonSkullCheckId(ItemStack instance, Object o) {
-        return instance.is(BlockItemIds.SKELETON_SKULL.item());
-    }
-
-    @Redirect(
-        method = "getVisibilityPercent",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/Items;ZOMBIE_HEAD:Lnet/minecraft/world/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private boolean isZombieHeadCheckId(ItemStack instance, Object o) {
-        return instance.is(BlockItemIds.ZOMBIE_HEAD.item());
-    }
-
-    @Redirect(
-        method = "getVisibilityPercent",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/Items;CREEPER_HEAD:Lnet/minecraft/world/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private boolean isCreeperHeadCheckId(ItemStack instance, Object o) {
-        return instance.is(BlockItemIds.CREEPER_HEAD.item());
-    }
-
-    @Redirect(
-        method = "getVisibilityPercent",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/Items;PIGLIN_HEAD:Lnet/minecraft/world/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            ),
-            to = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/Items;CREEPER_HEAD:Lnet/minecraft/world/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private boolean isPiglinHeadCheckId(ItemStack instance, Object o) {
-        return instance.is(BlockItemIds.PIGLIN_HEAD.item());
     }
 
     @Redirect(

@@ -8,8 +8,9 @@
         "other_block": "minecraft:jungle_wall_sign"
       }
     },
-    "minecraft:fuel": {
-      "ticks": 200
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_wood_items_large",
+      "speed_multiplier": "minecraft:cooking/speed_default"
     },
     "minecraft:stackable": 16
   },

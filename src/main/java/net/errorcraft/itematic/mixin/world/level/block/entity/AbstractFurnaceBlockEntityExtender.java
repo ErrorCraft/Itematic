@@ -3,8 +3,7 @@ package net.errorcraft.itematic.mixin.world.level.block.entity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.minecraft.core.NonNullList;
 import net.minecraft.references.BlockItemIds;
 import net.minecraft.references.ItemIds;
@@ -14,12 +13,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import net.minecraft.world.level.block.entity.FuelValues;
+import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
@@ -37,19 +35,6 @@ public class AbstractFurnaceBlockEntityExtender {
     private static void passLevel(NonNullList<ItemStack> items, ItemStack inputItemStack, ItemStack result, Operation<Void> original, ServerLevel level) {
         ScopedValue.where(LEVEL, level)
             .run(() -> original.call(items, inputItemStack, result));
-    }
-
-    @WrapOperation(
-        method = "getBurnDuration",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/entity/FuelValues;burnDuration(Lnet/minecraft/world/item/ItemStack;)I"
-        )
-    )
-    private int burnDurationUseItemBehavior(FuelValues instance, ItemStack itemStack, Operation<Integer> original) {
-        return itemStack.itematic$getBehavior(ItemBehaviorType.FUEL)
-            .map(FuelItemBehavior::ticks)
-            .orElse(0);
     }
 
     @WrapOperation(
@@ -120,17 +105,6 @@ public class AbstractFurnaceBlockEntityExtender {
         method = "canPlaceItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/entity/FuelValues;isFuel(Lnet/minecraft/world/item/ItemStack;)Z"
-        )
-    )
-    private boolean isFuelCheckFuelItemBehavior(FuelValues instance, ItemStack itemStack, Operation<Boolean> original) {
-        return itemStack.itematic$hasBehavior(ItemBehaviorType.FUEL);
-    }
-
-    @WrapOperation(
-        method = "canPlaceItem",
-        at = @At(
-            value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
@@ -138,18 +112,15 @@ public class AbstractFurnaceBlockEntityExtender {
         return instance.is(ItemIds.BUCKET);
     }
 
-    @ModifyArg(
+    @WrapOperation(
         method = "consumeFuel",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/core/NonNullList;set(ILjava/lang/Object;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/item/Item;getCraftingRemainder()Lnet/minecraft/world/item/ItemStackTemplate;"
         )
     )
-    @SuppressWarnings("unchecked")
-    private static <E> E setRemainderItemStackUseItemBehavior(E element, @Local(name = "fuelItem") Item fuelItem) {
-        return (E) fuelItem.itematic$getBehavior(ItemBehaviorType.FUEL)
-            .flatMap(FuelItemBehavior::remainder)
-            .map(ItemStackTemplate::create)
-            .orElse(ItemStack.EMPTY);
+    @Nullable
+    private static ItemStackTemplate useDataComponent(Item instance, Operation<ItemStackTemplate> original, @Local(name = "fuel", argsOnly = true) ItemStack fuel) {
+        return fuel.get(ItematicDataComponents.COOKING_FUEL_REMAINDER);
     }
 }

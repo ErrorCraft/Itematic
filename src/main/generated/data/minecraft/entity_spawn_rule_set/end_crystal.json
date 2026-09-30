@@ -2,9 +2,9 @@
   {
     "type": "minecraft:discard",
     "condition": {
-      "condition": "minecraft:inverted",
+      "type": "minecraft:inverted",
       "term": {
-        "condition": "minecraft:location_check",
+        "type": "minecraft:location_check",
         "offsetY": -1,
         "position": "interacted",
         "predicate": {
@@ -18,9 +18,9 @@
   {
     "type": "minecraft:discard",
     "condition": {
-      "condition": "minecraft:inverted",
+      "type": "minecraft:inverted",
       "term": {
-        "condition": "minecraft:location_check",
+        "type": "minecraft:location_check",
         "position": "interacted",
         "predicate": {
           "block": {

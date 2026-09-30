@@ -24,6 +24,13 @@
       "behavior": "minecraft:equip_entity_head"
     },
     "minecraft:equipment": {
+      "mob_visibility": {
+        "targeting_entity_types": [
+          "minecraft:piglin",
+          "minecraft:piglin_brute"
+        ],
+        "visibility": 0.5
+      },
       "slot": "head",
       "swappable": false
     },

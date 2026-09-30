@@ -7,11 +7,13 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.AttackBlockingItemB
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BrewingFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BrushItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BucketItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CastableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CompostableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ConsumableItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.CookingFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CooldownItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DamageableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
@@ -25,7 +27,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavi
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
@@ -50,6 +51,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ToolItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.TrimMaterialProviderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.UnlockRecipesItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.UseableItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.VillagerFoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
@@ -96,9 +98,13 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
         "equipment",
         EquipmentItemBehavior.CODEC
     );
-    public static final ItemBehaviorType<FuelItemBehavior> FUEL = register(
-        "fuel",
-        FuelItemBehavior.CODEC
+    public static final ItemBehaviorType<CookingFuelItemBehavior> COOKING_FUEL = register(
+        "cooking_fuel",
+        CookingFuelItemBehavior.CODEC
+    );
+    public static final ItemBehaviorType<BrewingFuelItemBehavior> BREWING_FUEL = register(
+        "brewing_fuel",
+        BrewingFuelItemBehavior.CODEC
     );
     public static final ItemBehaviorType<EnchantableItemBehavior> ENCHANTABLE = register(
         "enchantable",
@@ -259,6 +265,10 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<TrimMaterialProviderItemBehavior> TRIM_MATERIAL_PROVIDER = register(
         "trim_material_provider",
         TrimMaterialProviderItemBehavior.CODEC
+    );
+    public static final ItemBehaviorType<VillagerFoodItemBehavior> VILLAGER_FOOD = register(
+        "villager_food",
+        VillagerFoodItemBehavior.CODEC
     );
 
     public static void init() {}
