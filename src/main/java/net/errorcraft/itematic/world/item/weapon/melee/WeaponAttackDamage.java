@@ -6,14 +6,15 @@ import net.errorcraft.itematic.advancements.predicates.ItemPredicates;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +51,7 @@ public record WeaponAttackDamage(List<Rule> rules, double defaultDamage) {
 
     public record Rule(Optional<HolderSet<EntityType<?>>> entities, Optional<ItemPredicate> item, Optional<Double> damage, Optional<Boolean> addBase) {
         public static final Codec<Rule> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            RegistryCodecs.homogeneousList(Registries.ENTITY_TYPE).optionalFieldOf("entities").forGetter(Rule::entities),
+            RegistryCodecs.holderSet(Registries.ENTITY_TYPE).optionalFieldOf("entities").forGetter(Rule::entities),
             ItemPredicate.CODEC.optionalFieldOf("item").forGetter(Rule::item),
             ItematicCodecs.NON_NEGATIVE_DOUBLE.optionalFieldOf("damage").forGetter(Rule::damage),
             Codec.BOOL.optionalFieldOf("add_base").forGetter(Rule::addBase)

@@ -12,7 +12,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -26,7 +26,7 @@ import java.util.Optional;
 
 public record PlayableItemBehavior(Holder<Instrument> defaultInstrument) implements ItemBehavior<PlayableItemBehavior> {
     public static final Codec<PlayableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.create(Registries.INSTRUMENT).fieldOf("default_instrument").forGetter(PlayableItemBehavior::defaultInstrument)
+        RegistryCodecs.holder(Registries.INSTRUMENT).fieldOf("default_instrument").forGetter(PlayableItemBehavior::defaultInstrument)
     ).apply(instance, PlayableItemBehavior::new));
 
     public static PlayableItemBehavior of(Holder<Instrument> defaultInstrument) {

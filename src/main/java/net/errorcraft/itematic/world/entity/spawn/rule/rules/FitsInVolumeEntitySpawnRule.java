@@ -7,8 +7,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawnContext;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -97,7 +97,7 @@ public record FitsInVolumeEntitySpawnRule(boolean blocks, EntityVolumeCheck enti
         }
 
         record OfType(HolderSet<EntityType<?>> entityTypes) implements EntityVolumeCheck {
-            public static final Codec<OfType> CODEC = RegistryCodecs.homogeneousList(Registries.ENTITY_TYPE)
+            public static final Codec<OfType> CODEC = RegistryCodecs.holderSet(Registries.ENTITY_TYPE)
                 .xmap(
                     OfType::new,
                     OfType::entityTypes

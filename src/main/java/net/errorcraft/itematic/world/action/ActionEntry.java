@@ -8,10 +8,10 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
-import net.minecraft.resources.RegistryFileCodec;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -20,8 +20,8 @@ public record ActionEntry(Action<?> action, Optional<LootItemCondition> requirem
         Action.CODEC.fieldOf("action").forGetter(ActionEntry::action),
         LootItemCondition.DIRECT_CODEC.optionalFieldOf("requirements").forGetter(ActionEntry::requirements)
     ).apply(instance, ActionEntry::new));
-    public static final Codec<Holder<ActionEntry>> CODEC = RegistryFileCodec.create(ItematicRegistries.ACTION, DIRECT_CODEC);
-    public static final Codec<HolderSet<ActionEntry>> LIST_CODEC = RegistryCodecs.homogeneousList(ItematicRegistries.ACTION, DIRECT_CODEC, true);
+    public static final Codec<Holder<ActionEntry>> CODEC = RegistryCodecs.holder(ItematicRegistries.ACTION, DIRECT_CODEC);
+    public static final Codec<HolderSet<ActionEntry>> LIST_CODEC = RegistryCodecs.holderSet(ItematicRegistries.ACTION, DIRECT_CODEC, true);
 
     public static ActionEntry of(Action<?> action) {
         return new ActionEntry(action, Optional.empty());

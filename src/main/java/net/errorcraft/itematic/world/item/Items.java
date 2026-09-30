@@ -141,7 +141,6 @@ import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.predicates.DamagePredicate;
@@ -151,6 +150,7 @@ import net.minecraft.core.component.predicates.PotionsPredicate;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -254,7 +254,7 @@ public class Items {
         ItemBehaviorSet.CODEC.optionalFieldOf("behavior", ItemBehaviorSet.EMPTY).forGetter(Item::itematic$behavior),
         ActionEventMap.codec(ItematicBuiltInRegistries.ITEM_EVENT).optionalFieldOf("events", ActionEventMap.empty()).forGetter(Item::itematic$events)
     ).apply(instance, Items::create));
-    public static final Codec<HolderSet<Item>> LIST_CODEC = RegistryCodecs.homogeneousList(Registries.ITEM);
+    public static final Codec<HolderSet<Item>> LIST_CODEC = RegistryCodecs.holderSet(Registries.ITEM);
     public static final StreamCodec<RegistryFriendlyByteBuf, HolderSet<Item>> LIST_STREAM_CODEC = ByteBufCodecs.holderSet(Registries.ITEM);
 
     public static void bootstrap(BootstrapContext<Item> context) {

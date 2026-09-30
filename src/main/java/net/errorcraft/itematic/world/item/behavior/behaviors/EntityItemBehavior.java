@@ -18,9 +18,9 @@ import net.errorcraft.itematic.world.item.placement.EntityPlacer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
@@ -55,7 +55,7 @@ import java.util.function.Consumer;
 public record EntityItemBehavior(EntitySpawner entity, Optional<HolderSet<Block>> usesCollisionShape, boolean allowSpawnerModification, Set<Pass> passes) implements ItemBehavior<EntityItemBehavior> {
     public static final Codec<EntityItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EntitySpawner.CODEC.fieldOf("entity").forGetter(EntityItemBehavior::entity),
-        RegistryCodecs.homogeneousList(Registries.BLOCK).optionalFieldOf("uses_collision_shape").forGetter(EntityItemBehavior::usesCollisionShape),
+        RegistryCodecs.holderSet(Registries.BLOCK).optionalFieldOf("uses_collision_shape").forGetter(EntityItemBehavior::usesCollisionShape),
         Codec.BOOL.optionalFieldOf("allow_spawner_modification", false).forGetter(EntityItemBehavior::allowSpawnerModification),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityItemBehavior::passes)
     ).apply(instance, EntityItemBehavior::new));

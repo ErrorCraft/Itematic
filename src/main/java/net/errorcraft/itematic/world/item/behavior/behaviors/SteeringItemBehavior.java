@@ -10,7 +10,7 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +24,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public record SteeringItemBehavior(Holder<EntityType<?>> target, int damagePerUse) implements ItemBehavior<SteeringItemBehavior> {
     public static final Codec<SteeringItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.create(Registries.ENTITY_TYPE).fieldOf("target").forGetter(SteeringItemBehavior::target),
+        RegistryCodecs.holder(Registries.ENTITY_TYPE).fieldOf("target").forGetter(SteeringItemBehavior::target),
         ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("damage_per_use", 1).forGetter(SteeringItemBehavior::damagePerUse)
     ).apply(instance, SteeringItemBehavior::new));
 

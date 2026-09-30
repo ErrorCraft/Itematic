@@ -13,10 +13,10 @@ import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -207,7 +207,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
 
         public record Rule(HolderSet<Item> items, Optional<Float> power) {
             public static final Codec<Rule> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("items").forGetter(Rule::items),
+                RegistryCodecs.holderSet(Registries.ITEM).fieldOf("items").forGetter(Rule::items),
                 ItematicCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("power").forGetter(Rule::power)
             ).apply(instance, Rule::new));
             public static final StreamCodec<RegistryFriendlyByteBuf, Rule> STREAM_CODEC = StreamCodec.composite(

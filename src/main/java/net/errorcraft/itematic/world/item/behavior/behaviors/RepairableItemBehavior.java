@@ -5,16 +5,16 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Repairable;
 
 public record RepairableItemBehavior(HolderSet<Item> items) implements ItemBehavior<RepairableItemBehavior> {
     public static final Codec<RepairableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("items").forGetter(RepairableItemBehavior::items)
+        RegistryCodecs.holderSet(Registries.ITEM).fieldOf("items").forGetter(RepairableItemBehavior::items)
     ).apply(instance, RepairableItemBehavior::new));
 
     public static RepairableItemBehavior of(HolderSet<Item> items) {

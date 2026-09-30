@@ -9,7 +9,7 @@ import net.errorcraft.itematic.world.level.modification.WorldModification;
 import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public record PlaceFluidWorldModification(Holder<Fluid> fluid, Holder<SoundEvent> placeSound, Holder<Item> transformsInto) implements WorldModification {
     public static final MapCodec<PlaceFluidWorldModification> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryFixedCodec.create(Registries.FLUID).fieldOf("fluid").forGetter(PlaceFluidWorldModification::fluid),
+        RegistryCodecs.holder(Registries.FLUID).fieldOf("fluid").forGetter(PlaceFluidWorldModification::fluid),
         SoundEvent.CODEC.fieldOf("place_sound").forGetter(PlaceFluidWorldModification::placeSound),
         Item.CODEC.fieldOf("transforms_into").forGetter(PlaceFluidWorldModification::transformsInto)
     ).apply(instance, PlaceFluidWorldModification::new));

@@ -7,11 +7,11 @@ import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 
 public record DispensableItemBehavior(Holder<DispenseBehavior> behavior) implements ItemBehavior<DispensableItemBehavior> {
     public static final Codec<DispensableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryFixedCodec.create(ItematicRegistries.DISPENSE_BEHAVIOR).fieldOf("behavior").forGetter(DispensableItemBehavior::behavior)
+        RegistryCodecs.holder(ItematicRegistries.DISPENSE_BEHAVIOR).fieldOf("behavior").forGetter(DispensableItemBehavior::behavior)
     ).apply(instance, DispensableItemBehavior::new));
 
     public static DispensableItemBehavior of(Holder<DispenseBehavior> behavior) {

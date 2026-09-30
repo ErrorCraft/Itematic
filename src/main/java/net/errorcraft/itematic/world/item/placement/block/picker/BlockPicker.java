@@ -6,7 +6,7 @@ import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.world.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,7 +17,7 @@ import java.util.function.Function;
 public interface BlockPicker<T extends BlockPicker<T>> {
     Codec<BlockPicker<?>> ELEMENT_CODEC = ItematicBuiltInRegistries.BLOCK_PICKER_TYPE.byNameCodec()
         .dispatch(BlockPicker::type, BlockPickerType::codec);
-    Codec<BlockPicker<?>> CODEC = Codec.lazyInitialized(() -> Codec.either(ELEMENT_CODEC, RegistryFixedCodec.create(Registries.BLOCK))
+    Codec<BlockPicker<?>> CODEC = Codec.lazyInitialized(() -> Codec.either(ELEMENT_CODEC, RegistryCodecs.holder(Registries.BLOCK))
         .xmap(
             either -> either.map(
                 Function.identity(),

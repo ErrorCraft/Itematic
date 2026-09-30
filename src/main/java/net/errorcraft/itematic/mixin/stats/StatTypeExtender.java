@@ -9,11 +9,11 @@ import net.errorcraft.itematic.util.ItematicUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatFormatter;
@@ -91,7 +91,7 @@ public class StatTypeExtender<T> implements StatTypeAccess<T> {
         at = @At("TAIL")
     )
     private void setCodec(Registry<T> registry, Component displayName, CallbackInfo info) {
-        this.codec = RegistryFixedCodec.create(this.registry.key())
+        this.codec = RegistryCodecs.holder(this.registry.key())
             .xmap(this::itematic$get, Stat::itematic$entry)
             .fieldOf("entry");
     }

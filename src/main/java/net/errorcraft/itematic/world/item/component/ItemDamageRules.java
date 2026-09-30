@@ -3,8 +3,8 @@ package net.errorcraft.itematic.world.item.component;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -38,7 +38,7 @@ public record ItemDamageRules(List<Rule> rules, int defaultItemDamage) {
 
     public record Rule(HolderSet<Item> items, Optional<Integer> damage) {
         public static final Codec<Rule> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("items").forGetter(Rule::items),
+            RegistryCodecs.holderSet(Registries.ITEM).fieldOf("items").forGetter(Rule::items),
             ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("damage").forGetter(Rule::damage)
         ).apply(instance, Rule::new));
         public static final StreamCodec<RegistryFriendlyByteBuf, Rule> STREAM_CODEC = StreamCodec.composite(

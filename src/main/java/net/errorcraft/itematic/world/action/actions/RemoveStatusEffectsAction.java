@@ -7,15 +7,15 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 
 public record RemoveStatusEffectsAction(HolderSet<MobEffect> effects, LootContext.EntityTarget entity) implements Action<RemoveStatusEffectsAction> {
     public static final MapCodec<RemoveStatusEffectsAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryCodecs.homogeneousList(Registries.MOB_EFFECT).fieldOf("effects").forGetter(RemoveStatusEffectsAction::effects),
+        RegistryCodecs.holderSet(Registries.MOB_EFFECT).fieldOf("effects").forGetter(RemoveStatusEffectsAction::effects),
         LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(RemoveStatusEffectsAction::entity)
     ).apply(instance, RemoveStatusEffectsAction::new));
 

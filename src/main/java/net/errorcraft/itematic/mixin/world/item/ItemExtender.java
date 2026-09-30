@@ -31,10 +31,10 @@ import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringUtil;
@@ -98,7 +98,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         )
     )
     private static Codec<Holder<Item>> doNotUseStaticRegistry(DefaultedRegistry<Item> instance, Operation<Codec<Holder<Item>>> original) {
-        return RegistryFixedCodec.create(Registries.ITEM);
+        return RegistryCodecs.holder(Registries.ITEM);
     }
 
     @WrapOperation(
