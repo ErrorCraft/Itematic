@@ -68,7 +68,7 @@ public class GameModeSwitcherScreenExtender {
         static {
             CREATIVE.itematic$setIcon(BlockItemIds.GRASS_BLOCK.item());
             SURVIVAL.itematic$setIcon(ItemIds.IRON_SWORD);
-            ADVENTURE.itematic$setIcon(ItemIds.MAP);
+            ADVENTURE.itematic$setIcon(ItemIds.BURIED_TREASURE_MAP);
             SPECTATOR.itematic$setIcon(ItemIds.ENDER_EYE);
         }
 

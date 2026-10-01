@@ -115,7 +115,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     public abstract boolean isEmpty();
 
     @Shadow
-    public abstract void hurtAndBreak(int amount, ServerLevel level, @Nullable ServerPlayer player, Consumer<Item> onBreak);
+    public abstract void hurtAndBreak(int amount, ServerLevel level, @Nullable ServerPlayer player, Consumer<ItemStack> onBreak);
 
     @Shadow
     public abstract int getDamageValue();
@@ -839,7 +839,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
                     amount,
                     level,
                     entity instanceof ServerPlayer player ? player : null,
-                    item -> this.onItemBroken(item, entity, context)
+                    stack -> this.onItemBroken(stack, entity, context)
                 );
             });
     }
@@ -907,10 +907,10 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     }
 
     @Unique
-    private void onItemBroken(Item item, @Nullable LivingEntity entity, ActionContext context) {
+    private void onItemBroken(ItemStack stack, @Nullable LivingEntity entity, ActionContext context) {
         EquipmentSlot slot = context.get(ItematicContextKeys.EQUIPMENT_SLOT);
         if (slot != null && entity != null) {
-            entity.onEquippedItemBroken(item, slot);
+            entity.onEquippedItemBroken(stack, slot);
         }
 
         this.itematic$invokeEvent(ItemEvent.BREAK_ITEM, context);

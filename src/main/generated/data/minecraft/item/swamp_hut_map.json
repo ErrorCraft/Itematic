@@ -4,8 +4,8 @@
     "minecraft:stackable": 64
   },
   "display": {
-    "model": "minecraft:ocean_explorer_map",
-    "translation_key": "item.minecraft.ocean_explorer_map"
+    "model": "minecraft:swamp_hut_map",
+    "translation_key": "item.minecraft.swamp_hut_map"
   },
   "events": {
     "minecraft:use_on_block": "minecraft:mark_banner_on_map"

@@ -4,8 +4,8 @@
     "minecraft:stackable": 64
   },
   "display": {
-    "model": "minecraft:woodland_explorer_map",
-    "translation_key": "item.minecraft.woodland_explorer_map"
+    "model": "minecraft:ocean_monument_map",
+    "translation_key": "item.minecraft.ocean_monument_map"
   },
   "events": {
     "minecraft:use_on_block": "minecraft:mark_banner_on_map"

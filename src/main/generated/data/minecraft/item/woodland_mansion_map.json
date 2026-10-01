@@ -4,8 +4,8 @@
     "minecraft:stackable": 64
   },
   "display": {
-    "model": "minecraft:swamp_explorer_map",
-    "translation_key": "item.minecraft.swamp_explorer_map"
+    "model": "minecraft:woodland_mansion_map",
+    "translation_key": "item.minecraft.woodland_mansion_map"
   },
   "events": {
     "minecraft:use_on_block": "minecraft:mark_banner_on_map"

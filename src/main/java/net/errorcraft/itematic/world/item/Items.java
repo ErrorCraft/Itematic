@@ -2402,11 +2402,11 @@ public class Items {
                 .behavior(MappableItemBehavior.of(this.items.getOrThrow(ItemIds.FILLED_MAP)))
                 .register();
             this.registerMap(ItemIds.FILLED_MAP);
-            this.registerMap(ItemIds.OCEAN_EXPLORER_MAP);
-            this.registerMap(ItemIds.WOODLAND_EXPLORER_MAP);
-            this.registerMap(ItemIds.TRIAL_EXPLORER_MAP);
-            this.registerMap(ItemIds.JUNGLE_EXPLORER_MAP);
-            this.registerMap(ItemIds.SWAMP_EXPLORER_MAP);
+            this.registerMap(ItemIds.OCEAN_MONUMENT_MAP);
+            this.registerMap(ItemIds.WOODLAND_MANSION_MAP);
+            this.registerMap(ItemIds.BURIED_TRIAL_CHAMBERS_MAP);
+            this.registerMap(ItemIds.JUNGLE_PYRAMID_MAP);
+            this.registerMap(ItemIds.SWAMP_HUT_MAP);
             this.registerMap(ItemIds.DESERT_VILLAGE_MAP);
             this.registerMap(ItemIds.PLAINS_VILLAGE_MAP);
             this.registerMap(ItemIds.SAVANNA_VILLAGE_MAP);

@@ -184,6 +184,7 @@
     "world.entity.monster.spider.SpiderExtender",
     "world.entity.monster.warden.WardenExtender",
     "world.entity.monster.zombie.DrownedExtender",
+    "world.entity.monster.zombie.DrownedExtender$DrownedTridentAttackGoalExtender",
     "world.entity.monster.zombie.HuskExtender",
     "world.entity.monster.zombie.ZombieExtender",
     "world.entity.monster.zombie.ZombieVillagerExtender",

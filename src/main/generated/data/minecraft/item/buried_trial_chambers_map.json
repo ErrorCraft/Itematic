@@ -4,8 +4,8 @@
     "minecraft:stackable": 64
   },
   "display": {
-    "model": "minecraft:jungle_explorer_map",
-    "translation_key": "item.minecraft.jungle_explorer_map"
+    "model": "minecraft:buried_trial_chambers_map",
+    "translation_key": "item.minecraft.buried_trial_chambers_map"
   },
   "events": {
     "minecraft:use_on_block": "minecraft:mark_banner_on_map"
