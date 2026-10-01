@@ -40,7 +40,7 @@ public class SplitItemModifier extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext context) {
-        LivingEntity holder = context.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof LivingEntity target ? target : null;
+        LivingEntity holder = context.getOptional(LootContextParams.THIS_ENTITY) instanceof LivingEntity target ? target : null;
         return stack.consumeAndReturn(
             this.count.value().getInt(context),
             holder

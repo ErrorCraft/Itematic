@@ -6,7 +6,9 @@
     "minVersion": "0.5.0"
   },
   "mixins": [
+    "data.advancements.AdvancementProviderExtender",
     "data.recipes.BrewingRecipeBuilderAccessor",
+    "data.recipes.packs.VanillaRecipeProviderExtender$Bootstrapper",
     "world.item.trading.VillagerTradesExtender"
   ],
   "injectors": {

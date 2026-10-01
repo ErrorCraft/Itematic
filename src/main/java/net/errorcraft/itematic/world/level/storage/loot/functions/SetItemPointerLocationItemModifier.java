@@ -39,7 +39,7 @@ public class SetItemPointerLocationItemModifier extends LootItemConditionalFunct
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext context) {
-        Vec3 pos = context.getOptionalParameter(this.position.contextParam());
+        Vec3 pos = context.getOptional(this.position.contextParam());
         if (pos == null) {
             return stack;
         }
