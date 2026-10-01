@@ -48,7 +48,7 @@ public abstract class ServerPlayerExtender extends Player {
     }
 
     @WrapOperation(
-        method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",
+        method = "drop(Lnet/minecraft/world/item/ItemStack;ZLnet/minecraft/util/Prediction;)Lnet/minecraft/world/entity/item/ItemEntity;",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"
@@ -59,7 +59,7 @@ public abstract class ServerPlayerExtender extends Player {
     }
 
     @WrapOperation(
-        method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;",
+        method = "drop(Lnet/minecraft/world/item/ItemStack;ZLnet/minecraft/util/Prediction;)Lnet/minecraft/world/entity/item/ItemEntity;",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"

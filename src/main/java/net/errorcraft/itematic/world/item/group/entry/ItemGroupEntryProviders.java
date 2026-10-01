@@ -79,6 +79,8 @@ public class ItemGroupEntryProviders {
             .add(ItemGroupItemTags.WOOL_CARPETS)
             .add(ItemGroupItemTags.TERRACOTTA)
             .add(ItemGroupItemTags.CONCRETE)
+            .add(ItemGroupItemTags.CONCRETE_STAIRS)
+            .add(ItemGroupItemTags.CONCRETE_SLABS)
             .add(ItemGroupItemTags.CONCRETE_POWDER)
             .add(ItemGroupItemTags.GLAZED_TERRACOTTA)
             .add(ItemGroupItemTags.GLASS)

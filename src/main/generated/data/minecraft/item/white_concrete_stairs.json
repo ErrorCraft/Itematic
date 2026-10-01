@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:white_concrete_stairs"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:white_concrete_stairs",
+    "translation_key": "block.minecraft.white_concrete_stairs"
+  }
+}

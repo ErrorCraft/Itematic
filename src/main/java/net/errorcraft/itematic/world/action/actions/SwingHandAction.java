@@ -9,15 +9,17 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.storage.loot.LootContext;
 
-public record SwingHandAction(LootContext.EntityTarget entity) implements Action<SwingHandAction> {
+public record SwingHandAction(LootContext.EntityTarget entity, SwingAnimation animation) implements Action<SwingHandAction> {
     public static final MapCodec<SwingHandAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(SwingHandAction::entity)
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(SwingHandAction::entity),
+        SwingAnimation.CODEC.optionalFieldOf("animation", SwingAnimation.DEFAULT).forGetter(SwingHandAction::animation)
     ).apply(instance, SwingHandAction::new));
 
     public static SwingHandAction of(LootContext.EntityTarget entity) {
-        return new SwingHandAction(entity);
+        return new SwingHandAction(entity, SwingAnimation.DEFAULT);
     }
 
     @Override
@@ -37,7 +39,7 @@ public record SwingHandAction(LootContext.EntityTarget entity) implements Action
             return false;
         }
 
-        target.swing(hand, true);
+        target.swing(hand, this.animation, true);
         return true;
     }
 }

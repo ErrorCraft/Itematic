@@ -683,6 +683,10 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .addAll(orderColoredBlockItems(BlockItemIds.DYED_TERRACOTTA));
         this.builder(ItemGroupItemTags.CONCRETE)
             .addAll(orderColoredBlockItems(BlockItemIds.CONCRETE));
+        this.builder(ItemGroupItemTags.CONCRETE_STAIRS)
+            .addAll(orderColoredBlockItems(BlockItemIds.CONCRETE_STAIRS));
+        this.builder(ItemGroupItemTags.CONCRETE_SLABS)
+            .addAll(orderColoredBlockItems(BlockItemIds.CONCRETE_SLAB));
         this.builder(ItemGroupItemTags.CONCRETE_POWDER)
             .addAll(orderColoredBlockItems(BlockItemIds.CONCRETE_POWDER));
         this.builder(ItemGroupItemTags.GLAZED_TERRACOTTA)

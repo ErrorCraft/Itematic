@@ -83,6 +83,8 @@ public class ItemGroupItemTags {
     public static final TagKey<Item> WOOL_CARPETS = of("wool_carpets");
     public static final TagKey<Item> TERRACOTTA = of("terracotta");
     public static final TagKey<Item> CONCRETE = of("concrete");
+    public static final TagKey<Item> CONCRETE_STAIRS = of("concrete_stairs");
+    public static final TagKey<Item> CONCRETE_SLABS = of("concrete_slabs");
     public static final TagKey<Item> CONCRETE_POWDER = of("concrete_powder");
     public static final TagKey<Item> GLAZED_TERRACOTTA = of("glazed_terracotta");
     public static final TagKey<Item> GLASS = of("glass");

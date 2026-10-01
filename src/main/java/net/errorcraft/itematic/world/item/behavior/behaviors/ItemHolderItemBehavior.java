@@ -15,6 +15,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -249,7 +250,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
             return;
         }
 
-        player.drop(removedStack, true);
+        player.drop(removedStack, true, Prediction.PREDICTED);
         player.playSound(
             this.emptySound.value(),
             0.8f,

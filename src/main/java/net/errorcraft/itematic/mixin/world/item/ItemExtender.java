@@ -55,6 +55,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.context.UseOnContext;
@@ -80,6 +81,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
     @Unique
     private ItemAttributeModifiers attributeModifiers;
+
+    @Unique
+    private SwingAnimation interactAnimation;
 
     @Unique
     private ItemBehaviorSet behavior;
@@ -598,6 +602,16 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
+    public SwingAnimation itematic$interactAnimation() {
+        return this.interactAnimation;
+    }
+
+    @Override
+    public void itematic$setInteractAnimation(SwingAnimation interactAnimation) {
+        this.interactAnimation = interactAnimation;
+    }
+
+    @Override
     public void itematic$setAttributeModifiers(ItemAttributeModifiers attributeModifiers) {
         this.attributeModifiers = attributeModifiers;
     }
@@ -694,6 +708,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     private DataComponentMap createDefaultDataComponents() {
         DataComponentMap.Builder builder = DataComponentMap.builder()
             .addAll(DataComponents.COMMON_ITEM_COMPONENTS);
+        builder.set(DataComponents.INTERACT_ANIMATION, this.interactAnimation);
         this.display.addComponents(builder);
         for (ItemBehavior<?> behavior : this.behavior) {
             behavior.addComponents(builder);

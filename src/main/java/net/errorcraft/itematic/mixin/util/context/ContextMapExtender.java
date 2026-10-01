@@ -18,7 +18,7 @@ public class ContextMapExtender {
 
         @Override
         public void itematic$copy(ContextMap other) {
-            this.params.putAll(((ContextMapAccessor) other).itematic$params());
+            this.params.putAll(((ContextMapAccessor)(Object) other).itematic$params());
         }
 
         @Override

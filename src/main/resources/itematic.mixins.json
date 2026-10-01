@@ -388,7 +388,6 @@
     "world.level.storage.loot.ContainerComponentManipulatorExtender",
     "world.level.storage.loot.LootContextExtender$EntityTargetExtender",
     "world.level.storage.loot.functions.EnchantRandomlyFunctionExtender",
-    "world.level.storage.loot.functions.ExplorationMapFunctionExtender",
     "world.level.storage.loot.functions.FillPlayerHeadExtender",
     "world.level.storage.loot.functions.LootItemConditionalFunctionExtender",
     "world.level.storage.loot.functions.SetEnchantmentsFunctionExtender",

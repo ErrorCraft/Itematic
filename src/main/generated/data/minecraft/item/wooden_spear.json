@@ -26,6 +26,10 @@
       }
     },
     "minecraft:weapon": {
+      "attack_animation": {
+        "type": "stab",
+        "duration": 13
+      },
       "attack_damage": {
         "default_damage": 0.0,
         "rules": []
@@ -41,10 +45,6 @@
       "attack_speed": 0.38461539149284363,
       "damage_type": "minecraft:spear",
       "minimum_attack_charge": 1.0,
-      "swing_animation": {
-        "type": "stab",
-        "duration": 13
-      },
       "types": {
         "minecraft:kinetic": {
           "damage_conditions": {

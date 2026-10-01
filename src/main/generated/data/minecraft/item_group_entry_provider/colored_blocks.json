@@ -6,6 +6,8 @@
     "#minecraft:item_group/wool_carpets",
     "#minecraft:item_group/terracotta",
     "#minecraft:item_group/concrete",
+    "#minecraft:item_group/concrete_stairs",
+    "#minecraft:item_group/concrete_slabs",
     "#minecraft:item_group/concrete_powder",
     "#minecraft:item_group/glazed_terracotta",
     "#minecraft:item_group/glass",

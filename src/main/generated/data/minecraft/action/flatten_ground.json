@@ -7,9 +7,7 @@
         "action": {
           "type": "minecraft:set_block_state",
           "position": "interacted",
-          "state": {
-            "Name": "minecraft:dirt_path"
-          }
+          "state": "minecraft:dirt_path"
         }
       },
       {

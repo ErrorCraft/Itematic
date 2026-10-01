@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(TransmuteRecipe.class)
@@ -30,8 +31,16 @@ public abstract class TransmuteRecipeExtender implements CraftingRecipe {
     private Ingredient material;
 
     @Shadow
-    @Final
-    private ItemStackTemplate result;
+    protected abstract int computeResultSize(int materialCount);
+
+    @Shadow
+    protected abstract SlotDisplay resultDisplay(int resultCount);
+
+    @Shadow
+    protected abstract int minMaterialCount();
+
+    @Shadow
+    protected abstract int maxMaterialCount();
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
@@ -44,7 +53,7 @@ public abstract class TransmuteRecipeExtender implements CraftingRecipe {
             }
 
             final int index = i;
-            if (!foundInput && this.input.test(stack) && !stack.is(this.result.item())) {
+            if (!foundInput && this.input.test(stack)) {
                 foundInput = true;
                 this.input.itematic$remainder()
                     .map(ItemStackTemplate::create)
@@ -62,15 +71,23 @@ public abstract class TransmuteRecipeExtender implements CraftingRecipe {
 
     @Override
     public List<RecipeDisplay> itematic$display(HolderGetter<Item> items) {
-        return List.of(
-            new ShapelessCraftingRecipeDisplay(
-                List.of(
-                    this.input.display(),
-                    this.material.display()
-                ),
-                new SlotDisplay.ItemStackSlotDisplay(this.result),
-                new SlotDisplay.ItemSlotDisplay(items.getOrThrow(BlockItemIds.CRAFTING_TABLE.item()))
-            )
-        );
+        List<RecipeDisplay> displays = new ArrayList<>();
+        List<SlotDisplay> ingredientSlots = new ArrayList<>();
+        ingredientSlots.add(this.input.display());
+        SlotDisplay materialDisplay = this.material.display();
+        int minMaterialCount = this.minMaterialCount();
+        int maxMaterialCount = this.maxMaterialCount();
+        for (int materialCount = minMaterialCount; materialCount <= maxMaterialCount; ++materialCount) {
+            ingredientSlots.add(materialDisplay);
+            displays.add(
+                new ShapelessCraftingRecipeDisplay(
+                    List.copyOf(ingredientSlots),
+                    this.resultDisplay(this.computeResultSize(materialCount)),
+                    new SlotDisplay.ItemSlotDisplay(items.getOrThrow(BlockItemIds.CRAFTING_TABLE.item()))
+                )
+            );
+        }
+
+        return displays;
     }
 }

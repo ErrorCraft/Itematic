@@ -25,9 +25,7 @@
               "action": {
                 "type": "minecraft:set_block_state",
                 "position": "interacted",
-                "state": {
-                  "Name": "minecraft:potted_bamboo"
-                }
+                "state": "minecraft:potted_bamboo"
               }
             },
             {

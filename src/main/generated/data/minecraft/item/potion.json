@@ -88,9 +88,7 @@
           "action": {
             "type": "minecraft:set_block_state",
             "position": "interacted",
-            "state": {
-              "Name": "minecraft:mud"
-            }
+            "state": "minecraft:mud"
           }
         },
         {

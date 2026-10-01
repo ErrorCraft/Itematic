@@ -2,12 +2,7 @@
   "action": {
     "type": "minecraft:set_block_state",
     "position": "interacted",
-    "state": {
-      "Name": "minecraft:farmland",
-      "Properties": {
-        "moisture": "0"
-      }
-    }
+    "state": "minecraft:farmland"
   },
   "requirements": {
     "type": "minecraft:all_of",

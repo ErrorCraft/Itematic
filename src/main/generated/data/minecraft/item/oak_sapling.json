@@ -28,9 +28,7 @@
               "action": {
                 "type": "minecraft:set_block_state",
                 "position": "interacted",
-                "state": {
-                  "Name": "minecraft:potted_oak_sapling"
-                }
+                "state": "minecraft:potted_oak_sapling"
               }
             },
             {

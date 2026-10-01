@@ -30,7 +30,6 @@ import net.errorcraft.itematic.world.action.actions.ExchangeItemAction;
 import net.errorcraft.itematic.world.action.actions.FertilizeAction;
 import net.errorcraft.itematic.world.action.actions.InvokeGameEventAction;
 import net.errorcraft.itematic.world.action.actions.LightEndPortalAction;
-import net.errorcraft.itematic.world.action.actions.MarkBannerOnItemAction;
 import net.errorcraft.itematic.world.action.actions.ModifyItemAction;
 import net.errorcraft.itematic.world.action.actions.PlaySoundAction;
 import net.errorcraft.itematic.world.action.actions.RemoveStatusEffectsAction;
@@ -251,6 +250,7 @@ public class Items {
     public static final Codec<Item> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ItemDisplay.CODEC.fieldOf("display").forGetter(Item::itematic$display),
         ItemAttributeModifiers.CODEC.optionalFieldOf("attribute_modifiers", ItemAttributeModifiers.EMPTY).forGetter(Item::itematic$attributeModifiers),
+        SwingAnimation.CODEC.optionalFieldOf("interact_animation", SwingAnimation.DEFAULT).forGetter(Item::itematic$interactAnimation),
         ItemBehaviorSet.CODEC.optionalFieldOf("behavior", ItemBehaviorSet.EMPTY).forGetter(Item::itematic$behavior),
         ActionEventMap.codec(ItematicBuiltInRegistries.ITEM_EVENT).optionalFieldOf("events", ActionEventMap.empty()).forGetter(Item::itematic$events)
     ).apply(instance, Items::create));
@@ -266,10 +266,11 @@ public class Items {
         return ResourceKey.create(Registries.ITEM, id);
     }
 
-    public static Item create(ItemDisplay display, ItemAttributeModifiers attributeModifiers, ItemBehaviorSet behavior, ActionEventMap<ItemEvent> events) {
+    public static Item create(ItemDisplay display, ItemAttributeModifiers attributeModifiers, SwingAnimation interactAnimation, ItemBehaviorSet behavior, ActionEventMap<ItemEvent> events) {
         Item item = new Item(new Item.Properties());
         item.itematic$setDisplay(display);
         item.itematic$setAttributeModifiers(attributeModifiers);
+        item.itematic$setInteractAnimation(interactAnimation);
         item.itematic$setBehavior(behavior);
         item.itematic$setEvents(events);
         return item;
@@ -667,6 +668,8 @@ public class Items {
             BlockItemIds.DYED_TERRACOTTA.forEach(this::registerBlock);
             BlockItemIds.GLAZED_TERRACOTTA.forEach(this::registerBlock);
             BlockItemIds.CONCRETE.forEach(this::registerBlock);
+            BlockItemIds.CONCRETE_STAIRS.forEach(this::registerBlock);
+            BlockItemIds.CONCRETE_SLAB.forEach(this::registerBlock);
             BlockItemIds.CONCRETE_POWDER.forEach(this::registerBlock);
             this.registerBlock(BlockItemIds.GLASS);
             this.registerBlock(BlockItemIds.TINTED_GLASS);
@@ -2392,17 +2395,23 @@ public class Items {
             this.builder(ItemIds.MAP)
                 .behavior(MappableItemBehavior.of(this.items.getOrThrow(ItemIds.FILLED_MAP)))
                 .register();
-            this.builder(ItemIds.FILLED_MAP)
-                .behavior(MapHolderItemBehavior.INSTANCE)
-                .event(
-                    ItemEvent.USE_ON_BLOCK,
-                    ActionEntry.of(
-                        PassingSequenceHandler.builder()
-                            .add(MarkBannerOnItemAction.of(PositionTarget.INTERACTED))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                    )
-                )
-                .register();
+            this.registerMap(ItemIds.FILLED_MAP);
+            this.registerMap(ItemIds.OCEAN_EXPLORER_MAP);
+            this.registerMap(ItemIds.WOODLAND_EXPLORER_MAP);
+            this.registerMap(ItemIds.TRIAL_EXPLORER_MAP);
+            this.registerMap(ItemIds.JUNGLE_EXPLORER_MAP);
+            this.registerMap(ItemIds.SWAMP_EXPLORER_MAP);
+            this.registerMap(ItemIds.DESERT_VILLAGE_MAP);
+            this.registerMap(ItemIds.PLAINS_VILLAGE_MAP);
+            this.registerMap(ItemIds.SAVANNA_VILLAGE_MAP);
+            this.registerMap(ItemIds.SNOWY_VILLAGE_MAP);
+            this.registerMap(ItemIds.TAIGA_VILLAGE_MAP);
+            this.registerMap(ItemIds.BURIED_TREASURE_MAP);
+            this.registerMap(ItemIds.ANCIENT_CITY_MAP);
+            this.registerMap(ItemIds.MINESHAFT_MAP);
+            this.registerMap(ItemIds.DESERT_PYRAMID_MAP);
+            this.registerMap(ItemIds.ABANDONED_CAMPSITE_MAP);
+            this.registerMap(ItemIds.WARM_OCEAN_RUINS_MAP);
             this.builder(ItemIds.LEAD)
                 .event(
                     ItemEvent.USE_ON_BLOCK,
@@ -2666,6 +2675,13 @@ public class Items {
                 .register();
         }
 
+        private void registerMap(ResourceKey<Item> item) {
+            this.builder(item)
+                .behavior(MapHolderItemBehavior.INSTANCE)
+                .event(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.MARK_BANNER_ON_MAP))
+                .register();
+        }
+
         private void registerBundle(ResourceKey<Item> item) {
             this.builder(item, 1)
                 .display(display -> display.itemBarStyle(ItemBarStyleIds.BUNDLE))
@@ -2828,22 +2844,13 @@ public class Items {
                             )
                         )
                         .damageType(this.damageTypes.getOrThrow(DamageTypes.SPEAR))
-                        .swingAnimation(
+                        .attackAnimation(
                             new SwingAnimation(
                                 SwingAnimationType.STAB,
                                 (int) (attackDuration * SharedConstants.TICKS_PER_SECOND)
                             )
                         )
-                        .attackRange(
-                            new AttackRange(
-                                2.0f,
-                                4.5f,
-                                2.0f,
-                                6.5f,
-                                0.125f,
-                                0.5f
-                            )
-                        )
+                        .attackRange(new AttackRange(2.0f, 4.5f, 2.0f, 6.5f, 0.125f, 0.5f))
                         .minimumAttackCharge(1.0f)
                         .build()
                 )

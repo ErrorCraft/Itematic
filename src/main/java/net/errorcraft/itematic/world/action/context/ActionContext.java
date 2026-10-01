@@ -58,7 +58,7 @@ public class ActionContext {
 
     @Nullable
     public <T> T get(ContextKey<T> parameter) {
-        return this.parameters.getOptional(parameter);
+        return this.parameters.get(parameter);
     }
 
     @Nullable
@@ -195,7 +195,7 @@ public class ActionContext {
     public static class Builder {
         private final Level level;
         private ItemStackExchanger stackExchanger = ItemStackExchanger.EMPTY;
-        private final ContextMap.Builder parameters = new ContextMap.Builder();
+        private final ContextMap.Builder parameters = ContextMap.builder();
         private final Set<Entry> existingMarkedEntries;
 
         private Builder(Level level) {
@@ -243,12 +243,12 @@ public class ActionContext {
         }
 
         public <T> Builder add(ContextKey<T> parameter, T value) {
-            this.parameters.withParameter(parameter, value);
+            this.parameters.set(parameter, value);
             return this;
         }
 
         public <T> Builder addOptional(ContextKey<T> parameter, @Nullable T value) {
-            this.parameters.withOptionalParameter(parameter, value);
+            this.parameters.set(parameter, value);
             return this;
         }
 

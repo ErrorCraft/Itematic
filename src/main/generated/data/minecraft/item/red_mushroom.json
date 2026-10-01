@@ -24,9 +24,7 @@
               "action": {
                 "type": "minecraft:set_block_state",
                 "position": "interacted",
-                "state": {
-                  "Name": "minecraft:potted_red_mushroom"
-                }
+                "state": "minecraft:potted_red_mushroom"
               }
             },
             {

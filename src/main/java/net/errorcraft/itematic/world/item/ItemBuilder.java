@@ -9,6 +9,7 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.SwingAnimation;
 
 import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
@@ -36,6 +37,7 @@ public class ItemBuilder {
             Items.create(
                 this.display.build(this.item),
                 this.attributeModifiers.build(),
+                SwingAnimation.DEFAULT,
                 this.behavior.build(),
                 this.events.build()
             )

@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:green_concrete_slab"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:green_concrete_slab",
+    "translation_key": "block.minecraft.green_concrete_slab"
+  }
+}

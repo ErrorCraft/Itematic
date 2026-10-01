@@ -27,7 +27,7 @@ public record RestsOnTopOfFaceEntitySpawnRule(Optional<Vec3> volume) implements 
 
     @Override
     public boolean apply(EntitySpawnContext context) {
-        return Cushion.wouldSuriveAt(
+        return Cushion.canBePlacedAt(
             context.level(),
             this.box(context.spawnPosition(), context.entityType())
         );
