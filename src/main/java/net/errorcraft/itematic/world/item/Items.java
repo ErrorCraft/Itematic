@@ -2262,7 +2262,13 @@ public class Items {
                 .behavior(FoodItemBehavior.of(Foods.CHORUS_FRUIT))
                 .event(
                     ItemEvent.CONSUME_ITEM,
-                    ActionEntry.of(TeleportAction.of(16, LootContext.EntityTarget.THIS))
+                    ActionEntry.of(
+                        TeleportAction.of(
+                            16,
+                            LootContext.EntityTarget.THIS,
+                            this.blocks.getOrThrow(BlockTags.CONSUMABLE_DOES_NOT_TELEPORT_TO)
+                        )
+                    )
                 )
                 .register();
             this.registerItem(ItemIds.POPPED_CHORUS_FRUIT);

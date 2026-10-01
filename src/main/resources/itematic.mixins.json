@@ -144,7 +144,7 @@
     "world.entity.monster.CreeperExtender",
     "world.entity.monster.CrossbowAttackMobExtender",
     "world.entity.monster.ElderGuardianExtender",
-    "world.entity.monster.EnderManExtender",
+    "world.entity.monster.EndermanExtender",
     "world.entity.monster.EndermiteExtender",
     "world.entity.monster.GhastExtender",
     "world.entity.monster.GuardianExtender",

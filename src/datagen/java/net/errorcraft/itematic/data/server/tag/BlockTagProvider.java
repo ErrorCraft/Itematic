@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.references.BlockItemIds;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 
 import java.util.concurrent.CompletableFuture;
@@ -34,5 +35,6 @@ public class BlockTagProvider extends FabricTagsProvider<Block> {
         this.builder(ItematicBlockTags.HAS_MARKER_PARTICLE)
             .add(BlockItemIds.BARRIER.block())
             .add(BlockItemIds.LIGHT.block());
+        this.builder(BlockTags.CONSUMABLE_DOES_NOT_TELEPORT_TO);
     }
 }

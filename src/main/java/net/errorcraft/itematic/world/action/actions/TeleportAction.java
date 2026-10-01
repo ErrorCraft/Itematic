@@ -5,6 +5,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -12,19 +15,24 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.fox.Fox;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 
-public record TeleportAction(int distance, LootContext.EntityTarget entity) implements Action<TeleportAction> {
+import java.util.Optional;
+
+public record TeleportAction(int distance, LootContext.EntityTarget entity, Optional<HolderSet<Block>> unsafeBlocks) implements Action<TeleportAction> {
     public static final MapCodec<TeleportAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ExtraCodecs.POSITIVE_INT.fieldOf("distance").forGetter(TeleportAction::distance),
-        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(TeleportAction::entity)
+        LootContext.EntityTarget.CODEC.fieldOf("entity").forGetter(TeleportAction::entity),
+        RegistryCodecs.holderSet(Registries.BLOCK).optionalFieldOf("unsafe_blocks").forGetter(TeleportAction::unsafeBlocks)
     ).apply(instance, TeleportAction::new));
     private static final int MAX_TELEPORT_ATTEMPTS = 16;
 
-    public static TeleportAction of(int distance, LootContext.EntityTarget entity) {
-        return new TeleportAction(distance, entity);
+    public static TeleportAction of(int distance, LootContext.EntityTarget entity, HolderSet<Block> unsafeBlocks) {
+        return new TeleportAction(distance, entity, Optional.of(unsafeBlocks));
     }
 
     @Override
@@ -60,13 +68,17 @@ public record TeleportAction(int distance, LootContext.EntityTarget entity) impl
                 target.stopRiding();
             }
 
-            if (target.randomTeleport(newX, newY, newZ, true)) {
+            if (target.randomTeleport(newX, newY, newZ, true, this::isUnsafe)) {
                 teleported(target, level, position);
                 return true;
             }
         }
 
         return false;
+    }
+
+    private boolean isUnsafe(BlockState state) {
+        return this.unsafeBlocks.map(state::is).orElse(false);
     }
 
     private static void teleported(LivingEntity target, ServerLevel level, Vec3 position) {

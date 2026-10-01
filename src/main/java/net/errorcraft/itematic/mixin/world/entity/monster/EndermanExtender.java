@@ -4,7 +4,7 @@ import net.errorcraft.itematic.mixin.world.entity.MobExtender;
 import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(EnderMan.class)
-public abstract class EnderManExtender extends MobExtender {
-    protected EnderManExtender(EntityType<? extends Monster> type, Level level) {
+@Mixin(Enderman.class)
+public abstract class EndermanExtender extends MobExtender {
+    protected EndermanExtender(EntityType<? extends Monster> type, Level level) {
         super(type, level);
     }
 
