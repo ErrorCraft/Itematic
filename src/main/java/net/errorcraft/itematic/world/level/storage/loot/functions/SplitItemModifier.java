@@ -9,20 +9,19 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.Optional;
 
 public class SplitItemModifier extends LootItemConditionalFunction {
     public static final MapCodec<SplitItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(
-        NumberProviders.CODEC.fieldOf("count").forGetter(split -> split.count)
+        ContextIntProviders.CODEC.fieldOf("count").forGetter(split -> split.count)
     ).apply(instance, SplitItemModifier::new));
 
-    private final Holder<NumberProvider> count;
+    private final Holder<ContextIntProvider> count;
 
-    private SplitItemModifier(Optional<Holder<LootItemCondition>> condition, Holder<NumberProvider> count) {
+    private SplitItemModifier(Optional<Holder<LootItemCondition>> condition, Holder<ContextIntProvider> count) {
         super(condition);
         this.count = count;
     }
@@ -30,7 +29,7 @@ public class SplitItemModifier extends LootItemConditionalFunction {
     public static Builder<?> builder(int count) {
         return simpleBuilder(conditions -> new SplitItemModifier(
             conditions,
-            ConstantValue.exactly(count)
+            ContextIntProviders.exactly(count)
         ));
     }
 

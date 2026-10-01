@@ -90,18 +90,6 @@ public class AbstractFurnaceBlockEntityExtender {
     }
 
     @WrapOperation(
-        method = "canTakeItemThroughFace",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
-            ordinal = 0
-        )
-    )
-    private boolean isWaterBucketCheckKey(ItemStack instance, Object o, Operation<Boolean> original) {
-        return instance.is(ItemIds.WATER_BUCKET);
-    }
-
-    @WrapOperation(
         method = "canPlaceItem",
         at = @At(
             value = "INVOKE",

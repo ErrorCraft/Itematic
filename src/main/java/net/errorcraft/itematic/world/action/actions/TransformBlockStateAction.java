@@ -8,13 +8,14 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.BlockTransformer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-public record TransformBlockStateAction(PositionTarget position, BlockStateProvider provider, BlockTransformer.TransformType transformType, BlockTransformer.TransformParticle particle, boolean pushEntitiesUpwards) implements Action<TransformBlockStateAction> {
+public record TransformBlockStateAction(PositionTarget position, Holder<BlockStateProvider> provider, BlockTransformer.TransformType transformType, BlockTransformer.TransformParticle particle, boolean pushEntitiesUpwards) implements Action<TransformBlockStateAction> {
     public static final MapCodec<TransformBlockStateAction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         PositionTarget.CODEC.fieldOf("position").forGetter(TransformBlockStateAction::position),
         BlockStateProvider.CODEC.fieldOf("provider").forGetter(TransformBlockStateAction::provider),
@@ -26,7 +27,7 @@ public record TransformBlockStateAction(PositionTarget position, BlockStateProvi
     public static TransformBlockStateAction of(PositionTarget position, BlockStateProvider provider) {
         return new TransformBlockStateAction(
             position,
-            provider,
+            Holder.direct(provider),
             BlockTransformer.TransformType.SINGLE_BLOCK,
             BlockTransformer.TransformParticle.NONE,
             false
@@ -36,7 +37,7 @@ public record TransformBlockStateAction(PositionTarget position, BlockStateProvi
     public static TransformBlockStateAction of(PositionTarget position, BlockStateProvider provider, BlockTransformer.TransformType transformType, BlockTransformer.TransformParticle particle) {
         return new TransformBlockStateAction(
             position,
-            provider,
+            Holder.direct(provider),
             transformType,
             particle,
             false
@@ -46,7 +47,7 @@ public record TransformBlockStateAction(PositionTarget position, BlockStateProvi
     public static TransformBlockStateAction ofPushingUpwards(PositionTarget position, BlockStateProvider provider) {
         return new TransformBlockStateAction(
             position,
-            provider,
+            Holder.direct(provider),
             BlockTransformer.TransformType.SINGLE_BLOCK,
             BlockTransformer.TransformParticle.NONE,
             true
@@ -67,7 +68,7 @@ public record TransformBlockStateAction(PositionTarget position, BlockStateProvi
 
         Level level = context.level();
         BlockState currentBlockState = level.getBlockState(pos);
-        BlockState newBlockState = this.provider.getOptionalState(level, context.level().getRandom(), pos);
+        BlockState newBlockState = this.provider.value().getOptionalState(level, context.level().getRandom(), pos);
         if (newBlockState == null) {
             return false;
         }

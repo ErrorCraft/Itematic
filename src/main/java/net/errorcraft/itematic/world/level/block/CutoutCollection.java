@@ -4,7 +4,7 @@ import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CookingFuelItemBehavior;
 import net.minecraft.references.BlockItemId;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiFunction;
@@ -61,7 +61,7 @@ public record CutoutCollection<T>(T block, @Nullable T stairs, T slab, @Nullable
         }
 
         bootstrapper.builderForBlock(blockItems.slab)
-            .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_SLABS))
+            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_SLABS))
             .register();
         if (blockItems.wall != null) {
             registerBurningItem(bootstrapper, blockItems.wall);
@@ -70,7 +70,7 @@ public record CutoutCollection<T>(T block, @Nullable T stairs, T slab, @Nullable
 
     private static void registerBurningItem(Items.Bootstrapper bootstrapper, BlockItemId blockItem) {
         bootstrapper.builderForBlock(blockItem)
-            .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_BLOCKS))
+            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
             .register();
     }
 

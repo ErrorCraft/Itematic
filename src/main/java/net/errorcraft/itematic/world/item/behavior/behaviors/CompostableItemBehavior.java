@@ -6,18 +6,18 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.component.Compostable;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 
-public record CompostableItemBehavior(ResourceKey<NumberProvider> layers) implements ItemBehavior<CompostableItemBehavior> {
+public record CompostableItemBehavior(ResolvableInt layers) implements ItemBehavior<CompostableItemBehavior> {
     public static final Codec<CompostableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        ResourceKey.codec(Registries.NUMBER_PROVIDER).fieldOf("layers").forGetter(CompostableItemBehavior::layers)
+        ResolvableInt.CODEC.fieldOf("layers").forGetter(CompostableItemBehavior::layers)
     ).apply(instance, CompostableItemBehavior::new));
 
-    public static CompostableItemBehavior of(ResourceKey<NumberProvider> layers) {
-        return new CompostableItemBehavior(layers);
+    public static CompostableItemBehavior of(ResourceKey<ContextIntProvider> layers) {
+        return new CompostableItemBehavior(ResolvableInt.fromKey(layers));
     }
 
     @Override

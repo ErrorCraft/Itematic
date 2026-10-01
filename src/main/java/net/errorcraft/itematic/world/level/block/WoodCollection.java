@@ -6,8 +6,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
@@ -113,7 +113,7 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
             blockItems.sapling,
             pottedSapling,
             null,
-            NumberProviders.COMPOSTABLE_MEDIUM
+            ContextIntProviders.COMPOSTABLE_MEDIUM
         );
         blockItems.leaves.forEach(bootstrapper::registerCompostableLeaves);
         bootstrapper.registerBlock(blockItems.fenceGate);
@@ -128,32 +128,32 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         bootstrapper.registerBlock(blockItems.shelf);
     }
 
-    public static void registerItems(WoodCollection<BlockItemId> blockItems, Items.Bootstrapper bootstrapper, ResourceKey<Block> wallSign, ResourceKey<Block> hangingWallSign, ResourceKey<Block> pottedSapling, ResourceKey<NumberProvider> saplingBurnTime) {
+    public static void registerItems(WoodCollection<BlockItemId> blockItems, Items.Bootstrapper bootstrapper, ResourceKey<Block> wallSign, ResourceKey<Block> hangingWallSign, ResourceKey<Block> pottedSapling, ResourceKey<ContextIntProvider> saplingBurnTime) {
         CutoutCollection.registerBurningItems(blockItems.planks, bootstrapper);
-        blockItems.log.forEach(log -> bootstrapper.registerBurningBlock(log, NumberProviders.COOKING_TIME_WOOD_BLOCKS));
+        blockItems.log.forEach(log -> bootstrapper.registerBurningBlock(log, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
         if (blockItems.wood != null) {
-            blockItems.wood.forEach(wood -> bootstrapper.registerBurningBlock(wood, NumberProviders.COOKING_TIME_WOOD_BLOCKS));
+            blockItems.wood.forEach(wood -> bootstrapper.registerBurningBlock(wood, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
         }
 
         bootstrapper.registerPottableSapling(
             blockItems.sapling,
             pottedSapling,
             saplingBurnTime,
-            saplingBurnTime == NumberProviders.COOKING_TIME_DRY_PLANTS ? NumberProviders.COMPOSTABLE_LOW : null
+            saplingBurnTime == ContextIntProviders.COOKING_TIME_DRY_PLANTS ? ContextIntProviders.COMPOSTABLE_LOW : null
         );
         blockItems.leaves.forEach(bootstrapper::registerCompostableLeaves);
-        bootstrapper.registerBurningBlock(blockItems.fenceGate, NumberProviders.COOKING_TIME_WOOD_BLOCKS);
+        bootstrapper.registerBurningBlock(blockItems.fenceGate, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
         bootstrapper.builderForBlockAttachedToSide(blockItems.sign, wallSign, Direction.DOWN, 16)
-            .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
+            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
             .register();
         bootstrapper.builderForBlockAttachedToSide(blockItems.hangingSign, hangingWallSign, Direction.UP, 16)
-            .behavior(CookingFuelItemBehavior.of(NumberProviders.COOKING_TIME_HANGING_SIGNS))
+            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_HANGING_SIGNS))
             .register();
-        bootstrapper.registerBurningBlock(blockItems.door, NumberProviders.COOKING_TIME_WOOD_ITEMS_LARGE);
-        bootstrapper.registerBurningBlock(blockItems.trapdoor, NumberProviders.COOKING_TIME_WOOD_BLOCKS);
-        bootstrapper.registerBurningBlock(blockItems.button, NumberProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL);
-        bootstrapper.registerBurningBlock(blockItems.pressurePlate, NumberProviders.COOKING_TIME_WOOD_BLOCKS);
-        bootstrapper.registerBurningBlock(blockItems.shelf, NumberProviders.COOKING_TIME_WOOD_BLOCKS);
+        bootstrapper.registerBurningBlock(blockItems.door, ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE);
+        bootstrapper.registerBurningBlock(blockItems.trapdoor, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
+        bootstrapper.registerBurningBlock(blockItems.button, ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL);
+        bootstrapper.registerBurningBlock(blockItems.pressurePlate, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
+        bootstrapper.registerBurningBlock(blockItems.shelf, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
     }
 
     public <U> WoodCollection<U> map(Function<T, U> mapper) {

@@ -7,8 +7,8 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.component.BrewingFuel;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 
 public record BrewingFuelItemBehavior(BrewingFuel fuel) implements ItemBehavior<BrewingFuelItemBehavior> {
     public static final Codec<BrewingFuelItemBehavior> CODEC = BrewingFuel.CODEC.xmap(
@@ -16,9 +16,9 @@ public record BrewingFuelItemBehavior(BrewingFuel fuel) implements ItemBehavior<
         BrewingFuelItemBehavior::fuel
     );
 
-    public static BrewingFuelItemBehavior of(ResourceKey<NumberProvider> uses) {
+    public static BrewingFuelItemBehavior of(ResourceKey<ContextIntProvider> uses) {
         return new BrewingFuelItemBehavior(
-            new BrewingFuel(uses, NumberProviders.COOKING_DEFAULT_SPEED_MULTIPLIER)
+            new BrewingFuel(uses, ContextFloatProviders.BREWING_DEFAULT_SPEED_MULTIPLIER)
         );
     }
 
