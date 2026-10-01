@@ -143,11 +143,6 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
         return OptionalInt.of(CrossbowItem.getChargeDuration(stack, user) + EXTRA_USE_TIME);
     }
 
-    @Override
-    public float pullProgress(ItemStack stack, LivingEntity user, int usedTicks) {
-        return ((float)usedTicks) / CrossbowItem.getChargeDuration(stack, user);
-    }
-
     public void shoot(ShooterItemBehavior shooter, Level level, LivingEntity user, InteractionHand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity targetOverride) {
         if (!(level instanceof ServerLevel serverLevel)) {
             return;

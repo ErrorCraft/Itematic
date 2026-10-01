@@ -65,7 +65,7 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
             return false;
         }
 
-        float pullProgress = this.pullProgress(usedTicks);
+        float pullProgress = BowItem.getPowerForTime(usedTicks);
         if (pullProgress < 0.1f) {
             return false;
         }
@@ -96,14 +96,5 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
     @Override
     public OptionalInt useDuration(ItemStack stack, LivingEntity user) {
         return OptionalInt.of(UseDuration.INDEFINITE);
-    }
-
-    @Override
-    public float pullProgress(ItemStack stack, LivingEntity user, int usedTicks) {
-        return this.pullProgress(usedTicks);
-    }
-
-    private float pullProgress(int usedTicks) {
-        return BowItem.getPowerForTime(usedTicks);
     }
 }

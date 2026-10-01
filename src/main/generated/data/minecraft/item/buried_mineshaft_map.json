@@ -4,8 +4,8 @@
     "minecraft:stackable": 64
   },
   "display": {
-    "model": "minecraft:mineshaft_map",
-    "translation_key": "item.minecraft.mineshaft_map"
+    "model": "minecraft:buried_mineshaft_map",
+    "translation_key": "item.minecraft.buried_mineshaft_map"
   },
   "events": {
     "minecraft:use_on_block": "minecraft:mark_banner_on_map"

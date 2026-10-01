@@ -27,6 +27,7 @@ inject-interface    net/minecraft/client/gui/screens/achievement/StatsScreen$Ite
 inject-interface    net/minecraft/client/gui/screens/debug/GameModeSwitcherScreen$GameModeIcon    net/errorcraft/itematic/access/client/gui/screens/debug/GameModeSwitcherScreenAccess$GameModeIconAccess
 inject-interface    net/minecraft/client/gui/screens/inventory/tooltip/ClientBundleTooltip    net/errorcraft/itematic/access/client/gui/screens/inventory/tooltip/ClientBundleTooltipAccess
 inject-interface    net/minecraft/client/gui/screens/recipebook/RecipeBookComponent$TabInfo    net/errorcraft/itematic/access/client/gui/screens/recipebook/RecipeBookComponentAccess$TabInfoAccess
+inject-interface    net/minecraft/client/renderer/state/level/FirstPersonHandsAndItemsRenderState    net/errorcraft/itematic/access/client/renderer/state/level/FirstPersonHandsAndItemsRenderStateAccess
 inject-interface    net/minecraft/client/resources/model/ModelBakery$BakingResult    net/errorcraft/itematic/access/client/resources/model/ModelBakeryAccess$BakingResultAccess
 inject-interface    net/minecraft/client/resources/model/ModelManager    net/errorcraft/itematic/access/client/resources/model/ModelManagerAccess
 inject-interface    net/minecraft/commands/arguments/ObjectiveCriteriaArgument    net/errorcraft/itematic/access/commands/arguments/ObjectiveCriteriaArgumentAccess

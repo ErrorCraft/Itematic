@@ -2407,10 +2407,10 @@ public class Items {
             this.registerMap(ItemIds.SNOWY_VILLAGE_MAP);
             this.registerMap(ItemIds.TAIGA_VILLAGE_MAP);
             this.registerMap(ItemIds.BURIED_TREASURE_MAP);
-            this.registerMap(ItemIds.ANCIENT_CITY_MAP);
-            this.registerMap(ItemIds.MINESHAFT_MAP);
+            this.registerMap(ItemIds.BURIED_ANCIENT_CITY_MAP);
+            this.registerMap(ItemIds.BURIED_MINESHAFT_MAP);
             this.registerMap(ItemIds.DESERT_PYRAMID_MAP);
-            this.registerMap(ItemIds.ABANDONED_CAMPSITE_MAP);
+            this.registerMap(ItemIds.ABANDONED_CAMP_MAP);
             this.registerMap(ItemIds.WARM_OCEAN_RUINS_MAP);
             this.builder(ItemIds.LEAD)
                 .event(

@@ -29,5 +29,4 @@ public interface ShooterMethod {
         }
     }
     OptionalInt useDuration(ItemStack stack, LivingEntity user);
-    float pullProgress(ItemStack stack, LivingEntity user, int usedTicks);
 }
