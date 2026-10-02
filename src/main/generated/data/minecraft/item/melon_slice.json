@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:compostable": {
-      "level_increase_chance": 0.5
+      "layers": "minecraft:compostable/low_medium"
     },
     "minecraft:consumable": {},
     "minecraft:food": {

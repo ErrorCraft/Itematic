@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -17,8 +17,8 @@ import org.jspecify.annotations.Nullable;
 
 public record AttachedToSideBlockPicker(Holder<Block> attachedBlock, Holder<Block> otherBlock, Direction attachedSide) implements BlockPicker<AttachedToSideBlockPicker> {
     public static final MapCodec<AttachedToSideBlockPicker> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryFixedCodec.create(Registries.BLOCK).fieldOf("attached_block").forGetter(AttachedToSideBlockPicker::attachedBlock),
-        RegistryFixedCodec.create(Registries.BLOCK).fieldOf("other_block").forGetter(AttachedToSideBlockPicker::otherBlock),
+        RegistryCodecs.holder(Registries.BLOCK).fieldOf("attached_block").forGetter(AttachedToSideBlockPicker::attachedBlock),
+        RegistryCodecs.holder(Registries.BLOCK).fieldOf("other_block").forGetter(AttachedToSideBlockPicker::otherBlock),
         Direction.CODEC.fieldOf("attached_side").forGetter(AttachedToSideBlockPicker::attachedSide)
     ).apply(instance, AttachedToSideBlockPicker::new));
 

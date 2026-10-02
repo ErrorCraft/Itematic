@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:compostable": {
-      "level_increase_chance": 0.85
+      "layers": "minecraft:compostable/medium_high"
     },
     "minecraft:consumable": {},
     "minecraft:food": {
@@ -15,6 +15,9 @@
         "type": "minecraft:constant",
         "amount": 32
       }
+    },
+    "minecraft:villager_food": {
+      "nutrition": 4
     }
   },
   "display": {

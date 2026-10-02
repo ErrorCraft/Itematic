@@ -1,6 +1,0 @@
-{
-  "type": "minecraft:brewing_modify",
-  "base": "minecraft:regeneration",
-  "reagent": "minecraft:glowstone_dust",
-  "result": "minecraft:strong_regeneration"
-}

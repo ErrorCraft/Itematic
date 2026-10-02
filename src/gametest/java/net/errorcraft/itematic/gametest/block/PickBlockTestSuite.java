@@ -852,7 +852,7 @@ public class PickBlockTestSuite {
         );
     }
 
-    @GameTest(structure = "itematic:block.potted_open_eyeblossom")
+    @GameTest(structure = "itematic:block.potted_open_eyeblossom", environment = "itematic:night")
     public void getPickStackOnPottedOpenEyeblossomGivesOpenEyeblossomItemStack(GameTestHelper helper) {
         BlockState state = helper.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);
@@ -862,7 +862,7 @@ public class PickBlockTestSuite {
         );
     }
 
-    @GameTest(structure = "itematic:block.potted_closed_eyeblossom")
+    @GameTest(structure = "itematic:block.potted_closed_eyeblossom", environment = "itematic:day")
     public void getPickStackOnPottedClosedEyeblossomGivesClosedEyeblossomItemStack(GameTestHelper helper) {
         BlockState state = helper.getBlockState(BLOCK_POSITION);
         BlockPos absolutePos = helper.absolutePos(BLOCK_POSITION);

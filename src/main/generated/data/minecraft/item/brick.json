@@ -1,8 +1,5 @@
 {
   "behavior": {
-    "minecraft:decorated_pot_pattern": {
-      "pattern": "minecraft:blank"
-    },
     "minecraft:stackable": 64
   },
   "display": {

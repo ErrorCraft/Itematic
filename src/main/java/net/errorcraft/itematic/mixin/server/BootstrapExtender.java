@@ -11,15 +11,6 @@ public class BootstrapExtender {
         method = "bootStrap",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/ComposterBlock;bootStrap()V"
-        )
-    )
-    private static void doNotRegisterCompostableItems() {}
-
-    @Redirect(
-        method = "bootStrap",
-        at = @At(
-            value = "INVOKE",
             target = "Lnet/minecraft/core/dispenser/DispenseItemBehavior;bootStrap()V"
         )
     )

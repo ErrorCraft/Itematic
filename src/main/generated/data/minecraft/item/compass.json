@@ -15,32 +15,29 @@
           {
             "action": {
               "type": "minecraft:modify_item",
-              "item_modifier": {
-                "function": "minecraft:sequence",
-                "functions": [
-                  {
-                    "count": 1.0,
-                    "function": "minecraft:split"
+              "item_modifier": [
+                {
+                  "type": "minecraft:split",
+                  "count": 1
+                },
+                {
+                  "type": "minecraft:set_item_pointer_location",
+                  "position": "interacted"
+                },
+                {
+                  "type": "minecraft:set_name",
+                  "name": {
+                    "translate": "item.minecraft.lodestone_compass"
                   },
-                  {
-                    "function": "minecraft:set_item_pointer_location",
-                    "position": "interacted"
-                  },
-                  {
-                    "function": "minecraft:set_name",
-                    "name": {
-                      "translate": "item.minecraft.lodestone_compass"
-                    },
-                    "target": "item_name"
-                  },
-                  {
-                    "components": {
-                      "minecraft:enchantment_glint_override": true
-                    },
-                    "function": "minecraft:set_components"
+                  "target": "item_name"
+                },
+                {
+                  "type": "minecraft:set_components",
+                  "components": {
+                    "minecraft:enchantment_glint_override": true
                   }
-                ]
-              }
+                }
+              ]
             }
           },
           {
@@ -62,7 +59,7 @@
         ]
       },
       "requirements": {
-        "condition": "minecraft:location_check",
+        "type": "minecraft:location_check",
         "position": "interacted",
         "predicate": {
           "block": {

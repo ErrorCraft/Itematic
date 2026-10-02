@@ -5,16 +5,16 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.component.DamageResistant;
 
 public record ImmuneToDamageItemBehavior(HolderSet<DamageType> damage) implements ItemBehavior<ImmuneToDamageItemBehavior> {
     public static final Codec<ImmuneToDamageItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryCodecs.homogeneousList(Registries.DAMAGE_TYPE).fieldOf("damage").forGetter(ImmuneToDamageItemBehavior::damage)
+        RegistryCodecs.holderSet(Registries.DAMAGE_TYPE).fieldOf("damage").forGetter(ImmuneToDamageItemBehavior::damage)
     ).apply(instance, ImmuneToDamageItemBehavior::new));
 
     public static ImmuneToDamageItemBehavior of(HolderSet<DamageType> damage) {

@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.InstrumentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.PaintingVariantTags;
+import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.Instrument;
@@ -52,35 +53,41 @@ public class ItemGroupEntryProviders {
         HolderGetter<Item> items = registerable.lookup(Registries.ITEM);
         HolderGetter<BannerPattern> bannerPatterns = registerable.lookup(Registries.BANNER_PATTERN);
         HolderGetter<Instrument> instruments = registerable.lookup(Registries.INSTRUMENT);
+        HolderGetter<PaintingVariant> paintingVariants = registerable.lookup(Registries.PAINTING_VARIANT);
 
         registerable.register(BUILDING_BLOCKS, ItemGroupEntryProvider.builder(items)
             .add(ItemGroupItemTags.WOODEN_BUILDING_BLOCKS)
             .add(ItemGroupItemTags.STONE_LIKE_BUILDING_BLOCKS)
             .add(BlockItemIds.COAL_BLOCK.item())
-            .add(ItemGroupItemTags.IRON_BUILDING_BLOCKS)
-            .add(ItemGroupItemTags.GOLD_BUILDING_BLOCKS)
-            .add(BlockItemIds.REDSTONE_BLOCK.item())
             .add(BlockItemIds.EMERALD_BLOCK.item())
             .add(BlockItemIds.LAPIS_BLOCK.item())
-            .add(BlockItemIds.DIAMOND_BLOCK.item())
-            .add(BlockItemIds.NETHERITE_BLOCK.item())
+            .add(BlockItemIds.AMETHYST_BLOCK.item())
+            .add(BlockItemIds.REDSTONE_BLOCK.item())
             .add(ItemGroupItemTags.QUARTZ_BUILDING_BLOCKS)
             .add(ItemGroupItemTags.SMOOTH_QUARTZ_BUILDING_BLOCKS)
-            .add(BlockItemIds.AMETHYST_BLOCK.item())
+            .add(ItemGroupItemTags.IRON_BUILDING_BLOCKS)
+            .add(ItemGroupItemTags.GOLD_BUILDING_BLOCKS)
+            .add(BlockItemIds.DIAMOND_BLOCK.item())
+            .add(BlockItemIds.NETHERITE_BLOCK.item())
             .add(ItemGroupItemTags.COPPER_LIKE_BUILDING_BLOCKS)
             .build()
         );
         registerable.register(COLORED_BLOCKS, ItemGroupEntryProvider.builder(items)
             .add(ItemGroupItemTags.WOOL)
+            .add(ItemGroupItemTags.WOOL_STAIRS)
+            .add(ItemGroupItemTags.WOOL_SLABS)
             .add(ItemGroupItemTags.WOOL_CARPETS)
             .add(ItemGroupItemTags.TERRACOTTA)
             .add(ItemGroupItemTags.CONCRETE)
+            .add(ItemGroupItemTags.CONCRETE_STAIRS)
+            .add(ItemGroupItemTags.CONCRETE_SLABS)
             .add(ItemGroupItemTags.CONCRETE_POWDER)
             .add(ItemGroupItemTags.GLAZED_TERRACOTTA)
             .add(ItemGroupItemTags.GLASS)
             .add(ItemGroupItemTags.GLASS_PANES)
             .add(ItemGroupItemTags.SHULKER_BOXES)
-            .add(ItemGroupItemTags.BEDS)
+            .add(ItemGroupItemTags.COLORED_BEDS)
+            .add(ItemGroupItemTags.CUSHIONS)
             .add(ItemGroupItemTags.CANDLES)
             .add(ItemGroupItemTags.BANNERS)
             .build()
@@ -168,7 +175,12 @@ public class ItemGroupEntryProviders {
             .add(ItemIds.ITEM_FRAME)
             .add(ItemIds.GLOW_ITEM_FRAME)
             .add(ItemIds.PAINTING)
-            .add(PaintingVariantItemGroupEntry.expected(items.getOrThrow(ItemIds.PAINTING), PaintingVariantTags.PLACEABLE))
+            .add(
+                PaintingVariantItemGroupEntry.expected(
+                    items.getOrThrow(ItemIds.PAINTING),
+                    paintingVariants.getOrThrow(PaintingVariantTags.PLACEABLE)
+                )
+            )
             .add(BlockItemIds.BOOKSHELF.item())
             .add(BlockItemIds.CHISELED_BOOKSHELF.item())
             .add(ItemGroupItemTags.SHELVES)
@@ -331,19 +343,18 @@ public class ItemGroupEntryProviders {
         registerable.register(INGREDIENTS, ItemGroupEntryProvider.builder(items)
             .add(ItemIds.COAL)
             .add(ItemIds.CHARCOAL)
-            .add(ItemIds.RAW_IRON)
-            .add(ItemIds.RAW_COPPER)
-            .add(ItemIds.RAW_GOLD)
             .add(ItemIds.EMERALD)
             .add(ItemIds.LAPIS_LAZULI)
+            .add(ItemIds.AMETHYST_SHARD)
+            .add(ItemIds.QUARTZ)
+            .add(ItemIds.RAW_COPPER)
+            .add(ItemIds.RAW_IRON)
+            .add(ItemIds.RAW_GOLD)
             .add(ItemIds.DIAMOND)
             .add(BlockItemIds.ANCIENT_DEBRIS.item())
-            .add(ItemIds.QUARTZ)
-            .add(ItemIds.AMETHYST_SHARD)
-            .add(BlockItemIds.RESIN_CLUMP.item())
             .add(ItemGroupItemTags.NUGGETS)
-            .add(ItemIds.IRON_INGOT)
             .add(ItemIds.COPPER_INGOT)
+            .add(ItemIds.IRON_INGOT)
             .add(ItemIds.GOLD_INGOT)
             .add(ItemIds.NETHERITE_SCRAP)
             .add(ItemIds.NETHERITE_INGOT)
@@ -359,6 +370,7 @@ public class ItemGroupEntryProviders {
             .add(ItemIds.LEATHER)
             .add(ItemIds.RABBIT_HIDE)
             .add(ItemIds.HONEYCOMB)
+            .add(BlockItemIds.RESIN_CLUMP.item())
             .add(ItemIds.INK_SAC)
             .add(ItemIds.GLOW_INK_SAC)
             .add(ItemIds.TURTLE_SCUTE)
@@ -502,7 +514,12 @@ public class ItemGroupEntryProviders {
             .addRequiresPermissions(BlockItemIds.TEST_INSTANCE_BLOCK.item())
             .add(ItemGroupEntryProviders::testBlocks)
             .add(ItemGroupEntryProviders::lightBlocks)
-            .add(PaintingVariantItemGroupEntry.unexpected(items.getOrThrow(ItemIds.PAINTING), PaintingVariantTags.PLACEABLE))
+            .add(
+                PaintingVariantItemGroupEntry.unexpected(
+                    items.getOrThrow(ItemIds.PAINTING),
+                    paintingVariants.getOrThrow(PaintingVariantTags.PLACEABLE)
+                )
+            )
             .build()
         );
     }

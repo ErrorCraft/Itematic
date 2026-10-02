@@ -40,7 +40,7 @@ public class LocationCheckExtender implements LocationCheckAccess {
         method = "test(Lnet/minecraft/world/level/storage/loot/LootContext;)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/level/storage/loot/LootContext;getOptionalParameter(Lnet/minecraft/util/context/ContextKey;)Ljava/lang/Object;"
+            target = "Lnet/minecraft/world/level/storage/loot/LootContext;getOptional(Lnet/minecraft/util/context/ContextKey;)Ljava/lang/Object;"
         )
     )
     private ContextKey<? extends Vec3> usePositionTarget(ContextKey<Vec3> parameter) {

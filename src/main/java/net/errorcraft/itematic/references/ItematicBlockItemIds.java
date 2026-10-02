@@ -62,10 +62,11 @@ public class ItematicBlockItemIds {
     public static final WoodCollection<BlockItemId> CHERRY = createWood("cherry");
     public static final WoodCollection<BlockItemId> DARK_OAK = createWood("dark_oak");
     public static final WoodCollection<BlockItemId> PALE_OAK = createWood("pale_oak");
-    public static final WoodCollection<BlockItemId> MANGROVE = createWood("mangrove", WoodCollection.SUFFIXES_MANGROVE);
-    public static final WoodCollection<BlockItemId> BAMBOO = createWood("bamboo", WoodCollection.SUFFIXES_BAMBOO);
-    public static final WoodCollection<BlockItemId> CRIMSON = createNetherWood("crimson");
-    public static final WoodCollection<BlockItemId> WARPED = createNetherWood("warped");
+    public static final WoodCollection<BlockItemId> MANGROVE = createWood("mangrove", builder -> builder.suffixes(WoodCollection.SUFFIXES_MANGROVE));
+    public static final WoodCollection<BlockItemId> POPLAR = createWood("poplar", builder -> builder.leaves("red_poplar", "orange_poplar", "yellow_poplar"));
+    public static final WoodCollection<BlockItemId> BAMBOO = createWood("bamboo", builder -> builder.suffixes(WoodCollection.SUFFIXES_BAMBOO).noLeaves());
+    public static final WoodCollection<BlockItemId> CRIMSON = createWood("crimson", builder -> builder.suffixes(WoodCollection.SUFFIXES_NETHER).noLeaves());
+    public static final WoodCollection<BlockItemId> WARPED = createWood("warped", builder -> builder.suffixes(WoodCollection.SUFFIXES_NETHER).noLeaves());
     public static final CutoutCollection<BlockItemId> BAMBOO_MOSAIC = createCutout("bamboo_mosaic", CutoutCollection.Builder::noWall);
     public static final CoralCollection<BlockItemId> TUBE_CORAL = createCoral("tube");
     public static final CoralCollection<BlockItemId> BRAIN_CORAL = createCoral("brain");
@@ -87,16 +88,15 @@ public class ItematicBlockItemIds {
             .map(BlockItemId::create);
     }
 
-    private static WoodCollection<BlockItemId> createWood(String name) {
-        return createWood(name, WoodCollection.SUFFIXES);
+    private static WoodCollection<BlockItemId> createWood(String material) {
+        return WoodCollection.builder(material)
+            .build()
+            .map(BlockItemId::create);
     }
 
-    private static WoodCollection<BlockItemId> createNetherWood(String name) {
-        return createWood(name, WoodCollection.SUFFIXES_NETHER);
-    }
-
-    private static WoodCollection<BlockItemId> createWood(String name, WoodCollection<String> suffixes) {
-        return WoodCollection.affixWithType(WoodCollection.create(name), suffixes)
+    private static WoodCollection<BlockItemId> createWood(String material, UnaryOperator<WoodCollection.Builder> builder) {
+        return builder.apply(WoodCollection.builder(material))
+            .build()
             .map(BlockItemId::create);
     }
 

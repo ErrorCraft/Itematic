@@ -15,6 +15,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -187,7 +188,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
     public void onDestroyed(ItemEntity item) {
         BundleContents bundleContents = item.getItem().get(DataComponents.BUNDLE_CONTENTS);
         if (bundleContents != null) {
-            ItemUtils.onContainerDestroyed(item, bundleContents.itemCopyStream());
+            ItemUtils.onContainerDestroyed(item, bundleContents.itemCopies());
         }
     }
 
@@ -211,9 +212,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
             return null;
         }
 
-        BundleContents.Mutable newContents = new BundleContents.Mutable(existingBundleContents);
-        newContents.itematic$setFields(existingBundleContents, capacity, rules);
-        return newContents;
+        return existingBundleContents.itematic$asMutable(capacity, rules);
     }
 
     public static void toggleSelectedItem(ItemStack stack, int selectedItem) {
@@ -251,7 +250,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
             return;
         }
 
-        player.drop(removedStack, true);
+        player.drop(removedStack, true, Prediction.PREDICTED);
         player.playSound(
             this.emptySound.value(),
             0.8f,

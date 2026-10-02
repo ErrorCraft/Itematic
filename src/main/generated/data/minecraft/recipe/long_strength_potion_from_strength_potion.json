@@ -1,6 +1,0 @@
-{
-  "type": "minecraft:brewing_modify",
-  "base": "minecraft:strength",
-  "reagent": "minecraft:redstone",
-  "result": "minecraft:long_strength"
-}

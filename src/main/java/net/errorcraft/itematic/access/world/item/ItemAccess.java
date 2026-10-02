@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.Level;
 
 import java.util.Optional;
@@ -28,6 +29,10 @@ public interface ItemAccess {
         throw new AssertionError("Implemented via mixin");
     }
     default void itematic$setAttributeModifiers(ItemAttributeModifiers attributeModifiers) {}
+    default SwingAnimation itematic$interactAnimation() {
+        throw new AssertionError("Implemented via mixin");
+    }
+    default void itematic$setInteractAnimation(SwingAnimation interactAnimation) {}
     default ItemBehaviorSet itematic$behavior() {
         throw new AssertionError("Implemented via mixin");
     }

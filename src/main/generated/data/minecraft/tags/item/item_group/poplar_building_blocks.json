@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:poplar_log",
+    "minecraft:poplar_wood",
+    "minecraft:stripped_poplar_log",
+    "minecraft:stripped_poplar_wood",
+    "minecraft:poplar_planks",
+    "minecraft:poplar_stairs",
+    "minecraft:poplar_slab",
+    "minecraft:poplar_fence",
+    "minecraft:poplar_fence_gate",
+    "minecraft:poplar_door",
+    "minecraft:poplar_trapdoor",
+    "minecraft:poplar_pressure_plate",
+    "minecraft:poplar_button"
+  ]
+}

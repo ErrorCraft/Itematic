@@ -1,0 +1,21 @@
+[
+  {
+    "type": "minecraft:discard",
+    "condition": {
+      "type": "minecraft:side_check",
+      "sides": [
+        "down"
+      ]
+    }
+  },
+  {
+    "type": "minecraft:fits_in_volume",
+    "blocks": true,
+    "entities": true
+  },
+  {
+    "type": "minecraft:align_yaw",
+    "face_away_from_player": true,
+    "steps": 8
+  }
+]

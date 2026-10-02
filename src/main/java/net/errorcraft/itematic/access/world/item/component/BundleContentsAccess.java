@@ -10,6 +10,10 @@ public interface BundleContentsAccess {
         throw new AssertionError("Implemented via mixin");
     }
 
+    default BundleContents.Mutable itematic$asMutable(Fraction capacity, ItemHolderRules rules) {
+        throw new AssertionError("Implemented via mixin");
+    }
+
     interface MutableAccess {
         default void itematic$setFields(BundleContents bundleContents, Fraction capacity, ItemHolderRules rules) {}
     }

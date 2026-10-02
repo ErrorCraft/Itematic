@@ -1,0 +1,28 @@
+[
+  {
+    "type": "minecraft:discard",
+    "condition": {
+      "type": "minecraft:inverted",
+      "term": {
+        "type": "minecraft:side_check",
+        "sides": [
+          "up"
+        ]
+      }
+    }
+  },
+  {
+    "type": "minecraft:offset_spawn_position_to_exact_y"
+  },
+  {
+    "type": "minecraft:rests_on_top_of_face"
+  },
+  {
+    "type": "minecraft:fits_in_volume",
+    "entities": "#minecraft:cannot_intersect_with_cushion"
+  },
+  {
+    "type": "minecraft:align_yaw",
+    "steps": 4
+  }
+]

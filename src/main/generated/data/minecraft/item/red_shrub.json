@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:red_shrub"
+    },
+    "minecraft:compostable": {
+      "layers": "minecraft:compostable/low"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:red_shrub",
+    "translation_key": "block.minecraft.red_shrub"
+  }
+}

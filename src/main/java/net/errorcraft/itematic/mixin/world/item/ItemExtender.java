@@ -31,10 +31,10 @@ import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringUtil;
@@ -55,6 +55,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.context.UseOnContext;
@@ -82,6 +83,9 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     private ItemAttributeModifiers attributeModifiers;
 
     @Unique
+    private SwingAnimation interactAnimation;
+
+    @Unique
     private ItemBehaviorSet behavior;
 
     @Unique
@@ -98,7 +102,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         )
     )
     private static Codec<Holder<Item>> doNotUseStaticRegistry(DefaultedRegistry<Item> instance, Operation<Codec<Holder<Item>>> original) {
-        return RegistryFixedCodec.create(Registries.ITEM);
+        return RegistryCodecs.holder(Registries.ITEM);
     }
 
     @WrapOperation(
@@ -598,6 +602,16 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @Override
+    public SwingAnimation itematic$interactAnimation() {
+        return this.interactAnimation;
+    }
+
+    @Override
+    public void itematic$setInteractAnimation(SwingAnimation interactAnimation) {
+        this.interactAnimation = interactAnimation;
+    }
+
+    @Override
     public void itematic$setAttributeModifiers(ItemAttributeModifiers attributeModifiers) {
         this.attributeModifiers = attributeModifiers;
     }
@@ -694,6 +708,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     private DataComponentMap createDefaultDataComponents() {
         DataComponentMap.Builder builder = DataComponentMap.builder()
             .addAll(DataComponents.COMMON_ITEM_COMPONENTS);
+        builder.set(DataComponents.INTERACT_ANIMATION, this.interactAnimation);
         this.display.addComponents(builder);
         for (ItemBehavior<?> behavior : this.behavior) {
             behavior.addComponents(builder);

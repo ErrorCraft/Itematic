@@ -1,6 +1,0 @@
-{
-  "type": "minecraft:brewing_amplify",
-  "base": "minecraft:potion",
-  "reagent": "minecraft:gunpowder",
-  "result": "minecraft:splash_potion"
-}

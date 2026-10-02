@@ -6,8 +6,7 @@ import net.errorcraft.itematic.mixin.world.entity.EntityAccessor;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
-import net.errorcraft.itematic.world.entity.spawn.rule.ConditionedEntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSet;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -30,19 +29,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntitySpawnRule> spawnRules, DataComponentPatch components, Optional<Holder<SoundEvent>> spawnSound, boolean allowItemData) {
+public record EntitySpawner(Holder<EntityType<?>> entity, Optional<Holder<EntitySpawnRuleSet>> spawnRules, DataComponentPatch components, Optional<Holder<SoundEvent>> spawnSound, boolean allowItemData) {
     public static final Codec<EntitySpawner> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         BuiltInRegistries.ENTITY_TYPE.holderByNameCodec().fieldOf("entity").forGetter(EntitySpawner::entity),
-        ConditionedEntitySpawnRule.CODEC.listOf().optionalFieldOf("spawn_rules", List.of()).forGetter(EntitySpawner::spawnRules),
+        EntitySpawnRuleSet.CODEC.optionalFieldOf("spawn_rules").forGetter(EntitySpawner::spawnRules),
         DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(EntitySpawner::components),
         SoundEvent.CODEC.optionalFieldOf("spawn_sound").forGetter(EntitySpawner::spawnSound),
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntitySpawner::allowItemData)
@@ -70,8 +66,8 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
     }
 
     @Nullable
-    public Entity spawn(ActionContext context, Vec3 initialPos, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
-        EntitySpawnContext spawnContext = this.createSpawnContext(context, initialPos);
+    public Entity spawn(ActionContext context, Vec3 initialPos, @Nullable Double exactY, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
+        EntitySpawnContext spawnContext = this.createSpawnContext(context, initialPos, exactY);
         if (spawnContext == null) {
             return null;
         }
@@ -87,7 +83,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
     }
 
     @Nullable
-    private EntitySpawnContext createSpawnContext(ActionContext context, Vec3 initialPos) {
+    private EntitySpawnContext createSpawnContext(ActionContext context, Vec3 initialPos, @Nullable Double exactY) {
         if (!(context.level() instanceof ServerLevel level)) {
             return null;
         }
@@ -101,19 +97,16 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
             level,
             type,
             context.get(LootContextParams.THIS_ENTITY),
-            initialPos
+            initialPos,
+            exactY
         );
     }
 
     private boolean applyRules(ActionContext spawnActionContext, EntitySpawnContext spawnContext) {
         LootContext predicateContext = Objects.requireNonNull(spawnActionContext.lootContext());
-        for (ConditionedEntitySpawnRule spawnRule : this.spawnRules) {
-            if (!spawnRule.apply(predicateContext, spawnContext)) {
-                return false;
-            }
-        }
-
-        return true;
+        return this.spawnRules.map(Holder::value)
+            .map(entitySpawnRuleSet -> entitySpawnRuleSet.applyRules(predicateContext, spawnContext))
+            .orElse(true);
     }
 
     @Nullable
@@ -185,7 +178,8 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
 
     public static class Builder {
         private final Holder<EntityType<?>> entity;
-        private final List<ConditionedEntitySpawnRule> spawnRules = new ArrayList<>();
+        @Nullable
+        private Holder<EntitySpawnRuleSet> spawnRules;
         private DataComponentPatch components = DataComponentPatch.EMPTY;
         @Nullable
         private Holder<SoundEvent> spawnSound;
@@ -198,20 +192,15 @@ public record EntitySpawner(Holder<EntityType<?>> entity, List<ConditionedEntity
         public EntitySpawner build() {
             return new EntitySpawner(
                 this.entity,
-                this.spawnRules,
+                Optional.ofNullable(this.spawnRules),
                 this.components,
                 Optional.ofNullable(this.spawnSound),
                 this.allowItemData
             );
         }
 
-        public Builder spawnRule(EntitySpawnRule<?> rule) {
-            this.spawnRules.add(ConditionedEntitySpawnRule.of(rule));
-            return this;
-        }
-
-        public Builder spawnRule(EntitySpawnRule<?> rule, LootItemCondition.Builder condition) {
-            this.spawnRules.add(ConditionedEntitySpawnRule.of(rule, condition.build()));
+        public Builder spawnRules(Holder<EntitySpawnRuleSet> spawnRules) {
+            this.spawnRules = spawnRules;
             return this;
         }
 

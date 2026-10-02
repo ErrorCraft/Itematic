@@ -8,14 +8,15 @@
         "transforms_into": "minecraft:bucket"
       }
     },
-    "minecraft:dispensable": {
-      "behavior": "minecraft:use_bucket"
-    },
-    "minecraft:fuel": {
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_lava_bucket",
       "remainder": {
         "id": "minecraft:bucket"
       },
-      "ticks": 20000
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:use_bucket"
     },
     "minecraft:stackable": 1
   },

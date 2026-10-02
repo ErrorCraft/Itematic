@@ -1,0 +1,24 @@
+{
+  "behavior": {
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_wool_slabs",
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
+    "minecraft:entity": {
+      "entity": {
+        "allow_item_data": true,
+        "components": {
+          "minecraft:cushion/color": "brown"
+        },
+        "entity": "minecraft:cushion",
+        "spawn_rules": "minecraft:cushion"
+      },
+      "uses_collision_shape": "#minecraft:cushion_uses_collision_shape"
+    },
+    "minecraft:stackable": 16
+  },
+  "display": {
+    "model": "minecraft:brown_cushion",
+    "translation_key": "item.minecraft.brown_cushion"
+  }
+}

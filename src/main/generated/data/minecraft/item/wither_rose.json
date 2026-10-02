@@ -4,7 +4,7 @@
       "block": "minecraft:wither_rose"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.65
+      "layers": "minecraft:compostable/medium"
     },
     "minecraft:stackable": 64,
     "minecraft:suspicious_effect_ingredient": {
@@ -31,9 +31,7 @@
               "action": {
                 "type": "minecraft:set_block_state",
                 "position": "interacted",
-                "state": {
-                  "Name": "minecraft:potted_wither_rose"
-                }
+                "state": "minecraft:potted_wither_rose"
               }
             },
             {
@@ -69,7 +67,7 @@
           ]
         },
         "requirements": {
-          "condition": "minecraft:location_check",
+          "type": "minecraft:location_check",
           "position": "interacted",
           "predicate": {
             "block": {

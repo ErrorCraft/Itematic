@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:straw_bed"
+    },
+    "minecraft:stackable": 16
+  },
+  "display": {
+    "model": "minecraft:straw_bed",
+    "translation_key": "block.minecraft.straw_bed"
+  }
+}

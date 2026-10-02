@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:light_blue_concrete_slab"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:light_blue_concrete_slab",
+    "translation_key": "block.minecraft.light_blue_concrete_slab"
+  }
+}

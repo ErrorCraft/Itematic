@@ -7,24 +7,21 @@
         "action": {
           "type": "minecraft:set_block_state",
           "position": "interacted",
-          "state": {
-            "Name": "minecraft:dirt"
-          }
+          "state": "minecraft:dirt"
         }
       },
       {
         "action": {
-          "type": "minecraft:drop_item_from_block",
-          "item": {
-            "id": "minecraft:hanging_roots"
-          },
+          "type": "minecraft:drop_loot",
+          "drop_strategy": "clicked_face",
+          "loot_table": "minecraft:till/rooted_dirt",
           "position": "interacted"
         }
       }
     ]
   },
   "requirements": {
-    "condition": "minecraft:location_check",
+    "type": "minecraft:location_check",
     "position": "interacted",
     "predicate": {
       "block": {

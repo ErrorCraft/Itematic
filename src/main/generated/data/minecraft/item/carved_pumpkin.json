@@ -16,7 +16,7 @@
       "block": "minecraft:carved_pumpkin"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.65
+      "layers": "minecraft:compostable/medium"
     },
     "minecraft:dispensable": {
       "behavior": "minecraft:place_carved_pumpkin"

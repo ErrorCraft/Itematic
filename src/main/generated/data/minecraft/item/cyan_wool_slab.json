@@ -1,0 +1,16 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:cyan_wool_slab"
+    },
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_wool_slabs",
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:cyan_wool_slab",
+    "translation_key": "block.minecraft.cyan_wool_slab"
+  }
+}

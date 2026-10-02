@@ -10,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.component.MapDecorations;
-import net.minecraft.world.item.component.MapItemColor;
 import net.minecraft.world.level.Level;
 
 public class MapHolderItemBehavior implements ItemBehavior<MapHolderItemBehavior> {
@@ -27,7 +26,6 @@ public class MapHolderItemBehavior implements ItemBehavior<MapHolderItemBehavior
 
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
-        builder.set(DataComponents.MAP_COLOR, MapItemColor.DEFAULT);
         builder.set(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY);
     }
 

@@ -6,7 +6,7 @@ import com.mojang.serialization.DynamicOps;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.ServerStatsCounter;
 import net.minecraft.stats.Stat;
@@ -37,7 +37,7 @@ public class ServerStatsCounterExtender extends StatsCounter {
         )
     )
     private static <T> Codec<Holder<T>> doNotUseStaticRegistry(Registry<T> instance) {
-        return RegistryFixedCodec.create(instance.key());
+        return RegistryCodecs.holder(instance.key());
     }
 
     @ModifyArg(

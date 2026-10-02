@@ -1,25 +1,27 @@
 package net.errorcraft.itematic.world.level.block;
 
-import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.world.item.Items;
-import net.errorcraft.itematic.world.item.behavior.behaviors.FuelItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.CookingFuelItemBehavior;
 import net.minecraft.core.Direction;
 import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @Nullable Strippable<T> wood, T sapling, @Nullable T leaves, T fenceGate, T sign, T hangingSign, T door, T trapdoor, T button, T pressurePlate, T shelf) {
+public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @Nullable Strippable<T> wood, T sapling, MultiStateCollection<T> leaves, T fenceGate, T sign, T hangingSign, T door, T trapdoor, T button, T pressurePlate, T shelf) {
     public static final WoodCollection<String> PREFIXES = new WoodCollection<>(
         CutoutCollection.create(""),
         Strippable.PREFIXES,
         Strippable.PREFIXES,
         "",
-        "",
+        MultiStateCollection.create(""),
         "",
         "",
         "",
@@ -29,18 +31,18 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         "",
         ""
     );
-    public static final WoodCollection<String> SUFFIXES = suffixes("_log", "_wood", "_sapling", "_leaves");
-    public static final WoodCollection<String> SUFFIXES_MANGROVE = suffixes("_log", "_wood", "_propagule", "_leaves");
-    public static final WoodCollection<String> SUFFIXES_BAMBOO = suffixes("_block", null, "", null);
-    public static final WoodCollection<String> SUFFIXES_NETHER = suffixes("_stem", "_hyphae", "_fungus", null);
+    public static final WoodCollection<String> SUFFIXES = suffixes("_log", "_wood", "_sapling");
+    public static final WoodCollection<String> SUFFIXES_MANGROVE = suffixes("_log", "_wood", "_propagule");
+    public static final WoodCollection<String> SUFFIXES_BAMBOO = suffixes("_block", null, "");
+    public static final WoodCollection<String> SUFFIXES_NETHER = suffixes("_stem", "_hyphae", "_fungus");
 
-    private static WoodCollection<String> suffixes(String log, @Nullable String wood, String sapling, @Nullable String leaves) {
+    private static WoodCollection<String> suffixes(String log, @Nullable String wood, String sapling) {
         return new WoodCollection<>(
             CutoutCollection.create("_planks", "", "", ""),
             Strippable.create(log),
             Strippable.create(wood),
             sapling,
-            leaves,
+            MultiStateCollection.create("_leaves"),
             "_fence_gate",
             "_sign",
             "_hanging_sign",
@@ -52,13 +54,17 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         );
     }
 
-    public static WoodCollection<String> create(String value) {
+    public static Builder builder(String material) {
+        return new Builder(material);
+    }
+
+    public static WoodCollection<String> create(String value, Set<String> leaves) {
         return new WoodCollection<>(
             CutoutCollection.builder(value).fence().build(),
             Strippable.create(value),
             Strippable.create(value),
             value,
-            value,
+            MultiStateCollection.create(leaves),
             value,
             value,
             value,
@@ -76,7 +82,7 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
             Strippable.zipMap(first.log, second.log, operation),
             Strippable.zipMap(first.wood, second.wood, operation),
             operation.apply(first.sapling, second.sapling),
-            ItematicUtil.applyNullable(first.leaves, second.leaves, operation),
+            MultiStateCollection.zipMap(first.leaves, second.leaves, operation),
             operation.apply(first.fenceGate, second.fenceGate),
             operation.apply(first.sign, second.sign),
             operation.apply(first.hangingSign, second.hangingSign),
@@ -106,13 +112,10 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         bootstrapper.registerPottableSapling(
             blockItems.sapling,
             pottedSapling,
-            0,
-            CompostChances.BIG
+            null,
+            ContextIntProviders.COMPOSTABLE_MEDIUM
         );
-        if (blockItems.leaves != null) {
-            bootstrapper.registerCompostableLeaves(blockItems.leaves);
-        }
-
+        blockItems.leaves.forEach(bootstrapper::registerCompostableLeaves);
         bootstrapper.registerBlock(blockItems.fenceGate);
         bootstrapper.builderForBlockAttachedToSide(blockItems.sign, wallSign, Direction.DOWN, 16)
             .register();
@@ -125,35 +128,32 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         bootstrapper.registerBlock(blockItems.shelf);
     }
 
-    public static void registerItems(WoodCollection<BlockItemId> blockItems, Items.Bootstrapper bootstrapper, ResourceKey<Block> wallSign, ResourceKey<Block> hangingWallSign, ResourceKey<Block> pottedSapling, int saplingFuelTicks) {
+    public static void registerItems(WoodCollection<BlockItemId> blockItems, Items.Bootstrapper bootstrapper, ResourceKey<Block> wallSign, ResourceKey<Block> hangingWallSign, ResourceKey<Block> pottedSapling, ResourceKey<ContextIntProvider> saplingBurnTime) {
         CutoutCollection.registerBurningItems(blockItems.planks, bootstrapper);
-        blockItems.log.forEach(bootstrapper.registerBurningBlock(FuelTimes.WOOD));
+        blockItems.log.forEach(log -> bootstrapper.registerBurningBlock(log, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
         if (blockItems.wood != null) {
-            blockItems.wood.forEach(bootstrapper.registerBurningBlock(FuelTimes.WOOD));
+            blockItems.wood.forEach(wood -> bootstrapper.registerBurningBlock(wood, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
         }
 
         bootstrapper.registerPottableSapling(
             blockItems.sapling,
             pottedSapling,
-            saplingFuelTicks,
-            saplingFuelTicks == FuelTimes.PLANT ? CompostChances.SMALL : 0.0f
+            saplingBurnTime,
+            saplingBurnTime == ContextIntProviders.COOKING_TIME_DRY_PLANTS ? ContextIntProviders.COMPOSTABLE_LOW : null
         );
-        if (blockItems.leaves != null) {
-            bootstrapper.registerCompostableLeaves(blockItems.leaves);
-        }
-
-        bootstrapper.registerBurningBlock(FuelTimes.WOOD).accept(blockItems.fenceGate);
+        blockItems.leaves.forEach(bootstrapper::registerCompostableLeaves);
+        bootstrapper.registerBurningBlock(blockItems.fenceGate, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
         bootstrapper.builderForBlockAttachedToSide(blockItems.sign, wallSign, Direction.DOWN, 16)
-            .behavior(FuelItemBehavior.of(FuelTimes.SIGN))
+            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
             .register();
         bootstrapper.builderForBlockAttachedToSide(blockItems.hangingSign, hangingWallSign, Direction.UP, 16)
-            .behavior(FuelItemBehavior.of(FuelTimes.HANGING_SIGN))
+            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_HANGING_SIGNS))
             .register();
-        bootstrapper.registerBurningBlock(FuelTimes.DOOR).accept(blockItems.door);
-        bootstrapper.registerBurningBlock(FuelTimes.WOOD).accept(blockItems.trapdoor);
-        bootstrapper.registerBurningBlock(FuelTimes.BUTTON).accept(blockItems.button);
-        bootstrapper.registerBurningBlock(FuelTimes.WOOD).accept(blockItems.pressurePlate);
-        bootstrapper.registerBurningBlock(FuelTimes.WOOD).accept(blockItems.shelf);
+        bootstrapper.registerBurningBlock(blockItems.door, ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE);
+        bootstrapper.registerBurningBlock(blockItems.trapdoor, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
+        bootstrapper.registerBurningBlock(blockItems.button, ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL);
+        bootstrapper.registerBurningBlock(blockItems.pressurePlate, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
+        bootstrapper.registerBurningBlock(blockItems.shelf, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
     }
 
     public <U> WoodCollection<U> map(Function<T, U> mapper) {
@@ -162,7 +162,7 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
             this.log.map(mapper),
             Strippable.map(this.wood, mapper),
             mapper.apply(this.sapling),
-            ItematicUtil.applyNullable(this.leaves, mapper),
+            this.leaves.map(mapper),
             mapper.apply(this.fenceGate),
             mapper.apply(this.sign),
             mapper.apply(this.hangingSign),
@@ -220,6 +220,36 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         public void forEach(Consumer<T> consumer) {
             consumer.accept(this.unstripped);
             consumer.accept(this.stripped);
+        }
+    }
+
+    public static class Builder {
+        private final String material;
+        private Set<String> leaves;
+        private WoodCollection<String> suffixes = SUFFIXES;
+
+        private Builder(String material) {
+            this.material = material;
+            this.leaves = Set.of(material);
+        }
+
+        public WoodCollection<String> build() {
+            return WoodCollection.affixWithType(WoodCollection.create(this.material, this.leaves), this.suffixes);
+        }
+
+        public Builder noLeaves() {
+            this.leaves = Set.of();
+            return this;
+        }
+
+        public Builder leaves(String... leaves) {
+            this.leaves = Set.of(leaves);
+            return this;
+        }
+
+        public Builder suffixes(WoodCollection<String> suffixes) {
+            this.suffixes = suffixes;
+            return this;
         }
     }
 }

@@ -38,12 +38,12 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types, Optional<Holder<DamageType>> damageType, Optional<SwingAnimation> swingAnimation, WeaponAttackDamage attackDamage, double attackSpeed, Optional<AttackRange> attackRange, Optional<Float> minimumAttackCharge) implements ItemBehavior<WeaponItemBehavior>, DataComponentHolder {
+public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types, Optional<Holder<DamageType>> damageType, Optional<SwingAnimation> attackAnimation, WeaponAttackDamage attackDamage, double attackSpeed, Optional<AttackRange> attackRange, Optional<Float> minimumAttackCharge) implements ItemBehavior<WeaponItemBehavior>, DataComponentHolder {
     public static final Codec<WeaponItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("item_damage_per_attack", 1).forGetter(WeaponItemBehavior::itemDamagePerAttack),
         MeleeWeaponComponents.CODEC.optionalFieldOf("types", DataComponentMap.EMPTY).forGetter(WeaponItemBehavior::types),
         DamageType.CODEC.optionalFieldOf("damage_type").forGetter(WeaponItemBehavior::damageType),
-        SwingAnimation.CODEC.optionalFieldOf("swing_animation").forGetter(WeaponItemBehavior::swingAnimation),
+        SwingAnimation.CODEC.optionalFieldOf("attack_animation").forGetter(WeaponItemBehavior::attackAnimation),
         WeaponAttackDamage.CODEC.fieldOf("attack_damage").forGetter(WeaponItemBehavior::attackDamage),
         ItematicCodecs.NON_NEGATIVE_DOUBLE.fieldOf("attack_speed").forGetter(WeaponItemBehavior::attackSpeed),
         AttackRange.CODEC.optionalFieldOf("attack_range").forGetter(WeaponItemBehavior::attackRange),
@@ -105,7 +105,7 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
         this.getAllOfType(MeleeWeaponWithDataComponents.class)
             .forEach(meleeWeapon -> meleeWeapon.addComponents(builder));
         this.damageType.ifPresent(damageType -> builder.set(DataComponents.DAMAGE_TYPE, damageType));
-        this.swingAnimation.ifPresent(swingAnimation -> builder.set(DataComponents.SWING_ANIMATION, swingAnimation));
+        this.attackAnimation.ifPresent(attackAnimation -> builder.set(DataComponents.ATTACK_ANIMATION, attackAnimation));
         this.attackRange.ifPresent(attackRange -> builder.set(DataComponents.ATTACK_RANGE, attackRange));
         this.minimumAttackCharge.ifPresent(minimumAttackCharge -> builder.set(DataComponents.MINIMUM_ATTACK_CHARGE, minimumAttackCharge));
     }
@@ -147,7 +147,7 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
         @Nullable
         private Holder<DamageType> damageType;
         @Nullable
-        private SwingAnimation swingAnimation;
+        private SwingAnimation attackAnimation;
         private final double attackDamage;
         private final double attackSpeed;
         @Nullable
@@ -166,7 +166,7 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
                 this.itemDamagePerAttack,
                 this.types.build(),
                 Optional.ofNullable(this.damageType),
-                Optional.ofNullable(this.swingAnimation),
+                Optional.ofNullable(this.attackAnimation),
                 new WeaponAttackDamage(List.of(), this.attackDamage),
                 this.attackSpeed,
                 Optional.ofNullable(this.attackRange),
@@ -184,8 +184,8 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
             return this;
         }
 
-        public Builder swingAnimation(SwingAnimation swingAnimation) {
-            this.swingAnimation = swingAnimation;
+        public Builder attackAnimation(SwingAnimation swingAnimation) {
+            this.attackAnimation = swingAnimation;
             return this;
         }
 

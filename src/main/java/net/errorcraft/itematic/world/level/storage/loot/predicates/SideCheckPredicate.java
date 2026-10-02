@@ -26,6 +26,6 @@ public record SideCheckPredicate(Set<Direction> sides) implements LootItemCondit
 
     @Override
     public boolean test(LootContext context) {
-        return this.sides.contains(context.getOptionalParameter(ItematicContextKeys.SIDE));
+        return this.sides.contains(context.getOptional(ItematicContextKeys.SIDE));
     }
 }

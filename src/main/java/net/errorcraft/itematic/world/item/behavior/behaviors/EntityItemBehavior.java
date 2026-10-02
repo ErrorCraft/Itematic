@@ -2,6 +2,7 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.mixin.world.item.CushionItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.HangingEntityItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.ItemAccessor;
 import net.errorcraft.itematic.util.SetCodec;
@@ -16,7 +17,10 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.placement.EntityPlacer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
@@ -48,17 +52,29 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModification, Set<Pass> passes) implements ItemBehavior<EntityItemBehavior> {
+public record EntityItemBehavior(EntitySpawner entity, Optional<HolderSet<Block>> usesCollisionShape, boolean allowSpawnerModification, Set<Pass> passes) implements ItemBehavior<EntityItemBehavior> {
     public static final Codec<EntityItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EntitySpawner.CODEC.fieldOf("entity").forGetter(EntityItemBehavior::entity),
+        RegistryCodecs.holderSet(Registries.BLOCK).optionalFieldOf("uses_collision_shape").forGetter(EntityItemBehavior::usesCollisionShape),
         Codec.BOOL.optionalFieldOf("allow_spawner_modification", false).forGetter(EntityItemBehavior::allowSpawnerModification),
         SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityItemBehavior::passes)
     ).apply(instance, EntityItemBehavior::new));
+    public static final ScopedValue<HolderSet<Block>> USES_COLLISION_SHAPE = ScopedValue.newInstance();
     private static final Component RANDOM_VARIANT_TOOLTIP = HangingEntityItemAccessor.randomVariantTooltip();
 
     public static EntityItemBehavior of(EntitySpawner entity) {
         return new EntityItemBehavior(
             entity,
+            Optional.empty(),
+            false,
+            Pass.DEFAULT_PASSES
+        );
+    }
+
+    public static EntityItemBehavior of(EntitySpawner entity, HolderSet<Block> usesCollisionShape) {
+        return new EntityItemBehavior(
+            entity,
+            Optional.of(usesCollisionShape),
             false,
             Pass.DEFAULT_PASSES
         );
@@ -67,6 +83,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     public static EntityItemBehavior of(EntitySpawner entity, boolean allowSpawnerModification, Pass... passes) {
         return new EntityItemBehavior(
             entity,
+            Optional.empty(),
             allowSpawnerModification,
             Set.of(passes)
         );
@@ -132,14 +149,20 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     }
 
     private void modifyOrPlace(UseOnContext context, ItemStackExchanger stackExchanger) {
-        if (!this.tryModifyOrPlace(context, stackExchanger)) {
+        UseOnContext recalculatedContext = this.recalculateContext(context);
+        if (!this.tryModifyOrPlace(recalculatedContext, stackExchanger)) {
             return;
         }
 
-        context.getItemInHand().consume(
-            1,
-            context.getPlayer()
-        );
+        context.getItemInHand()
+            .consume(1, context.getPlayer());
+    }
+
+    private UseOnContext recalculateContext(UseOnContext context) {
+        return this.usesCollisionShape.map(
+            usesCollisionShape -> ScopedValue.where(USES_COLLISION_SHAPE, usesCollisionShape)
+                .call(() -> CushionItemAccessor.recalculateContextForSpecialCollisionShapes(context))
+        ).orElse(context);
     }
 
     private boolean tryModifyOrPlace(UseOnContext context, ItemStackExchanger stackExchanger) {
@@ -161,7 +184,7 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
             .add(ItematicContextKeys.HAND, context.getHand())
             .add(ItematicContextKeys.SIDE, context.getClickedFace())
             .build();
-        return this.place(actionContext, PositionTarget.INTERACTED) != null;
+        return this.place(actionContext, PositionTarget.INTERACTED, context.getClickLocation().y()) != null;
     }
 
     private boolean modifySpawner(UseOnContext context) {
@@ -198,9 +221,9 @@ public record EntityItemBehavior(EntitySpawner entity, boolean allowSpawnerModif
     }
 
     @Nullable
-    public Entity place(ActionContext context, PositionTarget position) {
+    public Entity place(ActionContext context, PositionTarget position, @Nullable Double exactY) {
         return EntityPlacer.of(this.entity, null)
-            .place(context, position, EntitySpawnReason.SPAWN_ITEM_USE);
+            .place(context, position, exactY, EntitySpawnReason.SPAWN_ITEM_USE);
     }
 
     public enum Pass implements StringRepresentable {

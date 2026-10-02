@@ -13,9 +13,9 @@ import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.InteractionHand;
@@ -36,8 +36,8 @@ import java.util.OptionalInt;
 
 public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRules itemDamage) implements ItemBehavior<ShooterItemBehavior> {
     public static final Codec<ShooterItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemBehavior::heldAmmunition),
-        RegistryCodecs.homogeneousList(Registries.ITEM).fieldOf("ammunition").forGetter(ShooterItemBehavior::ammunition),
+        RegistryCodecs.holderSet(Registries.ITEM).fieldOf("held_ammunition").forGetter(ShooterItemBehavior::heldAmmunition),
+        RegistryCodecs.holderSet(Registries.ITEM).fieldOf("ammunition").forGetter(ShooterItemBehavior::ammunition),
         ExtraCodecs.POSITIVE_INT.fieldOf("range").forGetter(ShooterItemBehavior::range),
         ShooterMethod.CODEC.fieldOf("method").forGetter(ShooterItemBehavior::method),
         ItemDamageRules.CODEC.fieldOf("item_damage").forGetter(ShooterItemBehavior::itemDamage)

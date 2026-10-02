@@ -40,5 +40,8 @@
   "display": {
     "model": "minecraft:stone_axe",
     "translation_key": "item.minecraft.stone_axe"
+  },
+  "events": {
+    "minecraft:use_on_block": "minecraft:use_axe_on_block"
   }
 }

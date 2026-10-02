@@ -40,5 +40,8 @@
   "display": {
     "model": "minecraft:diamond_axe",
     "translation_key": "item.minecraft.diamond_axe"
+  },
+  "events": {
+    "minecraft:use_on_block": "minecraft:use_axe_on_block"
   }
 }

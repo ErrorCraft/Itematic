@@ -1,13 +1,14 @@
 {
   "behavior": {
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_wood_items_small",
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
     "minecraft:damageable": {
       "durability": 465
     },
     "minecraft:enchantable": {
       "enchantability": 1
-    },
-    "minecraft:fuel": {
-      "ticks": 300
     },
     "minecraft:shooter": {
       "ammunition": "#minecraft:bow_ammunition",

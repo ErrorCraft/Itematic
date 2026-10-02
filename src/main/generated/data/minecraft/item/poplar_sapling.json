@@ -1,0 +1,78 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:poplar_sapling"
+    },
+    "minecraft:compostable": {
+      "layers": "minecraft:compostable/low"
+    },
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_dry_plants",
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:poplar_sapling",
+    "translation_key": "block.minecraft.poplar_sapling"
+  },
+  "events": {
+    "minecraft:before_use_on_block": {
+      "cancel_original_call_on_success": true,
+      "entry": {
+        "action": {
+          "type": "minecraft:sequence",
+          "handler": "minecraft:passing",
+          "entries": [
+            {
+              "action": {
+                "type": "minecraft:set_block_state",
+                "position": "interacted",
+                "state": "minecraft:potted_poplar_sapling"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:invoke_game_event",
+                "event": "minecraft:block_change",
+                "entity": "this",
+                "position": "interacted"
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:increment_stat",
+                "entity": "this",
+                "stat": {
+                  "type": "minecraft:custom",
+                  "entry": "minecraft:pot_flower"
+                }
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:decrement_item",
+                "amount": 1
+              }
+            },
+            {
+              "action": {
+                "type": "minecraft:swing_hand",
+                "entity": "this"
+              }
+            }
+          ]
+        },
+        "requirements": {
+          "type": "minecraft:location_check",
+          "position": "interacted",
+          "predicate": {
+            "block": {
+              "blocks": "minecraft:flower_pot"
+            }
+          }
+        }
+      }
+    }
+  }
+}

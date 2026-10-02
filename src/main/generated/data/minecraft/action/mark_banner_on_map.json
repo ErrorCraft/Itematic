@@ -1,0 +1,20 @@
+{
+  "action": {
+    "type": "minecraft:sequence",
+    "handler": "minecraft:passing",
+    "entries": [
+      {
+        "action": {
+          "type": "minecraft:mark_banner_on_item",
+          "position": "interacted"
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:swing_hand",
+          "entity": "this"
+        }
+      }
+    ]
+  }
+}

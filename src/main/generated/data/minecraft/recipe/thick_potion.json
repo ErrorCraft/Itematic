@@ -1,6 +1,0 @@
-{
-  "type": "minecraft:brewing_modify",
-  "base": "minecraft:water",
-  "reagent": "minecraft:glowstone_dust",
-  "result": "minecraft:thick"
-}

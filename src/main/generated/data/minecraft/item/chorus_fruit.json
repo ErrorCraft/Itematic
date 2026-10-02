@@ -24,7 +24,8 @@
       "action": {
         "type": "minecraft:teleport",
         "distance": 16,
-        "entity": "this"
+        "entity": "this",
+        "unsafe_blocks": "#minecraft:consumable_does_not_teleport_to"
       }
     }
   }

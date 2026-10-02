@@ -4,7 +4,7 @@
       "block": "minecraft:white_tulip"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.65
+      "layers": "minecraft:compostable/medium"
     },
     "minecraft:stackable": 64,
     "minecraft:suspicious_effect_ingredient": {
@@ -32,9 +32,7 @@
               "action": {
                 "type": "minecraft:set_block_state",
                 "position": "interacted",
-                "state": {
-                  "Name": "minecraft:potted_white_tulip"
-                }
+                "state": "minecraft:potted_white_tulip"
               }
             },
             {
@@ -70,7 +68,7 @@
           ]
         },
         "requirements": {
-          "condition": "minecraft:location_check",
+          "type": "minecraft:location_check",
           "position": "interacted",
           "predicate": {
             "block": {

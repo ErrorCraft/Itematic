@@ -1,9 +1,11 @@
 package net.errorcraft.itematic.core.registries;
 
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.mixin.core.registries.BuiltInRegistriesAccessor;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
-import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleType;
+import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.rules.DiscardEntitySpawnRule;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
@@ -61,9 +63,9 @@ public class ItematicBuiltInRegistries {
         ItematicRegistries.WORLD_MODIFICATION_TYPE,
         _ -> WorldModificationType.DRAIN_FLUID
     );
-    public static final Registry<EntitySpawnRuleType<?>> ENTITY_SPAWN_RULE_TYPE = register(
+    public static final Registry<MapCodec<? extends EntitySpawnRule<?>>> ENTITY_SPAWN_RULE_TYPE = register(
         ItematicRegistries.ENTITY_SPAWN_RULE_TYPE,
-        _ -> EntitySpawnRuleType.DISCARD
+        _ -> DiscardEntitySpawnRule.CODEC
     );
     public static final Registry<DataComponentType<?>> MELEE_WEAPON_COMPONENT_TYPE = register(
         ItematicRegistries.MELEE_WEAPON_COMPONENT_TYPE,

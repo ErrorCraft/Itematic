@@ -4,10 +4,11 @@
       "block": "minecraft:dried_kelp_block"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.5
+      "layers": "minecraft:compostable/low_medium"
     },
-    "minecraft:fuel": {
-      "ticks": 4001
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_dried_kelp_block",
+      "speed_multiplier": "minecraft:cooking/speed_default"
     },
     "minecraft:stackable": 64
   },

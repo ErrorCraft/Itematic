@@ -4,7 +4,7 @@
       "block": "minecraft:crimson_roots"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.65
+      "layers": "minecraft:compostable/medium"
     },
     "minecraft:stackable": 64
   },
@@ -24,9 +24,7 @@
               "action": {
                 "type": "minecraft:set_block_state",
                 "position": "interacted",
-                "state": {
-                  "Name": "minecraft:potted_crimson_roots"
-                }
+                "state": "minecraft:potted_crimson_roots"
               }
             },
             {
@@ -62,7 +60,7 @@
           ]
         },
         "requirements": {
-          "condition": "minecraft:location_check",
+          "type": "minecraft:location_check",
           "position": "interacted",
           "predicate": {
             "block": {

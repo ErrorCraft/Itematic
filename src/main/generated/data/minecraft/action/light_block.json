@@ -10,17 +10,20 @@
           "entries": [
             {
               "action": {
-                "type": "minecraft:modify_block_state",
+                "type": "minecraft:transform_block_state",
                 "position": "interacted",
-                "properties": {
-                  "lit": "true"
+                "provider": {
+                  "type": "minecraft:apply_properties",
+                  "properties": {
+                    "lit": "true"
+                  }
                 }
               },
               "requirements": {
-                "condition": "minecraft:all_of",
+                "type": "minecraft:all_of",
                 "terms": [
                   {
-                    "condition": "minecraft:location_check",
+                    "type": "minecraft:location_check",
                     "position": "interacted",
                     "predicate": {
                       "block": {
@@ -31,9 +34,9 @@
                     }
                   },
                   {
-                    "condition": "minecraft:inverted",
+                    "type": "minecraft:inverted",
                     "term": {
-                      "condition": "minecraft:location_check",
+                      "type": "minecraft:location_check",
                       "position": "interacted",
                       "predicate": {
                         "block": {
@@ -71,7 +74,7 @@
                 ]
               },
               "requirements": {
-                "condition": "minecraft:location_check",
+                "type": "minecraft:location_check",
                 "position": "interacted",
                 "predicate": {
                   "block": {

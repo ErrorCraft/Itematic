@@ -1,0 +1,21 @@
+{
+  "behavior": {
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_boats",
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
+    "minecraft:dispensable": {
+      "behavior": "minecraft:spawn_entity_from_item"
+    },
+    "minecraft:entity": {
+      "entity": {
+        "entity": "minecraft:poplar_boat"
+      }
+    },
+    "minecraft:stackable": 1
+  },
+  "display": {
+    "model": "minecraft:poplar_boat",
+    "translation_key": "item.minecraft.poplar_boat"
+  }
+}

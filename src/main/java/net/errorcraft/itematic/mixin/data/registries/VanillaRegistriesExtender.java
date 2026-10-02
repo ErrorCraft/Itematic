@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.data.registries;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehaviors;
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.action.Actions;
+import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSets;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProviders;
 import net.minecraft.core.RegistrySetBuilder;
@@ -16,12 +17,13 @@ import org.spongepowered.asm.mixin.Shadow;
 public class VanillaRegistriesExtender {
     @Shadow
     @Final
-    private static RegistrySetBuilder BUILDER;
+    private static RegistrySetBuilder WORLD_BUILDER;
 
     static {
-        BUILDER.add(Registries.ITEM, Items::bootstrap)
+        WORLD_BUILDER.add(Registries.ITEM, Items::bootstrap)
             .add(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProviders::bootstrap)
             .add(ItematicRegistries.ACTION, Actions::bootstrap)
-            .add(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehaviors::bootstrap);
+            .add(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehaviors::bootstrap)
+            .add(ItematicRegistries.ENTITY_SPAWN_RULE_SET, EntitySpawnRuleSets::bootstrap);
     }
 }

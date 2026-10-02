@@ -1,0 +1,16 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:stripped_poplar_wood"
+    },
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_wood_blocks",
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:stripped_poplar_wood",
+    "translation_key": "block.minecraft.stripped_poplar_wood"
+  }
+}

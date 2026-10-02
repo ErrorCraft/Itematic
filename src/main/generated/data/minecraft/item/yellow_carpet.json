@@ -3,6 +3,10 @@
     "minecraft:block": {
       "block": "minecraft:yellow_carpet"
     },
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_wool_carpets",
+      "speed_multiplier": "minecraft:cooking/speed_default"
+    },
     "minecraft:dispensable": {
       "behavior": "minecraft:equip_entity"
     },
@@ -16,9 +20,6 @@
       "equip_sound": "minecraft:entity.llama.swag",
       "shearing_sound": "minecraft:item.llama_carpet.unequip",
       "slot": "body"
-    },
-    "minecraft:fuel": {
-      "ticks": 67
     },
     "minecraft:stackable": 64
   },

@@ -1,0 +1,15 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:orange_poplar_leaves"
+    },
+    "minecraft:compostable": {
+      "layers": "minecraft:compostable/low"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:orange_poplar_leaves",
+    "translation_key": "block.minecraft.orange_poplar_leaves"
+  }
+}

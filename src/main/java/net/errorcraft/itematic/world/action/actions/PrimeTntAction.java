@@ -2,7 +2,6 @@ package net.errorcraft.itematic.world.action.actions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.mixin.world.level.block.TntBlockAccessor;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
@@ -11,6 +10,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
@@ -40,7 +41,8 @@ public record PrimeTntAction(PositionTarget position) implements Action<PrimeTnt
         }
 
         Player player = context.get(LootContextParams.THIS_ENTITY, Player.class);
-        if (TntBlockAccessor.prime(level, pos, player)) {
+        ItemStack stack = context.getOrDefault(LootContextParams.TOOL, ItemStack.class, ItemStack.EMPTY);
+        if (TntBlock.prime(level, pos, player, stack)) {
             level.removeBlock(pos, false);
             return true;
         }

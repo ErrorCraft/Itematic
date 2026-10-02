@@ -4,10 +4,11 @@
       "block": "minecraft:dark_oak_sapling"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.3
+      "layers": "minecraft:compostable/low"
     },
-    "minecraft:fuel": {
-      "ticks": 100
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_dry_plants",
+      "speed_multiplier": "minecraft:cooking/speed_default"
     },
     "minecraft:stackable": 64
   },
@@ -27,9 +28,7 @@
               "action": {
                 "type": "minecraft:set_block_state",
                 "position": "interacted",
-                "state": {
-                  "Name": "minecraft:potted_dark_oak_sapling"
-                }
+                "state": "minecraft:potted_dark_oak_sapling"
               }
             },
             {
@@ -65,7 +64,7 @@
           ]
         },
         "requirements": {
-          "condition": "minecraft:location_check",
+          "type": "minecraft:location_check",
           "position": "interacted",
           "predicate": {
             "block": {

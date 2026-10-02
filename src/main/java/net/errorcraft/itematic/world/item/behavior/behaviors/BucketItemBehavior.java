@@ -42,6 +42,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -107,7 +108,7 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
             .add(ItematicContextKeys.HAND, hand)
             .add(ItematicContextKeys.SIDE, blockHitResult.getDirection())
             .build();
-        if (this.use(context, PositionTarget.INTERACTED, !blockHitResult.isInside())) {
+        if (this.use(context, PositionTarget.INTERACTED, !blockHitResult.isInside(), blockHitResult.getLocation().y())) {
             return ItemResult.CONSUME;
         }
 
@@ -121,14 +122,14 @@ public record BucketItemBehavior(WorldModification modification, Optional<Entity
         }
     }
 
-    public boolean use(ActionContext context, PositionTarget position, boolean mayOffset) {
+    public boolean use(ActionContext context, PositionTarget position, boolean mayOffset, @Nullable Double exactY) {
         Optional<ItemStack> result = this.modification.modify(context, position, mayOffset);
         if (result.isEmpty()) {
             return false;
         }
 
         this.entity.ifPresent(entity -> EntityPlacer.of(entity, BucketItemBehavior::initializeBucketEntity)
-            .place(context, PositionTarget.INTERACTED, EntitySpawnReason.BUCKET));
+            .place(context, PositionTarget.INTERACTED, exactY, EntitySpawnReason.BUCKET));
         ItemStack stack = context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance);
         if (!ItemStacks.isNullOrEmpty(stack)) {
             stack.consume(

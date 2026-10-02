@@ -1,0 +1,12 @@
+[
+  {
+    "type": "minecraft:discard",
+    "condition": {
+      "type": "minecraft:side_check",
+      "sides": [
+        "down",
+        "up"
+      ]
+    }
+  }
+]

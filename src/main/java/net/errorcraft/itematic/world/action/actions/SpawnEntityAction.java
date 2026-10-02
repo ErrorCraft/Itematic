@@ -30,6 +30,6 @@ public record SpawnEntityAction(EntitySpawner entity, PositionTarget position) i
     @Override
     public boolean execute(ActionContext context) {
         EntityPlacer placer = EntityPlacer.of(this.entity, null);
-        return placer.place(context, this.position, EntitySpawnReason.COMMAND) != null;
+        return placer.place(context, this.position, null, EntitySpawnReason.COMMAND) != null;
     }
 }

@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:lime_concrete_slab"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:lime_concrete_slab",
+    "translation_key": "block.minecraft.lime_concrete_slab"
+  }
+}

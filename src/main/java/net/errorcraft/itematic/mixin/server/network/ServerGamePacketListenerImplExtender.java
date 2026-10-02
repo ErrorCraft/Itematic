@@ -8,13 +8,10 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.PlacementInfo;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -60,17 +57,6 @@ public class ServerGamePacketListenerImplExtender {
     )
     private ItemStack transmuteCopyForWrittenBookUseHolder(ItemStack instance, ItemLike newItem, Operation<ItemStack> original, @Share("writable") LocalRef<WritableItemBehavior> writableReference) {
         return instance.itematic$transmuteCopy(writableReference.get().transformsInto());
-    }
-
-    @WrapOperation(
-        method = "handlePlaceRecipe",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/crafting/Recipe;placementInfo()Lnet/minecraft/world/item/crafting/PlacementInfo;"
-        )
-    )
-    private PlacementInfo placementInfoUseDynamicRegistry(Recipe<?> instance, Operation<PlacementInfo> original) {
-        return instance.itematic$placementInfo(this.player.registryAccess().lookupOrThrow(Registries.ITEM));
     }
 
     @WrapOperation(

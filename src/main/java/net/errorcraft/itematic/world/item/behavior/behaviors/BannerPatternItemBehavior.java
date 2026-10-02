@@ -5,15 +5,15 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.world.level.block.entity.BannerPattern;
 
 public record BannerPatternItemBehavior(HolderSet<BannerPattern> patterns) implements ItemBehavior<BannerPatternItemBehavior> {
     public static final Codec<BannerPatternItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        RegistryCodecs.homogeneousList(Registries.BANNER_PATTERN).fieldOf("patterns").forGetter(BannerPatternItemBehavior::patterns)
+        RegistryCodecs.holderSet(Registries.BANNER_PATTERN).fieldOf("patterns").forGetter(BannerPatternItemBehavior::patterns)
     ).apply(instance, BannerPatternItemBehavior::new));
 
     public static BannerPatternItemBehavior of(HolderSet<BannerPattern> patterns) {

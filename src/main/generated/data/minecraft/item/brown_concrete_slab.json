@@ -1,0 +1,12 @@
+{
+  "behavior": {
+    "minecraft:block": {
+      "block": "minecraft:brown_concrete_slab"
+    },
+    "minecraft:stackable": 64
+  },
+  "display": {
+    "model": "minecraft:brown_concrete_slab",
+    "translation_key": "block.minecraft.brown_concrete_slab"
+  }
+}

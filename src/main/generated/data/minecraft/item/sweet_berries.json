@@ -4,7 +4,7 @@
       "block": "minecraft:sweet_berry_bush"
     },
     "minecraft:compostable": {
-      "level_increase_chance": 0.3
+      "layers": "minecraft:compostable/low"
     },
     "minecraft:consumable": {},
     "minecraft:food": {

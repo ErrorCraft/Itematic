@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.world.entity.spawn;
 
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -12,13 +13,16 @@ public class EntitySpawnContext {
     @Nullable
     private final Entity user;
     private Vec3 spawnPosition;
+    @Nullable
+    private final Double exactY;
     private float yaw = 0.0f;
 
-    public EntitySpawnContext(ServerLevel level, EntityType<?> entityType, @Nullable Entity user, Vec3 spawnPosition) {
+    public EntitySpawnContext(ServerLevel level, EntityType<?> entityType, @Nullable Entity user, Vec3 spawnPosition, @Nullable Double exactY) {
         this.level = level;
         this.entityType = entityType;
         this.user = user;
         this.spawnPosition = spawnPosition;
+        this.exactY = exactY;
     }
 
     public ServerLevel level() {
@@ -35,6 +39,12 @@ public class EntitySpawnContext {
 
     public void spawnPosition(Vec3 spawnPosition) {
         this.spawnPosition = spawnPosition;
+    }
+
+    public void spawnAtExactY() {
+        if (this.exactY != null) {
+            this.spawnPosition = this.spawnPosition.with(Direction.Axis.Y, this.exactY);
+        }
     }
 
     public float userAngle() {

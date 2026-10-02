@@ -6,29 +6,31 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.access.world.item.component.BundleContentsAccess;
+import net.errorcraft.itematic.access.world.item.component.ContainerComponentAccess;
 import net.errorcraft.itematic.util.ItematicUtil;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.world.item.component.SimpleMutableContainer;
 import org.apache.commons.lang3.concurrent.Memoizer;
 import org.apache.commons.lang3.math.Fraction;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Mixin(BundleContents.class)
-public class BundleContentsExtender implements BundleContentsAccess {
+public class BundleContentsExtender implements BundleContentsAccess, ContainerComponentAccess<BundleContents> {
     @Shadow
     @Final
     private List<ItemStackTemplate> items;
@@ -56,6 +58,26 @@ public class BundleContentsExtender implements BundleContentsAccess {
         }
     }
 
+    @Override
+    public BundleContents.Mutable itematic$asMutable(Fraction capacity, ItemHolderRules rules) {
+        BundleContents.Mutable newContents = new BundleContents.Mutable();
+        newContents.itematic$setFields((BundleContents)(Object) this, capacity, rules);
+        return newContents;
+    }
+
+    @Override
+    public BundleContents itematic$copyWithContents(ItemStack stack, Stream<ItemStack> newContents) {
+        return stack.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
+            .map(itemHolder -> itemHolder.createBuilder(stack, (BundleContents)(Object) this))
+            .map(BundleContents.Mutable::clearItems)
+            .map(mutable -> {
+                newContents.forEach(mutable::tryInsert);
+                return mutable;
+            })
+            .map(BundleContents.Mutable::toImmutable)
+            .orElse((BundleContents)(Object) this);
+    }
+
     @Unique
     private DataResult<Fraction> calculateOccupancy(ItemHolderRules rules) {
         try {
@@ -79,12 +101,7 @@ public class BundleContentsExtender implements BundleContentsAccess {
     }
 
     @Mixin(BundleContents.Mutable.class)
-    public static class MutableExtender implements MutableAccess {
-        @Shadow
-        @Final
-        @Mutable
-        private List<ItemStack> items;
-
+    public static abstract class MutableExtender extends SimpleMutableContainer<BundleContents> implements MutableAccess {
         @Shadow
         private Fraction weight;
 
@@ -96,6 +113,10 @@ public class BundleContentsExtender implements BundleContentsAccess {
 
         @Unique
         private ItemHolderRules rules;
+
+        public MutableExtender(List<ItemStack> items) {
+            super(items);
+        }
 
         @WrapOperation(
             method = "getMaxAmountToAdd",
@@ -170,13 +191,12 @@ public class BundleContentsExtender implements BundleContentsAccess {
         public void itematic$setFields(BundleContents bundleContents, Fraction capacity, ItemHolderRules rules) {
             this.capacity = capacity;
             this.rules = rules;
+            this.items.clear();
             DataResult<Fraction> currentWeight = bundleContents.itematic$occupancy(rules);
             if (currentWeight.isError()) {
-                this.items = new ArrayList<>();
                 this.weight = Fraction.ZERO;
                 this.selectedItem = BundleContents.NO_SELECTED_ITEM_INDEX;
             } else {
-                this.items = new ArrayList<>(bundleContents.size());
                 for (ItemStackTemplate item : bundleContents.items()) {
                     this.items.add(item.create());
                 }

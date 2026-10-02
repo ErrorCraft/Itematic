@@ -3,8 +3,9 @@
     "minecraft:block": {
       "block": "minecraft:bamboo"
     },
-    "minecraft:fuel": {
-      "ticks": 50
+    "minecraft:cooking_fuel": {
+      "burn_time": "minecraft:cooking/time_bamboo",
+      "speed_multiplier": "minecraft:cooking/speed_default"
     },
     "minecraft:stackable": 64
   },
@@ -24,9 +25,7 @@
               "action": {
                 "type": "minecraft:set_block_state",
                 "position": "interacted",
-                "state": {
-                  "Name": "minecraft:potted_bamboo"
-                }
+                "state": "minecraft:potted_bamboo"
               }
             },
             {
@@ -62,7 +61,7 @@
           ]
         },
         "requirements": {
-          "condition": "minecraft:location_check",
+          "type": "minecraft:location_check",
           "position": "interacted",
           "predicate": {
             "block": {

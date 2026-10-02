@@ -1,10 +1,12 @@
 package net.errorcraft.itematic.core.registries;
 
+import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
-import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleType;
+import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSet;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
@@ -34,9 +36,10 @@ public class ItematicRegistries {
     public static final ResourceKey<Registry<ItemHolderRuleType<?>>> ITEM_HOLDER_RULE_TYPE = of("item_holder_rule_type");
     public static final ResourceKey<Registry<ShooterMethodType<?>>> SHOOTER_METHOD_TYPE = of("shooter_method_type");
     public static final ResourceKey<Registry<WorldModificationType<?>>> WORLD_MODIFICATION_TYPE = of("world_modification_type");
-    public static final ResourceKey<Registry<EntitySpawnRuleType<?>>> ENTITY_SPAWN_RULE_TYPE = of("entity_spawn_rule_type");
+    public static final ResourceKey<Registry<MapCodec<? extends EntitySpawnRule<?>>>> ENTITY_SPAWN_RULE_TYPE = of("entity_spawn_rule_type");
     public static final ResourceKey<Registry<DataComponentType<?>>> MELEE_WEAPON_COMPONENT_TYPE = of("melee_weapon_component_type");
     public static final ResourceKey<Registry<ItemGroupEntryType<?>>> ITEM_GROUP_ENTRY_TYPE = of("item_group_entry_type");
+    public static final ResourceKey<Registry<EntitySpawnRuleSet>> ENTITY_SPAWN_RULE_SET = of("entity_spawn_rule_set");
 
     private ItematicRegistries() {}
 

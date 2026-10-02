@@ -7,6 +7,7 @@ import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.resources.ItematicRegistryValidators;
 import net.errorcraft.itematic.world.action.ActionEntry;
+import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSet;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
 import net.minecraft.core.Registry;
@@ -41,6 +42,7 @@ public class RegistryDataLoaderExtender {
                 ItematicRegistryValidators.nonRecursive(ActionEntry::streamReferences)
             ))
             .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createData(ItematicRegistries.ENTITY_SPAWN_RULE_SET, EntitySpawnRuleSet.DIRECT_CODEC))
             .build();
     }
 
@@ -63,6 +65,7 @@ public class RegistryDataLoaderExtender {
                 ItematicRegistryValidators.nonRecursive(ActionEntry::streamReferences)
             ))
             .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createData(ItematicRegistries.ENTITY_SPAWN_RULE_SET, EntitySpawnRuleSet.DIRECT_CODEC))
             .build();
     }
 

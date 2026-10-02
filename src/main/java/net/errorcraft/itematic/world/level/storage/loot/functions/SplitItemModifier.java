@@ -2,38 +2,34 @@ package net.errorcraft.itematic.world.level.storage.loot.functions;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
-import java.util.List;
+import java.util.Optional;
 
 public class SplitItemModifier extends LootItemConditionalFunction {
     public static final MapCodec<SplitItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(
-        NumberProviders.CODEC.fieldOf("count").forGetter(split -> split.count)
+        ContextIntProviders.CODEC.fieldOf("count").forGetter(split -> split.count)
     ).apply(instance, SplitItemModifier::new));
 
-    private final NumberProvider count;
+    private final Holder<ContextIntProvider> count;
 
-    public SplitItemModifier(NumberProvider count) {
-        this(List.of(), count);
-    }
-
-    public SplitItemModifier(List<LootItemCondition> conditions, NumberProvider count) {
-        super(conditions);
+    private SplitItemModifier(Optional<Holder<LootItemCondition>> condition, Holder<ContextIntProvider> count) {
+        super(condition);
         this.count = count;
     }
 
     public static Builder<?> builder(int count) {
         return simpleBuilder(conditions -> new SplitItemModifier(
             conditions,
-            ConstantValue.exactly(count)
+            ContextIntProviders.exactly(count)
         ));
     }
 
@@ -44,9 +40,9 @@ public class SplitItemModifier extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext context) {
-        LivingEntity holder = context.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof LivingEntity target ? target : null;
+        LivingEntity holder = context.getOptional(LootContextParams.THIS_ENTITY) instanceof LivingEntity target ? target : null;
         return stack.consumeAndReturn(
-            this.count.getInt(context),
+            this.count.value().getInt(context),
             holder
         );
     }

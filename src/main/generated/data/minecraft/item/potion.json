@@ -88,9 +88,7 @@
           "action": {
             "type": "minecraft:set_block_state",
             "position": "interacted",
-            "state": {
-              "Name": "minecraft:mud"
-            }
+            "state": "minecraft:mud"
           }
         },
         {
@@ -101,31 +99,33 @@
         }
       ],
       "requirements": {
-        "condition": "minecraft:all_of",
+        "type": "minecraft:all_of",
         "terms": [
           {
-            "condition": "minecraft:inverted",
+            "type": "minecraft:inverted",
             "term": {
-              "condition": "minecraft:side_check",
+              "type": "minecraft:side_check",
               "sides": [
                 "down"
               ]
             }
           },
           {
-            "condition": "minecraft:location_check",
+            "type": "minecraft:location_check",
             "position": "interacted",
             "predicate": {
               "block": {
-                "blocks": "#minecraft:convertable_to_mud"
+                "blocks": "#minecraft:convertible_to_mud"
               }
             }
           },
           {
-            "condition": "minecraft:match_tool",
+            "type": "minecraft:match_tool",
             "predicate": {
               "predicates": {
-                "minecraft:potion_contents": "minecraft:water"
+                "minecraft:potion_contents": {
+                  "potions": "minecraft:water"
+                }
               }
             }
           }

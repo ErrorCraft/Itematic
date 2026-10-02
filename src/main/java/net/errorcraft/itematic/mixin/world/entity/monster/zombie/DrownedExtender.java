@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.world.entity.monster.zombie;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
 import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
@@ -14,7 +16,6 @@ import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Drowned.class)
@@ -23,18 +24,32 @@ public abstract class DrownedExtender extends MobExtender {
         super(type, level);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "finalizeSpawn",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForNautilusShellUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForNautilusShellUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.NAUTILUS_SHELL);
     }
 
-    @Redirect(
+    @WrapOperation(
+        method = {
+            "finalizeSpawn",
+            "performRangedAttack"
+        },
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
+        )
+    )
+    private boolean isTridentCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
+        return instance.is(ItemIds.TRIDENT);
+    }
+
+    @WrapOperation(
         method = {
             "populateDefaultEquipmentSlots",
             "performRangedAttack"
@@ -45,11 +60,11 @@ public abstract class DrownedExtender extends MobExtender {
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForTridentUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForTridentUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.TRIDENT);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
@@ -64,26 +79,18 @@ public abstract class DrownedExtender extends MobExtender {
             )
         )
     )
-    private ItemStack newItemStackForFishingRodUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForFishingRodUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.FISHING_ROD);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "canReplaceCurrentItem",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/Items;NAUTILUS_SHELL:Lnet/minecraft/world/item/Item;",
-                opcode = Opcodes.GETSTATIC
-            )
+            target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isNautilusShellCheckId(ItemStack instance, Object o) {
+    private boolean isNautilusShellCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
         return instance.is(ItemIds.NAUTILUS_SHELL);
     }
 
@@ -94,14 +101,14 @@ public abstract class DrownedExtender extends MobExtender {
 
     @Mixin(targets = "net/minecraft/world/entity/monster/zombie/Drowned$DrownedTridentAttackGoal")
     public static class DrownedTridentAttackGoalExtender {
-        @Redirect(
+        @WrapOperation(
             method = "canUse",
             at = @At(
                 value = "INVOKE",
                 target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
             )
         )
-        private boolean isTridentCheckId(ItemStack instance, Object o) {
+        private boolean isTridentCheckId(ItemStack instance, Object o, Operation<Boolean> original) {
             return instance.is(ItemIds.TRIDENT);
         }
     }

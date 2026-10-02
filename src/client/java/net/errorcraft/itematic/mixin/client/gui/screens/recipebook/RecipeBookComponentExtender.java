@@ -2,20 +2,16 @@ package net.errorcraft.itematic.mixin.client.gui.screens.recipebook;
 
 import net.errorcraft.itematic.access.client.gui.screens.recipebook.RecipeBookComponentAccess;
 import net.errorcraft.itematic.world.level.ItemAccess;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.level.ItemLike;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,21 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 
-@Mixin(RecipeBookComponent.class)
 public class RecipeBookComponentExtender {
-    @Shadow
-    @Final
-    private StackedItemContents stackedContents;
-
-    @Inject(
-        method = "init",
-        at = @At("HEAD")
-    )
-    @SuppressWarnings("DataFlowIssue")
-    private void setStackedContentsLevel(int width, int height, Minecraft minecraft, boolean widthTooNarrow, CallbackInfo info) {
-        this.stackedContents.itematic$setLevel(minecraft.level);
-    }
-
     @Mixin(RecipeBookComponent.TabInfo.class)
     public static class TabInfoExtender implements RecipeBookComponentAccess.TabInfoAccess {
         @Unique

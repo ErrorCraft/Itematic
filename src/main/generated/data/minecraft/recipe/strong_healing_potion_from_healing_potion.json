@@ -1,6 +1,0 @@
-{
-  "type": "minecraft:brewing_modify",
-  "base": "minecraft:healing",
-  "reagent": "minecraft:glowstone_dust",
-  "result": "minecraft:strong_healing"
-}
