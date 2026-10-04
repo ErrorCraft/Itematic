@@ -1,16 +1,20 @@
 package net.errorcraft.itematic.access.world.item;
 
-import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
-import net.errorcraft.itematic.world.level.ItemAccess;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.errorcraft.itematic.world.item.group.ItemGroup;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.world.item.CreativeModeTab;
 
 public interface CreativeModeTabAccess {
-    default ItemStack itematic$icon(ItemAccess access) {
-        return ItemStack.EMPTY;
+    interface BuilderAccess {
+        default CreativeModeTab.Builder itematic$page(int page) {
+            throw new AssertionError("Implemented via mixin");
+        }
+        default CreativeModeTab.Builder itematic$displayItems(Holder<ItemGroup> itemGroup) {
+            throw new AssertionError("Implemented via mixin");
+        }
+        default CreativeModeTab.Builder itematic$searchDisplayItems(HolderSet<ItemGroup> itemGroups) {
+            throw new AssertionError("Implemented via mixin");
+        }
     }
-    default void itematic$setIconKey(ResourceKey<Item> iconKey) {}
-    default void itematic$setEntryProviderTag(TagKey<ItemGroupEntryProvider> entryProviderTag) {}
 }

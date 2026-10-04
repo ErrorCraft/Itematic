@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:op_blocks",
+  "icon": {
+    "id": "minecraft:command_block"
+  },
+  "name": {
+    "translate": "itemGroup.op"
+  }
+}

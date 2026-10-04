@@ -20,6 +20,7 @@ public class ItematicDynamicRegistryProvider extends FabricDynamicRegistryProvid
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.ACTION));
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.DISPENSE_BEHAVIOR));
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.ENTITY_SPAWN_RULE_SET));
+        addAll(entries, registries.lookupOrThrow(ItematicRegistries.ITEM_GROUP));
     }
 
     @Override

@@ -3,8 +3,13 @@ package net.errorcraft.itematic.mixin.client.gui.screens.inventory;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import net.errorcraft.itematic.world.item.group.CreativeModeTabsCache;
+import net.errorcraft.itematic.world.item.group.ItemGroup;
+import net.fabricmc.fabric.api.client.creativetab.v1.FabricCreativeModeInventoryScreen;
+import net.fabricmc.fabric.impl.creativetab.FabricCreativeModeTabImpl;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.DefaultedRegistry;
@@ -18,7 +23,9 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -28,10 +35,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Mixin(CreativeModeInventoryScreen.class)
-public abstract class CreativeModeInventoryScreenExtender extends AbstractContainerScreen<CreativeModeInventoryScreen.ItemPickerMenu> {
+@Mixin(value = CreativeModeInventoryScreen.class, priority = 1100)
+public abstract class CreativeModeInventoryScreenExtender extends AbstractContainerScreen<CreativeModeInventoryScreen.ItemPickerMenu> implements FabricCreativeModeInventoryScreen {
+    @Shadow
+    @Nullable
+    private static CreativeModeTab selectedTab;
+
     public CreativeModeInventoryScreenExtender(CreativeModeInventoryScreen.ItemPickerMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
+    }
+
+    @ModifyReturnValue(
+        method = "tryRebuildTabContents",
+        at = @At("TAIL")
+    )
+    private boolean setSelectedTabToFirst(boolean original) {
+        selectedTab = CreativeModeTabsCache.firstTab();
+        return original;
     }
 
     @Definition(id = "getHotbarManager", method = "Lnet/minecraft/client/Minecraft;getHotbarManager()Lnet/minecraft/client/HotbarManager;")
@@ -60,18 +80,6 @@ public abstract class CreativeModeInventoryScreenExtender extends AbstractContai
     }
 
     @Redirect(
-        method = "extractTabButton",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab;getIconItem()Lnet/minecraft/world/item/ItemStack;"
-        )
-    )
-    @SuppressWarnings("ConstantConditions")
-    private ItemStack getIconItemUseDynamicRegistry(CreativeModeTab instance) {
-        return instance.itematic$icon(this.minecraft.level.itematic$itemAccess());
-    }
-
-    @Redirect(
         method = "updateVisibleTags",
         at = @At(
             value = "INVOKE",
@@ -83,6 +91,17 @@ public abstract class CreativeModeInventoryScreenExtender extends AbstractContai
         return this.minecraft.level.registryAccess()
             .lookupOrThrow(Registries.ITEM)
             .getTags();
+    }
+
+    @Override
+    @SuppressWarnings("UnstableApiUsage")
+    public int getPage(CreativeModeTab creativeModeTab) {
+        int page = ((FabricCreativeModeTabImpl) creativeModeTab).fabric_getPage();
+        if (page == ItemGroup.DISPLAY_ON_EVERY_PAGE) {
+            return this.getCurrentPage();
+        }
+
+        return page;
     }
 
     @ModifyExpressionValue(

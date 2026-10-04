@@ -1,23 +1,19 @@
 package net.errorcraft.itematic.mixin.world.item;
 
-import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.logging.LogUtils;
 import net.errorcraft.itematic.access.world.item.CreativeModeTabAccess;
-import net.errorcraft.itematic.core.registries.ItematicRegistries;
+import net.errorcraft.itematic.world.item.group.ItemGroup;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
-import net.errorcraft.itematic.world.level.ItemAccess;
+import net.fabricmc.fabric.impl.creativetab.FabricCreativeModeTabImpl;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,55 +23,68 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Locale;
 
-@Mixin(CreativeModeTab.class)
-public class CreativeModeTabExtender implements CreativeModeTabAccess {
-    @Shadow
-    @Final
-    private CreativeModeTab.Type type;
-
+@SuppressWarnings("UnstableApiUsage")
+@Mixin(value = CreativeModeTab.class, priority = 1100)
+public class CreativeModeTabExtender implements FabricCreativeModeTabImpl {
     @Unique
-    private ResourceKey<Item> iconKey;
-    @Unique
-    private TagKey<ItemGroupEntryProvider> entryProviderTag;
+    private int page;
 
-    @WrapWithCondition(
+    @Inject(
         method = "buildContents",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$DisplayItemsGenerator;accept(Lnet/minecraft/world/item/CreativeModeTab$ItemDisplayParameters;Lnet/minecraft/world/item/CreativeModeTab$Output;)V"
-        )
+        at = @At("TAIL"),
+        cancellable = true,
+        order = 900
     )
-    private boolean collectEntries(CreativeModeTab.DisplayItemsGenerator instance, CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries) {
-        if (this.type != CreativeModeTab.Type.CATEGORY) {
-            return true;
+    private void cancelBeforeFabricApiChecksStaticRegistry(CreativeModeTab.ItemDisplayParameters parameters, CallbackInfo info) {
+        info.cancel();
+    }
+
+    @Override
+    public int fabric_getPage() {
+        return this.page;
+    }
+
+    @Override
+    public void fabric_setPage(int page) {
+        this.page = page;
+    }
+
+    @Mixin(CreativeModeTab.Builder.class)
+    public static abstract class BuilderExtender implements CreativeModeTabAccess.BuilderAccess {
+        @Shadow
+        public abstract CreativeModeTab.Builder displayItems(CreativeModeTab.DisplayItemsGenerator displayItemsGenerator);
+
+        @Unique
+        private int page = -1;
+
+        @ModifyReturnValue(
+            method = "build",
+            at = @At("TAIL")
+        )
+        @SuppressWarnings("UnstableApiUsage")
+        private CreativeModeTab setPage(CreativeModeTab original) {
+            ((FabricCreativeModeTabImpl) original).fabric_setPage(this.page);
+            return original;
         }
 
-        context.holders()
-            .lookupOrThrow(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER)
-            .get(this.entryProviderTag)
-            .ifPresent(entryList -> collectEntries(entryList, context, entries));
-        return false;
-    }
+        @Override
+        public CreativeModeTab.Builder itematic$page(int page) {
+            this.page = page;
+            return (CreativeModeTab.Builder)(Object) this;
+        }
 
-    @Override
-    public ItemStack itematic$icon(ItemAccess access) {
-        return new ItemStack(access.getOrThrow(this.iconKey));
-    }
+        @Override
+        public CreativeModeTab.Builder itematic$displayItems(Holder<ItemGroup> itemGroup) {
+            return this.displayItems((parameters, output) -> {
+                for (Holder<ItemGroupEntryProvider> entry : itemGroup.value().entries()) {
+                    entry.value().collectEntries(parameters, output);
+                }
+            });
+        }
 
-    @Override
-    public void itematic$setIconKey(ResourceKey<Item> iconKey) {
-        this.iconKey = iconKey;
-    }
-
-    @Override
-    public void itematic$setEntryProviderTag(TagKey<ItemGroupEntryProvider> entryProviderTag) {
-        this.entryProviderTag = entryProviderTag;
-    }
-
-    @Unique
-    private static void collectEntries(HolderSet.Named<ItemGroupEntryProvider> entryList, CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries) {
-        for (Holder<ItemGroupEntryProvider> entry : entryList) {
-            entry.value().collectEntries(context, entries);
+        @Override
+        public CreativeModeTab.Builder itematic$searchDisplayItems(HolderSet<ItemGroup> itemGroups) {
+            return this.displayItems((_, _) -> {});
         }
     }
 
