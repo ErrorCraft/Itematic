@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 public class CreativeModeTabsCache {
     private static final int TABS_PER_ROW = 5;
     private static final int TABS_PER_PAGE = 10;
+    private static final CreativeModeTab EMPTY = CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0).build();
     private static final List<CreativeModeTab> TABS = new ArrayList<>();
     @Nullable
     private static CreativeModeTab SEARCH;
@@ -25,17 +26,19 @@ public class CreativeModeTabsCache {
         return TABS.stream();
     }
 
-    @Nullable
     public static CreativeModeTab firstTab() {
         if (TABS.isEmpty()) {
-            return null;
+            return EMPTY;
         }
 
         return TABS.getFirst();
     }
 
-    @Nullable
     public static CreativeModeTab search() {
+        if (SEARCH == null) {
+            return EMPTY;
+        }
+
         return SEARCH;
     }
 

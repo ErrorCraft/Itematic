@@ -26,7 +26,6 @@ public class CreativeModeTabsExtender {
         method = "getDefaultTab"
     )
     private static CreativeModeTab useCachedTabFromDataDrivenRegistry(Operation<CreativeModeTab> original) {
-        // TODO: Fix NPE when no tabs are present
         return CreativeModeTabsCache.firstTab();
     }
 
@@ -34,7 +33,6 @@ public class CreativeModeTabsExtender {
         method = "searchTab"
     )
     private static CreativeModeTab useCachedSearchTabFromDataDrivenRegistry(Operation<CreativeModeTab> original) {
-        // TODO: Fix NPE when tab is not present
         return CreativeModeTabsCache.search();
     }
 

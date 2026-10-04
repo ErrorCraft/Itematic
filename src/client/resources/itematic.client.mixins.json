@@ -26,7 +26,6 @@
     "gui.screens.inventory.CartographyTableScreenExtender",
     "gui.screens.inventory.CreativeModeInventoryScreenAccessor",
     "gui.screens.inventory.CreativeModeInventoryScreenExtender",
-    "gui.screens.inventory.GameModeInventoryScreensExtender",
     "gui.screens.inventory.LoomScreenExtender",
     "gui.screens.inventory.SmithingScreenExtender",
     "gui.screens.inventory.tooltip.ClientBundleTooltipExtender",
