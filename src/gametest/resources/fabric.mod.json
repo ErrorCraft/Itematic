@@ -36,6 +36,7 @@
       "net.errorcraft.itematic.gametest.item.CompassTestSuite",
       "net.errorcraft.itematic.gametest.item.CrossbowTestSuite",
       "net.errorcraft.itematic.gametest.item.EndCrystalTestSuite",
+      "net.errorcraft.itematic.gametest.item.EnderEyeTestSuite",
       "net.errorcraft.itematic.gametest.item.FishingRodTestSuite",
       "net.errorcraft.itematic.gametest.item.FlowerPotItemTestSuite",
       "net.errorcraft.itematic.gametest.item.GlowItemFrameTestSuite",
