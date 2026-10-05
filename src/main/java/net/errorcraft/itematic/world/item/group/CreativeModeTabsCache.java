@@ -8,10 +8,13 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackLinkedSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class CreativeModeTabsCache {
@@ -91,6 +94,7 @@ public class CreativeModeTabsCache {
 
     private static CreativeModeTab createSearchTab(Holder<ItemGroup> itemGroup) {
         return builderOnEveryPage(itemGroup, CreativeModeTab.Row.TOP, 6)
+            .displayItems(CreativeModeTabsCache::searchDisplayItemsGenerator)
             .type(CreativeModeTab.Type.SEARCH)
             .backgroundTexture(CreativeModeTabsAccessor.searchBackground())
             .build();
@@ -124,5 +128,18 @@ public class CreativeModeTabsCache {
                 entry.value().collectEntries(parameters, output);
             }
         };
+    }
+
+    private static void searchDisplayItemsGenerator(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
+        Set<ItemStack> stacks = ItemStackLinkedSet.createTypeAndComponentsSet();
+        for (CreativeModeTab tab : TABS) {
+            if (tab.getType() != CreativeModeTab.Type.CATEGORY) {
+                continue;
+            }
+
+            stacks.addAll(tab.getSearchTabDisplayItems());
+        }
+
+        output.acceptAll(stacks);
     }
 }
