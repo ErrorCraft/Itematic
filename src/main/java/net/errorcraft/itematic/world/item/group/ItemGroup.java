@@ -14,5 +14,4 @@ public record ItemGroup(Component name, ItemStackTemplate icon, HolderSet<ItemGr
         ItemStackTemplate.CODEC.fieldOf("icon").forGetter(ItemGroup::icon),
         ItemGroupEntryProvider.LIST_CODEC.fieldOf("entries").forGetter(ItemGroup::entries)
     ).apply(instance, ItemGroup::new));
-    public static final int DISPLAY_ON_EVERY_PAGE = -1;
 }

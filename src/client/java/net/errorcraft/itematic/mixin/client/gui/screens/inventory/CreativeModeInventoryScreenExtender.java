@@ -7,7 +7,6 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.world.item.group.CreativeModeTabsCache;
-import net.errorcraft.itematic.world.item.group.ItemGroup;
 import net.fabricmc.fabric.api.client.creativetab.v1.FabricCreativeModeInventoryScreen;
 import net.fabricmc.fabric.impl.creativetab.FabricCreativeModeTabImpl;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -103,7 +102,7 @@ public abstract class CreativeModeInventoryScreenExtender extends AbstractContai
     @SuppressWarnings("UnstableApiUsage")
     public int getPage(CreativeModeTab creativeModeTab) {
         int page = ((FabricCreativeModeTabImpl) creativeModeTab).fabric_getPage();
-        if (page == ItemGroup.DISPLAY_ON_EVERY_PAGE) {
+        if (page == CreativeModeTabsCache.DISPLAY_TAB_ON_EVERY_PAGE) {
             return this.getCurrentPage();
         }
 
