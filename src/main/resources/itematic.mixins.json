@@ -243,6 +243,7 @@
     "world.item.BrushItemExtender",
     "world.item.BundleItemAccessor",
     "world.item.CreativeModeTabExtender",
+    "world.item.CreativeModeTabExtender$BuilderExtender",
     "world.item.CreativeModeTabExtender$ItemDisplayBuilderExtender",
     "world.item.CreativeModeTabExtender$TabVisibilityExtender",
     "world.item.CreativeModeTabsAccessor",

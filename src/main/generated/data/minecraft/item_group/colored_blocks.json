@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:colored_blocks",
+  "icon": {
+    "id": "minecraft:cyan_wool"
+  },
+  "name": {
+    "translate": "itemGroup.coloredBlocks"
+  }
+}

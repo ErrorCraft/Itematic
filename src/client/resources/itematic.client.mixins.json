@@ -24,6 +24,7 @@
     "gui.screens.inventory.AbstractContainerScreenAccessor",
     "gui.screens.inventory.BeaconScreenExtender",
     "gui.screens.inventory.CartographyTableScreenExtender",
+    "gui.screens.inventory.CreativeModeInventoryScreenAccessor",
     "gui.screens.inventory.CreativeModeInventoryScreenExtender",
     "gui.screens.inventory.LoomScreenExtender",
     "gui.screens.inventory.SmithingScreenExtender",

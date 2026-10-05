@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:spawn_eggs",
+  "icon": {
+    "id": "minecraft:creeper_spawn_egg"
+  },
+  "name": {
+    "translate": "itemGroup.spawnEggs"
+  }
+}
