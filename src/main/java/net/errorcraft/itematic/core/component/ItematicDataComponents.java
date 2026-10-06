@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.core.component;
 
+import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.Items;
@@ -134,6 +135,11 @@ public class ItematicDataComponents {
         "cooking_fuel_remainder",
         builder -> builder.persistent(ItemStackTemplate.CODEC)
             .networkSynchronized(ItemStackTemplate.STREAM_CODEC)
+    );
+    public static final DataComponentType<Holder<DispenseBehavior>> DISPENSE_BEHAVIOR = register(
+        "dispense_behavior",
+        builder -> builder.persistent(DispenseBehavior.CODEC)
+            .networkSynchronized(DispenseBehavior.STREAM_CODEC)
     );
 
     private ItematicDataComponents() {}
