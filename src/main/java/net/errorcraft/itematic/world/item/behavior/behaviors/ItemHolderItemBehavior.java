@@ -9,6 +9,7 @@ import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.holder.ItemHolderSounds;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
@@ -36,21 +37,22 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, Holder<SoundEvent> insertItemSound, Holder<SoundEvent> insertFailItemSound, Holder<SoundEvent> removeItemSound, Holder<SoundEvent> emptySound) implements ItemBehavior<ItemHolderItemBehavior> {
+public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, ItemHolderSounds sounds) implements ItemBehavior<ItemHolderItemBehavior> {
     public static final Codec<Fraction> CAPACITY_CODEC = ItematicCodecs.positiveFraction(100);
     public static final Codec<ItemHolderItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         CAPACITY_CODEC.fieldOf("capacity").forGetter(ItemHolderItemBehavior::capacity),
         ItemHolderRules.CODEC.fieldOf("rules").forGetter(ItemHolderItemBehavior::rules),
-        SoundEvent.CODEC.fieldOf("insert_item_sound").forGetter(ItemHolderItemBehavior::insertItemSound),
-        SoundEvent.CODEC.fieldOf("insert_fail_item_sound").forGetter(ItemHolderItemBehavior::insertFailItemSound),
-        SoundEvent.CODEC.fieldOf("remove_item_sound").forGetter(ItemHolderItemBehavior::removeItemSound),
-        SoundEvent.CODEC.fieldOf("empty_sound").forGetter(ItemHolderItemBehavior::emptySound)
+        ItemHolderSounds.CODEC.fieldOf("sounds").forGetter(ItemHolderItemBehavior::sounds)
     ).apply(instance, ItemHolderItemBehavior::new));
     private static final int TICKS_AFTER_FIRST_THROW = BundleItemAccessor.ticksAfterFirstThrow();
     private static final int TICKS_BETWEEN_THROWS = BundleItemAccessor.ticksBetweenThrows();
 
     public static ItemHolderItemBehavior of(Fraction capacity, ItemHolderRules rules, Holder<SoundEvent> insertItemSound, Holder<SoundEvent> insertFailItemSound, Holder<SoundEvent> removeItemSound, Holder<SoundEvent> emptySound) {
-        return new ItemHolderItemBehavior(capacity, rules, insertItemSound, insertFailItemSound, removeItemSound, emptySound);
+        return new ItemHolderItemBehavior(
+            capacity,
+            rules,
+            new ItemHolderSounds(insertItemSound, insertFailItemSound, removeItemSound, emptySound)
+        );
     }
 
     @Override
@@ -78,14 +80,14 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
 
         ItemStack other = slot.getItem();
         if (clickAction == ClickAction.PRIMARY && !other.isEmpty()) {
-            this.transfer(newContents, slot, user);
+            this.transfer(stack, newContents, slot, user);
             stack.set(DataComponents.BUNDLE_CONTENTS, newContents.toImmutable());
             broadcastSlotsChanged(user);
             return true;
         }
 
         if (clickAction == ClickAction.SECONDARY && other.isEmpty()) {
-            this.removeAndAddRemainderBack(newContents, slot, user);
+            this.removeAndAddRemainderBack(stack, newContents, slot, user);
             stack.set(DataComponents.BUNDLE_CONTENTS, newContents.toImmutable());
             broadcastSlotsChanged(user);
             return true;
@@ -108,7 +110,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
 
         if (clickAction == ClickAction.PRIMARY && !cursorStack.isEmpty()) {
             if (slot.allowModification(user)) {
-                this.add(newContents, slot.safeInsert(cursorStack), user);
+                this.add(stack, newContents, slot.safeInsert(cursorStack), user);
             }
 
             stack.set(DataComponents.BUNDLE_CONTENTS, newContents.toImmutable());
@@ -118,7 +120,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
 
         if (clickAction == ClickAction.SECONDARY && cursorStack.isEmpty()) {
             if (slot.allowModification(user)) {
-                this.remove(user, newContents, stackExchanger::exchange);
+                this.remove(stack, user, newContents, stackExchanger::exchange);
             }
 
             stack.set(DataComponents.BUNDLE_CONTENTS, newContents.toImmutable());
@@ -135,6 +137,7 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
         builder.set(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
         builder.set(ItematicDataComponents.ITEM_HOLDER_CAPACITY, this.capacity);
         builder.set(ItematicDataComponents.ITEM_HOLDER_RULES, this.rules);
+        builder.set(ItematicDataComponents.ITEM_HOLDER_SOUNDS, this.sounds);
     }
 
     public Optional<TooltipComponent> tooltipData(ItemStack stack) {
@@ -230,12 +233,12 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
         stack.set(DataComponents.BUNDLE_CONTENTS, newContents.toImmutable());
     }
 
-    private void add(BundleContents.Mutable newContents, ItemStack stack, Player user) {
-        int addedCount = newContents.tryInsert(stack);
+    private void add(ItemStack stack, BundleContents.Mutable newContents, ItemStack stackToInsert, Player user) {
+        int addedCount = newContents.tryInsert(stackToInsert);
         if (addedCount > 0) {
-            this.playInsertItemSound(user);
+            ItemHolderSounds.playInsertItemSound(stack, user);
         } else {
-            this.playInsertFailSound(user);
+            ItemHolderSounds.playInsertItemFailSound(stack, user);
         }
     }
 
@@ -251,35 +254,31 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
         }
 
         player.drop(removedStack, true, Prediction.PREDICTED);
-        player.playSound(
-            this.emptySound.value(),
-            0.8f,
-            0.8f + player.level().getRandom().nextFloat() * 0.4f
-        );
+        ItemHolderSounds.playEmptySound(stack, player);
         player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
         stack.set(DataComponents.BUNDLE_CONTENTS, newBuilder.toImmutable());
     }
 
-    private void transfer(BundleContents.Mutable newContents, Slot slot, Player user) {
+    private void transfer(ItemStack stack, BundleContents.Mutable newContents, Slot slot, Player user) {
         int transferredCount = newContents.tryTransfer(slot, user);
         if (transferredCount > 0) {
-            this.playInsertItemSound(user);
+            ItemHolderSounds.playInsertItemSound(stack, user);
         } else {
-            this.playInsertFailSound(user);
+            ItemHolderSounds.playInsertItemFailSound(stack, user);
         }
     }
 
-    private void remove(Entity user, BundleContents.Mutable newContents, Consumer<ItemStack> onRemoved) {
+    private void remove(ItemStack stack, Entity user, BundleContents.Mutable newContents, Consumer<ItemStack> onRemoved) {
         ItemStack removedStack = newContents.removeOne();
         if (removedStack == null) {
             return;
         }
 
-        this.playRemoveOneSound(user);
+        ItemHolderSounds.playRemoveItemSound(stack, user);
         onRemoved.accept(removedStack);
     }
 
-    private void removeAndAddRemainderBack(BundleContents.Mutable newContents, Slot slot, Player user) {
+    private void removeAndAddRemainderBack(ItemStack stack, BundleContents.Mutable newContents, Slot slot, Player user) {
         ItemStack removedStack = newContents.removeOne();
         if (removedStack == null) {
             return;
@@ -287,34 +286,10 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, H
 
         ItemStack remainder = slot.safeInsert(removedStack);
         if (remainder.isEmpty()) {
-            this.playRemoveOneSound(user);
+            ItemHolderSounds.playRemoveItemSound(stack, user);
         } else {
             newContents.tryInsert(remainder);
         }
-    }
-
-    private void playInsertItemSound(Entity user) {
-        user.playSound(
-            this.insertItemSound.value(),
-            0.8f,
-            0.8f + user.level().getRandom().nextFloat() * 0.4f
-        );
-    }
-
-    private void playInsertFailSound(Entity user) {
-        user.playSound(
-            this.insertFailItemSound.value(),
-            1.0f,
-            1.0f
-        );
-    }
-
-    private void playRemoveOneSound(Entity user) {
-        user.playSound(
-            this.removeItemSound.value(),
-            0.8f,
-            0.8f + user.level().getRandom().nextFloat() * 0.4f
-        );
     }
 
     private static void broadcastSlotsChanged(Player user) {

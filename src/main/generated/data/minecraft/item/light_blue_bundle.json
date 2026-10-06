@@ -5,10 +5,6 @@
         "denominator": 1,
         "numerator": 1
       },
-      "empty_sound": "minecraft:item.bundle.drop_contents",
-      "insert_fail_item_sound": "minecraft:item.bundle.insert_fail",
-      "insert_item_sound": "minecraft:item.bundle.insert",
-      "remove_item_sound": "minecraft:item.bundle.remove_one",
       "rules": [
         {
           "type": "minecraft:reject",
@@ -40,7 +36,13 @@
             "numerator": 1
           }
         }
-      ]
+      ],
+      "sounds": {
+        "empty": "minecraft:item.bundle.drop_contents",
+        "insert_item": "minecraft:item.bundle.insert",
+        "insert_item_fail": "minecraft:item.bundle.insert_fail",
+        "remove_item": "minecraft:item.bundle.remove_one"
+      }
     },
     "minecraft:stackable": 1,
     "minecraft:useable": {

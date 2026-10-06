@@ -6,6 +6,7 @@ import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.equipment.Glider;
+import net.errorcraft.itematic.world.item.holder.ItemHolderSounds;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
@@ -81,6 +82,12 @@ public class ItematicDataComponents {
         "item_holder_rules",
         builder -> builder.persistent(ItemHolderRules.CODEC)
             .networkSynchronized(ItemHolderRules.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<ItemHolderSounds> ITEM_HOLDER_SOUNDS = register(
+        "item_holder_sounds",
+        builder -> builder.persistent(ItemHolderSounds.CODEC)
+            .networkSynchronized(ItemHolderSounds.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<ItemDamageRules> SHOOTER_DAMAGE_RULES = register(
