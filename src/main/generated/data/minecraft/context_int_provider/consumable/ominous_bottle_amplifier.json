@@ -1,0 +1,5 @@
+{
+  "type": "minecraft:data_component",
+  "component": "minecraft:ominous_bottle_amplifier",
+  "source": "tool"
+}

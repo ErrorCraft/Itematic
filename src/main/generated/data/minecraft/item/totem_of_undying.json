@@ -15,19 +15,16 @@
           {
             "id": "minecraft:regeneration",
             "amplifier": 1,
-            "duration": 900,
-            "show_icon": true
+            "duration": 900
           },
           {
             "id": "minecraft:absorption",
             "amplifier": 1,
-            "duration": 100,
-            "show_icon": true
+            "duration": 100
           },
           {
             "id": "minecraft:fire_resistance",
-            "duration": 800,
-            "show_icon": true
+            "duration": 800
           }
         ],
         "entity": "this"
