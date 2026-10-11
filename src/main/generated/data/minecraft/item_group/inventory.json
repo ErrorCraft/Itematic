@@ -1,0 +1,9 @@
+{
+  "entries": [],
+  "icon": {
+    "id": "minecraft:chest"
+  },
+  "name": {
+    "translate": "itemGroup.inventory"
+  }
+}
