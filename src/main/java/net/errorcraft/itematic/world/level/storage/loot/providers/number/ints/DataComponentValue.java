@@ -50,7 +50,9 @@ public record DataComponentValue<C>(IntProvider<?, C> provider, LootContextArg<D
     }
 
     @Override
-    public void validate(ValidationContext context) {}
+    public void validate(ValidationContext context) {
+        this.fallback.value().validate(context);
+    }
 
     private int fallback(LootContext context) {
         return this.fallback.value().getIntUnsafe(context);

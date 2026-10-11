@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.core.registries;
 
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.core.component.provider.number.floats.FloatProvider;
 import net.errorcraft.itematic.core.component.provider.number.ints.IntProvider;
 import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.world.action.ActionEntry;
@@ -42,6 +43,7 @@ public class ItematicRegistries {
     public static final ResourceKey<Registry<ItemGroupEntryType<?>>> ITEM_GROUP_ENTRY_TYPE = of("item_group_entry_type");
     public static final ResourceKey<Registry<EntitySpawnRuleSet>> ENTITY_SPAWN_RULE_SET = of("entity_spawn_rule_set");
     public static final ResourceKey<Registry<IntProvider.Type<?, ?>>> DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE = of("data_component_context_int_provider_type");
+    public static final ResourceKey<Registry<FloatProvider.Type<?, ?>>> DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE = of("data_component_context_float_provider_type");
 
     private ItematicRegistries() {}
 

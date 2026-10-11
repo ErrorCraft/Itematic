@@ -2,6 +2,7 @@ package net.errorcraft.itematic;
 
 import net.errorcraft.itematic.advancements.predicates.entity.ItematicEntitySubPredicates;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.core.component.provider.number.floats.FloatProviders;
 import net.errorcraft.itematic.core.component.provider.number.ints.IntProviders;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
@@ -20,6 +21,7 @@ import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.Itema
 import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.errorcraft.itematic.world.level.storage.loot.functions.ItematicItemModifiers;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.ItematicPredicates;
+import net.errorcraft.itematic.world.level.storage.loot.providers.number.floats.ItematicContextFloatProviderTypes;
 import net.errorcraft.itematic.world.level.storage.loot.providers.number.ints.ItematicContextIntProviderTypes;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -47,5 +49,7 @@ public class Itematic implements ModInitializer {
         ItematicBlockStateProviderTypes.bootstrap(BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE);
         IntProviders.bootstrap(ItematicBuiltInRegistries.DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE);
         ItematicContextIntProviderTypes.bootstrap(BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE);
+        FloatProviders.bootstrap(ItematicBuiltInRegistries.DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE);
+        ItematicContextFloatProviderTypes.bootstrap(BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE);
     }
 }

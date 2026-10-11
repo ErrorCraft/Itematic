@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.core.component.provider.number.ints;
 
 import net.errorcraft.itematic.core.component.provider.number.ints.providers.DamageProvider;
+import net.errorcraft.itematic.core.component.provider.number.ints.providers.FoodProvider;
 import net.errorcraft.itematic.core.component.provider.number.ints.providers.MaxDamageProvider;
 import net.errorcraft.itematic.core.component.provider.number.ints.providers.MaxStackSizeProvider;
 import net.errorcraft.itematic.core.component.provider.number.ints.providers.OminousBottleAmplifierProvider;
@@ -14,5 +15,6 @@ public class IntProviders {
         Registry.register(registry, "max_damage", MaxDamageProvider.TYPE);
         Registry.register(registry, "damage", DamageProvider.TYPE);
         Registry.register(registry, "ominous_bottle_amplifier", OminousBottleAmplifierProvider.TYPE);
+        Registry.register(registry, "food", FoodProvider.TYPE);
     }
 }
