@@ -5,6 +5,7 @@ import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.action.Actions;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSets;
 import net.errorcraft.itematic.world.item.Items;
+import net.errorcraft.itematic.world.item.group.ItemGroups;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProviders;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
@@ -24,6 +25,7 @@ public class VanillaRegistriesExtender {
             .add(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER, ItemGroupEntryProviders::bootstrap)
             .add(ItematicRegistries.ACTION, Actions::bootstrap)
             .add(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehaviors::bootstrap)
-            .add(ItematicRegistries.ENTITY_SPAWN_RULE_SET, EntitySpawnRuleSets::bootstrap);
+            .add(ItematicRegistries.ENTITY_SPAWN_RULE_SET, EntitySpawnRuleSets::bootstrap)
+            .add(ItematicRegistries.ITEM_GROUP, ItemGroups::bootstrap);
     }
 }
