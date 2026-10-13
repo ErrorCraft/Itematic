@@ -2002,10 +2002,17 @@ public class Items {
                         LocationCheckPredicates.builder(
                             PositionTarget.INTERACTED,
                             LocationPredicate.Builder.location()
-                                .setBlock(BlockPredicate.Builder.block()
-                                    .of(this.blocks, this.blocks.getOrThrow(BlockItemIds.END_PORTAL_FRAME.block()).value())
-                                    .setProperties(StatePropertiesPredicate.Builder.properties()
-                                        .hasProperty(BlockStateProperties.EYE, false)))
+                                .setBlock(
+                                    BlockPredicate.Builder.block()
+                                        .of(
+                                            this.blocks,
+                                            this.blocks.getOrThrow(BlockItemIds.END_PORTAL_FRAME.block()).value()
+                                        )
+                                        .setProperties(
+                                            StatePropertiesPredicate.Builder.properties()
+                                                .hasProperty(BlockStateProperties.EYE, false)
+                                        )
+                                )
                         ),
                         PassingSequenceHandler.builder()
                             .add(
@@ -2013,21 +2020,32 @@ public class Items {
                                     PositionTarget.INTERACTED,
                                     new ApplyPropertiesProvider(
                                         BlockItemStatePropertiesBuilder.create()
-                                            .property(BlockStateProperties.EYE, false)
+                                            .property(BlockStateProperties.EYE, true)
                                             .build()
                                     )
                                 )
                             )
                             .add(DecrementItemAction.of(1))
                             .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                            .add(PlaySoundAction.of(PositionTarget.INTERACTED, this.soundEvents.getOrThrow(SoundEventIds.END_PORTAL_FRAME_FILL), SoundSource.BLOCKS))
-                            .add(DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SMOKE)
-                                .count(16)
-                                .offset(Vec3Provider.of(
-                                    -0.1875d, 0.1875d,
-                                    0.8125d, 0.8125d,
-                                    -0.1875d, 0.1875d))
-                                .build())
+                            .add(
+                                PlaySoundAction.of(
+                                    PositionTarget.INTERACTED,
+                                    this.soundEvents.getOrThrow(SoundEventIds.END_PORTAL_FRAME_FILL),
+                                    SoundSource.BLOCKS
+                                )
+                            )
+                            .add(
+                                DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SMOKE)
+                                    .count(16)
+                                    .offset(
+                                        Vec3Provider.of(
+                                            -0.1875d, 0.1875d,
+                                            0.8125d, 0.8125d,
+                                            -0.1875d, 0.1875d
+                                        )
+                                    )
+                                    .build()
+                            )
                             .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED))
                     )
                 )

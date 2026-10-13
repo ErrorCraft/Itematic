@@ -42,7 +42,7 @@
               "provider": {
                 "type": "minecraft:apply_properties",
                 "properties": {
-                  "eye": "false"
+                  "eye": "true"
                 }
               },
               "push_entities_upwards": true
