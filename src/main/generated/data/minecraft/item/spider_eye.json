@@ -25,8 +25,7 @@
         "effects": [
           {
             "id": "minecraft:poison",
-            "duration": 100,
-            "show_icon": true
+            "duration": 100
           }
         ],
         "entity": "this"
