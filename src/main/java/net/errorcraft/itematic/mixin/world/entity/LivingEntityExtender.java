@@ -401,10 +401,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Unique
     @Nullable
     private Double getBaseAttackDamage(ItemStack stack) {
-        if (!stack.itematic$hasBehavior(ItemBehaviorType.WEAPON)) {
-            return null;
-        }
-
         WeaponAttackDamage weaponAttackDamage = stack.get(ItematicDataComponents.WEAPON_ATTACK_DAMAGE);
         if (weaponAttackDamage == null) {
             return null;

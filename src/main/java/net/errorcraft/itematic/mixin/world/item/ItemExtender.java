@@ -1,6 +1,5 @@
 package net.errorcraft.itematic.mixin.world.item;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -40,7 +39,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -273,40 +271,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @WrapMethod(
-        method = "hurtEnemy"
-    )
-    public void useItemBehavior(ItemStack itemStack, LivingEntity mob, LivingEntity attacker, Operation<Void> original) {
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, itemStack);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.postHit(itemStack, mob, attacker, stackExchanger);
-        }
-
-        if (attacker.level() instanceof ServerLevel serverLevel) {
-            ActionContext context = ActionContext.builder(serverLevel)
-                .stackExchanger(stackExchanger)
-                .add(LootContextParams.THIS_ENTITY, attacker)
-                .add(LootContextParams.ORIGIN, attacker.position())
-                .add(LootContextParams.TARGET_ENTITY, mob)
-                .add(ItematicContextKeys.INTERACTED_POSITION, mob.position())
-                .add(LootContextParams.TOOL, itemStack)
-                .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
-                .build();
-            itemStack.itematic$invokeEvent(ItemEvent.HIT_ENTITY, context);
-        }
-
-        tryUpdateItemStack(attacker, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
-    }
-
-    @Inject(
-        method = "postHurtEnemy",
-        at = @At("HEAD")
-    )
-    private void postDamageEntityUseItemBehavior(ItemStack itemStack, LivingEntity mob, LivingEntity attacker, CallbackInfo info) {
-        this.itematic$getBehavior(ItemBehaviorType.WEAPON)
-            .ifPresent(weapon -> weapon.postDamageEntity(itemStack, mob, attacker));
-    }
-
-    @WrapMethod(
         method = "mineBlock"
     )
     public boolean useItemBehavior(ItemStack itemStack, Level level, BlockState state, BlockPos pos, LivingEntity owner, Operation<Boolean> original) {
@@ -438,16 +402,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
         carriedItem.set(stackExchanger.result());
         return result;
-    }
-
-    @ModifyReturnValue(
-        method = "getAttackDamageBonus",
-        at = @At("TAIL")
-    )
-    private float getBonusAttackDamageUseItemBehavior(float original, Entity victim, float damage, DamageSource damageSource) {
-        return this.itematic$getBehavior(ItemBehaviorType.WEAPON)
-            .map(weapon -> weapon.bonusAttackDamage(victim, damage, damageSource))
-            .orElse(0.0f);
     }
 
     @Inject(

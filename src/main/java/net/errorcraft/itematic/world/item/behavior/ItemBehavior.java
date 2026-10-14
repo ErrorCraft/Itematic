@@ -38,8 +38,6 @@ public interface ItemBehavior<T extends ItemBehavior<T>> {
     default ItemResult useOnEntity(Player user, LivingEntity target, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         return ItemResult.PASS;
     }
-    default void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, ItemStackExchanger stackExchanger) {
-    }
     default boolean postMine(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner, ItemStackExchanger stackExchanger) {
         return false;
     }

@@ -4,6 +4,8 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -35,5 +37,8 @@ public interface ItemStackAccess {
     }
     default double itematic$attackSpeedMultiplier() {
         return 0.0d;
+    }
+    default float itematic$attackDamageBonus(Entity victim, float damage, DamageSource damageSource) {
+        return 0.0f;
     }
 }

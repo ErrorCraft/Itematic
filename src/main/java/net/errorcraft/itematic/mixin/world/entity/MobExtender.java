@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Util;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -215,6 +216,17 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
     )
     private double useCustomAttackDamage(Mob instance, Holder<Attribute> holder, Operation<Double> original) {
         return this.itematic$getAttackDamage();
+    }
+
+    @WrapOperation(
+        method = "doHurtTarget",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/Item;getAttackDamageBonus(Lnet/minecraft/world/entity/Entity;FLnet/minecraft/world/damagesource/DamageSource;)F"
+        )
+    )
+    private float useDataComponent(Item instance, Entity victim, float damage, DamageSource damageSource, Operation<Float> original, @Local(name = "weaponItem") ItemStack weaponItem) {
+        return weaponItem.itematic$attackDamageBonus(victim, damage, damageSource);
     }
 
     @WrapMethod(
