@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.core.component.provider.number.ints;
 
+import net.errorcraft.itematic.core.component.provider.number.ints.providers.CustomDataProvider;
 import net.errorcraft.itematic.core.component.provider.number.ints.providers.DamageProvider;
 import net.errorcraft.itematic.core.component.provider.number.ints.providers.EnchantmentLevelProvider;
 import net.errorcraft.itematic.core.component.provider.number.ints.providers.FoodProvider;
@@ -19,5 +20,6 @@ public class IntProviders {
         Registry.register(registry, "food", FoodProvider.TYPE);
         Registry.register(registry, "enchantments", EnchantmentLevelProvider.Enchantments.TYPE);
         Registry.register(registry, "stored_enchantments", EnchantmentLevelProvider.StoredEnchantments.TYPE);
+        Registry.register(registry, "custom_data", CustomDataProvider.TYPE);
     }
 }
