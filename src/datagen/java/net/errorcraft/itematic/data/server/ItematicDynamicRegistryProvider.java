@@ -22,6 +22,7 @@ public class ItematicDynamicRegistryProvider extends FabricDynamicRegistryProvid
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.ACTION));
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.DISPENSE_BEHAVIOR));
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.ENTITY_SPAWN_RULE_SET));
+        addAll(entries, registries.lookupOrThrow(ItematicRegistries.ITEM_GROUP));
         HolderLookup.RegistryLookup<ContextIntProvider> contextIntProviders = registries.lookupOrThrow(Registries.CONTEXT_INT_PROVIDER);
         entries.add(contextIntProviders.getOrThrow(ItematicContextIntProviders.CONSUMABLE_OMINOUS_BOTTLE_AMPLIFIER));
     }

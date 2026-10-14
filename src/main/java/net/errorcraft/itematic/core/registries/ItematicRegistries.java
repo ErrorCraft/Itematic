@@ -11,6 +11,7 @@ import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSet;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.group.ItemGroup;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
@@ -42,6 +43,7 @@ public class ItematicRegistries {
     public static final ResourceKey<Registry<DataComponentType<?>>> MELEE_WEAPON_COMPONENT_TYPE = of("melee_weapon_component_type");
     public static final ResourceKey<Registry<ItemGroupEntryType<?>>> ITEM_GROUP_ENTRY_TYPE = of("item_group_entry_type");
     public static final ResourceKey<Registry<EntitySpawnRuleSet>> ENTITY_SPAWN_RULE_SET = of("entity_spawn_rule_set");
+    public static final ResourceKey<Registry<ItemGroup>> ITEM_GROUP = of("item_group");
     public static final ResourceKey<Registry<IntProvider.Type<?, ?>>> DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE = of("data_component_context_int_provider_type");
     public static final ResourceKey<Registry<FloatProvider.Type<?, ?>>> DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE = of("data_component_context_float_provider_type");
 
