@@ -24,7 +24,7 @@ public abstract class FoodProvider implements IntProvider<FoodProvider, FoodProp
         return DataComponents.FOOD;
     }
 
-    public abstract MapCodec<? extends FoodProvider> subCodec();
+    protected abstract MapCodec<? extends FoodProvider> subCodec();
 
     public static class Nutrition extends FoodProvider {
         public static final Nutrition INSTANCE = new Nutrition();
@@ -33,13 +33,13 @@ public abstract class FoodProvider implements IntProvider<FoodProvider, FoodProp
         private Nutrition() {}
 
         @Override
-        public int get(FoodProperties component, DataComponentGetter components) {
-            return component.nutrition();
+        public MapCodec<? extends FoodProvider> subCodec() {
+            return CODEC;
         }
 
         @Override
-        public MapCodec<? extends FoodProvider> subCodec() {
-            return CODEC;
+        public int get(FoodProperties component, DataComponentGetter components) throws ArithmeticException {
+            return component.nutrition();
         }
     }
 }

@@ -24,7 +24,7 @@ public abstract class FoodProvider implements FloatProvider<FoodProvider, FoodPr
         return DataComponents.FOOD;
     }
 
-    public abstract MapCodec<? extends FoodProvider> subCodec();
+    protected abstract MapCodec<? extends FoodProvider> subCodec();
 
     public static class Saturation extends FoodProvider {
         public static final Saturation INSTANCE = new Saturation();
@@ -33,13 +33,13 @@ public abstract class FoodProvider implements FloatProvider<FoodProvider, FoodPr
         private Saturation() {}
 
         @Override
-        public float get(FoodProperties component, DataComponentGetter components) {
-            return component.saturation();
+        public MapCodec<? extends FoodProvider> subCodec() {
+            return CODEC;
         }
 
         @Override
-        public MapCodec<? extends FoodProvider> subCodec() {
-            return CODEC;
+        public float get(FoodProperties component, DataComponentGetter components) throws ArithmeticException {
+            return component.saturation();
         }
     }
 }

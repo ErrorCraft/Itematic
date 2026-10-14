@@ -20,7 +20,15 @@ public interface FloatProvider<P extends FloatProvider<P, C>, C> {
 
     Type<P, C> type();
     DataComponentType<C> component();
-    float get(C component, DataComponentGetter components);
+    float get(C component, DataComponentGetter components) throws ArithmeticException;
+    static <T> T getComponentOrThrow(DataComponentGetter components, DataComponentType<T> component) {
+        T value = components.get(component);
+        if (value == null) {
+            throw new ArithmeticException("Data component " + component + " is not present");
+        }
+
+        return value;
+    }
 
     record Type<P extends FloatProvider<P, C>, C>(MapCodec<? extends P> codec) {
         public static <P extends FloatProvider<P, C>, C> Type<P, C> simple(MapCodec<? extends P> codec) {

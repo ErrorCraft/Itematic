@@ -12,26 +12,29 @@ import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
 import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
 
-public record DataComponentValue<C>(FloatProvider<?, C> provider, LootContextArg<DataComponentGetter> source, Holder<ContextFloatProvider> fallback) implements ContextFloatProvider {
+import java.util.Optional;
+import java.util.function.Supplier;
+
+public record DataComponentValue<C>(FloatProvider<?, C> provider, LootContextArg<DataComponentGetter> source, Optional<Holder<ContextFloatProvider>> fallback) implements ContextFloatProvider {
     public static final MapCodec<DataComponentValue<?>> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         FloatProvider.MAP_CODEC.forGetter(DataComponentValue::provider),
         CopyComponentsFunctionAccessor.getterCodec().fieldOf("source").forGetter(DataComponentValue::source),
-        ContextFloatProviders.CODEC.optionalFieldOf("fallback", ContextFloatProviders.exactly(0)).forGetter(DataComponentValue::fallback)
+        ContextFloatProviders.CODEC.optionalFieldOf("fallback").forGetter(DataComponentValue::fallback)
     ).apply(instance, DataComponentValue::new));
 
     @Override
     public float getFloatUnsafe(LootContext context) throws ArithmeticException {
         DataComponentGetter components = this.source.get(context);
         if (components == null) {
-            return this.fallback(context);
+            return this.fallbackOrThrow(context, () -> new ArithmeticException("Data component source is not present"));
         }
 
-        C component = components.get(this.provider.component());
-        if (component == null) {
-            return this.fallback(context);
+        try {
+            C component = FloatProvider.getComponentOrThrow(components, this.provider.component());
+            return this.provider.get(component, components);
+        } catch (ArithmeticException e) {
+            return this.fallbackOrThrow(context, () -> e);
         }
-
-        return this.provider.get(component, components);
     }
 
     @Override
@@ -41,10 +44,13 @@ public record DataComponentValue<C>(FloatProvider<?, C> provider, LootContextArg
 
     @Override
     public void validate(ValidationContext context) {
-        this.fallback.value().validate(context);
+        this.fallback.map(Holder::value)
+            .ifPresent(provider -> provider.validate(context));
     }
 
-    private float fallback(LootContext context) {
-        return this.fallback.value().getFloatUnsafe(context);
+    private float fallbackOrThrow(LootContext context, Supplier<ArithmeticException> exceptionSupplier) throws ArithmeticException {
+        return this.fallback.orElseThrow(exceptionSupplier)
+            .value()
+            .getFloatUnsafe(context);
     }
 }

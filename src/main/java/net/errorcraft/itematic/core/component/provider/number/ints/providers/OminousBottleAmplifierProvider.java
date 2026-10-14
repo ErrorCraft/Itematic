@@ -25,7 +25,7 @@ public class OminousBottleAmplifierProvider implements IntProvider<OminousBottle
     }
 
     @Override
-    public int get(OminousBottleAmplifier component, DataComponentGetter components) {
+    public int get(OminousBottleAmplifier component, DataComponentGetter components) throws ArithmeticException {
         return component.value();
     }
 }

@@ -14,18 +14,21 @@ import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
-public record DataComponentValue<C>(IntProvider<?, C> provider, LootContextArg<DataComponentGetter> source, Holder<ContextIntProvider> fallback) implements ContextIntProvider {
+import java.util.Optional;
+import java.util.function.Supplier;
+
+public record DataComponentValue<C>(IntProvider<?, C> provider, LootContextArg<DataComponentGetter> source, Optional<Holder<ContextIntProvider>> fallback) implements ContextIntProvider {
     public static final MapCodec<DataComponentValue<?>> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         IntProvider.MAP_CODEC.forGetter(DataComponentValue::provider),
         CopyComponentsFunctionAccessor.getterCodec().fieldOf("source").forGetter(DataComponentValue::source),
-        ContextIntProviders.CODEC.optionalFieldOf("fallback", ContextIntProviders.exactly(0)).forGetter(DataComponentValue::fallback)
+        ContextIntProviders.CODEC.optionalFieldOf("fallback").forGetter(DataComponentValue::fallback)
     ).apply(instance, DataComponentValue::new));
 
     public static <C> DataComponentValue<C> of(IntProvider<?, C> provider, ContextKey<? extends DataComponentGetter> source) {
         return new DataComponentValue<>(
             provider,
             new CopyComponentsFunction.DirectSource<>(source),
-            ContextIntProviders.exactly(0)
+            Optional.empty()
         );
     }
 
@@ -33,15 +36,15 @@ public record DataComponentValue<C>(IntProvider<?, C> provider, LootContextArg<D
     public int getIntUnsafe(LootContext context) throws ArithmeticException {
         DataComponentGetter components = this.source.get(context);
         if (components == null) {
-            return this.fallback(context);
+            return this.fallbackOrThrow(context, () -> new ArithmeticException("Data component source is not present"));
         }
 
-        C component = components.get(this.provider.component());
-        if (component == null) {
-            return this.fallback(context);
+        try {
+            C component = IntProvider.getComponentOrThrow(components, this.provider.component());
+            return this.provider.get(component, components);
+        } catch (ArithmeticException e) {
+            return this.fallbackOrThrow(context, () -> e);
         }
-
-        return this.provider.get(component, components);
     }
 
     @Override
@@ -51,10 +54,13 @@ public record DataComponentValue<C>(IntProvider<?, C> provider, LootContextArg<D
 
     @Override
     public void validate(ValidationContext context) {
-        this.fallback.value().validate(context);
+        this.fallback.map(Holder::value)
+            .ifPresent(provider -> provider.validate(context));
     }
 
-    private int fallback(LootContext context) {
-        return this.fallback.value().getIntUnsafe(context);
+    private int fallbackOrThrow(LootContext context, Supplier<ArithmeticException> exceptionSupplier) throws ArithmeticException {
+        return this.fallback.orElseThrow(exceptionSupplier)
+            .value()
+            .getIntUnsafe(context);
     }
 }

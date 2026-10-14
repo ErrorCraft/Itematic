@@ -24,7 +24,7 @@ public abstract class DamageProvider implements IntProvider<DamageProvider, Inte
         return DataComponents.DAMAGE;
     }
 
-    public abstract MapCodec<? extends DamageProvider> subCodec();
+    protected abstract MapCodec<? extends DamageProvider> subCodec();
 
     public static class Damage extends DamageProvider {
         public static final Damage INSTANCE = new Damage();
@@ -33,13 +33,13 @@ public abstract class DamageProvider implements IntProvider<DamageProvider, Inte
         private Damage() {}
 
         @Override
-        public int get(Integer component, DataComponentGetter components) {
-            return component;
+        protected MapCodec<? extends DamageProvider> subCodec() {
+            return CODEC;
         }
 
         @Override
-        public MapCodec<? extends DamageProvider> subCodec() {
-            return CODEC;
+        public int get(Integer component, DataComponentGetter components) {
+            return component;
         }
     }
 
@@ -50,14 +50,14 @@ public abstract class DamageProvider implements IntProvider<DamageProvider, Inte
         private Durability() {}
 
         @Override
-        public int get(Integer component, DataComponentGetter components) {
-            int maxDamage = components.getOrDefault(DataComponents.MAX_DAMAGE, 0);
-            return maxDamage - component;
+        protected MapCodec<? extends DamageProvider> subCodec() {
+            return CODEC;
         }
 
         @Override
-        public MapCodec<? extends DamageProvider> subCodec() {
-            return CODEC;
+        public int get(Integer component, DataComponentGetter components) throws ArithmeticException {
+            int maxDamage = IntProvider.getComponentOrThrow(components, DataComponents.MAX_DAMAGE);
+            return maxDamage - component;
         }
     }
 }

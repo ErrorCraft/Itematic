@@ -24,7 +24,7 @@ public class MaxStackSizeProvider implements IntProvider<MaxStackSizeProvider, I
     }
 
     @Override
-    public int get(Integer component, DataComponentGetter components) {
+    public int get(Integer component, DataComponentGetter components) throws ArithmeticException {
         return component;
     }
 }

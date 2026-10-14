@@ -24,7 +24,7 @@ public class MaxDamageProvider implements IntProvider<MaxDamageProvider, Integer
     }
 
     @Override
-    public int get(Integer component, DataComponentGetter components) {
+    public int get(Integer component, DataComponentGetter components) throws ArithmeticException {
         return component;
     }
 }
