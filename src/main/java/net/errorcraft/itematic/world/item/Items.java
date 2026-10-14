@@ -101,6 +101,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockItemStatePropertiesBuilder;
+import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
@@ -2635,8 +2636,8 @@ public class Items {
                             .allowItemData()
                             .build(),
                         true,
-                        EntityItemBehavior.Pass.BLOCK,
-                        EntityItemBehavior.Pass.FLUID
+                        EntityPlacerComponent.Pass.BLOCK,
+                        EntityPlacerComponent.Pass.FLUID
                     )
                 )
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))

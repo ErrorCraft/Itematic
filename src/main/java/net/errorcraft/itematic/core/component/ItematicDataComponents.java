@@ -5,6 +5,7 @@ import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
+import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.equipment.Glider;
 import net.errorcraft.itematic.world.item.holder.ItemHolderSounds;
@@ -140,6 +141,12 @@ public class ItematicDataComponents {
         "dispense_behavior",
         builder -> builder.persistent(DispenseBehavior.CODEC)
             .networkSynchronized(DispenseBehavior.STREAM_CODEC)
+    );
+    public static final DataComponentType<EntityPlacerComponent> ENTITY_PLACER = register(
+        "entity_placer",
+        builder -> builder.persistent(EntityPlacerComponent.CODEC)
+            .networkSynchronized(EntityPlacerComponent.STREAM_CODEC)
+            .cacheEncoding()
     );
 
     private ItematicDataComponents() {}

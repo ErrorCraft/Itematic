@@ -35,6 +35,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -63,6 +64,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -119,6 +121,9 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
 
     @Shadow
     public abstract int getDamageValue();
+
+    @Shadow
+    public abstract <T extends TooltipProvider> void addToTooltip(DataComponentType<T> type, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> consumer, TooltipFlag flag);
 
     @Shadow
     public abstract void shrink(int amount);
@@ -632,16 +637,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
             target = "Lnet/minecraft/world/item/Item;appendHoverText(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/Item$TooltipContext;Lnet/minecraft/world/item/component/TooltipDisplay;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;)V"
         )
     )
-    @SuppressWarnings("DataFlowIssue")
-    private void addTooltipFromItem(Item instance, ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag, Operation<Void> original) {
-        if (!this.isEmpty()) {
-            this.item.value().itematic$addTooltip(
-                (ItemStack)(Object) this,
-                context,
-                builder,
-                tooltipFlag
-            );
-        }
+    private void addExtraDataComponentTooltips(Item instance, ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag, Operation<Void> original) {
+        this.addToTooltip(ItematicDataComponents.ENTITY_PLACER, context, display, builder, tooltipFlag);
     }
 
     @WrapOperation(

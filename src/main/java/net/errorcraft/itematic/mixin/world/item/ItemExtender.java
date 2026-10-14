@@ -3,6 +3,8 @@ package net.errorcraft.itematic.mixin.world.item;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.world.item.ItemAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
@@ -19,6 +21,7 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
+import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
@@ -51,7 +54,6 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
@@ -70,7 +72,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Mixin(Item.class)
 public abstract class ItemExtender implements ItemAccess, FabricItem {
@@ -154,12 +155,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @WrapMethod(
-        method = "use"
+        method = "use",
+        order = 1001
     )
-    public InteractionResult useItemBehavior(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original) {
+    public InteractionResult useItemBehavior(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = player.getItemInHand(hand);
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, stack);
-        ItemResult result = ItemResult.PASS;
+        stackExchangerReference.set(stackExchanger);
+        InteractionResult originalResult = original.call(level, player, hand);
+        ItemResult result = originalResult.consumesAction() ? ItemResult.SUCCEED : ItemResult.PASS;
         for (ItemBehavior<?> behavior : this.behavior) {
             ItemResult newResult = behavior.use(level, player, hand, stack, stackExchanger);
             result = result.max(newResult);
@@ -187,9 +191,23 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @WrapMethod(
-        method = "useOn"
+        method = "use"
     )
-    public InteractionResult useItemBehavior(UseOnContext context, Operation<InteractionResult> original) {
+    private InteractionResult useDataComponents(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
+        ItemStack stack = player.getItemInHand(hand);
+        EntityPlacerComponent entityPlacer = stack.get(ItematicDataComponents.ENTITY_PLACER);
+        if (entityPlacer != null) {
+            return entityPlacer.use(level, player, hand, stack, stackExchangerReference.get());
+        }
+
+        return InteractionResult.PASS;
+    }
+
+    @WrapMethod(
+        method = "useOn",
+        order = 1001
+    )
+    public InteractionResult useItemBehavior(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         Level level = context.getLevel();
         if (level.isClientSide()) {
             return InteractionResult.PASS;
@@ -213,6 +231,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return InteractionResult.CONSUME.heldItemTransformedTo(stackExchanger.result());
         }
 
+        stackExchangerReference.set(stackExchanger);
+        InteractionResult originalResult = original.call(context);
         ItemResult result = ItemResult.PASS;
         for (ItemBehavior<?> behavior : this.behavior) {
             ItemResult newResult = behavior.useOnBlock(context, stackExchanger);
@@ -224,12 +244,25 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         tryUpdateItemStack(user, hand, stack, stackExchanger);
-        InteractionResult trueResult = result.toActionResult();
+        InteractionResult trueResult = originalResult.consumesAction() ? originalResult : result.toActionResult();
         if (trueResult instanceof InteractionResult.Success success) {
-            trueResult = success.heldItemTransformedTo(stackExchanger.result());
+            return success.heldItemTransformedTo(stackExchanger.result());
         }
 
         return trueResult;
+    }
+
+    @WrapMethod(
+        method = "useOn"
+    )
+    private InteractionResult useDataComponents(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
+        ItemStack stack = context.getItemInHand();
+        EntityPlacerComponent entityPlacer = stack.get(ItematicDataComponents.ENTITY_PLACER);
+        if (entityPlacer != null) {
+            return entityPlacer.useOn(context, stackExchangerReference.get());
+        }
+
+        return original.call(context);
     }
 
     @WrapMethod(
@@ -617,14 +650,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean itematic$hasEventListener(ItemEvent event) {
         return this.events.hasListener(event);
-    }
-
-    @Override
-    public void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag tooltipFlag) {
-        this.display.tooltip().ifPresent(tooltip -> tooltip.forEach(builder));
-        for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.appendTooltip(stack, context, builder, tooltipFlag);
-        }
     }
 
     @Override
