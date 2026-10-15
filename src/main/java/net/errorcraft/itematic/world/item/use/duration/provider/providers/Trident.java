@@ -5,7 +5,6 @@ import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -13,16 +12,17 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.OptionalInt;
 
-public class TridentUseDurationProvider implements UseDurationProvider {
-    public static final TridentUseDurationProvider INSTANCE = new TridentUseDurationProvider();
-    public static final MapCodec<TridentUseDurationProvider> CODEC = MapCodec.unit(INSTANCE);
-    public static final StreamCodec<ByteBuf, TridentUseDurationProvider> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+public class Trident implements UseDurationProvider {
+    public static final Trident INSTANCE = new Trident();
+    public static final MapCodec<Trident> CODEC = MapCodec.unit(INSTANCE);
+    public static final StreamCodec<ByteBuf, Trident> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+    public static final Type<Trident> TYPE = new Type<>(CODEC, STREAM_CODEC);
 
-    private TridentUseDurationProvider() {}
+    private Trident() {}
 
     @Override
-    public UseDurationProviderType<?> type() {
-        return UseDurationProviderType.TRIDENT;
+    public Type<?> type() {
+        return TYPE;
     }
 
     @Override

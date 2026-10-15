@@ -12,7 +12,7 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
-import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
+import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderTypes;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.ItematicBlockStateProviderTypes;
@@ -35,7 +35,7 @@ public class Itematic implements ModInitializer {
         BlockPickerType.init();
         ItematicItemModifiers.bootstrap(BuiltInRegistries.LOOT_FUNCTION_TYPE);
         ItematicDataComponents.init();
-        UseDurationProviderType.init();
+        UseDurationProviderTypes.bootstrap(ItematicBuiltInRegistries.USE_DURATION_PROVIDER_TYPE);
         ItemHolderRuleType.init();
         ShooterMethodType.init();
         WorldModificationType.init();

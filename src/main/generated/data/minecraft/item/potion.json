@@ -16,10 +16,7 @@
       "remainder": {
         "id": "minecraft:glass_bottle"
       },
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "ticks": 32
     }
   },
   "display": {

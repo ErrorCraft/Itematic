@@ -11,10 +11,7 @@
     "minecraft:stackable": 64,
     "minecraft:useable": {
       "animation": "eat",
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "ticks": 32
     },
     "minecraft:villager_food": {
       "nutrition": 1

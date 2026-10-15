@@ -110,9 +110,10 @@ import net.errorcraft.itematic.world.item.holder.rule.rules.OccupancyHeldItemsWi
 import net.errorcraft.itematic.world.item.holder.rule.rules.RejectItemHolderRule;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.PlayableUseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.ShooterUseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.TridentUseDurationProvider;
+import net.errorcraft.itematic.world.item.use.duration.UseDuration;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Playable;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Shooter;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Trident;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.KineticMeleeWeapon;
@@ -1351,7 +1352,7 @@ public class Items {
                 .behavior(DamageableItemBehavior.of(384))
                 .behavior(
                     UseableItemBehavior.builder()
-                        .useFor(ShooterUseDurationProvider.INSTANCE)
+                        .useFor(Shooter.INSTANCE)
                         .animation(ItemUseAnimation.BOW)
                         .build()
                 )
@@ -1370,7 +1371,7 @@ public class Items {
                 .behavior(DamageableItemBehavior.of(465))
                 .behavior(
                     UseableItemBehavior.builder()
-                        .useFor(ShooterUseDurationProvider.INSTANCE)
+                        .useFor(Shooter.INSTANCE)
                         .animation(ItemUseAnimation.CROSSBOW)
                         .build()
                 )
@@ -1419,7 +1420,7 @@ public class Items {
                 )
                 .behavior(
                     UseableItemBehavior.builder()
-                        .useFor(TridentUseDurationProvider.INSTANCE)
+                        .useFor(Trident.INSTANCE)
                         .animation(ItemUseAnimation.TRIDENT)
                         .build()
                 )
@@ -1489,7 +1490,7 @@ public class Items {
                     UseableItemBehavior.builder()
                         .useFor(BrushItemAccessor.useDuration())
                         .animation(ItemUseAnimation.BRUSH)
-                        .passes(UseableItemBehavior.Pass.BLOCK)
+                        .passes(UseDuration.Pass.BLOCK)
                         .build()
                 )
                 .behavior(BrushItemBehavior.INSTANCE)
@@ -1728,7 +1729,7 @@ public class Items {
                 .display(display -> display.rarity(Rarity.UNCOMMON))
                 .behavior(
                     UseableItemBehavior.builder()
-                        .useFor(PlayableUseDurationProvider.INSTANCE)
+                        .useFor(Playable.INSTANCE)
                         .animation(ItemUseAnimation.TOOT_HORN)
                         .build()
                 )

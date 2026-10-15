@@ -12,10 +12,7 @@
       "remainder": {
         "id": "minecraft:bowl"
       },
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "ticks": 32
     }
   },
   "display": {

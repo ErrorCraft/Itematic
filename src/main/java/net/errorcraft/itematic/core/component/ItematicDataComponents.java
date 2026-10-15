@@ -30,6 +30,7 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.ItemUseAnimation;
 import org.apache.commons.lang3.math.Fraction;
 
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
 public class ItematicDataComponents {
@@ -37,6 +38,12 @@ public class ItematicDataComponents {
         "use_duration",
         builder -> builder.persistent(UseDuration.CODEC)
             .networkSynchronized(UseDuration.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<Set<UseDuration.Pass>> USE_PASSES = register(
+        "use_passes",
+        builder -> builder.persistent(UseDuration.Pass.SET_CODEC)
+            .networkSynchronized(UseDuration.Pass.SET_STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<ItemUseAnimation> USE_ANIMATION = register(

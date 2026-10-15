@@ -8,10 +8,7 @@
     "minecraft:stackable": 64,
     "minecraft:useable": {
       "animation": "drink",
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "ticks": 32
     }
   },
   "display": {

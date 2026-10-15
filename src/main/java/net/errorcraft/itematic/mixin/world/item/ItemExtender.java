@@ -203,6 +203,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private InteractionResult useDataComponents(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = player.getItemInHand(hand);
+        UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null && useDuration.canUse(stack, UseDuration.Pass.NORMAL)) {
+            return useDuration.tryStartUsing(level, stack, player, hand);
+        }
+
         BlockPlacerComponent blockPlacer = stack.get(ItematicDataComponents.BLOCK_PLACER);
         if (blockPlacer != null && blockPlacer.canUse(BlockPlacerComponent.Pass.FLUID)) {
             return blockPlacer.use(level, player, hand, stack, stackExchangerReference.get());
@@ -348,6 +353,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private InteractionResult useDataComponents(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = context.getItemInHand();
+        UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null && useDuration.canUse(stack, UseDuration.Pass.BLOCK) && context.getPlayer() != null) {
+            return useDuration.tryStartUsing(context.getLevel(), stack, context.getPlayer(), context.getHand());
+        }
+
         BlockPlacerComponent blockPlacer = stack.get(ItematicDataComponents.BLOCK_PLACER);
         if (blockPlacer != null && blockPlacer.canUse(BlockPlacerComponent.Pass.BLOCK)) {
             return blockPlacer.useOn(context, stackExchangerReference.get());
@@ -394,7 +404,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @WrapMethod(
-        method = "interactLivingEntity"
+        method = "interactLivingEntity",
+        order = 1001
     )
     public InteractionResult useItemBehavior(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type, Operation<InteractionResult> original) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, itemStack);
@@ -429,6 +440,18 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         return trueResult;
+    }
+
+    @WrapMethod(
+        method = "interactLivingEntity"
+    )
+    private InteractionResult useDataComponents(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type, Operation<InteractionResult> original) {
+        UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null && useDuration.canUse(itemStack, UseDuration.Pass.ENTITY)) {
+            return useDuration.tryStartUsing(player.level(), itemStack, player, type);
+        }
+
+        return original.call(itemStack, player, target, type);
     }
 
     @WrapMethod(
@@ -732,13 +755,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean itematic$hasEventListener(ItemEvent event) {
         return this.events.hasListener(event);
-    }
-
-    @Override
-    public boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
-        return this.itematic$getBehavior(ItemBehaviorType.FOOD)
-            .map(food -> food.mayStartUsing(user, stack))
-            .orElse(true);
     }
 
     @Override

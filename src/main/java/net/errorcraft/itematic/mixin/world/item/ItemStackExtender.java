@@ -931,15 +931,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     }
 
     @Override
-    public boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
-        if (this.item == null) {
-            return false;
-        }
-
-        return this.item.value().itematic$mayStartUsing(level, user, hand, stack);
-    }
-
-    @Override
     public boolean itematic$canFitInsideContainerItems() {
         BlockPlacerComponent blockPlacer = this.get(ItematicDataComponents.BLOCK_PLACER);
         if (blockPlacer != null) {

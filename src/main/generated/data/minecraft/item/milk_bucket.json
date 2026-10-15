@@ -10,10 +10,7 @@
       "remainder": {
         "id": "minecraft:bucket"
       },
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "ticks": 32
     }
   },
   "display": {

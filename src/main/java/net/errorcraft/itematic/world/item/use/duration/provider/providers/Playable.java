@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.network.codec.StreamCodec;
@@ -14,16 +13,17 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.OptionalInt;
 
-public class PlayableUseDurationProvider implements UseDurationProvider {
-    public static final PlayableUseDurationProvider INSTANCE = new PlayableUseDurationProvider();
-    public static final MapCodec<PlayableUseDurationProvider> CODEC = MapCodec.unit(INSTANCE);
-    public static final StreamCodec<ByteBuf, PlayableUseDurationProvider> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+public class Playable implements UseDurationProvider {
+    public static final Playable INSTANCE = new Playable();
+    public static final MapCodec<Playable> CODEC = MapCodec.unit(INSTANCE);
+    public static final StreamCodec<ByteBuf, Playable> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+    public static final Type<Playable> TYPE = new Type<>(CODEC, STREAM_CODEC);
 
-    private PlayableUseDurationProvider() {}
+    private Playable() {}
 
     @Override
-    public UseDurationProviderType<?> type() {
-        return UseDurationProviderType.PLAYABLE;
+    public Type<?> type() {
+        return TYPE;
     }
 
     @Override

@@ -36,11 +36,11 @@ public interface BlockPicker<T extends BlockPicker<T>> {
         return this.defaultBlock().value().itematic$blockPlaceContext(context);
     }
 
-    private static Either<BlockPicker<?>, Holder<Block>> wrap(BlockPicker<?> modifier) {
-        if (modifier instanceof SimpleBlockPicker(Holder<Block> block)) {
+    private static Either<BlockPicker<?>, Holder<Block>> wrap(BlockPicker<?> blockPicker) {
+        if (blockPicker instanceof SimpleBlockPicker(Holder<Block> block)) {
             return Either.right(block);
         }
 
-        return Either.left(modifier);
+        return Either.left(blockPicker);
     }
 }

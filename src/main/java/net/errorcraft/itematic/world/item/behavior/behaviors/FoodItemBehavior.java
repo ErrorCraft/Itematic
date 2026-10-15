@@ -66,9 +66,4 @@ public record FoodItemBehavior(int nutrition, float saturation, boolean alwaysEd
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.FOOD, new FoodProperties(this.nutrition, this.saturation, this.alwaysEdible));
     }
-
-    public boolean mayStartUsing(Player user, ItemStack stack) {
-        FoodProperties food = stack.get(DataComponents.FOOD);
-        return food != null && user.canEat(food.canAlwaysEat());
-    }
 }

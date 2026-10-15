@@ -46,10 +46,7 @@
     },
     "minecraft:stackable": 1,
     "minecraft:useable": {
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 200
-      }
+      "ticks": 200
     }
   },
   "display": {

@@ -140,7 +140,8 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             return OptionalInt.empty();
         }
 
-        return OptionalInt.of(CrossbowItem.getChargeDuration(stack, user) + EXTRA_USE_TIME);
+        int useDuration = Math.max(CrossbowItem.getChargeDuration(stack, user), 1) + EXTRA_USE_TIME;
+        return OptionalInt.of(useDuration);
     }
 
     public void shoot(ShooterItemBehavior shooter, Level level, LivingEntity user, InteractionHand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity targetOverride) {

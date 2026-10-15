@@ -14,7 +14,7 @@ import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
-import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
+import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.world.level.modification.WorldModificationType;
 import net.minecraft.core.Registry;
@@ -32,7 +32,7 @@ public class ItematicRegistries {
     public static final ResourceKey<Registry<SequenceHandlerType<?>>> SEQUENCE_HANDLER_TYPE = of("sequence_handler_type");
     public static final ResourceKey<Registry<SmithingTemplate>> SMITHING_TEMPLATE = of("smithing_template");
     public static final ResourceKey<Registry<BlockPickerType<?>>> BLOCK_PICKER_TYPE = of("block_picker_type");
-    public static final ResourceKey<Registry<UseDurationProviderType<?>>> USE_DURATION_PROVIDER_TYPE = of("use_duration_provider_type");
+    public static final ResourceKey<Registry<UseDurationProvider.Type<?>>> USE_DURATION_PROVIDER_TYPE = of("use_duration_provider_type");
     public static final ResourceKey<Registry<ItemHolderRuleType<?>>> ITEM_HOLDER_RULE_TYPE = of("item_holder_rule_type");
     public static final ResourceKey<Registry<ShooterMethodType<?>>> SHOOTER_METHOD_TYPE = of("shooter_method_type");
     public static final ResourceKey<Registry<WorldModificationType<?>>> WORLD_MODIFICATION_TYPE = of("world_modification_type");
