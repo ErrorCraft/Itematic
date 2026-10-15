@@ -353,6 +353,38 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @WrapMethod(
+        method = "mineBlock"
+    )
+    public boolean useDataComponents(ItemStack itemStack, Level level, BlockState state, BlockPos pos, LivingEntity owner, Operation<Boolean> original, @Share("context") LocalRef<ActionContext> contextReference) {
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(owner, itemStack);
+        ActionContext context = ActionContext.builder(level)
+            .stackExchanger(stackExchanger)
+            .add(LootContextParams.THIS_ENTITY, owner)
+            .add(LootContextParams.ORIGIN, owner.position())
+            .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(pos))
+            .add(LootContextParams.TOOL, itemStack)
+            .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
+            .build();
+        contextReference.set(context);
+        boolean result = original.call(itemStack, level, state, pos, owner);
+        itemStack.itematic$invokeEvent(ItemEvent.BROKE_BLOCK, context);
+        tryUpdateItemStack(owner, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
+        return result;
+    }
+
+    @WrapOperation(
+        method = "mineBlock",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;)V"
+        )
+    )
+    private void invokeUseToolItemEventAndUseActionContext(ItemStack instance, int amount, LivingEntity owner, EquipmentSlot slot, Operation<Void> original, @Share("context") LocalRef<ActionContext> contextReference) {
+        instance.itematic$invokeEvent(ItemEvent.USE_TOOL, contextReference.get());
+        instance.itematic$damage(amount, contextReference.get());
+    }
+
+    @WrapMethod(
         method = "interactLivingEntity"
     )
     public InteractionResult useItemBehavior(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type, Operation<InteractionResult> original) {
@@ -388,32 +420,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         return trueResult;
-    }
-
-    @WrapMethod(
-        method = "mineBlock"
-    )
-    public boolean useItemBehavior(ItemStack itemStack, Level level, BlockState state, BlockPos pos, LivingEntity owner, Operation<Boolean> original) {
-        boolean result = false;
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(owner, itemStack);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.postMine(itemStack, level, state, pos, owner, stackExchanger);
-        }
-
-        if (level instanceof ServerLevel serverLevel) {
-            ActionContext context = ActionContext.builder(serverLevel)
-                .stackExchanger(stackExchanger)
-                .add(LootContextParams.THIS_ENTITY, owner)
-                .add(LootContextParams.ORIGIN, owner.position())
-                .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(pos))
-                .add(LootContextParams.TOOL, itemStack)
-                .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
-                .build();
-            itemStack.itematic$invokeEvent(ItemEvent.BROKE_BLOCK, context);
-        }
-
-        tryUpdateItemStack(owner, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
-        return result;
     }
 
     @WrapMethod(
