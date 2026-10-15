@@ -39,6 +39,7 @@ inject-interface    net/minecraft/sounds/SoundSource    net/minecraft/util/Strin
 inject-interface    net/minecraft/stats/Stat    net/errorcraft/itematic/access/stats/StatAccess<TT;>
 inject-interface    net/minecraft/stats/StatType    net/errorcraft/itematic/access/stats/StatTypeAccess<TT;>
 inject-interface    net/minecraft/util/context/ContextMap$Builder    net/errorcraft/itematic/access/util/context/ContextMapAccess$BuilderAccess
+inject-interface    net/minecraft/world/InteractionResult    net/errorcraft/itematic/access/world/InteractionResultAccess
 inject-interface    net/minecraft/world/SimpleContainer    net/errorcraft/itematic/access/world/SimpleContainerAccess
 inject-interface    net/minecraft/world/entity/Entity    net/errorcraft/itematic/access/world/entity/EntityAccess
 inject-interface    net/minecraft/world/entity/EntityType    net/errorcraft/itematic/access/world/entity/EntityTypeAccess<TT;>

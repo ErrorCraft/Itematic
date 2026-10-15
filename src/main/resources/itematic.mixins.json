@@ -51,6 +51,7 @@
     "util.context.ContextMapAccessor",
     "util.context.ContextMapExtender$BuilderExtender",
     "util.datafix.DataFixersExtender",
+    "world.InteractionResultExtender$SuccessExtender",
     "world.ItemStackWithSlotExtender",
     "world.SimpleContainerExtender",
     "world.entity.AgeableMobExtender",

@@ -3,6 +3,7 @@ package net.errorcraft.itematic.mixin.world.item;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.serialization.Codec;
@@ -21,6 +22,7 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
@@ -31,6 +33,7 @@ import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.codec.RegistryCodecs;
@@ -54,21 +57,27 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
@@ -200,7 +209,85 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return entityPlacer.use(level, player, hand, stack, stackExchangerReference.get());
         }
 
-        return InteractionResult.PASS;
+        return original.call(level, player, hand);
+    }
+
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/core/component/DataComponents;CONSUMABLE:Lnet/minecraft/core/component/DataComponentType;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    @Nullable
+    private Object doNotUseConsumableDataComponent(ItemStack instance, DataComponentType<Consumable> componentType, Operation<Object> original) {
+        return null;
+    }
+
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/equipment/Equippable;swapWithEquipmentSlot(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/InteractionResult;"
+        )
+    )
+    private InteractionResult passActionContext(Equippable instance, ItemStack inHand, Player player, Operation<InteractionResult> original, @Local(name = "hand", argsOnly = true) InteractionHand hand, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
+        ActionContext context = ActionContext.builder(player.level())
+            .stackExchanger(stackExchangerReference.get())
+            .add(LootContextParams.THIS_ENTITY, player)
+            .add(LootContextParams.ORIGIN, player.position())
+            .add(LootContextParams.TOOL, inHand)
+            .add(ItematicContextKeys.HAND, hand)
+            .build();
+        return ScopedValue.where(EquipmentItemBehavior.ON_EQUIP_ACTION_CONTEXT, context)
+            .call(() -> original.call(instance, inHand, player));
+    }
+
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/core/component/DataComponents;BLOCKS_ATTACKS:Lnet/minecraft/core/component/DataComponentType;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private boolean doNotUseBlocksAttacksDataComponent(ItemStack instance, DataComponentType<BlocksAttacks> componentType, Operation<Object> original) {
+        return false;
+    }
+
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/core/component/DataComponents;KINETIC_WEAPON:Lnet/minecraft/core/component/DataComponentType;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    @Nullable
+    private Object doNotUseKineticWeaponDataComponent(ItemStack instance, DataComponentType<KineticWeapon> componentType, Operation<Object> original) {
+        return null;
     }
 
     @WrapMethod(
