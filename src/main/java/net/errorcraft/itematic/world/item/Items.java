@@ -101,6 +101,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockItemStatePropertiesBuilder;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
@@ -342,7 +343,7 @@ public class Items {
         private ItemBuilder builderForBlockOnFluid(BlockItemId blockItem) {
             return this.builder(blockItem.item())
                 .display(ItemDisplay.Builder::blockName)
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block()), BlockItemBehavior.Pass.FLUID));
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block()), BlockPlacerComponent.Pass.FLUID));
         }
 
         private ItemBuilder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side) {

@@ -5,10 +5,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.tags.ItematicBlockTags;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
-import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.BlockItem;
@@ -22,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Mixin(ClientLevel.class)
@@ -45,13 +43,19 @@ public class ClientLevelExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfBlockItemUseItemBehavior(Object reference, Class<BlockItem> clazz, @Local(name = "carriedItemStack") ItemStack carriedItemStack, @Share("block") LocalRef<Holder<Block>> blockReference) {
-        Optional<Holder<Block>> block = carriedItemStack.itematic$getBehavior(ItemBehaviorType.BLOCK)
-            .map(BlockItemBehavior::block)
-            .map(BlockPicker::defaultBlock)
-            .filter(defaultBlock -> defaultBlock.is(ItematicBlockTags.HAS_MARKER_PARTICLE));
-        block.ifPresent(blockReference::set);
-        return block.isPresent();
+    private boolean instanceOfBlockItemUseDataComponent(Object reference, Class<BlockItem> clazz, @Local(name = "carriedItemStack") ItemStack carriedItemStack, @Share("block") LocalRef<Holder<Block>> blockReference) {
+        BlockPlacerComponent blockPlacer = carriedItemStack.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer == null) {
+            return false;
+        }
+
+        Holder<Block> block = blockPlacer.block().defaultBlock();
+        if (!block.is(ItematicBlockTags.HAS_MARKER_PARTICLE)) {
+            return false;
+        }
+
+        blockReference.set(block);
+        return true;
     }
 
     @ModifyVariable(

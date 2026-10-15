@@ -5,6 +5,7 @@ import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.equipment.Glider;
@@ -146,6 +147,12 @@ public class ItematicDataComponents {
         "entity_placer",
         builder -> builder.persistent(EntityPlacerComponent.CODEC)
             .networkSynchronized(EntityPlacerComponent.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<BlockPlacerComponent> BLOCK_PLACER = register(
+        "block_placer",
+        builder -> builder.persistent(BlockPlacerComponent.CODEC)
+            .networkSynchronized(BlockPlacerComponent.STREAM_CODEC)
             .cacheEncoding()
     );
 

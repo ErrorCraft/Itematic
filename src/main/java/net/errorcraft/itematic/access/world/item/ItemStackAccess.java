@@ -35,6 +35,9 @@ public interface ItemStackAccess {
     default boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
         return false;
     }
+    default boolean itematic$canFitInsideContainerItems() {
+        return false;
+    }
     default double itematic$attackSpeedMultiplier() {
         return 0.0d;
     }

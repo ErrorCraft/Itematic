@@ -20,9 +20,9 @@ import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
@@ -49,7 +49,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -204,8 +203,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private InteractionResult useDataComponents(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = player.getItemInHand(hand);
+        BlockPlacerComponent blockPlacer = stack.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer != null && blockPlacer.canUse(BlockPlacerComponent.Pass.FLUID)) {
+            return blockPlacer.use(level, player, hand, stack, stackExchangerReference.get());
+        }
+
         EntityPlacerComponent entityPlacer = stack.get(ItematicDataComponents.ENTITY_PLACER);
-        if (entityPlacer != null) {
+        if (entityPlacer != null && entityPlacer.canUse(EntityPlacerComponent.Pass.FLUID)) {
             return entityPlacer.use(level, player, hand, stack, stackExchangerReference.get());
         }
 
@@ -344,8 +348,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private InteractionResult useDataComponents(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = context.getItemInHand();
+        BlockPlacerComponent blockPlacer = stack.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer != null && blockPlacer.canUse(BlockPlacerComponent.Pass.BLOCK)) {
+            return blockPlacer.useOn(context, stackExchangerReference.get());
+        }
+
         EntityPlacerComponent entityPlacer = stack.get(ItematicDataComponents.ENTITY_PLACER);
-        if (entityPlacer != null) {
+        if (entityPlacer != null && entityPlacer.canUse(EntityPlacerComponent.Pass.BLOCK)) {
             return entityPlacer.useOn(context, stackExchangerReference.get());
         }
 
@@ -430,17 +439,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         for (ItemBehavior<?> behavior : this.behavior) {
             behavior.using(itemStack, level, livingEntity, usedTicks, ticksRemaining);
         }
-    }
-
-    @Inject(
-        method = "onDestroyed",
-        at = @At("HEAD")
-    )
-    private void onItemEntityDestroyedUseItemBehavior(ItemEntity itemEntity, CallbackInfo info) {
-        this.itematic$getBehavior(ItemBehaviorType.BLOCK)
-            .ifPresent(block -> block.onDestroyed(itemEntity));
-        this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .ifPresent(itemHolder -> itemHolder.onDestroyed(itemEntity));
     }
 
     @WrapMethod(
@@ -573,15 +571,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private boolean isCorrectForDropsPassItemStack(Tool instance, BlockState state, Operation<Boolean> original, ItemStack itemStack) {
         return instance.itematic$isCorrectForDrops(itemStack, state);
-    }
-
-    @WrapMethod(
-        method = "canFitInsideContainerItems"
-    )
-    public boolean useItemBehavior(Operation<Boolean> original) {
-        return this.itematic$getBehavior(ItemBehaviorType.BLOCK)
-            .map(BlockItemBehavior::canBeNested)
-            .orElse(true);
     }
 
     @WrapMethod(

@@ -237,6 +237,7 @@
     "world.inventory.GrindstoneMenuExtender$EnchantedItemSlotExtender",
     "world.inventory.LoomMenuExtender",
     "world.inventory.LoomMenuExtender$BannerSlotExtender",
+    "world.inventory.ShulkerBoxSlotExtender",
     "world.inventory.tooltip.BundleTooltipExtender",
     "world.item.BlockItemAccessor",
     "world.item.BoneMealItemExtender",

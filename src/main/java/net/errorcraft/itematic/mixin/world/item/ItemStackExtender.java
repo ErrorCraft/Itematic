@@ -22,6 +22,7 @@ import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
@@ -54,6 +55,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -380,6 +382,20 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         }
 
         return original.call(state, level, pos, player);
+    }
+
+    @Inject(
+        method = "onDestroyed",
+        at = @At("HEAD")
+    )
+    private void onDestroyedUseDataComponents(ItemEntity itemEntity, CallbackInfo info) {
+        BlockPlacerComponent blockPlacer = this.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer != null) {
+            blockPlacer.onDestroyed(itemEntity);
+        }
+
+        this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
+            .ifPresent(itemHolder -> itemHolder.onDestroyed(itemEntity));
     }
 
     @WrapMethod(
@@ -921,6 +937,16 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         }
 
         return this.item.value().itematic$mayStartUsing(level, user, hand, stack);
+    }
+
+    @Override
+    public boolean itematic$canFitInsideContainerItems() {
+        BlockPlacerComponent blockPlacer = this.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer != null) {
+            return blockPlacer.canFitInsideContainerItems();
+        }
+
+        return true;
     }
 
     @Override

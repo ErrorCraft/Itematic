@@ -44,7 +44,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -121,39 +120,21 @@ public record EntityPlacerComponent(EntitySpawner entity, Optional<HolderSet<Blo
         }
     }
 
-    public InteractionResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (this.isUnuseable(Pass.FLUID)) {
-            return InteractionResult.PASS;
-        }
+    public boolean canUse(Pass pass) {
+        return this.passes.contains(pass);
+    }
 
+    public InteractionResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
         BlockHitResult blockHitResult = ItemAccessor.getPlayerPOVHitResult(level, user, ClipContext.Fluid.SOURCE_ONLY);
         if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return InteractionResult.PASS;
         }
 
         UseOnContext itemUsageContext = new UseOnContext(level, user, hand, stack, blockHitResult);
-        return this.modifyOrPlace(itemUsageContext, stackExchanger);
+        return this.useOn(itemUsageContext, stackExchanger);
     }
 
     public InteractionResult useOn(UseOnContext context, ItemStackExchanger stackExchanger) {
-        if (this.isUnuseable(Pass.BLOCK)) {
-            return InteractionResult.PASS;
-        }
-
-        return this.modifyOrPlace(context, stackExchanger);
-    }
-
-    @Nullable
-    public Entity place(ActionContext context, PositionTarget position, @Nullable Double exactY) {
-        return EntityPlacer.of(this.entity, null)
-            .place(context, position, exactY, EntitySpawnReason.SPAWN_ITEM_USE);
-    }
-
-    private boolean isUnuseable(Pass pass) {
-        return !this.passes.contains(pass);
-    }
-
-    private InteractionResult modifyOrPlace(UseOnContext context, ItemStackExchanger stackExchanger) {
         if (context.getLevel().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
@@ -165,6 +146,12 @@ public record EntityPlacerComponent(EntitySpawner entity, Optional<HolderSet<Blo
 
         context.getItemInHand().consume(1, context.getPlayer());
         return InteractionResult.SUCCESS;
+    }
+
+    @Nullable
+    public Entity place(ActionContext context, PositionTarget position, @Nullable Double exactY) {
+        return EntityPlacer.of(this.entity, null)
+            .place(context, position, exactY, EntitySpawnReason.SPAWN_ITEM_USE);
     }
 
     private UseOnContext recalculateContext(UseOnContext context) {
