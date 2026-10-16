@@ -6,6 +6,7 @@ import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.ConsumableComponent;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
@@ -179,6 +180,12 @@ public class ItematicDataComponents {
         "block_placer",
         builder -> builder.persistent(BlockPlacerComponent.CODEC)
             .networkSynchronized(BlockPlacerComponent.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<Bucket> BUCKET = register(
+        "bucket",
+        builder -> builder.persistent(Bucket.CODEC)
+            .networkSynchronized(Bucket.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<ZoomFieldOfViewMultiplier> ZOOM_FIELD_OF_VIEW_MULTIPLIER = register(

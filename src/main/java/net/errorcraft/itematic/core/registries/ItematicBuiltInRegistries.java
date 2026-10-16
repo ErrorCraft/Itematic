@@ -17,7 +17,8 @@ import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvi
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Constant;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
-import net.errorcraft.itematic.world.level.modification.WorldModificationType;
+import net.errorcraft.itematic.world.level.modification.WorldModification;
+import net.errorcraft.itematic.world.level.modification.modifications.DrainFluid;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -60,9 +61,9 @@ public class ItematicBuiltInRegistries {
         ItematicRegistries.SHOOTER_METHOD_TYPE,
         _ -> ShooterMethodType.DIRECT
     );
-    public static final Registry<WorldModificationType<?>> WORLD_MODIFICATION_TYPE = register(
+    public static final Registry<WorldModification.Type<?>> WORLD_MODIFICATION_TYPE = register(
         ItematicRegistries.WORLD_MODIFICATION_TYPE,
-        _ -> WorldModificationType.DRAIN_FLUID
+        _ -> DrainFluid.TYPE
     );
     public static final Registry<MapCodec<? extends EntitySpawnRule<?>>> ENTITY_SPAWN_RULE_TYPE = register(
         ItematicRegistries.ENTITY_SPAWN_RULE_TYPE,

@@ -23,6 +23,7 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
@@ -216,6 +217,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         EntityPlacerComponent entityPlacer = stack.get(ItematicDataComponents.ENTITY_PLACER);
         if (entityPlacer != null && entityPlacer.canUse(EntityPlacerComponent.Pass.FLUID)) {
             return entityPlacer.use(level, player, hand, stack, stackExchangerReference.get());
+        }
+
+        Bucket bucket = stack.get(ItematicDataComponents.BUCKET);
+        if (bucket != null) {
+            return bucket.use(level, player, hand, stack, stackExchangerReference.get());
         }
 
         return original.call(level, player, hand);

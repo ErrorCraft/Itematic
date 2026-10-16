@@ -16,7 +16,7 @@ import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvi
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.ItematicBlockStateProviderTypes;
-import net.errorcraft.itematic.world.level.modification.WorldModificationType;
+import net.errorcraft.itematic.world.level.modification.WorldModificationTypes;
 import net.errorcraft.itematic.world.level.storage.loot.functions.ItematicItemModifiers;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.ItematicPredicates;
 import net.fabricmc.api.ModInitializer;
@@ -38,7 +38,7 @@ public class Itematic implements ModInitializer {
         UseDurationProviderTypes.bootstrap(ItematicBuiltInRegistries.USE_DURATION_PROVIDER_TYPE);
         ItemHolderRuleType.init();
         ShooterMethodType.init();
-        WorldModificationType.init();
+        WorldModificationTypes.bootstrap(ItematicBuiltInRegistries.WORLD_MODIFICATION_TYPE);
         EntitySpawnRuleTypes.bootstrap(ItematicBuiltInRegistries.ENTITY_SPAWN_RULE_TYPE);
         MeleeWeaponComponents.init();
         ItematicEntitySubPredicates.bootstrap(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);

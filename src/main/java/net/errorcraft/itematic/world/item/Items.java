@@ -76,7 +76,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemB
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.OminousEffectProviderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
@@ -857,7 +856,6 @@ public class Items {
                 .register();
             this.builderForConsumable(ItemIds.OMINOUS_BOTTLE, Consumables.DEFAULT_DRINK)
                 .display(display -> display.rarity(Rarity.UNCOMMON))
-                .behavior(OminousEffectProviderItemBehavior.INSTANCE)
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.OMINOUS_BOTTLE_DISPOSE)))
