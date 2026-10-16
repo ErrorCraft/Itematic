@@ -4,23 +4,23 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.OptionalInt;
 
-public class IndefiniteUseDurationProvider implements UseDurationProvider {
-    public static final IndefiniteUseDurationProvider INSTANCE = new IndefiniteUseDurationProvider();
-    public static final MapCodec<IndefiniteUseDurationProvider> CODEC = MapCodec.unit(INSTANCE);
-    public static final StreamCodec<ByteBuf, IndefiniteUseDurationProvider> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+public class Indefinite implements UseDurationProvider {
+    public static final Indefinite INSTANCE = new Indefinite();
+    public static final MapCodec<Indefinite> CODEC = MapCodec.unit(INSTANCE);
+    public static final StreamCodec<ByteBuf, Indefinite> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+    public static final Type<Indefinite> TYPE = new Type<>(CODEC, STREAM_CODEC);
 
-    private IndefiniteUseDurationProvider() {}
+    private Indefinite() {}
 
     @Override
-    public UseDurationProviderType<?> type() {
-        return UseDurationProviderType.INDEFINITE;
+    public Type<?> type() {
+        return TYPE;
     }
 
     @Override

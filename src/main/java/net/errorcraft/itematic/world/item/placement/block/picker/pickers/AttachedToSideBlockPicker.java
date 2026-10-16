@@ -4,11 +4,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
+import net.errorcraft.itematic.world.level.block.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.core.registries.codec.RegistryCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -17,10 +18,16 @@ import org.jspecify.annotations.Nullable;
 
 public record AttachedToSideBlockPicker(Holder<Block> attachedBlock, Holder<Block> otherBlock, Direction attachedSide) implements BlockPicker<AttachedToSideBlockPicker> {
     public static final MapCodec<AttachedToSideBlockPicker> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        RegistryCodecs.holder(Registries.BLOCK).fieldOf("attached_block").forGetter(AttachedToSideBlockPicker::attachedBlock),
-        RegistryCodecs.holder(Registries.BLOCK).fieldOf("other_block").forGetter(AttachedToSideBlockPicker::otherBlock),
+        Blocks.CODEC.fieldOf("attached_block").forGetter(AttachedToSideBlockPicker::attachedBlock),
+        Blocks.CODEC.fieldOf("other_block").forGetter(AttachedToSideBlockPicker::otherBlock),
         Direction.CODEC.fieldOf("attached_side").forGetter(AttachedToSideBlockPicker::attachedSide)
     ).apply(instance, AttachedToSideBlockPicker::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, AttachedToSideBlockPicker> STREAM_CODEC = StreamCodec.composite(
+        Blocks.STREAM_CODEC, AttachedToSideBlockPicker::attachedBlock,
+        Blocks.STREAM_CODEC, AttachedToSideBlockPicker::otherBlock,
+        Direction.STREAM_CODEC, AttachedToSideBlockPicker::attachedSide,
+        AttachedToSideBlockPicker::new
+    );
 
     @Override
     public BlockPickerType<AttachedToSideBlockPicker> type() {

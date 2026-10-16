@@ -1,11 +1,19 @@
 package net.errorcraft.itematic.core.component;
 
+import net.errorcraft.itematic.core.dispenser.behavior.DispenseBehavior;
 import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.Bucket;
+import net.errorcraft.itematic.world.item.component.ConsumableComponent;
+import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
+import net.errorcraft.itematic.world.item.component.ZoomFieldOfViewMultiplier;
+import net.errorcraft.itematic.world.item.component.ZoomSounds;
 import net.errorcraft.itematic.world.item.equipment.Glider;
+import net.errorcraft.itematic.world.item.holder.ItemHolderSounds;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
@@ -20,12 +28,14 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.ItemUseAnimation;
 import org.apache.commons.lang3.math.Fraction;
 
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
 public class ItematicDataComponents {
@@ -35,10 +45,31 @@ public class ItematicDataComponents {
             .networkSynchronized(UseDuration.STREAM_CODEC)
             .cacheEncoding()
     );
+    public static final DataComponentType<Set<UseDuration.Pass>> USE_PASSES = register(
+        "use_passes",
+        builder -> builder.persistent(UseDuration.Pass.SET_CODEC)
+            .networkSynchronized(UseDuration.Pass.SET_STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<Unit> HAS_USE_PARTICLES = register(
+        "has_use_particles",
+        builder -> builder.persistent(Unit.CODEC)
+            .networkSynchronized(Unit.STREAM_CODEC)
+    );
     public static final DataComponentType<ItemUseAnimation> USE_ANIMATION = register(
         "use_animation",
         builder -> builder.persistent(ItemUseAnimation.CODEC)
             .networkSynchronized(ItemUseAnimation.STREAM_CODEC)
+    );
+    public static final DataComponentType<Holder<SoundEvent>> USE_SOUND = register(
+        "use_sound",
+        builder -> builder.persistent(SoundEvent.CODEC)
+            .networkSynchronized(SoundEvent.STREAM_CODEC)
+    );
+    public static final DataComponentType<ConsumableComponent> CONSUMABLE = register(
+        "consumable",
+        builder -> builder.persistent(ConsumableComponent.CODEC)
+            .networkSynchronized(ConsumableComponent.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<HolderSet<Item>> SHOOTER_AMMUNITION = register(
@@ -81,6 +112,12 @@ public class ItematicDataComponents {
         "item_holder_rules",
         builder -> builder.persistent(ItemHolderRules.CODEC)
             .networkSynchronized(ItemHolderRules.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<ItemHolderSounds> ITEM_HOLDER_SOUNDS = register(
+        "item_holder_sounds",
+        builder -> builder.persistent(ItemHolderSounds.CODEC)
+            .networkSynchronized(ItemHolderSounds.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<ItemDamageRules> SHOOTER_DAMAGE_RULES = register(
@@ -127,6 +164,39 @@ public class ItematicDataComponents {
         "cooking_fuel_remainder",
         builder -> builder.persistent(ItemStackTemplate.CODEC)
             .networkSynchronized(ItemStackTemplate.STREAM_CODEC)
+    );
+    public static final DataComponentType<Holder<DispenseBehavior>> DISPENSE_BEHAVIOR = register(
+        "dispense_behavior",
+        builder -> builder.persistent(DispenseBehavior.CODEC)
+            .networkSynchronized(DispenseBehavior.STREAM_CODEC)
+    );
+    public static final DataComponentType<EntityPlacerComponent> ENTITY_PLACER = register(
+        "entity_placer",
+        builder -> builder.persistent(EntityPlacerComponent.CODEC)
+            .networkSynchronized(EntityPlacerComponent.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<BlockPlacerComponent> BLOCK_PLACER = register(
+        "block_placer",
+        builder -> builder.persistent(BlockPlacerComponent.CODEC)
+            .networkSynchronized(BlockPlacerComponent.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<Bucket> BUCKET = register(
+        "bucket",
+        builder -> builder.persistent(Bucket.CODEC)
+            .networkSynchronized(Bucket.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<ZoomFieldOfViewMultiplier> ZOOM_FIELD_OF_VIEW_MULTIPLIER = register(
+        "zoom_field_of_view_multiplier",
+        builder -> builder.persistent(ZoomFieldOfViewMultiplier.CODEC)
+            .networkSynchronized(ZoomFieldOfViewMultiplier.STREAM_CODEC)
+    );
+    public static final DataComponentType<ZoomSounds> ZOOM_SOUNDS = register(
+        "zoom_sounds",
+        builder -> builder.persistent(ZoomSounds.CODEC)
+            .networkSynchronized(ZoomSounds.STREAM_CODEC)
     );
 
     private ItematicDataComponents() {}

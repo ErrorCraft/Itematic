@@ -14,7 +14,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.CastableItemBehavio
 import net.errorcraft.itematic.world.item.behavior.behaviors.CompostableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ConsumableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CookingFuelItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.CooldownItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DamageableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DecoratedPotPatternItemBehavior;
@@ -32,7 +31,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemB
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.OminousEffectProviderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
@@ -125,10 +123,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<ProjectileItemBehavior> PROJECTILE = register(
         "projectile",
         ProjectileItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<CooldownItemBehavior> COOLDOWN = register(
-        "cooldown",
-        CooldownItemBehavior.CODEC
     );
     public static final ItemBehaviorType<DyeItemBehavior> DYE = register(
         "dye",
@@ -249,10 +243,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<StackableItemBehavior> STACKABLE = register(
         "stackable",
         StackableItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<OminousEffectProviderItemBehavior> OMINOUS_EFFECT_PROVIDER = register(
-        "ominous_effect_provider",
-        OminousEffectProviderItemBehavior.CODEC
     );
     public static final ItemBehaviorType<GliderItemBehavior> GLIDER = register(
         "glider",

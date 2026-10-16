@@ -4,23 +4,23 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.OptionalInt;
 
-public class ShooterUseDurationProvider implements UseDurationProvider {
-    public static final ShooterUseDurationProvider INSTANCE = new ShooterUseDurationProvider();
-    public static final MapCodec<ShooterUseDurationProvider> CODEC = MapCodec.unit(INSTANCE);
-    public static final StreamCodec<ByteBuf, ShooterUseDurationProvider> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+public class Shooter implements UseDurationProvider {
+    public static final Shooter INSTANCE = new Shooter();
+    public static final MapCodec<Shooter> CODEC = MapCodec.unit(INSTANCE);
+    public static final StreamCodec<ByteBuf, Shooter> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+    public static final Type<Shooter> TYPE = new Type<>(CODEC, STREAM_CODEC);
 
-    private ShooterUseDurationProvider() {}
+    private Shooter() {}
 
     @Override
-    public UseDurationProviderType<?> type() {
-        return UseDurationProviderType.SHOOTER;
+    public Type<?> type() {
+        return TYPE;
     }
 
     @Override

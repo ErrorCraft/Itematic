@@ -2,9 +2,6 @@ package net.errorcraft.itematic.mixin.world.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.world.entity.LivingEntityAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
@@ -47,7 +44,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.Predicate;
 
@@ -88,31 +84,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
 
     public LivingEntityExtender(EntityType<?> type, Level level) {
         super(type, level);
-    }
-
-    @WrapMethod(
-        method = "getEquipmentSlotForItem"
-    )
-    private EquipmentSlot alsoCheckEquipmentItemBehavior(ItemStack itemStack, Operation<EquipmentSlot> original) {
-        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
-            return EquipmentSlot.MAINHAND;
-        }
-
-        return original.call(itemStack);
-    }
-
-    @Inject(
-        method = "onEquipItem",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
-        ),
-        cancellable = true
-    )
-    private void alsoCheckEquipmentItemBehavior(EquipmentSlot slot, ItemStack oldStack, ItemStack stack, CallbackInfo info) {
-        if (!stack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
-            info.cancel();
-        }
     }
 
     @Redirect(
@@ -260,20 +231,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return false;
     }
 
-    @Inject(
-        method = "canEquipWithDispenser",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
-        ),
-        cancellable = true
-    )
-    private void alsoCheckEquipmentItemBehavior(ItemStack itemStack, CallbackInfoReturnable<Boolean> info) {
-        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
-            info.setReturnValue(false);
-        }
-    }
-
     @Redirect(
         method = "canEquipWithDispenser",
         at = @At(
@@ -283,22 +240,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     )
     private boolean dispensableAlwaysTrue(Equippable instance) {
         return true;
-    }
-
-    @WrapOperation(
-        method = "isEquippableInSlot",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
-        )
-    )
-    @Nullable
-    private Object alsoCheckEquipmentItemBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
-        if (!instance.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
-            return null;
-        }
-
-        return original.call(instance, type);
     }
 
     @Redirect(
@@ -401,10 +342,6 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
     @Unique
     @Nullable
     private Double getBaseAttackDamage(ItemStack stack) {
-        if (!stack.itematic$hasBehavior(ItemBehaviorType.WEAPON)) {
-            return null;
-        }
-
         WeaponAttackDamage weaponAttackDamage = stack.get(ItematicDataComponents.WEAPON_ATTACK_DAMAGE);
         if (weaponAttackDamage == null) {
             return null;

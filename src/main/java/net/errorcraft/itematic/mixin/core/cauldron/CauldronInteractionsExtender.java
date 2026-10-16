@@ -1,10 +1,9 @@
 package net.errorcraft.itematic.mixin.core.cauldron;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
-import net.errorcraft.itematic.world.item.placement.block.picker.BlockPicker;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteractions;
 import net.minecraft.references.BlockItemIds;
@@ -31,12 +30,15 @@ public class CauldronInteractionsExtender {
             target = "Lnet/minecraft/world/level/block/Block;byItem(Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/level/block/Block;"
         )
     )
-    private static @Nullable Block getBlockFromItemUseItemBehavior(Item item) {
-        return item.itematic$getBehavior(ItemBehaviorType.BLOCK)
-            .map(BlockItemBehavior::block)
-            .map(BlockPicker::defaultBlock)
-            .map(Holder::value)
-            .orElse(null);
+    private static @Nullable Block getBlockFromItemUseDataComponent(Item item, @Local(name = "itemInHand", argsOnly = true) ItemStack itemInHand) {
+        BlockPlacerComponent blockPlacer = itemInHand.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer == null) {
+            return null;
+        }
+
+        return blockPlacer.block()
+            .defaultBlock()
+            .value();
     }
 
     @Redirect(
