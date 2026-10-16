@@ -1,13 +1,11 @@
 {
   "behavior": {
-    "minecraft:consumable": {
-      "has_consume_particles": false,
-      "sound": "minecraft:entity.generic.drink"
-    },
+    "minecraft:consumable": {},
     "minecraft:ominous_effect_provider": {},
     "minecraft:stackable": 64,
     "minecraft:useable": {
       "animation": "drink",
+      "sound": "minecraft:entity.generic.drink",
       "ticks": 32
     }
   },

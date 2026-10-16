@@ -14,7 +14,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.CastableItemBehavio
 import net.errorcraft.itematic.world.item.behavior.behaviors.CompostableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ConsumableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CookingFuelItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.CooldownItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DamageableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DecoratedPotPatternItemBehavior;
@@ -125,10 +124,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<ProjectileItemBehavior> PROJECTILE = register(
         "projectile",
         ProjectileItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<CooldownItemBehavior> COOLDOWN = register(
-        "cooldown",
-        CooldownItemBehavior.CODEC
     );
     public static final ItemBehaviorType<DyeItemBehavior> DYE = register(
         "dye",

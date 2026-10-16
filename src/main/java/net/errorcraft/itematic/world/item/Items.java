@@ -59,7 +59,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.CastableItemBehavio
 import net.errorcraft.itematic.world.item.behavior.behaviors.CompostableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ConsumableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CookingFuelItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.CooldownItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DamageableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DecoratedPotPatternItemBehavior;
@@ -1093,7 +1092,7 @@ public class Items {
             this.registerBlock(BlockItemIds.BEEHIVE);
             this.builder(ItemIds.HONEY_BOTTLE, 16)
                 .behavior(UseableItemBehavior.of(Consumables.HONEY_BOTTLE, this.items.getOrThrow(ItemIds.GLASS_BOTTLE)))
-                .behavior(ConsumableItemBehavior.of(Consumables.HONEY_BOTTLE))
+                .behavior(ConsumableItemBehavior.of())
                 .behavior(FoodItemBehavior.of(Foods.HONEY_BOTTLE))
                 .event(
                     ItemEvent.CONSUME_ITEM,
@@ -1993,8 +1992,8 @@ public class Items {
                 .behavior(ThrowableItemBehavior.of(1.5f))
                 .register();
             this.builderForProjectile(ItemIds.ENDER_PEARL, EntityTypeIds.ENDER_PEARL, 16)
+                .behavior(UseableItemBehavior.ofInstant(1.0f))
                 .behavior(ThrowableItemBehavior.of(1.5f))
-                .behavior(CooldownItemBehavior.of(20))
                 .register();
             this.builderForProjectile(ItemIds.ENDER_EYE, EntityTypeIds.EYE_OF_ENDER)
                 .behavior(ThrowableItemBehavior.of())
@@ -2081,9 +2080,9 @@ public class Items {
                 )
                 .register();
             this.builderForProjectile(ItemIds.WIND_CHARGE, EntityTypeIds.WIND_CHARGE)
+                .behavior(UseableItemBehavior.ofInstant(0.5f))
                 .behavior(ThrowableItemBehavior.of(1.5f))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                .behavior(CooldownItemBehavior.of(10))
                 .register();
             this.builder(ItemIds.DISC_FRAGMENT_5)
                 .display(display -> display.rarity(Rarity.UNCOMMON).tooltip(Tooltips.description(ItemIds.DISC_FRAGMENT_5)))
@@ -2582,13 +2581,13 @@ public class Items {
         private ItemBuilder builderForConsumable(ResourceKey<Item> item, Consumable consumable) {
             return this.builder(item)
                 .behavior(UseableItemBehavior.of(consumable))
-                .behavior(ConsumableItemBehavior.of(consumable));
+                .behavior(ConsumableItemBehavior.of());
         }
 
         private ItemBuilder builderForConsumable(ResourceKey<Item> item, Consumable consumable, ResourceKey<Item> remainder) {
             return this.builder(item, 1)
                 .behavior(UseableItemBehavior.of(consumable, this.items.getOrThrow(remainder)))
-                .behavior(ConsumableItemBehavior.of(consumable));
+                .behavior(ConsumableItemBehavior.of());
         }
 
         private ItemBuilder builderForConsumableBowl(ResourceKey<Item> item) {

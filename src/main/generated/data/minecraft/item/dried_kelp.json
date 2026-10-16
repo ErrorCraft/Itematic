@@ -11,6 +11,8 @@
     "minecraft:stackable": 64,
     "minecraft:useable": {
       "animation": "eat",
+      "has_use_particles": true,
+      "sound": "minecraft:entity.generic.eat",
       "ticks": 16
     }
   },

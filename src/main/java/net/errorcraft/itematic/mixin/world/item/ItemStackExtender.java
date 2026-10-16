@@ -24,6 +24,7 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
@@ -65,6 +66,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.item.component.Weapon;
@@ -401,12 +403,30 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     @WrapMethod(
         method = "onUseTick"
     )
-    private void checkInteractableStackForOnUseTick(Level level, LivingEntity livingEntity, int ticksRemaining, Operation<Void> original) {
+    private void checkInteractableStackForOnUseTickAndUseDataComponents(Level level, LivingEntity livingEntity, int ticksRemaining, Operation<Void> original) {
         if (this.itematic$cannotBeInteractedWith()) {
             return;
         }
 
+        int usedTicks = livingEntity.itematic$usedItemTicks();
+        UseDuration useDuration = this.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null) {
+            useDuration.using((ItemStack)(Object) this, usedTicks, ticksRemaining, livingEntity);
+        }
+
         original.call(level, livingEntity, ticksRemaining);
+    }
+
+    @WrapOperation(
+        method = "onUseTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
+        )
+    )
+    @Nullable
+    private Object doNotUseConsumableDataComponent(ItemStack instance, DataComponentType<Consumable> componentType, Operation<Object> original) {
+        return null;
     }
 
     @ModifyArg(
@@ -749,32 +769,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     }
 
     @WrapOperation(
-        method = "use",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/InteractionResult$Success;heldItemTransformedTo(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/InteractionResult$Success;"
-        )
-    )
-    private InteractionResult.Success doNotModifyResultingItemStackIfNotUseable(InteractionResult.Success instance, ItemStack itemStack, Operation<InteractionResult.Success> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
-            return instance;
-        }
-
-        return original.call(instance, itemStack);
-    }
-
-    @WrapMethod(
-        method = "applyAfterUseComponentSideEffects"
-    )
-    private ItemStack checkForUseableBehavior(LivingEntity user, ItemStack stackBeforeUsing, Operation<ItemStack> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
-            return (ItemStack)(Object) this;
-        }
-
-        return original.call(user, stackBeforeUsing);
-    }
-
-    @WrapOperation(
         method = "lambda$getDamageSource$1",
         at = @At(
             value = "INVOKE",
@@ -782,7 +776,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         )
     )
     @Nullable
-    private DamageSource getDamageSourceUseItemBehavior(Item instance, LivingEntity attacker, Operation<DamageSource> original) {
+    private DamageSource getDamageSourceUseDataComponent(Item instance, LivingEntity attacker, Operation<DamageSource> original) {
         SmashingWeapon smashingWeapon = this.get(ItematicDataComponents.SMASHING_WEAPON);
         if (smashingWeapon != null) {
             return smashingWeapon.damageSource(attacker);

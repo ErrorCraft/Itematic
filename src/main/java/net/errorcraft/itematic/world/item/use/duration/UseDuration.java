@@ -3,12 +3,18 @@ package net.errorcraft.itematic.world.item.use.duration;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.mixin.world.item.component.ConsumableAccessor;
 import net.errorcraft.itematic.util.SetCodec;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.world.item.component.UseableListener;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Constant;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
@@ -38,9 +44,10 @@ public record UseDuration(UseDurationProvider provider) {
         UseDuration::new,
         UseDuration::provider
     );
-    public static final int NONE = 0;
     public static final int INSTANT = 0;
     public static final int INDEFINITE = -1;
+    private static final int CONSUME_EFFECTS_INTERVAL = ConsumableAccessor.consumeEffectsInterval();
+    private static final float CONSUME_EFFECTS_TRESHOLD = ConsumableAccessor.consumeEffectsThreshold();
 
     public UseDuration(int ticks) {
         this(new Constant(ticks));
@@ -65,6 +72,8 @@ public record UseDuration(UseDurationProvider provider) {
             return InteractionResult.FAIL;
         }
 
+        stack.getAllOfType(UseableListener.Started.class)
+            .forEach(started -> started.onStartedUsing(user));
         int ticks = possibleTicks.getAsInt();
         switch (ticks) {
             case INSTANT -> {
@@ -75,6 +84,41 @@ public record UseDuration(UseDurationProvider provider) {
             default -> user.itematic$startUsingItem(hand, ticks);
         }
         return InteractionResult.CONSUME;
+    }
+
+    public void using(ItemStack stack, int usedTicks, int remainingUseTicks, LivingEntity user) {
+        if (shouldEmitParticlesAndSounds(usedTicks, remainingUseTicks)) {
+            Consumables.DEFAULT_FOOD.emitParticlesAndSounds(user.getRandom(), user, stack, 5);
+        }
+    }
+
+    public void stopUsing(ItemStack stack, Level level, LivingEntity user, ItemStackExchanger stackExchanger) {
+        stack.getAllOfType(UseableListener.Stopped.class)
+            .forEach(stopped -> stopped.onStoppedUsing(stack, stackExchanger, level, user));
+    }
+
+    public void finishUsing(ItemStack stack, Level level, LivingEntity user, ItemStackExchanger stackExchanger) {
+        stack.getAllOfType(UseableListener.Finished.class)
+            .forEach(finished -> finished.itematic$onFinishedUsing(stack, stackExchanger, level, user));
+        Holder<SoundEvent> useSound = stack.get(ItematicDataComponents.USE_SOUND);
+        if (useSound != null) {
+            level.playSound(
+                null,
+                user.getX(),
+                user.getY(),
+                user.getZ(),
+                useSound.value(),
+                SoundSource.NEUTRAL,
+                1.0f,
+                user.getRandom().triangle(1.0f, 0.4f)
+            );
+        }
+    }
+
+    private static boolean shouldEmitParticlesAndSounds(int usedTicks, int remainingUseTicks) {
+        boolean isValidTime = remainingUseTicks != INDEFINITE
+            && usedTicks > (usedTicks + remainingUseTicks) * CONSUME_EFFECTS_TRESHOLD;
+        return isValidTime && usedTicks % CONSUME_EFFECTS_INTERVAL == 0;
     }
 
     public enum Pass implements StringRepresentable {

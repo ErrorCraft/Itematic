@@ -1,11 +1,8 @@
 {
   "behavior": {
-    "minecraft:consumable": {
-      "has_consume_particles": false,
-      "sound": "minecraft:item.honey_bottle.drink"
-    },
+    "minecraft:consumable": {},
     "minecraft:food": {
-      "always_edible": true,
+      "can_always_eat": true,
       "nutrition": 6,
       "saturation": 1.2
     },
@@ -15,6 +12,7 @@
       "remainder": {
         "id": "minecraft:glass_bottle"
       },
+      "sound": "minecraft:item.honey_bottle.drink",
       "ticks": 40
     }
   },

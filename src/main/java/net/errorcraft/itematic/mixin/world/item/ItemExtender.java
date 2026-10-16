@@ -475,6 +475,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             result |= behavior.stopUsing(itemStack, level, entity, usedTicks, remainingTime, stackExchanger);
         }
 
+        UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null) {
+            useDuration.stopUsing(itemStack, level, entity, stackExchanger);
+            result = true;
+        }
+
         if (level instanceof ServerLevel serverLevel) {
             ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
@@ -494,10 +500,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "finishUsingItem"
     )
     public ItemStack useItemBehavior(ItemStack itemStack, Level level, LivingEntity entity, Operation<ItemStack> original) {
-        int usedTicks = entity.itematic$usedItemTicks();
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, itemStack);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.finishUsing(level, entity, itemStack, usedTicks, stackExchanger);
+        UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null) {
+            useDuration.finishUsing(itemStack, level, entity, stackExchanger);
         }
 
         if (level instanceof ServerLevel serverLevel) {
@@ -511,8 +517,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             itemStack.itematic$invokeEvent(ItemEvent.FINISHED_USING, context);
         }
 
-        this.itematic$getBehavior(ItemBehaviorType.CONSUMABLE)
-            .ifPresent(consumable -> consumable.consume(entity, itemStack, stackExchanger, level, entity.getUsedItemHand()));
         return stackExchanger.result();
     }
 
@@ -599,22 +603,14 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "getUseAnimation"
     )
-    public ItemUseAnimation getUseActionUseItemBehavior(ItemStack itemStack, Operation<ItemUseAnimation> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
-            return ItemUseAnimation.NONE;
-        }
-
+    public ItemUseAnimation getUseActionUseDataComponent(ItemStack itemStack, Operation<ItemUseAnimation> original) {
         return itemStack.getOrDefault(ItematicDataComponents.USE_ANIMATION, ItemUseAnimation.NONE);
     }
 
     @WrapMethod(
         method = "getUseDuration"
     )
-    public int useItemBehavior(ItemStack itemStack, LivingEntity user, Operation<Integer> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
-            return 0;
-        }
-
+    public int getUseDurationUseDataComponent(ItemStack itemStack, LivingEntity user, Operation<Integer> original) {
         UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
         if (useDuration == null) {
             return 0;

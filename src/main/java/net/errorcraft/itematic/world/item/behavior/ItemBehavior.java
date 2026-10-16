@@ -36,7 +36,6 @@ public interface ItemBehavior<T extends ItemBehavior<T>> {
     default boolean stopUsing(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
         return false;
     }
-    default void finishUsing(Level level, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {}
     default boolean clickOnSlot(ItemStack stack, Slot slot, ClickAction clickAction, Player user) {
         return false;
     }
