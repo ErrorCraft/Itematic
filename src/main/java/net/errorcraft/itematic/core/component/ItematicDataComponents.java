@@ -10,6 +10,7 @@ import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.ConsumableComponent;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
+import net.errorcraft.itematic.world.item.component.ProjectileComponent;
 import net.errorcraft.itematic.world.item.component.ZoomFieldOfViewMultiplier;
 import net.errorcraft.itematic.world.item.component.ZoomSounds;
 import net.errorcraft.itematic.world.item.equipment.Glider;
@@ -197,6 +198,12 @@ public class ItematicDataComponents {
         "zoom_sounds",
         builder -> builder.persistent(ZoomSounds.CODEC)
             .networkSynchronized(ZoomSounds.STREAM_CODEC)
+    );
+    public static final DataComponentType<ProjectileComponent> PROJECTILE = register(
+        "projectile",
+        builder -> builder.persistent(ProjectileComponent.CODEC)
+            .networkSynchronized(ProjectileComponent.STREAM_CODEC)
+            .cacheEncoding()
     );
 
     private ItematicDataComponents() {}

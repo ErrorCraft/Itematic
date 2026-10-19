@@ -10,6 +10,7 @@ import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
+import net.errorcraft.itematic.world.item.component.ProjectileComponent;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.core.HolderSet;
@@ -31,7 +32,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.OptionalInt;
 
 public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item> ammunition, int range, ShooterMethod method, ItemDamageRules itemDamage) implements ItemBehavior<ShooterItemBehavior> {
@@ -135,13 +135,11 @@ public record ShooterItemBehavior(HolderSet<Item> heldAmmunition, HolderSet<Item
     }
 
     private void createProjectile(ItemStack projectile, ServerLevel level, LivingEntity shooter, float power, float divergence, float angle, int index, boolean critical, @Nullable LivingEntity target) {
-        Optional<Entity> optionalEntity = projectile.itematic$getBehavior(ItemBehaviorType.PROJECTILE)
-            .map(projectileComponent -> projectileComponent.spawnEntity(level, shooter, projectile, 0.0f, power));
-        if (optionalEntity.isEmpty()) {
+        Entity entity = ProjectileComponent.spawn(projectile, level, shooter, 0.0f, power);
+        if (entity == null) {
             return;
         }
 
-        Entity entity = optionalEntity.get();
         if (entity instanceof Projectile projectileEntity) {
             this.method.initializeProjectile(shooter, projectileEntity, index, power, divergence, angle, critical, target);
         }
