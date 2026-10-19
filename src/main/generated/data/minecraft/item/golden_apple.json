@@ -27,13 +27,11 @@
           {
             "id": "minecraft:regeneration",
             "amplifier": 1,
-            "duration": 100,
-            "show_icon": true
+            "duration": 100
           },
           {
             "id": "minecraft:absorption",
-            "duration": 2400,
-            "show_icon": true
+            "duration": 2400
           }
         ],
         "entity": "this"

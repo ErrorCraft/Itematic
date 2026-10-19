@@ -1,10 +1,12 @@
 package net.errorcraft.itematic.data.server;
 
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
+import net.errorcraft.itematic.world.level.storage.loot.providers.number.ints.ItematicContextIntProviders;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,6 +23,8 @@ public class ItematicDynamicRegistryProvider extends FabricDynamicRegistryProvid
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.DISPENSE_BEHAVIOR));
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.ENTITY_SPAWN_RULE_SET));
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.ITEM_GROUP));
+        HolderLookup.RegistryLookup<ContextIntProvider> contextIntProviders = registries.lookupOrThrow(Registries.CONTEXT_INT_PROVIDER);
+        entries.add(contextIntProviders.getOrThrow(ItematicContextIntProviders.CONSUMABLE_OMINOUS_BOTTLE_AMPLIFIER));
     }
 
     @Override

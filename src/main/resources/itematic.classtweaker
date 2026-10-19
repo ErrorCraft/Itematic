@@ -14,6 +14,7 @@ accessible    class    net/minecraft/client/resources/model/ModelBakery$ModelBak
 accessible    class    net/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap
 accessible    class    net/minecraft/world/entity/animal/feline/Ocelot$OcelotTemptGoal
 accessible    method    net/minecraft/world/item/CreativeModeTab$Builder type (Lnet/minecraft/world/item/CreativeModeTab$Type;)Lnet/minecraft/world/item/CreativeModeTab$Builder;
+accessible    class    net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction$DirectSource
 
 inject-interface    net/minecraft/advancements/predicates/entity/EntityPredicate$Builder    net/errorcraft/itematic/access/advancements/predicates/entity/EntityPredicateAccess$BuilderAccess
 inject-interface    net/minecraft/advancements/predicates/ItemPredicate    net/errorcraft/itematic/access/advancements/predicates/ItemPredicateAccess
