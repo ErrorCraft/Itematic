@@ -127,6 +127,7 @@ import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointer
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
+import net.errorcraft.itematic.world.level.storage.loot.providers.number.ints.ItematicContextIntProviders;
 import net.errorcraft.itematic.world.phys.Vec3Provider;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.predicates.BlockPredicate;
@@ -175,7 +176,6 @@ import net.minecraft.util.Util;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypeIds;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -206,6 +206,7 @@ import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.MobVisibility;
+import net.minecraft.world.item.component.OminousBottleAmplifier;
 import net.minecraft.world.item.component.PiercingWeapon;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.item.component.SwingAnimation;
@@ -858,7 +859,32 @@ public class Items {
                 .display(display -> display.rarity(Rarity.UNCOMMON))
                 .event(
                     ItemEvent.CONSUME_ITEM,
-                    ActionEntry.of(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.OMINOUS_BOTTLE_DISPOSE)))
+                    ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .addOptional(
+                                MatchTool.toolMatches(
+                                    ItemPredicate.Builder.item()
+                                        .withComponents(
+                                            DataComponentMatchers.Builder.components()
+                                                .any(DataComponents.OMINOUS_BOTTLE_AMPLIFIER)
+                                                .build()
+                                        )
+                                ),
+                                AddStatusEffectsAction.of(
+                                    AddStatusEffectsAction.StatusEffect.of(
+                                        this.statusEffects.getOrThrow(MobEffectIds.BAD_OMEN),
+                                        OminousBottleAmplifier.EFFECT_DURATION,
+                                        ItematicContextIntProviders.CONSUMABLE_OMINOUS_BOTTLE_AMPLIFIER
+                                    )
+                                )
+                            )
+                            .add(
+                                PlaySoundAction.of(
+                                    PositionTarget.ORIGIN,
+                                    this.soundEvents.getOrThrow(SoundEventIds.OMINOUS_BOTTLE_DISPOSE)
+                                )
+                            )
+                    )
                 )
                 .register();
             this.builderForConsumable(ItemIds.MILK_BUCKET, Consumables.DEFAULT_DRINK, ItemIds.BUCKET)
@@ -1700,9 +1726,21 @@ public class Items {
                     ItemEvent.BEFORE_DEATH_HOLDER,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 900, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 100, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 800, 0)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.REGENERATION),
+                                900,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION),
+                                100,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE),
+                                800,
+                                0
+                            )
                         )
                     )
                 )
@@ -2209,7 +2247,10 @@ public class Items {
                     ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.6f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 100)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.POISON),
+                                100
+                            )
                         )
                     )
                 )
@@ -2251,8 +2292,15 @@ public class Items {
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 100, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 2400)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.REGENERATION),
+                                100,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION),
+                                2400
+                            )
                         )
                     )
                 )
@@ -2264,10 +2312,23 @@ public class Items {
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 400, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.RESISTANCE), 6000),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 6000),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 2400)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.REGENERATION),
+                                400,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.RESISTANCE),
+                                6000
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE),
+                                6000
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION),
+                                2400
+                            )
                         )
                     )
                 )
@@ -2309,7 +2370,10 @@ public class Items {
                     ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.3f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 600)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.POISON),
+                                600
+                            )
                         )
                     )
                 )
@@ -2347,9 +2411,20 @@ public class Items {
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 1200, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.HUNGER), 300, 2),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.NAUSEA), 300)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.POISON),
+                                1200,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.HUNGER),
+                                300,
+                                2
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.NAUSEA),
+                                300
+                            )
                         )
                     )
                 )
@@ -2386,7 +2461,10 @@ public class Items {
                     ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.8f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.HUNGER), 600)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.HUNGER),
+                                600
+                            )
                         )
                     )
                 )
@@ -2397,7 +2475,10 @@ public class Items {
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 100)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.POISON),
+                                100
+                            )
                         )
                     )
                 )

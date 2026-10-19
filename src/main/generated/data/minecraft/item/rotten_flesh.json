@@ -24,8 +24,7 @@
         "effects": [
           {
             "id": "minecraft:hunger",
-            "duration": 600,
-            "show_icon": true
+            "duration": 600
           }
         ],
         "entity": "this"

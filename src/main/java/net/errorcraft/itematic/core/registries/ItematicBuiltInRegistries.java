@@ -1,6 +1,10 @@
 package net.errorcraft.itematic.core.registries;
 
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.core.component.provider.number.floats.FloatProvider;
+import net.errorcraft.itematic.core.component.provider.number.floats.providers.FoodProvider;
+import net.errorcraft.itematic.core.component.provider.number.ints.IntProvider;
+import net.errorcraft.itematic.core.component.provider.number.ints.providers.MaxStackSizeProvider;
 import net.errorcraft.itematic.mixin.core.registries.BuiltInRegistriesAccessor;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
@@ -76,6 +80,14 @@ public class ItematicBuiltInRegistries {
     public static final Registry<ItemGroupEntryType<?>> ITEM_GROUP_ENTRY_TYPE = register(
         ItematicRegistries.ITEM_GROUP_ENTRY_TYPE,
         _ -> ItemGroupEntryType.ITEM
+    );
+    public static final Registry<IntProvider.Type<?, ?>> DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE = register(
+        ItematicRegistries.DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE,
+        _ -> MaxStackSizeProvider.TYPE
+    );
+    public static final Registry<FloatProvider.Type<?, ?>> DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE = register(
+        ItematicRegistries.DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE,
+        _ -> FoodProvider.TYPE
     );
 
     private ItematicBuiltInRegistries() {}
