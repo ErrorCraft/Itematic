@@ -191,7 +191,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             }
         }
 
-        InteractionResult trueResult = result.toActionResult();
+        InteractionResult trueResult = originalResult != InteractionResult.PASS ? originalResult : result.toActionResult();
         if (trueResult instanceof InteractionResult.Success success) {
             return success.heldItemTransformedTo(stackExchanger.result());
         }
@@ -341,7 +341,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         tryUpdateItemStack(user, hand, stack, stackExchanger);
-        InteractionResult trueResult = originalResult.consumesAction() ? originalResult : result.toActionResult();
+        InteractionResult trueResult = originalResult != InteractionResult.PASS ? originalResult : result.toActionResult();
         if (trueResult instanceof InteractionResult.Success success) {
             return success.heldItemTransformedTo(stackExchanger.result());
         }
@@ -437,7 +437,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         tryUpdateItemStack(player, type, itemStack, stackExchanger);
         InteractionResult trueResult = result.toActionResult();
         if (trueResult instanceof InteractionResult.Success success) {
-            trueResult = success.heldItemTransformedTo(stackExchanger.result());
+            return success.heldItemTransformedTo(stackExchanger.result());
         }
 
         return trueResult;
