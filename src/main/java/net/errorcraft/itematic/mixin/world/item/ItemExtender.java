@@ -310,16 +310,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         order = 1001
     )
     public InteractionResult useItemBehavior(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
-        Level level = context.getLevel();
-        if (level.isClientSide()) {
-            return InteractionResult.PASS;
-        }
-
         ItemStackExchanger stackExchanger = context.itematic$stackExchanger();
         LivingEntity user = context.getPlayer();
         ItemStack stack = context.getItemInHand();
         InteractionHand hand = context.getHand();
-        ActionContext actionContext = ActionContext.builder(level)
+        ActionContext actionContext = ActionContext.builder(context.getLevel())
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, user)
             .addOptional(LootContextParams.ORIGIN, user, Entity::position)
