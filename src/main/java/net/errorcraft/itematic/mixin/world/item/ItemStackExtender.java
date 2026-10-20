@@ -564,17 +564,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         return original.call(repairItem);
     }
 
-    @ModifyExpressionValue(
-        method = "isEnchantable",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
-        )
-    )
-    public boolean alsoCheckEnchantableItemBehavior(boolean original) {
-        return original && this.itematic$hasBehavior(ItemBehaviorType.ENCHANTABLE);
-    }
-
     @WrapMethod(
         method = {
             "isSameItem",

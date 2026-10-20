@@ -2484,7 +2484,7 @@ public class Items {
                 )
                 .register();
             this.builder(ItemIds.BOOK)
-                .behavior(EnchantableItemBehavior.ofTransforming(1, this.items.getOrThrow(ItemIds.ENCHANTED_BOOK)))
+                .behavior(EnchantableItemBehavior.of(1, this.items.getOrThrow(ItemIds.ENCHANTED_BOOK)))
                 .register();
             this.builder(ItemIds.WRITABLE_BOOK, 1)
                 .behavior(WritableItemBehavior.of(this.items.getOrThrow(ItemIds.WRITTEN_BOOK)))

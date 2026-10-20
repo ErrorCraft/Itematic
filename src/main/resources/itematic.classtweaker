@@ -70,6 +70,7 @@ inject-interface    net/minecraft/world/item/context/UseOnContext    net/errorcr
 inject-interface    net/minecraft/world/item/crafting/Ingredient    net/errorcraft/itematic/access/world/item/crafting/IngredientAccess
 inject-interface    net/minecraft/world/item/crafting/Recipe    net/errorcraft/itematic/access/world/item/crafting/RecipeAccess
 inject-interface    net/minecraft/world/item/crafting/ShapedRecipePattern    net/errorcraft/itematic/access/world/item/crafting/ShapedRecipePatternAccess
+inject-interface    net/minecraft/world/item/enchantment/Enchantable    net/errorcraft/itematic/access/world/item/enchantment/EnchantableAccess
 inject-interface    net/minecraft/world/level/Level    net/errorcraft/itematic/access/world/level/LevelAccess
 inject-interface    net/minecraft/world/level/LevelReader    net/errorcraft/itematic/access/world/level/LevelReaderAccess
 inject-interface    net/minecraft/world/level/block/CropBlock    net/errorcraft/itematic/access/world/level/block/CropBlockAccess

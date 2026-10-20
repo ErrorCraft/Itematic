@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
+import net.errorcraft.itematic.world.item.enchantment.Enchantables;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,11 +36,10 @@ public class EnchantmentHelperExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isBookUseItemBehavior(ItemStack instance, Object o, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> item = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
-            .flatMap(EnchantableItemBehavior::transformsInto);
-        item.ifPresent(transformsInto::set);
-        return item.isPresent();
+    private static boolean isBookUseDataComponent(ItemStack instance, Object o, @Share("transformsInto") LocalRef<Holder<Item>> transformsIntoReference) {
+        Optional<Holder<Item>> transformsInto = Enchantables.transformsInto(instance);
+        transformsInto.ifPresent(transformsIntoReference::set);
+        return transformsInto.isPresent();
     }
 
     @Redirect(
@@ -50,8 +49,8 @@ public class EnchantmentHelperExtender {
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private static ItemStack newItemStackForEnchantedBookUseHolder(ItemLike item, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        return itemStack.itematic$transmuteCopy(transformsInto.get());
+    private static ItemStack newItemStackForEnchantedBookUseDataComponent(ItemLike item, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack, @Share("transformsInto") LocalRef<Holder<Item>> transformsIntoReference) {
+        return itemStack.itematic$transmuteCopy(transformsIntoReference.get());
     }
 
     @Redirect(
@@ -61,9 +60,7 @@ public class EnchantmentHelperExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isBookUseItemBehavior(ItemStack instance, Object o) {
-        return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
-            .flatMap(EnchantableItemBehavior::transformsInto)
-            .isPresent();
+    private static boolean isBookUseDataComponent(ItemStack instance, Object o) {
+        return Enchantables.transformsInto(instance).isPresent();
     }
 }
