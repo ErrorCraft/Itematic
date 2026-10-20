@@ -2,8 +2,10 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -30,12 +32,12 @@ public class SpawnEggItemBehavior implements ItemBehavior<SpawnEggItemBehavior> 
     }
 
     public Optional<Mob> spawnBaby(Player user, Mob entity, EntityType<? extends Mob> entityType, ServerLevel level, Vec3 pos, ItemStack stack) {
-        Optional<EntityItemBehavior> entityBehavior = stack.itematic$getBehavior(ItemBehaviorType.ENTITY);
-        if (entityBehavior.isEmpty()) {
+        EntityPlacerComponent entityPlacer = stack.get(ItematicDataComponents.ENTITY_PLACER);
+        if (entityPlacer == null) {
             return Optional.empty();
         }
 
-        if (entityBehavior.get().entity().entityType(stack) != entityType) {
+        if (entityPlacer.entity().entityType(stack) != entityType) {
             return Optional.empty();
         }
 

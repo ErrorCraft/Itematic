@@ -7,18 +7,10 @@ import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.SwingAnimation;
-import net.minecraft.world.level.Level;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public interface ItemAccess {
     default ItemDisplay itematic$display() {
@@ -52,9 +44,5 @@ public interface ItemAccess {
     }
     default boolean itematic$hasEventListener(ItemEvent event) {
         return false;
-    }
-    default void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag tooltipFlag) {}
-    default boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
-        return true;
     }
 }

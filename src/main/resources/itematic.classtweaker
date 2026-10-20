@@ -41,6 +41,7 @@ inject-interface    net/minecraft/sounds/SoundSource    net/minecraft/util/Strin
 inject-interface    net/minecraft/stats/Stat    net/errorcraft/itematic/access/stats/StatAccess<TT;>
 inject-interface    net/minecraft/stats/StatType    net/errorcraft/itematic/access/stats/StatTypeAccess<TT;>
 inject-interface    net/minecraft/util/context/ContextMap$Builder    net/errorcraft/itematic/access/util/context/ContextMapAccess$BuilderAccess
+inject-interface    net/minecraft/world/InteractionResult    net/errorcraft/itematic/access/world/InteractionResultAccess
 inject-interface    net/minecraft/world/SimpleContainer    net/errorcraft/itematic/access/world/SimpleContainerAccess
 inject-interface    net/minecraft/world/entity/Entity    net/errorcraft/itematic/access/world/entity/EntityAccess
 inject-interface    net/minecraft/world/entity/EntityType    net/errorcraft/itematic/access/world/entity/EntityTypeAccess<TT;>
@@ -69,6 +70,7 @@ inject-interface    net/minecraft/world/item/context/UseOnContext    net/errorcr
 inject-interface    net/minecraft/world/item/crafting/Ingredient    net/errorcraft/itematic/access/world/item/crafting/IngredientAccess
 inject-interface    net/minecraft/world/item/crafting/Recipe    net/errorcraft/itematic/access/world/item/crafting/RecipeAccess
 inject-interface    net/minecraft/world/item/crafting/ShapedRecipePattern    net/errorcraft/itematic/access/world/item/crafting/ShapedRecipePatternAccess
+inject-interface    net/minecraft/world/item/enchantment/Enchantable    net/errorcraft/itematic/access/world/item/enchantment/EnchantableAccess
 inject-interface    net/minecraft/world/level/Level    net/errorcraft/itematic/access/world/level/LevelAccess
 inject-interface    net/minecraft/world/level/LevelReader    net/errorcraft/itematic/access/world/level/LevelReaderAccess
 inject-interface    net/minecraft/world/level/block/CropBlock    net/errorcraft/itematic/access/world/level/block/CropBlockAccess

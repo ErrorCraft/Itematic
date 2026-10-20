@@ -3,63 +3,79 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
-import net.errorcraft.itematic.util.SetCodec;
-import net.errorcraft.itematic.world.ItemResult;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.ConstantUseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.IndefiniteUseDurationProvider;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Constant;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Indefinite;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Instant;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.UseCooldown;
 import net.minecraft.world.item.component.UseEffects;
 import net.minecraft.world.item.component.UseRemainder;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation animation, Optional<ItemStackTemplate> remainder, UseEffects effects, Set<Pass> passes) implements ItemBehavior<UseableItemBehavior> {
+public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, ItemUseAnimation animation, Optional<Holder<SoundEvent>> sound, Optional<ItemStackTemplate> remainder, UseEffects effects, Optional<UseCooldown> cooldown, Set<UseDuration.Pass> passes) implements ItemBehavior<UseableItemBehavior> {
     public static final Codec<UseableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        UseDuration.CODEC.optionalFieldOf("ticks").forGetter(UseableItemBehavior::ticks),
+        UseDuration.CODEC.optionalFieldOf("ticks", new UseDuration(Instant.INSTANCE)).forGetter(UseableItemBehavior::ticks),
+        Codec.BOOL.optionalFieldOf("has_use_particles", false).forGetter(UseableItemBehavior::hasUseParticles),
         ItemUseAnimation.CODEC.optionalFieldOf("animation", ItemUseAnimation.NONE).forGetter(UseableItemBehavior::animation),
+        SoundEvent.CODEC.optionalFieldOf("sound").forGetter(UseableItemBehavior::sound),
         ItemStackTemplate.CODEC.optionalFieldOf("remainder").forGetter(UseableItemBehavior::remainder),
         UseEffects.CODEC.optionalFieldOf("effects", UseEffects.DEFAULT).forGetter(UseableItemBehavior::effects),
-        SetCodec.forEnum(Pass.CODEC).optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(UseableItemBehavior::passes)
+        UseCooldown.CODEC.optionalFieldOf("cooldown").forGetter(UseableItemBehavior::cooldown),
+        UseDuration.Pass.SET_CODEC.optionalFieldOf("passes", UseDuration.Pass.DEFAULT).forGetter(UseableItemBehavior::passes)
     ).apply(instance, UseableItemBehavior::new));
 
     public static UseableItemBehavior of(Consumable consumable) {
         return new UseableItemBehavior(
-            Optional.of(new UseDuration(consumable.consumeTicks())),
+            new UseDuration(consumable.consumeTicks()),
+            consumable.hasConsumeParticles(),
             consumable.animation(),
+            Optional.of(consumable.sound()),
             Optional.empty(),
             UseEffects.DEFAULT,
-            Pass.DEFAULT_PASSES
+            Optional.empty(),
+            UseDuration.Pass.DEFAULT
         );
     }
 
     public static UseableItemBehavior of(Consumable consumable, Holder<Item> remainder) {
         return new UseableItemBehavior(
-            Optional.of(new UseDuration(consumable.consumeTicks())),
+            new UseDuration(consumable.consumeTicks()),
+            consumable.hasConsumeParticles(),
             consumable.animation(),
+            Optional.of(consumable.sound()),
             Optional.of(ItemStackTemplates.of(remainder)),
             UseEffects.DEFAULT,
-            Pass.DEFAULT_PASSES
+            Optional.empty(),
+            UseDuration.Pass.DEFAULT
+        );
+    }
+
+    public static ItemBehavior<?> ofInstant(float cooldownSeconds) {
+        return new UseableItemBehavior(
+            new UseDuration(Instant.INSTANCE),
+            false,
+            ItemUseAnimation.NONE,
+            Optional.empty(),
+            Optional.empty(),
+            UseEffects.DEFAULT,
+            Optional.of(new UseCooldown(cooldownSeconds)),
+            UseDuration.Pass.DEFAULT
         );
     }
 
@@ -73,89 +89,45 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
     }
 
     @Override
-    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (this.isUnuseable(Pass.NORMAL)) {
-            return ItemResult.PASS;
-        }
-
-        return tryStartUsing(level, user, hand, stack);
-    }
-
-    @Override
-    public ItemResult useOnBlock(UseOnContext context, ItemStackExchanger stackExchanger) {
-        if (this.isUnuseable(Pass.BLOCK)) {
-            return ItemResult.PASS;
-        }
-
-        Player player = context.getPlayer();
-        if (player == null) {
-            return ItemResult.PASS;
-        }
-
-        return tryStartUsing(context.getLevel(), player, context.getHand(), context.getItemInHand());
-    }
-
-    @Override
-    public ItemResult useOnEntity(Player user, LivingEntity target, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        if (this.isUnuseable(Pass.ENTITY)) {
-            return ItemResult.PASS;
-        }
-
-        return tryStartUsing(user.level(), user, hand, stack);
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
-        this.ticks.ifPresent(ticks -> builder.set(ItematicDataComponents.USE_DURATION, ticks));
+        builder.set(ItematicDataComponents.USE_DURATION, this.ticks);
+        if (this.hasUseParticles) {
+            builder.set(ItematicDataComponents.HAS_USE_PARTICLES, Unit.INSTANCE);
+        }
+
         builder.set(ItematicDataComponents.USE_ANIMATION, this.animation);
+        this.sound.ifPresent(sound -> builder.set(ItematicDataComponents.USE_SOUND, sound));
         this.remainder.ifPresent(remainder -> builder.set(DataComponents.USE_REMAINDER, new UseRemainder(remainder)));
         builder.set(DataComponents.USE_EFFECTS, this.effects);
-    }
-
-    private boolean isUnuseable(Pass pass) {
-        return !this.passes.contains(pass);
-    }
-
-    private static ItemResult tryStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
-        if (!stack.itematic$mayStartUsing(level, user, hand, stack)) {
-            return ItemResult.PASS;
-        }
-
-        UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
-        if (useDuration == null) {
-            return ItemResult.CONSUME;
-        }
-
-        if (useDuration.startUsing(stack, user, hand)) {
-            return ItemResult.CONSUME;
-        }
-
-        return ItemResult.PASS;
+        this.cooldown.ifPresent(cooldown -> builder.set(DataComponents.USE_COOLDOWN, cooldown));
+        builder.set(ItematicDataComponents.USE_PASSES, this.passes);
     }
 
     public static class Builder {
-        @Nullable
-        private UseDurationProvider ticks;
+        private UseDurationProvider ticks = Instant.INSTANCE;
         private ItemUseAnimation animation = ItemUseAnimation.NONE;
         @Nullable
         private Holder<Item> remainder;
-        private Set<Pass> passes = Pass.DEFAULT_PASSES;
+        private Set<UseDuration.Pass> passes = UseDuration.Pass.DEFAULT;
         private UseEffects effects = UseEffects.DEFAULT;
 
         private Builder() {}
 
         public UseableItemBehavior build() {
             return new UseableItemBehavior(
-                Optional.ofNullable(this.ticks).map(UseDuration::new),
+                new UseDuration(this.ticks),
+                false,
                 this.animation,
+                Optional.empty(),
                 Optional.ofNullable(this.remainder).map(ItemStackTemplates::of),
                 this.effects,
+                Optional.empty(),
                 this.passes
             );
         }
 
         public Builder useFor(int ticks) {
-            this.ticks = new ConstantUseDurationProvider(ticks);
+            this.ticks = new Constant(ticks);
             return this;
         }
 
@@ -165,7 +137,7 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
         }
 
         public Builder useIndefinitely() {
-            this.ticks = IndefiniteUseDurationProvider.INSTANCE;
+            this.ticks = Indefinite.INSTANCE;
             return this;
         }
 
@@ -184,28 +156,9 @@ public record UseableItemBehavior(Optional<UseDuration> ticks, ItemUseAnimation 
             return this;
         }
 
-        public Builder passes(Pass... passes) {
+        public Builder passes(UseDuration.Pass... passes) {
             this.passes = Set.of(passes);
             return this;
-        }
-    }
-
-    public enum Pass implements StringRepresentable {
-        NORMAL("normal"),
-        BLOCK("block"),
-        ENTITY("entity");
-        public static final Set<Pass> DEFAULT_PASSES = Set.of(NORMAL);
-        public static final Codec<Pass> CODEC = StringRepresentable.fromEnum(Pass::values);
-
-        private final String name;
-
-        Pass(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String getSerializedName() {
-            return this.name;
         }
     }
 }

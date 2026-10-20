@@ -1,14 +1,11 @@
 {
   "behavior": {
-    "minecraft:consumable": {
-      "has_consume_particles": false,
-      "sound": "minecraft:entity.generic.drink"
-    },
+    "minecraft:consumable": {},
     "minecraft:dispensable": {
       "behavior": "minecraft:use_item_on_block_or_dispense_item"
     },
     "minecraft:potion_holder": {
-      "duration_multiplier": 1.0
+      "duration_scale": 1.0
     },
     "minecraft:stackable": 1,
     "minecraft:useable": {
@@ -16,10 +13,8 @@
       "remainder": {
         "id": "minecraft:glass_bottle"
       },
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "sound": "minecraft:entity.generic.drink",
+      "ticks": 32
     }
   },
   "display": {

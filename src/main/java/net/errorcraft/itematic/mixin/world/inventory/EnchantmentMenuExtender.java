@@ -2,10 +2,9 @@ package net.errorcraft.itematic.mixin.world.inventory;
 
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.EnchantableItemBehavior;
+import net.errorcraft.itematic.tags.ItematicItemTags;
+import net.errorcraft.itematic.world.item.enchantment.Enchantables;
 import net.minecraft.core.Holder;
-import net.minecraft.references.ItemIds;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,11 +24,10 @@ public class EnchantmentMenuExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBookUseItemBehavior(ItemStack instance, Object o, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        Optional<Holder<Item>> item = instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
-            .flatMap(EnchantableItemBehavior::transformsInto);
-        item.ifPresent(transformsInto::set);
-        return item.isPresent();
+    private boolean isBookUseDataComponent(ItemStack instance, Object o, @Share("transformsInto") LocalRef<Holder<Item>> transformsIntoReference) {
+        Optional<Holder<Item>> transformsInto = Enchantables.transformsInto(instance);
+        transformsInto.ifPresent(transformsIntoReference::set);
+        return transformsInto.isPresent();
     }
 
     @Redirect(
@@ -39,8 +37,8 @@ public class EnchantmentMenuExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack transmuteCopyForEnchantedBookUseHolder(ItemStack instance, ItemLike newItem, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
-        return instance.itematic$transmuteCopy(transformsInto.get());
+    private ItemStack transmuteCopyForEnchantedBookUseDataComponent(ItemStack instance, ItemLike newItem, @Share("transformsInto") LocalRef<Holder<Item>> transformsIntoReference) {
+        return instance.itematic$transmuteCopy(transformsIntoReference.get());
     }
 
     @Redirect(
@@ -50,10 +48,8 @@ public class EnchantmentMenuExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isBookUseItemBehavior(ItemStack instance, Object o) {
-        return instance.itematic$getBehavior(ItemBehaviorType.ENCHANTABLE)
-            .flatMap(EnchantableItemBehavior::transformsInto)
-            .isPresent();
+    private boolean isBookUseDataComponent(ItemStack instance, Object o) {
+        return Enchantables.transformsInto(instance).isPresent();
     }
 
     @Redirect(
@@ -63,8 +59,8 @@ public class EnchantmentMenuExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isLapisLazuliCheckId(ItemStack instance, Object o) {
-        return instance.is(ItemIds.LAPIS_LAZULI);
+    private boolean isLapisLazuliCheckTag(ItemStack instance, Object o) {
+        return instance.is(ItematicItemTags.ENCHANTING_TABLE_INGREDIENTS);
     }
 
     @Mixin(targets = "net/minecraft/world/inventory/EnchantmentMenu$3")
@@ -76,8 +72,8 @@ public class EnchantmentMenuExtender {
                 target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
             )
         )
-        private boolean isLapisLazuliCheckId(ItemStack instance, Object o) {
-            return instance.is(ItemIds.LAPIS_LAZULI);
+        private boolean isLapisLazuliCheckTag(ItemStack instance, Object o) {
+            return instance.is(ItematicItemTags.ENCHANTING_TABLE_INGREDIENTS);
         }
     }
 }

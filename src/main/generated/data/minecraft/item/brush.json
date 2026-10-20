@@ -13,10 +13,7 @@
       "passes": [
         "block"
       ],
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 200
-      }
+      "ticks": 200
     }
   },
   "display": {
