@@ -1,9 +1,11 @@
 package net.errorcraft.itematic.mixin.world.item;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.world.item.ItemAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
@@ -18,8 +20,11 @@ import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.Bucket;
+import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
@@ -29,6 +34,7 @@ import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.codec.RegistryCodecs;
@@ -40,12 +46,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -53,26 +57,30 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Mixin(Item.class)
 public abstract class ItemExtender implements ItemAccess, FabricItem {
@@ -156,12 +164,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @WrapMethod(
-        method = "use"
+        method = "use",
+        order = 1001
     )
-    public InteractionResult useItemBehavior(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original) {
+    public InteractionResult useItemBehavior(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = player.getItemInHand(hand);
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, stack);
-        ItemResult result = ItemResult.PASS;
+        stackExchangerReference.set(stackExchanger);
+        InteractionResult originalResult = original.call(level, player, hand);
+        ItemResult result = originalResult.consumesAction() ? ItemResult.SUCCEED : ItemResult.PASS;
         for (ItemBehavior<?> behavior : this.behavior) {
             ItemResult newResult = behavior.use(level, player, hand, stack, stackExchanger);
             result = result.max(newResult);
@@ -180,7 +191,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             }
         }
 
-        InteractionResult trueResult = result.toActionResult();
+        InteractionResult trueResult = originalResult != InteractionResult.PASS ? originalResult : result.toActionResult();
         if (trueResult instanceof InteractionResult.Success success) {
             return success.heldItemTransformedTo(stackExchanger.result());
         }
@@ -189,19 +200,121 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @WrapMethod(
-        method = "useOn"
+        method = "use"
     )
-    public InteractionResult useItemBehavior(UseOnContext context, Operation<InteractionResult> original) {
-        Level level = context.getLevel();
-        if (level.isClientSide()) {
-            return InteractionResult.PASS;
+    private InteractionResult useDataComponents(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
+        ItemStack stack = player.getItemInHand(hand);
+        UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null && useDuration.canUse(stack, UseDuration.Pass.NORMAL)) {
+            return useDuration.tryStartUsing(level, stack, player, hand);
         }
 
+        BlockPlacerComponent blockPlacer = stack.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer != null && blockPlacer.canUse(BlockPlacerComponent.Pass.FLUID)) {
+            return blockPlacer.use(level, player, hand, stack, stackExchangerReference.get());
+        }
+
+        EntityPlacerComponent entityPlacer = stack.get(ItematicDataComponents.ENTITY_PLACER);
+        if (entityPlacer != null && entityPlacer.canUse(EntityPlacerComponent.Pass.FLUID)) {
+            return entityPlacer.use(level, player, hand, stack, stackExchangerReference.get());
+        }
+
+        Bucket bucket = stack.get(ItematicDataComponents.BUCKET);
+        if (bucket != null) {
+            return bucket.use(level, player, hand, stack, stackExchangerReference.get());
+        }
+
+        return original.call(level, player, hand);
+    }
+
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/core/component/DataComponents;CONSUMABLE:Lnet/minecraft/core/component/DataComponentType;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    @Nullable
+    private Object doNotUseConsumableDataComponent(ItemStack instance, DataComponentType<Consumable> componentType, Operation<Object> original) {
+        return null;
+    }
+
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/equipment/Equippable;swapWithEquipmentSlot(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/world/InteractionResult;"
+        )
+    )
+    private InteractionResult passActionContext(Equippable instance, ItemStack inHand, Player player, Operation<InteractionResult> original, @Local(name = "hand", argsOnly = true) InteractionHand hand, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
+        ActionContext context = ActionContext.builder(player.level())
+            .stackExchanger(stackExchangerReference.get())
+            .add(LootContextParams.THIS_ENTITY, player)
+            .add(LootContextParams.ORIGIN, player.position())
+            .add(LootContextParams.TOOL, inHand)
+            .add(ItematicContextKeys.HAND, hand)
+            .build();
+        return ScopedValue.where(EquipmentItemBehavior.ON_EQUIP_ACTION_CONTEXT, context)
+            .call(() -> original.call(instance, inHand, player));
+    }
+
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/core/component/DataComponents;BLOCKS_ATTACKS:Lnet/minecraft/core/component/DataComponentType;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    private boolean doNotUseBlocksAttacksDataComponent(ItemStack instance, DataComponentType<BlocksAttacks> componentType, Operation<Object> original) {
+        return false;
+    }
+
+    @WrapOperation(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "FIELD",
+                target = "Lnet/minecraft/core/component/DataComponents;KINETIC_WEAPON:Lnet/minecraft/core/component/DataComponentType;",
+                opcode = Opcodes.GETSTATIC
+            )
+        )
+    )
+    @Nullable
+    private Object doNotUseKineticWeaponDataComponent(ItemStack instance, DataComponentType<KineticWeapon> componentType, Operation<Object> original) {
+        return null;
+    }
+
+    @WrapMethod(
+        method = "useOn",
+        order = 1001
+    )
+    public InteractionResult useItemBehavior(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStackExchanger stackExchanger = context.itematic$stackExchanger();
         LivingEntity user = context.getPlayer();
         ItemStack stack = context.getItemInHand();
         InteractionHand hand = context.getHand();
-        ActionContext actionContext = ActionContext.builder(level)
+        ActionContext actionContext = ActionContext.builder(context.getLevel())
             .stackExchanger(stackExchanger)
             .addOptional(LootContextParams.THIS_ENTITY, user)
             .addOptional(LootContextParams.ORIGIN, user, Entity::position)
@@ -215,6 +328,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return InteractionResult.CONSUME.heldItemTransformedTo(stackExchanger.result());
         }
 
+        stackExchangerReference.set(stackExchanger);
+        InteractionResult originalResult = original.call(context);
         ItemResult result = ItemResult.PASS;
         for (ItemBehavior<?> behavior : this.behavior) {
             ItemResult newResult = behavior.useOnBlock(context, stackExchanger);
@@ -226,16 +341,72 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         tryUpdateItemStack(user, hand, stack, stackExchanger);
-        InteractionResult trueResult = result.toActionResult();
+        InteractionResult trueResult = originalResult != InteractionResult.PASS ? originalResult : result.toActionResult();
         if (trueResult instanceof InteractionResult.Success success) {
-            trueResult = success.heldItemTransformedTo(stackExchanger.result());
+            return success.heldItemTransformedTo(stackExchanger.result());
         }
 
         return trueResult;
     }
 
     @WrapMethod(
-        method = "interactLivingEntity"
+        method = "useOn"
+    )
+    private InteractionResult useDataComponents(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
+        ItemStack stack = context.getItemInHand();
+        UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null && useDuration.canUse(stack, UseDuration.Pass.BLOCK) && context.getPlayer() != null) {
+            return useDuration.tryStartUsing(context.getLevel(), stack, context.getPlayer(), context.getHand());
+        }
+
+        BlockPlacerComponent blockPlacer = stack.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer != null && blockPlacer.canUse(BlockPlacerComponent.Pass.BLOCK)) {
+            return blockPlacer.useOn(context, stackExchangerReference.get());
+        }
+
+        EntityPlacerComponent entityPlacer = stack.get(ItematicDataComponents.ENTITY_PLACER);
+        if (entityPlacer != null && entityPlacer.canUse(EntityPlacerComponent.Pass.BLOCK)) {
+            return entityPlacer.useOn(context, stackExchangerReference.get());
+        }
+
+        return original.call(context);
+    }
+
+    @WrapMethod(
+        method = "mineBlock"
+    )
+    public boolean useDataComponents(ItemStack itemStack, Level level, BlockState state, BlockPos pos, LivingEntity owner, Operation<Boolean> original, @Share("context") LocalRef<ActionContext> contextReference) {
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(owner, itemStack);
+        ActionContext context = ActionContext.builder(level)
+            .stackExchanger(stackExchanger)
+            .add(LootContextParams.THIS_ENTITY, owner)
+            .add(LootContextParams.ORIGIN, owner.position())
+            .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(pos))
+            .add(LootContextParams.TOOL, itemStack)
+            .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
+            .build();
+        contextReference.set(context);
+        boolean result = original.call(itemStack, level, state, pos, owner);
+        itemStack.itematic$invokeEvent(ItemEvent.BROKE_BLOCK, context);
+        tryUpdateItemStack(owner, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
+        return result;
+    }
+
+    @WrapOperation(
+        method = "mineBlock",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;)V"
+        )
+    )
+    private void invokeUseToolItemEventAndUseActionContext(ItemStack instance, int amount, LivingEntity owner, EquipmentSlot slot, Operation<Void> original, @Share("context") LocalRef<ActionContext> contextReference) {
+        instance.itematic$invokeEvent(ItemEvent.USE_TOOL, contextReference.get());
+        instance.itematic$damage(amount, contextReference.get());
+    }
+
+    @WrapMethod(
+        method = "interactLivingEntity",
+        order = 1001
     )
     public InteractionResult useItemBehavior(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type, Operation<InteractionResult> original) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, itemStack);
@@ -266,70 +437,22 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         tryUpdateItemStack(player, type, itemStack, stackExchanger);
         InteractionResult trueResult = result.toActionResult();
         if (trueResult instanceof InteractionResult.Success success) {
-            trueResult = success.heldItemTransformedTo(stackExchanger.result());
+            return success.heldItemTransformedTo(stackExchanger.result());
         }
 
         return trueResult;
     }
 
     @WrapMethod(
-        method = "hurtEnemy"
+        method = "interactLivingEntity"
     )
-    public void useItemBehavior(ItemStack itemStack, LivingEntity mob, LivingEntity attacker, Operation<Void> original) {
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, itemStack);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.postHit(itemStack, mob, attacker, stackExchanger);
+    private InteractionResult useDataComponents(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type, Operation<InteractionResult> original) {
+        UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null && useDuration.canUse(itemStack, UseDuration.Pass.ENTITY)) {
+            return useDuration.tryStartUsing(player.level(), itemStack, player, type);
         }
 
-        if (attacker.level() instanceof ServerLevel serverLevel) {
-            ActionContext context = ActionContext.builder(serverLevel)
-                .stackExchanger(stackExchanger)
-                .add(LootContextParams.THIS_ENTITY, attacker)
-                .add(LootContextParams.ORIGIN, attacker.position())
-                .add(LootContextParams.TARGET_ENTITY, mob)
-                .add(ItematicContextKeys.INTERACTED_POSITION, mob.position())
-                .add(LootContextParams.TOOL, itemStack)
-                .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
-                .build();
-            itemStack.itematic$invokeEvent(ItemEvent.HIT_ENTITY, context);
-        }
-
-        tryUpdateItemStack(attacker, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
-    }
-
-    @Inject(
-        method = "postHurtEnemy",
-        at = @At("HEAD")
-    )
-    private void postDamageEntityUseItemBehavior(ItemStack itemStack, LivingEntity mob, LivingEntity attacker, CallbackInfo info) {
-        this.itematic$getBehavior(ItemBehaviorType.WEAPON)
-            .ifPresent(weapon -> weapon.postDamageEntity(itemStack, mob, attacker));
-    }
-
-    @WrapMethod(
-        method = "mineBlock"
-    )
-    public boolean useItemBehavior(ItemStack itemStack, Level level, BlockState state, BlockPos pos, LivingEntity owner, Operation<Boolean> original) {
-        boolean result = false;
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(owner, itemStack);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.postMine(itemStack, level, state, pos, owner, stackExchanger);
-        }
-
-        if (level instanceof ServerLevel serverLevel) {
-            ActionContext context = ActionContext.builder(serverLevel)
-                .stackExchanger(stackExchanger)
-                .add(LootContextParams.THIS_ENTITY, owner)
-                .add(LootContextParams.ORIGIN, owner.position())
-                .add(ItematicContextKeys.INTERACTED_POSITION, Vec3.atCenterOf(pos))
-                .add(LootContextParams.TOOL, itemStack)
-                .add(ItematicContextKeys.EQUIPMENT_SLOT, EquipmentSlot.MAINHAND)
-                .build();
-            itemStack.itematic$invokeEvent(ItemEvent.BROKE_BLOCK, context);
-        }
-
-        tryUpdateItemStack(owner, InteractionHand.MAIN_HAND, itemStack, stackExchanger);
-        return result;
+        return original.call(itemStack, player, target, type);
     }
 
     @WrapMethod(
@@ -342,17 +465,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
     }
 
-    @Inject(
-        method = "onDestroyed",
-        at = @At("HEAD")
-    )
-    private void onItemEntityDestroyedUseItemBehavior(ItemEntity itemEntity, CallbackInfo info) {
-        this.itematic$getBehavior(ItemBehaviorType.BLOCK)
-            .ifPresent(block -> block.onDestroyed(itemEntity));
-        this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .ifPresent(itemHolder -> itemHolder.onDestroyed(itemEntity));
-    }
-
     @WrapMethod(
         method = "releaseUsing"
     )
@@ -362,6 +474,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, itemStack);
         for (ItemBehavior<?> behavior : this.behavior) {
             result |= behavior.stopUsing(itemStack, level, entity, usedTicks, remainingTime, stackExchanger);
+        }
+
+        UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null) {
+            useDuration.stopUsing(itemStack, level, entity, stackExchanger);
+            result = true;
         }
 
         if (level instanceof ServerLevel serverLevel) {
@@ -383,10 +501,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "finishUsingItem"
     )
     public ItemStack useItemBehavior(ItemStack itemStack, Level level, LivingEntity entity, Operation<ItemStack> original) {
-        int usedTicks = entity.itematic$usedItemTicks();
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, itemStack);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.finishUsing(level, entity, itemStack, usedTicks, stackExchanger);
+        UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null) {
+            useDuration.finishUsing(itemStack, level, entity, stackExchanger);
         }
 
         if (level instanceof ServerLevel serverLevel) {
@@ -400,8 +518,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             itemStack.itematic$invokeEvent(ItemEvent.FINISHED_USING, context);
         }
 
-        this.itematic$getBehavior(ItemBehaviorType.CONSUMABLE)
-            .ifPresent(consumable -> consumable.consume(entity, itemStack, stackExchanger, level, entity.getUsedItemHand()));
         return stackExchanger.result();
     }
 
@@ -438,16 +554,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
 
         carriedItem.set(stackExchanger.result());
         return result;
-    }
-
-    @ModifyReturnValue(
-        method = "getAttackDamageBonus",
-        at = @At("TAIL")
-    )
-    private float getBonusAttackDamageUseItemBehavior(float original, Entity victim, float damage, DamageSource damageSource) {
-        return this.itematic$getBehavior(ItemBehaviorType.WEAPON)
-            .map(weapon -> weapon.bonusAttackDamage(victim, damage, damageSource))
-            .orElse(0.0f);
     }
 
     @Inject(
@@ -496,33 +602,16 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     }
 
     @WrapMethod(
-        method = "canFitInsideContainerItems"
-    )
-    public boolean useItemBehavior(Operation<Boolean> original) {
-        return this.itematic$getBehavior(ItemBehaviorType.BLOCK)
-            .map(BlockItemBehavior::canBeNested)
-            .orElse(true);
-    }
-
-    @WrapMethod(
         method = "getUseAnimation"
     )
-    public ItemUseAnimation getUseActionUseItemBehavior(ItemStack itemStack, Operation<ItemUseAnimation> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
-            return ItemUseAnimation.NONE;
-        }
-
+    public ItemUseAnimation getUseActionUseDataComponent(ItemStack itemStack, Operation<ItemUseAnimation> original) {
         return itemStack.getOrDefault(ItematicDataComponents.USE_ANIMATION, ItemUseAnimation.NONE);
     }
 
     @WrapMethod(
         method = "getUseDuration"
     )
-    public int useItemBehavior(ItemStack itemStack, LivingEntity user, Operation<Integer> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
-            return 0;
-        }
-
+    public int getUseDurationUseDataComponent(ItemStack itemStack, LivingEntity user, Operation<Integer> original) {
         UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
         if (useDuration == null) {
             return 0;
@@ -663,21 +752,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @Override
     public boolean itematic$hasEventListener(ItemEvent event) {
         return this.events.hasListener(event);
-    }
-
-    @Override
-    public void itematic$addTooltip(ItemStack stack, Item.TooltipContext context, Consumer<Component> builder, TooltipFlag tooltipFlag) {
-        this.display.tooltip().ifPresent(tooltip -> tooltip.forEach(builder));
-        for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.appendTooltip(stack, context, builder, tooltipFlag);
-        }
-    }
-
-    @Override
-    public boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
-        return this.itematic$getBehavior(ItemBehaviorType.FOOD)
-            .map(food -> food.mayStartUsing(user, stack))
-            .orElse(true);
     }
 
     @Override

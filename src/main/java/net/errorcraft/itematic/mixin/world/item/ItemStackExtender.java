@@ -16,12 +16,16 @@ import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
+import net.errorcraft.itematic.world.item.use.duration.UseDuration;
+import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
@@ -52,6 +56,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -61,8 +66,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.BundleContents;
-import net.minecraft.world.item.component.KineticWeapon;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.component.TooltipProvider;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -119,6 +125,9 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
 
     @Shadow
     public abstract int getDamageValue();
+
+    @Shadow
+    public abstract <T extends TooltipProvider> void addToTooltip(DataComponentType<T> type, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> consumer, TooltipFlag flag);
 
     @Shadow
     public abstract void shrink(int amount);
@@ -288,7 +297,59 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
             return false;
         }
 
+        SmashingWeapon smashingWeapon = this.get(ItematicDataComponents.SMASHING_WEAPON);
+        if (smashingWeapon != null) {
+            smashingWeapon.hurtEnemy((ItemStack)(Object) this, mob, attacker);
+        }
+
         return original.call(mob, attacker);
+    }
+
+    @Inject(
+        method = "postHurtEnemy",
+        at = @At("HEAD")
+    )
+    private void useDataComponents(LivingEntity mob, LivingEntity attacker, CallbackInfo info) {
+        SmashingWeapon smashingWeapon = this.get(ItematicDataComponents.SMASHING_WEAPON);
+        if (smashingWeapon != null) {
+            smashingWeapon.postHurtEnemy((ItemStack)(Object) this, mob, attacker);
+        }
+    }
+
+    @WrapMethod(
+        method = "postHurtEnemy"
+    )
+    private void invokeHitEntityItemEventAndStoreActionContext(LivingEntity mob, LivingEntity attacker, Operation<Void> original, @Share("context") LocalRef<ActionContext> contextReference) {
+        ItemStack thisStack = (ItemStack)(Object) this;
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(attacker, thisStack);
+        InteractionHand usedHand = attacker.getUsedItemHand();
+        ActionContext context = ActionContext.builder(attacker.level())
+            .stackExchanger(stackExchanger)
+            .add(LootContextParams.THIS_ENTITY, attacker)
+            .add(LootContextParams.ATTACKING_ENTITY, attacker)
+            .add(LootContextParams.ORIGIN, attacker.position())
+            .add(LootContextParams.TARGET_ENTITY, mob)
+            .add(ItematicContextKeys.INTERACTED_POSITION, mob.position())
+            .add(LootContextParams.TOOL, thisStack)
+            .add(ItematicContextKeys.HAND, usedHand)
+            .add(ItematicContextKeys.EQUIPMENT_SLOT, usedHand.asEquipmentSlot())
+            .build();
+        contextReference.set(context);
+        original.call(mob, attacker);
+        this.itematic$invokeEvent(ItemEvent.HIT_ENTITY, context);
+        tryUpdateItemStack(attacker, usedHand, thisStack, stackExchanger);
+    }
+
+    @WrapOperation(
+        method = "postHurtEnemy",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;hurtAndBreak(ILnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;)V"
+        )
+    )
+    private void invokeUseWeaponItemEventAndUseActionContext(ItemStack instance, int amount, LivingEntity owner, EquipmentSlot slot, Operation<Void> original, @Local(name = "weapon") Weapon weapon, @Share("context") LocalRef<ActionContext> contextReference) {
+        this.itematic$invokeEvent(ItemEvent.USE_WEAPON, contextReference.get());
+        this.itematic$damage(weapon.itemDamagePerAttack(), contextReference.get());
     }
 
     @WrapMethod(
@@ -325,15 +386,58 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         return original.call(state, level, pos, player);
     }
 
+    @Inject(
+        method = "onDestroyed",
+        at = @At("HEAD")
+    )
+    private void onDestroyedUseDataComponents(ItemEntity itemEntity, CallbackInfo info) {
+        BlockPlacerComponent blockPlacer = this.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer != null) {
+            blockPlacer.onDestroyed(itemEntity);
+        }
+
+        this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
+            .ifPresent(itemHolder -> itemHolder.onDestroyed(itemEntity));
+    }
+
     @WrapMethod(
         method = "onUseTick"
     )
-    private void checkInteractableStackForOnUseTick(Level level, LivingEntity livingEntity, int ticksRemaining, Operation<Void> original) {
+    private void checkInteractableStackForOnUseTickAndUseDataComponents(Level level, LivingEntity livingEntity, int ticksRemaining, Operation<Void> original) {
         if (this.itematic$cannotBeInteractedWith()) {
             return;
         }
 
+        int usedTicks = livingEntity.itematic$usedItemTicks();
+        UseDuration useDuration = this.get(ItematicDataComponents.USE_DURATION);
+        if (useDuration != null) {
+            useDuration.using((ItemStack)(Object) this, usedTicks, ticksRemaining, livingEntity);
+        }
+
         original.call(level, livingEntity, ticksRemaining);
+    }
+
+    @WrapOperation(
+        method = "onUseTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
+        )
+    )
+    @Nullable
+    private Object doNotUseConsumableDataComponent(ItemStack instance, DataComponentType<Consumable> componentType, Operation<Object> original) {
+        return null;
+    }
+
+    @ModifyArg(
+        method = "onUseTick",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/component/KineticWeapon;damageEntities(Lnet/minecraft/world/item/ItemStack;ILnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/EquipmentSlot;)V"
+        )
+    )
+    private int passUsedTicksInstead(int ticksRemaining, @Local(name = "livingEntity", argsOnly = true) LivingEntity livingEntity) {
+        return livingEntity.itematic$usedItemTicks();
     }
 
     @WrapMethod(
@@ -449,25 +553,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         return original.call(item);
     }
 
-    @WrapOperation(
-        method = "onUseTick",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/core/component/DataComponents;KINETIC_WEAPON:Lnet/minecraft/core/component/DataComponentType;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    @Nullable
-    private Object getKineticWeaponReturnNull(ItemStack instance, DataComponentType<KineticWeapon> type, Operation<Object> original) {
-        return null;
-    }
-
     @WrapMethod(
         method = "isValidRepairItem"
     )
@@ -477,17 +562,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         }
 
         return original.call(repairItem);
-    }
-
-    @ModifyExpressionValue(
-        method = "isEnchantable",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
-        )
-    )
-    public boolean alsoCheckEnchantableItemBehavior(boolean original) {
-        return original && this.itematic$hasBehavior(ItemBehaviorType.ENCHANTABLE);
     }
 
     @WrapMethod(
@@ -588,16 +662,8 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
             target = "Lnet/minecraft/world/item/Item;appendHoverText(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/Item$TooltipContext;Lnet/minecraft/world/item/component/TooltipDisplay;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;)V"
         )
     )
-    @SuppressWarnings("DataFlowIssue")
-    private void addTooltipFromItem(Item instance, ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag, Operation<Void> original) {
-        if (!this.isEmpty()) {
-            this.item.value().itematic$addTooltip(
-                (ItemStack)(Object) this,
-                context,
-                builder,
-                tooltipFlag
-            );
-        }
+    private void addExtraDataComponentTooltips(Item instance, ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag, Operation<Void> original) {
+        this.addToTooltip(ItematicDataComponents.ENTITY_PLACER, context, display, builder, tooltipFlag);
     }
 
     @WrapOperation(
@@ -631,18 +697,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         }
 
         return original.call(other, slot, clickAction, player, carriedItem);
-    }
-
-    @WrapOperation(
-        method = "postHurtEnemy",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
-        )
-    )
-    @Nullable
-    private Object getWeaponDataComponentUseNull(ItemStack instance, DataComponentType<Weapon> type, Operation<Object> original) {
-        return null;
     }
 
     @ModifyReturnValue(
@@ -704,32 +758,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     }
 
     @WrapOperation(
-        method = "use",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/InteractionResult$Success;heldItemTransformedTo(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/InteractionResult$Success;"
-        )
-    )
-    private InteractionResult.Success doNotModifyResultingItemStackIfNotUseable(InteractionResult.Success instance, ItemStack itemStack, Operation<InteractionResult.Success> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
-            return instance;
-        }
-
-        return original.call(instance, itemStack);
-    }
-
-    @WrapMethod(
-        method = "applyAfterUseComponentSideEffects"
-    )
-    private ItemStack checkForUseableBehavior(LivingEntity user, ItemStack stackBeforeUsing, Operation<ItemStack> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.USEABLE)) {
-            return (ItemStack)(Object) this;
-        }
-
-        return original.call(user, stackBeforeUsing);
-    }
-
-    @WrapOperation(
         method = "lambda$getDamageSource$1",
         at = @At(
             value = "INVOKE",
@@ -737,11 +765,13 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         )
     )
     @Nullable
-    @SuppressWarnings("ConstantValue")
-    private DamageSource getDamageSourceUseItemBehavior(Item instance, LivingEntity attacker, Operation<DamageSource> original) {
-        return this.itematic$getBehavior(ItemBehaviorType.WEAPON)
-            .map(weapon -> weapon.damageSource((ItemStack)(Object) this, attacker))
-            .orElse(null);
+    private DamageSource getDamageSourceUseDataComponent(Item instance, LivingEntity attacker, Operation<DamageSource> original) {
+        SmashingWeapon smashingWeapon = this.get(ItematicDataComponents.SMASHING_WEAPON);
+        if (smashingWeapon != null) {
+            return smashingWeapon.damageSource(attacker);
+        }
+
+        return null;
     }
 
     @WrapMethod(
@@ -884,21 +914,28 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     }
 
     @Override
-    public boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
-        if (this.item == null) {
-            return false;
+    public boolean itematic$canFitInsideContainerItems() {
+        BlockPlacerComponent blockPlacer = this.get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer != null) {
+            return blockPlacer.canFitInsideContainerItems();
         }
 
-        return this.item.value().itematic$mayStartUsing(level, user, hand, stack);
+        return true;
     }
 
     @Override
     public double itematic$attackSpeedMultiplier() {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.WEAPON)) {
-            return 1.0d;
+        return this.getOrDefault(ItematicDataComponents.ATTACK_SPEED_MULTIPLIER, 1.0d);
+    }
+
+    @Override
+    public float itematic$attackDamageBonus(Entity victim, float damage, DamageSource damageSource) {
+        SmashingWeapon smashingWeapon = this.get(ItematicDataComponents.SMASHING_WEAPON);
+        if (smashingWeapon != null) {
+            return smashingWeapon.attackDamageBonus(victim, damage, damageSource);
         }
 
-        return this.getOrDefault(ItematicDataComponents.ATTACK_SPEED_MULTIPLIER, 1.0d);
+        return 0.0f;
     }
 
     @Unique
@@ -914,6 +951,20 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         }
 
         this.itematic$invokeEvent(ItemEvent.BREAK_ITEM, context);
+    }
+
+    @Unique
+    private static void tryUpdateItemStack(@Nullable LivingEntity target, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
+        if (target == null) {
+            return;
+        }
+
+        ItemStack newStack = stackExchanger.result();
+        if (stack == newStack) {
+            return;
+        }
+
+        target.setItemInHand(hand, newStack);
     }
 
     @Mixin(targets = "net/minecraft/world/item/ItemStack$1")

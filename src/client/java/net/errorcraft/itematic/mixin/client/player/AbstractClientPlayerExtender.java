@@ -1,8 +1,8 @@
 package net.errorcraft.itematic.mixin.client.player;
 
 import com.mojang.authlib.GameProfile;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.world.item.component.ZoomFieldOfViewMultiplier;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.references.ItemIds;
 import net.minecraft.world.entity.player.Player;
@@ -37,9 +37,12 @@ public abstract class AbstractClientPlayerExtender extends Player {
             floatValue = 0.1f
         )
     )
-    private float fieldOfViewModifierUseItemBehavior(float original) {
-        return this.getActiveItem().itematic$getBehavior(ItemBehaviorType.ZOOM)
-            .map(ZoomItemBehavior::fieldOfViewMultiplier)
-            .orElse(original);
+    private float fieldOfViewModifierUseDataComponent(float original) {
+        ZoomFieldOfViewMultiplier zoomFieldOfViewMultiplier = this.getActiveItem().get(ItematicDataComponents.ZOOM_FIELD_OF_VIEW_MULTIPLIER);
+        if (zoomFieldOfViewMultiplier != null) {
+            return zoomFieldOfViewMultiplier.multiplier();
+        }
+
+        return original;
     }
 }

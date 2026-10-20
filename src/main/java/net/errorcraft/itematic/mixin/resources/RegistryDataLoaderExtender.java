@@ -42,7 +42,7 @@ public class RegistryDataLoaderExtender {
                 ActionEntry.DIRECT_CODEC,
                 ItematicRegistryValidators.nonRecursive(ActionEntry::streamReferences)
             ))
-            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.DIRECT_CODEC))
             .add(createData(ItematicRegistries.ENTITY_SPAWN_RULE_SET, EntitySpawnRuleSet.DIRECT_CODEC))
             .add(createData(ItematicRegistries.ITEM_GROUP, ItemGroup.DIRECT_CODEC))
             .build();
@@ -66,7 +66,7 @@ public class RegistryDataLoaderExtender {
                 ActionEntry.DIRECT_CODEC,
                 ItematicRegistryValidators.nonRecursive(ActionEntry::streamReferences)
             ))
-            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.DIRECT_CODEC))
             .add(createData(ItematicRegistries.ENTITY_SPAWN_RULE_SET, EntitySpawnRuleSet.DIRECT_CODEC))
             .add(createData(ItematicRegistries.ITEM_GROUP, ItemGroup.DIRECT_CODEC))
             .build();

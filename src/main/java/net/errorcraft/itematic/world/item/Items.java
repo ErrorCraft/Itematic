@@ -59,7 +59,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.CastableItemBehavio
 import net.errorcraft.itematic.world.item.behavior.behaviors.CompostableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ConsumableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.CookingFuelItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.CooldownItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DamageableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DecoratedPotPatternItemBehavior;
@@ -77,7 +76,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemB
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.OminousEffectProviderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
@@ -101,6 +99,8 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockItemStatePropertiesBuilder;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
@@ -108,9 +108,10 @@ import net.errorcraft.itematic.world.item.holder.rule.rules.OccupancyHeldItemsWi
 import net.errorcraft.itematic.world.item.holder.rule.rules.RejectItemHolderRule;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.PlayableUseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.ShooterUseDurationProvider;
-import net.errorcraft.itematic.world.item.use.duration.provider.providers.TridentUseDurationProvider;
+import net.errorcraft.itematic.world.item.use.duration.UseDuration;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Playable;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Shooter;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Trident;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.KineticMeleeWeapon;
@@ -126,6 +127,7 @@ import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointer
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
+import net.errorcraft.itematic.world.level.storage.loot.providers.number.ints.ItematicContextIntProviders;
 import net.errorcraft.itematic.world.phys.Vec3Provider;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.predicates.BlockPredicate;
@@ -174,7 +176,6 @@ import net.minecraft.util.Util;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypeIds;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -205,6 +206,7 @@ import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.MobVisibility;
+import net.minecraft.world.item.component.OminousBottleAmplifier;
 import net.minecraft.world.item.component.PiercingWeapon;
 import net.minecraft.world.item.component.SuspiciousStewEffects;
 import net.minecraft.world.item.component.SwingAnimation;
@@ -341,7 +343,7 @@ public class Items {
         private ItemBuilder builderForBlockOnFluid(BlockItemId blockItem) {
             return this.builder(blockItem.item())
                 .display(ItemDisplay.Builder::blockName)
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block()), BlockItemBehavior.Pass.FLUID));
+                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block()), BlockPlacerComponent.Pass.FLUID));
         }
 
         private ItemBuilder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side) {
@@ -855,10 +857,34 @@ public class Items {
                 .register();
             this.builderForConsumable(ItemIds.OMINOUS_BOTTLE, Consumables.DEFAULT_DRINK)
                 .display(display -> display.rarity(Rarity.UNCOMMON))
-                .behavior(OminousEffectProviderItemBehavior.INSTANCE)
                 .event(
                     ItemEvent.CONSUME_ITEM,
-                    ActionEntry.of(PlaySoundAction.of(PositionTarget.ORIGIN, this.soundEvents.getOrThrow(SoundEventIds.OMINOUS_BOTTLE_DISPOSE)))
+                    ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .addOptional(
+                                MatchTool.toolMatches(
+                                    ItemPredicate.Builder.item()
+                                        .withComponents(
+                                            DataComponentMatchers.Builder.components()
+                                                .any(DataComponents.OMINOUS_BOTTLE_AMPLIFIER)
+                                                .build()
+                                        )
+                                ),
+                                AddStatusEffectsAction.of(
+                                    AddStatusEffectsAction.StatusEffect.of(
+                                        this.statusEffects.getOrThrow(MobEffectIds.BAD_OMEN),
+                                        OminousBottleAmplifier.EFFECT_DURATION,
+                                        ItematicContextIntProviders.CONSUMABLE_OMINOUS_BOTTLE_AMPLIFIER
+                                    )
+                                )
+                            )
+                            .add(
+                                PlaySoundAction.of(
+                                    PositionTarget.ORIGIN,
+                                    this.soundEvents.getOrThrow(SoundEventIds.OMINOUS_BOTTLE_DISPOSE)
+                                )
+                            )
+                    )
                 )
                 .register();
             this.builderForConsumable(ItemIds.MILK_BUCKET, Consumables.DEFAULT_DRINK, ItemIds.BUCKET)
@@ -1090,7 +1116,7 @@ public class Items {
             this.registerBlock(BlockItemIds.BEEHIVE);
             this.builder(ItemIds.HONEY_BOTTLE, 16)
                 .behavior(UseableItemBehavior.of(Consumables.HONEY_BOTTLE, this.items.getOrThrow(ItemIds.GLASS_BOTTLE)))
-                .behavior(ConsumableItemBehavior.of(Consumables.HONEY_BOTTLE))
+                .behavior(ConsumableItemBehavior.of())
                 .behavior(FoodItemBehavior.of(Foods.HONEY_BOTTLE))
                 .event(
                     ItemEvent.CONSUME_ITEM,
@@ -1349,7 +1375,7 @@ public class Items {
                 .behavior(DamageableItemBehavior.of(384))
                 .behavior(
                     UseableItemBehavior.builder()
-                        .useFor(ShooterUseDurationProvider.INSTANCE)
+                        .useFor(Shooter.INSTANCE)
                         .animation(ItemUseAnimation.BOW)
                         .build()
                 )
@@ -1368,7 +1394,7 @@ public class Items {
                 .behavior(DamageableItemBehavior.of(465))
                 .behavior(
                     UseableItemBehavior.builder()
-                        .useFor(ShooterUseDurationProvider.INSTANCE)
+                        .useFor(Shooter.INSTANCE)
                         .animation(ItemUseAnimation.CROSSBOW)
                         .build()
                 )
@@ -1417,7 +1443,7 @@ public class Items {
                 )
                 .behavior(
                     UseableItemBehavior.builder()
-                        .useFor(TridentUseDurationProvider.INSTANCE)
+                        .useFor(Trident.INSTANCE)
                         .animation(ItemUseAnimation.TRIDENT)
                         .build()
                 )
@@ -1487,7 +1513,7 @@ public class Items {
                     UseableItemBehavior.builder()
                         .useFor(BrushItemAccessor.useDuration())
                         .animation(ItemUseAnimation.BRUSH)
-                        .passes(UseableItemBehavior.Pass.BLOCK)
+                        .passes(UseDuration.Pass.BLOCK)
                         .build()
                 )
                 .behavior(BrushItemBehavior.INSTANCE)
@@ -1700,9 +1726,21 @@ public class Items {
                     ItemEvent.BEFORE_DEATH_HOLDER,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 900, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 100, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 800, 0)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.REGENERATION),
+                                900,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION),
+                                100,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE),
+                                800,
+                                0
+                            )
                         )
                     )
                 )
@@ -1726,7 +1764,7 @@ public class Items {
                 .display(display -> display.rarity(Rarity.UNCOMMON))
                 .behavior(
                     UseableItemBehavior.builder()
-                        .useFor(PlayableUseDurationProvider.INSTANCE)
+                        .useFor(Playable.INSTANCE)
                         .animation(ItemUseAnimation.TOOT_HORN)
                         .build()
                 )
@@ -1990,8 +2028,8 @@ public class Items {
                 .behavior(ThrowableItemBehavior.of(1.5f))
                 .register();
             this.builderForProjectile(ItemIds.ENDER_PEARL, EntityTypeIds.ENDER_PEARL, 16)
+                .behavior(UseableItemBehavior.ofInstant(1.0f))
                 .behavior(ThrowableItemBehavior.of(1.5f))
-                .behavior(CooldownItemBehavior.of(20))
                 .register();
             this.builderForProjectile(ItemIds.ENDER_EYE, EntityTypeIds.EYE_OF_ENDER)
                 .behavior(ThrowableItemBehavior.of())
@@ -2078,9 +2116,9 @@ public class Items {
                 )
                 .register();
             this.builderForProjectile(ItemIds.WIND_CHARGE, EntityTypeIds.WIND_CHARGE)
+                .behavior(UseableItemBehavior.ofInstant(0.5f))
                 .behavior(ThrowableItemBehavior.of(1.5f))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                .behavior(CooldownItemBehavior.of(10))
                 .register();
             this.builder(ItemIds.DISC_FRAGMENT_5)
                 .display(display -> display.rarity(Rarity.UNCOMMON).tooltip(Tooltips.description(ItemIds.DISC_FRAGMENT_5)))
@@ -2209,7 +2247,10 @@ public class Items {
                     ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.6f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 100)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.POISON),
+                                100
+                            )
                         )
                     )
                 )
@@ -2251,8 +2292,15 @@ public class Items {
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 100, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 2400)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.REGENERATION),
+                                100,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION),
+                                2400
+                            )
                         )
                     )
                 )
@@ -2264,10 +2312,23 @@ public class Items {
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.REGENERATION), 400, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.RESISTANCE), 6000),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE), 6000),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION), 2400)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.REGENERATION),
+                                400,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.RESISTANCE),
+                                6000
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.FIRE_RESISTANCE),
+                                6000
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.ABSORPTION),
+                                2400
+                            )
                         )
                     )
                 )
@@ -2309,7 +2370,10 @@ public class Items {
                     ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.3f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 600)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.POISON),
+                                600
+                            )
                         )
                     )
                 )
@@ -2347,9 +2411,20 @@ public class Items {
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 1200, 1),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.HUNGER), 300, 2),
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.NAUSEA), 300)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.POISON),
+                                1200,
+                                1
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.HUNGER),
+                                300,
+                                2
+                            ),
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.NAUSEA),
+                                300
+                            )
                         )
                     )
                 )
@@ -2386,7 +2461,10 @@ public class Items {
                     ActionEntry.of(
                         LootItemRandomChanceCondition.randomChance(0.8f),
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.HUNGER), 600)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.HUNGER),
+                                600
+                            )
                         )
                     )
                 )
@@ -2397,13 +2475,16 @@ public class Items {
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
                         AddStatusEffectsAction.of(
-                            new MobEffectInstance(this.statusEffects.getOrThrow(MobEffectIds.POISON), 100)
+                            AddStatusEffectsAction.StatusEffect.of(
+                                this.statusEffects.getOrThrow(MobEffectIds.POISON),
+                                100
+                            )
                         )
                     )
                 )
                 .register();
             this.builder(ItemIds.BOOK)
-                .behavior(EnchantableItemBehavior.ofTransforming(1, this.items.getOrThrow(ItemIds.ENCHANTED_BOOK)))
+                .behavior(EnchantableItemBehavior.of(1, this.items.getOrThrow(ItemIds.ENCHANTED_BOOK)))
                 .register();
             this.builder(ItemIds.WRITABLE_BOOK, 1)
                 .behavior(WritableItemBehavior.of(this.items.getOrThrow(ItemIds.WRITTEN_BOOK)))
@@ -2579,13 +2660,13 @@ public class Items {
         private ItemBuilder builderForConsumable(ResourceKey<Item> item, Consumable consumable) {
             return this.builder(item)
                 .behavior(UseableItemBehavior.of(consumable))
-                .behavior(ConsumableItemBehavior.of(consumable));
+                .behavior(ConsumableItemBehavior.of());
         }
 
         private ItemBuilder builderForConsumable(ResourceKey<Item> item, Consumable consumable, ResourceKey<Item> remainder) {
             return this.builder(item, 1)
                 .behavior(UseableItemBehavior.of(consumable, this.items.getOrThrow(remainder)))
-                .behavior(ConsumableItemBehavior.of(consumable));
+                .behavior(ConsumableItemBehavior.of());
         }
 
         private ItemBuilder builderForConsumableBowl(ResourceKey<Item> item) {
@@ -2635,8 +2716,8 @@ public class Items {
                             .allowItemData()
                             .build(),
                         true,
-                        EntityItemBehavior.Pass.BLOCK,
-                        EntityItemBehavior.Pass.FLUID
+                        EntityPlacerComponent.Pass.BLOCK,
+                        EntityPlacerComponent.Pass.FLUID
                     )
                 )
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))

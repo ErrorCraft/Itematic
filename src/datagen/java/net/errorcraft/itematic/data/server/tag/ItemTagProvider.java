@@ -1431,6 +1431,8 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(ItemIds.SUGAR)
             .add(BlockItemIds.COBWEB.item())
             .add(ItemIds.BREEZE_ROD);
+        this.builder(ItematicItemTags.ENCHANTING_TABLE_INGREDIENTS)
+            .add(ItemIds.LAPIS_LAZULI);
     }
 
     private static Stream<ResourceKey<Item>> orderColoredItems(ColorCollection<ResourceKey<Item>> itemIds) {

@@ -1,7 +1,5 @@
 package net.errorcraft.itematic.mixin.client.gui.screens.inventory;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
@@ -10,7 +8,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplatePro
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
 import net.minecraft.client.gui.screens.inventory.ItemCombinerScreen;
 import net.minecraft.client.gui.screens.inventory.SmithingScreen;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -18,7 +15,6 @@ import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SmithingTemplateItem;
-import net.minecraft.world.item.equipment.Equippable;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -76,22 +72,6 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
     )
     private Optional<List<Identifier>> getEmptyAdditionsSlotTexturesFromSmithingTemplate(Optional<SmithingTemplateItem> instance, Function<SmithingTemplateItem, List<Identifier>> mapper, @Share("smithingTemplate") LocalRef<Optional<SmithingTemplate>> smithingTemplate) {
         return smithingTemplate.get().map(SmithingTemplate::emptyAdditionsSlotTextures);
-    }
-
-    @WrapOperation(
-        method = "updateArmorStandPreview",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;"
-        )
-    )
-    @Nullable
-    private Object alsoCheckEquipmentItemBehavior(ItemStack instance, DataComponentType<Equippable> type, Operation<Object> original) {
-        if (!instance.itematic$hasBehavior(ItemBehaviorType.EQUIPMENT)) {
-            return null;
-        }
-
-        return original.call(instance, type);
     }
 
     @ModifyConstant(

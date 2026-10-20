@@ -3,11 +3,10 @@ package net.errorcraft.itematic.access.world.item;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 
 public interface ItemStackAccess {
     default boolean itematic$isSuccessfullyLoaded() {
@@ -30,10 +29,13 @@ public interface ItemStackAccess {
         return ItemStack.EMPTY;
     }
     default void itematic$damage(int amount, ActionContext context) {}
-    default boolean itematic$mayStartUsing(Level level, Player user, InteractionHand hand, ItemStack stack) {
+    default boolean itematic$canFitInsideContainerItems() {
         return false;
     }
     default double itematic$attackSpeedMultiplier() {
         return 0.0d;
+    }
+    default float itematic$attackDamageBonus(Entity victim, float damage, DamageSource damageSource) {
+        return 0.0f;
     }
 }

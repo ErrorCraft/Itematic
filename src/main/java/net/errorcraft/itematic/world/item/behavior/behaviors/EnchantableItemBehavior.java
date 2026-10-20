@@ -33,8 +33,8 @@ public record EnchantableItemBehavior(int enchantability, Optional<Holder<Item>>
         return new EnchantableItemBehavior(enchantability, Optional.empty());
     }
 
-    public static EnchantableItemBehavior ofTransforming(int enchantability, Holder<Item> item) {
-        return new EnchantableItemBehavior(enchantability, Optional.of(item));
+    public static EnchantableItemBehavior of(int enchantability, Holder<Item> transformsInto) {
+        return new EnchantableItemBehavior(enchantability, Optional.of(transformsInto));
     }
 
     @Override
@@ -44,6 +44,8 @@ public record EnchantableItemBehavior(int enchantability, Optional<Holder<Item>>
 
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
-        builder.set(DataComponents.ENCHANTABLE, new Enchantable(this.enchantability));
+        Enchantable enchantable = new Enchantable(this.enchantability);
+        enchantable.itematic$setTransformsInto(this.transformsInto);
+        builder.set(DataComponents.ENCHANTABLE, enchantable);
     }
 }

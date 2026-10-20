@@ -41,21 +41,4 @@ public class GrindstoneMenuExtender {
     private ItemStack transmuteCopyForBookUseHolder(ItemStack instance, ItemLike newItem, @Share("transformsInto") LocalRef<Holder<Item>> transformsInto) {
         return instance.itematic$transmuteCopy(transformsInto.get());
     }
-
-    @Mixin(targets = {
-        "net/minecraft/world/inventory/GrindstoneMenu$2",
-        "net/minecraft/world/inventory/GrindstoneMenu$3"
-    })
-    public static class EnchantedItemSlotExtender {
-        @Redirect(
-            method = "mayPlace",
-            at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"
-            )
-        )
-        private boolean isDamageableItemCheckEnchantableItemBehavior(ItemStack instance) {
-            return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTABLE);
-        }
-    }
 }

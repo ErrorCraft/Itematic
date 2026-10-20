@@ -9,6 +9,8 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -61,6 +63,10 @@ public record PassingSequenceHandler(List<Entry> entries) implements SequenceHan
 
         public Builder addOptional(Action<?> action) {
             return this.addOptional(Holder.direct(ActionEntry.of(action)));
+        }
+
+        public Builder addOptional(LootItemCondition.Builder requirements, Action<?> action) {
+            return this.addOptional(Holder.direct(ActionEntry.of(requirements, action)));
         }
 
         public Builder addOptional(Holder<ActionEntry> entry) {
