@@ -14,6 +14,7 @@ public class ItematicItemTags {
     public static final TagKey<Item> BANNED_BUNDLE_ITEMS = of("banned_bundle_items");
     public static final TagKey<Item> PREVENTS_TAKING_POTTED_ITEM_OUT = of("prevents_taking_potted_item_out");
     public static final TagKey<Item> MUNDANE_POTION_REAGENTS = of("mundane_potion_reagents");
+    public static final TagKey<Item> ENCHANTING_TABLE_INGREDIENTS = of("enchanting_table_ingredients");
 
     private ItematicItemTags() {}
 

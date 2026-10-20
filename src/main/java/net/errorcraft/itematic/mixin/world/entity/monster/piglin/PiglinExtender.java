@@ -1,13 +1,15 @@
 package net.errorcraft.itematic.mixin.world.entity.monster.piglin;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
@@ -88,18 +90,17 @@ public abstract class PiglinExtender extends MobExtender {
         return instance.itematic$isHolding(ItemIds.CROSSBOW);
     }
 
-    @WrapMethod(
-        method = "canUseNonMeleeWeapon"
+    @Definition(id = "item", local = @Local(type = ItemStack.class, name = "item", argsOnly = true))
+    @Definition(id = "getItem", method = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;")
+    @Definition(id = "CROSSBOW", field = "Lnet/minecraft/world/item/Items;CROSSBOW:Lnet/minecraft/world/item/Item;")
+    @Expression("item.getItem() == CROSSBOW")
+    @WrapOperation(
+        method = "canUseNonMeleeWeapon",
+        at = @At("MIXINEXTRAS:EXPRESSION")
     )
-    private boolean useItemBehaviorComponent(ItemStack item, Operation<Boolean> original) {
-        if (item.itematic$getBehavior(ItemBehaviorType.SHOOTER)
+    private boolean useItemBehaviorComponent(Object left, Object right, Operation<Boolean> original, ItemStack item) {
+        return item.itematic$getBehavior(ItemBehaviorType.SHOOTER)
             .map(shooter -> shooter.usesMethod(ShooterMethodType.CHARGEABLE))
-            .orElse(false)) {
-            return true;
-        }
-
-        return item.itematic$getBehavior(ItemBehaviorType.WEAPON)
-            .map(weapon -> weapon.has(MeleeWeaponComponents.KINETIC))
             .orElse(false);
     }
 

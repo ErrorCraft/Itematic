@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.mixin.client.renderer.entity.player;
 
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
@@ -32,7 +33,7 @@ public class AvatarRendererExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isSpyglassCheckZoomItemBehavior(ItemStack instance, Object o) {
-        return instance.itematic$hasBehavior(ItemBehaviorType.ZOOM);
+    private static boolean isSpyglassCheckZoomFieldOfViewMultiplierDataComponent(ItemStack instance, Object o) {
+        return instance.has(ItematicDataComponents.ZOOM_FIELD_OF_VIEW_MULTIPLIER);
     }
 }

@@ -9,12 +9,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.world.item.component.ToolAccess;
 import net.errorcraft.itematic.advancements.predicates.ItemPredicates;
-import net.errorcraft.itematic.util.ItematicCodecs;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.block.Block;
@@ -113,7 +113,7 @@ public class ToolExtender implements ToolAccess {
             )
         )
         private static Codec<Float> allowZeroForSpeedField(Operation<Codec<Float>> original) {
-            return ItematicCodecs.NON_NEGATIVE_FLOAT;
+            return ExtraCodecs.NON_NEGATIVE_FLOAT;
         }
 
         @ModifyArg(

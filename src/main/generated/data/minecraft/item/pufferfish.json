@@ -8,10 +8,9 @@
     "minecraft:stackable": 64,
     "minecraft:useable": {
       "animation": "eat",
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "has_use_particles": true,
+      "sound": "minecraft:entity.generic.eat",
+      "ticks": 32
     }
   },
   "display": {
@@ -26,19 +25,16 @@
           {
             "id": "minecraft:poison",
             "amplifier": 1,
-            "duration": 1200,
-            "show_icon": true
+            "duration": 1200
           },
           {
             "id": "minecraft:hunger",
             "amplifier": 2,
-            "duration": 300,
-            "show_icon": true
+            "duration": 300
           },
           {
             "id": "minecraft:nausea",
-            "duration": 300,
-            "show_icon": true
+            "duration": 300
           }
         ],
         "entity": "this"

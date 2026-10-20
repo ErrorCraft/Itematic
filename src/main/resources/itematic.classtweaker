@@ -13,6 +13,8 @@ accessible    class    net/minecraft/client/gui/screens/recipebook/OverlayRecipe
 accessible    class    net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl
 accessible    class    net/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap
 accessible    class    net/minecraft/world/entity/animal/feline/Ocelot$OcelotTemptGoal
+accessible    method    net/minecraft/world/item/CreativeModeTab$Builder type (Lnet/minecraft/world/item/CreativeModeTab$Type;)Lnet/minecraft/world/item/CreativeModeTab$Builder;
+accessible    class    net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction$DirectSource
 
 inject-interface    net/minecraft/advancements/predicates/entity/EntityPredicate$Builder    net/errorcraft/itematic/access/advancements/predicates/entity/EntityPredicateAccess$BuilderAccess
 inject-interface    net/minecraft/advancements/predicates/ItemPredicate    net/errorcraft/itematic/access/advancements/predicates/ItemPredicateAccess
@@ -39,6 +41,7 @@ inject-interface    net/minecraft/sounds/SoundSource    net/minecraft/util/Strin
 inject-interface    net/minecraft/stats/Stat    net/errorcraft/itematic/access/stats/StatAccess<TT;>
 inject-interface    net/minecraft/stats/StatType    net/errorcraft/itematic/access/stats/StatTypeAccess<TT;>
 inject-interface    net/minecraft/util/context/ContextMap$Builder    net/errorcraft/itematic/access/util/context/ContextMapAccess$BuilderAccess
+inject-interface    net/minecraft/world/InteractionResult    net/errorcraft/itematic/access/world/InteractionResultAccess
 inject-interface    net/minecraft/world/SimpleContainer    net/errorcraft/itematic/access/world/SimpleContainerAccess
 inject-interface    net/minecraft/world/entity/Entity    net/errorcraft/itematic/access/world/entity/EntityAccess
 inject-interface    net/minecraft/world/entity/EntityType    net/errorcraft/itematic/access/world/entity/EntityTypeAccess<TT;>
@@ -67,6 +70,7 @@ inject-interface    net/minecraft/world/item/context/UseOnContext    net/errorcr
 inject-interface    net/minecraft/world/item/crafting/Ingredient    net/errorcraft/itematic/access/world/item/crafting/IngredientAccess
 inject-interface    net/minecraft/world/item/crafting/Recipe    net/errorcraft/itematic/access/world/item/crafting/RecipeAccess
 inject-interface    net/minecraft/world/item/crafting/ShapedRecipePattern    net/errorcraft/itematic/access/world/item/crafting/ShapedRecipePatternAccess
+inject-interface    net/minecraft/world/item/enchantment/Enchantable    net/errorcraft/itematic/access/world/item/enchantment/EnchantableAccess
 inject-interface    net/minecraft/world/level/Level    net/errorcraft/itematic/access/world/level/LevelAccess
 inject-interface    net/minecraft/world/level/LevelReader    net/errorcraft/itematic/access/world/level/LevelReaderAccess
 inject-interface    net/minecraft/world/level/block/CropBlock    net/errorcraft/itematic/access/world/level/block/CropBlockAccess

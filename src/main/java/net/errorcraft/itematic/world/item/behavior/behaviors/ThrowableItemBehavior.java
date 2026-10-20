@@ -11,6 +11,7 @@ import net.errorcraft.itematic.world.action.context.PositionTarget;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.component.ProjectileComponent;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
@@ -90,26 +91,14 @@ public record ThrowableItemBehavior(float speed, float angleOffset, Optional<Min
     }
 
     private void createEntity(ActionContext context, ItemStack stack) {
-        ProjectileItemBehavior projectile = stack.itematic$getBehavior(ItemBehaviorType.PROJECTILE)
-            .orElse(null);
+        Entity projectile = ProjectileComponent.spawn(context, PositionTarget.INTERACTED, this.angleOffset, this.speed, 1.0f);
         if (projectile == null) {
             return;
         }
 
-        Entity projectileEntity = projectile.spawnEntity(
-            context,
-            PositionTarget.INTERACTED,
-            this.angleOffset,
-            this.speed,
-            1.0f
-        );
-        if (projectileEntity == null) {
-            return;
-        }
-
         ActionContext spawnedContext = context.extend()
-            .add(ItematicContextKeys.SPAWNED_ENTITY, projectileEntity)
-            .add(ItematicContextKeys.SPAWNED_POSITION, projectileEntity.position())
+            .add(ItematicContextKeys.SPAWNED_ENTITY, projectile)
+            .add(ItematicContextKeys.SPAWNED_POSITION, projectile.position())
             .build();
         stack.itematic$invokeEvent(ItemEvent.THROW_PROJECTILE, spawnedContext);
     }
