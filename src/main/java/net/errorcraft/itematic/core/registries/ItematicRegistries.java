@@ -18,7 +18,7 @@ import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.level.modification.WorldModification;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -37,7 +37,7 @@ public class ItematicRegistries {
     public static final ResourceKey<Registry<BlockPickerType<?>>> BLOCK_PICKER_TYPE = of("block_picker_type");
     public static final ResourceKey<Registry<UseDurationProvider.Type<?>>> USE_DURATION_PROVIDER_TYPE = of("use_duration_provider_type");
     public static final ResourceKey<Registry<ItemHolderRuleType<?>>> ITEM_HOLDER_RULE_TYPE = of("item_holder_rule_type");
-    public static final ResourceKey<Registry<ShooterMethodType<?>>> SHOOTER_METHOD_TYPE = of("shooter_method_type");
+    public static final ResourceKey<Registry<ShooterMethod<?>>> SHOOTER_METHOD = of("shooter_method");
     public static final ResourceKey<Registry<WorldModification.Type<?>>> WORLD_MODIFICATION_TYPE = of("world_modification_type");
     public static final ResourceKey<Registry<MapCodec<? extends EntitySpawnRule<?>>>> ENTITY_SPAWN_RULE_TYPE = of("entity_spawn_rule_type");
     public static final ResourceKey<Registry<DataComponentType<?>>> MELEE_WEAPON_COMPONENT_TYPE = of("melee_weapon_component_type");

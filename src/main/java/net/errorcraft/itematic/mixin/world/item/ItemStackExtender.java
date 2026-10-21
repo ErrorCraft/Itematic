@@ -21,13 +21,12 @@ import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Chargeable;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.ChatFormatting;
@@ -599,12 +598,9 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     @WrapMethod(
         method = "useOnRelease"
     )
-    private boolean alsoCheckShooterItemBehavior(Operation<Boolean> original) {
-        ShooterMethodType<?> shooterMethodType = this.itematic$getBehavior(ItemBehaviorType.SHOOTER)
-            .map(ShooterItemBehavior::method)
-            .map(ShooterMethod::type)
-            .orElse(null);
-        if (shooterMethodType == ShooterMethodType.CHARGEABLE) {
+    private boolean alsoCheckShooterMethodDataComponent(Operation<Boolean> original) {
+        ShooterMethod<?> method = this.get(ItematicDataComponents.SHOOTER_METHOD);
+        if (method == Chargeable.INSTANCE) {
             return true;
         }
 

@@ -19,8 +19,9 @@ import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
+import net.errorcraft.itematic.world.item.weapon.shooter.ChargedPowerRules;
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargingSounds;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.ChargeableShooterMethod;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -29,6 +30,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
@@ -121,11 +123,21 @@ public class ItematicDataComponents {
             .networkSynchronized(ItemHolderSounds.STREAM_CODEC)
             .cacheEncoding()
     );
+    public static final DataComponentType<ShooterMethod<?>> SHOOTER_METHOD = register(
+        "shooter_method",
+        builder -> builder.persistent(ShooterMethod.CODEC)
+            .networkSynchronized(ShooterMethod.STREAM_CODEC)
+    );
     public static final DataComponentType<ItemDamageRules> SHOOTER_DAMAGE_RULES = register(
         "shooter_damage_rules",
         builder -> builder.persistent(ItemDamageRules.CODEC)
             .networkSynchronized(ItemDamageRules.STREAM_CODEC)
             .cacheEncoding()
+    );
+    public static final DataComponentType<Integer> SHOOTER_RANGE = register(
+        "shooter_range",
+        builder -> builder.persistent(ExtraCodecs.POSITIVE_INT)
+            .networkSynchronized(ByteBufCodecs.VAR_INT)
     );
     public static final DataComponentType<Float> SHOOTER_DEFAULT_CHARGE_TIME = register(
         "shooter_default_charge_time",
@@ -139,10 +151,10 @@ public class ItematicDataComponents {
             .networkSynchronized(ChargingSounds.STREAM_CODEC)
             .cacheEncoding()
     );
-    public static final DataComponentType<ChargeableShooterMethod.ChargedPowerRules> SHOOTER_CHARGED_POWER_RULES = register(
+    public static final DataComponentType<ChargedPowerRules> SHOOTER_CHARGED_POWER_RULES = register(
         "shooter_charged_power_rules",
-        builder -> builder.persistent(ChargeableShooterMethod.ChargedPowerRules.CODEC)
-            .networkSynchronized(ChargeableShooterMethod.ChargedPowerRules.STREAM_CODEC)
+        builder -> builder.persistent(ChargedPowerRules.CODEC)
+            .networkSynchronized(ChargedPowerRules.STREAM_CODEC)
     );
     public static final DataComponentType<Holder<SoundEvent>> SHOOTER_SHOOT_SOUND = register(
         "shooter_shoot_sound",

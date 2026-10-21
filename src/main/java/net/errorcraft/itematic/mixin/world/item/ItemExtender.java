@@ -27,6 +27,7 @@ import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.core.BlockPos;
@@ -204,6 +205,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private InteractionResult useDataComponents(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = player.getItemInHand(hand);
+        ShooterMethod<?> method = stack.get(ItematicDataComponents.SHOOTER_METHOD);
+        if (method != null && method.tryShoot(stack, level, player, hand)) {
+            return InteractionResult.CONSUME;
+        }
+
         UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
         if (useDuration != null && useDuration.canUse(stack, UseDuration.Pass.NORMAL)) {
             return useDuration.tryStartUsing(level, stack, player, hand);
@@ -463,6 +469,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         for (ItemBehavior<?> behavior : this.behavior) {
             behavior.using(itemStack, level, livingEntity, usedTicks, ticksRemaining);
         }
+
+        ShooterMethod<?> method = itemStack.get(ItematicDataComponents.SHOOTER_METHOD);
+        if (method != null) {
+            method.hold(itemStack, level, livingEntity, usedTicks);
+        }
     }
 
     @WrapMethod(
@@ -480,6 +491,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         if (useDuration != null) {
             useDuration.stopUsing(itemStack, level, entity, stackExchanger);
             result = true;
+        }
+
+        ShooterMethod<?> method = itemStack.get(ItematicDataComponents.SHOOTER_METHOD);
+        if (method != null) {
+            result |= method.stop(itemStack, level, entity, usedTicks);
         }
 
         if (level instanceof ServerLevel serverLevel) {

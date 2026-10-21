@@ -2,8 +2,9 @@ package net.errorcraft.itematic.world.item.use.duration.provider.providers;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -29,8 +30,11 @@ public class Shooter implements UseDurationProvider {
             return OptionalInt.empty();
         }
 
-        return stack.itematic$getBehavior(ItemBehaviorType.SHOOTER)
-            .map(shooter -> shooter.useDuration(stack, user))
-            .orElseGet(OptionalInt::empty);
+        ShooterMethod<?> method = stack.get(ItematicDataComponents.SHOOTER_METHOD);
+        if (method == null) {
+            return OptionalInt.empty();
+        }
+
+        return method.useDuration(stack, user);
     }
 }

@@ -4,16 +4,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.world.item.ProjectileWeaponItemAccessor;
-import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -27,39 +23,30 @@ import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 
-public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements ShooterMethod {
-    private static final Holder<SoundEvent> DEFAULT_SHOOT_SOUND = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.ARROW_SHOOT);
-    public static final MapCodec<DirectShooterMethod> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        SoundEvent.CODEC.optionalFieldOf("shoot_sound", DEFAULT_SHOOT_SOUND).forGetter(DirectShooterMethod::shootSound)
-    ).apply(instance, DirectShooterMethod::new));
+public class Direct implements ShooterMethod<Direct> {
+    public static final Direct INSTANCE = new Direct();
     private static final BowItem DUMMY = new BowItem(new Item.Properties());
 
-    public static DirectShooterMethod of() {
-        return new DirectShooterMethod(DEFAULT_SHOOT_SOUND);
+    private Direct() {}
+
+    @Override
+    public MapCodec<? extends ShooterMethod.Properties<Direct>> propertiesCodec() {
+        return Properties.CODEC;
     }
 
     @Override
-    public ShooterMethodType<?> type() {
-        return ShooterMethodType.DIRECT;
-    }
-
-    @Override
-    public void addComponents(DataComponentMap.Builder builder) {
-        builder.set(ItematicDataComponents.SHOOTER_SHOOT_SOUND, this.shootSound);
-    }
-
-    @Override
-    public boolean tryShoot(ShooterItemBehavior component, ItemStack stack, Level level, LivingEntity user, InteractionHand hand) {
+    public boolean tryShoot(ItemStack stack, Level level, LivingEntity user, InteractionHand hand) {
         return false;
     }
 
     @Override
-    public void hold(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks) {}
+    public void hold(ItemStack stack, Level level, LivingEntity user, int usedTicks) {}
 
     @Override
-    public boolean stop(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks) {
+    public boolean stop(ItemStack stack, Level level, LivingEntity user, int usedTicks) {
         ItemStack ammunition = user.itematic$getAmmunition(stack);
         if (ammunition.isEmpty()) {
             return false;
@@ -72,7 +59,7 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
 
         List<ItemStack> projectiles = ProjectileWeaponItemAccessor.draw(stack, ammunition, user);
         if (level instanceof ServerLevel serverLevel && !projectiles.isEmpty()) {
-            shooter.shoot(serverLevel, user, user.getUsedItemHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
+            this.shoot(serverLevel, user, user.getUsedItemHand(), stack, projectiles, pullProgress * 3.0f, 1.0f, pullProgress == 1.0f, null);
         }
 
         Holder<SoundEvent> shootSound = stack.get(ItematicDataComponents.SHOOTER_SHOOT_SOUND);
@@ -96,5 +83,25 @@ public record DirectShooterMethod(Holder<SoundEvent> shootSound) implements Shoo
     @Override
     public OptionalInt useDuration(ItemStack stack, LivingEntity user) {
         return OptionalInt.of(UseDuration.INDEFINITE);
+    }
+
+    public record Properties(Optional<Holder<SoundEvent>> shootSound) implements ShooterMethod.Properties<Direct> {
+        public static final MapCodec<Properties> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            SoundEvent.CODEC.optionalFieldOf("shoot_sound").forGetter(Properties::shootSound)
+        ).apply(instance, Properties::new));
+
+        public static Properties of(Holder<SoundEvent> shootSound) {
+            return new Properties(Optional.of(shootSound));
+        }
+
+        @Override
+        public Direct method() {
+            return INSTANCE;
+        }
+
+        @Override
+        public void addComponents(DataComponentMap.Builder builder) {
+            this.shootSound.ifPresent(shootSound -> builder.set(ItematicDataComponents.SHOOTER_SHOOT_SOUND, shootSound));
+        }
     }
 }

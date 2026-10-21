@@ -117,8 +117,9 @@ import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponCompo
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.KineticMeleeWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.PiercingMeleeWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.component.SmashingMeleeWeapon;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.ChargeableShooterMethod;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.DirectShooterMethod;
+import net.errorcraft.itematic.world.item.weapon.shooter.ChargedPowerRules;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Chargeable;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Direct;
 import net.errorcraft.itematic.world.level.block.CoralCollection;
 import net.errorcraft.itematic.world.level.block.CutoutCollection;
 import net.errorcraft.itematic.world.level.block.WoodCollection;
@@ -1381,10 +1382,10 @@ public class Items {
                 )
                 .behavior(
                     ShooterItemBehavior.of(
+                        Direct.Properties.of(this.soundEvents.getOrThrow(SoundEventIds.ARROW_SHOOT)),
                         this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
                         this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
-                        BowItem.DEFAULT_RANGE,
-                        DirectShooterMethod.of()
+                        BowItem.DEFAULT_RANGE
                     )
                 )
                 .behavior(EnchantableItemBehavior.of(1))
@@ -1400,16 +1401,16 @@ public class Items {
                 )
                 .behavior(
                     ShooterItemBehavior.of(
-                        this.items.getOrThrow(ItematicItemTags.CROSSBOW_AMMUNITION),
-                        this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
-                        CrossbowItem.DEFAULT_RANGE,
-                        ChargeableShooterMethod.of(
+                        Chargeable.Properties.of(
                             CrossbowItemAccessor.defaultChargingSounds(),
-                            ChargeableShooterMethod.ChargedPowerRules.Rule.of(
+                            ChargedPowerRules.Rule.of(
                                 HolderSet.direct(this.items.getOrThrow(ItemIds.FIREWORK_ROCKET)),
                                 CrossbowItemAccessor.fireworkRocketPower()
                             )
                         ),
+                        this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
+                        this.items.getOrThrow(ItematicItemTags.CROSSBOW_AMMUNITION),
+                        CrossbowItem.DEFAULT_RANGE,
                         ItemDamageRules.Rule.of(
                             HolderSet.direct(this.items.getOrThrow(ItemIds.FIREWORK_ROCKET)),
                             3
