@@ -11,6 +11,7 @@ import net.errorcraft.itematic.world.item.component.ConsumableComponent;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.ProjectileComponent;
+import net.errorcraft.itematic.world.item.component.Throwable;
 import net.errorcraft.itematic.world.item.component.ZoomFieldOfViewMultiplier;
 import net.errorcraft.itematic.world.item.component.ZoomSounds;
 import net.errorcraft.itematic.world.item.equipment.Glider;
@@ -141,7 +142,7 @@ public class ItematicDataComponents {
     );
     public static final DataComponentType<Float> SHOOTER_DEFAULT_CHARGE_TIME = register(
         "shooter_default_charge_time",
-        builder -> builder.persistent(ItematicCodecs.NON_NEGATIVE_FLOAT)
+        builder -> builder.persistent(ExtraCodecs.NON_NEGATIVE_FLOAT)
             .networkSynchronized(ByteBufCodecs.FLOAT)
             .cacheEncoding()
     );
@@ -215,6 +216,12 @@ public class ItematicDataComponents {
         "projectile",
         builder -> builder.persistent(ProjectileComponent.CODEC)
             .networkSynchronized(ProjectileComponent.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<Throwable> THROWABLE = register(
+        "throwable",
+        builder -> builder.persistent(Throwable.CODEC)
+            .networkSynchronized(Throwable.STREAM_CODEC)
             .cacheEncoding()
     );
 

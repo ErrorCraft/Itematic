@@ -10,13 +10,6 @@ import org.apache.commons.lang3.math.Fraction;
 import java.util.function.Function;
 
 public class ItematicCodecs {
-    public static final Codec<Float> NON_NEGATIVE_FLOAT = Codec.FLOAT.validate(value -> {
-        if (value >= 0 && value <= Float.MAX_VALUE) {
-            return DataResult.success(value);
-        }
-
-        return DataResult.error(() -> "Float must be non-negative: " + value);
-    });
     public static final Codec<Double> POSITIVE_DOUBLE = Codec.DOUBLE.validate(value -> {
         if (value > 0 && value <= Double.MAX_VALUE) {
             return DataResult.success(value);

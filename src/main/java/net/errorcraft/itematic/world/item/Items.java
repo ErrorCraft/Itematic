@@ -1448,7 +1448,7 @@ public class Items {
                         .animation(ItemUseAnimation.TRIDENT)
                         .build()
                 )
-                .behavior(ThrowableItemBehavior.ofMinDrawDuration(TridentItem.PROJECTILE_SHOOT_POWER, 0.0f, TridentItem.THROW_THRESHOLD_TIME))
+                .behavior(ThrowableItemBehavior.of(TridentItem.PROJECTILE_SHOOT_POWER, 0.0f, TridentItem.THROW_THRESHOLD_TIME))
                 .behavior(EnchantableItemBehavior.of(1))
                 .event(
                     ItemEvent.STOPPED_USING,

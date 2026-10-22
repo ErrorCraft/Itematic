@@ -26,6 +26,7 @@ import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
+import net.errorcraft.itematic.world.item.component.Throwable;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
@@ -208,6 +209,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         ShooterMethod<?> method = stack.get(ItematicDataComponents.SHOOTER_METHOD);
         if (method != null && method.tryShoot(stack, level, player, hand)) {
             return InteractionResult.CONSUME;
+        }
+
+        Throwable throwable = stack.get(ItematicDataComponents.THROWABLE);
+        if (throwable != null && throwable.tryUseInstantly(level, player, stack, stackExchangerReference.get())) {
+            return InteractionResult.SUCCESS;
         }
 
         UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
@@ -483,10 +489,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         boolean result = false;
         int usedTicks = entity.itematic$usedItemTicks();
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, itemStack);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.stopUsing(itemStack, level, entity, usedTicks, remainingTime, stackExchanger);
-        }
-
         UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
         if (useDuration != null) {
             useDuration.stopUsing(itemStack, level, entity, stackExchanger);
@@ -496,6 +498,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         ShooterMethod<?> method = itemStack.get(ItematicDataComponents.SHOOTER_METHOD);
         if (method != null) {
             result |= method.stop(itemStack, level, entity, usedTicks);
+        }
+
+        Throwable throwable = itemStack.get(ItematicDataComponents.THROWABLE);
+        if (throwable != null) {
+            result |= throwable.stopUsing(itemStack, level, entity, usedTicks, stackExchanger);
         }
 
         if (level instanceof ServerLevel serverLevel) {
