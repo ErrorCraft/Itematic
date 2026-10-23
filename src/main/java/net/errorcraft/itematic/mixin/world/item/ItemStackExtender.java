@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.world.item;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -22,6 +23,7 @@ import net.errorcraft.itematic.world.item.ItemStacks;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
@@ -37,6 +39,7 @@ import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -68,6 +71,7 @@ import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.component.TooltipProvider;
+import net.minecraft.world.item.component.UseCooldown;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -275,6 +279,38 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         }
 
         return original.call(level, player, hand);
+    }
+
+    @ModifyExpressionValue(
+        method = "use",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/Item;use(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;"
+        )
+    )
+    private InteractionResult checkUseCooldownMoment(InteractionResult original, @Local(name = "player", argsOnly = true) Player player, @Local(name = "stackBeforeUse") ItemStack stackBeforeUse) {
+        UseCooldownMoment useCooldownMoment = stackBeforeUse.getOrDefault(ItematicDataComponents.USE_COOLDOWN_MOMENT, UseCooldownMoment.DEFAULT);
+        if (useCooldownMoment != UseCooldownMoment.ON_START) {
+            return original;
+        }
+
+        UseCooldown useCooldown = stackBeforeUse.get(DataComponents.USE_COOLDOWN);
+        if (useCooldown != null) {
+            useCooldown.apply(stackBeforeUse, player);
+        }
+
+        return original;
+    }
+
+    @WrapWithCondition(
+        method = "applyAfterUseComponentSideEffects",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/component/UseCooldown;apply(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V"
+        )
+    )
+    private boolean checkUseCooldownMoment(UseCooldown instance, ItemStack stack, LivingEntity user) {
+        return stack.getOrDefault(ItematicDataComponents.USE_COOLDOWN_MOMENT, UseCooldownMoment.DEFAULT) == UseCooldownMoment.ON_END;
     }
 
     @WrapMethod(

@@ -60,11 +60,13 @@ public class ItematicCodecs {
         });
     }
 
+    public static <T, U extends T> Codec<T> either(Codec<T> primary, Codec<U> alternative, Function<T, Either<T, U>> wrapper) {
+        return Codec.either(primary, alternative)
+            .xmap(Either::unwrap, wrapper);
+    }
+
     public static <T, U> Codec<T> withAlternative(Codec<T> primary, Codec<U> alternative, Function<U, T> converter, Function<T, Either<T, U>> wrapper) {
-        return Codec.either(
-            primary,
-            alternative
-        ).xmap(
+        return Codec.either(primary, alternative).xmap(
             either -> either.map(Function.identity(), converter),
             wrapper
         );

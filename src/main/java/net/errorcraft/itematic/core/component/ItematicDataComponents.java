@@ -12,6 +12,7 @@ import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.ProjectileComponent;
 import net.errorcraft.itematic.world.item.component.Throwable;
+import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
 import net.errorcraft.itematic.world.item.component.ZoomFieldOfViewMultiplier;
 import net.errorcraft.itematic.world.item.component.ZoomSounds;
 import net.errorcraft.itematic.world.item.equipment.Glider;
@@ -69,6 +70,11 @@ public class ItematicDataComponents {
         "use_sound",
         builder -> builder.persistent(SoundEvent.CODEC)
             .networkSynchronized(SoundEvent.STREAM_CODEC)
+    );
+    public static final DataComponentType<UseCooldownMoment> USE_COOLDOWN_MOMENT = register(
+        "use_cooldown_moment",
+        builder -> builder.persistent(UseCooldownMoment.CODEC)
+            .networkSynchronized(UseCooldownMoment.STREAM_CODEC)
     );
     public static final DataComponentType<ConsumableComponent> CONSUMABLE = register(
         "consumable",

@@ -23,7 +23,7 @@ public record ZoomSounds(Holder<SoundEvent> start, Holder<SoundEvent> stop) impl
     );
 
     @Override
-    public void onStartedUsing(LivingEntity user) {
+    public void itematic$onStartedUsing(LivingEntity user) {
         user.playSound(this.start.value(), 1.0f, 1.0f);
     }
 

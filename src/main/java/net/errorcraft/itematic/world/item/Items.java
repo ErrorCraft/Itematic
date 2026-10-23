@@ -102,6 +102,7 @@ import net.errorcraft.itematic.world.item.component.BlockItemStatePropertiesBuil
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
+import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
@@ -1766,6 +1767,7 @@ public class Items {
                 .behavior(
                     UseableItemBehavior.builder()
                         .useFor(Playable.INSTANCE)
+                        .cooldown(Playable.INSTANCE, UseCooldownMoment.ON_START)
                         .animation(ItemUseAnimation.TOOT_HORN)
                         .build()
                 )

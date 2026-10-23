@@ -65,6 +65,7 @@ inject-interface    net/minecraft/world/item/component/ChargedProjectiles    net
 inject-interface    net/minecraft/world/item/component/ContainerComponent    net/errorcraft/itematic/access/world/item/component/ContainerComponentAccess<TT;>
 inject-interface    net/minecraft/world/item/component/Tool    net/errorcraft/itematic/access/world/item/component/ToolAccess
 inject-interface    net/minecraft/world/item/component/Tool$Rule    net/errorcraft/itematic/access/world/item/component/ToolAccess$RuleAccess
+inject-interface    net/minecraft/world/item/component/UseCooldown    net/errorcraft/itematic/access/world/item/component/UseCooldownAccess
 inject-interface    net/minecraft/world/item/context/BlockPlaceContext    net/errorcraft/itematic/access/world/item/context/BlockPlaceContextAccess
 inject-interface    net/minecraft/world/item/context/UseOnContext    net/errorcraft/itematic/access/world/item/context/UseOnContextAccess
 inject-interface    net/minecraft/world/item/crafting/Ingredient    net/errorcraft/itematic/access/world/item/crafting/IngredientAccess

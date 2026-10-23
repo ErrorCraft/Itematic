@@ -1,11 +1,14 @@
 package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
+import net.errorcraft.itematic.world.item.component.UseCooldowns;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Constant;
@@ -28,7 +31,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, ItemUseAnimation animation, Optional<Holder<SoundEvent>> sound, Optional<ItemStackTemplate> remainder, UseEffects effects, Optional<UseCooldown> cooldown, Set<UseDuration.Pass> passes) implements ItemBehavior<UseableItemBehavior> {
+public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, ItemUseAnimation animation, Optional<Holder<SoundEvent>> sound, Optional<ItemStackTemplate> remainder, UseEffects effects, Optional<Cooldown> cooldown, Set<UseDuration.Pass> passes) implements ItemBehavior<UseableItemBehavior> {
     public static final Codec<UseableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UseDuration.CODEC.optionalFieldOf("ticks", new UseDuration(Instant.INSTANCE)).forGetter(UseableItemBehavior::ticks),
         Codec.BOOL.optionalFieldOf("has_use_particles", false).forGetter(UseableItemBehavior::hasUseParticles),
@@ -36,7 +39,7 @@ public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, It
         SoundEvent.CODEC.optionalFieldOf("sound").forGetter(UseableItemBehavior::sound),
         ItemStackTemplate.CODEC.optionalFieldOf("remainder").forGetter(UseableItemBehavior::remainder),
         UseEffects.CODEC.optionalFieldOf("effects", UseEffects.DEFAULT).forGetter(UseableItemBehavior::effects),
-        UseCooldown.CODEC.optionalFieldOf("cooldown").forGetter(UseableItemBehavior::cooldown),
+        Cooldown.CODEC.optionalFieldOf("cooldown").forGetter(UseableItemBehavior::cooldown),
         UseDuration.Pass.SET_CODEC.optionalFieldOf("passes", UseDuration.Pass.DEFAULT).forGetter(UseableItemBehavior::passes)
     ).apply(instance, UseableItemBehavior::new));
 
@@ -74,7 +77,12 @@ public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, It
             Optional.empty(),
             Optional.empty(),
             UseEffects.DEFAULT,
-            Optional.of(new UseCooldown(cooldownSeconds)),
+            Optional.of(
+                new Cooldown(
+                    new UseCooldown(cooldownSeconds),
+                    UseCooldownMoment.DEFAULT
+                )
+            ),
             UseDuration.Pass.DEFAULT
         );
     }
@@ -99,8 +107,20 @@ public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, It
         this.sound.ifPresent(sound -> builder.set(ItematicDataComponents.USE_SOUND, sound));
         this.remainder.ifPresent(remainder -> builder.set(DataComponents.USE_REMAINDER, new UseRemainder(remainder)));
         builder.set(DataComponents.USE_EFFECTS, this.effects);
-        this.cooldown.ifPresent(cooldown -> builder.set(DataComponents.USE_COOLDOWN, cooldown));
+        this.cooldown.ifPresent(cooldown -> cooldown.addComponents(builder));
         builder.set(ItematicDataComponents.USE_PASSES, this.passes);
+    }
+
+    public record Cooldown(UseCooldown cooldown, UseCooldownMoment moment) {
+        public static final Codec<Cooldown> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            MapCodec.assumeMapUnsafe(UseCooldown.CODEC).forGetter(Cooldown::cooldown),
+            UseCooldownMoment.CODEC.optionalFieldOf("moment", UseCooldownMoment.DEFAULT).forGetter(Cooldown::moment)
+        ).apply(instance, Cooldown::new));
+
+        private void addComponents(DataComponentMap.Builder builder) {
+            builder.set(DataComponents.USE_COOLDOWN, this.cooldown);
+            builder.set(ItematicDataComponents.USE_COOLDOWN_MOMENT, this.moment);
+        }
     }
 
     public static class Builder {
@@ -108,8 +128,10 @@ public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, It
         private ItemUseAnimation animation = ItemUseAnimation.NONE;
         @Nullable
         private Holder<Item> remainder;
-        private Set<UseDuration.Pass> passes = UseDuration.Pass.DEFAULT;
         private UseEffects effects = UseEffects.DEFAULT;
+        @Nullable
+        private Cooldown cooldown;
+        private Set<UseDuration.Pass> passes = UseDuration.Pass.DEFAULT;
 
         private Builder() {}
 
@@ -121,7 +143,7 @@ public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, It
                 Optional.empty(),
                 Optional.ofNullable(this.remainder).map(ItemStackTemplates::of),
                 this.effects,
-                Optional.empty(),
+                Optional.ofNullable(this.cooldown),
                 this.passes
             );
         }
@@ -153,6 +175,11 @@ public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, It
 
         public Builder effects(UseEffects effects) {
             this.effects = effects;
+            return this;
+        }
+
+        public Builder cooldown(UseDurationProvider ticks, UseCooldownMoment moment) {
+            this.cooldown = new Cooldown(UseCooldowns.of(ticks), moment);
             return this;
         }
 

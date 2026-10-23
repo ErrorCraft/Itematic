@@ -73,7 +73,7 @@ public record UseDuration(UseDurationProvider provider) {
         }
 
         stack.getAllOfType(UseableListener.Started.class)
-            .forEach(started -> started.onStartedUsing(user));
+            .forEach(started -> started.itematic$onStartedUsing(user));
         int ticks = possibleTicks.getAsInt();
         switch (ticks) {
             case INSTANT -> {
