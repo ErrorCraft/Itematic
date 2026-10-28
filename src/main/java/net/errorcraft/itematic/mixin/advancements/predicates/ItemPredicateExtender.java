@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -63,6 +64,23 @@ public class ItemPredicateExtender implements ItemPredicateAccess {
         }
 
         return true;
+    }
+
+    @ModifyReturnValue(
+        method = "equals",
+        at = @At("TAIL")
+    )
+    private boolean checkExtraFields(boolean original, Object o) {
+        ItemPredicateExtender that = ((ItemPredicateExtender) o);
+        return original && Objects.equals(this.behavior, that.behavior);
+    }
+
+    @ModifyReturnValue(
+        method = "hashCode",
+        at = @At("TAIL")
+    )
+    private int hashExtraFields(int original) {
+        return Objects.hash(original, this.behavior);
     }
 
     @Override
