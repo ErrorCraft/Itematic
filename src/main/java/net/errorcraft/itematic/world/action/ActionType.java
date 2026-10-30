@@ -38,6 +38,8 @@ import net.errorcraft.itematic.world.action.actions.ShearAtPositionAction;
 import net.errorcraft.itematic.world.action.actions.ShootProjectileFromItemAction;
 import net.errorcraft.itematic.world.action.actions.SpawnEntityAction;
 import net.errorcraft.itematic.world.action.actions.SpawnEntityFromItemAction;
+import net.errorcraft.itematic.world.action.actions.StoreFloatAction;
+import net.errorcraft.itematic.world.action.actions.StoreIntAction;
 import net.errorcraft.itematic.world.action.actions.SwingHandAction;
 import net.errorcraft.itematic.world.action.actions.TakeHoneyAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
@@ -219,6 +221,14 @@ public record ActionType<T extends Action<T>>(MapCodec<T> codec) {
     public static final ActionType<DropLootAction> DROP_LOOT = register(
         "drop_loot",
         new ActionType<>(DropLootAction.CODEC)
+    );
+    public static final ActionType<StoreIntAction> STORE_INT = register(
+        "store_int",
+        new ActionType<>(StoreIntAction.CODEC)
+    );
+    public static final ActionType<StoreFloatAction> STORE_FLOAT = register(
+        "store_float",
+        new ActionType<>(StoreFloatAction.CODEC)
     );
 
     public static void init() {}
