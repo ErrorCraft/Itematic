@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.world.item.enchantment;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -12,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -32,6 +34,23 @@ public class EnchantableExtender implements EnchantableAccess {
             MapCodec.assumeMapUnsafe(original).forGetter(Function.identity()),
             Item.CODEC.optionalFieldOf("transforms_into").forGetter(Enchantable::itematic$transformsInto)
         ).apply(instance, EnchantableExtender::setTransformsInto));
+    }
+
+    @ModifyReturnValue(
+        method = "equals",
+        at = @At("TAIL")
+    )
+    private boolean checkExtraFields(boolean original, Object o) {
+        EnchantableExtender that = ((EnchantableExtender) o);
+        return original && Objects.equals(this.transformsInto, that.transformsInto);
+    }
+
+    @ModifyReturnValue(
+        method = "hashCode",
+        at = @At("TAIL")
+    )
+    private int hashExtraFields(int original) {
+        return Objects.hash(original, this.transformsInto);
     }
 
     @Override
