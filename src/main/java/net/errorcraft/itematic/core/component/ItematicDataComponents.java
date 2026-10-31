@@ -230,6 +230,16 @@ public class ItematicDataComponents {
             .networkSynchronized(Throwable.STREAM_CODEC)
             .cacheEncoding()
     );
+    public static final DataComponentType<Holder<Item>> ENCHANT_RESULT_ITEM = register(
+        "enchant_result_item",
+        builder -> builder.persistent(Item.CODEC)
+            .networkSynchronized(Item.STREAM_CODEC)
+    );
+    public static final DataComponentType<Holder<Item>> GRIND_RESULT_ITEM = register(
+        "grind_result_item",
+        builder -> builder.persistent(Item.CODEC)
+            .networkSynchronized(Item.STREAM_CODEC)
+    );
 
     private ItematicDataComponents() {}
 

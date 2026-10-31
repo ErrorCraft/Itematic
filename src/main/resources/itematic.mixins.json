@@ -322,7 +322,6 @@
     "world.item.crafting.StonecutterRecipeExtender",
     "world.item.crafting.TransmuteRecipeExtender",
     "world.item.crafting.display.SlotDisplayExtender$ItemSlotDisplaysExtender",
-    "world.item.enchantment.EnchantableExtender",
     "world.item.enchantment.EnchantmentExtender",
     "world.item.enchantment.EnchantmentHelperExtender",
     "world.item.equipment.EquippableExtender",

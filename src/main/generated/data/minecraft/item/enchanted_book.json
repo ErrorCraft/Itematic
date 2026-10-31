@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:enchantment_holder": {
-      "grinding_transforms_into": "minecraft:book"
+      "grind_result_item": "minecraft:book"
     },
     "minecraft:stackable": 1
   },
