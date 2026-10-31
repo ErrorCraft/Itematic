@@ -30,10 +30,12 @@ import net.minecraft.util.ByIdMap;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -60,49 +62,24 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 
-public record EntityPlacerComponent(EntitySpawner entity, Optional<HolderSet<Block>> usesCollisionShape, boolean allowSpawnerModification, Set<Pass> passes) implements TooltipProvider {
+public record EntityPlacerComponent(EntitySpawner entity, Optional<HolderSet<Block>> usesCollisionShape, boolean allowSpawnerModification, boolean allowSpawningOffspring, Set<Pass> passes) implements TooltipProvider {
     public static final Codec<EntityPlacerComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         EntitySpawner.CODEC.fieldOf("entity").forGetter(EntityPlacerComponent::entity),
         RegistryCodecs.holderSet(Registries.BLOCK).optionalFieldOf("uses_collision_shape").forGetter(EntityPlacerComponent::usesCollisionShape),
         Codec.BOOL.optionalFieldOf("allow_spawner_modification", false).forGetter(EntityPlacerComponent::allowSpawnerModification),
+        Codec.BOOL.optionalFieldOf("allow_spawning_offspring", false).forGetter(EntityPlacerComponent::allowSpawningOffspring),
         Pass.SET_CODEC.optionalFieldOf("passes", Pass.DEFAULT_PASSES).forGetter(EntityPlacerComponent::passes)
     ).apply(instance, EntityPlacerComponent::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, EntityPlacerComponent> STREAM_CODEC = StreamCodec.composite(
         EntitySpawner.STREAM_CODEC, EntityPlacerComponent::entity,
         ByteBufCodecs.holderSet(Registries.BLOCK).apply(ByteBufCodecs::optional), EntityPlacerComponent::usesCollisionShape,
         ByteBufCodecs.BOOL, EntityPlacerComponent::allowSpawnerModification,
+        ByteBufCodecs.BOOL, EntityPlacerComponent::allowSpawningOffspring,
         Pass.SET_STREAM_CODEC, EntityPlacerComponent::passes,
         EntityPlacerComponent::new
     );
     public static final ScopedValue<HolderSet<Block>> USES_COLLISION_SHAPE = ScopedValue.newInstance();
     private static final Component RANDOM_VARIANT_TOOLTIP = HangingEntityItemAccessor.randomVariantTooltip();
-
-    public static EntityPlacerComponent of(EntitySpawner entity) {
-        return new EntityPlacerComponent(
-            entity,
-            Optional.empty(),
-            false,
-            Pass.DEFAULT_PASSES
-        );
-    }
-
-    public static EntityPlacerComponent of(EntitySpawner entity, HolderSet<Block> usesCollisionShape) {
-        return new EntityPlacerComponent(
-            entity,
-            Optional.of(usesCollisionShape),
-            false,
-            Pass.DEFAULT_PASSES
-        );
-    }
-
-    public static EntityPlacerComponent of(EntitySpawner entity, boolean allowSpawnerModification, Pass... passes) {
-        return new EntityPlacerComponent(
-            entity,
-            Optional.empty(),
-            allowSpawnerModification,
-            Set.of(passes)
-        );
-    }
 
     @Override
     public void addToTooltip(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components) {
@@ -152,6 +129,31 @@ public record EntityPlacerComponent(EntitySpawner entity, Optional<HolderSet<Blo
     public Entity place(ActionContext context, PositionTarget position, @Nullable Double exactY) {
         return EntityPlacer.of(this.entity, null)
             .place(context, position, exactY, EntitySpawnReason.SPAWN_ITEM_USE);
+    }
+
+    public Optional<Mob> trySpawnOffspring(Player user, Mob parent, EntityType<? extends Mob> parentType, ServerLevel level, Vec3 pos, ItemStack stack) {
+        if (this.entity.entityType(stack) != parentType) {
+            return Optional.empty();
+        }
+
+        Mob offspring = createOffspring(parent, parentType, level);
+        if (offspring == null) {
+            return Optional.empty();
+        }
+
+        if (!offspring.itematic$trySetBaby(true)) {
+            return Optional.empty();
+        }
+
+        offspring.snapTo(pos);
+        Component customName = stack.get(DataComponents.CUSTOM_NAME);
+        if (customName != null) {
+            offspring.setCustomName(customName);
+        }
+
+        level.addFreshEntityWithPassengers(offspring);
+        stack.consume(1, user);
+        return Optional.of(offspring);
     }
 
     private UseOnContext recalculateContext(UseOnContext context) {
@@ -221,6 +223,15 @@ public record EntityPlacerComponent(EntitySpawner entity, Optional<HolderSet<Blo
             GameEvent.BLOCK_CHANGE,
             pos
         );
+    }
+
+    @Nullable
+    private static Mob createOffspring(Entity parent, EntityType<? extends Mob> parentType, ServerLevel level) {
+        if (parent instanceof AgeableMob ageableMobParent) {
+            return ageableMobParent.getBreedOffspring(level, ageableMobParent);
+        }
+
+        return parentType.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
     }
 
     public enum Pass implements StringRepresentable {

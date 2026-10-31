@@ -25,6 +25,7 @@ public record EntityItemBehavior(EntityPlacerComponent entityPlacer) implements 
                 entity,
                 Optional.empty(),
                 false,
+                false,
                 EntityPlacerComponent.Pass.DEFAULT_PASSES
             )
         );
@@ -36,17 +37,19 @@ public record EntityItemBehavior(EntityPlacerComponent entityPlacer) implements 
                 entity,
                 Optional.of(usesCollisionShape),
                 false,
+                false,
                 EntityPlacerComponent.Pass.DEFAULT_PASSES
             )
         );
     }
 
-    public static EntityItemBehavior of(EntitySpawner entity, boolean allowSpawnerModification, EntityPlacerComponent.Pass... passes) {
+    public static EntityItemBehavior of(EntitySpawner entity, boolean allowSpawnerModification, boolean allowSpawningOffspring, EntityPlacerComponent.Pass... passes) {
         return new EntityItemBehavior(
             new EntityPlacerComponent(
                 entity,
                 Optional.empty(),
                 allowSpawnerModification,
+                allowSpawningOffspring,
                 Set.of(passes)
             )
         );

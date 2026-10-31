@@ -39,7 +39,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.SpawnEggItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
@@ -127,10 +126,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<DyeItemBehavior> DYE = register(
         "dye",
         DyeItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<SpawnEggItemBehavior> SPAWN_EGG = register(
-        "spawn_egg",
-        SpawnEggItemBehavior.CODEC
     );
     public static final ItemBehaviorType<DispensableItemBehavior> DISPENSABLE = register(
         "dispensable",

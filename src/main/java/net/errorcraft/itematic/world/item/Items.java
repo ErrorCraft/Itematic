@@ -84,7 +84,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.SpawnEggItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
@@ -2719,12 +2718,12 @@ public class Items {
                             .allowItemData()
                             .build(),
                         true,
+                        true,
                         EntityPlacerComponent.Pass.BLOCK,
                         EntityPlacerComponent.Pass.FLUID
                     )
                 )
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))
-                .behavior(SpawnEggItemBehavior.INSTANCE)
                 .register();
         }
 

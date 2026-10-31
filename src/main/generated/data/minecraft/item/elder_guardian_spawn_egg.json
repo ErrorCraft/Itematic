@@ -5,6 +5,7 @@
     },
     "minecraft:entity": {
       "allow_spawner_modification": true,
+      "allow_spawning_offspring": true,
       "entity": {
         "allow_item_data": true,
         "entity": "minecraft:elder_guardian"
@@ -14,7 +15,6 @@
         "fluid"
       ]
     },
-    "minecraft:spawn_egg": {},
     "minecraft:stackable": 64
   },
   "display": {

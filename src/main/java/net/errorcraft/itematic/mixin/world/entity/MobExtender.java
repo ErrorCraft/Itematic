@@ -12,8 +12,8 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.errorcraft.itematic.access.world.entity.MobAccess;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.SpawnEggItemBehavior;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.minecraft.advancements.triggers.PlayerInteractTrigger;
 import net.minecraft.core.Holder;
 import net.minecraft.references.ItemIds;
@@ -121,18 +121,6 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
         return player != null;
     }
 
-    @WrapOperation(
-        method = "checkAndHandleImportantInteractions",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"
-        )
-    )
-    @Nullable
-    private Item getItemUseNull(ItemStack instance, Operation<Item> original) {
-        return null;
-    }
-
     @ModifyConstant(
         method = "checkAndHandleImportantInteractions",
         constant = @Constant(
@@ -140,10 +128,14 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
             ordinal = 0
         )
     )
-    private boolean instanceOfSpawnEggItemUseItemBehavior(Object reference, Class<SpawnEggItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
-        Optional<SpawnEggItemBehavior> optionalSpawnEgg = itemStack.itematic$getBehavior(ItemBehaviorType.SPAWN_EGG);
-        optionalSpawnEgg.ifPresent(spawnEgg::set);
-        return optionalSpawnEgg.isPresent();
+    private boolean instanceOfSpawnEggItemUseDataComponent(Object reference, Class<SpawnEggItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("entityPlacer") LocalRef<EntityPlacerComponent> entityPlacerReference) {
+        EntityPlacerComponent entityPlacer = itemStack.get(ItematicDataComponents.ENTITY_PLACER);
+        if (entityPlacer == null) {
+            return false;
+        }
+
+        entityPlacerReference.set(entityPlacer);
+        return true;
     }
 
     @WrapOperation(
@@ -153,8 +145,8 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
             target = "Lnet/minecraft/world/item/SpawnEggItem;spawnOffspringFromSpawnEgg(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"
         )
     )
-    private Optional<Mob> spawnOffspringUseItemBehavior(Player player, Mob parent, EntityType<? extends Mob> type, ServerLevel level, Vec3 pos, ItemStack spawnEggStack, Operation<Optional<Mob>> original, @Share("spawnEgg") LocalRef<SpawnEggItemBehavior> spawnEgg) {
-        return spawnEgg.get().spawnBaby(player, parent, type, level, pos, spawnEggStack);
+    private Optional<Mob> spawnOffspringFromSpawnEggUseDataComponent(Player player, Mob parent, EntityType<? extends Mob> type, ServerLevel level, Vec3 pos, ItemStack spawnEggStack, Operation<Optional<Mob>> original, @Share("entityPlacer") LocalRef<EntityPlacerComponent> entityPlacerReference) {
+        return entityPlacerReference.get().trySpawnOffspring(player, parent, type, level, pos, spawnEggStack);
     }
 
     @WrapOperation(
