@@ -15,6 +15,7 @@ import net.errorcraft.itematic.references.ItemBarStyleIds;
 import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
 import net.errorcraft.itematic.references.SoundEventIds;
+import net.errorcraft.itematic.tags.ItematicEntityTypeTags;
 import net.errorcraft.itematic.tags.ItematicItemTags;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionEventMap;
@@ -1479,7 +1480,7 @@ public class Items {
                 .register();
             this.builder(ItemIds.CARROT_ON_A_STICK, 1)
                 .behavior(DamageableItemBehavior.of(25))
-                .behavior(SteeringItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.PIG), 7))
+                .behavior(SteeringItemBehavior.of(this.entityTypes.getOrThrow(ItematicEntityTypeTags.CARROT_ON_A_STICK_CONTROL_TARGETS), 7))
                 .event(
                     ItemEvent.BREAK_ITEM,
                     ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemIds.FISHING_ROD)))
@@ -1487,7 +1488,7 @@ public class Items {
                 .register();
             this.builder(ItemIds.WARPED_FUNGUS_ON_A_STICK, 1)
                 .behavior(DamageableItemBehavior.of(100))
-                .behavior(SteeringItemBehavior.of(this.entityTypes.getOrThrow(EntityTypeIds.STRIDER), 1))
+                .behavior(SteeringItemBehavior.of(this.entityTypes.getOrThrow(ItematicEntityTypeTags.WARPED_FUNGUS_ON_A_STICK_CONTROL_TARGETS), 1))
                 .event(
                     ItemEvent.BREAK_ITEM,
                     ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemIds.FISHING_ROD)))

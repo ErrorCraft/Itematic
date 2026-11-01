@@ -24,6 +24,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.Bucket;
+import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.component.Throwable;
@@ -209,6 +210,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         ShooterMethod<?> method = stack.get(ItematicDataComponents.SHOOTER_METHOD);
         if (method != null && method.tryShoot(stack, level, player, hand)) {
             return InteractionResult.CONSUME;
+        }
+
+        EntityController entityController = stack.get(ItematicDataComponents.ENTITY_CONTROLLER);
+        if (entityController != null && entityController.canControlVehicle(player, level)) {
+            return entityController.controlVehicle(level, player, hand, stack);
         }
 
         Throwable throwable = stack.get(ItematicDataComponents.THROWABLE);

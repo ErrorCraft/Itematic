@@ -8,6 +8,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehav
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.ConsumableComponent;
+import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.ProjectileComponent;
@@ -239,6 +240,12 @@ public class ItematicDataComponents {
         "grind_result_item",
         builder -> builder.persistent(Item.CODEC)
             .networkSynchronized(Item.STREAM_CODEC)
+    );
+    public static final DataComponentType<EntityController> ENTITY_CONTROLLER = register(
+        "entity_controller",
+        builder -> builder.persistent(EntityController.CODEC)
+            .networkSynchronized(EntityController.STREAM_CODEC)
+            .cacheEncoding()
     );
 
     private ItematicDataComponents() {}
