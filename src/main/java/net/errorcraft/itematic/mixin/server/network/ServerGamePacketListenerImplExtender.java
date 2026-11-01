@@ -6,35 +6,19 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
-import net.minecraft.server.level.ServerPlayer;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.minecraft.core.Holder;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-
-import java.util.Optional;
 
 @Mixin(ServerGamePacketListenerImpl.class)
 public class ServerGamePacketListenerImplExtender {
-    @Shadow
-    public ServerPlayer player;
-
-    @ModifyExpressionValue(
-        method = "updateBookContents",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
-        )
-    )
-    private boolean alsoCheckWritableItemBehavior(boolean original, @Local(name = "carried") ItemStack carried) {
-        return original && carried.itematic$hasBehavior(ItemBehaviorType.WRITABLE);
-    }
-
     @ModifyExpressionValue(
         method = "signBook",
         at = @At(
@@ -42,10 +26,17 @@ public class ServerGamePacketListenerImplExtender {
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private boolean alsoUseItemBehavior(boolean original, @Local(name = "carried") ItemStack carried, @Share("writable") LocalRef<WritableItemBehavior> writableReference) {
-        Optional<WritableItemBehavior> writable = carried.itematic$getBehavior(ItemBehaviorType.WRITABLE);
-        writable.ifPresent(writableReference::set);
-        return original && writable.isPresent();
+    private boolean storeSignResultItem(boolean original, @Local(name = "carried") ItemStack carried, @Share("signResultItem") LocalRef<@Nullable Holder<Item>> signResultItemReference) {
+        if (!original) {
+            return false;
+        }
+
+        Holder<Item> signResultItem = carried.get(ItematicDataComponents.SIGN_RESULT_ITEM);
+        if (signResultItem != null) {
+            signResultItemReference.set(signResultItem);
+        }
+
+        return true;
     }
 
     @WrapOperation(
@@ -55,8 +46,13 @@ public class ServerGamePacketListenerImplExtender {
             target = "Lnet/minecraft/world/item/ItemStack;transmuteCopy(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack transmuteCopyForWrittenBookUseHolder(ItemStack instance, ItemLike newItem, Operation<ItemStack> original, @Share("writable") LocalRef<WritableItemBehavior> writableReference) {
-        return instance.itematic$transmuteCopy(writableReference.get().transformsInto());
+    private ItemStack transmuteCopyForWrittenBookUseDataComponent(ItemStack instance, ItemLike newItem, Operation<ItemStack> original, @Share("signResultItem") LocalRef<@Nullable Holder<Item>> signResultItemReference) {
+        Holder<Item> signResultItem = signResultItemReference.get();
+        if (signResultItem == null) {
+            return instance.copy();
+        }
+
+        return instance.itematic$transmuteCopy(signResultItem);
     }
 
     @WrapOperation(

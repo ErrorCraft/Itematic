@@ -88,7 +88,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplatePro
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.TextHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ThrowableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ToolItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.TrimMaterialProviderItemBehavior;
@@ -2494,7 +2493,6 @@ public class Items {
                 .register();
             this.builder(ItemIds.WRITTEN_BOOK, 16)
                 .display(ItemDisplay.Builder::glint)
-                .behavior(TextHolderItemBehavior.INSTANCE)
                 .register();
             this.builder(ItemIds.ENCHANTED_BOOK, 1)
                 .display(display -> display.rarity(Rarity.UNCOMMON).glint())

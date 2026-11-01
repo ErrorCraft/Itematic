@@ -23,6 +23,7 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.BookContent;
 import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
@@ -46,7 +47,6 @@ import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -66,7 +66,6 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
-import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.equipment.Equippable;
@@ -240,6 +239,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         Bucket bucket = stack.get(ItematicDataComponents.BUCKET);
         if (bucket != null) {
             return bucket.use(level, player, hand, stack, stackExchangerReference.get());
+        }
+
+        if (stack.has(DataComponents.WRITABLE_BOOK_CONTENT) || stack.has(DataComponents.WRITTEN_BOOK_CONTENT)) {
+            BookContent.open(player, stack, hand);
+            return InteractionResult.SUCCESS;
         }
 
         return original.call(level, player, hand);
@@ -681,27 +685,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public Optional<TooltipComponent> useItemBehavior(ItemStack itemStack, Operation<Optional<TooltipComponent>> original) {
         return this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
             .flatMap(itemHolder -> itemHolder.tooltipData(itemStack));
-    }
-
-    @WrapMethod(
-        method = "getName(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/network/chat/Component;"
-    )
-    private Component alsoCheckTextHolderItemBehavior(ItemStack itemStack, Operation<Component> original) {
-        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
-            return original.call(itemStack);
-        }
-
-        WrittenBookContent writtenBookContent = itemStack.get(DataComponents.WRITTEN_BOOK_CONTENT);
-        if (writtenBookContent == null) {
-            return original.call(itemStack);
-        }
-
-        String title = writtenBookContent.title().raw();
-        if (StringUtil.isBlank(title)) {
-            return original.call(itemStack);
-        }
-
-        return Component.literal(title);
     }
 
     @Override

@@ -42,7 +42,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplatePro
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.TextHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ThrowableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ToolItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.TrimMaterialProviderItemBehavior;
@@ -182,10 +181,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<WritableItemBehavior> WRITABLE = register(
         "writable",
         WritableItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<TextHolderItemBehavior> TEXT_HOLDER = register(
-        "text_holder",
-        TextHolderItemBehavior.CODEC
     );
     public static final ItemBehaviorType<PlayableItemBehavior> PLAYABLE = register(
         "playable",

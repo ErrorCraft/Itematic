@@ -247,6 +247,11 @@ public class ItematicDataComponents {
             .networkSynchronized(EntityController.STREAM_CODEC)
             .cacheEncoding()
     );
+    public static final DataComponentType<Holder<Item>> SIGN_RESULT_ITEM = register(
+        "sign_result_item",
+        builder -> builder.persistent(Item.CODEC)
+            .networkSynchronized(Item.STREAM_CODEC)
+    );
 
     private ItematicDataComponents() {}
 
