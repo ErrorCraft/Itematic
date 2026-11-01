@@ -29,6 +29,7 @@ import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.component.Throwable;
+import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
@@ -61,6 +62,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
@@ -486,6 +488,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             behavior.using(itemStack, level, livingEntity, usedTicks, ticksRemaining);
         }
 
+        ItemHolderRules itemHolderRules = itemStack.get(ItematicDataComponents.ITEM_HOLDER_RULES);
+        if (itemHolderRules != null) {
+            itemHolderRules.tryDrop(itemStack, level, livingEntity, usedTicks);
+        }
+
         ShooterMethod<?> method = itemStack.get(ItematicDataComponents.SHOOTER_METHOD);
         if (method != null) {
             method.hold(itemStack, level, livingEntity, usedTicks);
@@ -567,26 +574,30 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "overrideStackedOnOther"
     )
     public boolean useItemBehavior(ItemStack self, Slot slot, ClickAction clickAction, Player player, Operation<Boolean> original) {
-        boolean result = false;
-        for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.clickOnSlot(self, slot, clickAction, player);
+        ItemHolderRules itemHolderRules = self.get(ItematicDataComponents.ITEM_HOLDER_RULES);
+        if (itemHolderRules == null) {
+            return false;
         }
 
-        return result;
+        return itemHolderRules.clickOnSlot(self, slot, clickAction, player);
     }
 
     @WrapMethod(
         method = "overrideOtherStackedOnMe"
     )
-    public boolean useItemBehavior(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, Operation<Boolean> original) {
-        boolean result = false;
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntityAlways(player, other);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.clickedOnWithStack(self, other, slot, clickAction, player, stackExchanger);
+    public boolean useDataComponents(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, Operation<Boolean> original) {
+        ItemHolderRules itemHolderRules = self.get(ItematicDataComponents.ITEM_HOLDER_RULES);
+        if (itemHolderRules == null) {
+            return false;
         }
 
-        carriedItem.set(stackExchanger.result());
-        return result;
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntityAlways(player, other);
+        if (itemHolderRules.clickedOnWithStack(self, other, slot, clickAction, player, stackExchanger)) {
+            carriedItem.set(stackExchanger.result());
+            return true;
+        }
+
+        return false;
     }
 
     @Inject(
@@ -682,9 +693,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "getTooltipImage"
     )
-    public Optional<TooltipComponent> useItemBehavior(ItemStack itemStack, Operation<Optional<TooltipComponent>> original) {
-        return this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .flatMap(itemHolder -> itemHolder.tooltipData(itemStack));
+    public Optional<TooltipComponent> useDataComponents(ItemStack itemStack, Operation<Optional<TooltipComponent>> original) {
+        BundleContents bundleContents = itemStack.get(DataComponents.BUNDLE_CONTENTS);
+        if (bundleContents != null) {
+            return bundleContents.itematic$tooltipImage(itemStack);
+        }
+
+        return original.call(itemStack);
     }
 
     @Override

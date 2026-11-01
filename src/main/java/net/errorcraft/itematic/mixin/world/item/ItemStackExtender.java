@@ -130,6 +130,9 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     public abstract int getDamageValue();
 
     @Shadow
+    public abstract <T> @Nullable T set(DataComponentType<T> type, @Nullable T value);
+
+    @Shadow
     public abstract <T extends TooltipProvider> void addToTooltip(DataComponentType<T> type, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> consumer, TooltipFlag flag);
 
     @Shadow
@@ -431,8 +434,10 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
             blockPlacer.onDestroyed(itemEntity);
         }
 
-        this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .ifPresent(itemHolder -> itemHolder.onDestroyed(itemEntity));
+        BundleContents bundleContents = this.get(DataComponents.BUNDLE_CONTENTS);
+        if (bundleContents != null) {
+            bundleContents.itematic$onDestroyed(itemEntity);
+        }
     }
 
     @WrapMethod(
