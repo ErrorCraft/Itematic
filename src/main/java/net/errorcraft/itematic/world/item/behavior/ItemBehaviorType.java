@@ -7,6 +7,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.AttackBlockingItemB
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BlockTransformerItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BrewingFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BrushItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BucketItemBehavior;
@@ -34,7 +35,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavio
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.PreventUseWhenUsedOnTargetItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
@@ -69,6 +69,10 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<BlockItemBehavior> BLOCK = register(
         "block",
         BlockItemBehavior.CODEC
+    );
+    public static final ItemBehaviorType<BlockTransformerItemBehavior> BLOCK_TRANSFORMER = register(
+        "block_transformer",
+        BlockTransformerItemBehavior.CODEC
     );
     public static final ItemBehaviorType<DamageableItemBehavior> DAMAGEABLE = register(
         "damageable",
@@ -161,10 +165,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<SteeringItemBehavior> STEERING = register(
         "steering",
         SteeringItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<PreventUseWhenUsedOnTargetItemBehavior> PREVENT_USE_WHEN_USED_ON_TARGET = register(
-        "prevent_use_when_used_on_target",
-        PreventUseWhenUsedOnTargetItemBehavior.CODEC
     );
     public static final ItemBehaviorType<SmithingTemplateProviderItemBehavior> SMITHING_TEMPLATE_PROVIDER = register(
         "smithing_template_provider",

@@ -38,7 +38,6 @@ import net.errorcraft.itematic.world.action.actions.SetBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.SetEntityNameFromItemAction;
 import net.errorcraft.itematic.world.action.actions.SwingHandAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
-import net.errorcraft.itematic.world.action.actions.TransformBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
 import net.errorcraft.itematic.world.action.actions.WaxBlockAction;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
@@ -53,6 +52,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.AttackBlockingItemB
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BlockTransformerItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BrewingFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BrushItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BucketItemBehavior;
@@ -80,7 +80,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavio
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.PreventUseWhenUsedOnTargetItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
@@ -97,10 +96,10 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.VillagerFoodItemBeh
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
-import net.errorcraft.itematic.world.item.component.BlockItemStatePropertiesBuilder;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
+import net.errorcraft.itematic.world.item.component.ItematicBlockTransformers;
 import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
@@ -123,7 +122,6 @@ import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Direct;
 import net.errorcraft.itematic.world.level.block.CoralCollection;
 import net.errorcraft.itematic.world.level.block.CutoutCollection;
 import net.errorcraft.itematic.world.level.block.WoodCollection;
-import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.ApplyPropertiesProvider;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointerLocationItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
@@ -138,11 +136,11 @@ import net.minecraft.advancements.predicates.FluidPredicate;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.advancements.predicates.MinMaxBounds;
-import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.BlockTransformer;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.predicates.DamagePredicate;
@@ -227,7 +225,6 @@ import net.minecraft.world.level.block.ColorCollection;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidIds;
@@ -299,6 +296,7 @@ public class Items {
         private final HolderGetter<DamageType> damageTypes;
         private final HolderGetter<BannerPattern> bannerPatterns;
         private final HolderGetter<EntitySpawnRuleSet> entitySpawnRuleSets;
+        private final HolderGetter<BlockTransformer> blockTransformers;
 
         private Bootstrapper(BootstrapContext<Item> context) {
             this.context = context;
@@ -320,6 +318,7 @@ public class Items {
             this.damageTypes = context.lookup(Registries.DAMAGE_TYPE);
             this.bannerPatterns = context.lookup(Registries.BANNER_PATTERN);
             this.entitySpawnRuleSets = context.lookup(ItematicRegistries.ENTITY_SPAWN_RULE_SET);
+            this.blockTransformers = context.lookup(Registries.BLOCK_TRANSFORMER);
         }
 
         private ItemBuilder builder(ResourceKey<Item> item, int maxStackSize) {
@@ -2035,45 +2034,15 @@ public class Items {
                 .register();
             this.builderForProjectile(ItemIds.ENDER_EYE, EntityTypeIds.EYE_OF_ENDER)
                 .behavior(ThrowableItemBehavior.of())
-                .behavior(PreventUseWhenUsedOnTargetItemBehavior.forBlock())
+                .behavior(
+                    BlockTransformerItemBehavior.of(
+                        this.blockTransformers.getOrThrow(ItematicBlockTransformers.FILL_END_PORTAL_FRAME)
+                    )
+                )
                 .event(
-                    ItemEvent.USE_ON_BLOCK,
+                    ItemEvent.TRANSFORMED_BLOCK,
                     ActionEntry.of(
-                        LocationCheckPredicates.builder(
-                            PositionTarget.INTERACTED,
-                            LocationPredicate.Builder.location()
-                                .setBlock(
-                                    BlockPredicate.Builder.block()
-                                        .of(
-                                            this.blocks,
-                                            this.blocks.getOrThrow(BlockItemIds.END_PORTAL_FRAME.block()).value()
-                                        )
-                                        .setProperties(
-                                            StatePropertiesPredicate.Builder.properties()
-                                                .hasProperty(BlockStateProperties.EYE, false)
-                                        )
-                                )
-                        ),
-                        PassingSequenceHandler.builder()
-                            .add(
-                                TransformBlockStateAction.ofPushingUpwards(
-                                    PositionTarget.INTERACTED,
-                                    new ApplyPropertiesProvider(
-                                        BlockItemStatePropertiesBuilder.create()
-                                            .property(BlockStateProperties.EYE, true)
-                                            .build()
-                                    )
-                                )
-                            )
-                            .add(DecrementItemAction.of(1))
-                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                            .add(
-                                PlaySoundAction.of(
-                                    PositionTarget.INTERACTED,
-                                    this.soundEvents.getOrThrow(SoundEventIds.END_PORTAL_FRAME_FILL),
-                                    SoundSource.BLOCKS
-                                )
-                            )
+                        UncheckedSequenceHandler.builder()
                             .add(
                                 DisplayParticleAction.builder(PositionTarget.INTERACTED, ParticleTypes.SMOKE)
                                     .count(16)
@@ -2086,7 +2055,7 @@ public class Items {
                                     )
                                     .build()
                             )
-                            .addOptional(LightEndPortalAction.of(PositionTarget.INTERACTED))
+                            .add(LightEndPortalAction.of(PositionTarget.INTERACTED))
                     )
                 )
                 .event(
