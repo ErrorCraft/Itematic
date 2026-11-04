@@ -35,6 +35,8 @@ inject-interface    net/minecraft/client/resources/model/ModelManager    net/err
 inject-interface    net/minecraft/commands/arguments/ObjectiveCriteriaArgument    net/errorcraft/itematic/access/commands/arguments/ObjectiveCriteriaArgumentAccess
 inject-interface    net/minecraft/core/Holder    net/errorcraft/itematic/access/core/HolderAccess<TT;>
 inject-interface    net/minecraft/core/HolderSet    net/errorcraft/itematic/access/core/HolderSetAccess<TT;>
+inject-interface    net/minecraft/core/component/BlockTransformer$BlockTransformData    net/errorcraft/itematic/access/core/component/BlockTransformerAccess$BlockTransformDataAccess
+inject-interface    net/minecraft/core/component/BlockTransformer$BlockTransformData$Builder    net/errorcraft/itematic/access/core/component/BlockTransformerAccess$BlockTransformDataAccess$BuilderAccess
 inject-interface    net/minecraft/gametest/framework/GameTestInfo    net/errorcraft/itematic/access/gametest/framework/GameTestInfoAccess
 inject-interface    net/minecraft/network/protocol/game/ClientGamePacketListener    net/errorcraft/itematic/access/network/protocol/game/ClientGamePacketListenerAccess
 inject-interface    net/minecraft/sounds/SoundSource    net/minecraft/util/StringRepresentable
@@ -65,12 +67,12 @@ inject-interface    net/minecraft/world/item/component/ChargedProjectiles    net
 inject-interface    net/minecraft/world/item/component/ContainerComponent    net/errorcraft/itematic/access/world/item/component/ContainerComponentAccess<TT;>
 inject-interface    net/minecraft/world/item/component/Tool    net/errorcraft/itematic/access/world/item/component/ToolAccess
 inject-interface    net/minecraft/world/item/component/Tool$Rule    net/errorcraft/itematic/access/world/item/component/ToolAccess$RuleAccess
+inject-interface    net/minecraft/world/item/component/UseCooldown    net/errorcraft/itematic/access/world/item/component/UseCooldownAccess
 inject-interface    net/minecraft/world/item/context/BlockPlaceContext    net/errorcraft/itematic/access/world/item/context/BlockPlaceContextAccess
 inject-interface    net/minecraft/world/item/context/UseOnContext    net/errorcraft/itematic/access/world/item/context/UseOnContextAccess
 inject-interface    net/minecraft/world/item/crafting/Ingredient    net/errorcraft/itematic/access/world/item/crafting/IngredientAccess
 inject-interface    net/minecraft/world/item/crafting/Recipe    net/errorcraft/itematic/access/world/item/crafting/RecipeAccess
 inject-interface    net/minecraft/world/item/crafting/ShapedRecipePattern    net/errorcraft/itematic/access/world/item/crafting/ShapedRecipePatternAccess
-inject-interface    net/minecraft/world/item/enchantment/Enchantable    net/errorcraft/itematic/access/world/item/enchantment/EnchantableAccess
 inject-interface    net/minecraft/world/level/Level    net/errorcraft/itematic/access/world/level/LevelAccess
 inject-interface    net/minecraft/world/level/LevelReader    net/errorcraft/itematic/access/world/level/LevelReaderAccess
 inject-interface    net/minecraft/world/level/block/CropBlock    net/errorcraft/itematic/access/world/level/block/CropBlockAccess

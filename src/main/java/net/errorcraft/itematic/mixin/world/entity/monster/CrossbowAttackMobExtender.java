@@ -1,13 +1,11 @@
 package net.errorcraft.itematic.mixin.world.entity.monster;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.world.entity.projectile.ItematicProjectileUtil;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.ChargeableShooterMethod;
-import net.minecraft.references.ItemIds;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.world.entity.projectile.Projectiles;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Chargeable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
@@ -21,21 +19,18 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Optional;
 
 @Mixin(CrossbowAttackMob.class)
 public interface CrossbowAttackMobExtender {
-    @Redirect(
+    @WrapOperation(
         method = "performCrossbowAttack(Lnet/minecraft/world/entity/LivingEntity;F)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/projectile/ProjectileUtil;getWeaponHoldingHand(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/Item;)Lnet/minecraft/world/InteractionHand;"
         )
     )
-    private InteractionHand getHandForHeldCrossbowUseId(LivingEntity mob, Item weaponItem) {
-        return ItematicProjectileUtil.getWeaponHoldingHand(mob, ItemIds.CROSSBOW);
+    private InteractionHand getWeaponHoldingHandForCrossbowUseDataComponent(LivingEntity mob, Item weaponItem, Operation<InteractionHand> original) {
+        return Projectiles.getWeaponHoldingHand(mob, Chargeable.INSTANCE);
     }
 
     @ModifyConstant(
@@ -45,10 +40,8 @@ public interface CrossbowAttackMobExtender {
             ordinal = 0
         )
     )
-    private boolean instanceOfCrossbowItemUseItemBehavior(Object reference, Class<CrossbowItem> clazz, @Local(name = "usedItem") ItemStack usedItem, @Share("shooter") LocalRef<ShooterItemBehavior> shooterReference) {
-        Optional<ShooterItemBehavior> optionalShooter = usedItem.itematic$getBehavior(ItemBehaviorType.SHOOTER);
-        optionalShooter.ifPresent(shooterReference::set);
-        return optionalShooter.isPresent();
+    private boolean instanceOfCrossbowItemUseDataComponent(Object reference, Class<CrossbowItem> clazz, @Local(name = "usedItem") ItemStack usedItem) {
+        return usedItem.get(ItematicDataComponents.SHOOTER_METHOD) == Chargeable.INSTANCE;
     }
 
     @ModifyVariable(
@@ -61,16 +54,14 @@ public interface CrossbowAttackMobExtender {
         return null;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "performCrossbowAttack",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/CrossbowItem;performShooting(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;FFLnet/minecraft/world/entity/LivingEntity;)V"
         )
     )
-    private void performShootingUseItemBehavior(CrossbowItem instance, Level level, LivingEntity shooter, InteractionHand hand, ItemStack weapon, float power, float uncertainty, LivingEntity targetOverride, @Share("shooter") LocalRef<ShooterItemBehavior> shooterReference) {
-        if (shooterReference.get().method() instanceof ChargeableShooterMethod chargeable) {
-            chargeable.shoot(shooterReference.get(), level, shooter, hand, weapon, power, uncertainty, targetOverride);
-        }
+    private void performShootingUseDataComponent(CrossbowItem instance, Level level, LivingEntity shooter, InteractionHand hand, ItemStack weapon, float power, float uncertainty, LivingEntity targetOverride, Operation<Void> original) {
+        Chargeable.INSTANCE.shoot(level, shooter, hand, weapon, power, uncertainty, targetOverride);
     }
 }

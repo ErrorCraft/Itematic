@@ -8,8 +8,6 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickAction;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -33,15 +31,6 @@ public interface ItemBehavior<T extends ItemBehavior<T>> {
         return ItemResult.PASS;
     }
     default void using(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks) {}
-    default boolean stopUsing(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
-        return false;
-    }
-    default boolean clickOnSlot(ItemStack stack, Slot slot, ClickAction clickAction, Player user) {
-        return false;
-    }
-    default boolean clickedOnWithStack(ItemStack stack, ItemStack cursorStack, Slot slot, ClickAction clickAction, Player user, ItemStackExchanger stackExchanger) {
-        return false;
-    }
     default void onCraft(ItemStack stack, Level level) {}
     default void addComponents(DataComponentMap.Builder builder) {}
 }

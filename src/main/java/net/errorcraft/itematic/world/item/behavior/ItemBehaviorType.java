@@ -7,6 +7,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.AttackBlockingItemB
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.BlockTransformerItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BrewingFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BrushItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.BucketItemBehavior;
@@ -34,16 +35,13 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavio
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.PreventUseWhenUsedOnTargetItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.SpawnEggItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.TextHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ThrowableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ToolItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.TrimMaterialProviderItemBehavior;
@@ -71,6 +69,10 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<BlockItemBehavior> BLOCK = register(
         "block",
         BlockItemBehavior.CODEC
+    );
+    public static final ItemBehaviorType<BlockTransformerItemBehavior> BLOCK_TRANSFORMER = register(
+        "block_transformer",
+        BlockTransformerItemBehavior.CODEC
     );
     public static final ItemBehaviorType<DamageableItemBehavior> DAMAGEABLE = register(
         "damageable",
@@ -128,10 +130,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
         "dye",
         DyeItemBehavior.CODEC
     );
-    public static final ItemBehaviorType<SpawnEggItemBehavior> SPAWN_EGG = register(
-        "spawn_egg",
-        SpawnEggItemBehavior.CODEC
-    );
     public static final ItemBehaviorType<DispensableItemBehavior> DISPENSABLE = register(
         "dispensable",
         DispensableItemBehavior.CODEC
@@ -168,10 +166,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
         "steering",
         SteeringItemBehavior.CODEC
     );
-    public static final ItemBehaviorType<PreventUseWhenUsedOnTargetItemBehavior> PREVENT_USE_WHEN_USED_ON_TARGET = register(
-        "prevent_use_when_used_on_target",
-        PreventUseWhenUsedOnTargetItemBehavior.CODEC
-    );
     public static final ItemBehaviorType<SmithingTemplateProviderItemBehavior> SMITHING_TEMPLATE_PROVIDER = register(
         "smithing_template_provider",
         SmithingTemplateProviderItemBehavior.CODEC
@@ -187,10 +181,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<WritableItemBehavior> WRITABLE = register(
         "writable",
         WritableItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<TextHolderItemBehavior> TEXT_HOLDER = register(
-        "text_holder",
-        TextHolderItemBehavior.CODEC
     );
     public static final ItemBehaviorType<PlayableItemBehavior> PLAYABLE = register(
         "playable",

@@ -18,7 +18,8 @@
         "rules": []
       },
       "method": {
-        "type": "minecraft:direct"
+        "type": "minecraft:direct",
+        "shoot_sound": "minecraft:entity.arrow.shoot"
       },
       "range": 15
     },

@@ -2,7 +2,7 @@ package net.errorcraft.itematic.gametest.item;
 
 import net.errorcraft.itematic.assertion.Assert;
 import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
-import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
+import net.errorcraft.itematic.world.item.holder.BundleContentsUtil;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 
@@ -36,7 +37,7 @@ public class BundleTestSuite {
             );
             Assert.itemStack(helper, slot.getItem())
                 .isEmpty();
-            ItemHolderItemBehavior.toggleSelectedItem(bundle, 0);
+            BundleItem.toggleSelectedItem(bundle, 0);
             Assert.itemStack(helper, bundle)
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
@@ -87,7 +88,7 @@ public class BundleTestSuite {
             );
             Assert.itemStack(helper, slot.getItem())
                 .isEmpty();
-            ItemHolderItemBehavior.toggleSelectedItem(bundle, 0);
+            BundleItem.toggleSelectedItem(bundle, 0);
             Assert.itemStack(helper, bundle)
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
@@ -96,7 +97,7 @@ public class BundleTestSuite {
                 );
             Assert.areEqual(
                 helper,
-                Assert.isNotNull(helper, ItemHolderItemBehavior.occupancy(bundle), "possible occupancy")
+                Assert.isNotNull(helper, BundleContentsUtil.occupancy(bundle), "possible occupancy")
                     .getOrThrow(),
                 BundleContentsAccessor.nestedBundleOccupancy(),
                 "occupancy"

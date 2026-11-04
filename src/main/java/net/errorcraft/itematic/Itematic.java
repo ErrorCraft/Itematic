@@ -16,7 +16,8 @@ import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderTypes;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethods;
+import net.errorcraft.itematic.world.level.levelgen.blockpredicates.ItematicBlockPredicateTypes;
 import net.errorcraft.itematic.world.level.levelgen.feature.stateproviders.ItematicBlockStateProviderTypes;
 import net.errorcraft.itematic.world.level.modification.WorldModificationTypes;
 import net.errorcraft.itematic.world.level.storage.loot.functions.ItematicItemModifiers;
@@ -41,12 +42,13 @@ public class Itematic implements ModInitializer {
         ItematicDataComponents.init();
         UseDurationProviderTypes.bootstrap(ItematicBuiltInRegistries.USE_DURATION_PROVIDER_TYPE);
         ItemHolderRuleType.init();
-        ShooterMethodType.init();
+        ShooterMethods.bootstrap(ItematicBuiltInRegistries.SHOOTER_METHOD);
         WorldModificationTypes.bootstrap(ItematicBuiltInRegistries.WORLD_MODIFICATION_TYPE);
         EntitySpawnRuleTypes.bootstrap(ItematicBuiltInRegistries.ENTITY_SPAWN_RULE_TYPE);
         MeleeWeaponComponents.init();
         ItematicEntitySubPredicates.bootstrap(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);
         ItematicBlockStateProviderTypes.bootstrap(BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE);
+        ItematicBlockPredicateTypes.bootstrap(BuiltInRegistries.BLOCK_PREDICATE_TYPE);
         IntProviders.bootstrap(ItematicBuiltInRegistries.DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE);
         ItematicContextIntProviderTypes.bootstrap(BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE);
         FloatProviders.bootstrap(ItematicBuiltInRegistries.DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE);

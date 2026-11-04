@@ -1,10 +1,12 @@
 package net.errorcraft.itematic.data.server;
 
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
+import net.errorcraft.itematic.world.item.component.ItematicBlockTransformers;
 import net.errorcraft.itematic.world.level.storage.loot.providers.number.ints.ItematicContextIntProviders;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.BlockTransformer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 
@@ -25,6 +27,8 @@ public class ItematicDynamicRegistryProvider extends FabricDynamicRegistryProvid
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.ITEM_GROUP));
         HolderLookup.RegistryLookup<ContextIntProvider> contextIntProviders = registries.lookupOrThrow(Registries.CONTEXT_INT_PROVIDER);
         entries.add(contextIntProviders.getOrThrow(ItematicContextIntProviders.CONSUMABLE_OMINOUS_BOTTLE_AMPLIFIER));
+        HolderLookup.RegistryLookup<BlockTransformer> blockTransformers = registries.lookupOrThrow(Registries.BLOCK_TRANSFORMER);
+        entries.add(blockTransformers.getOrThrow(ItematicBlockTransformers.FILL_END_PORTAL_FRAME));
     }
 
     @Override

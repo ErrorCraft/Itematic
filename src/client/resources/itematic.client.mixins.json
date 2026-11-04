@@ -41,7 +41,6 @@
     "particle.BreakingItemParticleExtender$SnowballProviderExtender",
     "player.AbstractClientPlayerExtender",
     "player.FirstPersonHandsAndItemsExtender",
-    "player.LocalPlayerExtender",
     "renderer.FirstPersonHandsAndItemsRendererExtender",
     "renderer.LevelEventHandlerExtender",
     "renderer.entity.AbstractSkeletonRendererExtender",

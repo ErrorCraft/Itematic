@@ -6,8 +6,8 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Chargeable;
 import net.minecraft.client.renderer.FirstPersonHandsAndItemsRenderer;
 import net.minecraft.client.renderer.state.level.FirstPersonHandsAndItemsRenderState;
 import net.minecraft.world.item.ItemStack;
@@ -33,10 +33,8 @@ public class FirstPersonHandsAndItemsRendererExtender {
             )
         )
     )
-    private boolean isCrossbowUseItemBehavior(ItemStack instance, Object o, Operation<Boolean> original) {
-        return instance.itematic$getBehavior(ItemBehaviorType.SHOOTER)
-            .filter(shooterItemBehavior -> shooterItemBehavior.method().type() == ShooterMethodType.CHARGEABLE)
-            .isPresent();
+    private boolean isCrossbowUseDataComponent(ItemStack instance, Object o, Operation<Boolean> original) {
+        return instance.get(ItematicDataComponents.SHOOTER_METHOD) == Chargeable.INSTANCE;
     }
 
     @Definition(id = "timeHeld", local = @Local(type = float.class, name = "timeHeld"))

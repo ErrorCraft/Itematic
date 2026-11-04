@@ -20,7 +20,8 @@ import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Constant;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Direct;
 import net.errorcraft.itematic.world.level.modification.WorldModification;
 import net.errorcraft.itematic.world.level.modification.modifications.DrainFluid;
 import net.minecraft.core.Registry;
@@ -61,9 +62,9 @@ public class ItematicBuiltInRegistries {
         ItematicRegistries.ITEM_HOLDER_RULE_TYPE,
         _ -> ItemHolderRuleType.REJECT
     );
-    public static final Registry<ShooterMethodType<?>> SHOOTER_METHOD_TYPE = register(
-        ItematicRegistries.SHOOTER_METHOD_TYPE,
-        _ -> ShooterMethodType.DIRECT
+    public static final Registry<ShooterMethod<?>> SHOOTER_METHOD = register(
+        ItematicRegistries.SHOOTER_METHOD,
+        _ -> Direct.INSTANCE
     );
     public static final Registry<WorldModification.Type<?>> WORLD_MODIFICATION_TYPE = register(
         ItematicRegistries.WORLD_MODIFICATION_TYPE,

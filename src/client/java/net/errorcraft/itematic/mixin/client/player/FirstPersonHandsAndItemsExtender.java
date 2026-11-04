@@ -2,9 +2,10 @@ package net.errorcraft.itematic.mixin.client.player;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Chargeable;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Direct;
 import net.minecraft.client.player.FirstPersonHandsAndItems;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.state.level.FirstPersonHandsAndItemsRenderState;
@@ -35,16 +36,12 @@ public class FirstPersonHandsAndItemsExtender {
         )
     )
     private static boolean isBowOrCrossbowUseItemBehavior(ItemStack instance, Object o, Operation<Boolean> original) {
-        return instance.itematic$getBehavior(ItemBehaviorType.SHOOTER)
-            .map(ShooterItemBehavior::method)
-            .filter(method -> {
-                if (o == Items.BOW) {
-                    return method.type() == ShooterMethodType.DIRECT;
-                }
+        ShooterMethod<?> method = instance.get(ItematicDataComponents.SHOOTER_METHOD);
+        if (o == Items.BOW) {
+            return method == Direct.INSTANCE;
+        }
 
-                return method.type() == ShooterMethodType.CHARGEABLE;
-            })
-            .isPresent();
+        return method == Chargeable.INSTANCE;
     }
 
     @WrapOperation(
@@ -61,10 +58,7 @@ public class FirstPersonHandsAndItemsExtender {
             )
         )
     )
-    private static boolean isCrossbowUseItemBehavior(ItemStack instance, Object o, Operation<Boolean> original) {
-        return instance.itematic$getBehavior(ItemBehaviorType.SHOOTER)
-            .map(ShooterItemBehavior::method)
-            .filter(method -> method.type() == ShooterMethodType.CHARGEABLE)
-            .isPresent();
+    private static boolean isCrossbowUseDataComponent(ItemStack instance, Object o, Operation<Boolean> original) {
+        return instance.get(ItematicDataComponents.SHOOTER_METHOD) == Chargeable.INSTANCE;
     }
 }

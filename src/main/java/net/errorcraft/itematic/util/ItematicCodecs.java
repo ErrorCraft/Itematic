@@ -10,13 +10,6 @@ import org.apache.commons.lang3.math.Fraction;
 import java.util.function.Function;
 
 public class ItematicCodecs {
-    public static final Codec<Float> NON_NEGATIVE_FLOAT = Codec.FLOAT.validate(value -> {
-        if (value >= 0 && value <= Float.MAX_VALUE) {
-            return DataResult.success(value);
-        }
-
-        return DataResult.error(() -> "Float must be non-negative: " + value);
-    });
     public static final Codec<Double> POSITIVE_DOUBLE = Codec.DOUBLE.validate(value -> {
         if (value > 0 && value <= Double.MAX_VALUE) {
             return DataResult.success(value);
@@ -67,11 +60,13 @@ public class ItematicCodecs {
         });
     }
 
+    public static <T, U extends T> Codec<T> either(Codec<T> primary, Codec<U> alternative, Function<T, Either<T, U>> wrapper) {
+        return Codec.either(primary, alternative)
+            .xmap(Either::unwrap, wrapper);
+    }
+
     public static <T, U> Codec<T> withAlternative(Codec<T> primary, Codec<U> alternative, Function<U, T> converter, Function<T, Either<T, U>> wrapper) {
-        return Codec.either(
-            primary,
-            alternative
-        ).xmap(
+        return Codec.either(primary, alternative).xmap(
             either -> either.map(Function.identity(), converter),
             wrapper
         );

@@ -23,10 +23,15 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.BookContent;
 import net.errorcraft.itematic.world.item.component.Bucket;
+import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
+import net.errorcraft.itematic.world.item.component.Throwable;
+import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.core.BlockPos;
@@ -43,7 +48,6 @@ import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -58,12 +62,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.component.Tool;
-import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.equipment.Equippable;
@@ -204,6 +208,21 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private InteractionResult useDataComponents(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = player.getItemInHand(hand);
+        ShooterMethod<?> method = stack.get(ItematicDataComponents.SHOOTER_METHOD);
+        if (method != null && method.tryShoot(stack, level, player, hand)) {
+            return InteractionResult.CONSUME;
+        }
+
+        EntityController entityController = stack.get(ItematicDataComponents.ENTITY_CONTROLLER);
+        if (entityController != null && entityController.canControlVehicle(player, level)) {
+            return entityController.controlVehicle(level, player, hand, stack);
+        }
+
+        Throwable throwable = stack.get(ItematicDataComponents.THROWABLE);
+        if (throwable != null && throwable.tryUseInstantly(level, player, stack, stackExchangerReference.get())) {
+            return InteractionResult.SUCCESS;
+        }
+
         UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
         if (useDuration != null && useDuration.canUse(stack, UseDuration.Pass.NORMAL)) {
             return useDuration.tryStartUsing(level, stack, player, hand);
@@ -222,6 +241,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         Bucket bucket = stack.get(ItematicDataComponents.BUCKET);
         if (bucket != null) {
             return bucket.use(level, player, hand, stack, stackExchangerReference.get());
+        }
+
+        if (stack.has(DataComponents.WRITABLE_BOOK_CONTENT) || stack.has(DataComponents.WRITTEN_BOOK_CONTENT)) {
+            BookContent.open(player, stack, hand);
+            return InteractionResult.SUCCESS;
         }
 
         return original.call(level, player, hand);
@@ -463,6 +487,16 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         for (ItemBehavior<?> behavior : this.behavior) {
             behavior.using(itemStack, level, livingEntity, usedTicks, ticksRemaining);
         }
+
+        ItemHolderRules itemHolderRules = itemStack.get(ItematicDataComponents.ITEM_HOLDER_RULES);
+        if (itemHolderRules != null) {
+            itemHolderRules.tryDrop(itemStack, level, livingEntity, usedTicks);
+        }
+
+        ShooterMethod<?> method = itemStack.get(ItematicDataComponents.SHOOTER_METHOD);
+        if (method != null) {
+            method.hold(itemStack, level, livingEntity, usedTicks);
+        }
     }
 
     @WrapMethod(
@@ -472,14 +506,20 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         boolean result = false;
         int usedTicks = entity.itematic$usedItemTicks();
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, itemStack);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.stopUsing(itemStack, level, entity, usedTicks, remainingTime, stackExchanger);
-        }
-
         UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
         if (useDuration != null) {
             useDuration.stopUsing(itemStack, level, entity, stackExchanger);
             result = true;
+        }
+
+        ShooterMethod<?> method = itemStack.get(ItematicDataComponents.SHOOTER_METHOD);
+        if (method != null) {
+            result |= method.stop(itemStack, level, entity, usedTicks);
+        }
+
+        Throwable throwable = itemStack.get(ItematicDataComponents.THROWABLE);
+        if (throwable != null) {
+            result |= throwable.stopUsing(itemStack, level, entity, usedTicks, stackExchanger);
         }
 
         if (level instanceof ServerLevel serverLevel) {
@@ -534,26 +574,30 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "overrideStackedOnOther"
     )
     public boolean useItemBehavior(ItemStack self, Slot slot, ClickAction clickAction, Player player, Operation<Boolean> original) {
-        boolean result = false;
-        for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.clickOnSlot(self, slot, clickAction, player);
+        ItemHolderRules itemHolderRules = self.get(ItematicDataComponents.ITEM_HOLDER_RULES);
+        if (itemHolderRules == null) {
+            return false;
         }
 
-        return result;
+        return itemHolderRules.clickOnSlot(self, slot, clickAction, player);
     }
 
     @WrapMethod(
         method = "overrideOtherStackedOnMe"
     )
-    public boolean useItemBehavior(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, Operation<Boolean> original) {
-        boolean result = false;
-        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntityAlways(player, other);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            result |= behavior.clickedOnWithStack(self, other, slot, clickAction, player, stackExchanger);
+    public boolean useDataComponents(ItemStack self, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess carriedItem, Operation<Boolean> original) {
+        ItemHolderRules itemHolderRules = self.get(ItematicDataComponents.ITEM_HOLDER_RULES);
+        if (itemHolderRules == null) {
+            return false;
         }
 
-        carriedItem.set(stackExchanger.result());
-        return result;
+        ItemStackExchanger stackExchanger = ItemStackExchanger.forEntityAlways(player, other);
+        if (itemHolderRules.clickedOnWithStack(self, other, slot, clickAction, player, stackExchanger)) {
+            carriedItem.set(stackExchanger.result());
+            return true;
+        }
+
+        return false;
     }
 
     @Inject(
@@ -649,30 +693,13 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "getTooltipImage"
     )
-    public Optional<TooltipComponent> useItemBehavior(ItemStack itemStack, Operation<Optional<TooltipComponent>> original) {
-        return this.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .flatMap(itemHolder -> itemHolder.tooltipData(itemStack));
-    }
-
-    @WrapMethod(
-        method = "getName(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/network/chat/Component;"
-    )
-    private Component alsoCheckTextHolderItemBehavior(ItemStack itemStack, Operation<Component> original) {
-        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
-            return original.call(itemStack);
+    public Optional<TooltipComponent> useDataComponents(ItemStack itemStack, Operation<Optional<TooltipComponent>> original) {
+        BundleContents bundleContents = itemStack.get(DataComponents.BUNDLE_CONTENTS);
+        if (bundleContents != null) {
+            return bundleContents.itematic$tooltipImage(itemStack);
         }
 
-        WrittenBookContent writtenBookContent = itemStack.get(DataComponents.WRITTEN_BOOK_CONTENT);
-        if (writtenBookContent == null) {
-            return original.call(itemStack);
-        }
-
-        String title = writtenBookContent.title().raw();
-        if (StringUtil.isBlank(title)) {
-            return original.call(itemStack);
-        }
-
-        return Component.literal(title);
+        return original.call(itemStack);
     }
 
     @Override
