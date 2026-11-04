@@ -2,7 +2,7 @@
   "behavior": {
     "minecraft:stackable": 1,
     "minecraft:writable": {
-      "transforms_into": "minecraft:written_book"
+      "sign_result_item": "minecraft:written_book"
     }
   },
   "display": {

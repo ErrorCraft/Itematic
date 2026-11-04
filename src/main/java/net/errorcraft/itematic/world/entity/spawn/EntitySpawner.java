@@ -14,7 +14,11 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -37,12 +41,20 @@ import java.util.Optional;
 
 public record EntitySpawner(Holder<EntityType<?>> entity, Optional<Holder<EntitySpawnRuleSet>> spawnRules, DataComponentPatch components, Optional<Holder<SoundEvent>> spawnSound, boolean allowItemData) {
     public static final Codec<EntitySpawner> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        BuiltInRegistries.ENTITY_TYPE.holderByNameCodec().fieldOf("entity").forGetter(EntitySpawner::entity),
+        RegistryCodecs.holder(Registries.ENTITY_TYPE).fieldOf("entity").forGetter(EntitySpawner::entity),
         EntitySpawnRuleSet.CODEC.optionalFieldOf("spawn_rules").forGetter(EntitySpawner::spawnRules),
         DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(EntitySpawner::components),
         SoundEvent.CODEC.optionalFieldOf("spawn_sound").forGetter(EntitySpawner::spawnSound),
         Codec.BOOL.optionalFieldOf("allow_item_data", false).forGetter(EntitySpawner::allowItemData)
     ).apply(instance, EntitySpawner::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, EntitySpawner> STREAM_CODEC = StreamCodec.composite(
+        ByteBufCodecs.holderRegistry(Registries.ENTITY_TYPE), EntitySpawner::entity,
+        EntitySpawnRuleSet.STREAM_CODEC.apply(ByteBufCodecs::optional), EntitySpawner::spawnRules,
+        DataComponentPatch.STREAM_CODEC, EntitySpawner::components,
+        SoundEvent.STREAM_CODEC.apply(ByteBufCodecs::optional), EntitySpawner::spawnSound,
+        ByteBufCodecs.BOOL, EntitySpawner::allowItemData,
+        EntitySpawner::new
+    );
 
     public static EntitySpawner of(Holder<EntityType<?>> entity) {
         return EntitySpawner.builder(entity).build();

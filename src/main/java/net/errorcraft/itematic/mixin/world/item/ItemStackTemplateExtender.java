@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @Mixin(ItemStackTemplate.class)
 public class ItemStackTemplateExtender implements ItemInstanceAccess {
@@ -33,6 +34,17 @@ public class ItemStackTemplateExtender implements ItemInstanceAccess {
     @Shadow
     @Final
     private Holder<Item> item;
+
+    @ModifyArg(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/serialization/Codec;withAlternative(Lcom/mojang/serialization/Codec;Lcom/mojang/serialization/Codec;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
+        )
+    )
+    private static Function<Holder<Item>, ItemStackTemplate> useHolderConstructor(Function<Holder<Item>, ItemStackTemplate> converter) {
+        return ItemStackTemplates::of;
+    }
 
     @WrapOperation(
         method = "lambda$static$1",

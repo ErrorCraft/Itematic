@@ -5,6 +5,9 @@ import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawnContext;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.codec.RegistryCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
@@ -18,6 +21,7 @@ public class EntitySpawnRuleSet {
             set -> set.spawnRules
         );
     public static final Codec<Holder<EntitySpawnRuleSet>> CODEC = RegistryCodecs.holder(ItematicRegistries.ENTITY_SPAWN_RULE_SET);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<EntitySpawnRuleSet>> STREAM_CODEC = ByteBufCodecs.holderRegistry(ItematicRegistries.ENTITY_SPAWN_RULE_SET);
 
     private final List<ConditionedEntitySpawnRule> spawnRules;
 

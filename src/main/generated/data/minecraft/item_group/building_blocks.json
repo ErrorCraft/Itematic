@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:building_blocks",
+  "icon": {
+    "id": "minecraft:bricks"
+  },
+  "name": {
+    "translate": "itemGroup.buildingBlocks"
+  }
+}

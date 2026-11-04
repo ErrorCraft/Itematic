@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:food_and_drinks",
+  "icon": {
+    "id": "minecraft:golden_apple"
+  },
+  "name": {
+    "translate": "itemGroup.foodAndDrink"
+  }
+}

@@ -3,11 +3,13 @@ package net.errorcraft.itematic.mixin.core.component;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.world.item.component.ConsumableComponent;
 import net.errorcraft.itematic.world.item.equipment.Glider;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Unit;
+import net.minecraft.world.item.component.Consumable;
 import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +20,24 @@ import java.util.function.UnaryOperator;
 
 @Mixin(DataComponents.class)
 public class DataComponentsExtender {
+    @WrapOperation(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/core/component/DataComponents;register(Ljava/lang/String;Ljava/util/function/UnaryOperator;)Lnet/minecraft/core/component/DataComponentType;",
+            ordinal = 0
+        ),
+        slice = @Slice(
+            from = @At(
+                value = "CONSTANT",
+                args = "stringValue=consumable"
+            )
+        )
+    )
+    private static DataComponentType<ConsumableComponent> useCustomConsumableDataComponent(String id, UnaryOperator<DataComponentType.Builder<Consumable>> builder, Operation<DataComponentType<Consumable>> original) {
+        return ItematicDataComponents.CONSUMABLE;
+    }
+
     @WrapOperation(
         method = "<clinit>",
         at = @At(

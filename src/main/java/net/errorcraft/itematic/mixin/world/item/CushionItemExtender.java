@@ -2,7 +2,7 @@ package net.errorcraft.itematic.mixin.world.item;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.errorcraft.itematic.world.item.behavior.behaviors.EntityItemBehavior;
+import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CushionItem;
 import net.minecraft.world.level.block.Block;
@@ -20,6 +20,6 @@ public class CushionItemExtender {
         )
     )
     private static boolean isCushionUsesCollisionShapeUseItemBehavior(BlockState instance, TagKey<Block> tagKey, Operation<Boolean> original) {
-        return instance.is(EntityItemBehavior.USES_COLLISION_SHAPE.get());
+        return instance.is(EntityPlacerComponent.USES_COLLISION_SHAPE.get());
     }
 }

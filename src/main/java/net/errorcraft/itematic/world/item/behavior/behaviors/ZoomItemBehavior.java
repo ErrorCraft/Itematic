@@ -2,29 +2,28 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.util.ItematicCodecs;
-import net.errorcraft.itematic.world.ItemResult;
-import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.component.ZoomFieldOfViewMultiplier;
+import net.errorcraft.itematic.world.item.component.ZoomSounds;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 
-public record ZoomItemBehavior(float fieldOfViewMultiplier, Holder<SoundEvent> startUsingSound, Holder<SoundEvent> stopUsingSound) implements ItemBehavior<ZoomItemBehavior> {
+public record ZoomItemBehavior(ZoomFieldOfViewMultiplier fieldOfViewMultiplier, Holder<SoundEvent> startUsingSound, Holder<SoundEvent> stopUsingSound) implements ItemBehavior<ZoomItemBehavior> {
     public static final Codec<ZoomItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        ItematicCodecs.positiveFloat(1.0f).fieldOf("field_of_view_multiplier").forGetter(ZoomItemBehavior::fieldOfViewMultiplier),
+        ZoomFieldOfViewMultiplier.CODEC.fieldOf("field_of_view_multiplier").forGetter(ZoomItemBehavior::fieldOfViewMultiplier),
         SoundEvent.CODEC.fieldOf("start_using_sound").forGetter(ZoomItemBehavior::startUsingSound),
         SoundEvent.CODEC.fieldOf("stop_using_sound").forGetter(ZoomItemBehavior::stopUsingSound)
     ).apply(instance, ZoomItemBehavior::new));
 
     public static ZoomItemBehavior of(float fieldOfViewMultiplier, Holder<SoundEvent> startUsingSound, Holder<SoundEvent> stopUsingSound) {
-        return new ZoomItemBehavior(fieldOfViewMultiplier, startUsingSound, stopUsingSound);
+        return new ZoomItemBehavior(
+            new ZoomFieldOfViewMultiplier(fieldOfViewMultiplier),
+            startUsingSound,
+            stopUsingSound
+        );
     }
 
     @Override
@@ -33,24 +32,8 @@ public record ZoomItemBehavior(float fieldOfViewMultiplier, Holder<SoundEvent> s
     }
 
     @Override
-    public ItemResult use(Level level, Player user, InteractionHand hand, ItemStack stack, ItemStackExchanger stackExchanger) {
-        user.playSound(this.startUsingSound.value(), 1.0f, 1.0f);
-        user.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
-        return ItemResult.PASS;
-    }
-
-    @Override
-    public boolean stopUsing(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks, ItemStackExchanger stackExchanger) {
-        this.playStopSound(user);
-        return true;
-    }
-
-    @Override
-    public void finishUsing(Level level, LivingEntity user, ItemStack stack, int usedTicks, ItemStackExchanger stackExchanger) {
-        this.playStopSound(user);
-    }
-
-    private void playStopSound(LivingEntity target) {
-        target.playSound(this.stopUsingSound.value(), 1.0f, 1.0f);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(ItematicDataComponents.ZOOM_FIELD_OF_VIEW_MULTIPLIER, this.fieldOfViewMultiplier);
+        builder.set(ItematicDataComponents.ZOOM_SOUNDS, new ZoomSounds(this.startUsingSound, this.stopUsingSound));
     }
 }

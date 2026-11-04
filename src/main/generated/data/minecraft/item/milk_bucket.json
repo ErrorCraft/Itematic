@@ -1,19 +1,14 @@
 {
   "behavior": {
-    "minecraft:consumable": {
-      "has_consume_particles": false,
-      "sound": "minecraft:entity.generic.drink"
-    },
+    "minecraft:consumable": {},
     "minecraft:stackable": 1,
     "minecraft:useable": {
       "animation": "drink",
       "remainder": {
         "id": "minecraft:bucket"
       },
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "sound": "minecraft:entity.generic.drink",
+      "ticks": 32
     }
   },
   "display": {

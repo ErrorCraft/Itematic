@@ -1,8 +1,5 @@
 {
   "behavior": {
-    "minecraft:cooldown": {
-      "ticks": 20
-    },
     "minecraft:projectile": {
       "entity": "minecraft:ender_pearl"
     },
@@ -10,6 +7,11 @@
     "minecraft:throwable": {
       "angle_offset": 0.0,
       "speed": 1.5
+    },
+    "minecraft:useable": {
+      "cooldown": {
+        "seconds": 1.0
+      }
     }
   },
   "display": {

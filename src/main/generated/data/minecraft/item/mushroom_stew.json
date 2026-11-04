@@ -8,13 +8,12 @@
     "minecraft:stackable": 1,
     "minecraft:useable": {
       "animation": "eat",
+      "has_use_particles": true,
       "remainder": {
         "id": "minecraft:bowl"
       },
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "sound": "minecraft:entity.generic.eat",
+      "ticks": 32
     }
   },
   "display": {

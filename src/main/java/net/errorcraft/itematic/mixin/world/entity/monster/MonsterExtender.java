@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.world.entity.monster;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.errorcraft.itematic.mixin.world.entity.LivingEntityExtender;
 import net.minecraft.references.ItemIds;
 import net.minecraft.world.entity.EntityType;
@@ -12,6 +14,13 @@ import org.spongepowered.asm.mixin.Mixin;
 public abstract class MonsterExtender extends LivingEntityExtender {
     public MonsterExtender(EntityType<?> type, Level level) {
         super(type, level);
+    }
+
+    @WrapMethod(
+        method = "getProjectile"
+    )
+    private ItemStack useDataComponent(ItemStack heldWeapon, Operation<ItemStack> original) {
+        return this.itematic$getAmmunition(heldWeapon);
     }
 
     @Override

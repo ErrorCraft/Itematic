@@ -2,6 +2,7 @@ package net.errorcraft.itematic.core.dispenser.behavior;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionEntry;
@@ -12,6 +13,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
+import net.minecraft.core.registries.codec.RegistryCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -19,11 +24,13 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
 
 public class DispenseBehavior extends OptionalDispenseItemBehavior {
-    public static final Codec<DispenseBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final Codec<DispenseBehavior> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ActionEntry.CODEC.fieldOf("entry").forGetter(dispenseBehavior -> dispenseBehavior.entry),
         Codec.BOOL.optionalFieldOf("dispense_as_item_on_failure", true).forGetter(dispenseBehavior -> dispenseBehavior.dispenseAsItemOnFailure),
         Offset.CODEC.optionalFieldOf("offset", Offset.DEFAULT).forGetter(dispenseBehavior -> dispenseBehavior.offset)
     ).apply(instance, DispenseBehavior::new));
+    public static final Codec<Holder<DispenseBehavior>> CODEC = RegistryCodecs.holder(ItematicRegistries.DISPENSE_BEHAVIOR);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<DispenseBehavior>> STREAM_CODEC = ByteBufCodecs.holderRegistry(ItematicRegistries.DISPENSE_BEHAVIOR);
 
     private final Holder<ActionEntry> entry;
     private final boolean dispenseAsItemOnFailure;

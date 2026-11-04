@@ -1,0 +1,25 @@
+[
+  {
+    "block_state_provider": {
+      "type": "minecraft:rule_based",
+      "rules": [
+        {
+          "if_true": {
+            "type": "minecraft:matching_properties",
+            "properties": {
+              "eye": "false"
+            }
+          },
+          "then": {
+            "type": "minecraft:apply_properties",
+            "properties": {
+              "eye": "true"
+            }
+          }
+        }
+      ]
+    },
+    "push_entities_upwards": true,
+    "sound": "minecraft:block.end_portal_frame.fill"
+  }
+]

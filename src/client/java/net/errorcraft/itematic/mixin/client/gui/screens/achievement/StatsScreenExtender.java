@@ -4,8 +4,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import net.errorcraft.itematic.access.client.gui.screens.achievement.StatsScreenAccess;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.screens.achievement.StatsScreen;
@@ -41,7 +41,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Mixin(StatsScreen.class)
@@ -180,12 +179,17 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     ordinal = 0
                 )
             )
-            private boolean instanceOfBlockItemForFirstItemUseItemBehavior(Object reference, Class<BlockItem> clazz, @Local(name = "one", argsOnly = true) StatsScreen.ItemStatisticsList.ItemRow one, @Share("firstBlock") LocalRef<BlockItemBehavior> firstBlockReference) {
-                Optional<BlockItemBehavior> firstBlock = one.itematic$item()
+            private boolean instanceOfBlockItemForFirstItemUseDataComponent(Object reference, Class<BlockItem> clazz, @Local(name = "one", argsOnly = true) StatsScreen.ItemStatisticsList.ItemRow one, @Share("firstBlockPlacer") LocalRef<BlockPlacerComponent> firstBlockPlacerReference) {
+                BlockPlacerComponent firstBlockPlacer = one.itematic$item()
                     .value()
-                    .itematic$getBehavior(ItemBehaviorType.BLOCK);
-                firstBlock.ifPresent(firstBlockReference::set);
-                return firstBlock.isPresent();
+                    .components()
+                    .get(ItematicDataComponents.BLOCK_PLACER);
+                if (firstBlockPlacer == null) {
+                    return false;
+                }
+
+                firstBlockPlacerReference.set(firstBlockPlacer);
+                return true;
             }
 
             @ModifyConstant(
@@ -201,12 +205,17 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private boolean instanceOfBlockItemForSecondItemUseItemBehavior(Object reference, Class<BlockItem> clazz, @Local(name = "two", argsOnly = true) StatsScreen.ItemStatisticsList.ItemRow two, @Share("secondBlock") LocalRef<BlockItemBehavior> secondBlockReference) {
-                Optional<BlockItemBehavior> secondBlock = two.itematic$item()
+            private boolean instanceOfBlockItemForSecondItemUseDataComponent(Object reference, Class<BlockItem> clazz, @Local(name = "two", argsOnly = true) StatsScreen.ItemStatisticsList.ItemRow two, @Share("secondBlockPlacer") LocalRef<BlockPlacerComponent> secondBlockPlacerReference) {
+                BlockPlacerComponent secondBlockPlacer = two.itematic$item()
                     .value()
-                    .itematic$getBehavior(ItemBehaviorType.BLOCK);
-                secondBlock.ifPresent(secondBlockReference::set);
-                return secondBlock.isPresent();
+                    .components()
+                    .get(ItematicDataComponents.BLOCK_PLACER);
+                if (secondBlockPlacer == null) {
+                    return false;
+                }
+
+                secondBlockPlacerReference.set(secondBlockPlacer);
+                return true;
             }
 
             @Redirect(
@@ -253,8 +262,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForFirstBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T key, @Share("firstBlock") LocalRef<BlockItemBehavior> firstBlockReference) {
-                return instance.getValue(type.itematic$get(firstBlockReference.get().block().defaultBlock()));
+            private <T> int getStatForFirstBlockUseDataComponent(StatsCounter instance, StatType<Block> type, T key, @Share("firstBlockPlacer") LocalRef<BlockPlacerComponent> firstBlockPlacerReference) {
+                return instance.getValue(type.itematic$get(firstBlockPlacerReference.get().block().defaultBlock()));
             }
 
             @Redirect(
@@ -277,8 +286,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> int getStatForSecondBlockUseItemBehavior(StatsCounter instance, StatType<Block> type, T key, @Share("secondBlock") LocalRef<BlockItemBehavior> secondBlockReference) {
-                return instance.getValue(type.itematic$get(secondBlockReference.get().block().defaultBlock()));
+            private <T> int getStatForSecondBlockUseDataComponent(StatsCounter instance, StatType<Block> type, T key, @Share("secondBlockPlacer") LocalRef<BlockPlacerComponent> secondBlockPlacerReference) {
+                return instance.getValue(type.itematic$get(secondBlockPlacerReference.get().block().defaultBlock()));
             }
 
             @Redirect(
@@ -370,11 +379,16 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     ordinal = 0
                 )
             )
-            private boolean instanceOfBlockItemUseItemBehavior(Object reference, Class<BlockItem> clazz, @Share("block") LocalRef<BlockItemBehavior> blockReference) {
-                Optional<BlockItemBehavior> block = this.item.value()
-                    .itematic$getBehavior(ItemBehaviorType.BLOCK);
-                block.ifPresent(blockReference::set);
-                return block.isPresent();
+            private boolean instanceOfBlockItemUseDataComponent(Object reference, Class<BlockItem> clazz, @Share("blockPlacer") LocalRef<BlockPlacerComponent> blockPlacerReference) {
+                BlockPlacerComponent blockPlacer = this.item.value()
+                    .components()
+                    .get(ItematicDataComponents.BLOCK_PLACER);
+                if (blockPlacer == null) {
+                    return false;
+                }
+
+                blockPlacerReference.set(blockPlacer);
+                return true;
             }
 
             @Redirect(
@@ -417,8 +431,8 @@ public abstract class StatsScreenExtender implements StatsScreenAccess {
                     )
                 )
             )
-            private <T> Stat<Block> getStatUseHolder(StatType<Block> instance, T argument, @Share("block") LocalRef<BlockItemBehavior> blockReference) {
-                return instance.itematic$get(blockReference.get().block().defaultBlock());
+            private <T> Stat<Block> getStatUseHolder(StatType<Block> instance, T argument, @Share("blockPlacer") LocalRef<BlockPlacerComponent> blockPlacerReference) {
+                return instance.itematic$get(blockPlacerReference.get().block().defaultBlock());
             }
 
             @Redirect(

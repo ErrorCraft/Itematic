@@ -4,7 +4,7 @@
       "behavior": "minecraft:shoot_bottle"
     },
     "minecraft:potion_holder": {
-      "duration_multiplier": 1.0
+      "duration_scale": 1.0
     },
     "minecraft:projectile": {
       "entity": "minecraft:splash_potion"

@@ -1,9 +1,8 @@
 package net.errorcraft.itematic.gametest.item.component;
 
 import net.errorcraft.itematic.assertion.Assert;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.TestUtil;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -15,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BundleContents;
@@ -41,7 +41,7 @@ public class ItemHolderItemComponentTestSuite {
             );
             Assert.itemStack(helper, inventory.getItem(SLOT))
                 .isEmpty();
-            ItemHolderItemBehavior.toggleSelectedItem(bundle, 0);
+            BundleItem.toggleSelectedItem(bundle, 0);
             Assert.itemStack(helper, bundle)
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
@@ -57,7 +57,7 @@ public class ItemHolderItemComponentTestSuite {
         ServerLevel level = helper.getLevel();
         Inventory inventory = player.getInventory();
         ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
-        addToBundleContentsComponent(helper, bundle, level.itematic$createStack(ItemIds.STICK));
+        addToBundleContents(helper, bundle, level.itematic$createStack(ItemIds.STICK));
         Slot slot = new Slot(inventory, SLOT, 0, 0);
         helper.succeedIf(() -> {
             Assert.isTrue(
@@ -94,7 +94,7 @@ public class ItemHolderItemComponentTestSuite {
             Assert.itemStack(helper, carriedSlot.get())
                 .isEmpty();
             ItemStack bundle = player.getInventory().getItem(SLOT);
-            ItemHolderItemBehavior.toggleSelectedItem(bundle, 0);
+            BundleItem.toggleSelectedItem(bundle, 0);
             Assert.itemStack(helper, bundle)
                 .hasComponent(
                     DataComponents.BUNDLE_CONTENTS,
@@ -109,7 +109,7 @@ public class ItemHolderItemComponentTestSuite {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         ServerLevel level = helper.getLevel();
         ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
-        addToBundleContentsComponent(helper, bundle, level.itematic$createStack(ItemIds.STICK));
+        addToBundleContents(helper, bundle, level.itematic$createStack(ItemIds.STICK));
         Slot inventorySlot = new Slot(player.getInventory(), SLOT, 0, 0);
         inventorySlot.setByPlayer(bundle);
         SlotAccess carriedSlot = Objects.requireNonNull(player.getSlot(Player.HELD_ITEM_SLOT));
@@ -140,7 +140,7 @@ public class ItemHolderItemComponentTestSuite {
         ServerLevel level = helper.getLevel();
         ResourceKey<Item> itemInInventory = ItemIds.STICK;
         ItemStack bundle = level.itematic$createStack(ItemIds.BUNDLE);
-        addToBundleContentsComponent(helper, bundle, level.itematic$createStack(itemInInventory));
+        addToBundleContents(helper, bundle, level.itematic$createStack(itemInInventory));
         Slot inventorySlot = new Slot(player.getInventory(), SLOT, 0, 0);
         inventorySlot.setByPlayer(bundle);
         SlotAccess carriedSlot = Objects.requireNonNull(player.getSlot(Player.HELD_ITEM_SLOT));
@@ -166,11 +166,12 @@ public class ItemHolderItemComponentTestSuite {
         });
     }
 
-    private static void addToBundleContentsComponent(GameTestHelper helper, ItemStack bundle, ItemStack stackToAdd) {
+    private static void addToBundleContents(GameTestHelper helper, ItemStack itemHolder, ItemStack stackToAdd) {
         BundleContents.Mutable builder = Objects.requireNonNull(
-            TestUtil.getItemBehavior(helper, bundle, ItemBehaviorType.ITEM_HOLDER).createBuilder(bundle)
+            TestUtil.getDataComponent(helper, itemHolder, ItematicDataComponents.ITEM_HOLDER_RULES)
+                .createBuilder(itemHolder)
         );
         builder.tryInsert(stackToAdd);
-        bundle.set(DataComponents.BUNDLE_CONTENTS, builder.toImmutable());
+        itemHolder.set(DataComponents.BUNDLE_CONTENTS, builder.toImmutable());
     }
 }

@@ -1,0 +1,9 @@
+{
+  "entries": [],
+  "icon": {
+    "id": "minecraft:bookshelf"
+  },
+  "name": {
+    "translate": "itemGroup.hotbar"
+  }
+}

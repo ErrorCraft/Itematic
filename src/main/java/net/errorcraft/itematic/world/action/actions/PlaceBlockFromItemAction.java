@@ -3,12 +3,12 @@ package net.errorcraft.itematic.world.action.actions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.action.Action;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.BlockItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
@@ -29,13 +29,12 @@ public record PlaceBlockFromItemAction(PositionTarget position, boolean decremen
 
     @Override
     public boolean execute(ActionContext context) {
-        BlockItemBehavior block = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
-            .itematic$getBehavior(ItemBehaviorType.BLOCK)
-            .orElse(null);
-        if (block == null) {
+        BlockPlacerComponent blockPlacer = context.getOrDefault(LootContextParams.TOOL, ItemStack.EMPTY)
+            .get(ItematicDataComponents.BLOCK_PLACER);
+        if (blockPlacer == null) {
             return false;
         }
 
-        return block.place(context, this.position, this.decrementCount);
+        return blockPlacer.place(context, this.position, this.decrementCount);
     }
 }

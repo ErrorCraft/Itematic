@@ -9,6 +9,7 @@ import net.errorcraft.itematic.resources.ItematicRegistryValidators;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSet;
 import net.errorcraft.itematic.world.item.Items;
+import net.errorcraft.itematic.world.item.group.ItemGroup;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -41,8 +42,9 @@ public class RegistryDataLoaderExtender {
                 ActionEntry.DIRECT_CODEC,
                 ItematicRegistryValidators.nonRecursive(ActionEntry::streamReferences)
             ))
-            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.DIRECT_CODEC))
             .add(createData(ItematicRegistries.ENTITY_SPAWN_RULE_SET, EntitySpawnRuleSet.DIRECT_CODEC))
+            .add(createData(ItematicRegistries.ITEM_GROUP, ItemGroup.DIRECT_CODEC))
             .build();
     }
 
@@ -64,8 +66,9 @@ public class RegistryDataLoaderExtender {
                 ActionEntry.DIRECT_CODEC,
                 ItematicRegistryValidators.nonRecursive(ActionEntry::streamReferences)
             ))
-            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.CODEC))
+            .add(createData(ItematicRegistries.DISPENSE_BEHAVIOR, DispenseBehavior.DIRECT_CODEC))
             .add(createData(ItematicRegistries.ENTITY_SPAWN_RULE_SET, EntitySpawnRuleSet.DIRECT_CODEC))
+            .add(createData(ItematicRegistries.ITEM_GROUP, ItemGroup.DIRECT_CODEC))
             .build();
     }
 

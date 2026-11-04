@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:ingredients",
+  "icon": {
+    "id": "minecraft:iron_ingot"
+  },
+  "name": {
+    "translate": "itemGroup.ingredients"
+  }
+}

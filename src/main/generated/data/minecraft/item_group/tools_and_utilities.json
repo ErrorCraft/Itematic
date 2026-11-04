@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:tools_and_utilities",
+  "icon": {
+    "id": "minecraft:diamond_pickaxe"
+  },
+  "name": {
+    "translate": "itemGroup.tools"
+  }
+}

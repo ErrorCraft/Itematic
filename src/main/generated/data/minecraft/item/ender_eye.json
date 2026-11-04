@@ -1,8 +1,6 @@
 {
   "behavior": {
-    "minecraft:prevent_use_when_used_on_target": {
-      "block": true
-    },
+    "minecraft:block_transformer": "minecraft:fill_end_portal_frame",
     "minecraft:projectile": {
       "entity": "minecraft:eye_of_ender"
     },
@@ -30,96 +28,42 @@
         "volume": 1.0
       }
     },
-    "minecraft:use_on_block": {
-      "action": {
-        "type": "minecraft:sequence",
-        "handler": "minecraft:passing",
-        "entries": [
-          {
-            "action": {
-              "type": "minecraft:transform_block_state",
-              "position": "interacted",
-              "provider": {
-                "type": "minecraft:apply_properties",
-                "properties": {
-                  "eye": "false"
-                }
+    "minecraft:transformed_block": {
+      "action": [
+        {
+          "action": {
+            "type": "minecraft:display_particle",
+            "count": 16,
+            "delta": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "offset": [
+              {
+                "max": 0.1875,
+                "min": -0.1875
               },
-              "push_entities_upwards": true
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:decrement_item",
-              "amount": 1
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:swing_hand",
-              "entity": "this"
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:play_sound",
-              "category": "block",
-              "pitch": 1.0,
-              "position": "interacted",
-              "sound": "minecraft:block.end_portal_frame.fill",
-              "volume": 1.0
-            }
-          },
-          {
-            "action": {
-              "type": "minecraft:display_particle",
-              "count": 16,
-              "delta": [
-                0.0,
-                0.0,
-                0.0
-              ],
-              "offset": [
-                {
-                  "max": 0.1875,
-                  "min": -0.1875
-                },
-                0.8125,
-                {
-                  "max": 0.1875,
-                  "min": -0.1875
-                }
-              ],
-              "particle": {
-                "type": "minecraft:smoke"
-              },
-              "position": "interacted",
-              "speed": 0.0
-            }
-          },
-          {
-            "entry": {
-              "action": {
-                "type": "minecraft:light_end_portal",
-                "position": "interacted"
+              0.8125,
+              {
+                "max": 0.1875,
+                "min": -0.1875
               }
+            ],
+            "particle": {
+              "type": "minecraft:smoke"
             },
-            "optional": true
+            "position": "interacted",
+            "speed": 0.0
           }
-        ]
-      },
-      "requirements": {
-        "type": "minecraft:location_check",
-        "position": "interacted",
-        "predicate": {
-          "block": {
-            "blocks": "minecraft:end_portal_frame",
-            "state": {
-              "eye": "false"
-            }
+        },
+        {
+          "action": {
+            "type": "minecraft:light_end_portal",
+            "position": "interacted"
           }
         }
-      }
+      ]
     }
   }
 }

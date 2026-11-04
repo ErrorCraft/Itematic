@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
+import net.errorcraft.itematic.world.item.holder.BundleContentsUtil;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.minecraft.network.codec.StreamCodec;
@@ -29,7 +30,7 @@ public record OccupancyHeldItemsWithPenaltyItemHolderRule(Fraction penalty) impl
 
     @Override
     public DataResult<Fraction> occupancy(ItemInstance item) {
-        DataResult<Fraction> occupancyHeldItems = ItemHolderItemBehavior.occupancy(item);
+        DataResult<Fraction> occupancyHeldItems = BundleContentsUtil.occupancy(item);
         if (occupancyHeldItems != null) {
             return occupancyHeldItems.map(occupancy -> occupancy.add(this.penalty));
         }

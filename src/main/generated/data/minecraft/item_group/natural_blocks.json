@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:natural_blocks",
+  "icon": {
+    "id": "minecraft:grass_block"
+  },
+  "name": {
+    "translate": "itemGroup.natural"
+  }
+}

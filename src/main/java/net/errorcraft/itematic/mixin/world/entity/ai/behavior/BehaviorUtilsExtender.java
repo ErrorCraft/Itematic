@@ -1,9 +1,10 @@
 package net.errorcraft.itematic.mixin.world.entity.ai.behavior;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.item.Item;
@@ -14,9 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Optional;
 
 @Mixin(BehaviorUtils.class)
 public class BehaviorUtilsExtender {
@@ -27,10 +25,14 @@ public class BehaviorUtilsExtender {
             ordinal = 0
         )
     )
-    private static boolean instanceOfProjectileWeaponItemUseItemBehavior(Object reference, Class<ProjectileWeaponItem> clazz, Mob body, @Share("shooter") LocalRef<ShooterItemBehavior> shooter) {
-        Optional<ShooterItemBehavior> optionalShooter = body.getMainHandItem().itematic$getBehavior(ItemBehaviorType.SHOOTER);
-        optionalShooter.ifPresent(shooter::set);
-        return optionalShooter.isPresent();
+    private static boolean instanceOfProjectileWeaponItemUseDataComponent(Object reference, Class<ProjectileWeaponItem> clazz, Mob body, @Share("range") LocalIntRef rangeReference) {
+        Integer range = body.getMainHandItem().get(ItematicDataComponents.SHOOTER_RANGE);
+        if (range != null) {
+            rangeReference.set(range);
+            return true;
+        }
+
+        return false;
     }
 
     @ModifyVariable(
@@ -43,14 +45,14 @@ public class BehaviorUtilsExtender {
         return null;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "isWithinAttackRange",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ProjectileWeaponItem;getDefaultProjectileRange()I"
         )
     )
-    private static int getDefaultProjectileRangeUseItemBehavior(ProjectileWeaponItem instance, @Share("shooter") LocalRef<ShooterItemBehavior> shooter) {
-        return shooter.get().range();
+    private static int getDefaultProjectileRangeUseDataComponent(ProjectileWeaponItem instance, Operation<Integer> original, @Share("range") LocalIntRef rangeReference) {
+        return rangeReference.get();
     }
 }

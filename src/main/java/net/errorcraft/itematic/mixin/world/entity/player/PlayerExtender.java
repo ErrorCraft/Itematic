@@ -3,15 +3,17 @@ package net.errorcraft.itematic.mixin.world.entity.player;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.world.entity.LivingEntityExtender;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -93,6 +95,17 @@ public abstract class PlayerExtender extends LivingEntityExtender {
         return this.itematic$getAttackDamage();
     }
 
+    @WrapOperation(
+        method = "attack",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/Item;getAttackDamageBonus(Lnet/minecraft/world/entity/Entity;FLnet/minecraft/world/damagesource/DamageSource;)F"
+        )
+    )
+    private float useDataComponent(Item instance, Entity victim, float damage, DamageSource damageSource, Operation<Float> original, @Local(name = "attackingItemStack") ItemStack attackingItemStack) {
+        return attackingItemStack.itematic$attackDamageBonus(victim, damage, damageSource);
+    }
+
     @Redirect(
         method = "itemAttackInteraction",
         at = @At(
@@ -120,8 +133,8 @@ public abstract class PlayerExtender extends LivingEntityExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private boolean isSpyglassCheckZoomItemBehavior(ItemStack instance, Object o) {
-        return instance.itematic$hasBehavior(ItemBehaviorType.ZOOM);
+    private boolean isSpyglassCheckZoomFieldOfViewMultiplierDataComponent(ItemStack instance, Object o) {
+        return instance.has(ItematicDataComponents.ZOOM_FIELD_OF_VIEW_MULTIPLIER);
     }
 
     @Override
