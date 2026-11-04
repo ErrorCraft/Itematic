@@ -1,17 +1,19 @@
 package net.errorcraft.itematic.mixin.world.inventory;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(AnvilMenu.class)
 public class AnvilMenuExtender {
-    @Redirect(
+    @WrapOperation(
         method = "createResult",
         at = @At(
             value = "INVOKE",
@@ -19,23 +21,11 @@ public class AnvilMenuExtender {
             ordinal = 0
         )
     )
-    private boolean isItemCheckHolder(ItemStack instance, Object o, @Local(name = "addition") ItemStack addition) {
+    private boolean isItemCheckHolder(ItemStack instance, Object object, Operation<Boolean> original, @Local(name = "addition") ItemStack addition) {
         return instance.is(addition.typeHolder());
     }
 
-    @Redirect(
-        method = "createResult",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z",
-            ordinal = 1
-        )
-    )
-    private boolean alwaysTrue(ItemStack instance) {
-        return true;
-    }
-
-    @Redirect(
+    @WrapOperation(
         method = "createResult",
         at = @At(
             value = "INVOKE",
@@ -44,12 +34,13 @@ public class AnvilMenuExtender {
         ),
         slice = @Slice(
             from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/world/item/enchantment/Enchantment;canEnchant(Lnet/minecraft/world/item/ItemStack;)Z"
+                value = "FIELD",
+                target = "Lnet/minecraft/world/item/Items;ENCHANTED_BOOK:Lnet/minecraft/world/item/Item;",
+                opcode = Opcodes.GETSTATIC
             )
         )
     )
-    private boolean isEnchantedBookCheckEnchantmentHolderItemBehavior(ItemStack instance, Object o) {
-        return instance.itematic$hasBehavior(ItemBehaviorType.ENCHANTMENT_HOLDER);
+    private boolean isEnchantedBookCheckStoredEnchantmentsDataComponent(ItemStack instance, Object object, Operation<Boolean> original) {
+        return instance.has(DataComponents.STORED_ENCHANTMENTS);
     }
 }

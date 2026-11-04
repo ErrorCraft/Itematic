@@ -12,6 +12,7 @@ public class SoundEventIds {
     public static final ResourceKey<SoundEvent> ARMOR_UNEQUIP_WOLF = of("item.armor.unequip_wolf");
     public static final ResourceKey<SoundEvent> ARMOR_EQUIP_NAUTILUS = of("item.armor.equip_nautilus");
     public static final ResourceKey<SoundEvent> ARMOR_UNEQUIP_NAUTILUS = of("item.armor.unequip_nautilus");
+    public static final ResourceKey<SoundEvent> ARROW_SHOOT = of("entity.arrow.shoot");
     public static final ResourceKey<SoundEvent> AXE_SCRAPE = of("item.axe.scrape");
     public static final ResourceKey<SoundEvent> AXE_STRIP = of("item.axe.strip");
     public static final ResourceKey<SoundEvent> AXE_WAX_OFF = of("item.axe.wax_off");

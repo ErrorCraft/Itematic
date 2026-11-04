@@ -8,9 +8,12 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehav
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.ConsumableComponent;
+import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.ProjectileComponent;
+import net.errorcraft.itematic.world.item.component.Throwable;
+import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
 import net.errorcraft.itematic.world.item.component.ZoomFieldOfViewMultiplier;
 import net.errorcraft.itematic.world.item.component.ZoomSounds;
 import net.errorcraft.itematic.world.item.equipment.Glider;
@@ -19,8 +22,9 @@ import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.melee.SmashingWeapon;
 import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
+import net.errorcraft.itematic.world.item.weapon.shooter.ChargedPowerRules;
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargingSounds;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.ChargeableShooterMethod;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -29,6 +33,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
@@ -66,6 +71,11 @@ public class ItematicDataComponents {
         "use_sound",
         builder -> builder.persistent(SoundEvent.CODEC)
             .networkSynchronized(SoundEvent.STREAM_CODEC)
+    );
+    public static final DataComponentType<UseCooldownMoment> USE_COOLDOWN_MOMENT = register(
+        "use_cooldown_moment",
+        builder -> builder.persistent(UseCooldownMoment.CODEC)
+            .networkSynchronized(UseCooldownMoment.STREAM_CODEC)
     );
     public static final DataComponentType<ConsumableComponent> CONSUMABLE = register(
         "consumable",
@@ -121,15 +131,25 @@ public class ItematicDataComponents {
             .networkSynchronized(ItemHolderSounds.STREAM_CODEC)
             .cacheEncoding()
     );
+    public static final DataComponentType<ShooterMethod<?>> SHOOTER_METHOD = register(
+        "shooter_method",
+        builder -> builder.persistent(ShooterMethod.CODEC)
+            .networkSynchronized(ShooterMethod.STREAM_CODEC)
+    );
     public static final DataComponentType<ItemDamageRules> SHOOTER_DAMAGE_RULES = register(
         "shooter_damage_rules",
         builder -> builder.persistent(ItemDamageRules.CODEC)
             .networkSynchronized(ItemDamageRules.STREAM_CODEC)
             .cacheEncoding()
     );
+    public static final DataComponentType<Integer> SHOOTER_RANGE = register(
+        "shooter_range",
+        builder -> builder.persistent(ExtraCodecs.POSITIVE_INT)
+            .networkSynchronized(ByteBufCodecs.VAR_INT)
+    );
     public static final DataComponentType<Float> SHOOTER_DEFAULT_CHARGE_TIME = register(
         "shooter_default_charge_time",
-        builder -> builder.persistent(ItematicCodecs.NON_NEGATIVE_FLOAT)
+        builder -> builder.persistent(ExtraCodecs.NON_NEGATIVE_FLOAT)
             .networkSynchronized(ByteBufCodecs.FLOAT)
             .cacheEncoding()
     );
@@ -139,10 +159,10 @@ public class ItematicDataComponents {
             .networkSynchronized(ChargingSounds.STREAM_CODEC)
             .cacheEncoding()
     );
-    public static final DataComponentType<ChargeableShooterMethod.ChargedPowerRules> SHOOTER_CHARGED_POWER_RULES = register(
+    public static final DataComponentType<ChargedPowerRules> SHOOTER_CHARGED_POWER_RULES = register(
         "shooter_charged_power_rules",
-        builder -> builder.persistent(ChargeableShooterMethod.ChargedPowerRules.CODEC)
-            .networkSynchronized(ChargeableShooterMethod.ChargedPowerRules.STREAM_CODEC)
+        builder -> builder.persistent(ChargedPowerRules.CODEC)
+            .networkSynchronized(ChargedPowerRules.STREAM_CODEC)
     );
     public static final DataComponentType<Holder<SoundEvent>> SHOOTER_SHOOT_SOUND = register(
         "shooter_shoot_sound",
@@ -204,6 +224,33 @@ public class ItematicDataComponents {
         builder -> builder.persistent(ProjectileComponent.CODEC)
             .networkSynchronized(ProjectileComponent.STREAM_CODEC)
             .cacheEncoding()
+    );
+    public static final DataComponentType<Throwable> THROWABLE = register(
+        "throwable",
+        builder -> builder.persistent(Throwable.CODEC)
+            .networkSynchronized(Throwable.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<Holder<Item>> ENCHANT_RESULT_ITEM = register(
+        "enchant_result_item",
+        builder -> builder.persistent(Item.CODEC)
+            .networkSynchronized(Item.STREAM_CODEC)
+    );
+    public static final DataComponentType<Holder<Item>> GRIND_RESULT_ITEM = register(
+        "grind_result_item",
+        builder -> builder.persistent(Item.CODEC)
+            .networkSynchronized(Item.STREAM_CODEC)
+    );
+    public static final DataComponentType<EntityController> ENTITY_CONTROLLER = register(
+        "entity_controller",
+        builder -> builder.persistent(EntityController.CODEC)
+            .networkSynchronized(EntityController.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<Holder<Item>> SIGN_RESULT_ITEM = register(
+        "sign_result_item",
+        builder -> builder.persistent(Item.CODEC)
+            .networkSynchronized(Item.STREAM_CODEC)
     );
 
     private ItematicDataComponents() {}

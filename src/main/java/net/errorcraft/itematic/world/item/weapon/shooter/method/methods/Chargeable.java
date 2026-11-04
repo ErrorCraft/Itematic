@@ -1,29 +1,21 @@
 package net.errorcraft.itematic.world.item.weapon.shooter.method.methods;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.ProjectileWeaponItemAccessor;
-import net.errorcraft.itematic.util.ItematicCodecs;
-import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
+import net.errorcraft.itematic.world.item.weapon.shooter.ChargedPowerRules;
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargingSounds;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.core.registries.codec.RegistryCodecs;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,39 +32,24 @@ import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.OptionalInt;
 
-public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.ChargingSounds defaultChargingSounds, ChargedPowerRules chargedPowerRules) implements ShooterMethod {
-    public static final MapCodec<ChargeableShooterMethod> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItematicCodecs.NON_NEGATIVE_FLOAT.fieldOf("default_charge_time").forGetter(ChargeableShooterMethod::defaultChargeTime),
-        CrossbowItem.ChargingSounds.CODEC.fieldOf("default_charging_sounds").forGetter(ChargeableShooterMethod::defaultChargingSounds),
-        ChargedPowerRules.CODEC.fieldOf("charged_power_rules").forGetter(ChargeableShooterMethod::chargedPowerRules)
-    ).apply(instance, ChargeableShooterMethod::new));
+public class Chargeable implements ShooterMethod<Chargeable> {
+    public static final Chargeable INSTANCE = new Chargeable();
     private static final float START_SOUND_PROGRESS = CrossbowItemAccessor.startSoundProgress();
     private static final float MID_SOUND_PROGRESS = CrossbowItemAccessor.midSoundProgress();
     private static final int EXTRA_USE_TIME = 3;
     private static final CrossbowItem DUMMY = new CrossbowItem(new Item.Properties());
 
-    public static ChargeableShooterMethod of(CrossbowItem.ChargingSounds defaultChargingSounds, ChargedPowerRules.Rule... chargedPowerRules) {
-        return new ChargeableShooterMethod(CrossbowItemAccessor.defaultChargeTime(), defaultChargingSounds, new ChargedPowerRules(List.of(chargedPowerRules), CrossbowItemAccessor.defaultPower()));
+    private Chargeable() {}
+
+    @Override
+    public MapCodec<? extends ShooterMethod.Properties<Chargeable>> propertiesCodec() {
+        return Properties.CODEC;
     }
 
     @Override
-    public ShooterMethodType<?> type() {
-        return ShooterMethodType.CHARGEABLE;
-    }
-
-    @Override
-    public void addComponents(DataComponentMap.Builder builder) {
-        builder.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
-        builder.set(ItematicDataComponents.SHOOTER_DEFAULT_CHARGE_TIME, this.defaultChargeTime);
-        builder.set(ItematicDataComponents.SHOOTER_DEFAULT_CHARGING_SOUNDS, this.defaultChargingSounds);
-        builder.set(ItematicDataComponents.SHOOTER_CHARGED_POWER_RULES, this.chargedPowerRules);
-    }
-
-    @Override
-    public boolean tryShoot(ShooterItemBehavior component, ItemStack stack, Level level, LivingEntity user, InteractionHand hand) {
+    public boolean tryShoot(ItemStack stack, Level level, LivingEntity user, InteractionHand hand) {
         if (!CrossbowItem.isCharged(stack)) {
             return false;
         }
@@ -82,12 +59,12 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             return false;
         }
 
-        this.shoot(component, level, user, hand, stack, chargedPowerRules.power(stack), 1.0f, null);
+        this.shoot(level, user, hand, stack, chargedPowerRules.power(stack), 1.0f, null);
         return true;
     }
 
     @Override
-    public void hold(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks) {
+    public void hold(ItemStack stack, Level level, LivingEntity user, int usedTicks) {
         if (level.isClientSide()) {
             return;
         }
@@ -109,7 +86,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
     }
 
     @Override
-    public boolean stop(ShooterItemBehavior shooter, ItemStack stack, Level level, LivingEntity user, int usedTicks) {
+    public boolean stop(ItemStack stack, Level level, LivingEntity user, int usedTicks) {
         if (usedTicks < CrossbowItem.getChargeDuration(stack, user)) {
             return false;
         }
@@ -144,7 +121,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
         return OptionalInt.of(useDuration);
     }
 
-    public void shoot(ShooterItemBehavior shooter, Level level, LivingEntity user, InteractionHand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity targetOverride) {
+    public void shoot(Level level, LivingEntity user, InteractionHand hand, ItemStack stack, float power, float divergence, @Nullable LivingEntity targetOverride) {
         if (!(level instanceof ServerLevel serverLevel)) {
             return;
         }
@@ -154,7 +131,7 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
             return;
         }
 
-        shooter.shoot(serverLevel, user, hand, stack, chargedProjectiles.itemCopies().toList(), power, divergence, user instanceof Player, targetOverride);
+        this.shoot(serverLevel, user, hand, stack, chargedProjectiles.itemCopies().toList(), power, divergence, user instanceof Player, targetOverride);
         if (user instanceof ServerPlayer player) {
             CriteriaTriggers.SHOT_CROSSBOW.trigger(player, stack);
             player.awardStat(Stats.ITEM_USED.itematic$get(stack.typeHolder()));
@@ -180,45 +157,36 @@ public record ChargeableShooterMethod(float defaultChargeTime, CrossbowItem.Char
         return true;
     }
 
-    public record ChargedPowerRules(List<Rule> rules, float defaultPower) {
-        public static final Codec<ChargedPowerRules> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Rule.CODEC.listOf().fieldOf("rules").forGetter(ChargedPowerRules::rules),
-            ItematicCodecs.NON_NEGATIVE_FLOAT.fieldOf("default_power").forGetter(ChargedPowerRules::defaultPower)
-        ).apply(instance, ChargedPowerRules::new));
-        public static final StreamCodec<RegistryFriendlyByteBuf, ChargedPowerRules> STREAM_CODEC = StreamCodec.composite(
-            Rule.STREAM_CODEC.apply(ByteBufCodecs.list()), ChargedPowerRules::rules,
-            ByteBufCodecs.FLOAT, ChargedPowerRules::defaultPower,
-            ChargedPowerRules::new
-        );
+    public record Properties(float defaultChargeTime, CrossbowItem.ChargingSounds defaultChargingSounds, ChargedPowerRules chargedPowerRules) implements ShooterMethod.Properties<Chargeable> {
+        public static final MapCodec<Properties> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ExtraCodecs.NON_NEGATIVE_FLOAT.fieldOf("default_charge_time").forGetter(Properties::defaultChargeTime),
+            CrossbowItem.ChargingSounds.CODEC.fieldOf("default_charging_sounds").forGetter(Properties::defaultChargingSounds),
+            ChargedPowerRules.CODEC.fieldOf("charged_power_rules").forGetter(Properties::chargedPowerRules)
+        ).apply(instance, Properties::new));
 
-        public float power(ItemStack stack) {
-            for (Rule rule : this.rules) {
-                if (rule.power.isPresent() && rule.matches(stack)) {
-                    return rule.power.get();
-                }
-            }
-
-            return this.defaultPower;
+        public static Properties of(CrossbowItem.ChargingSounds defaultChargingSounds, ChargedPowerRules.Rule... chargedPowerRules) {
+            return new Properties(
+                CrossbowItemAccessor.defaultChargeTime(),
+                defaultChargingSounds,
+                new ChargedPowerRules(
+                    List.of(chargedPowerRules),
+                    CrossbowItemAccessor.defaultPower()
+                )
+            );
         }
 
-        public record Rule(HolderSet<Item> items, Optional<Float> power) {
-            public static final Codec<Rule> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                RegistryCodecs.holderSet(Registries.ITEM).fieldOf("items").forGetter(Rule::items),
-                ItematicCodecs.NON_NEGATIVE_FLOAT.optionalFieldOf("power").forGetter(Rule::power)
-            ).apply(instance, Rule::new));
-            public static final StreamCodec<RegistryFriendlyByteBuf, Rule> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.holderSet(Registries.ITEM), Rule::items,
-                ByteBufCodecs.FLOAT.apply(ByteBufCodecs::optional), Rule::power,
-                Rule::new
-            );
+        @Override
+        public Chargeable method() {
+            return INSTANCE;
+        }
 
-            public static Rule of(HolderSet<Item> items, float power) {
-                return new Rule(items, Optional.of(power));
-            }
-
-            public boolean matches(ItemStack stack) {
-                return stack.is(this.items);
-            }
+        @Override
+        public void addComponents(DataComponentMap.Builder builder) {
+            builder.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
+            builder.set(ItematicDataComponents.SHOOTER_DEFAULT_CHARGE_TIME, this.defaultChargeTime);
+            builder.set(ItematicDataComponents.SHOOTER_DEFAULT_CHARGING_SOUNDS, this.defaultChargingSounds);
+            builder.set(ItematicDataComponents.SHOOTER_CHARGED_POWER_RULES, this.chargedPowerRules);
         }
     }
+
 }

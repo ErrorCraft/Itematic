@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 
 public interface UseableListener {
     interface Started {
-        void onStartedUsing(LivingEntity user);
+        void itematic$onStartedUsing(LivingEntity user);
     }
 
     interface Stopped {
