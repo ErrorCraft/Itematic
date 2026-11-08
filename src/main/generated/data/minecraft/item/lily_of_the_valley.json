@@ -7,14 +7,12 @@
       "layers": "minecraft:compostable/medium"
     },
     "minecraft:stackable": 64,
-    "minecraft:suspicious_effect_ingredient": {
-      "effects": [
-        {
-          "id": "minecraft:poison",
-          "duration": 240
-        }
-      ]
-    }
+    "minecraft:suspicious_effect_ingredient": [
+      {
+        "id": "minecraft:poison",
+        "duration": 240
+      }
+    ]
   },
   "display": {
     "model": "minecraft:lily_of_the_valley",

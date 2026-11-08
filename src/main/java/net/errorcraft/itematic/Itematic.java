@@ -13,6 +13,7 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleTypes;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryTypes;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
@@ -57,5 +58,6 @@ public class Itematic implements ModInitializer {
         FloatProviders.bootstrap(ItematicBuiltInRegistries.DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE);
         ItematicContextFloatProviderTypes.bootstrap(BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE);
         ItematicEntityDataSerializers.bootstrap();
+        ItemGroupEntryTypes.bootstrap(ItematicBuiltInRegistries.ITEM_GROUP_ENTRY_TYPE);
     }
 }

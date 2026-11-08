@@ -13,6 +13,7 @@ import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.GliderFuel;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.ProjectileComponent;
+import net.errorcraft.itematic.world.item.component.SuspiciousStewEffectProvider;
 import net.errorcraft.itematic.world.item.component.Throwable;
 import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
 import net.errorcraft.itematic.world.item.component.ZoomFieldOfViewMultiplier;
@@ -257,6 +258,12 @@ public class ItematicDataComponents {
         "sign_result_item",
         builder -> builder.persistent(Item.CODEC)
             .networkSynchronized(Item.STREAM_CODEC)
+    );
+    public static final DataComponentType<SuspiciousStewEffectProvider> PROVIDES_SUSPICIOUS_STEW_EFFECTS = register(
+        "provides_suspicious_stew_effects",
+        builder -> builder.persistent(SuspiciousStewEffectProvider.CODEC)
+            .networkSynchronized(SuspiciousStewEffectProvider.STREAM_CODEC)
+            .cacheEncoding()
     );
 
     private ItematicDataComponents() {}

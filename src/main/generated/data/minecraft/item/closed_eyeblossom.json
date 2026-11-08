@@ -7,14 +7,12 @@
       "layers": "minecraft:compostable/medium"
     },
     "minecraft:stackable": 64,
-    "minecraft:suspicious_effect_ingredient": {
-      "effects": [
-        {
-          "id": "minecraft:nausea",
-          "duration": 140
-        }
-      ]
-    }
+    "minecraft:suspicious_effect_ingredient": [
+      {
+        "id": "minecraft:nausea",
+        "duration": 140
+      }
+    ]
   },
   "display": {
     "model": "minecraft:closed_eyeblossom",

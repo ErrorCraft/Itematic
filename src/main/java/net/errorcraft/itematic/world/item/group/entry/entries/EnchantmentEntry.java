@@ -3,28 +3,26 @@ package net.errorcraft.itematic.world.item.group.entry.entries;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
-import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.stream.IntStream;
 
-public record EnchantmentItemGroupEntry(Holder<Item> item) implements ItemGroupEntry<EnchantmentItemGroupEntry> {
-    public static final MapCodec<EnchantmentItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Item.CODEC.fieldOf("item").forGetter(EnchantmentItemGroupEntry::item)
-    ).apply(instance, EnchantmentItemGroupEntry::new));
+public record EnchantmentEntry(Holder<Item> item) implements ItemGroupEntry<EnchantmentEntry> {
+    public static final MapCodec<EnchantmentEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Item.CODEC.fieldOf("item").forGetter(EnchantmentEntry::item)
+    ).apply(instance, EnchantmentEntry::new));
 
-    public static EnchantmentItemGroupEntry of(Holder<Item> item) {
-        return new EnchantmentItemGroupEntry(item);
+    public static EnchantmentEntry of(Holder<Item> item) {
+        return new EnchantmentEntry(item);
     }
 
     @Override
-    public ItemGroupEntryType<EnchantmentItemGroupEntry> type() {
-        return ItemGroupEntryType.ENCHANTMENT;
+    public MapCodec<EnchantmentEntry> codec() {
+        return CODEC;
     }
 
     @Override
@@ -38,13 +36,13 @@ public record EnchantmentItemGroupEntry(Holder<Item> item) implements ItemGroupE
             );
     }
 
-    private ItemStack createStack(Holder<Enchantment> enchantment, int level) {
+    private ItemStack createStack(Holder<net.minecraft.world.item.enchantment.Enchantment> enchantment, int level) {
         ItemStack stack = new ItemStack(this.item);
         stack.enchant(enchantment, level);
         return stack;
     }
 
-    private static CreativeModeTab.TabVisibility visibility(Holder<Enchantment> enchantment, int level) {
+    private static CreativeModeTab.TabVisibility visibility(Holder<net.minecraft.world.item.enchantment.Enchantment> enchantment, int level) {
         if (enchantment.value().getMaxLevel() == level) {
             return CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS;
         }

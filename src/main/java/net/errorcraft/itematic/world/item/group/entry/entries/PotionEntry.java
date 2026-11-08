@@ -3,7 +3,6 @@ package net.errorcraft.itematic.world.item.group.entry.entries;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.alchemy.PotionContentsUtil;
-import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.world.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -13,29 +12,29 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
 
-public class PotionItemGroupEntry extends PossiblyHiddenItemGroupEntry<PotionItemGroupEntry> {
-    public static final MapCodec<PotionItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> codec(instance).and(
+public class PotionEntry extends PossiblyHiddenItemGroupEntry<PotionEntry> {
+    public static final MapCodec<PotionEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> codec(instance).and(
         Item.CODEC.fieldOf("item").forGetter(entry -> entry.item)
-    ).apply(instance, PotionItemGroupEntry::new));
+    ).apply(instance, PotionEntry::new));
 
     private final Holder<Item> item;
 
-    public PotionItemGroupEntry(Holder<Item> item) {
+    public PotionEntry(Holder<Item> item) {
         this(CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS, false, item);
     }
 
-    public PotionItemGroupEntry(CreativeModeTab.TabVisibility visibility, boolean requiresPermissions, Holder<Item> item) {
+    public PotionEntry(CreativeModeTab.TabVisibility visibility, boolean requiresPermissions, Holder<Item> item) {
         super(visibility, requiresPermissions);
         this.item = item;
     }
 
-    public static PotionItemGroupEntry of(Holder<Item> item) {
-        return new PotionItemGroupEntry(item);
+    public static PotionEntry of(Holder<Item> item) {
+        return new PotionEntry(item);
     }
 
     @Override
-    public ItemGroupEntryType<PotionItemGroupEntry> type() {
-        return ItemGroupEntryType.POTION;
+    public MapCodec<PotionEntry> codec() {
+        return CODEC;
     }
 
     @Override

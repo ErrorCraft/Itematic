@@ -1,8 +1,9 @@
 package net.errorcraft.itematic.mixin.world.entity.animal.cow;
 
-import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.references.ItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
@@ -16,7 +17,6 @@ import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(MushroomCow.class)
@@ -25,7 +25,7 @@ public abstract class MushroomCowExtender extends MobExtender {
         super(type, level);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
@@ -33,11 +33,11 @@ public abstract class MushroomCowExtender extends MobExtender {
             ordinal = 0
         )
     )
-    private boolean isBowlCheckId(ItemStack instance, Object o) {
+    private boolean isBowlCheckId(ItemStack instance, Object object, Operation<Boolean> original) {
         return instance.is(ItemIds.BOWL);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "mobInteract",
         at = @At(
             value = "NEW",
@@ -45,11 +45,11 @@ public abstract class MushroomCowExtender extends MobExtender {
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForSuspiciousStewUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForSuspiciousStewUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.SUSPICIOUS_STEW);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "mobInteract",
         at = @At(
             value = "NEW",
@@ -64,11 +64,11 @@ public abstract class MushroomCowExtender extends MobExtender {
             )
         )
     )
-    private ItemStack newItemStackForMushroomStewUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForMushroomStewUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.MUSHROOM_STEW);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "mobInteract",
         at = @At(
             value = "INVOKE",
@@ -83,11 +83,11 @@ public abstract class MushroomCowExtender extends MobExtender {
             )
         )
     )
-    private boolean isShearsCheckId(ItemStack instance, Object o) {
+    private boolean isShearsCheckId(ItemStack instance, Object object, Operation<Boolean> original) {
         return instance.is(ItemIds.SHEARS);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "getEffectsFromItemStack",
         at = @At(
             value = "INVOKE",
@@ -95,9 +95,8 @@ public abstract class MushroomCowExtender extends MobExtender {
         )
     )
     @Nullable
-    private SuspiciousEffectHolder getSuspiciousStewEffectsUseItemBehavior(ItemLike item, @Local(name = "itemStack", argsOnly = true) ItemStack itemStack) {
-        return itemStack.itematic$getBehavior(ItemBehaviorType.SUSPICIOUS_EFFECT_INGREDIENT)
-            .orElse(null);
+    private SuspiciousEffectHolder getSuspiciousStewEffectsUseDataComponent(ItemLike item, Operation<SuspiciousEffectHolder> original, ItemStack itemStack) {
+        return itemStack.get(ItematicDataComponents.PROVIDES_SUSPICIOUS_STEW_EFFECTS);
     }
 
     @Override

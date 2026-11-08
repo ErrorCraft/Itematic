@@ -12,7 +12,8 @@ import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.Discard;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
+import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.ItemEntry;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
 import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
@@ -78,9 +79,9 @@ public class ItematicBuiltInRegistries {
         ItematicRegistries.MELEE_WEAPON_COMPONENT_TYPE,
         _ -> MeleeWeaponComponents.SMASHING
     );
-    public static final Registry<ItemGroupEntryType<?>> ITEM_GROUP_ENTRY_TYPE = register(
+    public static final Registry<MapCodec<? extends ItemGroupEntry<?>>> ITEM_GROUP_ENTRY_TYPE = register(
         ItematicRegistries.ITEM_GROUP_ENTRY_TYPE,
-        _ -> ItemGroupEntryType.ITEM
+        _ -> ItemEntry.CODEC
     );
     public static final Registry<IntProvider.Type<?, ?>> DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE = register(
         ItematicRegistries.DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE,

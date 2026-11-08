@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
-import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
 import net.errorcraft.itematic.world.item.group.entry.PossiblyHiddenItemGroupEntry;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentPatch;
@@ -15,33 +14,33 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
 
-public class ItemItemGroupEntry extends PossiblyHiddenItemGroupEntry<ItemItemGroupEntry> {
-    public static final MapCodec<ItemItemGroupEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> codec(instance).and(instance.group(
+public class ItemEntry extends PossiblyHiddenItemGroupEntry<ItemEntry> {
+    public static final MapCodec<ItemEntry> CODEC = RecordCodecBuilder.mapCodec(instance -> codec(instance).and(instance.group(
         Items.LIST_CODEC.fieldOf("items").forGetter(entry -> entry.items),
         DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(entry -> entry.components)
-    )).apply(instance, ItemItemGroupEntry::new));
+    )).apply(instance, ItemEntry::new));
 
     private final HolderSet<Item> items;
     private final DataComponentPatch components;
 
-    public ItemItemGroupEntry(HolderSet<Item> items) {
+    public ItemEntry(HolderSet<Item> items) {
         this(items, DataComponentPatch.EMPTY);
     }
 
-    public ItemItemGroupEntry(HolderSet<Item> items, DataComponentPatch components) {
+    public ItemEntry(HolderSet<Item> items, DataComponentPatch components) {
         this.items = items;
         this.components = components;
     }
 
-    public ItemItemGroupEntry(CreativeModeTab.TabVisibility visibility, boolean requiresPermissions, HolderSet<Item> items, DataComponentPatch components) {
+    public ItemEntry(CreativeModeTab.TabVisibility visibility, boolean requiresPermissions, HolderSet<Item> items, DataComponentPatch components) {
         super(visibility, requiresPermissions);
         this.items = items;
         this.components = components;
     }
 
     @Override
-    public ItemGroupEntryType<ItemItemGroupEntry> type() {
-        return ItemGroupEntryType.ITEM;
+    public MapCodec<ItemEntry> codec() {
+        return CODEC;
     }
 
     public Either<ItemGroupEntry<?>, HolderSet<Item>> createEither() {
