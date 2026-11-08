@@ -7,22 +7,26 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
+import java.util.function.UnaryOperator;
+
 public class EntitySpawnContext {
     private final ServerLevel level;
     private final EntityType<?> entityType;
     @Nullable
     private final Entity user;
     private Vec3 spawnPosition;
-    @Nullable
-    private final Double exactY;
+    private final Vec3 interactedPosition;
     private float yaw = 0.0f;
+    @Nullable
+    private final Direction interactedSide;
 
-    public EntitySpawnContext(ServerLevel level, EntityType<?> entityType, @Nullable Entity user, Vec3 spawnPosition, @Nullable Double exactY) {
+    public EntitySpawnContext(ServerLevel level, EntityType<?> entityType, @Nullable Entity user, Vec3 spawnPosition, @Nullable Vec3 interactedPosition, @Nullable Direction interactedSide) {
         this.level = level;
         this.entityType = entityType;
         this.user = user;
         this.spawnPosition = spawnPosition;
-        this.exactY = exactY;
+        this.interactedPosition = interactedPosition != null ? interactedPosition : spawnPosition;
+        this.interactedSide = interactedSide;
     }
 
     public ServerLevel level() {
@@ -37,14 +41,12 @@ public class EntitySpawnContext {
         return this.spawnPosition;
     }
 
-    public void spawnPosition(Vec3 spawnPosition) {
-        this.spawnPosition = spawnPosition;
+    public void spawnPosition(UnaryOperator<Vec3> spawnPosition) {
+        this.spawnPosition = spawnPosition.apply(this.spawnPosition);
     }
 
-    public void spawnAtExactY() {
-        if (this.exactY != null) {
-            this.spawnPosition = this.spawnPosition.with(Direction.Axis.Y, this.exactY);
-        }
+    public Vec3 interactedPosition() {
+        return this.interactedPosition;
     }
 
     public float userAngle() {
@@ -61,5 +63,10 @@ public class EntitySpawnContext {
 
     public void yaw(float yaw) {
         this.yaw = yaw;
+    }
+
+    @Nullable
+    public Direction interactedSide() {
+        return this.interactedSide;
     }
 }

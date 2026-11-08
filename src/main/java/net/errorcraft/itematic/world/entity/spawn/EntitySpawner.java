@@ -9,6 +9,7 @@ import net.errorcraft.itematic.world.entity.EntitySpawnCallback;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSet;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -33,7 +34,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -78,8 +81,8 @@ public record EntitySpawner(Holder<EntityType<?>> entity, Optional<Holder<Entity
     }
 
     @Nullable
-    public Entity spawn(ActionContext context, Vec3 initialPos, @Nullable Double exactY, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
-        EntitySpawnContext spawnContext = this.createSpawnContext(context, initialPos, exactY);
+    public Entity spawn(ActionContext context, Vec3 initialPos, @Nullable Vec3 interactedPosition, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean movedUp) {
+        EntitySpawnContext spawnContext = this.createSpawnContext(context, initialPos, interactedPosition, movedUp);
         if (spawnContext == null) {
             return null;
         }
@@ -91,11 +94,11 @@ public record EntitySpawner(Holder<EntityType<?>> entity, Optional<Holder<Entity
             return null;
         }
 
-        return this.spawn(spawnContext, spawnActionContext, spawnReason, spawnCallback, invertY);
+        return this.spawn(spawnContext, spawnActionContext, spawnReason, spawnCallback, movedUp);
     }
 
     @Nullable
-    private EntitySpawnContext createSpawnContext(ActionContext context, Vec3 initialPos, @Nullable Double exactY) {
+    private EntitySpawnContext createSpawnContext(ActionContext context, Vec3 initialPos, @Nullable Vec3 interactedPosition, boolean movedUp) {
         if (!(context.level() instanceof ServerLevel level)) {
             return null;
         }
@@ -105,12 +108,30 @@ public record EntitySpawner(Holder<EntityType<?>> entity, Optional<Holder<Entity
             return null;
         }
 
+        double verticalOffset = verticalOffset(context.level(), initialPos, movedUp);
         return new EntitySpawnContext(
             level,
             type,
             context.get(LootContextParams.THIS_ENTITY),
-            initialPos,
-            exactY
+            initialPos.add(0.0d, verticalOffset, 0.0d),
+            interactedPosition,
+            context.get(ItematicContextKeys.SIDE)
+        );
+    }
+
+    private static double verticalOffset(Level level, Vec3 spawnPosition, boolean movedUp) {
+        AABB boxAroundPosition = new AABB(
+            spawnPosition.add(-0.5d, 0.0d, -0.5d),
+            spawnPosition.add(0.5d, 1.0d, 0.5d)
+        );
+        AABB boxForCollisions = movedUp
+            ? boxAroundPosition.expandTowards(0.0d, -1.0d, 0.0d)
+            : boxAroundPosition;
+        return 1.0d + Shapes.collide(
+            Direction.Axis.Y,
+            boxAroundPosition.move(0.0d, 1.0d, 0.0d),
+            level.getCollisions(null, boxForCollisions),
+            movedUp ? -2.0d : -1.0d
         );
     }
 
@@ -122,8 +143,8 @@ public record EntitySpawner(Holder<EntityType<?>> entity, Optional<Holder<Entity
     }
 
     @Nullable
-    private Entity spawn(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
-        Entity entity = this.createEntity(spawnContext, spawnActionContext, spawnReason, spawnCallback, invertY);
+    private Entity spawn(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean movedUp) {
+        Entity entity = this.createEntity(spawnContext, spawnActionContext, spawnReason, spawnCallback, movedUp);
         if (entity == null) {
             return null;
         }
@@ -139,7 +160,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, Optional<Holder<Entity
     }
 
     @Nullable
-    private Entity createEntity(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean invertY) {
+    private Entity createEntity(EntitySpawnContext spawnContext, ActionContext spawnActionContext, EntitySpawnReason spawnReason, @Nullable EntitySpawnCallback spawnCallback, boolean movedUp) {
         Entity entity = spawnContext.entityType().itematic$create(
             spawnActionContext,
             spawnReason,
@@ -149,7 +170,7 @@ public record EntitySpawner(Holder<EntityType<?>> entity, Optional<Holder<Entity
                 spawnCallback
             ),
             this.allowItemData,
-            invertY
+            movedUp
         );
         if (entity == null) {
             return null;

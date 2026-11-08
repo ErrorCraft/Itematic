@@ -7,22 +7,22 @@ import net.errorcraft.itematic.world.entity.spawn.EntitySpawnContext;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
 import net.minecraft.util.Mth;
 
-public record AlignYawEntitySpawnRule(int steps, boolean faceAwayFromPlacer) implements EntitySpawnRule<AlignYawEntitySpawnRule> {
-    public static final MapCodec<AlignYawEntitySpawnRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.intRange(2, 360).fieldOf("steps").forGetter(AlignYawEntitySpawnRule::steps),
-        Codec.BOOL.optionalFieldOf("face_away_from_player", false).forGetter(AlignYawEntitySpawnRule::faceAwayFromPlacer)
-    ).apply(instance, AlignYawEntitySpawnRule::new));
+public record AlignYaw(int steps, boolean faceAwayFromPlacer) implements EntitySpawnRule<AlignYaw> {
+    public static final MapCodec<AlignYaw> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Codec.intRange(2, 360).fieldOf("steps").forGetter(AlignYaw::steps),
+        Codec.BOOL.optionalFieldOf("face_away_from_player", false).forGetter(AlignYaw::faceAwayFromPlacer)
+    ).apply(instance, AlignYaw::new));
 
-    public static AlignYawEntitySpawnRule ofFacingAway(int steps) {
-        return new AlignYawEntitySpawnRule(steps, true);
+    public static AlignYaw ofFacingAway(int steps) {
+        return new AlignYaw(steps, true);
     }
 
-    public static AlignYawEntitySpawnRule ofFacingTowards(int steps) {
-        return new AlignYawEntitySpawnRule(steps, false);
+    public static AlignYaw ofFacingTowards(int steps) {
+        return new AlignYaw(steps, false);
     }
 
     @Override
-    public MapCodec<AlignYawEntitySpawnRule> codec() {
+    public MapCodec<AlignYaw> codec() {
         return CODEC;
     }
 

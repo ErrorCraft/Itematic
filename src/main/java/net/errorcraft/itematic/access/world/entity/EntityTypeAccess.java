@@ -12,7 +12,7 @@ import org.jspecify.annotations.Nullable;
 public interface EntityTypeAccess<T extends Entity> {
     default void itematic$setInitializer(EntityInitializer<T> initializer) {}
     @Nullable
-    default T itematic$create(ActionContext context, EntitySpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
+    default T itematic$create(ActionContext context, EntitySpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean movedUp) {
         return null;
     }
 

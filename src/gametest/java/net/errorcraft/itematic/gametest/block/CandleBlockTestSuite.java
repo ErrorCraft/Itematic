@@ -27,7 +27,7 @@ public class CandleBlockTestSuite {
             level.itematic$createStack(BlockItemIds.DYED_CANDLE.white().item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .hasProperty(CandleBlock.CANDLES, 2));
     }
@@ -41,7 +41,7 @@ public class CandleBlockTestSuite {
             level.itematic$createStack(BlockItemIds.DYED_CANDLE.white().item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.DYED_CANDLE.white()));
     }

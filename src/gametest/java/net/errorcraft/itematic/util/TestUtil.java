@@ -140,6 +140,14 @@ public class TestUtil {
         return helper.getLevel().getEntities(type, new AABB(helper.absolutePos(pos)), Entity::isAlive);
     }
 
+    public static <E extends Entity> List<E> getEntitiesAt(GameTestHelper helper, EntityType<E> type, Vec3 pos) {
+        return helper.getLevel().getEntities(
+            type,
+            new AABB(helper.absolutePos(BlockPos.containing(pos))),
+            entity -> entity.isAlive() && helper.relativeVec(entity.position()).equals(pos)
+        );
+    }
+
     public static Player createMockPlayer(GameTestHelper helper, GameType gameMode, BlockPos pos) {
         Player player = helper.makeMockPlayer(gameMode);
         setEntityPos(helper, player, pos);
@@ -211,13 +219,33 @@ public class TestUtil {
         return Optional.empty();
     }
 
-    public static void interactWithBlock(GameTestHelper helper, BlockPos pos, Player player, Direction direction) {
+    public static void interactWithBlock(GameTestHelper helper, Player player, Direction direction, BlockPos pos) {
+        interactWithBlock(
+            helper,
+            player,
+            direction,
+            pos,
+            direction.getUnitVec3().add(1.0d).scale(0.5d)
+        );
+    }
+
+    public static void interactWithBlock(GameTestHelper helper, Player player, Direction direction, BlockPos pos, double xWithinBlock, double yWithinBlock, double zWithinBlock) {
+        interactWithBlock(
+            helper,
+            player,
+            direction,
+            pos,
+            new Vec3(xWithinBlock, yWithinBlock, zWithinBlock)
+        );
+    }
+
+    public static void interactWithBlock(GameTestHelper helper, Player player, Direction direction, BlockPos pos, Vec3 posWithinBlock) {
         BlockPos absolutePos = helper.absolutePos(pos);
         helper.useBlock(
             pos,
             player,
             new BlockHitResult(
-                Vec3.atCenterOf(absolutePos),
+                posWithinBlock.add(Vec3.atLowerCornerOf(absolutePos)),
                 helper.getAbsoluteDirection(direction),
                 absolutePos,
                 false

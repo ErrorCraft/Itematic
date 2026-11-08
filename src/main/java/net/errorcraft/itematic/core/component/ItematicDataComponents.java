@@ -10,6 +10,7 @@ import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.ConsumableComponent;
 import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
+import net.errorcraft.itematic.world.item.component.GliderFuel;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.ProjectileComponent;
 import net.errorcraft.itematic.world.item.component.Throwable;
@@ -174,6 +175,11 @@ public class ItematicDataComponents {
         builder -> builder.persistent(Glider.CODEC)
             .networkSynchronized(Glider.STREAM_CODEC)
             .cacheEncoding()
+    );
+    public static final DataComponentType<GliderFuel> GLIDER_FUEL = register(
+        "glider_fuel",
+        builder -> builder.persistent(GliderFuel.CODEC)
+            .networkSynchronized(GliderFuel.STREAM_CODEC)
     );
     public static final DataComponentType<SmashingWeapon> SMASHING_WEAPON = register(
         "smashing_weapon",

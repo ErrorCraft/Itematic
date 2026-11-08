@@ -22,7 +22,7 @@ public class AxeTestSuite {
             InteractionHand.MAIN_HAND,
             helper.getLevel().itematic$createStack(ItemIds.IRON_AXE)
         );
-        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, BLOCK_POSITION)
             .is(Blocks.STRIPPED_OAK_LOG));
     }
@@ -34,7 +34,7 @@ public class AxeTestSuite {
             InteractionHand.MAIN_HAND,
             helper.getLevel().itematic$createStack(ItemIds.IRON_AXE)
         );
-        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, BLOCK_POSITION)
             .is(Blocks.STRIPPED_OAK_WOOD));
     }
@@ -47,13 +47,13 @@ public class AxeTestSuite {
             helper.getLevel().itematic$createStack(ItemIds.IRON_AXE)
         );
         helper.succeedIf(() -> {
-            TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
+            TestUtil.interactWithBlock(helper, player, Direction.UP, BLOCK_POSITION);
             Assert.blockState(helper, BLOCK_POSITION)
                 .is(Blocks.COPPER_BLOCK.weathering().weathered());
-            TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
+            TestUtil.interactWithBlock(helper, player, Direction.UP, BLOCK_POSITION);
             Assert.blockState(helper, BLOCK_POSITION)
                 .is(Blocks.COPPER_BLOCK.weathering().exposed());
-            TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
+            TestUtil.interactWithBlock(helper, player, Direction.UP, BLOCK_POSITION);
             Assert.blockState(helper, BLOCK_POSITION)
                 .is(Blocks.COPPER_BLOCK.weathering().unaffected());
         });
@@ -66,7 +66,7 @@ public class AxeTestSuite {
             InteractionHand.MAIN_HAND,
             helper.getLevel().itematic$createStack(ItemIds.IRON_AXE)
         );
-        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, BLOCK_POSITION)
             .is(Blocks.COPPER_BLOCK.weathering().unaffected()));
     }

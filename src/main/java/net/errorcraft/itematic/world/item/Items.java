@@ -72,6 +72,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavi
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.GliderFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
@@ -126,6 +127,7 @@ import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointer
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
+import net.errorcraft.itematic.world.level.storage.loot.providers.number.floats.ItematicContextFloatProviders;
 import net.errorcraft.itematic.world.level.storage.loot.providers.number.ints.ItematicContextIntProviders;
 import net.errorcraft.itematic.world.phys.Vec3Provider;
 import net.minecraft.SharedConstants;
@@ -202,6 +204,7 @@ import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.MobVisibility;
@@ -2587,7 +2590,21 @@ public class Items {
                 .behavior(FireworkExplosionHolderItemBehavior.INSTANCE)
                 .register();
             this.builderForProjectile(ItemIds.FIREWORK_ROCKET, EntityTypeIds.FIREWORK_ROCKET)
-                .behavior(FireworkItemBehavior.INSTANCE)
+                .behavior(FireworkItemBehavior.of(new Fireworks(1, List.of())))
+                .behavior(
+                    EntityItemBehavior.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.FIREWORK_ROCKET))
+                            .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.FIREWORK_ROCKET))
+                            .build()
+                    )
+                )
+                .behavior(
+                    GliderFuelItemBehavior.of(
+                        ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_CONSTANTLY_ADDED_SPEED,
+                        ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_TARGET_SPEED,
+                        ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_TARGET_SPEED_FACTOR
+                    )
+                )
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
                 .register();
             this.registerItem(ItemIds.LEATHER);

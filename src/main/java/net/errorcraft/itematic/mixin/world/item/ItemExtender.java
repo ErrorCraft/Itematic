@@ -27,6 +27,7 @@ import net.errorcraft.itematic.world.item.component.BookContent;
 import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
+import net.errorcraft.itematic.world.item.component.GliderFuel;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.component.Throwable;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
@@ -211,6 +212,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         ShooterMethod<?> method = stack.get(ItematicDataComponents.SHOOTER_METHOD);
         if (method != null && method.tryShoot(stack, level, player, hand)) {
             return InteractionResult.CONSUME;
+        }
+
+        GliderFuel gliderFuel = stack.get(ItematicDataComponents.GLIDER_FUEL);
+        if (gliderFuel != null && gliderFuel.canBoost(player)) {
+            return gliderFuel.boost(player, level, stack);
         }
 
         EntityController entityController = stack.get(ItematicDataComponents.ENTITY_CONTROLLER);

@@ -64,7 +64,8 @@
       "net.errorcraft.itematic.gametest.item.component.ShooterItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.ThrowableItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.UseableOnFluidItemComponentTestSuite",
-      "net.errorcraft.itematic.gametest.item.component.WeaponItemComponentTestSuite"
+      "net.errorcraft.itematic.gametest.item.component.WeaponItemComponentTestSuite",
+      "net.errorcraft.itematic.gametest.item.placement.EntityPlacementTestSuite"
     ]
   },
   "mixins": [

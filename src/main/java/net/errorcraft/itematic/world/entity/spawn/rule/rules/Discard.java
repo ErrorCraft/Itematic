@@ -4,14 +4,14 @@ import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawnContext;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
 
-public class DiscardEntitySpawnRule implements EntitySpawnRule<DiscardEntitySpawnRule> {
-    public static final DiscardEntitySpawnRule INSTANCE = new DiscardEntitySpawnRule();
-    public static final MapCodec<DiscardEntitySpawnRule> CODEC = MapCodec.unit(INSTANCE);
+public class Discard implements EntitySpawnRule<Discard> {
+    public static final Discard INSTANCE = new Discard();
+    public static final MapCodec<Discard> CODEC = MapCodec.unit(INSTANCE);
 
-    private DiscardEntitySpawnRule() {}
+    private Discard() {}
 
     @Override
-    public MapCodec<DiscardEntitySpawnRule> codec() {
+    public MapCodec<Discard> codec() {
         return CODEC;
     }
 

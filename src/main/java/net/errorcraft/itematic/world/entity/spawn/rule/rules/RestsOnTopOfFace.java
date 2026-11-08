@@ -11,17 +11,17 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 
-public record RestsOnTopOfFaceEntitySpawnRule(Optional<Vec3> volume) implements EntitySpawnRule<RestsOnTopOfFaceEntitySpawnRule> {
-    public static final MapCodec<RestsOnTopOfFaceEntitySpawnRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Vec3.CODEC.optionalFieldOf("volume").forGetter(RestsOnTopOfFaceEntitySpawnRule::volume)
-    ).apply(instance, RestsOnTopOfFaceEntitySpawnRule::new));
+public record RestsOnTopOfFace(Optional<Vec3> volume) implements EntitySpawnRule<RestsOnTopOfFace> {
+    public static final MapCodec<RestsOnTopOfFace> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Vec3.CODEC.optionalFieldOf("volume").forGetter(RestsOnTopOfFace::volume)
+    ).apply(instance, RestsOnTopOfFace::new));
 
-    public static RestsOnTopOfFaceEntitySpawnRule entityDimensions() {
-        return new RestsOnTopOfFaceEntitySpawnRule(Optional.empty());
+    public static RestsOnTopOfFace entityDimensions() {
+        return new RestsOnTopOfFace(Optional.empty());
     }
 
     @Override
-    public MapCodec<RestsOnTopOfFaceEntitySpawnRule> codec() {
+    public MapCodec<RestsOnTopOfFace> codec() {
         return CODEC;
     }
 

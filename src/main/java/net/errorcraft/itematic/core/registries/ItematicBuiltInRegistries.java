@@ -9,7 +9,7 @@ import net.errorcraft.itematic.mixin.core.registries.BuiltInRegistriesAccessor;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.rules.DiscardEntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.rules.Discard;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
@@ -72,7 +72,7 @@ public class ItematicBuiltInRegistries {
     );
     public static final Registry<MapCodec<? extends EntitySpawnRule<?>>> ENTITY_SPAWN_RULE_TYPE = register(
         ItematicRegistries.ENTITY_SPAWN_RULE_TYPE,
-        _ -> DiscardEntitySpawnRule.CODEC
+        _ -> Discard.CODEC
     );
     public static final Registry<DataComponentType<?>> MELEE_WEAPON_COMPONENT_TYPE = register(
         ItematicRegistries.MELEE_WEAPON_COMPONENT_TYPE,

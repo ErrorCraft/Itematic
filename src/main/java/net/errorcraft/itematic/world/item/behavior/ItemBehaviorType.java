@@ -27,6 +27,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavi
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.GliderFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
@@ -237,6 +238,10 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<GliderItemBehavior> GLIDER = register(
         "glider",
         GliderItemBehavior.CODEC
+    );
+    public static final ItemBehaviorType<GliderFuelItemBehavior> GLIDER_FUEL = register(
+        "glider_fuel",
+        GliderFuelItemBehavior.CODEC
     );
     public static final ItemBehaviorType<AttackBlockingItemBehavior> ATTACK_BLOCKING = register(
         "attack_blocking",

@@ -26,7 +26,7 @@ public class PaintingTestSuite {
             level.itematic$createStack(ItemIds.PAINTING)
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.NORTH);
+        TestUtil.interactWithBlock(helper, player, Direction.NORTH, BLOCK_POSITION);
         helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.PAINTING)
             .existsAt(PAINTING_POSITION));
     }
@@ -40,7 +40,7 @@ public class PaintingTestSuite {
             level.itematic$createStack(ItemIds.PAINTING)
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, BLOCK_POSITION);
         helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.PAINTING)
             .doesNotExist());
     }
@@ -54,7 +54,7 @@ public class PaintingTestSuite {
             level.itematic$createStack(ItemIds.PAINTING)
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, player, Direction.DOWN, BLOCK_POSITION);
         helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.PAINTING)
             .doesNotExist());
     }

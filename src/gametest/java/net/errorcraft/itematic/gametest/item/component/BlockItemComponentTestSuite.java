@@ -38,7 +38,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.STONE.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.STONE));
     }
@@ -52,7 +52,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(ItematicBlockItemIds.OAK.planks().slab().item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .hasProperty(BlockStateProperties.SLAB_TYPE, SlabType.BOTTOM, () -> "Expected placed Oak Slab to be of bottom type"));
     }
@@ -66,7 +66,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(ItematicBlockItemIds.OAK.planks().slab().item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, player, Direction.DOWN, PLACED_BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .hasProperty(BlockStateProperties.SLAB_TYPE, SlabType.DOUBLE, () -> "Expected placed Oak Slab to be of double type"));
     }
@@ -80,7 +80,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(ItematicBlockItemIds.OAK.planks().slab().item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, player, Direction.DOWN, PLACED_BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .hasProperty(BlockStateProperties.SLAB_TYPE, SlabType.DOUBLE, () -> "Expected placed Oak Slab to be of double type"));
     }
@@ -94,7 +94,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.TALL_GRASS.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> {
             Assert.blockState(helper, PLACED_BLOCK_POSITION)
                 .hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER, () -> "Expected lower half of Tall Grass to be placed");
@@ -112,7 +112,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.TALL_GRASS.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .isNot(Blocks.TALL_GRASS));
     }
@@ -127,7 +127,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.SKELETON_SKULL.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.SKELETON_SKULL));
     }
@@ -141,7 +141,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.SKELETON_SKULL.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, WALL_POSITION, player, Direction.NORTH);
+        TestUtil.interactWithBlock(helper, player, Direction.NORTH, WALL_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.SKELETON_WALL_SKULL));
     }
@@ -156,7 +156,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(ItematicBlockItemIds.OAK.hangingSign().item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, ABOVE_PLACED_BLOCK_POSITION, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, player, Direction.DOWN, ABOVE_PLACED_BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.OAK_HANGING_SIGN));
     }
@@ -170,7 +170,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(ItematicBlockItemIds.OAK.hangingSign().item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, WALL_POSITION, player, Direction.NORTH);
+        TestUtil.interactWithBlock(helper, player, Direction.NORTH, WALL_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.OAK_WALL_HANGING_SIGN));
     }
@@ -184,7 +184,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .is(Blocks.SCAFFOLDING));
     }
@@ -198,7 +198,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, PLACED_BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, HORIZONTAL_SCAFFOLDING_OFFSET)
             .is(Blocks.SCAFFOLDING));
     }
@@ -213,7 +213,7 @@ public class BlockItemComponentTestSuite {
         );
         player.setYRot(0.0f);
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, HORIZONTAL_SCAFFOLDING_OFFSET)
             .is(Blocks.SCAFFOLDING));
     }
@@ -227,7 +227,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.SOUTH);
+        TestUtil.interactWithBlock(helper, player, Direction.SOUTH, PLACED_BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, VERTICAL_SCAFFOLDING_OFFSET)
             .is(Blocks.SCAFFOLDING));
     }
@@ -241,7 +241,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, PLACED_BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, HORIZONTAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET)
             .isNot(Blocks.SCAFFOLDING));
     }
@@ -255,7 +255,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.SCAFFOLDING.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, PLACED_BLOCK_POSITION, player, Direction.SOUTH);
+        TestUtil.interactWithBlock(helper, player, Direction.SOUTH, PLACED_BLOCK_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, VERTICAL_SCAFFOLDING_BEYOND_MAX_DISTANCE_OFFSET)
             .is(Blocks.SCAFFOLDING));
     }
@@ -269,7 +269,7 @@ public class BlockItemComponentTestSuite {
             level.itematic$createStack(BlockItemIds.COMMAND_BLOCK.item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_BLOCK_POSITION)
             .isNot(Blocks.COMMAND_BLOCK));
     }

@@ -5,6 +5,8 @@ import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.core.component.provider.number.floats.FloatProviders;
 import net.errorcraft.itematic.core.component.provider.number.ints.IntProviders;
 import net.errorcraft.itematic.core.registries.ItematicBuiltInRegistries;
+import net.errorcraft.itematic.network.syncher.ItematicEntityDataSerializers;
+import net.errorcraft.itematic.util.context.ItematicContextKeySets;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
@@ -36,6 +38,7 @@ public class Itematic implements ModInitializer {
         SequenceHandlerType.init();
         ItematicPredicates.bootstrap(BuiltInRegistries.LOOT_CONDITION_TYPE);
         ItematicContextKeys.init();
+        ItematicContextKeySets.bootstrap(BuiltInRegistries.CONTEXT_KEY_SET);
         SmithingTemplates.init();
         BlockPickerType.init();
         ItematicItemModifiers.bootstrap(BuiltInRegistries.LOOT_FUNCTION_TYPE);
@@ -53,5 +56,6 @@ public class Itematic implements ModInitializer {
         ItematicContextIntProviderTypes.bootstrap(BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE);
         FloatProviders.bootstrap(ItematicBuiltInRegistries.DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE);
         ItematicContextFloatProviderTypes.bootstrap(BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE);
+        ItematicEntityDataSerializers.bootstrap();
     }
 }

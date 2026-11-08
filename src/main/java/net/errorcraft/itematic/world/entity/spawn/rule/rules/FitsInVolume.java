@@ -17,31 +17,31 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 
-public record FitsInVolumeEntitySpawnRule(boolean blocks, EntityVolumeCheck entities, Optional<Vec3> volume) implements EntitySpawnRule<FitsInVolumeEntitySpawnRule> {
-    public static final MapCodec<FitsInVolumeEntitySpawnRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.BOOL.optionalFieldOf("blocks", false).forGetter(FitsInVolumeEntitySpawnRule::blocks),
-        EntityVolumeCheck.CODEC.optionalFieldOf("entities", new EntityVolumeCheck.Any(false)).forGetter(FitsInVolumeEntitySpawnRule::entities),
-        Vec3.CODEC.optionalFieldOf("volume").forGetter(FitsInVolumeEntitySpawnRule::volume)
-    ).apply(instance, FitsInVolumeEntitySpawnRule::new));
+public record FitsInVolume(boolean blocks, EntityVolumeCheck entities, Optional<Vec3> volume) implements EntitySpawnRule<FitsInVolume> {
+    public static final MapCodec<FitsInVolume> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Codec.BOOL.optionalFieldOf("blocks", false).forGetter(FitsInVolume::blocks),
+        EntityVolumeCheck.CODEC.optionalFieldOf("entities", new EntityVolumeCheck.Any(false)).forGetter(FitsInVolume::entities),
+        Vec3.CODEC.optionalFieldOf("volume").forGetter(FitsInVolume::volume)
+    ).apply(instance, FitsInVolume::new));
 
-    public static FitsInVolumeEntitySpawnRule of(boolean blocks, boolean entities, Vec3 volume) {
-        return new FitsInVolumeEntitySpawnRule(
+    public static FitsInVolume of(boolean blocks, boolean entities, Vec3 volume) {
+        return new FitsInVolume(
             blocks,
             new EntityVolumeCheck.Any(entities),
             Optional.of(volume)
         );
     }
 
-    public static FitsInVolumeEntitySpawnRule entityDimensions() {
-        return new FitsInVolumeEntitySpawnRule(
+    public static FitsInVolume entityDimensions() {
+        return new FitsInVolume(
             true,
             new EntityVolumeCheck.Any(true),
             Optional.empty()
         );
     }
 
-    public static FitsInVolumeEntitySpawnRule entityDimensionsForEntities(HolderSet<EntityType<?>> entityTypes) {
-        return new FitsInVolumeEntitySpawnRule(
+    public static FitsInVolume entityDimensionsForEntities(HolderSet<EntityType<?>> entityTypes) {
+        return new FitsInVolume(
             false,
             new EntityVolumeCheck.OfType(entityTypes),
             Optional.empty()
@@ -49,7 +49,7 @@ public record FitsInVolumeEntitySpawnRule(boolean blocks, EntityVolumeCheck enti
     }
 
     @Override
-    public MapCodec<FitsInVolumeEntitySpawnRule> codec() {
+    public MapCodec<FitsInVolume> codec() {
         return CODEC;
     }
 

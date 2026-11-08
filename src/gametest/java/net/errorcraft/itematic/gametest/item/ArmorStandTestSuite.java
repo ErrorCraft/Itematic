@@ -29,7 +29,7 @@ public class ArmorStandTestSuite {
             level.itematic$createStack(ItemIds.ARMOR_STAND)
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.ARMOR_STAND)
             .existsAt(PLACED_ENTITY_POSITION));
     }
@@ -43,7 +43,7 @@ public class ArmorStandTestSuite {
             level.itematic$createStack(ItemIds.ARMOR_STAND)
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, HIGH_POSITION, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, player, Direction.DOWN, HIGH_POSITION);
         helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.ARMOR_STAND)
             .doesNotExist());
     }
@@ -57,7 +57,7 @@ public class ArmorStandTestSuite {
             level.itematic$createStack(ItemIds.ARMOR_STAND)
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.ARMOR_STAND)
             .doesNotExist());
     }
@@ -72,7 +72,7 @@ public class ArmorStandTestSuite {
         );
         player.setYRot(USER_ANGLE);
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.ARMOR_STAND)
             .existsAt(
                 PLACED_ENTITY_POSITION,

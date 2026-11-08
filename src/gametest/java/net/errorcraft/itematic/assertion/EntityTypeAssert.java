@@ -5,7 +5,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EntityTypeAssert<E extends Entity> {
@@ -26,6 +28,21 @@ public class EntityTypeAssert<E extends Entity> {
     public EntityTypeAssert<E> existsAt(BlockPos pos) {
         TestUtil.getSingleEntityAt(this.helper, this.entityType, pos);
         return this;
+    }
+
+    public EntityTypeAssert<E> existsAt(double x, double y, double z) {
+        List<? extends E> entities = TestUtil.getEntitiesAt(this.helper, this.entityType, new Vec3(x, y, z));
+        if (!entities.isEmpty()) {
+            return this;
+        }
+
+        throw helper.assertionException(
+            "test.error.expected_entity_around",
+            this.entityType.getDescription(),
+            x,
+            y,
+            z
+        );
     }
 
     public EntityTypeAssert<E> existsAt(BlockPos pos, Consumer<EntityAssert<E>> entityAssertion) {
