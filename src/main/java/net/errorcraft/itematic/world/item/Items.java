@@ -91,7 +91,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIng
 import net.errorcraft.itematic.world.item.behavior.behaviors.ThrowableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ToolItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.TrimMaterialProviderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.UnlockRecipesItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.UseableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.VillagerFoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
@@ -2636,7 +2635,6 @@ public class Items {
             this.registerItem(ItemIds.PRISMARINE_CRYSTALS);
             this.builder(ItemIds.KNOWLEDGE_BOOK, 1)
                 .display(display -> display.rarity(Rarity.EPIC))
-                .behavior(UnlockRecipesItemBehavior.INSTANCE)
                 .register();
             this.builder(ItemIds.DEBUG_STICK, 1)
                 .display(display -> display.rarity(Rarity.EPIC).glint())

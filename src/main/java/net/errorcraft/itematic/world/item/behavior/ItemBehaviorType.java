@@ -46,7 +46,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIng
 import net.errorcraft.itematic.world.item.behavior.behaviors.ThrowableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ToolItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.TrimMaterialProviderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.UnlockRecipesItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.UseableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.VillagerFoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
@@ -214,10 +213,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<ImmuneToDamageItemBehavior> IMMUNE_TO_DAMAGE = register(
         "immune_to_damage",
         ImmuneToDamageItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<UnlockRecipesItemBehavior> UNLOCK_RECIPES = register(
-        "unlock_recipes",
-        UnlockRecipesItemBehavior.CODEC
     );
     public static final ItemBehaviorType<DebugStickItemBehavior> DEBUG_STICK = register(
         "debug_stick",
