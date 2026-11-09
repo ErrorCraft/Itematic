@@ -20,7 +20,6 @@ import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.DebugStickItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.BookContent;
@@ -66,6 +65,7 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.DebugStickState;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.SwingAnimation;
@@ -404,6 +404,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return entityPlacer.useOn(context, stackExchangerReference.get());
         }
 
+        DebugStickState debugStickState = stack.get(DataComponents.DEBUG_STICK_STATE);
+        if (debugStickState != null) {
+            return debugStickState.itematic$cycleSelectedPropertyValue(context);
+        }
+
         return original.call(context);
     }
 
@@ -624,10 +629,10 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "canDestroyBlock"
     )
-    private boolean useDebugStickItemBehavior(ItemStack itemStack, BlockState state, Level level, BlockPos pos, LivingEntity user, Operation<Boolean> original) {
-        Optional<DebugStickItemBehavior> debugStick = this.itematic$getBehavior(ItemBehaviorType.DEBUG_STICK);
-        if (debugStick.isPresent()) {
-            debugStick.get().use(user, state, level, pos, itemStack);
+    private boolean useDataComponents(ItemStack itemStack, BlockState state, Level level, BlockPos pos, LivingEntity user, Operation<Boolean> original) {
+        DebugStickState debugStickState = itemStack.get(DataComponents.DEBUG_STICK_STATE);
+        if (debugStickState != null) {
+            debugStickState.itematic$cycleProperty(user, state, level, pos, itemStack);
             return false;
         }
 

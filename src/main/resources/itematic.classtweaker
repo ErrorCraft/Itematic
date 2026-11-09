@@ -66,6 +66,7 @@ inject-interface    net/minecraft/world/item/component/BundleContents    net/err
 inject-interface    net/minecraft/world/item/component/BundleContents$Mutable    net/errorcraft/itematic/access/world/item/component/BundleContentsAccess$MutableAccess
 inject-interface    net/minecraft/world/item/component/ChargedProjectiles    net/errorcraft/itematic/access/world/item/component/ChargedProjectilesAccess
 inject-interface    net/minecraft/world/item/component/ContainerComponent    net/errorcraft/itematic/access/world/item/component/ContainerComponentAccess<TT;>
+inject-interface    net/minecraft/world/item/component/DebugStickState    net/errorcraft/itematic/access/world/item/component/DebugStickStateAccess
 inject-interface    net/minecraft/world/item/component/Tool    net/errorcraft/itematic/access/world/item/component/ToolAccess
 inject-interface    net/minecraft/world/item/component/Tool$Rule    net/errorcraft/itematic/access/world/item/component/ToolAccess$RuleAccess
 inject-interface    net/minecraft/world/item/component/UseCooldown    net/errorcraft/itematic/access/world/item/component/UseCooldownAccess
