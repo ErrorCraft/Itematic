@@ -33,6 +33,8 @@ public class SoundEventIds {
     public static final ResourceKey<SoundEvent> END_PORTAL_FRAME_FILL = of("block.end_portal_frame.fill");
     public static final ResourceKey<SoundEvent> FIRE_CHARGE_USE = of("item.firecharge.use");
     public static final ResourceKey<SoundEvent> FIRE_EXTINGUISH = of("block.fire.extinguish");
+    public static final ResourceKey<SoundEvent> FISHING_BOBBER_RETRIEVE = of("entity.fishing_bobber.retrieve");
+    public static final ResourceKey<SoundEvent> FISHING_BOBBER_THROW = of("entity.fishing_bobber.throw");
     public static final ResourceKey<SoundEvent> FLINT_AND_STEEL_USE = of("item.flintandsteel.use");
     public static final ResourceKey<SoundEvent> GENERIC_SPLASH = of("entity.generic.splash");
     public static final ResourceKey<SoundEvent> GLOW_INK_SAC_USE = of("item.glow_ink_sac.use");

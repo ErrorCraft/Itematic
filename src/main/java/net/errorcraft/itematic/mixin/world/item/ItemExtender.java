@@ -24,6 +24,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavi
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.BookContent;
 import net.errorcraft.itematic.world.item.component.Bucket;
+import net.errorcraft.itematic.world.item.component.Castable;
 import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.GliderFuel;
@@ -227,6 +228,12 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         EntityController entityController = stack.get(ItematicDataComponents.ENTITY_CONTROLLER);
         if (entityController != null && entityController.canControlVehicle(player, level)) {
             return entityController.controlVehicle(level, player, hand, stack);
+        }
+
+        Castable castable = stack.get(ItematicDataComponents.CASTABLE);
+        if (castable != null) {
+            castable.use(level, player, stack, stackExchangerReference.get());
+            return InteractionResult.SUCCESS;
         }
 
         Throwable throwable = stack.get(ItematicDataComponents.THROWABLE);

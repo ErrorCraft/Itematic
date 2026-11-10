@@ -29,6 +29,7 @@ public class ItematicDynamicRegistryProvider extends FabricDynamicRegistryProvid
         addAll(entries, registries.lookupOrThrow(ItematicRegistries.ITEM_GROUP));
         HolderLookup.RegistryLookup<ContextIntProvider> contextIntProviders = registries.lookupOrThrow(Registries.CONTEXT_INT_PROVIDER);
         entries.add(contextIntProviders.getOrThrow(ItematicContextIntProviders.CONSUMABLE_OMINOUS_BOTTLE_AMPLIFIER));
+        entries.add(contextIntProviders.getOrThrow(ItematicContextIntProviders.FISHING_EXPERIENCE));
         HolderLookup.RegistryLookup<ContextFloatProvider> contextFloatProviders = registries.lookupOrThrow(Registries.CONTEXT_FLOAT_PROVIDER);
         entries.add(contextFloatProviders.getOrThrow(ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_CONSTANTLY_ADDED_SPEED));
         entries.add(contextFloatProviders.getOrThrow(ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_TARGET_SPEED));

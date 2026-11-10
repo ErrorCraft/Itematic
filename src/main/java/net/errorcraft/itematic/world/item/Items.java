@@ -96,6 +96,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.Castable;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.ItematicBlockTransformers;
@@ -229,6 +230,7 @@ import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidIds;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
@@ -239,6 +241,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 import org.apache.commons.lang3.math.Fraction;
 import org.jspecify.annotations.Nullable;
 
@@ -1356,7 +1359,16 @@ public class Items {
             this.builder(ItemIds.FISHING_ROD, 1)
                 .behavior(DamageableItemBehavior.of(64))
                 .behavior(EnchantableItemBehavior.of(1))
-                .behavior(CastableItemBehavior.INSTANCE)
+                .behavior(
+                    CastableItemBehavior.of(
+                        new Castable(
+                            this.soundEvents.getOrThrow(SoundEventIds.FISHING_BOBBER_THROW),
+                            this.soundEvents.getOrThrow(SoundEventIds.FISHING_BOBBER_RETRIEVE),
+                            BuiltInLootTables.FISHING,
+                            ResolvableInt.fromKey(ItematicContextIntProviders.FISHING_EXPERIENCE)
+                        )
+                    )
+                )
                 .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_SMALL))
                 .register();
             this.builder(ItemIds.SHEARS, 1)
@@ -3056,13 +3068,13 @@ public class Items {
                 .behavior(
                     EquipmentItemBehavior.of(
                         Equippable.builder(EquipmentSlot.BODY)
-                            .setEquipSound(soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_NAUTILUS))
+                            .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_NAUTILUS))
                             .setAsset(material.assetId())
                             .setAllowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_NAUTILUS_ARMOR))
                             .setDamageOnHurt(false)
                             .setEquipOnInteract(true)
                             .setCanBeSheared(true)
-                            .setShearingSound(soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_NAUTILUS))
+                            .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_NAUTILUS))
                             .build()
                     )
                 )

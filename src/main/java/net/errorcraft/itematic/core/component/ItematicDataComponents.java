@@ -7,6 +7,7 @@ import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.Bucket;
+import net.errorcraft.itematic.world.item.component.Castable;
 import net.errorcraft.itematic.world.item.component.ConsumableComponent;
 import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
@@ -270,6 +271,12 @@ public class ItematicDataComponents {
         "sign_modifier",
         builder -> builder.persistent(SignModifier.CODEC)
             .networkSynchronized(SignModifier.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<Castable> CASTABLE = register(
+        "castable",
+        builder -> builder.persistent(Castable.CODEC)
+            .networkSynchronized(Castable.STREAM_CODEC)
             .cacheEncoding()
     );
 
