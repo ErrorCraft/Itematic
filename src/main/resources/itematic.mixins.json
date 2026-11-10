@@ -369,6 +369,7 @@
     "world.level.block.ScaffoldingBlockExtender",
     "world.level.block.SegmentableBlockExtender",
     "world.level.block.ShulkerBoxBlockExtender",
+    "world.level.block.SignBlockExtender",
     "world.level.block.SimpleWaterloggedBlockExtender",
     "world.level.block.StemBlockExtender",
     "world.level.block.SweetBerryBushBlockExtender",

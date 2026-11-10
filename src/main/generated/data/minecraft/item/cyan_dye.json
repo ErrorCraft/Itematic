@@ -1,6 +1,10 @@
 {
   "behavior": {
     "minecraft:dye": "cyan",
+    "minecraft:sign_modifier": {
+      "apply_sound": "minecraft:item.dye.use",
+      "color": "cyan"
+    },
     "minecraft:stackable": 64
   },
   "display": {

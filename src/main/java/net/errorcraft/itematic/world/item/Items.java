@@ -39,9 +39,7 @@ import net.errorcraft.itematic.world.action.actions.SetEntityNameFromItemAction;
 import net.errorcraft.itematic.world.action.actions.SwingHandAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
-import net.errorcraft.itematic.world.action.actions.WaxBlockAction;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
@@ -84,6 +82,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBeh
 import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SignModifierItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
@@ -1133,16 +1132,15 @@ public class Items {
             this.registerBlock(BlockItemIds.HONEY_BLOCK);
             this.registerBlock(BlockItemIds.HONEYCOMB_BLOCK);
             this.builder(ItemIds.HONEYCOMB)
+                .behavior(SignModifierItemBehavior.wax(true, this.soundEvents.getOrThrow(SoundEventIds.HONEYCOMB_WAX_ON)))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.WAX_BLOCK)))
                 .event(
                     ItemEvent.USE_ON_BLOCK,
                     ActionEntry.of(
-                        FirstToPassRequirementsSequenceHandler.builder()
-                            .add(Actions.waxSign(this.blocks, true))
-                            .add(PassingSequenceHandler.builder()
-                                .add(WaxBlockAction.of(PositionTarget.INTERACTED))
-                                .add(DecrementItemAction.of(1))
-                                .add(SwingHandAction.of(LootContext.EntityTarget.THIS)))
+                        PassingSequenceHandler.builder()
+                            .add(this.actions.getOrThrow(Actions.WAX_BLOCK))
+                            .add(DecrementItemAction.of(1))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     )
                 )
                 .register();
@@ -2512,6 +2510,7 @@ public class Items {
                 .register();
             ColorCollection.zipApply(ItemIds.DYE, ColorCollection.VALUES, (dye, dyeColor) -> this.builder(dye)
                 .behavior(DyeItemBehavior.of(dyeColor))
+                .behavior(SignModifierItemBehavior.dye(dyeColor, this.soundEvents.getOrThrow(SoundEventIds.DYE_USE)))
                 .register()
             );
             this.registerBundle(ItemIds.BUNDLE);
@@ -2611,10 +2610,10 @@ public class Items {
             this.registerItem(ItemIds.PAPER);
             this.registerItem(ItemIds.GLOWSTONE_DUST);
             this.builder(ItemIds.INK_SAC)
-                .event(ItemEvent.USE_ON_BLOCK, Actions.glowSign(this.blocks, false))
+                .behavior(SignModifierItemBehavior.glow(false, this.soundEvents.getOrThrow(SoundEventIds.INK_SAC_USE)))
                 .register();
             this.builder(ItemIds.GLOW_INK_SAC)
-                .event(ItemEvent.USE_ON_BLOCK, Actions.glowSign(this.blocks, true))
+                .behavior(SignModifierItemBehavior.glow(true, this.soundEvents.getOrThrow(SoundEventIds.GLOW_INK_SAC_USE)))
                 .register();
             this.builderForBlock(BlockItemIds.NETHER_WART)
                 .display(ItemDisplay.Builder::itemName)

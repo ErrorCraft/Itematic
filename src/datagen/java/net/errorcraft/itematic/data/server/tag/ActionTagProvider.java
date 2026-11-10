@@ -28,5 +28,9 @@ public class ActionTagProvider extends FabricTagsProvider<ActionEntry> {
             .add(Actions.STRIP_WOOD)
             .add(Actions.SCRAPE_COPPER_OFF)
             .add(Actions.UNWAX_BLOCK);
+        this.builder(ActionTags.WAX_BLOCK)
+            .add(Actions.WAX_COPPER_BLOCK);
+        this.builder(ActionTags.UNWAX_BLOCK)
+            .add(Actions.UNWAX_COPPER_BLOCK);
     }
 }

@@ -27,6 +27,7 @@ import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargedPowerRules;
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargingSounds;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
+import net.errorcraft.itematic.world.level.block.entity.SignModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -263,6 +264,12 @@ public class ItematicDataComponents {
         "provides_suspicious_stew_effects",
         builder -> builder.persistent(SuspiciousStewEffectProvider.CODEC)
             .networkSynchronized(SuspiciousStewEffectProvider.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<SignModifier> SIGN_MODIFIER = register(
+        "sign_modifier",
+        builder -> builder.persistent(SignModifier.CODEC)
+            .networkSynchronized(SignModifier.STREAM_CODEC)
             .cacheEncoding()
     );
 

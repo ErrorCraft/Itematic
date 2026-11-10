@@ -23,7 +23,6 @@ import net.errorcraft.itematic.world.action.actions.InvokeItemEventAction;
 import net.errorcraft.itematic.world.action.actions.LightEndPortalAction;
 import net.errorcraft.itematic.world.action.actions.MarkBannerOnItemAction;
 import net.errorcraft.itematic.world.action.actions.ModifyItemAction;
-import net.errorcraft.itematic.world.action.actions.ModifySignAction;
 import net.errorcraft.itematic.world.action.actions.PlaceBlockAction;
 import net.errorcraft.itematic.world.action.actions.PlaceBlockFromItemAction;
 import net.errorcraft.itematic.world.action.actions.PlaceCarvedPumpkinAction;
@@ -44,7 +43,6 @@ import net.errorcraft.itematic.world.action.actions.TeleportAction;
 import net.errorcraft.itematic.world.action.actions.TransformBlockStateAction;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
 import net.errorcraft.itematic.world.action.actions.UseBucketAction;
-import net.errorcraft.itematic.world.action.actions.WaxBlockAction;
 import net.minecraft.core.Registry;
 
 public record ActionType<T extends Action<T>>(MapCodec<T> codec) {
@@ -95,14 +93,6 @@ public record ActionType<T extends Action<T>>(MapCodec<T> codec) {
     public static final ActionType<SwingHandAction> SWING_HAND = register(
         "swing_hand",
         new ActionType<>(SwingHandAction.CODEC)
-    );
-    public static final ActionType<ModifySignAction> MODIFY_SIGN = register(
-        "modify_sign",
-        new ActionType<>(ModifySignAction.CODEC)
-    );
-    public static final ActionType<WaxBlockAction> WAX_BLOCK = register(
-        "wax_block",
-        new ActionType<>(WaxBlockAction.CODEC)
     );
     public static final ActionType<DecrementItemAction> DECREMENT_ITEM = register(
         "decrement_item",

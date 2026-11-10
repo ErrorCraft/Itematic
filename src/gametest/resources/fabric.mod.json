@@ -16,6 +16,7 @@
       "net.errorcraft.itematic.gametest.block.GrindstoneTestSuite",
       "net.errorcraft.itematic.gametest.block.PickBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.ShulkerBoxBlockTestSuite",
+      "net.errorcraft.itematic.gametest.block.SignBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.WaterCauldronBlockTestSuite",
       "net.errorcraft.itematic.gametest.entity.PickEntityTestSuite",
       "net.errorcraft.itematic.gametest.entity.animal.ArmadilloTestSuite",

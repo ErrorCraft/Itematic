@@ -344,7 +344,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "useOn",
         order = 1001
     )
-    public InteractionResult useItemBehavior(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
+    public InteractionResult invokeItemEvents(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStackExchanger stackExchanger = context.itematic$stackExchanger();
         LivingEntity user = context.getPlayer();
         ItemStack stack = context.getItemInHand();
@@ -364,24 +364,17 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         stackExchangerReference.set(stackExchanger);
-        InteractionResult originalResult = original.call(context);
-        ItemResult result = ItemResult.PASS;
-        for (ItemBehavior<?> behavior : this.behavior) {
-            ItemResult newResult = behavior.useOnBlock(context, stackExchanger);
-            result = result.max(newResult);
-        }
-
-        if (stack.itematic$invokeEvent(ItemEvent.USE_ON_BLOCK, actionContext)) {
-            result = result.max(ItemResult.CONSUME);
+        InteractionResult result = original.call(context);
+        if (stack.itematic$invokeEvent(ItemEvent.USE_ON_BLOCK, actionContext) && !result.consumesAction()) {
+            result = InteractionResult.CONSUME;
         }
 
         tryUpdateItemStack(user, hand, stack, stackExchanger);
-        InteractionResult trueResult = originalResult != InteractionResult.PASS ? originalResult : result.toActionResult();
-        if (trueResult instanceof InteractionResult.Success success) {
+        if (result instanceof InteractionResult.Success success) {
             return success.heldItemTransformedTo(stackExchanger.result());
         }
 
-        return trueResult;
+        return result;
     }
 
     @WrapMethod(
@@ -448,7 +441,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "interactLivingEntity",
         order = 1001
     )
-    public InteractionResult useItemBehavior(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type, Operation<InteractionResult> original) {
+    public InteractionResult invokeItemEvents(ItemStack itemStack, Player player, LivingEntity target, InteractionHand type, Operation<InteractionResult> original) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, itemStack);
         ActionContext context = ActionContext.builder(player.level())
             .stackExchanger(stackExchanger)
@@ -464,23 +457,17 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             return InteractionResult.CONSUME.heldItemTransformedTo(stackExchanger.result());
         }
 
-        ItemResult result = ItemResult.PASS;
-        for (ItemBehavior<?> behavior : this.behavior) {
-            ItemResult newResult = behavior.useOnEntity(player, target, type, itemStack, stackExchanger);
-            result = result.max(newResult);
-        }
-
-        if (itemStack.itematic$invokeEvent(ItemEvent.USE_ON_ENTITY, context)) {
-            result = result.max(ItemResult.CONSUME);
+        InteractionResult result = original.call(itemStack, player, target, type);
+        if (itemStack.itematic$invokeEvent(ItemEvent.USE_ON_ENTITY, context) && !result.consumesAction()) {
+            result = InteractionResult.CONSUME;
         }
 
         tryUpdateItemStack(player, type, itemStack, stackExchanger);
-        InteractionResult trueResult = result.toActionResult();
-        if (trueResult instanceof InteractionResult.Success success) {
+        if (result instanceof InteractionResult.Success success) {
             return success.heldItemTransformedTo(stackExchanger.result());
         }
 
-        return trueResult;
+        return result;
     }
 
     @WrapMethod(

@@ -11,7 +11,6 @@ import net.errorcraft.itematic.world.action.actions.DropLootAction;
 import net.errorcraft.itematic.world.action.actions.IncrementStatAction;
 import net.errorcraft.itematic.world.action.actions.InvokeGameEventAction;
 import net.errorcraft.itematic.world.action.actions.MarkBannerOnItemAction;
-import net.errorcraft.itematic.world.action.actions.ModifySignAction;
 import net.errorcraft.itematic.world.action.actions.PlaceBlockAction;
 import net.errorcraft.itematic.world.action.actions.PlaySoundAction;
 import net.errorcraft.itematic.world.action.actions.PrimeTntAction;
@@ -65,110 +64,34 @@ import java.util.Set;
 import java.util.function.UnaryOperator;
 
 public class Actions {
-    public static final ResourceKey<ActionEntry> USE_HOE_ON_BLOCK = create("use_hoe_on_block");
-    public static final ResourceKey<ActionEntry> TILL_DIRT = create("till_dirt");
-    public static final ResourceKey<ActionEntry> TILL_COARSE_DIRT = create("till_coarse_dirt");
-    public static final ResourceKey<ActionEntry> TILL_ROOTED_DIRT = create("till_rooted_dirt");
-    public static final ResourceKey<ActionEntry> USE_SHOVEL_ON_BLOCK = create("use_shovel_on_block");
-    public static final ResourceKey<ActionEntry> FLATTEN_GROUND = create("flatten_ground");
-    public static final ResourceKey<ActionEntry> EXTINGUISH_CAMPFIRE = create("extinguish_campfire");
-    public static final ResourceKey<ActionEntry> USE_AXE_ON_BLOCK = create("use_axe_on_block");
-    public static final ResourceKey<ActionEntry> STRIP_WOOD = create("strip_wood");
-    public static final ResourceKey<ActionEntry> SCRAPE_COPPER_OFF = create("scrape_copper_off");
-    public static final ResourceKey<ActionEntry> UNWAX_BLOCK = create("unwax_block");
-    public static final ResourceKey<ActionEntry> LIGHT_BLOCK = create("light_block");
-    public static final ResourceKey<ActionEntry> MARK_BANNER_ON_MAP = create("mark_banner_on_map");
+    public static final ResourceKey<ActionEntry> EXTINGUISH_CAMPFIRE = createKey("extinguish_campfire");
+    public static final ResourceKey<ActionEntry> FLATTEN_GROUND = createKey("flatten_ground");
+    public static final ResourceKey<ActionEntry> LIGHT_BLOCK = createKey("light_block");
+    public static final ResourceKey<ActionEntry> MARK_BANNER_ON_MAP = createKey("mark_banner_on_map");
+    public static final ResourceKey<ActionEntry> SCRAPE_COPPER_OFF = createKey("scrape_copper_off");
+    public static final ResourceKey<ActionEntry> STRIP_WOOD = createKey("strip_wood");
+    public static final ResourceKey<ActionEntry> TILL_COARSE_DIRT = createKey("till_coarse_dirt");
+    public static final ResourceKey<ActionEntry> TILL_DIRT = createKey("till_dirt");
+    public static final ResourceKey<ActionEntry> TILL_ROOTED_DIRT = createKey("till_rooted_dirt");
+    public static final ResourceKey<ActionEntry> UNWAX_BLOCK = createKey("unwax_block");
+    public static final ResourceKey<ActionEntry> UNWAX_COPPER_BLOCK = createKey("unwax_copper_block");
+    public static final ResourceKey<ActionEntry> USE_AXE_ON_BLOCK = createKey("use_axe_on_block");
+    public static final ResourceKey<ActionEntry> USE_HOE_ON_BLOCK = createKey("use_hoe_on_block");
+    public static final ResourceKey<ActionEntry> USE_SHOVEL_ON_BLOCK = createKey("use_shovel_on_block");
+    public static final ResourceKey<ActionEntry> WAX_BLOCK = createKey("wax_block");
+    public static final ResourceKey<ActionEntry> WAX_COPPER_BLOCK = createKey("wax_copper_block");
 
     private Actions() {}
+
+    private static ResourceKey<ActionEntry> createKey(String name) {
+        return ResourceKey.create(ItematicRegistries.ACTION, Identifier.withDefaultNamespace(name));
+    }
 
     public static void bootstrap(BootstrapContext<ActionEntry> context) {
         HolderGetter<ActionEntry> actions = context.lookup(ItematicRegistries.ACTION);
         HolderGetter<SoundEvent> soundEvents = context.lookup(Registries.SOUND_EVENT);
         HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
 
-        context.register(
-            USE_HOE_ON_BLOCK,
-            ActionEntry.of(
-                PassingSequenceHandler.builder()
-                    .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
-                    .add(DamageItemAction.of(1))
-                    .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-                    .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventIds.HOE_TILL), SoundSource.BLOCKS))
-            )
-        );
-        context.register(
-            TILL_DIRT,
-            ActionEntry.of(
-                setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND)),
-                SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockItemIds.FARMLAND.block()))
-            )
-        );
-        context.register(
-            TILL_COARSE_DIRT,
-            ActionEntry.of(
-                setBlockConditions(blocks, builder -> builder.of(blocks, blocks.getOrThrow(BlockItemIds.COARSE_DIRT.block()).value())),
-                SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockItemIds.DIRT.block()))
-            )
-        );
-        context.register(
-            TILL_ROOTED_DIRT,
-            ActionEntry.of(
-                LocationCheckPredicates.builder(
-                    PositionTarget.INTERACTED,
-                    LocationPredicate.Builder.location()
-                        .setBlock(
-                            BlockPredicate.Builder.block()
-                                .of(blocks, blocks.getOrThrow(BlockItemIds.ROOTED_DIRT.block()).value())
-                        )
-                ),
-                PassingSequenceHandler.builder()
-                    .add(
-                        SetBlockStateAction.of(
-                            PositionTarget.INTERACTED,
-                            blocks.getOrThrow(BlockItemIds.DIRT.block())
-                        )
-                    )
-                    .add(
-                        DropLootAction.of(
-                            PositionTarget.INTERACTED,
-                            BuiltInLootTables.TILL_ROOTED_DIRT,
-                            BlockTransformer.DropStrategy.CLICKED_FACE
-                        )
-                    )
-            )
-        );
-        context.register(
-            USE_SHOVEL_ON_BLOCK,
-            ActionEntry.of(
-                InvertedLootItemCondition.invert(
-                    SideCheckPredicate.builder(Direction.DOWN)
-                ),
-                PassingSequenceHandler.builder()
-                    .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_SHOVEL_ON_BLOCK)))
-                    .add(DamageItemAction.of(1))
-                    .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-            )
-        );
-        context.register(
-            FLATTEN_GROUND,
-            ActionEntry.of(
-                setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)),
-                PassingSequenceHandler.builder()
-                    .add(
-                        SetBlockStateAction.of(
-                            PositionTarget.INTERACTED,
-                            blocks.getOrThrow(BlockItemIds.DIRT_PATH.block())
-                        )
-                    )
-                    .add(
-                        PlaySoundAction.of(
-                            PositionTarget.INTERACTED,
-                            soundEvents.getOrThrow(SoundEventIds.SHOVEL_FLATTEN),
-                            SoundSource.BLOCKS
-                        )
-                    )
-            )
-        );
         context.register(
             EXTINGUISH_CAMPFIRE,
             ActionEntry.of(
@@ -221,82 +144,20 @@ public class Actions {
             )
         );
         context.register(
-            USE_AXE_ON_BLOCK,
+            FLATTEN_GROUND,
             ActionEntry.of(
-                PassingSequenceHandler.builder()
-                    .add(FirstToSucceedSequenceHandler.of(actions.getOrThrow(ActionTags.USE_AXE_ON_BLOCK)))
-                    .add(DamageItemAction.of(1))
-                    .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-            )
-        );
-        context.register(
-            STRIP_WOOD,
-            ActionEntry.of(
+                setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.FLATTENABLE_INTO_DIRT_PATH)),
                 PassingSequenceHandler.builder()
                     .add(
-                        TransformBlockStateAction.of(
+                        SetBlockStateAction.of(
                             PositionTarget.INTERACTED,
-                            MapBlockProvider.builder()
-                                .add(Blocks.OAK_WOOD, Blocks.STRIPPED_OAK_WOOD)
-                                .add(Blocks.OAK_LOG, Blocks.STRIPPED_OAK_LOG)
-                                .add(Blocks.DARK_OAK_WOOD, Blocks.STRIPPED_DARK_OAK_WOOD)
-                                .add(Blocks.DARK_OAK_LOG, Blocks.STRIPPED_DARK_OAK_LOG)
-                                .add(Blocks.PALE_OAK_WOOD, Blocks.STRIPPED_PALE_OAK_WOOD)
-                                .add(Blocks.PALE_OAK_LOG, Blocks.STRIPPED_PALE_OAK_LOG)
-                                .add(Blocks.POPLAR_WOOD, Blocks.STRIPPED_POPLAR_WOOD)
-                                .add(Blocks.POPLAR_LOG, Blocks.STRIPPED_POPLAR_LOG)
-                                .add(Blocks.ACACIA_WOOD, Blocks.STRIPPED_ACACIA_WOOD)
-                                .add(Blocks.ACACIA_LOG, Blocks.STRIPPED_ACACIA_LOG)
-                                .add(Blocks.CHERRY_WOOD, Blocks.STRIPPED_CHERRY_WOOD)
-                                .add(Blocks.CHERRY_LOG, Blocks.STRIPPED_CHERRY_LOG)
-                                .add(Blocks.BIRCH_WOOD, Blocks.STRIPPED_BIRCH_WOOD)
-                                .add(Blocks.BIRCH_LOG, Blocks.STRIPPED_BIRCH_LOG)
-                                .add(Blocks.JUNGLE_WOOD, Blocks.STRIPPED_JUNGLE_WOOD)
-                                .add(Blocks.JUNGLE_LOG, Blocks.STRIPPED_JUNGLE_LOG)
-                                .add(Blocks.SPRUCE_WOOD, Blocks.STRIPPED_SPRUCE_WOOD)
-                                .add(Blocks.SPRUCE_LOG, Blocks.STRIPPED_SPRUCE_LOG)
-                                .add(Blocks.WARPED_STEM, Blocks.STRIPPED_WARPED_STEM)
-                                .add(Blocks.WARPED_HYPHAE, Blocks.STRIPPED_WARPED_HYPHAE)
-                                .add(Blocks.CRIMSON_STEM, Blocks.STRIPPED_CRIMSON_STEM)
-                                .add(Blocks.CRIMSON_HYPHAE, Blocks.STRIPPED_CRIMSON_HYPHAE)
-                                .add(Blocks.MANGROVE_WOOD, Blocks.STRIPPED_MANGROVE_WOOD)
-                                .add(Blocks.MANGROVE_LOG, Blocks.STRIPPED_MANGROVE_LOG)
-                                .add(Blocks.BAMBOO_BLOCK, Blocks.STRIPPED_BAMBOO_BLOCK)
-                                .build()
+                            blocks.getOrThrow(BlockItemIds.DIRT_PATH.block())
                         )
                     )
                     .add(
                         PlaySoundAction.of(
                             PositionTarget.INTERACTED,
-                            soundEvents.getOrThrow(SoundEventIds.AXE_STRIP),
-                            SoundSource.BLOCKS
-                        )
-                    )
-            )
-        );
-        context.register(
-            SCRAPE_COPPER_OFF,
-            ActionEntry.of(
-                PassingSequenceHandler.builder()
-                    .add(mapBlocks(WeatheringCopper.PREVIOUS_BY_BLOCK.get().entrySet(), BlockTransformer.TransformParticle.SCRAPE))
-                    .add(
-                        PlaySoundAction.of(
-                            PositionTarget.INTERACTED,
-                            soundEvents.getOrThrow(SoundEventIds.AXE_SCRAPE),
-                            SoundSource.BLOCKS
-                        )
-                    )
-            )
-        );
-        context.register(
-            UNWAX_BLOCK,
-            ActionEntry.of(
-                PassingSequenceHandler.builder()
-                    .add(mapBlocks(HoneycombItem.WAX_OFF_BY_BLOCK.get().entrySet(), BlockTransformer.TransformParticle.WAX_OFF))
-                    .add(
-                        PlaySoundAction.of(
-                            PositionTarget.INTERACTED,
-                            soundEvents.getOrThrow(SoundEventIds.AXE_WAX_OFF),
+                            soundEvents.getOrThrow(SoundEventIds.SHOVEL_FLATTEN),
                             SoundSource.BLOCKS
                         )
                     )
@@ -372,10 +233,188 @@ public class Actions {
                     .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
             )
         );
-    }
-
-    private static ResourceKey<ActionEntry> create(String name) {
-        return ResourceKey.create(ItematicRegistries.ACTION, Identifier.withDefaultNamespace(name));
+        context.register(
+            SCRAPE_COPPER_OFF,
+            ActionEntry.of(
+                PassingSequenceHandler.builder()
+                    .add(
+                        mapBlocks(
+                            WeatheringCopper.PREVIOUS_BY_BLOCK.get().entrySet(),
+                            BlockTransformer.TransformParticle.SCRAPE
+                        )
+                    )
+                    .add(
+                        PlaySoundAction.of(
+                            PositionTarget.INTERACTED,
+                            soundEvents.getOrThrow(SoundEventIds.AXE_SCRAPE),
+                            SoundSource.BLOCKS
+                        )
+                    )
+            )
+        );
+        context.register(
+            STRIP_WOOD,
+            ActionEntry.of(
+                PassingSequenceHandler.builder()
+                    .add(
+                        TransformBlockStateAction.of(
+                            PositionTarget.INTERACTED,
+                            MapBlockProvider.builder()
+                                .add(Blocks.OAK_WOOD, Blocks.STRIPPED_OAK_WOOD)
+                                .add(Blocks.OAK_LOG, Blocks.STRIPPED_OAK_LOG)
+                                .add(Blocks.DARK_OAK_WOOD, Blocks.STRIPPED_DARK_OAK_WOOD)
+                                .add(Blocks.DARK_OAK_LOG, Blocks.STRIPPED_DARK_OAK_LOG)
+                                .add(Blocks.PALE_OAK_WOOD, Blocks.STRIPPED_PALE_OAK_WOOD)
+                                .add(Blocks.PALE_OAK_LOG, Blocks.STRIPPED_PALE_OAK_LOG)
+                                .add(Blocks.POPLAR_WOOD, Blocks.STRIPPED_POPLAR_WOOD)
+                                .add(Blocks.POPLAR_LOG, Blocks.STRIPPED_POPLAR_LOG)
+                                .add(Blocks.ACACIA_WOOD, Blocks.STRIPPED_ACACIA_WOOD)
+                                .add(Blocks.ACACIA_LOG, Blocks.STRIPPED_ACACIA_LOG)
+                                .add(Blocks.CHERRY_WOOD, Blocks.STRIPPED_CHERRY_WOOD)
+                                .add(Blocks.CHERRY_LOG, Blocks.STRIPPED_CHERRY_LOG)
+                                .add(Blocks.BIRCH_WOOD, Blocks.STRIPPED_BIRCH_WOOD)
+                                .add(Blocks.BIRCH_LOG, Blocks.STRIPPED_BIRCH_LOG)
+                                .add(Blocks.JUNGLE_WOOD, Blocks.STRIPPED_JUNGLE_WOOD)
+                                .add(Blocks.JUNGLE_LOG, Blocks.STRIPPED_JUNGLE_LOG)
+                                .add(Blocks.SPRUCE_WOOD, Blocks.STRIPPED_SPRUCE_WOOD)
+                                .add(Blocks.SPRUCE_LOG, Blocks.STRIPPED_SPRUCE_LOG)
+                                .add(Blocks.WARPED_STEM, Blocks.STRIPPED_WARPED_STEM)
+                                .add(Blocks.WARPED_HYPHAE, Blocks.STRIPPED_WARPED_HYPHAE)
+                                .add(Blocks.CRIMSON_STEM, Blocks.STRIPPED_CRIMSON_STEM)
+                                .add(Blocks.CRIMSON_HYPHAE, Blocks.STRIPPED_CRIMSON_HYPHAE)
+                                .add(Blocks.MANGROVE_WOOD, Blocks.STRIPPED_MANGROVE_WOOD)
+                                .add(Blocks.MANGROVE_LOG, Blocks.STRIPPED_MANGROVE_LOG)
+                                .add(Blocks.BAMBOO_BLOCK, Blocks.STRIPPED_BAMBOO_BLOCK)
+                                .build()
+                        )
+                    )
+                    .add(
+                        PlaySoundAction.of(
+                            PositionTarget.INTERACTED,
+                            soundEvents.getOrThrow(SoundEventIds.AXE_STRIP),
+                            SoundSource.BLOCKS
+                        )
+                    )
+            )
+        );
+        context.register(
+            TILL_COARSE_DIRT,
+            ActionEntry.of(
+                setBlockConditions(blocks, builder -> builder.of(blocks, blocks.getOrThrow(BlockItemIds.COARSE_DIRT.block()).value())),
+                SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockItemIds.DIRT.block()))
+            )
+        );
+        context.register(
+            TILL_DIRT,
+            ActionEntry.of(
+                setBlockConditions(blocks, builder -> builder.of(blocks, ItematicBlockTags.TILLABLE_INTO_FARMLAND)),
+                SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(BlockItemIds.FARMLAND.block()))
+            )
+        );
+        context.register(
+            TILL_ROOTED_DIRT,
+            ActionEntry.of(
+                LocationCheckPredicates.builder(
+                    PositionTarget.INTERACTED,
+                    LocationPredicate.Builder.location()
+                        .setBlock(
+                            BlockPredicate.Builder.block()
+                                .of(blocks, blocks.getOrThrow(BlockItemIds.ROOTED_DIRT.block()).value())
+                        )
+                ),
+                PassingSequenceHandler.builder()
+                    .add(
+                        SetBlockStateAction.of(
+                            PositionTarget.INTERACTED,
+                            blocks.getOrThrow(BlockItemIds.DIRT.block())
+                        )
+                    )
+                    .add(
+                        DropLootAction.of(
+                            PositionTarget.INTERACTED,
+                            BuiltInLootTables.TILL_ROOTED_DIRT,
+                            BlockTransformer.DropStrategy.CLICKED_FACE
+                        )
+                    )
+            )
+        );
+        context.register(
+            UNWAX_BLOCK,
+            ActionEntry.of(
+                PassingSequenceHandler.builder()
+                    .add(FirstToSucceedSequenceHandler.of(actions.getOrThrow(ActionTags.UNWAX_BLOCK)))
+                    .add(
+                        PlaySoundAction.of(
+                            PositionTarget.INTERACTED,
+                            soundEvents.getOrThrow(SoundEventIds.AXE_WAX_OFF),
+                            SoundSource.BLOCKS
+                        )
+                    )
+            )
+        );
+        context.register(
+            UNWAX_COPPER_BLOCK,
+            ActionEntry.of(
+                mapBlocks(
+                    HoneycombItem.WAX_OFF_BY_BLOCK.get().entrySet(),
+                    BlockTransformer.TransformParticle.WAX_OFF
+                )
+            )
+        );
+        context.register(
+            USE_AXE_ON_BLOCK,
+            ActionEntry.of(
+                PassingSequenceHandler.builder()
+                    .add(FirstToSucceedSequenceHandler.of(actions.getOrThrow(ActionTags.USE_AXE_ON_BLOCK)))
+                    .add(DamageItemAction.of(1))
+                    .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+            )
+        );
+        context.register(
+            USE_HOE_ON_BLOCK,
+            ActionEntry.of(
+                PassingSequenceHandler.builder()
+                    .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_HOE_ON_BLOCK)))
+                    .add(DamageItemAction.of(1))
+                    .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                    .add(PlaySoundAction.of(PositionTarget.INTERACTED, soundEvents.getOrThrow(SoundEventIds.HOE_TILL), SoundSource.BLOCKS))
+            )
+        );
+        context.register(
+            USE_SHOVEL_ON_BLOCK,
+            ActionEntry.of(
+                InvertedLootItemCondition.invert(
+                    SideCheckPredicate.builder(Direction.DOWN)
+                ),
+                PassingSequenceHandler.builder()
+                    .add(FirstToPassRequirementsSequenceHandler.of(actions.getOrThrow(ActionTags.USE_SHOVEL_ON_BLOCK)))
+                    .add(DamageItemAction.of(1))
+                    .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+            )
+        );
+        context.register(
+            WAX_BLOCK,
+            ActionEntry.of(
+                PassingSequenceHandler.builder()
+                    .add(FirstToSucceedSequenceHandler.of(actions.getOrThrow(ActionTags.WAX_BLOCK)))
+                    .add(
+                        PlaySoundAction.of(
+                            PositionTarget.INTERACTED,
+                            soundEvents.getOrThrow(SoundEventIds.HONEYCOMB_WAX_ON),
+                            SoundSource.BLOCKS
+                        )
+                    )
+            )
+        );
+        context.register(
+            WAX_COPPER_BLOCK,
+            ActionEntry.of(
+                mapBlocks(
+                    HoneycombItem.WAXABLES.get().entrySet(),
+                    BlockTransformer.TransformParticle.WAX_ON
+                )
+            )
+        );
     }
 
     public static ActionEntry potBlock(HolderGetter<Block> blocks, ResourceKey<Block> pottedBlock) {
@@ -383,36 +422,18 @@ public class Actions {
             LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.location()
-                    .setBlock(BlockPredicate.Builder.block()
-                        .of(blocks, blocks.getOrThrow(BlockItemIds.FLOWER_POT.block()).value()))
+                    .setBlock(
+                        BlockPredicate.Builder.block()
+                            .of(
+                                blocks,
+                                blocks.getOrThrow(BlockItemIds.FLOWER_POT.block()).value()
+                            )
+                    )
             ),
             PassingSequenceHandler.builder()
                 .add(SetBlockStateAction.of(PositionTarget.INTERACTED, blocks.getOrThrow(pottedBlock)))
                 .add(InvokeGameEventAction.of(GameEvent.BLOCK_CHANGE, PositionTarget.INTERACTED, LootContext.EntityTarget.THIS))
                 .add(IncrementStatAction.of(LootContext.EntityTarget.THIS, Stats.CUSTOM.get(Stats.POT_FLOWER)))
-                .add(DecrementItemAction.of(1))
-                .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
-        );
-    }
-
-    public static ActionEntry waxSign(HolderGetter<Block> blocks, boolean wax) {
-        return modifySign(blocks, ModifySignAction.wax(PositionTarget.INTERACTED, wax));
-    }
-
-    public static ActionEntry glowSign(HolderGetter<Block> blocks, boolean glow) {
-        return modifySign(blocks, ModifySignAction.glow(PositionTarget.INTERACTED, glow));
-    }
-
-    private static ActionEntry modifySign(HolderGetter<Block> blocks, ModifySignAction action) {
-        return ActionEntry.of(
-            LocationCheckPredicates.builder(
-                PositionTarget.INTERACTED,
-                LocationPredicate.Builder.location()
-                    .setBlock(BlockPredicate.Builder.block()
-                        .of(blocks, BlockTags.SIGNS))
-            ),
-            PassingSequenceHandler.builder()
-                .add(action)
                 .add(DecrementItemAction.of(1))
                 .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
         );
@@ -431,8 +452,10 @@ public class Actions {
             LocationCheckPredicates.builder(
                 PositionTarget.INTERACTED,
                 LocationPredicate.Builder.location()
-                    .setBlock(BlockPredicate.Builder.block()
-                        .of(blocks, BlockTags.AIR)),
+                    .setBlock(
+                        BlockPredicate.Builder.block()
+                            .of(blocks, BlockTags.AIR)
+                    ),
                 new BlockPos(0, 1, 0)
             )
         );

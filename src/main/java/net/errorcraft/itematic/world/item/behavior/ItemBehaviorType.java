@@ -39,6 +39,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBeh
 import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SignModifierItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
@@ -73,6 +74,10 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<BlockTransformerItemBehavior> BLOCK_TRANSFORMER = register(
         "block_transformer",
         BlockTransformerItemBehavior.CODEC
+    );
+    public static final ItemBehaviorType<SignModifierItemBehavior> SIGN_MODIFIER = register(
+        "sign_modifier",
+        SignModifierItemBehavior.CODEC
     );
     public static final ItemBehaviorType<DamageableItemBehavior> DAMAGEABLE = register(
         "damageable",
