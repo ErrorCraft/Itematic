@@ -10,7 +10,6 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.access.world.item.ItemAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
-import net.errorcraft.itematic.world.ItemResult;
 import net.errorcraft.itematic.world.action.ActionEventMap;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
@@ -174,17 +173,11 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "use",
         order = 1001
     )
-    public InteractionResult useItemBehavior(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
+    public InteractionResult invokeItemEvents(Level level, Player player, InteractionHand hand, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = player.getItemInHand(hand);
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(player, stack);
         stackExchangerReference.set(stackExchanger);
-        InteractionResult originalResult = original.call(level, player, hand);
-        ItemResult result = originalResult.consumesAction() ? ItemResult.SUCCEED : ItemResult.PASS;
-        for (ItemBehavior<?> behavior : this.behavior) {
-            ItemResult newResult = behavior.use(level, player, hand, stack, stackExchanger);
-            result = result.max(newResult);
-        }
-
+        InteractionResult result = original.call(level, player, hand);
         if (level instanceof ServerLevel serverLevel) {
             ActionContext context = ActionContext.builder(serverLevel)
                 .stackExchanger(stackExchanger)
@@ -193,17 +186,16 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
                 .add(LootContextParams.TOOL, stack)
                 .add(ItematicContextKeys.HAND, hand)
                 .build();
-            if (stack.itematic$invokeEvent(ItemEvent.USE, context)) {
-                result = result.max(ItemResult.CONSUME);
+            if (stack.itematic$invokeEvent(ItemEvent.USE, context) && !result.consumesAction()) {
+                result = InteractionResult.CONSUME;
             }
         }
 
-        InteractionResult trueResult = originalResult != InteractionResult.PASS ? originalResult : result.toActionResult();
-        if (trueResult instanceof InteractionResult.Success success) {
+        if (result instanceof InteractionResult.Success success) {
             return success.heldItemTransformedTo(stackExchanger.result());
         }
 
-        return trueResult;
+        return result;
     }
 
     @WrapMethod(

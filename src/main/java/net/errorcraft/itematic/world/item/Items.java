@@ -30,6 +30,7 @@ import net.errorcraft.itematic.world.action.actions.DecrementItemAction;
 import net.errorcraft.itematic.world.action.actions.DisplayParticleAction;
 import net.errorcraft.itematic.world.action.actions.ExchangeItemAction;
 import net.errorcraft.itematic.world.action.actions.FertilizeAction;
+import net.errorcraft.itematic.world.action.actions.IncrementStatAction;
 import net.errorcraft.itematic.world.action.actions.InvokeGameEventAction;
 import net.errorcraft.itematic.world.action.actions.LightEndPortalAction;
 import net.errorcraft.itematic.world.action.actions.ModifyItemAction;
@@ -76,7 +77,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
@@ -121,6 +121,8 @@ import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Direct;
 import net.errorcraft.itematic.world.level.block.CoralCollection;
 import net.errorcraft.itematic.world.level.block.CutoutCollection;
 import net.errorcraft.itematic.world.level.block.WoodCollection;
+import net.errorcraft.itematic.world.level.storage.loot.functions.FillMapItemModifier;
+import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemItemModifiers;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointerLocationItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
@@ -164,6 +166,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.BannerPatternTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
@@ -2479,7 +2482,37 @@ public class Items {
                 .behavior(EnchantmentHolderItemBehavior.of(this.items.getOrThrow(ItemIds.BOOK)))
                 .register();
             this.builder(ItemIds.MAP)
-                .behavior(MappableItemBehavior.of(this.items.getOrThrow(ItemIds.FILLED_MAP)))
+                .event(
+                    ItemEvent.USE,
+                    ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(
+                                ModifyItemAction.of(
+                                    LootContext.ItemStackTarget.TOOL,
+                                    SplitItemModifier.builder(1),
+                                    SetItemItemModifiers.builder(this.items.getOrThrow(ItemIds.FILLED_MAP)),
+                                    FillMapItemModifier.builder(
+                                        LootContext.EntityTarget.THIS,
+                                        0,
+                                        true,
+                                        false
+                                    )
+                                )
+                            )
+                            .add(
+                                IncrementStatAction.of(
+                                    LootContext.EntityTarget.THIS,
+                                    Stats.ITEM_USED.itematic$get(this.items.getOrThrow(ItemIds.MAP))
+                                )
+                            )
+                            .add(
+                                PlaySoundAction.ofEntityTracking(
+                                    this.soundEvents.getOrThrow(SoundEventIds.UI_CARTOGRAPHY_TABLE_TAKE_RESULT)
+                                )
+                            )
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                    )
+                )
                 .register();
             this.registerMap(ItemIds.FILLED_MAP);
             this.registerMap(ItemIds.OCEAN_MONUMENT_MAP);

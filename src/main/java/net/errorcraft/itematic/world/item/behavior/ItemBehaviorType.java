@@ -32,7 +32,6 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
@@ -194,10 +193,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<DecoratedPotPatternItemBehavior> DECORATED_POT_PATTERN = register(
         "decorated_pot_pattern",
         DecoratedPotPatternItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<MappableItemBehavior> MAPPABLE = register(
-        "mappable",
-        MappableItemBehavior.CODEC
     );
     public static final ItemBehaviorType<MapHolderItemBehavior> MAP_HOLDER = register(
         "map_holder",

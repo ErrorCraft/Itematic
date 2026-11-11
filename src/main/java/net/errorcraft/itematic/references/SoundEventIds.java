@@ -64,6 +64,7 @@ public class SoundEventIds {
     public static final ResourceKey<SoundEvent> SPYGLASS_USE = of("item.spyglass.use");
     public static final ResourceKey<SoundEvent> SPYGLASS_STOP_USING = of("item.spyglass.stop_using");
     public static final ResourceKey<SoundEvent> TNT_PRIMED = of("entity.tnt.primed");
+    public static final ResourceKey<SoundEvent> UI_CARTOGRAPHY_TABLE_TAKE_RESULT = of("ui.cartography_table.take_result");
     public static final ResourceKey<SoundEvent> WOLF_ARMOR_BREAK = of("item.wolf_armor.break");
 
     private SoundEventIds() {}
