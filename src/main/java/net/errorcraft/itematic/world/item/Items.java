@@ -76,7 +76,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.GliderFuelItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.MapDecorationHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
@@ -2810,7 +2810,7 @@ public class Items {
 
         private void registerMap(ResourceKey<Item> item) {
             this.builder(item)
-                .behavior(MapHolderItemBehavior.INSTANCE)
+                .behavior(MapDecorationHolderItemBehavior.INSTANCE)
                 .event(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.MARK_BANNER_ON_MAP))
                 .register();
         }

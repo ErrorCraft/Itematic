@@ -15,7 +15,6 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.ItemDisplay;
 import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
@@ -62,6 +61,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.Consumable;
@@ -156,17 +156,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private DataComponentMap useFieldInsteadOfIntrusiveHolder(Operation<DataComponentMap> original) {
         return this.dataComponents;
-    }
-
-    @WrapMethod(
-        method = "getDefaultMaxStackSize"
-    )
-    private int alsoCheckStackableItemBehavior(Operation<Integer> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.STACKABLE)) {
-            return Items.UNSTACKABLE_MAX_STACK_SIZE;
-        }
-
-        return original.call();
     }
 
     @WrapMethod(
@@ -606,10 +595,8 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         method = "onCraftedPostProcess",
         at = @At("HEAD")
     )
-    public void onCraft(ItemStack itemStack, Level level, CallbackInfo info) {
-        for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.onCraft(itemStack, level);
-        }
+    public void useDataComponents(ItemStack itemStack, Level level, CallbackInfo info) {
+        Items.FILLED_MAP.onCraftedPostProcess(itemStack, level);
     }
 
     @WrapMethod(

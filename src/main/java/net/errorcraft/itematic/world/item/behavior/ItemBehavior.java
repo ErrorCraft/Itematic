@@ -17,6 +17,5 @@ public interface ItemBehavior<T extends ItemBehavior<T>> {
 
     ItemBehaviorType<T> type();
     default void using(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks) {}
-    default void onCraft(ItemStack stack, Level level) {}
     default void addComponents(DataComponentMap.Builder builder) {}
 }

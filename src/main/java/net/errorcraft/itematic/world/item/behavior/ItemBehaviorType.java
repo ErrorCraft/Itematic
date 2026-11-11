@@ -31,7 +31,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.GliderFuelItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.MapDecorationHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
@@ -194,9 +194,9 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
         "decorated_pot_pattern",
         DecoratedPotPatternItemBehavior.CODEC
     );
-    public static final ItemBehaviorType<MapHolderItemBehavior> MAP_HOLDER = register(
-        "map_holder",
-        MapHolderItemBehavior.CODEC
+    public static final ItemBehaviorType<MapDecorationHolderItemBehavior> MAP_DECORATION_HOLDER = register(
+        "map_decoration_holder",
+        MapDecorationHolderItemBehavior.CODEC
     );
     public static final ItemBehaviorType<BrushItemBehavior> BRUSH = register(
         "brush",
