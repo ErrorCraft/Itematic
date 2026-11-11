@@ -40,7 +40,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SignModifierItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateDisplayItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
@@ -171,9 +171,9 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
         "steering",
         SteeringItemBehavior.CODEC
     );
-    public static final ItemBehaviorType<SmithingTemplateProviderItemBehavior> SMITHING_TEMPLATE_PROVIDER = register(
-        "smithing_template_provider",
-        SmithingTemplateProviderItemBehavior.CODEC
+    public static final ItemBehaviorType<SmithingTemplateDisplayItemBehavior> SMITHING_TEMPLATE_DISPLAY = register(
+        "smithing_template_display",
+        SmithingTemplateDisplayItemBehavior.CODEC
     );
     public static final ItemBehaviorType<BannerPatternItemBehavior> BANNER_PATTERN = register(
         "banner_pattern",

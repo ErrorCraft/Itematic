@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.data;
 
 import net.errorcraft.itematic.data.client.ItemBarStyleProvider;
+import net.errorcraft.itematic.data.client.SmithingTemplateDisplaysProvider;
 import net.errorcraft.itematic.data.server.ItematicDynamicRegistryProvider;
 import net.errorcraft.itematic.data.server.ModifiedRecipeProvider;
 import net.errorcraft.itematic.data.server.tag.ActionTagProvider;
@@ -33,5 +34,6 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(ItemBarStyleProvider::new);
         pack.addProvider(EntityTypeTagProvider::new);
         pack.addProvider(ItemGroupTagProvider::new);
+        pack.addProvider(SmithingTemplateDisplaysProvider::new);
     }
 }

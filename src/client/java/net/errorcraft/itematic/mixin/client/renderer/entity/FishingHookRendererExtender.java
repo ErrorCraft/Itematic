@@ -17,7 +17,7 @@ public class FishingHookRendererExtender {
             classValue = FishingRodItem.class
         )
     )
-    private static boolean instanceOfProjectileWeaponItemUseDataComponent(Object reference, Class<ProjectileWeaponItem> clazz, Player owner) {
+    private static boolean instanceOfFishingRodItemCheckDataComponent(Object reference, Class<ProjectileWeaponItem> clazz, Player owner) {
         return owner.getMainHandItem().has(ItematicDataComponents.CASTABLE);
     }
 }

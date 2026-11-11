@@ -21,13 +21,13 @@ public interface SmithingTemplateItemAccessor {
         throw new AssertionError();
     }
 
-    @Accessor("ARMOR_TRIM_APPLIES_TO")
-    static Component trimPatternAppliesToLabel() {
+    @Accessor("INGREDIENTS_TITLE")
+    static Component ingredientsTitle() {
         throw new AssertionError();
     }
 
-    @Accessor("INGREDIENTS_TITLE")
-    static Component ingredientsTitle() {
+    @Accessor("ARMOR_TRIM_APPLIES_TO")
+    static Component trimPatternAppliesToLabel() {
         throw new AssertionError();
     }
 
@@ -46,33 +46,43 @@ public interface SmithingTemplateItemAccessor {
         throw new AssertionError();
     }
 
+    @Accessor("NETHERITE_UPGRADE_APPLIES_TO")
+    static Component netheriteUpgradeAppliesToLabel() {
+        throw new AssertionError();
+    }
+
+    @Accessor("NETHERITE_UPGRADE_INGREDIENTS")
+    static Component netheriteUpgradeIngredients() {
+        throw new AssertionError();
+    }
+
     @Accessor("NETHERITE_UPGRADE_BASE_SLOT_DESCRIPTION")
-    static Component itemUpgradeBaseSlotDescription() {
+    static Component netheriteUpgradeBaseSlotDescription() {
         throw new AssertionError();
     }
 
     @Accessor("NETHERITE_UPGRADE_ADDITIONS_SLOT_DESCRIPTION")
-    static Component itemUpgradeAdditionsSlotDescription() {
+    static Component netheriteUpgradeAdditionsSlotDescription() {
         throw new AssertionError();
     }
 
     @Invoker("createTrimmableArmorIconList")
-    static List<Identifier> trimPatternEmptyBaseSlotTextures() {
+    static List<Identifier> trimPatternBaseSlotEmptyTextures() {
         throw new AssertionError();
     }
 
     @Invoker("createTrimmableMaterialIconList")
-    static List<Identifier> trimPatternEmptyAdditionsSlotTextures() {
+    static List<Identifier> trimPatternAdditionsSlotEmptyTextures() {
         throw new AssertionError();
     }
 
     @Invoker("createNetheriteUpgradeIconList")
-    static List<Identifier> itemUpgradeEmptyBaseSlotTextures() {
+    static List<Identifier> netheriteUpgradeBaseSlotEmptyTextures() {
         throw new AssertionError();
     }
 
     @Invoker("createNetheriteUpgradeMaterialList")
-    static List<Identifier> itemUpgradeEmptyAdditionsSlotTextures() {
+    static List<Identifier> netheriteUpgradeAdditionsSlotEmptyTextures() {
         throw new AssertionError();
     }
 }

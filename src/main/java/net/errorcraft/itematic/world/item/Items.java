@@ -14,6 +14,7 @@ import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor
 import net.errorcraft.itematic.references.ItemBarStyleIds;
 import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
+import net.errorcraft.itematic.references.SmithingTemplateDisplayIds;
 import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.tags.ItematicEntityTypeTags;
 import net.errorcraft.itematic.tags.ItematicItemTags;
@@ -83,7 +84,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehav
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SignModifierItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateDisplayItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
@@ -105,8 +106,6 @@ import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.rules.RejectItemHolderRule;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Playable;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Shooter;
@@ -2141,8 +2140,8 @@ public class Items {
             this.registerSmithingTemplate(
                 ItemIds.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
                 Rarity.UNCOMMON,
-                Tooltips.smithingUpgrade(Identifier.withDefaultNamespace("netherite_upgrade")),
-                SmithingTemplates.ITEM_UPGRADE
+                Tooltips.netheriteUpgrade(),
+                SmithingTemplateDisplayIds.NETHERITE_UPGRADE
             );
             this.registerTrimSmithingTemplate(ItemIds.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
             this.registerTrimSmithingTemplate(ItemIds.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
@@ -2745,14 +2744,14 @@ public class Items {
                 item,
                 rarity,
                 Tooltips.smithingTrimPattern(),
-                SmithingTemplates.TRIM_PATTERN
+                SmithingTemplateDisplayIds.TRIM_PATTERN
             );
         }
 
-        private void registerSmithingTemplate(ResourceKey<Item> item, Rarity rarity, Component[] tooltip, SmithingTemplate smithingTemplate) {
+        private void registerSmithingTemplate(ResourceKey<Item> item, Rarity rarity, Component[] tooltip, Identifier smithingTemplateDisplay) {
             this.builder(item)
                 .display(display -> display.rarity(rarity).tooltip(tooltip))
-                .behavior(SmithingTemplateProviderItemBehavior.of(smithingTemplate))
+                .behavior(SmithingTemplateDisplayItemBehavior.of(smithingTemplateDisplay))
                 .register();
         }
 

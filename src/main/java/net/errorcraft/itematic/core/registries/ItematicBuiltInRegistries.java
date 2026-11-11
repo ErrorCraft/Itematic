@@ -16,8 +16,6 @@ import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.entries.ItemEntry;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Constant;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
@@ -46,10 +44,6 @@ public class ItematicBuiltInRegistries {
     public static final Registry<SequenceHandlerType<?>> SEQUENCE_HANDLER_TYPE = register(
         ItematicRegistries.SEQUENCE_HANDLER_TYPE,
         _ -> SequenceHandlerType.UNCHECKED
-    );
-    public static final Registry<SmithingTemplate> SMITHING_TEMPLATE = register(
-        ItematicRegistries.SMITHING_TEMPLATE,
-        _ -> SmithingTemplates.TRIM_PATTERN
     );
     public static final Registry<BlockPickerType<?>> BLOCK_PICKER_TYPE = register(
         ItematicRegistries.BLOCK_PICKER_TYPE,

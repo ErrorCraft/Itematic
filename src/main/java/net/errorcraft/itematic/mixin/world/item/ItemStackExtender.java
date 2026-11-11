@@ -699,7 +699,19 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
             target = "Lnet/minecraft/world/item/Item;appendHoverText(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/Item$TooltipContext;Lnet/minecraft/world/item/component/TooltipDisplay;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;)V"
         )
     )
-    private void addExtraDataComponentTooltips(Item instance, ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag, Operation<Void> original) {
+    private void addStaticTooltip(Item instance, ItemStack itemStack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag, Operation<Void> original) {
+        instance.itematic$display().tooltip().ifPresent(tooltip -> tooltip.forEach(builder));
+    }
+
+    @Inject(
+        method = "addDetailsToTooltip",
+        at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/core/component/DataComponents;ENTITY_DATA:Lnet/minecraft/core/component/DataComponentType;",
+            opcode = Opcodes.GETSTATIC
+        )
+    )
+    private void addEntityPlacerTooltip(Item.TooltipContext context, TooltipDisplay display, @Nullable Player player, TooltipFlag tooltipFlag, Consumer<Component> builder, CallbackInfo info) {
         this.addToTooltip(ItematicDataComponents.ENTITY_PLACER, context, display, builder, tooltipFlag);
     }
 

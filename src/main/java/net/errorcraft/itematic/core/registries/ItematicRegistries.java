@@ -16,7 +16,6 @@ import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.errorcraft.itematic.world.level.modification.WorldModification;
@@ -33,7 +32,6 @@ public class ItematicRegistries {
     public static final ResourceKey<Registry<ItemGroupEntryProvider>> ITEM_GROUP_ENTRY_PROVIDER = of("item_group_entry_provider");
     public static final ResourceKey<Registry<ActionEntry>> ACTION = of("action");
     public static final ResourceKey<Registry<SequenceHandlerType<?>>> SEQUENCE_HANDLER_TYPE = of("sequence_handler_type");
-    public static final ResourceKey<Registry<SmithingTemplate>> SMITHING_TEMPLATE = of("smithing_template");
     public static final ResourceKey<Registry<BlockPickerType<?>>> BLOCK_PICKER_TYPE = of("block_picker_type");
     public static final ResourceKey<Registry<UseDurationProvider.Type<?>>> USE_DURATION_PROVIDER_TYPE = of("use_duration_provider_type");
     public static final ResourceKey<Registry<ItemHolderRuleType<?>>> ITEM_HOLDER_RULE_TYPE = of("item_holder_rule_type");

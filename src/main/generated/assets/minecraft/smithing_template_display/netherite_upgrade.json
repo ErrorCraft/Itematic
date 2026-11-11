@@ -1,0 +1,28 @@
+{
+  "additions_slot": {
+    "description": {
+      "translate": "item.minecraft.smithing_template.netherite_upgrade.additions_slot_description"
+    },
+    "empty_textures": [
+      "minecraft:container/slot/ingot"
+    ]
+  },
+  "base_slot": {
+    "description": {
+      "translate": "item.minecraft.smithing_template.netherite_upgrade.base_slot_description"
+    },
+    "empty_textures": [
+      "minecraft:container/slot/helmet",
+      "minecraft:container/slot/sword",
+      "minecraft:container/slot/chestplate",
+      "minecraft:container/slot/pickaxe",
+      "minecraft:container/slot/leggings",
+      "minecraft:container/slot/axe",
+      "minecraft:container/slot/boots",
+      "minecraft:container/slot/hoe",
+      "minecraft:container/slot/shovel",
+      "minecraft:container/slot/nautilus_armor",
+      "minecraft:container/slot/spear"
+    ]
+  }
+}

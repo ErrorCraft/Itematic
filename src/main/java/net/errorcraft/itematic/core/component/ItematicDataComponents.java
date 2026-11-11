@@ -117,6 +117,12 @@ public class ItematicDataComponents {
             .networkSynchronized(Identifier.STREAM_CODEC)
             .cacheEncoding()
     );
+    public static final DataComponentType<Identifier> SMITHING_TEMPLATE_DISPLAY = register(
+        "smithing_template_display",
+        builder -> builder.persistent(Identifier.CODEC)
+            .networkSynchronized(Identifier.STREAM_CODEC)
+            .cacheEncoding()
+    );
     public static final DataComponentType<Fraction> ITEM_HOLDER_CAPACITY = register(
         "item_holder_capacity",
         builder -> builder.persistent(ItemHolderItemBehavior.CAPACITY_CODEC)
