@@ -11,6 +11,7 @@ import net.errorcraft.itematic.mixin.world.item.BundleItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
+import net.errorcraft.itematic.mixin.world.level.block.entity.BrushableBlockEntityAccessor;
 import net.errorcraft.itematic.references.ItemBarStyleIds;
 import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
@@ -96,6 +97,7 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.VillagerFoodItemBeh
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockBrusher;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.Castable;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
@@ -1530,7 +1532,11 @@ public class Items {
                         .passes(UseDuration.Pass.BLOCK)
                         .build()
                 )
-                .behavior(BrushItemBehavior.INSTANCE)
+                .behavior(
+                    BrushItemBehavior.of(
+                        new BlockBrusher(BrushableBlockEntityAccessor.requiredBrushesToBreak())
+                    )
+                )
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH)))
                 .register();
             this.registerItem(ItemIds.BREEZE_ROD);

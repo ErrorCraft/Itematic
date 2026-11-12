@@ -56,7 +56,6 @@ inject-interface    net/minecraft/world/entity/ai/attributes/AttributeSupplier  
 inject-interface    net/minecraft/world/entity/npc/villager/VillagerProfession    net/errorcraft/itematic/access/world/entity/npc/villager/VillagerProfessionAccess
 inject-interface    net/minecraft/world/entity/projectile/FireworkRocketEntity    net/errorcraft/itematic/access/world/entity/projectile/FireworkRocketEntityAccess
 inject-interface    net/minecraft/world/inventory/tooltip/BundleTooltip    net/errorcraft/itematic/access/world/inventory/tooltip/BundleTooltipAccess
-inject-interface    net/minecraft/world/item/BrushItem    net/errorcraft/itematic/access/world/item/BrushItemAccess
 inject-interface    net/minecraft/world/item/CreativeModeTab    net/errorcraft/itematic/access/world/item/CreativeModeTabAccess
 inject-interface    net/minecraft/world/item/CreativeModeTab$TabVisibility    net/minecraft/util/StringRepresentable
 inject-interface    net/minecraft/world/item/Item    net/errorcraft/itematic/access/world/item/ItemAccess

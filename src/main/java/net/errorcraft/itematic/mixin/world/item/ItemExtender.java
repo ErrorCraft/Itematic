@@ -19,6 +19,7 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockBrusher;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.BookContent;
 import net.errorcraft.itematic.world.item.component.Bucket;
@@ -470,13 +471,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         return original.call(itemStack, player, target, type);
     }
 
-    @WrapMethod(
-        method = "onUseTick"
+    @Inject(
+        method = "onUseTick",
+        at = @At("HEAD")
     )
-    public void useItemBehavior(Level level, LivingEntity livingEntity, ItemStack itemStack, int ticksRemaining, Operation<Void> original) {
+    public void useDataComponents(Level level, LivingEntity livingEntity, ItemStack itemStack, int ticksRemaining, CallbackInfo info) {
         int usedTicks = livingEntity.itematic$usedItemTicks();
-        for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.using(itemStack, level, livingEntity, usedTicks, ticksRemaining);
+        BlockBrusher blockBrusher = itemStack.get(ItematicDataComponents.BLOCK_BRUSHER);
+        if (blockBrusher != null) {
+            blockBrusher.brush(itemStack, level, livingEntity, usedTicks);
         }
 
         ItemHolderRules itemHolderRules = itemStack.get(ItematicDataComponents.ITEM_HOLDER_RULES);

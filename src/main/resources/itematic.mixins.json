@@ -385,6 +385,7 @@
     "world.level.block.WitherSkullBlockExtender",
     "world.level.block.entity.AbstractFurnaceBlockEntityExtender",
     "world.level.block.entity.BrewingStandBlockEntityExtender",
+    "world.level.block.entity.BrushableBlockEntityAccessor",
     "world.level.block.entity.BrushableBlockEntityExtender",
     "world.level.block.entity.DecoratedPotBlockEntityExtender",
     "world.level.block.entity.JukeboxBlockEntityExtender",

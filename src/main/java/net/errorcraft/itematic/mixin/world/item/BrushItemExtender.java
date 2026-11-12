@@ -1,28 +1,19 @@
 package net.errorcraft.itematic.mixin.world.item;
 
-import net.errorcraft.itematic.access.world.item.BrushItemAccess;
+import net.errorcraft.itematic.world.item.component.BlockBrusher;
 import net.minecraft.world.item.BrushItem;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(BrushItem.class)
-public class BrushItemExtender implements BrushItemAccess {
-    @Unique
-    private int usedTicks;
-
+public class BrushItemExtender {
     @ModifyVariable(
         method = "onUseTick",
         at = @At("LOAD"),
         name = "timeElapsed"
     )
     private int useUsedTicksDirectlyInsteadOfCalculating(int timeElapsed) {
-        return this.usedTicks + 1;
-    }
-
-    @Override
-    public void itematic$setUsedTicks(int usedTicks) {
-        this.usedTicks = usedTicks;
+        return BlockBrusher.USED_TICKS.get() + 1;
     }
 }

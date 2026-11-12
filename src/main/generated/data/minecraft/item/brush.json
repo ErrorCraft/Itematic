@@ -1,6 +1,8 @@
 {
   "behavior": {
-    "minecraft:brush": {},
+    "minecraft:brush": {
+      "sweep_count": 10
+    },
     "minecraft:damageable": {
       "durability": 64
     },
