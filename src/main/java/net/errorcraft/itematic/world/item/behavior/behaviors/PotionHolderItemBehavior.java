@@ -7,7 +7,6 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 
 public record PotionHolderItemBehavior(float durationScale) implements ItemBehavior<PotionHolderItemBehavior> {
@@ -28,12 +27,5 @@ public record PotionHolderItemBehavior(float durationScale) implements ItemBehav
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
         builder.set(DataComponents.POTION_DURATION_SCALE, this.durationScale);
-    }
-
-    public String translationKey(ItemStack stack, String baseTranslationKey) {
-        return stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
-            .potion()
-            .map(potion -> baseTranslationKey + ".effect." + potion.value().name())
-            .orElseGet(() -> baseTranslationKey + ".effect.empty");
     }
 }

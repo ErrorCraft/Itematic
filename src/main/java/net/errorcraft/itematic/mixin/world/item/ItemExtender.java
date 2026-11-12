@@ -59,10 +59,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.Consumable;
@@ -666,17 +668,15 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "getName(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/network/chat/Component;"
     )
-    public Component checkBehavior(ItemStack itemStack, Operation<Component> original) {
-        Optional<String> potionHolderTranslationKey = this.itematic$getBehavior(ItemBehaviorType.POTION_HOLDER)
-            .map(potionHolder -> potionHolder.translationKey(itemStack, this.display.translationKey()));
-        if (potionHolderTranslationKey.isPresent()) {
-            return Component.translatable(potionHolderTranslationKey.get());
+    public Component getNameUseDataComponents(ItemStack itemStack, Operation<Component> original) {
+        PotionContents potionContents = itemStack.get(DataComponents.POTION_CONTENTS);
+        if (potionContents != null) {
+            return potionContents.getName(this.display.translationKey() + ".effect.");
         }
 
-        Optional<String> bannerPatternHolderTranslationKey = this.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
-            .flatMap(bannerPatternHolder -> bannerPatternHolder.translationKey(itemStack, this.display.translationKey()));
-        if (bannerPatternHolderTranslationKey.isPresent()) {
-            return Component.translatable(bannerPatternHolderTranslationKey.get());
+        DyeColor baseColor = itemStack.get(DataComponents.BASE_COLOR);
+        if (baseColor != null) {
+            return Component.translatable(this.display.translationKey() + "." + baseColor.getName());
         }
 
         return original.call(itemStack);
@@ -685,7 +685,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "getTooltipImage"
     )
-    public Optional<TooltipComponent> useDataComponents(ItemStack itemStack, Operation<Optional<TooltipComponent>> original) {
+    public Optional<TooltipComponent> getTooltipImageUseDataComponents(ItemStack itemStack, Operation<Optional<TooltipComponent>> original) {
         BundleContents bundleContents = itemStack.get(DataComponents.BUNDLE_CONTENTS);
         if (bundleContents != null) {
             return bundleContents.itematic$tooltipImage(itemStack);

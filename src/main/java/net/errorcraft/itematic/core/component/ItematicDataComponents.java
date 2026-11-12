@@ -41,6 +41,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.ItemUseAnimation;
@@ -291,6 +292,11 @@ public class ItematicDataComponents {
         builder -> builder.persistent(Castable.CODEC)
             .networkSynchronized(Castable.STREAM_CODEC)
             .cacheEncoding()
+    );
+    public static final DataComponentType<DyeColor> BANNER_BASE_COLOR = register(
+        "banner_base_color",
+        builder -> builder.persistent(DyeColor.CODEC)
+            .networkSynchronized(DyeColor.STREAM_CODEC)
     );
 
     private ItematicDataComponents() {}

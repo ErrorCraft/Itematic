@@ -1,13 +1,10 @@
 package net.errorcraft.itematic.mixin.client.gui.screens.inventory;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.minecraft.client.gui.screens.inventory.LoomScreen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.DyeColor;
@@ -16,15 +13,10 @@ import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(LoomScreen.class)
-public abstract class LoomScreenExtender extends AbstractContainerScreen<LoomMenu> {
-    public LoomScreenExtender(LoomMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
-    }
-
-    @Redirect(
+public class LoomScreenExtender {
+    @WrapOperation(
         method = "extractBackground",
         at = @At(
             value = "INVOKE",
@@ -32,21 +24,19 @@ public abstract class LoomScreenExtender extends AbstractContainerScreen<LoomMen
         )
     )
     @Nullable
-    private Item getItemUseNull(ItemStack instance) {
+    private Item getItemUseNull(ItemStack instance, Operation<Item> original) {
         return null;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "extractBackground",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/BannerItem;getColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemBehavior(BannerItem instance, @Local(name = "resultSlot") Slot resultSlot) {
+    private DyeColor getColorUseDataComponent(BannerItem instance, Operation<DyeColor> original, @Local(name = "resultSlot") Slot resultSlot) {
         return resultSlot.getItem()
-            .itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
-            .flatMap(BannerPatternHolderItemBehavior::color)
-            .orElse(DyeColor.WHITE);
+            .getOrDefault(ItematicDataComponents.BANNER_BASE_COLOR, DyeColor.WHITE);
     }
 }
