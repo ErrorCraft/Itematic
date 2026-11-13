@@ -3,7 +3,6 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.component.DataComponentMap;
@@ -18,7 +17,6 @@ public record EquipmentItemBehavior(Equippable equippable, Optional<MobVisibilit
         MapCodec.assumeMapUnsafe(Equippable.CODEC).forGetter(EquipmentItemBehavior::equippable),
         MobVisibility.CODEC.optionalFieldOf("mob_visibility").forGetter(EquipmentItemBehavior::mobVisibility)
     ).apply(instance, EquipmentItemBehavior::new));
-    public static final ScopedValue<ActionContext> ON_EQUIP_ACTION_CONTEXT = ScopedValue.newInstance();
 
     public static EquipmentItemBehavior of(Equippable equippable) {
         return new EquipmentItemBehavior(equippable, Optional.empty());

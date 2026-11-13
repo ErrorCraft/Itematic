@@ -298,6 +298,11 @@ public class ItematicDataComponents {
         builder -> builder.persistent(DyeColor.CODEC)
             .networkSynchronized(DyeColor.STREAM_CODEC)
     );
+    public static final DataComponentType<Unit> PRESERVE_DAMAGED_ITEM = register(
+        "preserve_damaged_item",
+        builder -> builder.persistent(Unit.CODEC)
+            .networkSynchronized(Unit.STREAM_CODEC)
+    );
 
     private ItematicDataComponents() {}
 

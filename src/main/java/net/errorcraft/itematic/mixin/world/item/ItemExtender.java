@@ -18,7 +18,6 @@ import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavior;
 import net.errorcraft.itematic.world.item.component.BlockBrusher;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.BookContent;
@@ -30,6 +29,7 @@ import net.errorcraft.itematic.world.item.component.GliderFuel;
 import net.errorcraft.itematic.world.item.component.InventoryTickListener;
 import net.errorcraft.itematic.world.item.component.RecipesComponent;
 import net.errorcraft.itematic.world.item.component.Throwable;
+import net.errorcraft.itematic.world.item.equipment.EquipmentUtil;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
@@ -288,7 +288,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .add(LootContextParams.TOOL, inHand)
             .add(ItematicContextKeys.HAND, hand)
             .build();
-        return ScopedValue.where(EquipmentItemBehavior.ON_EQUIP_ACTION_CONTEXT, context)
+        return ScopedValue.where(EquipmentUtil.ON_EQUIP_ACTION_CONTEXT, context)
             .call(() -> original.call(instance, inHand, player));
     }
 
@@ -498,7 +498,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "releaseUsing"
     )
-    public boolean useItemBehavior(ItemStack itemStack, Level level, LivingEntity entity, int remainingTime, Operation<Boolean> original) {
+    public boolean useDataComponents(ItemStack itemStack, Level level, LivingEntity entity, int remainingTime, Operation<Boolean> original) {
         boolean result = false;
         int usedTicks = entity.itematic$usedItemTicks();
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, itemStack);
@@ -536,7 +536,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "finishUsingItem"
     )
-    public ItemStack useItemBehavior(ItemStack itemStack, Level level, LivingEntity entity, Operation<ItemStack> original) {
+    public ItemStack useDataComponents(ItemStack itemStack, Level level, LivingEntity entity, Operation<ItemStack> original) {
         ItemStackExchanger stackExchanger = ItemStackExchanger.forEntity(entity, itemStack);
         UseDuration useDuration = itemStack.get(ItematicDataComponents.USE_DURATION);
         if (useDuration != null) {
@@ -569,7 +569,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     @WrapMethod(
         method = "overrideStackedOnOther"
     )
-    public boolean useItemBehavior(ItemStack self, Slot slot, ClickAction clickAction, Player player, Operation<Boolean> original) {
+    public boolean useDataComponents(ItemStack self, Slot slot, ClickAction clickAction, Player player, Operation<Boolean> original) {
         ItemHolderRules itemHolderRules = self.get(ItematicDataComponents.ITEM_HOLDER_RULES);
         if (itemHolderRules == null) {
             return false;
@@ -742,15 +742,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
         }
 
         return this.behavior.has(type);
-    }
-
-    @Override
-    public <T extends ItemBehavior<T>> Optional<T> itematic$getBehavior(ItemBehaviorType<T> type) {
-        if (this.behavior == null) {
-            return Optional.empty();
-        }
-
-        return this.behavior.get(type);
     }
 
     @Override

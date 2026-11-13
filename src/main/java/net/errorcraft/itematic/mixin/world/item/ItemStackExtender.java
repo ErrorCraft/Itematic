@@ -93,7 +93,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -127,7 +126,7 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     public abstract void hurtAndBreak(int amount, ServerLevel level, @Nullable ServerPlayer player, Consumer<ItemStack> onBreak);
 
     @Shadow
-    public abstract int getDamageValue();
+    public abstract int getMaxDamage();
 
     @Shadow
     public abstract <T> @Nullable T set(DataComponentType<T> type, @Nullable T value);
@@ -140,6 +139,9 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
 
     @Shadow
     public abstract int getCount();
+
+    @Shadow
+    public abstract int getDamageValue();
 
     @Unique
     private static final Component FAILED_TO_LOAD_NAME = Component.translatable("item.failed_to_load")
@@ -594,17 +596,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     }
 
     @WrapMethod(
-        method = "isValidRepairItem"
-    )
-    public boolean alsoCheckRepairableItemBehavior(ItemStack repairItem, Operation<Boolean> original) {
-        if (!this.itematic$hasBehavior(ItemBehaviorType.REPAIRABLE)) {
-            return false;
-        }
-
-        return original.call(repairItem);
-    }
-
-    @WrapMethod(
         method = {
             "isSameItem",
             "isSameItemSameComponents"
@@ -748,14 +739,15 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
         return original.call(other, slot, clickAction, player, carriedItem);
     }
 
-    @ModifyReturnValue(
-        method = "processDurabilityChange",
-        at = @At("RETURN")
+    @ModifyArg(
+        method = "hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerPlayer;Ljava/util/function/Consumer;)V",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/item/ItemStack;applyDamage(ILnet/minecraft/server/level/ServerPlayer;Ljava/util/function/Consumer;)V"
+        )
     )
-    private int limitDamageApplied(int original) {
-        return this.itematic$getBehavior(ItemBehaviorType.DAMAGEABLE)
-            .map(damageable -> Math.min(damageable.maximumDamage((ItemStack)(Object) this) - this.getDamageValue(), original))
-            .orElse(original);
+    private int limitDamageApplied(int newDamage) {
+        return Math.min(newDamage, this.itematic$trueMaxDamage());
     }
 
     @Inject(
@@ -906,6 +898,21 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     }
 
     @Override
+    public int itematic$trueMaxDamage() {
+        int maxDamage = this.getMaxDamage();
+        if (this.has(ItematicDataComponents.PRESERVE_DAMAGED_ITEM)) {
+            return maxDamage - 1;
+        }
+
+        return maxDamage;
+    }
+
+    @Override
+    public boolean itematic$canUseWithCurrentDamage() {
+        return this.getDamageValue() < this.itematic$trueMaxDamage();
+    }
+
+    @Override
     public void itematic$damage(int amount, ActionContext context) {
         if (!(context.level() instanceof ServerLevel level)) {
             return;
@@ -926,15 +933,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     @Override
     public <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {
         return this.item != null && this.item.value().itematic$hasBehavior(type);
-    }
-
-    @Override
-    public <T extends ItemBehavior<T>> Optional<T> itematic$getBehavior(ItemBehaviorType<T> type) {
-        if (this.item == null) {
-            return Optional.empty();
-        }
-
-        return this.item.value().itematic$getBehavior(type);
     }
 
     @Override

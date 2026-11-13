@@ -35,7 +35,7 @@ public class FirstPersonHandsAndItemsExtender {
             target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z"
         )
     )
-    private static boolean isBowOrCrossbowUseItemBehavior(ItemStack instance, Object o, Operation<Boolean> original) {
+    private static boolean isBowOrCrossbowUseDataComponent(ItemStack instance, Object o, Operation<Boolean> original) {
         ShooterMethod<?> method = instance.get(ItematicDataComponents.SHOOTER_METHOD);
         if (o == Items.BOW) {
             return method == Direct.INSTANCE;

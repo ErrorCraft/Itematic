@@ -75,7 +75,7 @@ public class ClientLevelExtender {
             target = "Lnet/minecraft/world/item/BlockItem;getBlock()Lnet/minecraft/world/level/block/Block;"
         )
     )
-    private Block getBlockUseItemBehavior(BlockItem instance, Operation<Block> original, @Share("block") LocalRef<Holder<Block>> blockReference) {
+    private Block getBlockUseDataComponent(BlockItem instance, Operation<Block> original, @Share("block") LocalRef<Holder<Block>> blockReference) {
         return blockReference.get().value();
     }
 }
