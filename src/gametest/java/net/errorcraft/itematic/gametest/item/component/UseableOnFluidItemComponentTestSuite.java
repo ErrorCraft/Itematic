@@ -97,7 +97,7 @@ public class UseableOnFluidItemComponentTestSuite {
         ServerLevel level = helper.getLevel();
         ItemStack pigSpawnEgg = level.itematic$createStack(ItemIds.PIG_SPAWN_EGG);
         player.setItemInHand(InteractionHand.MAIN_HAND, pigSpawnEgg);
-        TestUtil.interactWithBlock(helper, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, player, Direction.DOWN, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER);
         helper.succeedIf(() -> helper.assertEntityPresent(EntityTypes.PIG, ABOVE_LOOK_AT_WATER_POSITION_IN_WATER));
     }
 

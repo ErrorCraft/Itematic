@@ -7,14 +7,12 @@
       "layers": "minecraft:compostable/medium"
     },
     "minecraft:stackable": 64,
-    "minecraft:suspicious_effect_ingredient": {
-      "effects": [
-        {
-          "id": "minecraft:weakness",
-          "duration": 180
-        }
-      ]
-    }
+    "minecraft:suspicious_effect_ingredient": [
+      {
+        "id": "minecraft:weakness",
+        "duration": 180
+      }
+    ]
   },
   "display": {
     "model": "minecraft:pink_tulip",

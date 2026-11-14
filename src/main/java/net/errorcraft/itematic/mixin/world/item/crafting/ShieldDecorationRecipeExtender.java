@@ -5,8 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.DyeColor;
@@ -24,8 +23,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-
-import java.util.Optional;
 
 @Mixin(ShieldDecorationRecipe.class)
 public abstract class ShieldDecorationRecipeExtender extends CustomRecipe {
@@ -55,14 +52,11 @@ public abstract class ShieldDecorationRecipeExtender extends CustomRecipe {
     @ModifyConstant(
         method = "matches(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/world/level/Level;)Z",
         constant = @Constant(
-            classValue = BannerItem.class,
-            ordinal = 0
+            classValue = BannerItem.class
         )
     )
-    private boolean instanceOfBannerItemForMatchesUseItemBehavior(Object reference, Class<BannerItem> clazz, @Local(name = "itemStack") ItemStack itemStack) {
-        return itemStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
-            .flatMap(BannerPatternHolderItemBehavior::color)
-            .isPresent();
+    private boolean instanceOfBannerItemCheckBannerBaseColorDataComponent(Object reference, Class<BannerItem> clazz, @Local(name = "itemStack") ItemStack itemStack) {
+        return itemStack.has(ItematicDataComponents.BANNER_BASE_COLOR);
     }
 
     @ModifyConstant(
@@ -72,11 +66,14 @@ public abstract class ShieldDecorationRecipeExtender extends CustomRecipe {
             ordinal = 0
         )
     )
-    private boolean instanceOfBannerItemForAssembleUseItemBehavior(Object reference, Class<BannerItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("dyeColor") LocalRef<DyeColor> dyeColorReference) {
-        Optional<DyeColor> dyeColor = itemStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
-            .flatMap(BannerPatternHolderItemBehavior::color);
-        dyeColor.ifPresent(dyeColorReference::set);
-        return dyeColor.isPresent();
+    private boolean instanceOfBannerItemUseDataComponent(Object reference, Class<BannerItem> clazz, @Local(name = "itemStack") ItemStack itemStack, @Share("bannerBaseColor") LocalRef<DyeColor> bannerBaseColorReference) {
+        DyeColor bannerBaseColor = itemStack.get(ItematicDataComponents.BANNER_BASE_COLOR);
+        if (bannerBaseColor == null) {
+            return false;
+        }
+
+        bannerBaseColorReference.set(bannerBaseColor);
+        return true;
     }
 
     @WrapOperation(
@@ -86,8 +83,8 @@ public abstract class ShieldDecorationRecipeExtender extends CustomRecipe {
             target = "Lnet/minecraft/world/item/BannerItem;getColor()Lnet/minecraft/world/item/DyeColor;"
         )
     )
-    private DyeColor getColorUseItemBehavior(BannerItem instance, Operation<DyeColor> original, @Share("dyeColor") LocalRef<DyeColor> dyeColorReference) {
-        return dyeColorReference.get();
+    private DyeColor getColorUseDataComponent(BannerItem instance, Operation<DyeColor> original, @Share("bannerBaseColor") LocalRef<DyeColor> bannerBaseColorReference) {
+        return bannerBaseColorReference.get();
     }
 
     @Override

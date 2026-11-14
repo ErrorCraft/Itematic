@@ -7,13 +7,11 @@
       "layers": "minecraft:compostable/medium"
     },
     "minecraft:stackable": 64,
-    "minecraft:suspicious_effect_ingredient": {
-      "effects": [
-        {
-          "id": "minecraft:regeneration"
-        }
-      ]
-    }
+    "minecraft:suspicious_effect_ingredient": [
+      {
+        "id": "minecraft:regeneration"
+      }
+    ]
   },
   "display": {
     "model": "minecraft:oxeye_daisy",

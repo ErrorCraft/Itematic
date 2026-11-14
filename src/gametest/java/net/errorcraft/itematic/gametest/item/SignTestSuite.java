@@ -38,7 +38,7 @@ public class SignTestSuite {
             level.itematic$createStack(ItematicBlockItemIds.OAK.sign().item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> {
             Assert.blockState(helper, PLACED_GROUND_BLOCK_POSITION)
                 .is(Blocks.OAK_SIGN);
@@ -67,7 +67,7 @@ public class SignTestSuite {
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, oakSign);
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedOnTickWhen(1, () -> {
             Assert.blockState(helper, PLACED_GROUND_BLOCK_POSITION)
                 .is(Blocks.OAK_SIGN);
@@ -91,7 +91,7 @@ public class SignTestSuite {
             level.itematic$createStack(ItematicBlockItemIds.OAK.hangingSign().item())
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, CEILING_POSITION, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, player, Direction.DOWN, CEILING_POSITION);
         helper.succeedIf(() -> {
             Assert.blockState(helper, PLACED_CEILING_BLOCK_POSITION)
                 .is(Blocks.OAK_HANGING_SIGN);
@@ -120,7 +120,7 @@ public class SignTestSuite {
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, oakHangingSign);
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, CEILING_POSITION, player, Direction.DOWN);
+        TestUtil.interactWithBlock(helper, player, Direction.DOWN, CEILING_POSITION);
         helper.succeedOnTickWhen(1, () -> {
             Assert.blockState(helper, PLACED_CEILING_BLOCK_POSITION)
                 .is(Blocks.OAK_HANGING_SIGN);
@@ -142,7 +142,7 @@ public class SignTestSuite {
             InteractionHand.MAIN_HAND,
             helper.getLevel().itematic$createStack(ItematicBlockItemIds.OAK.sign().item())
         );
-        TestUtil.interactWithBlock(helper, WALL_POSITION, player, Direction.NORTH);
+        TestUtil.interactWithBlock(helper, player, Direction.NORTH, WALL_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_WALL_BLOCK_POSITION)
             .is(Blocks.OAK_WALL_SIGN));
     }
@@ -155,7 +155,7 @@ public class SignTestSuite {
             InteractionHand.MAIN_HAND,
             helper.getLevel().itematic$createStack(ItematicBlockItemIds.OAK.sign().item())
         );
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> Assert.blockState(helper, PLACED_GROUND_BLOCK_POSITION)
             .is(Blocks.OAK_SIGN));
     }

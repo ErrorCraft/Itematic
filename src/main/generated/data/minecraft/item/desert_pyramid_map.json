@@ -1,6 +1,6 @@
 {
   "behavior": {
-    "minecraft:map_holder": {},
+    "minecraft:map_decoration_holder": {},
     "minecraft:stackable": 64
   },
   "display": {

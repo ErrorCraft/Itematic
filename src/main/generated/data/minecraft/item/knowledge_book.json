@@ -1,7 +1,6 @@
 {
   "behavior": {
-    "minecraft:stackable": 1,
-    "minecraft:unlock_recipes": {}
+    "minecraft:stackable": 1
   },
   "display": {
     "model": "minecraft:knowledge_book",

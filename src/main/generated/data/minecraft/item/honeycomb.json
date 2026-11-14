@@ -3,6 +3,11 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:wax_block"
     },
+    "minecraft:sign_modifier": {
+      "apply_sound": "minecraft:item.honeycomb.wax_on",
+      "can_apply_without_text": true,
+      "wax": true
+    },
     "minecraft:stackable": 64
   },
   "display": {
@@ -13,68 +18,19 @@
     "minecraft:use_on_block": {
       "action": {
         "type": "minecraft:sequence",
-        "handler": "minecraft:first_to_pass_requirements",
+        "handler": "minecraft:passing",
         "entries": [
+          "minecraft:wax_block",
           {
             "action": {
-              "type": "minecraft:sequence",
-              "handler": "minecraft:passing",
-              "entries": [
-                {
-                  "action": {
-                    "type": "minecraft:modify_sign",
-                    "position": "interacted",
-                    "wax": true
-                  }
-                },
-                {
-                  "action": {
-                    "type": "minecraft:decrement_item",
-                    "amount": 1
-                  }
-                },
-                {
-                  "action": {
-                    "type": "minecraft:swing_hand",
-                    "entity": "this"
-                  }
-                }
-              ]
-            },
-            "requirements": {
-              "type": "minecraft:location_check",
-              "position": "interacted",
-              "predicate": {
-                "block": {
-                  "blocks": "#minecraft:signs"
-                }
-              }
+              "type": "minecraft:decrement_item",
+              "amount": 1
             }
           },
           {
             "action": {
-              "type": "minecraft:sequence",
-              "handler": "minecraft:passing",
-              "entries": [
-                {
-                  "action": {
-                    "type": "minecraft:wax_block",
-                    "position": "interacted"
-                  }
-                },
-                {
-                  "action": {
-                    "type": "minecraft:decrement_item",
-                    "amount": 1
-                  }
-                },
-                {
-                  "action": {
-                    "type": "minecraft:swing_hand",
-                    "entity": "this"
-                  }
-                }
-              ]
+              "type": "minecraft:swing_hand",
+              "entity": "this"
             }
           }
         ]

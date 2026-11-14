@@ -27,25 +27,25 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavi
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.GliderFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.MapDecorationHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SignModifierItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateDisplayItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ThrowableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ToolItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.TrimMaterialProviderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.UnlockRecipesItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.UseableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.VillagerFoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
@@ -73,6 +73,10 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<BlockTransformerItemBehavior> BLOCK_TRANSFORMER = register(
         "block_transformer",
         BlockTransformerItemBehavior.CODEC
+    );
+    public static final ItemBehaviorType<SignModifierItemBehavior> SIGN_MODIFIER = register(
+        "sign_modifier",
+        SignModifierItemBehavior.CODEC
     );
     public static final ItemBehaviorType<DamageableItemBehavior> DAMAGEABLE = register(
         "damageable",
@@ -166,9 +170,9 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
         "steering",
         SteeringItemBehavior.CODEC
     );
-    public static final ItemBehaviorType<SmithingTemplateProviderItemBehavior> SMITHING_TEMPLATE_PROVIDER = register(
-        "smithing_template_provider",
-        SmithingTemplateProviderItemBehavior.CODEC
+    public static final ItemBehaviorType<SmithingTemplateDisplayItemBehavior> SMITHING_TEMPLATE_DISPLAY = register(
+        "smithing_template_display",
+        SmithingTemplateDisplayItemBehavior.CODEC
     );
     public static final ItemBehaviorType<BannerPatternItemBehavior> BANNER_PATTERN = register(
         "banner_pattern",
@@ -190,13 +194,9 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
         "decorated_pot_pattern",
         DecoratedPotPatternItemBehavior.CODEC
     );
-    public static final ItemBehaviorType<MappableItemBehavior> MAPPABLE = register(
-        "mappable",
-        MappableItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<MapHolderItemBehavior> MAP_HOLDER = register(
-        "map_holder",
-        MapHolderItemBehavior.CODEC
+    public static final ItemBehaviorType<MapDecorationHolderItemBehavior> MAP_DECORATION_HOLDER = register(
+        "map_decoration_holder",
+        MapDecorationHolderItemBehavior.CODEC
     );
     public static final ItemBehaviorType<BrushItemBehavior> BRUSH = register(
         "brush",
@@ -213,10 +213,6 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<ImmuneToDamageItemBehavior> IMMUNE_TO_DAMAGE = register(
         "immune_to_damage",
         ImmuneToDamageItemBehavior.CODEC
-    );
-    public static final ItemBehaviorType<UnlockRecipesItemBehavior> UNLOCK_RECIPES = register(
-        "unlock_recipes",
-        UnlockRecipesItemBehavior.CODEC
     );
     public static final ItemBehaviorType<DebugStickItemBehavior> DEBUG_STICK = register(
         "debug_stick",
@@ -237,6 +233,10 @@ public record ItemBehaviorType<T extends ItemBehavior<T>>(Codec<T> codec) {
     public static final ItemBehaviorType<GliderItemBehavior> GLIDER = register(
         "glider",
         GliderItemBehavior.CODEC
+    );
+    public static final ItemBehaviorType<GliderFuelItemBehavior> GLIDER_FUEL = register(
+        "glider_fuel",
+        GliderFuelItemBehavior.CODEC
     );
     public static final ItemBehaviorType<AttackBlockingItemBehavior> ATTACK_BLOCKING = register(
         "attack_blocking",

@@ -9,14 +9,13 @@ import net.errorcraft.itematic.mixin.core.registries.BuiltInRegistriesAccessor;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.rules.DiscardEntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.rules.Discard;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
+import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.ItemEntry;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Constant;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
@@ -46,10 +45,6 @@ public class ItematicBuiltInRegistries {
         ItematicRegistries.SEQUENCE_HANDLER_TYPE,
         _ -> SequenceHandlerType.UNCHECKED
     );
-    public static final Registry<SmithingTemplate> SMITHING_TEMPLATE = register(
-        ItematicRegistries.SMITHING_TEMPLATE,
-        _ -> SmithingTemplates.TRIM_PATTERN
-    );
     public static final Registry<BlockPickerType<?>> BLOCK_PICKER_TYPE = register(
         ItematicRegistries.BLOCK_PICKER_TYPE,
         _ -> BlockPickerType.SIMPLE
@@ -72,15 +67,15 @@ public class ItematicBuiltInRegistries {
     );
     public static final Registry<MapCodec<? extends EntitySpawnRule<?>>> ENTITY_SPAWN_RULE_TYPE = register(
         ItematicRegistries.ENTITY_SPAWN_RULE_TYPE,
-        _ -> DiscardEntitySpawnRule.CODEC
+        _ -> Discard.CODEC
     );
     public static final Registry<DataComponentType<?>> MELEE_WEAPON_COMPONENT_TYPE = register(
         ItematicRegistries.MELEE_WEAPON_COMPONENT_TYPE,
         _ -> MeleeWeaponComponents.SMASHING
     );
-    public static final Registry<ItemGroupEntryType<?>> ITEM_GROUP_ENTRY_TYPE = register(
+    public static final Registry<MapCodec<? extends ItemGroupEntry<?>>> ITEM_GROUP_ENTRY_TYPE = register(
         ItematicRegistries.ITEM_GROUP_ENTRY_TYPE,
-        _ -> ItemGroupEntryType.ITEM
+        _ -> ItemEntry.CODEC
     );
     public static final Registry<IntProvider.Type<?, ?>> DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE = register(
         ItematicRegistries.DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE,

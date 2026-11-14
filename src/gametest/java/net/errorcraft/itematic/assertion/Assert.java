@@ -72,6 +72,14 @@ public class Assert {
         throw helper.assertionException(Component.literal(message.get()));
     }
 
+    public static <T> void areNotEqual(GameTestHelper helper, @Nullable T value, @Nullable T expected, Supplier<String> message) {
+        if (!Objects.equals(value, expected)) {
+            return;
+        }
+
+        throw helper.assertionException(Component.literal(message.get()));
+    }
+
     public static <T, U extends T> void isInstance(GameTestHelper helper, T value, Class<U> expectedClass, Supplier<String> message, Consumer<U> assertion) {
         if (expectedClass.isInstance(value)) {
             assertion.accept(expectedClass.cast(value));

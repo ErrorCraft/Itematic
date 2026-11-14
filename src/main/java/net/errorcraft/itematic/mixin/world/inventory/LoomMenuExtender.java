@@ -1,8 +1,7 @@
 package net.errorcraft.itematic.mixin.world.inventory;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.BannerPatternHolderItemBehavior;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.minecraft.world.inventory.LoomMenu;
 import net.minecraft.world.item.BannerItem;
 import net.minecraft.world.item.ItemStack;
@@ -18,10 +17,8 @@ public class LoomMenuExtender {
             classValue = BannerItem.class
         )
     )
-    private boolean instanceOfBannerItemUseItemBehavior(Object reference, Class<BannerItem> clazz, @Local(name = "stack") ItemStack stack) {
-        return stack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
-            .map(BannerPatternHolderItemBehavior::modifiable)
-            .orElse(false);
+    private boolean instanceOfBannerItemCheckBannerBaseColorDataComponent(Object reference, Class<BannerItem> clazz, @Local(name = "stack") ItemStack stack) {
+        return stack.has(ItematicDataComponents.BANNER_BASE_COLOR);
     }
 
     @Mixin(targets = "net/minecraft/world/inventory/LoomMenu$3")
@@ -32,10 +29,8 @@ public class LoomMenuExtender {
                 classValue = BannerItem.class
             )
         )
-        private boolean instanceOfBannerItemUseItemBehavior(Object reference, Class<BannerItem> clazz, ItemStack itemStack) {
-            return itemStack.itematic$getBehavior(ItemBehaviorType.BANNER_PATTERN_HOLDER)
-                .map(BannerPatternHolderItemBehavior::modifiable)
-                .orElse(false);
+        private boolean instanceOfBannerItemCheckBannerBaseColorDataComponent(Object reference, Class<BannerItem> clazz, ItemStack itemStack) {
+            return itemStack.has(ItematicDataComponents.BANNER_BASE_COLOR);
         }
     }
 }

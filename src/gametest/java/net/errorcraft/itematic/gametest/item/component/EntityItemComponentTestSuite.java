@@ -27,7 +27,7 @@ public class EntityItemComponentTestSuite {
             level.itematic$createStack(ItemIds.OAK_BOAT)
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> helper.assertEntityPresent(EntityTypes.OAK_BOAT, PLACED_ENTITY_POSITION));
     }
 
@@ -40,7 +40,7 @@ public class EntityItemComponentTestSuite {
             level.itematic$createStack(ItemIds.PIG_SPAWN_EGG)
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, GROUND_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, GROUND_POSITION);
         helper.succeedIf(() -> helper.assertEntityPresent(EntityTypes.PIG, PLACED_ENTITY_POSITION));
     }
 }

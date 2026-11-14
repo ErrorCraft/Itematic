@@ -7,13 +7,11 @@
       "layers": "minecraft:compostable/medium"
     },
     "minecraft:stackable": 64,
-    "minecraft:suspicious_effect_ingredient": {
-      "effects": [
-        {
-          "id": "minecraft:blindness"
-        }
-      ]
-    }
+    "minecraft:suspicious_effect_ingredient": [
+      {
+        "id": "minecraft:blindness"
+      }
+    ]
   },
   "display": {
     "model": "minecraft:azure_bluet",

@@ -11,9 +11,11 @@ import net.errorcraft.itematic.mixin.world.item.BundleItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
+import net.errorcraft.itematic.mixin.world.level.block.entity.BrushableBlockEntityAccessor;
 import net.errorcraft.itematic.references.ItemBarStyleIds;
 import net.errorcraft.itematic.references.ItematicBlockItemIds;
 import net.errorcraft.itematic.references.MobEffectIds;
+import net.errorcraft.itematic.references.SmithingTemplateDisplayIds;
 import net.errorcraft.itematic.references.SoundEventIds;
 import net.errorcraft.itematic.tags.ItematicEntityTypeTags;
 import net.errorcraft.itematic.tags.ItematicItemTags;
@@ -29,6 +31,7 @@ import net.errorcraft.itematic.world.action.actions.DecrementItemAction;
 import net.errorcraft.itematic.world.action.actions.DisplayParticleAction;
 import net.errorcraft.itematic.world.action.actions.ExchangeItemAction;
 import net.errorcraft.itematic.world.action.actions.FertilizeAction;
+import net.errorcraft.itematic.world.action.actions.IncrementStatAction;
 import net.errorcraft.itematic.world.action.actions.InvokeGameEventAction;
 import net.errorcraft.itematic.world.action.actions.LightEndPortalAction;
 import net.errorcraft.itematic.world.action.actions.ModifyItemAction;
@@ -39,9 +42,7 @@ import net.errorcraft.itematic.world.action.actions.SetEntityNameFromItemAction;
 import net.errorcraft.itematic.world.action.actions.SwingHandAction;
 import net.errorcraft.itematic.world.action.actions.TeleportAction;
 import net.errorcraft.itematic.world.action.actions.TwirlPlayerAction;
-import net.errorcraft.itematic.world.action.actions.WaxBlockAction;
 import net.errorcraft.itematic.world.action.context.PositionTarget;
-import net.errorcraft.itematic.world.action.sequence.handler.handlers.FirstToPassRequirementsSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.PassingSequenceHandler;
 import net.errorcraft.itematic.world.action.sequence.handler.handlers.UncheckedSequenceHandler;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
@@ -72,31 +73,33 @@ import net.errorcraft.itematic.world.item.behavior.behaviors.EquipmentItemBehavi
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkExplosionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FireworkItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.FoodItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.GliderFuelItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.GliderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ImmuneToDamageItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.MapHolderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.MappableItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.MapDecorationHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PlayableSongItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.PotionHolderItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ProjectileItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.RepairableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ShooterItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SignModifierItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateDisplayItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SteeringItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.SuspiciousEffectIngredientItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ThrowableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ToolItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.TrimMaterialProviderItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.behaviors.UnlockRecipesItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.UseableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.VillagerFoodItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WeaponItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.WritableItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ZoomItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockBrusher;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
+import net.errorcraft.itematic.world.item.component.Castable;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.ItematicBlockTransformers;
@@ -105,8 +108,6 @@ import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.errorcraft.itematic.world.item.holder.rule.rules.FractionItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.rules.OccupancyHeldItemsWithPenaltyItemHolderRule;
 import net.errorcraft.itematic.world.item.holder.rule.rules.RejectItemHolderRule;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Playable;
 import net.errorcraft.itematic.world.item.use.duration.provider.providers.Shooter;
@@ -122,10 +123,13 @@ import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Direct;
 import net.errorcraft.itematic.world.level.block.CoralCollection;
 import net.errorcraft.itematic.world.level.block.CutoutCollection;
 import net.errorcraft.itematic.world.level.block.WoodCollection;
+import net.errorcraft.itematic.world.level.storage.loot.functions.FillMapItemModifier;
+import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemItemModifiers;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SetItemPointerLocationItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.functions.SplitItemModifier;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.LocationCheckPredicates;
 import net.errorcraft.itematic.world.level.storage.loot.predicates.SideCheckPredicate;
+import net.errorcraft.itematic.world.level.storage.loot.providers.number.floats.ItematicContextFloatProviders;
 import net.errorcraft.itematic.world.level.storage.loot.providers.number.ints.ItematicContextIntProviders;
 import net.errorcraft.itematic.world.phys.Vec3Provider;
 import net.minecraft.SharedConstants;
@@ -164,6 +168,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.BannerPatternTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
@@ -202,6 +207,7 @@ import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.KineticWeapon;
 import net.minecraft.world.item.component.MobVisibility;
@@ -228,6 +234,7 @@ import net.minecraft.world.level.block.entity.DecoratedPotPatterns;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidIds;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.SetComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
@@ -238,6 +245,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 import org.apache.commons.lang3.math.Fraction;
 import org.jspecify.annotations.Nullable;
 
@@ -1131,16 +1139,15 @@ public class Items {
             this.registerBlock(BlockItemIds.HONEY_BLOCK);
             this.registerBlock(BlockItemIds.HONEYCOMB_BLOCK);
             this.builder(ItemIds.HONEYCOMB)
+                .behavior(SignModifierItemBehavior.wax(true, this.soundEvents.getOrThrow(SoundEventIds.HONEYCOMB_WAX_ON)))
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.WAX_BLOCK)))
                 .event(
                     ItemEvent.USE_ON_BLOCK,
                     ActionEntry.of(
-                        FirstToPassRequirementsSequenceHandler.builder()
-                            .add(Actions.waxSign(this.blocks, true))
-                            .add(PassingSequenceHandler.builder()
-                                .add(WaxBlockAction.of(PositionTarget.INTERACTED))
-                                .add(DecrementItemAction.of(1))
-                                .add(SwingHandAction.of(LootContext.EntityTarget.THIS)))
+                        PassingSequenceHandler.builder()
+                            .add(this.actions.getOrThrow(Actions.WAX_BLOCK))
+                            .add(DecrementItemAction.of(1))
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
                     )
                 )
                 .register();
@@ -1356,7 +1363,16 @@ public class Items {
             this.builder(ItemIds.FISHING_ROD, 1)
                 .behavior(DamageableItemBehavior.of(64))
                 .behavior(EnchantableItemBehavior.of(1))
-                .behavior(CastableItemBehavior.INSTANCE)
+                .behavior(
+                    CastableItemBehavior.of(
+                        new Castable(
+                            this.soundEvents.getOrThrow(SoundEventIds.FISHING_BOBBER_THROW),
+                            this.soundEvents.getOrThrow(SoundEventIds.FISHING_BOBBER_RETRIEVE),
+                            BuiltInLootTables.FISHING,
+                            ResolvableInt.fromKey(ItematicContextIntProviders.FISHING_EXPERIENCE)
+                        )
+                    )
+                )
                 .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_SMALL))
                 .register();
             this.builder(ItemIds.SHEARS, 1)
@@ -1516,7 +1532,11 @@ public class Items {
                         .passes(UseDuration.Pass.BLOCK)
                         .build()
                 )
-                .behavior(BrushItemBehavior.INSTANCE)
+                .behavior(
+                    BrushItemBehavior.of(
+                        new BlockBrusher(BrushableBlockEntityAccessor.requiredBrushesToBreak())
+                    )
+                )
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH)))
                 .register();
             this.registerItem(ItemIds.BREEZE_ROD);
@@ -2129,8 +2149,8 @@ public class Items {
             this.registerSmithingTemplate(
                 ItemIds.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
                 Rarity.UNCOMMON,
-                Tooltips.smithingUpgrade(Identifier.withDefaultNamespace("netherite_upgrade")),
-                SmithingTemplates.ITEM_UPGRADE
+                Tooltips.netheriteUpgrade(),
+                SmithingTemplateDisplayIds.NETHERITE_UPGRADE
             );
             this.registerTrimSmithingTemplate(ItemIds.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
             this.registerTrimSmithingTemplate(ItemIds.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, Rarity.UNCOMMON);
@@ -2468,7 +2488,37 @@ public class Items {
                 .behavior(EnchantmentHolderItemBehavior.of(this.items.getOrThrow(ItemIds.BOOK)))
                 .register();
             this.builder(ItemIds.MAP)
-                .behavior(MappableItemBehavior.of(this.items.getOrThrow(ItemIds.FILLED_MAP)))
+                .event(
+                    ItemEvent.USE,
+                    ActionEntry.of(
+                        PassingSequenceHandler.builder()
+                            .add(
+                                ModifyItemAction.of(
+                                    LootContext.ItemStackTarget.TOOL,
+                                    SplitItemModifier.builder(1),
+                                    SetItemItemModifiers.builder(this.items.getOrThrow(ItemIds.FILLED_MAP)),
+                                    FillMapItemModifier.builder(
+                                        LootContext.EntityTarget.THIS,
+                                        0,
+                                        true,
+                                        false
+                                    )
+                                )
+                            )
+                            .add(
+                                IncrementStatAction.of(
+                                    LootContext.EntityTarget.THIS,
+                                    Stats.ITEM_USED.itematic$get(this.items.getOrThrow(ItemIds.MAP))
+                                )
+                            )
+                            .add(
+                                PlaySoundAction.ofEntityTracking(
+                                    this.soundEvents.getOrThrow(SoundEventIds.UI_CARTOGRAPHY_TABLE_TAKE_RESULT)
+                                )
+                            )
+                            .add(SwingHandAction.of(LootContext.EntityTarget.THIS))
+                    )
+                )
                 .register();
             this.registerMap(ItemIds.FILLED_MAP);
             this.registerMap(ItemIds.OCEAN_MONUMENT_MAP);
@@ -2510,6 +2560,7 @@ public class Items {
                 .register();
             ColorCollection.zipApply(ItemIds.DYE, ColorCollection.VALUES, (dye, dyeColor) -> this.builder(dye)
                 .behavior(DyeItemBehavior.of(dyeColor))
+                .behavior(SignModifierItemBehavior.dye(dyeColor, this.soundEvents.getOrThrow(SoundEventIds.DYE_USE)))
                 .register()
             );
             this.registerBundle(ItemIds.BUNDLE);
@@ -2587,7 +2638,21 @@ public class Items {
                 .behavior(FireworkExplosionHolderItemBehavior.INSTANCE)
                 .register();
             this.builderForProjectile(ItemIds.FIREWORK_ROCKET, EntityTypeIds.FIREWORK_ROCKET)
-                .behavior(FireworkItemBehavior.INSTANCE)
+                .behavior(FireworkItemBehavior.of(new Fireworks(1, List.of())))
+                .behavior(
+                    EntityItemBehavior.of(
+                        EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.FIREWORK_ROCKET))
+                            .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.FIREWORK_ROCKET))
+                            .build()
+                    )
+                )
+                .behavior(
+                    GliderFuelItemBehavior.of(
+                        ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_CONSTANTLY_ADDED_SPEED,
+                        ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_TARGET_SPEED,
+                        ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_TARGET_SPEED_FACTOR
+                    )
+                )
                 .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
                 .register();
             this.registerItem(ItemIds.LEATHER);
@@ -2595,10 +2660,10 @@ public class Items {
             this.registerItem(ItemIds.PAPER);
             this.registerItem(ItemIds.GLOWSTONE_DUST);
             this.builder(ItemIds.INK_SAC)
-                .event(ItemEvent.USE_ON_BLOCK, Actions.glowSign(this.blocks, false))
+                .behavior(SignModifierItemBehavior.glow(false, this.soundEvents.getOrThrow(SoundEventIds.INK_SAC_USE)))
                 .register();
             this.builder(ItemIds.GLOW_INK_SAC)
-                .event(ItemEvent.USE_ON_BLOCK, Actions.glowSign(this.blocks, true))
+                .behavior(SignModifierItemBehavior.glow(true, this.soundEvents.getOrThrow(SoundEventIds.GLOW_INK_SAC_USE)))
                 .register();
             this.builderForBlock(BlockItemIds.NETHER_WART)
                 .display(ItemDisplay.Builder::itemName)
@@ -2619,7 +2684,6 @@ public class Items {
             this.registerItem(ItemIds.PRISMARINE_CRYSTALS);
             this.builder(ItemIds.KNOWLEDGE_BOOK, 1)
                 .display(display -> display.rarity(Rarity.EPIC))
-                .behavior(UnlockRecipesItemBehavior.INSTANCE)
                 .register();
             this.builder(ItemIds.DEBUG_STICK, 1)
                 .display(display -> display.rarity(Rarity.EPIC).glint())
@@ -2719,14 +2783,14 @@ public class Items {
                 item,
                 rarity,
                 Tooltips.smithingTrimPattern(),
-                SmithingTemplates.TRIM_PATTERN
+                SmithingTemplateDisplayIds.TRIM_PATTERN
             );
         }
 
-        private void registerSmithingTemplate(ResourceKey<Item> item, Rarity rarity, Component[] tooltip, SmithingTemplate smithingTemplate) {
+        private void registerSmithingTemplate(ResourceKey<Item> item, Rarity rarity, Component[] tooltip, Identifier smithingTemplateDisplay) {
             this.builder(item)
                 .display(display -> display.rarity(rarity).tooltip(tooltip))
-                .behavior(SmithingTemplateProviderItemBehavior.of(smithingTemplate))
+                .behavior(SmithingTemplateDisplayItemBehavior.of(smithingTemplateDisplay))
                 .register();
         }
 
@@ -2752,7 +2816,7 @@ public class Items {
 
         private void registerMap(ResourceKey<Item> item) {
             this.builder(item)
-                .behavior(MapHolderItemBehavior.INSTANCE)
+                .behavior(MapDecorationHolderItemBehavior.INSTANCE)
                 .event(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.MARK_BANNER_ON_MAP))
                 .register();
         }
@@ -3042,13 +3106,13 @@ public class Items {
                 .behavior(
                     EquipmentItemBehavior.of(
                         Equippable.builder(EquipmentSlot.BODY)
-                            .setEquipSound(soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_NAUTILUS))
+                            .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_NAUTILUS))
                             .setAsset(material.assetId())
                             .setAllowedEntities(entityTypes.getOrThrow(EntityTypeTags.CAN_WEAR_NAUTILUS_ARMOR))
                             .setDamageOnHurt(false)
                             .setEquipOnInteract(true)
                             .setCanBeSheared(true)
-                            .setShearingSound(soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_NAUTILUS))
+                            .setShearingSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_UNEQUIP_NAUTILUS))
                             .build()
                     )
                 )

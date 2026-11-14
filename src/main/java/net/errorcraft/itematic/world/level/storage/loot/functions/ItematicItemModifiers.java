@@ -10,5 +10,6 @@ public class ItematicItemModifiers {
     public static void bootstrap(Registry<MapCodec<? extends LootItemFunction>> registry) {
         Registry.register(registry, "split", SplitItemModifier.CODEC);
         Registry.register(registry, "set_item_pointer_location", SetItemPointerLocationItemModifier.CODEC);
+        Registry.register(registry, "fill_map", FillMapItemModifier.CODEC);
     }
 }

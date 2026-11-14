@@ -7,12 +7,14 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.equipment.Glider;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
 public record GliderItemBehavior(Glider glider) implements ItemBehavior<GliderItemBehavior> {
-    public static final Codec<GliderItemBehavior> CODEC = Glider.CODEC.xmap(GliderItemBehavior::new, GliderItemBehavior::glider);
+    public static final Codec<GliderItemBehavior> CODEC = Glider.CODEC.xmap(
+        GliderItemBehavior::new,
+        GliderItemBehavior::glider
+    );
 
     public static GliderItemBehavior of(ItemPredicate condition) {
         return new GliderItemBehavior(new Glider(Optional.of(condition)));
@@ -26,14 +28,5 @@ public record GliderItemBehavior(Glider glider) implements ItemBehavior<GliderIt
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(ItematicDataComponents.GLIDER, this.glider);
-    }
-
-    public boolean canUse(ItemStack stack) {
-        Glider glider = stack.get(ItematicDataComponents.GLIDER);
-        if (glider == null) {
-            return false;
-        }
-
-        return glider.canUse(stack);
     }
 }

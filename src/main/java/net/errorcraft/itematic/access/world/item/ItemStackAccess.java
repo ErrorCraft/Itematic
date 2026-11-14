@@ -28,6 +28,12 @@ public interface ItemStackAccess {
     default ItemStack itematic$transmuteCopy(Holder<Item> item, int count) {
         return ItemStack.EMPTY;
     }
+    default int itematic$trueMaxDamage() {
+        return 0;
+    }
+    default boolean itematic$canUseWithCurrentDamage() {
+        return false;
+    }
     default void itematic$damage(int amount, ActionContext context) {}
     default boolean itematic$canFitInsideContainerItems() {
         return false;

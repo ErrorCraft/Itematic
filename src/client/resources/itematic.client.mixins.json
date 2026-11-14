@@ -45,6 +45,7 @@
     "renderer.LevelEventHandlerExtender",
     "renderer.entity.AbstractSkeletonRendererExtender",
     "renderer.entity.DrownedRendererExtender",
+    "renderer.entity.FishingHookRendererExtender",
     "renderer.entity.WitchRendererExtender",
     "renderer.entity.player.AvatarRendererExtender",
     "renderer.entity.state.ItemClusterRenderStateExtender",

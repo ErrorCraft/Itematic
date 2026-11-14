@@ -37,6 +37,6 @@ public record UseBucketAction(PositionTarget position) implements Action<UseBuck
             return false;
         }
 
-        return bucket.use(context, this.position, false, null);
+        return bucket.use(context, this.position, null, false);
     }
 }

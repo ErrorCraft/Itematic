@@ -1,12 +1,65 @@
 {
   "behavior": {
-    "minecraft:mappable": {
-      "transforms_into": "minecraft:filled_map"
-    },
     "minecraft:stackable": 64
   },
   "display": {
     "model": "minecraft:map",
     "translation_key": "item.minecraft.map"
+  },
+  "events": {
+    "minecraft:use": {
+      "action": {
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          {
+            "action": {
+              "type": "minecraft:modify_item",
+              "item_modifier": [
+                {
+                  "type": "minecraft:split",
+                  "count": 1
+                },
+                {
+                  "type": "minecraft:set_item",
+                  "item": "minecraft:filled_map"
+                },
+                {
+                  "type": "minecraft:fill_map",
+                  "position": "this",
+                  "zoom": 0
+                }
+              ]
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:increment_stat",
+              "entity": "this",
+              "stat": {
+                "type": "minecraft:used",
+                "entry": "minecraft:map"
+              }
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:play_sound",
+              "from_entity": true,
+              "pitch": 1.0,
+              "position": "origin",
+              "sound": "minecraft:ui.cartography_table.take_result",
+              "volume": 1.0
+            }
+          },
+          {
+            "action": {
+              "type": "minecraft:swing_hand",
+              "entity": "this"
+            }
+          }
+        ]
+      }
+    }
   }
 }

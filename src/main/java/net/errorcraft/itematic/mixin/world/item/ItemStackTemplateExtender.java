@@ -22,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 @Mixin(ItemStackTemplate.class)
@@ -83,11 +82,6 @@ public class ItemStackTemplateExtender implements ItemInstanceAccess {
     @Override
     public <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {
         return this.item.value().itematic$hasBehavior(type);
-    }
-
-    @Override
-    public <T extends ItemBehavior<T>> Optional<T> itematic$getBehavior(ItemBehaviorType<T> type) {
-        return this.item.value().itematic$getBehavior(type);
     }
 
     @Override

@@ -46,6 +46,17 @@ public record PlaySoundAction(PositionTarget position, Holder<SoundEvent> sound,
         );
     }
 
+    public static PlaySoundAction ofEntityTracking(Holder<SoundEvent> sound) {
+        return new PlaySoundAction(
+            PositionTarget.ORIGIN,
+            sound,
+            Optional.empty(),
+            RandomRange.Floats.exactly(1.0f),
+            RandomRange.Floats.exactly(1.0f),
+            true
+        );
+    }
+
     public static PlaySoundAction of(PositionTarget position, Holder<SoundEvent> sound, SoundSource category) {
         return new PlaySoundAction(
             position,

@@ -1,0 +1,24 @@
+[
+  {
+    "type": "minecraft:discard",
+    "condition": {
+      "type": "minecraft:entity_properties",
+      "entity": "this",
+      "predicate": {
+        "minecraft:flags": {
+          "is_fall_flying": true
+        }
+      }
+    }
+  },
+  {
+    "type": "minecraft:set_spawn_position_to_interacted_position",
+    "x": true,
+    "y": true,
+    "z": true
+  },
+  {
+    "type": "minecraft:offset_spawn_position_by_interacted_side",
+    "distance": 0.15
+  }
+]

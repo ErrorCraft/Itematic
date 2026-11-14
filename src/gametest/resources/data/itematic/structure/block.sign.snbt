@@ -1,0 +1,21 @@
+{
+    DataVersion: 5023,
+    size: [3, 3, 3],
+    data: [
+        {pos: [0, 0, 0], state: "minecraft:bedrock"},
+        {pos: [0, 0, 1], state: "minecraft:bedrock"},
+        {pos: [0, 0, 2], state: "minecraft:bedrock"},
+        {pos: [1, 0, 0], state: "minecraft:bedrock"},
+        {pos: [1, 0, 1], state: "minecraft:bedrock"},
+        {pos: [1, 0, 2], state: "minecraft:bedrock"},
+        {pos: [2, 0, 0], state: "minecraft:bedrock"},
+        {pos: [2, 0, 1], state: "minecraft:bedrock"},
+        {pos: [2, 0, 2], state: "minecraft:bedrock"},
+        {pos: [1, 1, 1], state: "minecraft:oak_sign{rotation:8,waterlogged:false}", nbt: {back_text: {color: "black", has_glowing_text: 0b, messages: ["back text", "", "", ""]}, components: {}, front_text: {color: "black", has_glowing_text: 0b, messages: ["front text", "", "", ""]}, id: "minecraft:sign", is_waxed: 0b}}
+    ],
+    entities: [],
+    palette: [
+        "minecraft:bedrock",
+        "minecraft:oak_sign{rotation:8,waterlogged:false}"
+    ]
+}
