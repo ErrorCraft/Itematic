@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public class SetItemPointerLocationItemModifier extends LootItemConditionalFunction {
     public static final MapCodec<SetItemPointerLocationItemModifier> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance).and(
-        PositionTarget.CODEC.fieldOf("position").forGetter(split -> split.position)
+        PositionTarget.CODEC.fieldOf("position").forGetter(setItemPointerLocation -> setItemPointerLocation.position)
     ).apply(instance, SetItemPointerLocationItemModifier::new));
 
     private final PositionTarget position;

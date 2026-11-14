@@ -1,21 +1,21 @@
 package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.BrushItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.errorcraft.itematic.world.item.component.BlockBrusher;
+import net.minecraft.core.component.DataComponentMap;
 
-public class BrushItemBehavior implements ItemBehavior<BrushItemBehavior> {
-    public static final BrushItemBehavior INSTANCE = new BrushItemBehavior();
-    public static final Codec<BrushItemBehavior> CODEC = MapCodec.unitCodec(INSTANCE);
-    private static final BrushItem DUMMY = new BrushItem(new Item.Properties());
+public record BrushItemBehavior(BlockBrusher blockBrusher) implements ItemBehavior<BrushItemBehavior> {
+    public static final Codec<BrushItemBehavior> CODEC = BlockBrusher.CODEC.xmap(
+        BrushItemBehavior::new,
+        BrushItemBehavior::blockBrusher
+    );
 
-    private BrushItemBehavior() {}
+    public static BrushItemBehavior of(BlockBrusher blockBrusher) {
+        return new BrushItemBehavior(blockBrusher);
+    }
 
     @Override
     public ItemBehaviorType<BrushItemBehavior> type() {
@@ -23,8 +23,7 @@ public class BrushItemBehavior implements ItemBehavior<BrushItemBehavior> {
     }
 
     @Override
-    public void using(ItemStack stack, Level level, LivingEntity user, int usedTicks, int remainingUseTicks) {
-        DUMMY.itematic$setUsedTicks(usedTicks);
-        DUMMY.onUseTick(level, user, stack, remainingUseTicks);
+    public void addComponents(DataComponentMap.Builder builder) {
+        builder.set(ItematicDataComponents.BLOCK_BRUSHER, this.blockBrusher);
     }
 }

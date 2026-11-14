@@ -70,7 +70,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
     }
 
     @Override
-    public @Nullable T itematic$create(ActionContext context, EntitySpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean invertY) {
+    public @Nullable T itematic$create(ActionContext context, EntitySpawnReason reason, BlockPos pos, @Nullable EntitySpawnCallback callback, boolean allowItemData, boolean movedUp) {
         if (!(context.level() instanceof ServerLevel level)) {
             return null;
         }
@@ -82,7 +82,7 @@ public abstract class EntityTypeExtender<T extends Entity> implements EntityType
             pos,
             reason,
             true,
-            invertY
+            movedUp
         );
     }
 

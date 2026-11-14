@@ -1,6 +1,6 @@
 {
   "behavior": {
-    "minecraft:smithing_template_provider": "minecraft:item_upgrade",
+    "minecraft:smithing_template_display": "minecraft:netherite_upgrade",
     "minecraft:stackable": 64
   },
   "display": {
@@ -19,6 +19,7 @@
       {
         "extra": [
           {
+            "color": "blue",
             "translate": "item.minecraft.smithing_template.netherite_upgrade.applies_to"
           }
         ],
@@ -31,6 +32,7 @@
       {
         "extra": [
           {
+            "color": "blue",
             "translate": "item.minecraft.smithing_template.netherite_upgrade.ingredients"
           }
         ],

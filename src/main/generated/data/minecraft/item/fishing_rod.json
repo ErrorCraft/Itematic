@@ -1,6 +1,11 @@
 {
   "behavior": {
-    "minecraft:castable": {},
+    "minecraft:castable": {
+      "cast_sound": "minecraft:entity.fishing_bobber.throw",
+      "fish_experience": "minecraft:fishing/experience",
+      "fish_loot_table": "minecraft:gameplay/fishing",
+      "retrieve_sound": "minecraft:entity.fishing_bobber.retrieve"
+    },
     "minecraft:cooking_fuel": {
       "burn_time": "minecraft:cooking/time_wood_items_small",
       "speed_multiplier": "minecraft:cooking/speed_default"

@@ -25,6 +25,7 @@ public class FireworkRocketEntityInitializer implements EntityInitializer<Firewo
 
         return new FireworkRocketEntity(
             context.level(),
+            context.get(LootContextParams.THIS_ENTITY),
             pos.x(),
             pos.y(),
             pos.z(),

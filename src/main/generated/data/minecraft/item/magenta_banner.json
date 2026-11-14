@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:banner_pattern_holder": {
-      "color": "magenta"
+      "banner_base_color": "magenta"
     },
     "minecraft:block": {
       "block": {

@@ -2,7 +2,6 @@ package net.errorcraft.itematic.world.item.use.duration.provider.providers;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
 import net.minecraft.network.codec.StreamCodec;
@@ -39,8 +38,6 @@ public class Trident implements UseDurationProvider {
             return false;
         }
 
-        return stack.itematic$getBehavior(ItemBehaviorType.DAMAGEABLE)
-            .map(c -> c.isUsable(stack))
-            .orElse(true);
+        return stack.itematic$canUseWithCurrentDamage();
     }
 }

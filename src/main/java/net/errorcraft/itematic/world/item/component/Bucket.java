@@ -60,7 +60,7 @@ public record Bucket(WorldModification modification, Optional<EntitySpawner> ent
             .add(ItematicContextKeys.HAND, hand)
             .add(ItematicContextKeys.SIDE, blockHitResult.getDirection())
             .build();
-        if (this.use(context, PositionTarget.INTERACTED, !blockHitResult.isInside(), blockHitResult.getLocation().y())) {
+        if (this.use(context, PositionTarget.INTERACTED, blockHitResult.getLocation(), !blockHitResult.isInside())) {
             return InteractionResult.SUCCESS;
         }
 
@@ -73,14 +73,14 @@ public record Bucket(WorldModification modification, Optional<EntitySpawner> ent
         }
     }
 
-    public boolean use(ActionContext context, PositionTarget position, boolean mayOffset, @Nullable Double exactY) {
+    public boolean use(ActionContext context, PositionTarget position, @Nullable Vec3 interactedPosition, boolean mayOffset) {
         Optional<ItemStack> result = this.modification.modify(context, position, mayOffset);
         if (result.isEmpty()) {
             return false;
         }
 
         this.entity.map(entity -> EntityPlacer.of(entity, Bucket::initializeBucketEntity))
-            .ifPresent(placer -> placer.place(context, PositionTarget.INTERACTED, exactY, EntitySpawnReason.BUCKET));
+            .ifPresent(placer -> placer.place(context, PositionTarget.INTERACTED, interactedPosition, EntitySpawnReason.BUCKET));
         ItemStack stack = context.get(LootContextParams.TOOL, ItemStacks::fromItemInstance);
         if (!ItemStacks.isNullOrEmpty(stack)) {
             stack.consume(

@@ -2,18 +2,19 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
+
 import java.util.Optional;
 
-public record BannerPatternHolderItemBehavior(Optional<DyeColor> color) implements ItemBehavior<BannerPatternHolderItemBehavior> {
+public record BannerPatternHolderItemBehavior(Optional<DyeColor> bannerBaseColor) implements ItemBehavior<BannerPatternHolderItemBehavior> {
     public static final Codec<BannerPatternHolderItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        DyeColor.CODEC.optionalFieldOf("color").forGetter(BannerPatternHolderItemBehavior::color)
+        DyeColor.CODEC.optionalFieldOf("banner_base_color").forGetter(BannerPatternHolderItemBehavior::bannerBaseColor)
     ).apply(instance, BannerPatternHolderItemBehavior::new));
 
     public static BannerPatternHolderItemBehavior of() {
@@ -32,22 +33,6 @@ public record BannerPatternHolderItemBehavior(Optional<DyeColor> color) implemen
     @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY);
-    }
-
-    public boolean modifiable() {
-        return this.color.isPresent();
-    }
-
-    public Optional<String> translationKey(ItemStack stack, String baseTranslationKey) {
-        if (this.modifiable()) {
-            return Optional.empty();
-        }
-
-        DyeColor baseColor = stack.get(DataComponents.BASE_COLOR);
-        if (baseColor == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(baseTranslationKey + "." + baseColor.getName());
+        this.bannerBaseColor.ifPresent(bannerBaseColor -> builder.set(ItematicDataComponents.BANNER_BASE_COLOR, bannerBaseColor));
     }
 }

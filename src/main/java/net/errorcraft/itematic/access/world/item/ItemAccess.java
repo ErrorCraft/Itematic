@@ -10,8 +10,6 @@ import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.SwingAnimation;
 
-import java.util.Optional;
-
 public interface ItemAccess {
     default ItemDisplay itematic$display() {
         throw new AssertionError("Implemented via mixin");
@@ -31,9 +29,6 @@ public interface ItemAccess {
     default void itematic$setBehavior(ItemBehaviorSet components) {}
     default <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {
         return false;
-    }
-    default <T extends ItemBehavior<T>> Optional<T> itematic$getBehavior(ItemBehaviorType<T> type) {
-        return Optional.empty();
     }
     default ActionEventMap<ItemEvent> itematic$events() {
         return ActionEventMap.empty();

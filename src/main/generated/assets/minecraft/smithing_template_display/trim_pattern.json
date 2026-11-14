@@ -1,0 +1,27 @@
+{
+  "additions_slot": {
+    "description": {
+      "translate": "item.minecraft.smithing_template.armor_trim.additions_slot_description"
+    },
+    "empty_textures": [
+      "minecraft:container/slot/ingot",
+      "minecraft:container/slot/redstone_dust",
+      "minecraft:container/slot/lapis_lazuli",
+      "minecraft:container/slot/quartz",
+      "minecraft:container/slot/diamond",
+      "minecraft:container/slot/emerald",
+      "minecraft:container/slot/amethyst_shard"
+    ]
+  },
+  "base_slot": {
+    "description": {
+      "translate": "item.minecraft.smithing_template.armor_trim.base_slot_description"
+    },
+    "empty_textures": [
+      "minecraft:container/slot/helmet",
+      "minecraft:container/slot/chestplate",
+      "minecraft:container/slot/leggings",
+      "minecraft:container/slot/boots"
+    ]
+  }
+}

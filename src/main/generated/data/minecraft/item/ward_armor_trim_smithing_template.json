@@ -1,6 +1,6 @@
 {
   "behavior": {
-    "minecraft:smithing_template_provider": "minecraft:trim_pattern",
+    "minecraft:smithing_template_display": "minecraft:trim_pattern",
     "minecraft:stackable": 64
   },
   "display": {

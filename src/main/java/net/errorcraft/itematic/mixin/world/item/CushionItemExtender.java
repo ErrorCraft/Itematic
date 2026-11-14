@@ -19,7 +19,7 @@ public class CushionItemExtender {
             target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/TagKey;)Z"
         )
     )
-    private static boolean isCushionUsesCollisionShapeUseItemBehavior(BlockState instance, TagKey<Block> tagKey, Operation<Boolean> original) {
+    private static boolean isCushionUsesCollisionShapeUseDataComponent(BlockState instance, TagKey<Block> tagKey, Operation<Boolean> original) {
         return instance.is(EntityPlacerComponent.USES_COLLISION_SHAPE.get());
     }
 }
