@@ -3,14 +3,13 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.equipment.Glider;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.component.DataComponentMap;
 
 import java.util.Optional;
 
-public record GliderItemBehavior(Glider glider) implements ItemBehavior<GliderItemBehavior> {
+public record GliderItemBehavior(Glider glider) implements ItemBehavior {
     public static final Codec<GliderItemBehavior> CODEC = Glider.CODEC.xmap(
         GliderItemBehavior::new,
         GliderItemBehavior::glider
@@ -18,11 +17,6 @@ public record GliderItemBehavior(Glider glider) implements ItemBehavior<GliderIt
 
     public static GliderItemBehavior of(ItemPredicate condition) {
         return new GliderItemBehavior(new Glider(Optional.of(condition)));
-    }
-
-    @Override
-    public ItemBehaviorType<GliderItemBehavior> type() {
-        return ItemBehaviorType.GLIDER;
     }
 
     @Override

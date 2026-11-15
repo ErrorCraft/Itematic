@@ -3,24 +3,18 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.alchemy.PotionContents;
 
-public record PotionHolderItemBehavior(float durationScale) implements ItemBehavior<PotionHolderItemBehavior> {
+public record PotionHolderItemBehavior(float durationScale) implements ItemBehavior {
     public static final Codec<PotionHolderItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ExtraCodecs.NON_NEGATIVE_FLOAT.fieldOf("duration_scale").forGetter(PotionHolderItemBehavior::durationScale)
     ).apply(instance, PotionHolderItemBehavior::new));
 
     public static PotionHolderItemBehavior of(float durationScale) {
         return new PotionHolderItemBehavior(durationScale);
-    }
-
-    @Override
-    public ItemBehaviorType<PotionHolderItemBehavior> type() {
-        return ItemBehaviorType.POTION_HOLDER;
     }
 
     @Override

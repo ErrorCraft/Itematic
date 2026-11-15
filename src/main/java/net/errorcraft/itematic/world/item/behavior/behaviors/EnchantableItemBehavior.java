@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -16,7 +15,7 @@ import net.minecraft.world.item.equipment.ArmorMaterial;
 
 import java.util.Optional;
 
-public record EnchantableItemBehavior(int enchantability, Optional<Holder<Item>> enchantResultItem) implements ItemBehavior<EnchantableItemBehavior> {
+public record EnchantableItemBehavior(int enchantability, Optional<Holder<Item>> enchantResultItem) implements ItemBehavior {
     public static final Codec<EnchantableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ExtraCodecs.POSITIVE_INT.fieldOf("enchantability").forGetter(EnchantableItemBehavior::enchantability),
         Item.CODEC.optionalFieldOf("enchant_result_item").forGetter(EnchantableItemBehavior::enchantResultItem)
@@ -36,11 +35,6 @@ public record EnchantableItemBehavior(int enchantability, Optional<Holder<Item>>
 
     public static EnchantableItemBehavior of(int enchantability, Holder<Item> transformsInto) {
         return new EnchantableItemBehavior(enchantability, Optional.of(transformsInto));
-    }
-
-    @Override
-    public ItemBehaviorType<EnchantableItemBehavior> type() {
-        return ItemBehaviorType.ENCHANTABLE;
     }
 
     @Override

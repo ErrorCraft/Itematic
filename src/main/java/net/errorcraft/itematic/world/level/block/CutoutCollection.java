@@ -61,7 +61,10 @@ public record CutoutCollection<T>(T block, @Nullable T stairs, T slab, @Nullable
         }
 
         bootstrapper.builderForBlock(blockItems.slab)
-            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_SLABS))
+            .behavior(
+                CookingFuelItemBehavior.CODEC,
+                CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_SLABS)
+            )
             .register();
         if (blockItems.wall != null) {
             registerBurningItem(bootstrapper, blockItems.wall);
@@ -70,7 +73,10 @@ public record CutoutCollection<T>(T block, @Nullable T stairs, T slab, @Nullable
 
     private static void registerBurningItem(Items.Bootstrapper bootstrapper, BlockItemId blockItem) {
         bootstrapper.builderForBlock(blockItem)
-            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+            .behavior(
+                CookingFuelItemBehavior.CODEC,
+                CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+            )
             .register();
     }
 

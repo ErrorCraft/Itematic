@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.holder.ItemHolderSounds;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
 import net.minecraft.core.Holder;
@@ -15,7 +14,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.component.BundleContents;
 import org.apache.commons.lang3.math.Fraction;
 
-public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, ItemHolderSounds sounds) implements ItemBehavior<ItemHolderItemBehavior> {
+public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, ItemHolderSounds sounds) implements ItemBehavior {
     public static final Codec<Fraction> CAPACITY_CODEC = ItematicCodecs.positiveFraction(100);
     public static final Codec<ItemHolderItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         CAPACITY_CODEC.fieldOf("capacity").forGetter(ItemHolderItemBehavior::capacity),
@@ -29,11 +28,6 @@ public record ItemHolderItemBehavior(Fraction capacity, ItemHolderRules rules, I
             rules,
             new ItemHolderSounds(insertItemSound, insertFailItemSound, removeItemSound, emptySound)
         );
-    }
-
-    @Override
-    public ItemBehaviorType<ItemHolderItemBehavior> type() {
-        return ItemBehaviorType.ITEM_HOLDER;
     }
 
     @Override

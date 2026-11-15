@@ -334,7 +334,10 @@ public class Items {
 
         private ItemBuilder builder(ResourceKey<Item> item, int maxStackSize) {
             return ItemBuilder.create(item, this.context)
-                .behavior(StackableItemBehavior.of(maxStackSize));
+                .behavior(
+                    StackableItemBehavior.CODEC,
+                    StackableItemBehavior.of(maxStackSize)
+                );
         }
 
         private ItemBuilder builder(ResourceKey<Item> item) {
@@ -348,13 +351,19 @@ public class Items {
         public ItemBuilder builderForBlock(BlockItemId blockItem, int maxStackSize) {
             return this.builder(blockItem.item(), maxStackSize)
                 .display(ItemDisplay.Builder::blockName)
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block())));
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block()))
+                );
         }
 
         private ItemBuilder builderForBlockOnFluid(BlockItemId blockItem) {
             return this.builder(blockItem.item())
                 .display(ItemDisplay.Builder::blockName)
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block()), BlockPlacerComponent.Pass.FLUID));
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.of(this.blocks.getOrThrow(blockItem.block()), BlockPlacerComponent.Pass.FLUID)
+                );
         }
 
         private ItemBuilder builderForBlockAttachedToSide(BlockItemId blockItem, ResourceKey<Block> otherBlock, Direction side) {
@@ -365,6 +374,7 @@ public class Items {
             return this.builder(blockItem.item(), maxStackSize)
                 .display(ItemDisplay.Builder::blockName)
                 .behavior(
+                    BlockItemBehavior.CODEC,
                     BlockItemBehavior.attachedToSide(
                         this.blocks.getOrThrow(blockItem.block()),
                         this.blocks.getOrThrow(otherBlock),
@@ -384,7 +394,10 @@ public class Items {
         private void registerOperatorBlock(BlockItemId blockItem) {
             this.builder(blockItem.item())
                 .display(display -> display.blockName().rarity(Rarity.EPIC))
-                .behavior(BlockItemBehavior.operator(this.blocks.getOrThrow(blockItem.block())))
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.operator(this.blocks.getOrThrow(blockItem.block()))
+                )
                 .register();
         }
 
@@ -450,8 +463,14 @@ public class Items {
             );
             this.registerBlock(BlockItemIds.MUDDY_MANGROVE_ROOTS);
             this.builderForBlock(BlockItemIds.MANGROVE_ROOTS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_ROOTS))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_ROOTS)
+                )
                 .register();
             WoodCollection.registerItems(
                 ItematicBlockItemIds.POPLAR,
@@ -494,7 +513,10 @@ public class Items {
                 BlockIds.POTTED_CRIMSON_FUNGUS
             );
             this.builderForBlock(BlockItemIds.NETHER_WART_BLOCK)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
                 .register();
             WoodCollection.registerItems(
                 ItematicBlockItemIds.WARPED,
@@ -504,7 +526,10 @@ public class Items {
                 BlockIds.POTTED_WARPED_FUNGUS
             );
             this.builderForBlock(BlockItemIds.WARPED_WART_BLOCK)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
                 .register();
             CutoutCollection.registerItems(ItematicBlockItemIds.STONE, this);
             this.registerBlock(BlockItemIds.STONE_BUTTON);
@@ -542,7 +567,10 @@ public class Items {
             CutoutCollection.registerItems(ItematicBlockItemIds.MUD_BRICK, this);
             this.registerBlock(BlockItemIds.RESIN_BLOCK);
             this.builder(BlockItemIds.RESIN_CLUMP.item())
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RESIN_CLUMP.block())))
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.RESIN_CLUMP.block()))
+                )
                 .register();
             CutoutCollection.registerItems(ItematicBlockItemIds.RESIN_BRICKS, this);
             this.registerBlock(BlockItemIds.CHISELED_RESIN_BRICKS);
@@ -593,7 +621,10 @@ public class Items {
             CutoutCollection.registerItems(ItematicBlockItemIds.PURPUR, this);
             this.registerBlock(BlockItemIds.PURPUR_PILLAR);
             this.builderForBlock(BlockItemIds.COAL_BLOCK)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_COAL_BLOCK))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_COAL_BLOCK)
+                )
                 .register();
             this.registerBlock(BlockItemIds.COAL_ORE);
             this.registerBlock(BlockItemIds.DEEPSLATE_COAL_ORE);
@@ -625,10 +656,16 @@ public class Items {
             this.registerBlock(BlockItemIds.DIAMOND_ORE);
             this.registerBlock(BlockItemIds.DEEPSLATE_DIAMOND_ORE);
             this.builderForBlock(BlockItemIds.NETHERITE_BLOCK)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builderForBlock(BlockItemIds.ANCIENT_DEBRIS)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             CutoutCollection.registerItems(ItematicBlockItemIds.QUARTZ, this);
             this.registerBlock(BlockItemIds.NETHER_QUARTZ_ORE);
@@ -660,21 +697,39 @@ public class Items {
             BlockItemIds.COPPER_GOLEM_STATUE.forEach(this::registerBlock);
             BlockItemIds.LIGHTNING_ROD.forEach(this::registerBlock);
             BlockItemIds.WOOL.forEach(wool -> this.builderForBlock(wool)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL)
+                )
                 .register()
             );
             BlockItemIds.WOOL_STAIRS.forEach(woolStairs -> this.builderForBlock(woolStairs)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL)
+                )
                 .register()
             );
             BlockItemIds.WOOL_SLAB.forEach(woolSlab -> this.builderForBlock(woolSlab)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL_SLABS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL_SLABS)
+                )
                 .register()
             );
             ColorCollection.zipApply(BlockItemIds.CARPET, ColorCollection.VALUES, (carpet, dyeColor) -> this.builderForBlock(carpet)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL_CARPETS))
-                .behavior(EquipmentItemBehavior.of(Equippable.llamaSwag(dyeColor)))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL_CARPETS)
+                )
+                .behavior(
+                    EquipmentItemBehavior.CODEC,
+                    EquipmentItemBehavior.of(Equippable.llamaSwag(dyeColor))
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+                )
                 .register()
             );
             this.registerBlock(BlockItemIds.TERRACOTTA);
@@ -698,8 +753,14 @@ public class Items {
                 BlockItemIds.BANNER,
                 ColorCollection.VALUES,
                 (banner, dyeColor) -> this.builderForBlockAttachedToSide(banner, BlockIds.WALL_BANNER.pick(dyeColor), Direction.DOWN, 16)
-                    .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
-                    .behavior(BannerPatternHolderItemBehavior.of(dyeColor))
+                    .behavior(
+                        CookingFuelItemBehavior.CODEC,
+                        CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                    )
+                    .behavior(
+                        BannerPatternHolderItemBehavior.CODEC,
+                        BannerPatternHolderItemBehavior.of(dyeColor)
+                    )
                     .register()
             );
             this.registerBlock(BlockItemIds.CALCITE);
@@ -708,7 +769,10 @@ public class Items {
             this.registerBlock(BlockItemIds.OBSIDIAN);
             this.registerBlock(BlockItemIds.CRYING_OBSIDIAN);
             this.builderForBlock(BlockItemIds.GLOWSTONE)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.CHARGE_RESPAWN_ANCHOR)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.CHARGE_RESPAWN_ANCHOR))
+                )
                 .register();
             this.registerBlock(BlockItemIds.BASALT);
             this.registerBlock(BlockItemIds.POLISHED_BASALT);
@@ -745,7 +809,10 @@ public class Items {
             this.registerBlock(BlockItemIds.WARPED_NYLIUM);
             this.registerBlock(BlockItemIds.NETHERRACK);
             this.builderForBlock(BlockItemIds.CRAFTING_TABLE)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.registerBlock(BlockItemIds.CRAFTER);
             this.registerBlock(BlockItemIds.FURNACE);
@@ -754,16 +821,28 @@ public class Items {
             this.registerBlock(BlockItemIds.CAMPFIRE);
             this.registerBlock(BlockItemIds.SOUL_CAMPFIRE);
             this.builderForBlock(BlockItemIds.CHEST)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_CHEST)))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_CHEST))
+                )
                 .register();
             this.builderForBlock(BlockItemIds.TRAPPED_CHEST)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             BlockItemIds.COPPER_CHEST.forEach(this::registerBlock);
             this.registerBlock(BlockItemIds.ENDER_CHEST);
             this.builderForBlock(BlockItemIds.BARREL)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.registerShulkerBox(BlockItemIds.SHULKER_BOX);
             BlockItemIds.DYED_SHULKER_BOX.forEach(this::registerShulkerBox);
@@ -773,24 +852,42 @@ public class Items {
             this.registerBlock(BlockItemIds.DAMAGED_ANVIL);
             this.registerBlock(BlockItemIds.ENCHANTING_TABLE);
             this.builderForBlock(BlockItemIds.BOOKSHELF)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.CHISELED_BOOKSHELF)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.LECTERN)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.LADDER)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SCAFFOLDING)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_BAMBOO))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_BAMBOO)
+                )
                 .register();
             this.registerBlock(BlockItemIds.BREWING_STAND);
             this.registerBlock(BlockItemIds.CAULDRON);
             this.builder(ItemIds.GLASS_BOTTLE)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.GLASS_BOTTLE)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.GLASS_BOTTLE))
+                )
                 .event(
                     ItemEvent.USE_ON_BLOCK,
                     ActionEntry.of(
@@ -813,8 +910,14 @@ public class Items {
                 )
                 .register();
             this.builderForConsumable(ItemIds.POTION, Consumables.DEFAULT_DRINK, ItemIds.GLASS_BOTTLE)
-                .behavior(PotionHolderItemBehavior.of(1.0f))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM)))
+                .behavior(
+                    PotionHolderItemBehavior.CODEC,
+                    PotionHolderItemBehavior.of(1.0f)
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK_OR_DISPENSE_ITEM))
+                )
                 .event(
                     ItemEvent.USE_ON_BLOCK,
                     ActionEntry.of(
@@ -854,14 +957,32 @@ public class Items {
                 )
                 .register();
             this.builderForProjectile(ItemIds.SPLASH_POTION, EntityTypeIds.SPLASH_POTION, 1)
-                .behavior(PotionHolderItemBehavior.of(1.0f))
-                .behavior(ThrowableItemBehavior.of(0.5f, -20.0f))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
+                .behavior(
+                    PotionHolderItemBehavior.CODEC,
+                    PotionHolderItemBehavior.of(1.0f)
+                )
+                .behavior(
+                    ThrowableItemBehavior.CODEC,
+                    ThrowableItemBehavior.of(0.5f, -20.0f)
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE))
+                )
                 .register();
             this.builderForProjectile(ItemIds.LINGERING_POTION, EntityTypeIds.LINGERING_POTION, 1)
-                .behavior(PotionHolderItemBehavior.of(0.25f))
-                .behavior(ThrowableItemBehavior.of(0.5f, -20.0f))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
+                .behavior(
+                    PotionHolderItemBehavior.CODEC,
+                    PotionHolderItemBehavior.of(0.25f)
+                )
+                .behavior(
+                    ThrowableItemBehavior.CODEC,
+                    ThrowableItemBehavior.of(0.5f, -20.0f)
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE))
+                )
                 .register();
             this.builder(ItemIds.DRAGON_BREATH)
                 .display(display -> display.rarity(Rarity.UNCOMMON))
@@ -910,32 +1031,59 @@ public class Items {
             this.registerBlock(BlockItemIds.GRINDSTONE);
             this.registerBlock(BlockItemIds.STONECUTTER);
             this.builderForBlock(BlockItemIds.LOOM)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.CARTOGRAPHY_TABLE)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SMITHING_TABLE)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.FLETCHING_TABLE)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.JUKEBOX)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.NOTE_BLOCK)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.COMPOSTER)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.registerBlock(BlockItemIds.LODESTONE);
             this.registerBlock(BlockItemIds.RESPAWN_ANCHOR);
             this.registerBlock(BlockItemIds.VAULT);
             this.builder(BlockItemIds.REDSTONE_DUST.item())
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.REDSTONE_DUST.block())))
-                .behavior(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.REDSTONE)))
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.REDSTONE_DUST.block()))
+                )
+                .behavior(
+                    TrimMaterialProviderItemBehavior.CODEC,
+                    TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.REDSTONE))
+                )
                 .register();
             this.registerBlock(BlockItemIds.REPEATER);
             this.registerBlock(BlockItemIds.COMPARATOR);
@@ -950,75 +1098,144 @@ public class Items {
             this.registerBlock(BlockItemIds.TARGET);
             this.registerBlock(BlockItemIds.OBSERVER);
             this.builderForBlock(BlockItemIds.DAYLIGHT_DETECTOR)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                )
                 .register();
             this.registerBlock(BlockItemIds.SCULK_SENSOR);
             this.registerBlock(BlockItemIds.CALIBRATED_SCULK_SENSOR);
             this.builder(BlockItemIds.TRIPWIRE.item())
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TRIPWIRE.block())))
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.TRIPWIRE.block()))
+                )
                 .register();
             this.registerBlock(BlockItemIds.TRIPWIRE_HOOK);
             this.builderForBlock(BlockItemIds.TNT)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_TNT)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_TNT))
+                )
                 .register();
             this.builderForBlock(BlockItemIds.AZALEA)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS)
+                )
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_AZALEA_BUSH))
                 .register();
             this.builderForBlock(BlockItemIds.AZALEA_LEAVES)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.FLOWERING_AZALEA)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS)
+                )
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FLOWERING_AZALEA_BUSH))
                 .register();
             this.builderForBlock(BlockItemIds.FLOWERING_AZALEA_LEAVES)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.MUSHROOM_STEM)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.BROWN_MUSHROOM_BLOCK)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.BROWN_MUSHROOM)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_BROWN_MUSHROOM))
                 .register();
             this.builderForBlock(BlockItemIds.RED_MUSHROOM_BLOCK)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.RED_MUSHROOM)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_RED_MUSHROOM))
                 .register();
             this.builderForBlock(BlockItemIds.SHELF_MUSHROOM)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SHROOMLIGHT)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SHORT_GRASS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.FERN)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_FERN))
                 .register();
             this.builderForBlock(BlockItemIds.SHORT_DRY_GRASS)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.BUSH)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.RED_SHRUB)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.DEAD_BUSH)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS)
+                )
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_DEAD_BUSH))
                 .register();
             this.registerSuspiciousEffectIngredient(BlockItemIds.DANDELION, ContextIntProviders.COMPOSTABLE_MEDIUM, MobEffectIds.SATURATION, 140, BlockIds.POTTED_DANDELION);
@@ -1035,100 +1252,193 @@ public class Items {
             this.registerSuspiciousEffectIngredient(BlockItemIds.LILY_OF_THE_VALLEY, ContextIntProviders.COMPOSTABLE_MEDIUM, MobEffectIds.POISON, 240, BlockIds.POTTED_LILY_OF_THE_VALLEY);
             this.registerSuspiciousEffectIngredient(BlockItemIds.TORCHFLOWER, ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH, MobEffectIds.NIGHT_VISION, 100, BlockIds.POTTED_TORCHFLOWER);
             this.builderForBlock(BlockItemIds.CACTUS_FLOWER)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.registerSuspiciousEffectIngredient(BlockItemIds.CLOSED_EYEBLOSSOM, ContextIntProviders.COMPOSTABLE_MEDIUM, MobEffectIds.NAUSEA, 140, BlockIds.POTTED_CLOSED_EYEBLOSSOM);
             this.registerSuspiciousEffectIngredient(BlockItemIds.OPEN_EYEBLOSSOM, ContextIntProviders.COMPOSTABLE_MEDIUM, MobEffectIds.BLINDNESS, 140, BlockIds.POTTED_OPEN_EYEBLOSSOM);
             this.registerSuspiciousEffectIngredient(BlockItemIds.WITHER_ROSE, ContextIntProviders.COMPOSTABLE_MEDIUM, MobEffectIds.WITHER, 160, BlockIds.POTTED_WITHER_ROSE);
             this.builderForBlock(BlockItemIds.PINK_PETALS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.WILDFLOWERS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.LEAF_LITTER)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SPORE_BLOSSOM)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.FIREFLY_BUSH)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SUGAR_CANE)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.CACTUS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CACTUS))
                 .register();
             this.builderForBlock(BlockItemIds.CRIMSON_ROOTS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_CRIMSON_ROOTS))
                 .register();
             this.builderForBlock(BlockItemIds.WARPED_ROOTS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, BlockIds.POTTED_WARPED_ROOTS))
                 .register();
             this.builderForBlock(BlockItemIds.NETHER_SPROUTS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.WEEPING_VINES)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.TWISTING_VINES)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.VINE)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.TALL_GRASS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.LARGE_FERN)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.TALL_DRY_GRASS)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRY_PLANTS)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SUNFLOWER)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.LILAC)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.ROSE_BUSH)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.PEONY)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.PITCHER_PLANT)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.BIG_DRIPLEAF)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SMALL_DRIPLEAF)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.registerBlock(BlockItemIds.CHORUS_PLANT);
             this.registerBlock(BlockItemIds.CHORUS_FLOWER);
             this.builderForBlock(BlockItemIds.GLOW_LICHEN)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.HANGING_ROOTS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.registerBlock(BlockItemIds.FLOWER_POT);
             this.registerBlock(BlockItemIds.BEE_NEST);
             this.registerBlock(BlockItemIds.BEEHIVE);
             this.builder(ItemIds.HONEY_BOTTLE, 16)
-                .behavior(UseableItemBehavior.of(Consumables.HONEY_BOTTLE, this.items.getOrThrow(ItemIds.GLASS_BOTTLE)))
-                .behavior(ConsumableItemBehavior.of())
-                .behavior(FoodItemBehavior.of(Foods.HONEY_BOTTLE))
+                .behavior(
+                    UseableItemBehavior.CODEC,
+                    UseableItemBehavior.of(Consumables.HONEY_BOTTLE, this.items.getOrThrow(ItemIds.GLASS_BOTTLE))
+                )
+                .behavior(
+                    ConsumableItemBehavior.CODEC,
+                    ConsumableItemBehavior.of()
+                )
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.HONEY_BOTTLE)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
@@ -1142,8 +1452,14 @@ public class Items {
             this.registerBlock(BlockItemIds.HONEY_BLOCK);
             this.registerBlock(BlockItemIds.HONEYCOMB_BLOCK);
             this.builder(ItemIds.HONEYCOMB)
-                .behavior(SignModifierItemBehavior.wax(true, this.soundEvents.getOrThrow(SoundEventIds.HONEYCOMB_WAX_ON)))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.WAX_BLOCK)))
+                .behavior(
+                    SignModifierItemBehavior.CODEC,
+                    SignModifierItemBehavior.wax(true, this.soundEvents.getOrThrow(SoundEventIds.HONEYCOMB_WAX_ON))
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.WAX_BLOCK))
+                )
                 .event(
                     ItemEvent.USE_ON_BLOCK,
                     ActionEntry.of(
@@ -1156,43 +1472,82 @@ public class Items {
                 .register();
             this.registerBlock(BlockItemIds.GOLDEN_DANDELION);
             this.builderForBlockOnFluid(BlockItemIds.LILY_PAD)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SEAGRASS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.SEA_PICKLE)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.KELP)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.DRIED_KELP_BLOCK)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRIED_KELP_BLOCK))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_DRIED_KELP_BLOCK)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.MOSS_BLOCK)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.MOSS_CARPET)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.PALE_MOSS_BLOCK)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.PALE_MOSS_CARPET)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.PALE_HANGING_MOSS)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.TORCHFLOWER_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.PITCHER_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.registerBlock(BlockItemIds.SPONGE);
             this.registerBlock(BlockItemIds.WET_SPONGE);
@@ -1222,38 +1577,69 @@ public class Items {
             this.registerBlock(BlockItemIds.DETECTOR_RAIL);
             this.registerBlock(BlockItemIds.ACTIVATOR_RAIL);
             this.builderForBlock(BlockItemIds.MELON)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.MELON_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForConsumable(ItemIds.MELON_SLICE, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.MELON_SLICE))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.MELON_SLICE)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW_MEDIUM)
+                )
                 .register();
             this.registerItem(ItemIds.GLISTERING_MELON_SLICE);
             this.builderForBlock(BlockItemIds.PUMPKIN)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.PUMPKIN_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForConsumable(ItemIds.PUMPKIN_PIE, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.PUMPKIN_PIE))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_ALWAYS_ADD_ONE))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.PUMPKIN_PIE)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_ALWAYS_ADD_ONE)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.CARVED_PUMPKIN)
                 .attributeModifiers(AttributeModifiers::hideFromLocatorBar)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
                 .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
+                .behavior(
+                    EquipmentItemBehavior.CODEC,
                     EquipmentItemBehavior.of(Equippable.builder(EquipmentSlot.HEAD)
                         .setSwappable(false)
                         .setCameraOverlay(Identifier.withDefaultNamespace("misc/pumpkinblur"))
                         .build())
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_CARVED_PUMPKIN)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_CARVED_PUMPKIN))
+                )
                 .register();
             this.registerBlock(BlockItemIds.JACK_O_LANTERN);
             this.builderForBlock(BlockItemIds.DRAGON_EGG)
@@ -1298,22 +1684,40 @@ public class Items {
             this.registerOperatorBlock(BlockItemIds.TEST_BLOCK);
             this.registerOperatorBlock(BlockItemIds.TEST_INSTANCE_BLOCK);
             this.builderForSword(ItemIds.WOODEN_SWORD, ToolMaterial.WOOD, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
+                )
                 .register();
             this.builderForSpear(ItemIds.WOODEN_SPEAR, ToolMaterial.WOOD, 0.65f, 0.7f, 0.75f, 5.0f, 14.0f, 10.0f, 15.0f, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
+                )
                 .register();
             this.builderForShovel(ItemIds.WOODEN_SHOVEL, ToolMaterial.WOOD, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
+                )
                 .register();
             this.builderForPickaxe(ItemIds.WOODEN_PICKAXE, ToolMaterial.WOOD, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
+                )
                 .register();
             this.builderForAxe(ItemIds.WOODEN_AXE, ToolMaterial.WOOD, 7.0d, 0.2d, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
+                )
                 .register();
             this.builderForHoe(ItemIds.WOODEN_HOE, ToolMaterial.WOOD, 1.0d, 0.25d, ItemTags.WOODEN_TOOL_MATERIALS)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
+                )
                 .register();
             this.registerSword(ItemIds.STONE_SWORD, ToolMaterial.STONE, ItemTags.STONE_TOOL_MATERIALS);
             this.registerSpear(ItemIds.STONE_SPEAR, ToolMaterial.STONE, 0.75f, 0.82f, 0.7f, 4.5f, 13.0f, 9.0f, 13.75f, ItemTags.STONE_TOOL_MATERIALS);
@@ -1346,27 +1750,52 @@ public class Items {
             this.registerAxe(ItemIds.DIAMOND_AXE, ToolMaterial.DIAMOND, 6.0d, 0.25d, ItemTags.DIAMOND_TOOL_MATERIALS);
             this.registerHoe(ItemIds.DIAMOND_HOE, ToolMaterial.DIAMOND, 4.0d, 1.0d, ItemTags.DIAMOND_TOOL_MATERIALS);
             this.builderForSword(ItemIds.NETHERITE_SWORD, ToolMaterial.NETHERITE, ItemTags.NETHERITE_TOOL_MATERIALS)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builderForSpear(ItemIds.NETHERITE_SPEAR, ToolMaterial.NETHERITE, 1.15f, 1.2f, 0.4f, 2.5f, 9.0f, 5.5f, 8.75f, ItemTags.NETHERITE_TOOL_MATERIALS)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builderForShovel(ItemIds.NETHERITE_SHOVEL, ToolMaterial.NETHERITE, ItemTags.NETHERITE_TOOL_MATERIALS)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builderForPickaxe(ItemIds.NETHERITE_PICKAXE, ToolMaterial.NETHERITE, ItemTags.NETHERITE_TOOL_MATERIALS)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builderForAxe(ItemIds.NETHERITE_AXE, ToolMaterial.NETHERITE, 6.0d, 0.25d, ItemTags.NETHERITE_TOOL_MATERIALS)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builderForHoe(ItemIds.NETHERITE_HOE, ToolMaterial.NETHERITE, 5.0d, 1.0d, ItemTags.NETHERITE_TOOL_MATERIALS)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builder(ItemIds.FISHING_ROD, 1)
-                .behavior(DamageableItemBehavior.of(64))
-                .behavior(EnchantableItemBehavior.of(1))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(64)
+                )
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(1)
+                )
+                .behavior(
+                    CastableItemBehavior.CODEC,
                     CastableItemBehavior.of(
                         new Castable(
                             this.soundEvents.getOrThrow(SoundEventIds.FISHING_BOBBER_THROW),
@@ -1376,11 +1805,18 @@ public class Items {
                         )
                     )
                 )
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_SMALL))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_SMALL)
+                )
                 .register();
             this.builder(ItemIds.SHEARS, 1)
-                .behavior(DamageableItemBehavior.of(238))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(238)
+                )
+                .behavior(
+                    ToolItemBehavior.CODEC,
                     ToolItemBehavior.builder(1)
                         .rule(Tool.Rule.minesAndDrops(HolderSet.direct(this.blocks.getOrThrow(BlockItemIds.COBWEB.block())), 15.0f))
                         .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.SHEARS_EXTREME_BREAKING_SPEED), 15.0f))
@@ -1388,17 +1824,25 @@ public class Items {
                         .rule(Tool.Rule.overrideSpeed(this.blocks.getOrThrow(BlockTags.SHEARS_MINOR_BREAKING_SPEED), 2.0f))
                         .build()
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHEAR)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHEAR))
+                )
                 .register();
             this.builder(ItemIds.BOW, 1)
-                .behavior(DamageableItemBehavior.of(384))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(384)
+                )
+                .behavior(
+                    UseableItemBehavior.CODEC,
                     UseableItemBehavior.builder()
                         .useFor(Shooter.INSTANCE)
                         .animation(ItemUseAnimation.BOW)
                         .build()
                 )
                 .behavior(
+                    ShooterItemBehavior.CODEC,
                     ShooterItemBehavior.of(
                         Direct.Properties.of(this.soundEvents.getOrThrow(SoundEventIds.ARROW_SHOOT)),
                         this.items.getOrThrow(ItematicItemTags.BOW_AMMUNITION),
@@ -1406,18 +1850,29 @@ public class Items {
                         BowItem.DEFAULT_RANGE
                     )
                 )
-                .behavior(EnchantableItemBehavior.of(1))
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_SMALL))
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(1)
+                )
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_SMALL)
+                )
                 .register();
             this.builder(ItemIds.CROSSBOW, 1)
-                .behavior(DamageableItemBehavior.of(465))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(465)
+                )
+                .behavior(
+                    UseableItemBehavior.CODEC,
                     UseableItemBehavior.builder()
                         .useFor(Shooter.INSTANCE)
                         .animation(ItemUseAnimation.CROSSBOW)
                         .build()
                 )
                 .behavior(
+                    ShooterItemBehavior.CODEC,
                     ShooterItemBehavior.of(
                         Chargeable.Properties.of(
                             CrossbowItemAccessor.defaultChargingSounds(),
@@ -1435,39 +1890,69 @@ public class Items {
                         )
                     )
                 )
-                .behavior(EnchantableItemBehavior.of(1))
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_SMALL))
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(1)
+                )
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_SMALL)
+                )
                 .register();
             this.builderForProjectile(ItemIds.ARROW, EntityTypeIds.ARROW)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE))
+                )
                 .register();
             this.builderForProjectile(ItemIds.SPECTRAL_ARROW, EntityTypeIds.SPECTRAL_ARROW)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE))
+                )
                 .register();
             this.builderForProjectile(ItemIds.TIPPED_ARROW, EntityTypeIds.ARROW)
-                .behavior(PotionHolderItemBehavior.of(0.125f))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .behavior(
+                    PotionHolderItemBehavior.CODEC,
+                    PotionHolderItemBehavior.of(0.125f)
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE))
+                )
                 .register();
             this.builderForProjectile(ItemIds.TRIDENT, EntityTypeIds.TRIDENT, 1)
                 .display(display -> display.rarity(Rarity.RARE))
-                .behavior(DamageableItemBehavior.ofPreserved(250))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.ofPreserved(250)
+                )
+                .behavior(
+                    ToolItemBehavior.CODEC,
                     ToolItemBehavior.builder(2)
                         .preventCreativeDestruction()
                         .build()
                 )
                 .behavior(
+                    WeaponItemBehavior.CODEC,
                     WeaponItemBehavior.builder(1, TridentItem.BASE_DAMAGE, 0.275d)
                         .build()
                 )
                 .behavior(
+                    UseableItemBehavior.CODEC,
                     UseableItemBehavior.builder()
                         .useFor(Trident.INSTANCE)
                         .animation(ItemUseAnimation.TRIDENT)
                         .build()
                 )
-                .behavior(ThrowableItemBehavior.of(TridentItem.PROJECTILE_SHOOT_POWER, 0.0f, TridentItem.THROW_THRESHOLD_TIME))
-                .behavior(EnchantableItemBehavior.of(1))
+                .behavior(
+                    ThrowableItemBehavior.CODEC,
+                    ThrowableItemBehavior.of(TridentItem.PROJECTILE_SHOOT_POWER, 0.0f, TridentItem.THROW_THRESHOLD_TIME)
+                )
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(1)
+                )
                 .event(
                     ItemEvent.STOPPED_USING,
                     ActionEntry.of(
@@ -1496,24 +1981,42 @@ public class Items {
                 )
                 .register();
             this.builder(ItemIds.CARROT_ON_A_STICK, 1)
-                .behavior(DamageableItemBehavior.of(25))
-                .behavior(SteeringItemBehavior.of(this.entityTypes.getOrThrow(ItematicEntityTypeTags.CARROT_ON_A_STICK_CONTROL_TARGETS), 7))
+                .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(25)
+                )
+                .behavior(
+                    SteeringItemBehavior.CODEC,
+                    SteeringItemBehavior.of(this.entityTypes.getOrThrow(ItematicEntityTypeTags.CARROT_ON_A_STICK_CONTROL_TARGETS), 7)
+                )
                 .event(
                     ItemEvent.BREAK_ITEM,
                     ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemIds.FISHING_ROD)))
                 )
                 .register();
             this.builder(ItemIds.WARPED_FUNGUS_ON_A_STICK, 1)
-                .behavior(DamageableItemBehavior.of(100))
-                .behavior(SteeringItemBehavior.of(this.entityTypes.getOrThrow(ItematicEntityTypeTags.WARPED_FUNGUS_ON_A_STICK_CONTROL_TARGETS), 1))
+                .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(100)
+                )
+                .behavior(
+                    SteeringItemBehavior.CODEC,
+                    SteeringItemBehavior.of(this.entityTypes.getOrThrow(ItematicEntityTypeTags.WARPED_FUNGUS_ON_A_STICK_CONTROL_TARGETS), 1)
+                )
                 .event(
                     ItemEvent.BREAK_ITEM,
                     ActionEntry.of(ExchangeItemAction.ofNoDecrement(this.items.getOrThrow(ItemIds.FISHING_ROD)))
                 )
                 .register();
             this.builder(ItemIds.FLINT_AND_STEEL, 1)
-                .behavior(DamageableItemBehavior.of(64))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
+                .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(64)
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK))
+                )
                 .event(
                     ItemEvent.USE_ON_BLOCK,
                     ActionEntry.of(
@@ -1527,8 +2030,12 @@ public class Items {
                 )
                 .register();
             this.builder(ItemIds.BRUSH, 1)
-                .behavior(DamageableItemBehavior.of(64))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(64)
+                )
+                .behavior(
+                    UseableItemBehavior.CODEC,
                     UseableItemBehavior.builder()
                         .useFor(BrushItemAccessor.useDuration())
                         .animation(ItemUseAnimation.BRUSH)
@@ -1536,18 +2043,29 @@ public class Items {
                         .build()
                 )
                 .behavior(
+                    BrushItemBehavior.CODEC,
                     BrushItemBehavior.of(
                         new BlockBrusher(BrushableBlockEntityAccessor.requiredBrushesToBreak())
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.BRUSH))
+                )
                 .register();
             this.registerItem(ItemIds.BREEZE_ROD);
             this.builder(ItemIds.MACE, 1)
                 .display(display -> display.rarity(Rarity.EPIC))
-                .behavior(DamageableItemBehavior.of(500))
-                .behavior(ToolItemBehavior.builder(2).build())
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(500)
+                )
+                .behavior(
+                    ToolItemBehavior.CODEC,
+                    ToolItemBehavior.builder(2).build()
+                )
+                .behavior(
+                    WeaponItemBehavior.CODEC,
                     WeaponItemBehavior.builder(1, 5.0d, 0.15d)
                         .type(
                             MeleeWeaponComponents.SMASHING,
@@ -1566,8 +2084,14 @@ public class Items {
                         )
                         .build()
                 )
-                .behavior(EnchantableItemBehavior.of(15))
-                .behavior(RepairableItemBehavior.of(HolderSet.direct(this.items.getOrThrow(ItemIds.BREEZE_ROD))))
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(15)
+                )
+                .behavior(
+                    RepairableItemBehavior.CODEC,
+                    RepairableItemBehavior.of(HolderSet.direct(this.items.getOrThrow(ItemIds.BREEZE_ROD)))
+                )
                 .register();
             this.registerArmor(ItemIds.LEATHER_HELMET, ArmorMaterials.LEATHER, ArmorType.HELMET, ItemTags.REPAIRS_LEATHER_ARMOR);
             this.registerArmor(ItemIds.LEATHER_CHESTPLATE, ArmorMaterials.LEATHER, ArmorType.CHESTPLATE, ItemTags.REPAIRS_LEATHER_ARMOR);
@@ -1602,21 +2126,34 @@ public class Items {
             this.registerArmor(ItemIds.GOLDEN_LEGGINGS, ArmorMaterials.GOLD, ArmorType.LEGGINGS, ItemTags.REPAIRS_GOLD_ARMOR);
             this.registerArmor(ItemIds.GOLDEN_BOOTS, ArmorMaterials.GOLD, ArmorType.BOOTS, ItemTags.REPAIRS_GOLD_ARMOR);
             this.builderForArmor(ItemIds.NETHERITE_HELMET, ArmorMaterials.NETHERITE, ArmorType.HELMET, ItemTags.REPAIRS_NETHERITE_ARMOR)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builderForArmor(ItemIds.NETHERITE_CHESTPLATE, ArmorMaterials.NETHERITE, ArmorType.CHESTPLATE, ItemTags.REPAIRS_NETHERITE_ARMOR)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builderForArmor(ItemIds.NETHERITE_LEGGINGS, ArmorMaterials.NETHERITE, ArmorType.LEGGINGS, ItemTags.REPAIRS_NETHERITE_ARMOR)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.builderForArmor(ItemIds.NETHERITE_BOOTS, ArmorMaterials.NETHERITE, ArmorType.BOOTS, ItemTags.REPAIRS_NETHERITE_ARMOR)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.registerItem(ItemIds.TURTLE_SCUTE);
             this.registerArmor(ItemIds.TURTLE_HELMET, ArmorMaterials.TURTLE_SCUTE, ArmorType.HELMET, ItemTags.REPAIRS_TURTLE_HELMET);
             this.builder(ItemIds.SADDLE, 1)
                 .behavior(
+                    EquipmentItemBehavior.CODEC,
                     EquipmentItemBehavior.of(
                         Equippable.builder(EquipmentSlot.SADDLE)
                             .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.HORSE_SADDLE))
@@ -1628,7 +2165,10 @@ public class Items {
                             .build()
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+                )
                 .register();
             this.registerHorseArmor(ItemIds.LEATHER_HORSE_ARMOR, ArmorMaterials.LEATHER);
             this.registerHorseArmor(ItemIds.COPPER_HORSE_ARMOR, ArmorMaterials.COPPER);
@@ -1636,19 +2176,27 @@ public class Items {
             this.registerHorseArmor(ItemIds.GOLDEN_HORSE_ARMOR, ArmorMaterials.GOLD);
             this.registerHorseArmor(ItemIds.DIAMOND_HORSE_ARMOR, ArmorMaterials.DIAMOND);
             this.builderForHorseArmor(ItemIds.NETHERITE_HORSE_ARMOR, ArmorMaterials.NETHERITE)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.registerItem(ItemIds.ARMADILLO_SCUTE);
             this.builder(ItemIds.WOLF_ARMOR, 1)
                 .attributeModifiers(builder -> AttributeModifiers.armor(builder, ArmorMaterials.ARMADILLO_SCUTE, ArmorType.BODY))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
                     DamageableItemBehavior.of(
                         ArmorType.BODY.getDurability(ArmorMaterials.ARMADILLO_SCUTE.durability()),
                         this.soundEvents.getOrThrow(SoundEventIds.WOLF_ARMOR_BREAK)
                     )
                 )
-                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(ArmorMaterials.ARMADILLO_SCUTE.repairIngredient())))
                 .behavior(
+                    RepairableItemBehavior.CODEC,
+                    RepairableItemBehavior.of(this.items.getOrThrow(ArmorMaterials.ARMADILLO_SCUTE.repairIngredient()))
+                )
+                .behavior(
+                    EquipmentItemBehavior.CODEC,
                     EquipmentItemBehavior.of(
                         Equippable.builder(EquipmentSlot.BODY)
                             .setEquipSound(ArmorMaterials.ARMADILLO_SCUTE.equipSound())
@@ -1662,6 +2210,7 @@ public class Items {
                 .register();
             ColorCollection.zipApply(ItemIds.HARNESS, ColorCollection.VALUES, (harness, dyeColor) -> this.builder(harness, 1)
                 .behavior(
+                    EquipmentItemBehavior.CODEC,
                     EquipmentItemBehavior.of(
                         Equippable.builder(EquipmentSlot.BODY)
                             .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.HAPPY_GHAST_EQUIP))
@@ -1673,7 +2222,10 @@ public class Items {
                             .build()
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+                )
                 .register()
             );
             this.registerNautilusArmor(ItemIds.COPPER_NAUTILUS_ARMOR, ArmorMaterials.COPPER);
@@ -1681,13 +2233,20 @@ public class Items {
             this.registerNautilusArmor(ItemIds.GOLDEN_NAUTILUS_ARMOR, ArmorMaterials.GOLD);
             this.registerNautilusArmor(ItemIds.DIAMOND_NAUTILUS_ARMOR, ArmorMaterials.DIAMOND);
             this.builderForNautilusArmor(ItemIds.NETHERITE_NAUTILUS_ARMOR, ArmorMaterials.NETHERITE)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.registerItem(ItemIds.PHANTOM_MEMBRANE);
             this.builder(ItemIds.ELYTRA, 1)
                 .display(display -> display.rarity(Rarity.EPIC))
-                .behavior(DamageableItemBehavior.ofPreserved(432))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.ofPreserved(432)
+                )
+                .behavior(
+                    GliderItemBehavior.CODEC,
                     GliderItemBehavior.of(
                         ItemPredicate.Builder.item()
                             .withComponents(DataComponentMatchers.Builder.components()
@@ -1699,6 +2258,7 @@ public class Items {
                     )
                 )
                 .behavior(
+                    EquipmentItemBehavior.CODEC,
                     EquipmentItemBehavior.of(
                         Equippable.builder(EquipmentSlot.CHEST)
                             .setSwappable(true)
@@ -1707,18 +2267,29 @@ public class Items {
                             .build()
                     )
                 )
-                .behavior(RepairableItemBehavior.of(HolderSet.direct(this.items.getOrThrow(ItemIds.PHANTOM_MEMBRANE))))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
+                .behavior(
+                    RepairableItemBehavior.CODEC,
+                    RepairableItemBehavior.of(HolderSet.direct(this.items.getOrThrow(ItemIds.PHANTOM_MEMBRANE)))
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+                )
                 .register();
             this.builder(ItemIds.SHIELD, 1)
                 .behavior(
+                    UseableItemBehavior.CODEC,
                     UseableItemBehavior.builder()
                         .useIndefinitely()
                         .animation(ItemUseAnimation.BLOCK)
                         .build()
                 )
-                .behavior(DamageableItemBehavior.of(336))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(336)
+                )
+                .behavior(
+                    AttackBlockingItemBehavior.CODEC,
                     AttackBlockingItemBehavior.of(
                         new BlocksAttacks(
                             0.25f,
@@ -1732,6 +2303,7 @@ public class Items {
                     )
                 )
                 .behavior(
+                    EquipmentItemBehavior.CODEC,
                     EquipmentItemBehavior.of(
                         Equippable.builder(EquipmentSlot.OFFHAND)
                             .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_GENERIC))
@@ -1739,9 +2311,18 @@ public class Items {
                             .build()
                     )
                 )
-                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS)))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)))
-                .behavior(BannerPatternHolderItemBehavior.of())
+                .behavior(
+                    RepairableItemBehavior.CODEC,
+                    RepairableItemBehavior.of(this.items.getOrThrow(ItemTags.WOODEN_TOOL_MATERIALS))
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+                )
+                .behavior(
+                    BannerPatternHolderItemBehavior.CODEC,
+                    BannerPatternHolderItemBehavior.of()
+                )
                 .register();
             this.builder(ItemIds.TOTEM_OF_UNDYING, 1)
                 .display(display -> display.rarity(Rarity.UNCOMMON))
@@ -1770,12 +2351,14 @@ public class Items {
                 .register();
             this.builder(ItemIds.SPYGLASS, 1)
                 .behavior(
+                    UseableItemBehavior.CODEC,
                     UseableItemBehavior.builder()
                         .useFor(SpyglassItem.USE_DURATION)
                         .animation(ItemUseAnimation.SPYGLASS)
                         .build()
                 )
                 .behavior(
+                    ZoomItemBehavior.CODEC,
                     ZoomItemBehavior.of(
                         SpyglassItem.ZOOM_FOV_MODIFIER,
                         this.soundEvents.getOrThrow(SoundEventIds.SPYGLASS_USE),
@@ -1786,13 +2369,17 @@ public class Items {
             this.builder(ItemIds.GOAT_HORN, 1)
                 .display(display -> display.rarity(Rarity.UNCOMMON))
                 .behavior(
+                    UseableItemBehavior.CODEC,
                     UseableItemBehavior.builder()
                         .useFor(Playable.INSTANCE)
                         .cooldown(Playable.INSTANCE, UseCooldownMoment.ON_START)
                         .animation(ItemUseAnimation.TOOT_HORN)
                         .build()
                 )
-                .behavior(PlayableItemBehavior.of(this.instruments.getOrThrow(Instruments.PONDER_GOAT_HORN)))
+                .behavior(
+                    PlayableItemBehavior.CODEC,
+                    PlayableItemBehavior.of(this.instruments.getOrThrow(Instruments.PONDER_GOAT_HORN))
+                )
                 .register();
             this.builder(ItemIds.COMPASS)
                 .event(
@@ -1845,7 +2432,10 @@ public class Items {
             this.builderForBucketWithFluid(ItemIds.WATER_BUCKET, FluidIds.WATER, SoundEventIds.BUCKET_EMPTY)
                 .register();
             this.builderForBucketWithFluid(ItemIds.LAVA_BUCKET, FluidIds.LAVA, SoundEventIds.BUCKET_EMPTY_LAVA)
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_LAVA_BUCKET, this.items.getOrThrow(ItemIds.BUCKET)))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_LAVA_BUCKET, this.items.getOrThrow(ItemIds.BUCKET))
+                )
                 .register();
             this.registerBucket(
                 BlockItemIds.POWDER_SNOW.item(),
@@ -1857,16 +2447,28 @@ public class Items {
                 )
             );
             this.builderForBucketWithEntity(ItemIds.PUFFERFISH_BUCKET, EntityTypeIds.PUFFERFISH, SoundEventIds.BUCKET_EMPTY_FISH)
-                .behavior(FoodItemBehavior.of(Foods.PUFFERFISH))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.PUFFERFISH)
+                )
                 .register();
             this.builderForBucketWithEntity(ItemIds.SALMON_BUCKET, EntityTypeIds.SALMON, SoundEventIds.BUCKET_EMPTY_FISH)
-                .behavior(FoodItemBehavior.of(Foods.SALMON))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.SALMON)
+                )
                 .register();
             this.builderForBucketWithEntity(ItemIds.COD_BUCKET, EntityTypeIds.COD, SoundEventIds.BUCKET_EMPTY_FISH)
-                .behavior(FoodItemBehavior.of(Foods.COD))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COD)
+                )
                 .register();
             this.builderForBucketWithEntity(ItemIds.TROPICAL_FISH_BUCKET, EntityTypeIds.TROPICAL_FISH, SoundEventIds.BUCKET_EMPTY_FISH)
-                .behavior(FoodItemBehavior.of(Foods.TROPICAL_FISH))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.TROPICAL_FISH)
+                )
                 .register();
             this.builderForBucketWithEntity(ItemIds.AXOLOTL_BUCKET, EntityTypeIds.AXOLOTL, SoundEventIds.BUCKET_EMPTY_AXOLOTL)
                 .register();
@@ -2000,6 +2602,7 @@ public class Items {
             this.registerBoat(ItemIds.BAMBOO_CHEST_RAFT, EntityTypeIds.BAMBOO_CHEST_RAFT);
             this.builder(ItemIds.ARMOR_STAND, 16)
                 .behavior(
+                    EntityItemBehavior.CODEC,
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.ARMOR_STAND))
                             .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.ARMOR_STAND))
@@ -2007,10 +2610,14 @@ public class Items {
                             .build()
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
+                )
                 .register();
             this.builder(ItemIds.ITEM_FRAME)
                 .behavior(
+                    EntityItemBehavior.CODEC,
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.ITEM_FRAME))
                             .allowItemData()
@@ -2020,6 +2627,7 @@ public class Items {
                 .register();
             this.builder(ItemIds.GLOW_ITEM_FRAME)
                 .behavior(
+                    EntityItemBehavior.CODEC,
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.GLOW_ITEM_FRAME))
                             .allowItemData()
@@ -2029,6 +2637,7 @@ public class Items {
                 .register();
             this.builder(ItemIds.PAINTING)
                 .behavior(
+                    EntityItemBehavior.CODEC,
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.PAINTING))
                             .allowItemData()
@@ -2040,6 +2649,7 @@ public class Items {
             this.builder(ItemIds.END_CRYSTAL)
                 .display(ItemDisplay.Builder::glint)
                 .behavior(
+                    EntityItemBehavior.CODEC,
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.END_CRYSTAL))
                             .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.END_CRYSTAL))
@@ -2048,16 +2658,32 @@ public class Items {
                 )
                 .register();
             this.builderForProjectile(ItemIds.SNOWBALL, EntityTypeIds.SNOWBALL, 16)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
-                .behavior(ThrowableItemBehavior.of(1.5f))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE))
+                )
+                .behavior(
+                    ThrowableItemBehavior.CODEC,
+                    ThrowableItemBehavior.of(1.5f)
+                )
                 .register();
             this.builderForProjectile(ItemIds.ENDER_PEARL, EntityTypeIds.ENDER_PEARL, 16)
-                .behavior(UseableItemBehavior.ofInstant(1.0f))
-                .behavior(ThrowableItemBehavior.of(1.5f))
+                .behavior(
+                    UseableItemBehavior.CODEC,
+                    UseableItemBehavior.ofInstant(1.0f)
+                )
+                .behavior(
+                    ThrowableItemBehavior.CODEC,
+                    ThrowableItemBehavior.of(1.5f)
+                )
                 .register();
             this.builderForProjectile(ItemIds.ENDER_EYE, EntityTypeIds.EYE_OF_ENDER)
-                .behavior(ThrowableItemBehavior.of())
                 .behavior(
+                    ThrowableItemBehavior.CODEC,
+                    ThrowableItemBehavior.of()
+                )
+                .behavior(
+                    BlockTransformerItemBehavior.CODEC,
                     BlockTransformerItemBehavior.of(
                         this.blockTransformers.getOrThrow(ItematicBlockTransformers.FILL_END_PORTAL_FRAME)
                     )
@@ -2092,11 +2718,20 @@ public class Items {
                 .register();
             this.builderForProjectile(ItemIds.EXPERIENCE_BOTTLE, EntityTypeIds.EXPERIENCE_BOTTLE)
                 .display(display -> display.rarity(Rarity.UNCOMMON).glint())
-                .behavior(ThrowableItemBehavior.of(0.7f, -20.0f))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE)))
+                .behavior(
+                    ThrowableItemBehavior.CODEC,
+                    ThrowableItemBehavior.of(0.7f, -20.0f)
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_BOTTLE))
+                )
                 .register();
             this.builderForProjectile(ItemIds.FIRE_CHARGE, EntityTypeIds.SMALL_FIREBALL)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_CHARGE)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_CHARGE))
+                )
                 .event(
                     ItemEvent.USE_ON_BLOCK,
                     ActionEntry.of(
@@ -2110,9 +2745,18 @@ public class Items {
                 )
                 .register();
             this.builderForProjectile(ItemIds.WIND_CHARGE, EntityTypeIds.WIND_CHARGE)
-                .behavior(UseableItemBehavior.ofInstant(0.5f))
-                .behavior(ThrowableItemBehavior.of(1.5f))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .behavior(
+                    UseableItemBehavior.CODEC,
+                    UseableItemBehavior.ofInstant(0.5f)
+                )
+                .behavior(
+                    ThrowableItemBehavior.CODEC,
+                    ThrowableItemBehavior.of(1.5f)
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE))
+                )
                 .register();
             this.builder(ItemIds.DISC_FRAGMENT_5)
                 .display(display -> display.rarity(Rarity.UNCOMMON).tooltip(Tooltips.description(ItemIds.DISC_FRAGMENT_5)))
@@ -2199,43 +2843,100 @@ public class Items {
             this.registerDecoratedPotPattern(ItemIds.SNORT_POTTERY_SHERD, DecoratedPotPatterns.SNORT);
             this.builderForBlock(BlockItemIds.WHEAT_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builder(ItemIds.WHEAT)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.HAY_BLOCK)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
                 .register();
             this.builderForConsumable(ItemIds.BREAD, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.BREAD))
-                .behavior(VillagerFoodItemBehavior.of(4))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.BREAD)
+                )
+                .behavior(
+                    VillagerFoodItemBehavior.CODEC,
+                    VillagerFoodItemBehavior.of(4)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.CAKE, 1)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_ALWAYS_ADD_ONE))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_ALWAYS_ADD_ONE)
+                )
                 .register();
             this.builderForConsumable(BlockItemIds.CARROT_CROP.item(), Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.CARROT))
-                .behavior(VillagerFoodItemBehavior.of(1))
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARROT_CROP.block())))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.CARROT)
+                )
+                .behavior(
+                    VillagerFoodItemBehavior.CODEC,
+                    VillagerFoodItemBehavior.of(1)
+                )
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.CARROT_CROP.block()))
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForConsumable(ItemIds.GOLDEN_CARROT, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.GOLDEN_CARROT))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.GOLDEN_CARROT)
+                )
                 .register();
             this.builderForConsumable(BlockItemIds.POTATO_CROP.item(), Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.POTATO))
-                .behavior(VillagerFoodItemBehavior.of(1))
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.POTATO_CROP.block())))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.POTATO)
+                )
+                .behavior(
+                    VillagerFoodItemBehavior.CODEC,
+                    VillagerFoodItemBehavior.of(1)
+                )
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.POTATO_CROP.block()))
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForConsumable(ItemIds.BAKED_POTATO, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.BAKED_POTATO))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.BAKED_POTATO)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
                 .register();
             this.builderForConsumable(ItemIds.POISONOUS_POTATO, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.POISONOUS_POTATO))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.POISONOUS_POTATO)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
@@ -2251,37 +2952,85 @@ public class Items {
                 .register();
             this.builderForBlock(BlockItemIds.BEETROOT_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForConsumable(ItemIds.BEETROOT, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.BEETROOT))
-                .behavior(VillagerFoodItemBehavior.of(1))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.BEETROOT)
+                )
+                .behavior(
+                    VillagerFoodItemBehavior.CODEC,
+                    VillagerFoodItemBehavior.of(1)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForBlock(BlockItemIds.COCOA_CROP)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForConsumable(ItemIds.COOKIE, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.COOKIE))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COOKIE)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                )
                 .register();
             this.builderForConsumable(BlockItemIds.SWEET_BERRY_CROP.item(), Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.SWEET_BERRIES))
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SWEET_BERRY_CROP.block())))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.SWEET_BERRIES)
+                )
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.SWEET_BERRY_CROP.block()))
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForConsumable(BlockItemIds.GLOW_BERRY_CROP.item(), Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.GLOW_BERRIES))
-                .behavior(BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOW_BERRY_CROP.block())))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.GLOW_BERRIES)
+                )
+                .behavior(
+                    BlockItemBehavior.CODEC,
+                    BlockItemBehavior.of(this.blocks.getOrThrow(BlockItemIds.GLOW_BERRY_CROP.block()))
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForConsumable(ItemIds.APPLE, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.APPLE))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.APPLE)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.builderForConsumable(ItemIds.GOLDEN_APPLE, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.GOLDEN_APPLE))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.GOLDEN_APPLE)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
@@ -2301,7 +3050,10 @@ public class Items {
                 .register();
             this.builderForConsumable(ItemIds.ENCHANTED_GOLDEN_APPLE, Consumables.DEFAULT_FOOD)
                 .display(display -> display.rarity(Rarity.RARE).glint())
-                .behavior(FoodItemBehavior.of(Foods.ENCHANTED_GOLDEN_APPLE))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.ENCHANTED_GOLDEN_APPLE)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
@@ -2328,11 +3080,20 @@ public class Items {
                 )
                 .register();
             this.builderForConsumable(ItemIds.DRIED_KELP, Consumables.DRIED_KELP)
-                .behavior(FoodItemBehavior.of(Foods.DRIED_KELP))
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.DRIED_KELP)
+                )
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
             this.builderForConsumable(ItemIds.CHORUS_FRUIT, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.CHORUS_FRUIT))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.CHORUS_FRUIT)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
@@ -2346,19 +3107,34 @@ public class Items {
                 .register();
             this.registerItem(ItemIds.POPPED_CHORUS_FRUIT);
             this.builderForConsumable(ItemIds.PORKCHOP, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.PORKCHOP))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.PORKCHOP)
+                )
                 .register();
             this.builderForConsumable(ItemIds.COOKED_PORKCHOP, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.COOKED_PORKCHOP))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COOKED_PORKCHOP)
+                )
                 .register();
             this.builderForConsumable(ItemIds.BEEF, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.BEEF))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.BEEF)
+                )
                 .register();
             this.builderForConsumable(ItemIds.COOKED_BEEF, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.COOKED_BEEF))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COOKED_BEEF)
+                )
                 .register();
             this.builderForConsumable(ItemIds.CHICKEN, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.CHICKEN))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.CHICKEN)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
@@ -2373,34 +3149,61 @@ public class Items {
                 )
                 .register();
             this.builderForConsumable(ItemIds.COOKED_CHICKEN, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.COOKED_CHICKEN))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COOKED_CHICKEN)
+                )
                 .register();
             this.registerThrowableEgg(ItemIds.EGG, ChickenVariants.TEMPERATE);
             this.registerThrowableEgg(ItemIds.BLUE_EGG, ChickenVariants.COLD);
             this.registerThrowableEgg(ItemIds.BROWN_EGG, ChickenVariants.WARM);
             this.builderForConsumable(ItemIds.MUTTON, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.MUTTON))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.MUTTON)
+                )
                 .register();
             this.builderForConsumable(ItemIds.COOKED_MUTTON, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.COOKED_MUTTON))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COOKED_MUTTON)
+                )
                 .register();
             this.builderForConsumable(ItemIds.COD, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.COD))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COD)
+                )
                 .register();
             this.builderForConsumable(ItemIds.COOKED_COD, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.COOKED_COD))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COOKED_COD)
+                )
                 .register();
             this.builderForConsumable(ItemIds.SALMON, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.SALMON))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.SALMON)
+                )
                 .register();
             this.builderForConsumable(ItemIds.COOKED_SALMON, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.COOKED_SALMON))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COOKED_SALMON)
+                )
                 .register();
             this.builderForConsumable(ItemIds.TROPICAL_FISH, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.TROPICAL_FISH))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.TROPICAL_FISH)
+                )
                 .register();
             this.builderForConsumable(ItemIds.PUFFERFISH, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.PUFFERFISH))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.PUFFERFISH)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
@@ -2425,31 +3228,52 @@ public class Items {
                 .register();
             this.registerCookingFuel(ItemIds.BOWL, ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL);
             this.builderForConsumableBowl(ItemIds.MUSHROOM_STEW)
-                .behavior(FoodItemBehavior.of(Foods.MUSHROOM_STEW))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.MUSHROOM_STEW)
+                )
                 .register();
             this.builderForConsumable(ItemIds.RABBIT, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.RABBIT))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.RABBIT)
+                )
                 .register();
             this.builderForConsumable(ItemIds.COOKED_RABBIT, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.COOKED_RABBIT))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.COOKED_RABBIT)
+                )
                 .register();
             this.builderForConsumableBowl(ItemIds.RABBIT_STEW)
-                .behavior(FoodItemBehavior.of(Foods.RABBIT_STEW))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.RABBIT_STEW)
+                )
                 .register();
             this.registerItem(ItemIds.RABBIT_FOOT);
             this.registerItem(ItemIds.RABBIT_HIDE);
             this.builderForConsumableBowl(ItemIds.BEETROOT_SOUP)
-                .behavior(FoodItemBehavior.of(Foods.BEETROOT_SOUP))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.BEETROOT_SOUP)
+                )
                 .register();
             this.builderForConsumableBowl(ItemIds.SUSPICIOUS_STEW)
-                .behavior(FoodItemBehavior.of(Foods.SUSPICIOUS_STEW))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.SUSPICIOUS_STEW)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(ApplySuspiciousStewEffectsFromItemAction.of(LootContext.EntityTarget.THIS))
                 )
                 .register();
             this.builderForConsumable(ItemIds.ROTTEN_FLESH, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.ROTTEN_FLESH))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.ROTTEN_FLESH)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
@@ -2464,7 +3288,10 @@ public class Items {
                 )
                 .register();
             this.builderForConsumable(ItemIds.SPIDER_EYE, Consumables.DEFAULT_FOOD)
-                .behavior(FoodItemBehavior.of(Foods.SPIDER_EYE))
+                .behavior(
+                    FoodItemBehavior.CODEC,
+                    FoodItemBehavior.of(Foods.SPIDER_EYE)
+                )
                 .event(
                     ItemEvent.CONSUME_ITEM,
                     ActionEntry.of(
@@ -2478,17 +3305,26 @@ public class Items {
                 )
                 .register();
             this.builder(ItemIds.BOOK)
-                .behavior(EnchantableItemBehavior.of(1, this.items.getOrThrow(ItemIds.ENCHANTED_BOOK)))
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(1, this.items.getOrThrow(ItemIds.ENCHANTED_BOOK))
+                )
                 .register();
             this.builder(ItemIds.WRITABLE_BOOK, 1)
-                .behavior(WritableItemBehavior.of(this.items.getOrThrow(ItemIds.WRITTEN_BOOK)))
+                .behavior(
+                    WritableItemBehavior.CODEC,
+                    WritableItemBehavior.of(this.items.getOrThrow(ItemIds.WRITTEN_BOOK))
+                )
                 .register();
             this.builder(ItemIds.WRITTEN_BOOK, 16)
                 .display(ItemDisplay.Builder::glint)
                 .register();
             this.builder(ItemIds.ENCHANTED_BOOK, 1)
                 .display(display -> display.rarity(Rarity.UNCOMMON).glint())
-                .behavior(EnchantmentHolderItemBehavior.of(this.items.getOrThrow(ItemIds.BOOK)))
+                .behavior(
+                    EnchantmentHolderItemBehavior.CODEC,
+                    EnchantmentHolderItemBehavior.of(this.items.getOrThrow(ItemIds.BOOK))
+                )
                 .register();
             this.builder(ItemIds.MAP)
                 .event(
@@ -2562,14 +3398,21 @@ public class Items {
                 )
                 .register();
             ColorCollection.zipApply(ItemIds.DYE, ColorCollection.VALUES, (dye, dyeColor) -> this.builder(dye)
-                .behavior(DyeItemBehavior.of(dyeColor))
-                .behavior(SignModifierItemBehavior.dye(dyeColor, this.soundEvents.getOrThrow(SoundEventIds.DYE_USE)))
+                .behavior(
+                    DyeItemBehavior.CODEC,
+                    DyeItemBehavior.of(dyeColor)
+                )
+                .behavior(
+                    SignModifierItemBehavior.CODEC,
+                    SignModifierItemBehavior.dye(dyeColor, this.soundEvents.getOrThrow(SoundEventIds.DYE_USE))
+                )
                 .register()
             );
             this.registerBundle(ItemIds.BUNDLE);
             ItemIds.DYED_BUNDLE.forEach(this::registerBundle);
             ColorCollection.zipApply(ItemIds.CUSHION, ColorCollection.VALUES, (cushion, dyeColor) -> this.builder(cushion, 16)
                 .behavior(
+                    EntityItemBehavior.CODEC,
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.CUSHION))
                             .allowItemData()
@@ -2583,7 +3426,10 @@ public class Items {
                         this.blocks.getOrThrow(BlockTags.CUSHION_USES_COLLISION_SHAPE)
                     )
                 )
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL_SLABS))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOL_SLABS)
+                )
                 .register()
             );
             this.registerCookingFuel(ItemIds.COAL, ContextIntProviders.COOKING_TIME_COAL);
@@ -2599,11 +3445,20 @@ public class Items {
             this.registerItem(ItemIds.GOLD_NUGGET);
             this.registerTrimMaterialProvider(ItemIds.DIAMOND, TrimMaterials.DIAMOND);
             this.builder(ItemIds.NETHERITE_INGOT)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
-                .behavior(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.NETHERITE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
+                .behavior(
+                    TrimMaterialProviderItemBehavior.CODEC,
+                    TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(TrimMaterials.NETHERITE))
+                )
                 .register();
             this.builder(ItemIds.NETHERITE_SCRAP)
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_FIRE))
+                )
                 .register();
             this.registerTrimMaterialProvider(ItemIds.EMERALD, TrimMaterials.EMERALD);
             this.registerTrimMaterialProvider(ItemIds.LAPIS_LAZULI, TrimMaterials.LAPIS);
@@ -2612,13 +3467,19 @@ public class Items {
             this.registerTrimMaterialProvider(ItemIds.RESIN_BRICK, TrimMaterials.RESIN);
             this.builder(ItemIds.NETHER_STAR)
                 .display(display -> display.rarity(Rarity.RARE).glint())
-                .behavior(ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_EXPLOSION)))
+                .behavior(
+                    ImmuneToDamageItemBehavior.CODEC,
+                    ImmuneToDamageItemBehavior.of(this.damageTypes.getOrThrow(DamageTypeTags.IS_EXPLOSION))
+                )
                 .register();
             this.registerCookingFuel(ItemIds.STICK, ContextIntProviders.COOKING_TIME_DRY_PLANTS);
             this.registerItem(ItemIds.FLINT);
             this.registerItem(ItemIds.BONE);
             this.builder(ItemIds.BONE_MEAL)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_ITEM_ON_BLOCK))
+                )
                 .event(
                     ItemEvent.USE_ON_BLOCK,
                     ActionEntry.of(
@@ -2638,11 +3499,18 @@ public class Items {
             this.registerItem(ItemIds.FEATHER);
             this.registerItem(ItemIds.GUNPOWDER);
             this.builder(ItemIds.FIREWORK_STAR)
-                .behavior(FireworkExplosionHolderItemBehavior.INSTANCE)
+                .behavior(
+                    FireworkExplosionHolderItemBehavior.CODEC,
+                    FireworkExplosionHolderItemBehavior.INSTANCE
+                )
                 .register();
             this.builderForProjectile(ItemIds.FIREWORK_ROCKET, EntityTypeIds.FIREWORK_ROCKET)
-                .behavior(FireworkItemBehavior.of(new Fireworks(1, List.of())))
                 .behavior(
+                    FireworkItemBehavior.CODEC,
+                    FireworkItemBehavior.of(new Fireworks(1, List.of()))
+                )
+                .behavior(
+                    EntityItemBehavior.CODEC,
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(EntityTypeIds.FIREWORK_ROCKET))
                             .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.FIREWORK_ROCKET))
@@ -2650,31 +3518,47 @@ public class Items {
                     )
                 )
                 .behavior(
+                    GliderFuelItemBehavior.CODEC,
                     GliderFuelItemBehavior.of(
                         ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_CONSTANTLY_ADDED_SPEED,
                         ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_TARGET_SPEED,
                         ItematicContextFloatProviders.GLIDER_FIREWORK_ROCKET_TARGET_SPEED_FACTOR
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_FIREWORK_ROCKET))
+                )
                 .register();
             this.registerItem(ItemIds.LEATHER);
             this.registerItem(ItemIds.CLAY_BALL);
             this.registerItem(ItemIds.PAPER);
             this.registerItem(ItemIds.GLOWSTONE_DUST);
             this.builder(ItemIds.INK_SAC)
-                .behavior(SignModifierItemBehavior.glow(false, this.soundEvents.getOrThrow(SoundEventIds.INK_SAC_USE)))
+                .behavior(
+                    SignModifierItemBehavior.CODEC,
+                    SignModifierItemBehavior.glow(false, this.soundEvents.getOrThrow(SoundEventIds.INK_SAC_USE))
+                )
                 .register();
             this.builder(ItemIds.GLOW_INK_SAC)
-                .behavior(SignModifierItemBehavior.glow(true, this.soundEvents.getOrThrow(SoundEventIds.GLOW_INK_SAC_USE)))
+                .behavior(
+                    SignModifierItemBehavior.CODEC,
+                    SignModifierItemBehavior.glow(true, this.soundEvents.getOrThrow(SoundEventIds.GLOW_INK_SAC_USE))
+                )
                 .register();
             this.builderForBlock(BlockItemIds.NETHER_WART)
                 .display(ItemDisplay.Builder::itemName)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_MEDIUM)
+                )
                 .register();
             this.registerCookingFuel(ItemIds.BLAZE_ROD, ContextIntProviders.COOKING_TIME_BLAZE_ROD);
             this.builder(ItemIds.BLAZE_POWDER)
-                .behavior(BrewingFuelItemBehavior.of(ContextIntProviders.BREWING_DEFAULT_USES))
+                .behavior(
+                    BrewingFuelItemBehavior.CODEC,
+                    BrewingFuelItemBehavior.of(ContextIntProviders.BREWING_DEFAULT_USES)
+                )
                 .register();
             this.registerItem(ItemIds.SUGAR);
             this.registerItem(ItemIds.GHAST_TEAR);
@@ -2690,20 +3574,35 @@ public class Items {
                 .register();
             this.builder(ItemIds.DEBUG_STICK, 1)
                 .display(display -> display.rarity(Rarity.EPIC).glint())
-                .behavior(DebugStickItemBehavior.INSTANCE)
+                .behavior(
+                    DebugStickItemBehavior.CODEC,
+                    DebugStickItemBehavior.INSTANCE
+                )
                 .register();
         }
 
         private ItemBuilder builderForConsumable(ResourceKey<Item> item, Consumable consumable) {
             return this.builder(item)
-                .behavior(UseableItemBehavior.of(consumable))
-                .behavior(ConsumableItemBehavior.of());
+                .behavior(
+                    UseableItemBehavior.CODEC,
+                    UseableItemBehavior.of(consumable)
+                )
+                .behavior(
+                    ConsumableItemBehavior.CODEC,
+                    ConsumableItemBehavior.of()
+                );
         }
 
         private ItemBuilder builderForConsumable(ResourceKey<Item> item, Consumable consumable, ResourceKey<Item> remainder) {
             return this.builder(item, 1)
-                .behavior(UseableItemBehavior.of(consumable, this.items.getOrThrow(remainder)))
-                .behavior(ConsumableItemBehavior.of());
+                .behavior(
+                    UseableItemBehavior.CODEC,
+                    UseableItemBehavior.of(consumable, this.items.getOrThrow(remainder))
+                )
+                .behavior(
+                    ConsumableItemBehavior.CODEC,
+                    ConsumableItemBehavior.of()
+                );
         }
 
         private ItemBuilder builderForConsumableBowl(ResourceKey<Item> item) {
@@ -2716,8 +3615,14 @@ public class Items {
 
         private ItemBuilder builderForBucket(ResourceKey<Item> item, int maxStackSize, BucketItemBehavior bucket) {
             return this.builder(item, maxStackSize)
-                .behavior(bucket)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET)));
+                .behavior(
+                    BucketItemBehavior.CODEC,
+                    bucket
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.USE_BUCKET))
+                );
         }
 
         private ItemBuilder builderForBucketWithFluid(ResourceKey<Item> item, ResourceKey<Fluid> fluid, ResourceKey<SoundEvent> placeSound) {
@@ -2748,6 +3653,7 @@ public class Items {
         private void registerSpawnEgg(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
             this.builder(item)
                 .behavior(
+                    EntityItemBehavior.CODEC,
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(entity))
                             .allowItemData()
@@ -2758,21 +3664,31 @@ public class Items {
                         EntityPlacerComponent.Pass.FLUID
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
+                )
                 .register();
         }
 
         private void registerMusicDisc(ResourceKey<Item> item, Rarity rarity, ResourceKey<JukeboxSong> jukeboxSong) {
             this.builder(item, 1)
                 .display(display -> display.rarity(rarity))
-                .behavior(PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(jukeboxSong)))
+                .behavior(
+                    PlayableSongItemBehavior.CODEC,
+                    PlayableSongItemBehavior.of(this.jukeboxSongs.getOrThrow(jukeboxSong))
+                )
                 .register();
         }
 
         private void registerSuspiciousEffectIngredient(BlockItemId blockItem, ResourceKey<ContextIntProvider> compostLayers, ResourceKey<MobEffect> effect, int effectDuration, ResourceKey<Block> pottedBlock) {
             this.builderForBlock(blockItem)
-                .behavior(CompostableItemBehavior.of(compostLayers))
                 .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(compostLayers)
+                )
+                .behavior(
+                    SuspiciousEffectIngredientItemBehavior.CODEC,
                     SuspiciousEffectIngredientItemBehavior.of(
                         new SuspiciousStewEffects.Entry(this.statusEffects.getOrThrow(effect), effectDuration)
                     )
@@ -2793,33 +3709,48 @@ public class Items {
         private void registerSmithingTemplate(ResourceKey<Item> item, Rarity rarity, Component[] tooltip, Identifier smithingTemplateDisplay) {
             this.builder(item)
                 .display(display -> display.rarity(rarity).tooltip(tooltip))
-                .behavior(SmithingTemplateDisplayItemBehavior.of(smithingTemplateDisplay))
+                .behavior(
+                    SmithingTemplateDisplayItemBehavior.CODEC,
+                    SmithingTemplateDisplayItemBehavior.of(smithingTemplateDisplay)
+                )
                 .register();
         }
 
         private void registerBannerPattern(ResourceKey<Item> item, Rarity rarity, TagKey<BannerPattern> bannerPatterns) {
             this.builder(item, 1)
                 .display(display -> display.rarity(rarity))
-                .behavior(BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(bannerPatterns)))
+                .behavior(
+                    BannerPatternItemBehavior.CODEC,
+                    BannerPatternItemBehavior.of(this.bannerPatterns.getOrThrow(bannerPatterns))
+                )
                 .register();
         }
 
         private void registerDecoratedPotPattern(ResourceKey<Item> item, ResourceKey<DecoratedPotPattern> decoratedPotPattern) {
             this.builder(item)
                 .display(display -> display.rarity(Rarity.UNCOMMON))
-                .behavior(DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(decoratedPotPattern)))
+                .behavior(
+                    DecoratedPotPatternItemBehavior.CODEC,
+                    DecoratedPotPatternItemBehavior.of(this.decoratedPotPatterns.getOrThrow(decoratedPotPattern))
+                )
                 .register();
         }
 
         private void registerTrimMaterialProvider(ResourceKey<Item> item, ResourceKey<TrimMaterial> trimMaterial) {
             this.builder(item)
-                .behavior(TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(trimMaterial)))
+                .behavior(
+                    TrimMaterialProviderItemBehavior.CODEC,
+                    TrimMaterialProviderItemBehavior.of(this.trimMaterials.getOrThrow(trimMaterial))
+                )
                 .register();
         }
 
         private void registerMap(ResourceKey<Item> item) {
             this.builder(item)
-                .behavior(MapDecorationHolderItemBehavior.INSTANCE)
+                .behavior(
+                    MapDecorationHolderItemBehavior.CODEC,
+                    MapDecorationHolderItemBehavior.INSTANCE
+                )
                 .event(ItemEvent.USE_ON_BLOCK, this.actions.getOrThrow(Actions.MARK_BANNER_ON_MAP))
                 .register();
         }
@@ -2827,8 +3758,12 @@ public class Items {
         private void registerBundle(ResourceKey<Item> item) {
             this.builder(item, 1)
                 .display(display -> display.itemBarStyle(ItemBarStyleIds.BUNDLE))
-                .behavior(UseableItemBehavior.builder().useFor(BundleItemAccessor.useDuration()).build())
                 .behavior(
+                    UseableItemBehavior.CODEC,
+                    UseableItemBehavior.builder().useFor(BundleItemAccessor.useDuration()).build()
+                )
+                .behavior(
+                    ItemHolderItemBehavior.CODEC,
                     ItemHolderItemBehavior.of(
                         Fraction.ONE,
                         ItemHolderRules.builder()
@@ -2873,6 +3808,7 @@ public class Items {
                 .display(display -> display.rarity(rarity))
                 .attributeModifiers(AttributeModifiers::hideFromLocatorBar)
                 .behavior(
+                    EquipmentItemBehavior.CODEC,
                     reducedEntityVisibilityTypes.length == 0
                         ? EquipmentItemBehavior.of(equippable)
                         : EquipmentItemBehavior.of(
@@ -2887,13 +3823,19 @@ public class Items {
                             )
                         )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY_HEAD))
+                )
                 .register();
         }
 
         private void registerCookingFuel(ResourceKey<Item> item, ResourceKey<ContextIntProvider> burnTime) {
             this.builder(item)
-                .behavior(CookingFuelItemBehavior.of(burnTime))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(burnTime)
+                )
                 .register();
         }
 
@@ -2904,8 +3846,12 @@ public class Items {
 
         private ItemBuilder builderForSword(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
             return this.builder(item, 1)
-                .behavior(DamageableItemBehavior.of(material.durability()))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(material.durability())
+                )
+                .behavior(
+                    ToolItemBehavior.CODEC,
                     ToolItemBehavior.builder(2)
                         .preventCreativeDestruction()
                         .rule(Tool.Rule.minesAndDrops(HolderSet.direct(this.blocks.getOrThrow(BlockItemIds.COBWEB.block())), 15.0f))
@@ -2913,11 +3859,18 @@ public class Items {
                         .build()
                 )
                 .behavior(
+                    WeaponItemBehavior.CODEC,
                     WeaponItemBehavior.builder(1, 4.0d + material.attackDamageBonus(), 0.4d)
                         .build()
                 )
-                .behavior(EnchantableItemBehavior.of(material))
-                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(repairItems)));
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(material)
+                )
+                .behavior(
+                    RepairableItemBehavior.CODEC,
+                    RepairableItemBehavior.of(this.items.getOrThrow(repairItems))
+                );
         }
 
         private void registerSpear(ResourceKey<Item> item, ToolMaterial material, float attackDuration, float damageMultiplier, float delay, float dismountTime, float dismountSpeedThreshold, float knockbackTime, float damageTime, TagKey<Item> repairItems) {
@@ -2927,8 +3880,12 @@ public class Items {
 
         private ItemBuilder builderForSpear(ResourceKey<Item> item, ToolMaterial material, float attackDuration, float damageMultiplier, float delay, float dismountTime, float dismountSpeedThreshold, float knockbackTime, float damageTime, TagKey<Item> repairItems) {
             return this.builder(item, 1)
-                .behavior(DamageableItemBehavior.of(material.durability()))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(material.durability())
+                )
+                .behavior(
+                    UseableItemBehavior.CODEC,
                     UseableItemBehavior.builder()
                         .useIndefinitely()
                         .animation(ItemUseAnimation.SPEAR)
@@ -2940,6 +3897,7 @@ public class Items {
                         .build()
                 )
                 .behavior(
+                    WeaponItemBehavior.CODEC,
                     WeaponItemBehavior.builder(1, material.attackDamageBonus(), 1 / (4 * attackDuration))
                         .type(
                             MeleeWeaponComponents.KINETIC,
@@ -2996,21 +3954,40 @@ public class Items {
                         .minimumAttackCharge(1.0f)
                         .build()
                 )
-                .behavior(EnchantableItemBehavior.of(material))
-                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(repairItems)));
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(material)
+                )
+                .behavior(
+                    RepairableItemBehavior.CODEC,
+                    RepairableItemBehavior.of(this.items.getOrThrow(repairItems))
+                );
         }
 
         private ItemBuilder builderForTool(ResourceKey<Item> item, ToolMaterial material, float disableBlockingForSeconds, double baseAttackDamage, double attackSpeed, TagKey<Block> mineableBlocks, TagKey<Item> repairItems) {
             return this.builder(item, 1)
-                .behavior(DamageableItemBehavior.of(material.durability()))
-                .behavior(ToolItemBehavior.of(this.blocks, material, mineableBlocks))
                 .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(material.durability())
+                )
+                .behavior(
+                    ToolItemBehavior.CODEC,
+                    ToolItemBehavior.of(this.blocks, material, mineableBlocks)
+                )
+                .behavior(
+                    WeaponItemBehavior.CODEC,
                     WeaponItemBehavior.builder(2, baseAttackDamage + material.attackDamageBonus(), attackSpeed)
                         .disableBlockingForSeconds(disableBlockingForSeconds)
                         .build()
                 )
-                .behavior(EnchantableItemBehavior.of(material))
-                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(repairItems)));
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(material)
+                )
+                .behavior(
+                    RepairableItemBehavior.CODEC,
+                    RepairableItemBehavior.of(this.items.getOrThrow(repairItems))
+                );
         }
 
         private void registerShovel(ResourceKey<Item> item, ToolMaterial material, TagKey<Item> repairItems) {
@@ -3061,6 +4038,7 @@ public class Items {
             return this.builder(item, 1)
                 .attributeModifiers(builder -> AttributeModifiers.armor(builder, material, type))
                 .behavior(
+                    EquipmentItemBehavior.CODEC,
                     EquipmentItemBehavior.of(
                         Equippable.builder(type.getSlot())
                             .setSwappable(true)
@@ -3069,10 +4047,22 @@ public class Items {
                             .build()
                     )
                 )
-                .behavior(DamageableItemBehavior.of(type.getDurability(material.durability())))
-                .behavior(EnchantableItemBehavior.of(material))
-                .behavior(RepairableItemBehavior.of(this.items.getOrThrow(repairItems)))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)));
+                .behavior(
+                    DamageableItemBehavior.CODEC,
+                    DamageableItemBehavior.of(type.getDurability(material.durability()))
+                )
+                .behavior(
+                    EnchantableItemBehavior.CODEC,
+                    EnchantableItemBehavior.of(material)
+                )
+                .behavior(
+                    RepairableItemBehavior.CODEC,
+                    RepairableItemBehavior.of(this.items.getOrThrow(repairItems))
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+                );
         }
 
         private void registerHorseArmor(ResourceKey<Item> item, ArmorMaterial material) {
@@ -3084,6 +4074,7 @@ public class Items {
             return this.builder(item, 1)
                 .attributeModifiers(builder -> AttributeModifiers.armor(builder, material, ArmorType.BODY))
                 .behavior(
+                    EquipmentItemBehavior.CODEC,
                     EquipmentItemBehavior.of(
                         Equippable.builder(EquipmentSlot.BODY)
                             .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.HORSE_ARMOR))
@@ -3095,7 +4086,10 @@ public class Items {
                             .build()
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)));
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+                );
         }
 
         private void registerNautilusArmor(ResourceKey<Item> item, ArmorMaterial material) {
@@ -3107,6 +4101,7 @@ public class Items {
             return this.builder(item, 1)
                 .attributeModifiers(builder -> AttributeModifiers.armor(builder, material, ArmorType.BODY))
                 .behavior(
+                    EquipmentItemBehavior.CODEC,
                     EquipmentItemBehavior.of(
                         Equippable.builder(EquipmentSlot.BODY)
                             .setEquipSound(this.soundEvents.getOrThrow(SoundEventIds.ARMOR_EQUIP_NAUTILUS))
@@ -3119,7 +4114,10 @@ public class Items {
                             .build()
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY)));
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.EQUIP_ENTITY))
+                );
         }
 
         private void registerMinecart(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
@@ -3130,20 +4128,33 @@ public class Items {
         private ItemBuilder builderForMinecart(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
             return this.builder(item, 1)
                 .behavior(
+                    EntityItemBehavior.CODEC,
                     EntityItemBehavior.of(
                         EntitySpawner.builder(this.entityTypes.getOrThrow(entity))
                             .spawnRules(this.entitySpawnRuleSets.getOrThrow(EntitySpawnRuleSets.MINECART))
                             .build()
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)));
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
+                );
         }
 
         private void registerBoat(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity) {
             this.builder(item, 1)
-                .behavior(EntityItemBehavior.of(EntitySpawner.of(this.entityTypes.getOrThrow(entity))))
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM)))
-                .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_BOATS))
+                .behavior(
+                    EntityItemBehavior.CODEC,
+                    EntityItemBehavior.of(EntitySpawner.of(this.entityTypes.getOrThrow(entity)))
+                )
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SPAWN_ENTITY_FROM_ITEM))
+                )
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_BOATS)
+                )
                 .register();
         }
 
@@ -3153,13 +4164,20 @@ public class Items {
 
         private ItemBuilder builderForProjectile(ResourceKey<Item> item, ResourceKey<EntityType<?>> entity, int maxStackSize) {
             return this.builder(item, maxStackSize)
-                .behavior(ProjectileItemBehavior.of(this.entityTypes.getOrThrow(entity)));
+                .behavior(
+                    ProjectileItemBehavior.CODEC,
+                    ProjectileItemBehavior.of(this.entityTypes.getOrThrow(entity))
+                );
         }
 
         private void registerThrowableEgg(ResourceKey<Item> item, ResourceKey<ChickenVariant> chickenVariant) {
             this.builder(item, 16)
-                .behavior(ThrowableItemBehavior.of(1.5f))
                 .behavior(
+                    ThrowableItemBehavior.CODEC,
+                    ThrowableItemBehavior.of(1.5f)
+                )
+                .behavior(
+                    ProjectileItemBehavior.CODEC,
                     ProjectileItemBehavior.of(
                         this.entityTypes.getOrThrow(EntityTypeIds.EGG),
                         DataComponentPatch.builder()
@@ -3167,19 +4185,28 @@ public class Items {
                             .build()
                     )
                 )
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.SHOOT_PROJECTILE))
+                )
                 .register();
         }
 
-        public void registerShulkerBox(BlockItemId blockItem) {
+        private void registerShulkerBox(BlockItemId blockItem) {
             this.builderForBlock(blockItem, 1)
-                .behavior(DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM)))
+                .behavior(
+                    DispensableItemBehavior.CODEC,
+                    DispensableItemBehavior.of(this.dispenseBehaviors.getOrThrow(DispenseBehaviors.PLACE_BLOCK_FROM_ITEM))
+                )
                 .register();
         }
 
         public void registerBurningBlock(BlockItemId blockItem, ResourceKey<ContextIntProvider> burnTime) {
             this.builderForBlock(blockItem)
-                .behavior(CookingFuelItemBehavior.of(burnTime))
+                .behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(burnTime)
+                )
                 .register();
         }
 
@@ -3187,11 +4214,17 @@ public class Items {
             ItemBuilder builder = this.builderForBlock(blockItem)
                 .cancellableEvent(ItemEvent.BEFORE_USE_ON_BLOCK, Actions.potBlock(this.blocks, pottedBlock));
             if (burnTime != null) {
-                builder.behavior(CookingFuelItemBehavior.of(burnTime));
+                builder.behavior(
+                    CookingFuelItemBehavior.CODEC,
+                    CookingFuelItemBehavior.of(burnTime)
+                );
             }
 
             if (compostLayers != null) {
-                builder.behavior(CompostableItemBehavior.of(compostLayers));
+                builder.behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(compostLayers)
+                );
             }
 
             builder.register();
@@ -3199,7 +4232,10 @@ public class Items {
 
         public void registerCompostableLeaves(BlockItemId blockItem) {
             this.builderForBlock(blockItem)
-                .behavior(CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW))
+                .behavior(
+                    CompostableItemBehavior.CODEC,
+                    CompostableItemBehavior.of(ContextIntProviders.COMPOSTABLE_LOW)
+                )
                 .register();
         }
 

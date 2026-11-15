@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.core.registries;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.core.component.provider.number.floats.FloatProvider;
 import net.errorcraft.itematic.core.component.provider.number.ints.IntProvider;
@@ -10,7 +11,7 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleSet;
 import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.group.ItemGroup;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryProvider;
@@ -25,7 +26,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 
 public class ItematicRegistries {
-    public static final ResourceKey<Registry<ItemBehaviorType<?>>> ITEM_BEHAVIOR_TYPE = of("item_behavior_type");
+    public static final ResourceKey<Registry<Codec<? extends ItemBehavior>>> ITEM_BEHAVIOR_TYPE = of("item_behavior_type");
     public static final ResourceKey<Registry<DispenseBehavior>> DISPENSE_BEHAVIOR = of("dispense_behavior");
     public static final ResourceKey<Registry<ItemEvent>> ITEM_EVENT = of("item_event");
     public static final ResourceKey<Registry<ActionType<?>>> ACTION_TYPE = of("action_type");

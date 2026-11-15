@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
 import net.errorcraft.itematic.world.item.component.UseCooldowns;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
@@ -31,7 +30,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 import java.util.Set;
 
-public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, ItemUseAnimation animation, Optional<Holder<SoundEvent>> sound, Optional<ItemStackTemplate> remainder, UseEffects effects, Optional<Cooldown> cooldown, Set<UseDuration.Pass> passes) implements ItemBehavior<UseableItemBehavior> {
+public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, ItemUseAnimation animation, Optional<Holder<SoundEvent>> sound, Optional<ItemStackTemplate> remainder, UseEffects effects, Optional<Cooldown> cooldown, Set<UseDuration.Pass> passes) implements ItemBehavior {
     public static final Codec<UseableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UseDuration.CODEC.optionalFieldOf("ticks", new UseDuration(Instant.INSTANCE)).forGetter(UseableItemBehavior::ticks),
         Codec.BOOL.optionalFieldOf("has_use_particles", false).forGetter(UseableItemBehavior::hasUseParticles),
@@ -69,7 +68,7 @@ public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, It
         );
     }
 
-    public static ItemBehavior<?> ofInstant(float cooldownSeconds) {
+    public static UseableItemBehavior ofInstant(float cooldownSeconds) {
         return new UseableItemBehavior(
             new UseDuration(Instant.INSTANCE),
             false,
@@ -89,11 +88,6 @@ public record UseableItemBehavior(UseDuration ticks, boolean hasUseParticles, It
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public ItemBehaviorType<UseableItemBehavior> type() {
-        return ItemBehaviorType.USEABLE;
     }
 
     @Override

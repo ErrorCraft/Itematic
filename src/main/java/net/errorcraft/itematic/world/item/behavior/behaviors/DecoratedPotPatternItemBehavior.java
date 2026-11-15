@@ -3,7 +3,6 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -11,18 +10,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 
-public record DecoratedPotPatternItemBehavior(Holder<DecoratedPotPattern> pattern) implements ItemBehavior<DecoratedPotPatternItemBehavior> {
+public record DecoratedPotPatternItemBehavior(Holder<DecoratedPotPattern> pattern) implements ItemBehavior {
     public static final Codec<DecoratedPotPatternItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         RegistryCodecs.holder(Registries.DECORATED_POT_PATTERN).fieldOf("pattern").forGetter(DecoratedPotPatternItemBehavior::pattern)
     ).apply(instance, DecoratedPotPatternItemBehavior::new));
 
     public static DecoratedPotPatternItemBehavior of(Holder<DecoratedPotPattern> pattern) {
         return new DecoratedPotPatternItemBehavior(pattern);
-    }
-
-    @Override
-    public ItemBehaviorType<DecoratedPotPatternItemBehavior> type() {
-        return ItemBehaviorType.DECORATED_POT_PATTERN;
     }
 
     @Override

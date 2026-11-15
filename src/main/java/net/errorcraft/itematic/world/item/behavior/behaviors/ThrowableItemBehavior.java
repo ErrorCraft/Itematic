@@ -3,14 +3,13 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.Throwable;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.component.DataComponentMap;
 
 import java.util.Optional;
 
-public record ThrowableItemBehavior(Throwable throwable) implements ItemBehavior<ThrowableItemBehavior> {
+public record ThrowableItemBehavior(Throwable throwable) implements ItemBehavior {
     public static final Codec<ThrowableItemBehavior> CODEC = Throwable.CODEC.xmap(
         ThrowableItemBehavior::new,
         ThrowableItemBehavior::throwable
@@ -35,11 +34,6 @@ public record ThrowableItemBehavior(Throwable throwable) implements ItemBehavior
                 Optional.of(MinMaxBounds.Ints.atLeast(minDrawDuration))
             )
         );
-    }
-
-    @Override
-    public ItemBehaviorType<ThrowableItemBehavior> type() {
-        return ItemBehaviorType.THROWABLE;
     }
 
     @Override

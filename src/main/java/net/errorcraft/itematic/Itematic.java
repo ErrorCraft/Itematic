@@ -12,7 +12,7 @@ import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRuleTypes;
 import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.ItemBehaviorTypes;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryTypes;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
@@ -32,7 +32,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 public class Itematic implements ModInitializer {
     @Override
     public void onInitialize() {
-        ItemBehaviorType.init();
+        ItemBehaviorTypes.bootstrap(ItematicBuiltInRegistries.ITEM_BEHAVIOR_TYPE);
         ItemEvent.init();
         ActionType.init();
         SequenceHandlerType.init();
