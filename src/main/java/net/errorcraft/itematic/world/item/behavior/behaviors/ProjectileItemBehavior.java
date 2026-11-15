@@ -4,14 +4,13 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.ProjectileComponent;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.entity.EntityType;
 
-public record ProjectileItemBehavior(ProjectileComponent projectile) implements ItemBehavior<ProjectileItemBehavior> {
+public record ProjectileItemBehavior(ProjectileComponent projectile) implements ItemBehavior {
     public static final Codec<ProjectileItemBehavior> CODEC = ProjectileComponent.CODEC.xmap(
         ProjectileItemBehavior::new,
         ProjectileItemBehavior::projectile
@@ -33,11 +32,6 @@ public record ProjectileItemBehavior(ProjectileComponent projectile) implements 
                     .build()
             )
         );
-    }
-
-    @Override
-    public ItemBehaviorType<ProjectileItemBehavior> type() {
-        return ItemBehaviorType.PROJECTILE;
     }
 
     @Override

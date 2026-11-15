@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponWithDataComponents;
@@ -25,7 +24,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types, Optional<Holder<DamageType>> damageType, Optional<SwingAnimation> attackAnimation, WeaponAttackDamage attackDamage, double attackSpeed, Optional<AttackRange> attackRange, Optional<Float> minimumAttackCharge) implements ItemBehavior<WeaponItemBehavior> {
+public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types, Optional<Holder<DamageType>> damageType, Optional<SwingAnimation> attackAnimation, WeaponAttackDamage attackDamage, double attackSpeed, Optional<AttackRange> attackRange, Optional<Float> minimumAttackCharge) implements ItemBehavior {
     public static final Codec<WeaponItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("item_damage_per_attack", 1).forGetter(WeaponItemBehavior::itemDamagePerAttack),
         MeleeWeaponComponents.CODEC.optionalFieldOf("types", DataComponentMap.EMPTY).forGetter(WeaponItemBehavior::types),
@@ -39,11 +38,6 @@ public record WeaponItemBehavior(int itemDamagePerAttack, DataComponentMap types
 
     public static Builder builder(int itemDamagePerAttack, double attackDamage, double attackSpeed) {
         return new Builder(itemDamagePerAttack, attackDamage, attackSpeed);
-    }
-
-    @Override
-    public ItemBehaviorType<WeaponItemBehavior> type() {
-        return ItemBehaviorType.WEAPON;
     }
 
     @Override

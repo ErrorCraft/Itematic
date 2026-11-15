@@ -3,7 +3,6 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.level.block.entity.SignModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
@@ -12,7 +11,7 @@ import net.minecraft.world.item.DyeColor;
 
 import java.util.Optional;
 
-public record SignModifierItemBehavior(SignModifier modifier) implements ItemBehavior<SignModifierItemBehavior> {
+public record SignModifierItemBehavior(SignModifier modifier) implements ItemBehavior {
     public static final Codec<SignModifierItemBehavior> CODEC = SignModifier.CODEC.xmap(
         SignModifierItemBehavior::new,
         SignModifierItemBehavior::modifier
@@ -34,11 +33,6 @@ public record SignModifierItemBehavior(SignModifier modifier) implements ItemBeh
         return new SignModifierItemBehavior(
             new SignModifier(Optional.empty(), Optional.empty(), Optional.of(wax), applySound, true)
         );
-    }
-
-    @Override
-    public ItemBehaviorType<SignModifierItemBehavior> type() {
-        return ItemBehaviorType.SIGN_MODIFIER;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.core.registries;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.errorcraft.itematic.core.component.provider.number.floats.FloatProvider;
 import net.errorcraft.itematic.core.component.provider.number.floats.providers.FoodProvider;
@@ -11,7 +12,8 @@ import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
 import net.errorcraft.itematic.world.entity.spawn.rule.rules.Discard;
 import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
 import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
 import net.errorcraft.itematic.world.item.group.entry.entries.ItemEntry;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
@@ -29,9 +31,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 
 public class ItematicBuiltInRegistries {
-    public static final Registry<ItemBehaviorType<?>> ITEM_BEHAVIOR_TYPE = register(
+    public static final Registry<Codec<? extends ItemBehavior>> ITEM_BEHAVIOR_TYPE = register(
         ItematicRegistries.ITEM_BEHAVIOR_TYPE,
-        _ -> ItemBehaviorType.USEABLE
+        _ -> StackableItemBehavior.CODEC
     );
     public static final Registry<ItemEvent> ITEM_EVENT = register(
         ItematicRegistries.ITEM_EVENT,

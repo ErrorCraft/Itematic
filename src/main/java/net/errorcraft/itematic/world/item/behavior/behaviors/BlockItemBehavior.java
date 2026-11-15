@@ -3,7 +3,6 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.placement.block.picker.pickers.AttachedToSideBlockPicker;
 import net.errorcraft.itematic.world.item.placement.block.picker.pickers.SimpleBlockPicker;
@@ -14,7 +13,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.Set;
 
-public record BlockItemBehavior(BlockPlacerComponent blockPlacer) implements ItemBehavior<BlockItemBehavior> {
+public record BlockItemBehavior(BlockPlacerComponent blockPlacer) implements ItemBehavior {
     public static final Codec<BlockItemBehavior> CODEC = BlockPlacerComponent.CODEC.xmap(
         BlockItemBehavior::new,
         BlockItemBehavior::blockPlacer
@@ -58,11 +57,6 @@ public record BlockItemBehavior(BlockPlacerComponent blockPlacer) implements Ite
                 BlockPlacerComponent.Pass.DEFAULT_PASSES
             )
         );
-    }
-
-    @Override
-    public ItemBehaviorType<BlockItemBehavior> type() {
-        return ItemBehaviorType.BLOCK;
     }
 
     @Override

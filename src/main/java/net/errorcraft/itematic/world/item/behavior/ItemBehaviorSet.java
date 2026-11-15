@@ -8,13 +8,13 @@ import java.util.Map;
 
 public class ItemBehaviorSet {
     public static final ItemBehaviorSet EMPTY = new ItemBehaviorSet(Map.of());
-    public static final Codec<ItemBehaviorSet> CODEC = ItemBehavior.MAP_CODEC.xmap(
+    public static final Codec<ItemBehaviorSet> CODEC = ItemBehavior.CODEC.xmap(
         ItemBehaviorSet::new,
         itemBehaviorSet -> itemBehaviorSet.behavior
     );
-    private final Map<ItemBehaviorType<?>, ItemBehavior<?>> behavior;
+    private final Map<Codec<? extends ItemBehavior>, ItemBehavior> behavior;
 
-    private ItemBehaviorSet(Map<ItemBehaviorType<?>, ItemBehavior<?>> behavior) {
+    private ItemBehaviorSet(Map<Codec<? extends ItemBehavior>, ItemBehavior> behavior) {
         this.behavior = behavior;
     }
 
@@ -23,13 +23,13 @@ public class ItemBehaviorSet {
     }
 
     public void addComponents(DataComponentMap.Builder builder) {
-        for (ItemBehavior<?> behavior : this.behavior.values()) {
+        for (ItemBehavior behavior : this.behavior.values()) {
             behavior.addComponents(builder);
         }
     }
 
     public static class Builder {
-        private final Map<ItemBehaviorType<?>, ItemBehavior<?>> behavior = new HashMap<>();
+        private final Map<Codec<? extends ItemBehavior>, ItemBehavior> behavior = new HashMap<>();
 
         private Builder() {}
 
@@ -41,8 +41,8 @@ public class ItemBehaviorSet {
             return new ItemBehaviorSet(this.behavior);
         }
 
-        public void add(ItemBehavior<?> behavior) {
-            this.behavior.put(behavior.type(), behavior);
+        public <T extends ItemBehavior> void set(Codec<T> codec, T behavior) {
+            this.behavior.put(codec, behavior);
         }
     }
 }

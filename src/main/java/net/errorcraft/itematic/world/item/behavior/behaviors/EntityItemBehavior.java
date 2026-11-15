@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentMap;
@@ -13,7 +12,7 @@ import net.minecraft.world.level.block.Block;
 import java.util.Optional;
 import java.util.Set;
 
-public record EntityItemBehavior(EntityPlacerComponent entityPlacer) implements ItemBehavior<EntityItemBehavior> {
+public record EntityItemBehavior(EntityPlacerComponent entityPlacer) implements ItemBehavior {
     public static final Codec<EntityItemBehavior> CODEC = EntityPlacerComponent.CODEC.xmap(
         EntityItemBehavior::new,
         EntityItemBehavior::entityPlacer
@@ -53,11 +52,6 @@ public record EntityItemBehavior(EntityPlacerComponent entityPlacer) implements 
                 Set.of(passes)
             )
         );
-    }
-
-    @Override
-    public ItemBehaviorType<EntityItemBehavior> type() {
-        return ItemBehaviorType.ENTITY;
     }
 
     @Override

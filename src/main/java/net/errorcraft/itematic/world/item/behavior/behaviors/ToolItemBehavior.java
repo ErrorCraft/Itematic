@@ -2,7 +2,6 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -14,7 +13,7 @@ import net.minecraft.world.level.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
-public record ToolItemBehavior(Tool tool) implements ItemBehavior<ToolItemBehavior> {
+public record ToolItemBehavior(Tool tool) implements ItemBehavior {
     public static final Codec<ToolItemBehavior> CODEC = Tool.CODEC.xmap(
         ToolItemBehavior::new,
         ToolItemBehavior::tool
@@ -36,11 +35,6 @@ public record ToolItemBehavior(Tool tool) implements ItemBehavior<ToolItemBehavi
 
     public static Builder builder(int damage) {
         return new Builder(damage);
-    }
-
-    @Override
-    public ItemBehaviorType<ToolItemBehavior> type() {
-        return ItemBehaviorType.TOOL;
     }
 
     @Override

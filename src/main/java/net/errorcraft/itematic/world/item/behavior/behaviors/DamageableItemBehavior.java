@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -14,7 +13,7 @@ import net.minecraft.util.Unit;
 
 import java.util.Optional;
 
-public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>> breakSound, boolean preserveItem) implements ItemBehavior<DamageableItemBehavior> {
+public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>> breakSound, boolean preserveItem) implements ItemBehavior {
     public static final Codec<DamageableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ExtraCodecs.POSITIVE_INT.fieldOf("durability").forGetter(DamageableItemBehavior::durability),
         SoundEvent.CODEC.optionalFieldOf("break_sound").forGetter(DamageableItemBehavior::breakSound),
@@ -31,11 +30,6 @@ public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>
 
     public static DamageableItemBehavior ofPreserved(int durability) {
         return new DamageableItemBehavior(durability, Optional.empty(), true);
-    }
-
-    @Override
-    public ItemBehaviorType<DamageableItemBehavior> type() {
-        return ItemBehaviorType.DAMAGEABLE;
     }
 
     @Override

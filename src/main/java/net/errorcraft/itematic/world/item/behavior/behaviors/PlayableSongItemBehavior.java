@@ -2,23 +2,17 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.JukeboxPlayable;
 import net.minecraft.world.item.JukeboxSong;
 
-public record PlayableSongItemBehavior(Holder<JukeboxSong> song) implements ItemBehavior<PlayableSongItemBehavior> {
+public record PlayableSongItemBehavior(Holder<JukeboxSong> song) implements ItemBehavior {
     public static final Codec<PlayableSongItemBehavior> CODEC = JukeboxSong.CODEC.xmap(PlayableSongItemBehavior::new, PlayableSongItemBehavior::song);
 
     public static PlayableSongItemBehavior of(Holder<JukeboxSong> song) {
         return new PlayableSongItemBehavior(song);
-    }
-
-    @Override
-    public ItemBehaviorType<PlayableSongItemBehavior> type() {
-        return ItemBehaviorType.PLAYABLE_SONG;
     }
 
     @Override
