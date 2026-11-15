@@ -9,6 +9,7 @@ import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.mixin.world.item.BrushItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.BundleItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.CrossbowItemAccessor;
+import net.errorcraft.itematic.mixin.world.item.ItemStackAccessor;
 import net.errorcraft.itematic.mixin.world.item.MaceItemAccessor;
 import net.errorcraft.itematic.mixin.world.item.component.BundleContentsAccessor;
 import net.errorcraft.itematic.mixin.world.level.block.entity.BrushableBlockEntityAccessor;
@@ -254,14 +255,16 @@ import java.util.List;
 import java.util.Optional;
 
 public class Items {
-    public static final int UNSTACKABLE_MAX_STACK_SIZE = 1;
-    public static final Codec<Item> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    private static final Codec<Item> UNVALIDATED_DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ItemDisplay.CODEC.fieldOf("display").forGetter(Item::itematic$display),
         ItemAttributeModifiers.CODEC.optionalFieldOf("attribute_modifiers", ItemAttributeModifiers.EMPTY).forGetter(Item::itematic$attributeModifiers),
         SwingAnimation.CODEC.optionalFieldOf("interact_animation", SwingAnimation.DEFAULT).forGetter(Item::itematic$interactAnimation),
         ItemBehaviorSet.CODEC.optionalFieldOf("behavior", ItemBehaviorSet.EMPTY).forGetter(Item::itematic$behavior),
         ActionEventMap.codec(ItematicBuiltInRegistries.ITEM_EVENT).optionalFieldOf("events", ActionEventMap.empty()).forGetter(Item::itematic$events)
     ).apply(instance, Items::create));
+    public static final Codec<Item> DIRECT_CODEC = UNVALIDATED_DIRECT_CODEC.validate(
+        item -> ItemStackAccessor.validateComponents(item.components()).map(_ -> item)
+    );
     public static final Codec<HolderSet<Item>> LIST_CODEC = RegistryCodecs.holderSet(Registries.ITEM);
     public static final StreamCodec<RegistryFriendlyByteBuf, HolderSet<Item>> LIST_STREAM_CODEC = ByteBufCodecs.holderSet(Registries.ITEM);
 
