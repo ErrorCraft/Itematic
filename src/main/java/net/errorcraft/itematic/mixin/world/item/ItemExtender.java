@@ -17,7 +17,6 @@ import net.errorcraft.itematic.world.item.ItemDisplay;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.BlockBrusher;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.BookContent;
@@ -733,15 +732,6 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     public void itematic$setBehavior(ItemBehaviorSet components) {
         this.behavior = components;
         this.dataComponents = this.createDefaultDataComponents();
-    }
-
-    @Override
-    public <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {
-        if (this.behavior == null) {
-            return false;
-        }
-
-        return this.behavior.has(type);
     }
 
     @Override

@@ -17,7 +17,6 @@ accessible    method    net/minecraft/world/item/CreativeModeTab$Builder type (L
 accessible    class    net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction$DirectSource
 
 inject-interface    net/minecraft/advancements/predicates/entity/EntityPredicate$Builder    net/errorcraft/itematic/access/advancements/predicates/entity/EntityPredicateAccess$BuilderAccess
-inject-interface    net/minecraft/advancements/predicates/ItemPredicate    net/errorcraft/itematic/access/advancements/predicates/ItemPredicateAccess
 inject-interface    net/minecraft/advancements/predicates/ItemPredicate$Builder    net/errorcraft/itematic/access/advancements/predicates/ItemPredicateAccess$BuilderAccess
 inject-interface    net/minecraft/advancements/predicates/StatePropertiesPredicate$Builder    net/errorcraft/itematic/access/advancements/predicates/StatePropertiesPredicateAccess$BuilderAccess
 inject-interface    net/minecraft/client/Minecraft    net/errorcraft/itematic/access/client/MinecraftAccess

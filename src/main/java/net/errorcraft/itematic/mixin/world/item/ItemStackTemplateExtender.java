@@ -7,8 +7,6 @@ import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.ItemStackTemplates;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.world.item.Item;
@@ -77,11 +75,6 @@ public class ItemStackTemplateExtender implements ItemInstanceAccess {
     )
     private DataComponentGetter useDataComponentsOnItemInstead(DataComponentGetter prototype) {
         return this.item.value().components();
-    }
-
-    @Override
-    public <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {
-        return this.item.value().itematic$hasBehavior(type);
     }
 
     @Override
