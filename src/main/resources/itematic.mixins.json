@@ -265,6 +265,7 @@
     "world.item.ItemCooldownsExtender",
     "world.item.ItemExtender",
     "world.item.ItemExtender$PropertiesExtender",
+    "world.item.ItemStackAccessor",
     "world.item.ItemStackExtender",
     "world.item.ItemStackExtender$StreamCodecExtender",
     "world.item.ItemStackExtender$ValidatedStreamCodecExtender",

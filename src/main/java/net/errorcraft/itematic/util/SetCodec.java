@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import net.minecraft.core.Registry;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -19,11 +18,6 @@ public class SetCodec<E> implements Codec<Set<E>> {
     private SetCodec(Codec<E> codec, Comparator<E> comparator) {
         this.listCodec = codec.listOf();
         this.comparator = comparator;
-    }
-
-    @SuppressWarnings("DataFlowIssue")
-    public static <T> Codec<Set<T>> forRegistry(Registry<T> registry) {
-        return new SetCodec<>(registry.byNameCodec(), Comparator.comparing(registry::getKey));
     }
 
     public static <T extends Enum<T>> Codec<Set<T>> forEnum(Codec<T> codec) {

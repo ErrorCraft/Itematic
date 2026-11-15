@@ -15,7 +15,6 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.ItemDisplay;
 import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
 import net.errorcraft.itematic.world.item.behavior.ItemBehaviorSet;
 import net.errorcraft.itematic.world.item.component.BlockBrusher;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
@@ -784,10 +783,7 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
             .addAll(DataComponents.COMMON_ITEM_COMPONENTS);
         builder.set(DataComponents.INTERACT_ANIMATION, this.interactAnimation);
         this.display.addComponents(builder);
-        for (ItemBehavior<?> behavior : this.behavior) {
-            behavior.addComponents(builder);
-        }
-
+        this.behavior.addComponents(builder);
         if (!this.attributeModifiers.modifiers().isEmpty()) {
             builder.set(DataComponents.ATTRIBUTE_MODIFIERS, this.attributeModifiers);
         }
