@@ -20,8 +20,6 @@ import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.action.context.ItemStackExchanger;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.ItemStacks;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
@@ -928,11 +926,6 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
                     stack -> this.onItemBroken(stack, entity, context)
                 );
             });
-    }
-
-    @Override
-    public <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {
-        return this.item != null && this.item.value().itematic$hasBehavior(type);
     }
 
     @Override
