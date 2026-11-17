@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.ItemStackTemplates;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
@@ -19,7 +18,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntPr
 
 import java.util.Optional;
 
-public record CookingFuelItemBehavior(CookingFuel fuel, Optional<ItemStackTemplate> remainder) implements ItemBehavior<CookingFuelItemBehavior> {
+public record CookingFuelItemBehavior(CookingFuel fuel, Optional<ItemStackTemplate> remainder) implements ItemBehavior {
     public static final Codec<CookingFuelItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         MapCodec.assumeMapUnsafe(CookingFuel.CODEC).forGetter(CookingFuelItemBehavior::fuel),
         ItemStackTemplate.CODEC.optionalFieldOf("remainder").forGetter(CookingFuelItemBehavior::remainder)
@@ -37,11 +36,6 @@ public record CookingFuelItemBehavior(CookingFuel fuel, Optional<ItemStackTempla
             new CookingFuel(burnTime, ContextFloatProviders.COOKING_DEFAULT_SPEED_MULTIPLIER),
             Optional.of(ItemStackTemplates.of(remainder))
         );
-    }
-
-    @Override
-    public ItemBehaviorType<CookingFuelItemBehavior> type() {
-        return ItemBehaviorType.COOKING_FUEL;
     }
 
     @Override

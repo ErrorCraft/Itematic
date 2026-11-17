@@ -36,12 +36,20 @@ public class DispenseBehavior extends OptionalDispenseItemBehavior {
     private final boolean dispenseAsItemOnFailure;
     private final Offset offset;
 
-    public static Builder builder(Holder<ActionEntry> entry) {
-        return new Builder(entry);
+    public static DispenseBehavior of(Action<?> action) {
+        return new DispenseBehavior(
+            Holder.direct(ActionEntry.of(action)),
+            true,
+            Offset.DEFAULT
+        );
+    }
+
+    public static DispenseBehavior of(SequenceHandler.Builder<?, ?> handler) {
+        return of(SequenceAction.of(handler));
     }
 
     public static Builder builder(ActionEntry entry) {
-        return builder(Holder.direct(entry));
+        return new Builder(entry);
     }
 
     public static Builder builder(Action<?> action) {
@@ -142,8 +150,8 @@ public class DispenseBehavior extends OptionalDispenseItemBehavior {
         private boolean dispenseAsItemOnFailure = true;
         private Offset offset = Offset.DEFAULT;
 
-        private Builder(Holder<ActionEntry> entry) {
-            this.entry = entry;
+        private Builder(ActionEntry entry) {
+            this.entry = Holder.direct(entry);
         }
 
         public DispenseBehavior build() {

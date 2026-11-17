@@ -2,18 +2,18 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.Unit;
 
 import java.util.Optional;
 
-public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>> breakSound, boolean preserveItem) implements ItemBehavior<DamageableItemBehavior> {
+public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>> breakSound, boolean preserveItem) implements ItemBehavior {
     public static final Codec<DamageableItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ExtraCodecs.POSITIVE_INT.fieldOf("durability").forGetter(DamageableItemBehavior::durability),
         SoundEvent.CODEC.optionalFieldOf("break_sound").forGetter(DamageableItemBehavior::breakSound),
@@ -33,22 +33,12 @@ public record DamageableItemBehavior(int durability, Optional<Holder<SoundEvent>
     }
 
     @Override
-    public ItemBehaviorType<DamageableItemBehavior> type() {
-        return ItemBehaviorType.DAMAGEABLE;
-    }
-
-    @Override
     public void addComponents(DataComponentMap.Builder builder) {
         builder.set(DataComponents.MAX_DAMAGE, this.durability);
         builder.set(DataComponents.DAMAGE, 0);
         this.breakSound.ifPresent(breakSound -> builder.set(DataComponents.BREAK_SOUND, breakSound));
-    }
-
-    public int maximumDamage(ItemStack stack) {
-        return stack.getMaxDamage() - (this.preserveItem ? 1 : 0);
-    }
-
-    public boolean isUsable(ItemStack stack) {
-        return stack.getDamageValue() < this.maximumDamage(stack);
+        if (this.preserveItem) {
+            builder.set(ItematicDataComponents.PRESERVE_DAMAGED_ITEM, Unit.INSTANCE);
+        }
     }
 }

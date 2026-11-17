@@ -2,12 +2,14 @@ package net.errorcraft.itematic.mixin.world.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.errorcraft.itematic.access.world.entity.LivingEntityAccess;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
+import net.errorcraft.itematic.world.item.equipment.Glider;
 import net.errorcraft.itematic.world.item.use.duration.UseDuration;
 import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
 import net.minecraft.core.Holder;
@@ -42,7 +44,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Predicate;
@@ -86,7 +87,7 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         super(type, level);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "checkTotemDeathProtection",
         at = @At(
             value = "INVOKE",
@@ -94,34 +95,33 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         )
     )
     @Nullable
-    @SuppressWarnings("unchecked")
-    private <T> T getDeathProtectionDataComponentCheckEventListener(ItemStack instance, DataComponentType<T> type) {
+    private <T> Object getDeathProtectionDataComponentCheckEventListener(ItemStack instance, DataComponentType<T> type, Operation<Object> original) {
         if (instance.itematic$hasEventListener(ItemEvent.BEFORE_DEATH_HOLDER)) {
-            return (T) DeathProtection.TOTEM_OF_UNDYING;
+            return DeathProtection.TOTEM_OF_UNDYING;
         }
 
         return null;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "checkTotemDeathProtection",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, @Local(name = "protectionItem") ItemStack protectionItem) {
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, Operation<Stat<T>> original, @Local(name = "protectionItem") ItemStack protectionItem) {
         return instance.itematic$get(protectionItem.typeHolder());
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "checkTotemDeathProtection",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/component/DeathProtection;applyEffects(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V"
         )
     )
-    private void invokeBeforeDeathHolderEvent(DeathProtection instance, ItemStack itemStack, LivingEntity entity) {
+    private void invokeBeforeDeathHolderEvent(DeathProtection instance, ItemStack itemStack, LivingEntity entity, Operation<Void> original) {
         if (!(entity.level() instanceof ServerLevel level)) {
             return;
         }
@@ -207,49 +207,52 @@ public abstract class LivingEntityExtender extends Entity implements LivingEntit
         return original;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "canGlideUsing",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z"
         )
     )
-    private static boolean hasGliderUseItemBehavior(ItemStack instance, DataComponentType<Unit> type) {
-        return instance.itematic$getBehavior(ItemBehaviorType.GLIDER)
-            .map(glider -> glider.canUse(instance))
-            .orElse(false);
+    private static boolean hasGliderUseExtendedDataComponent(ItemStack instance, DataComponentType<Unit> type, Operation<Boolean> original) {
+        Glider glider = instance.get(ItematicDataComponents.GLIDER);
+        if (glider == null) {
+            return false;
+        }
+
+        return glider.canUse(instance);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "canGlideUsing",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;nextDamageWillBreak()Z"
         )
     )
-    private static boolean doNotCheckBrokenGlider(ItemStack instance) {
+    private static boolean doNotCheckBrokenGlider(ItemStack instance, Operation<Boolean> original) {
         return false;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "canEquipWithDispenser",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/equipment/Equippable;dispensable()Z"
         )
     )
-    private boolean dispensableAlwaysTrue(Equippable instance) {
+    private boolean dispensableAlwaysTrue(Equippable instance, Operation<Boolean> original) {
         return true;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "createWitherRose",
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    private ItemStack newItemStackForWitherRoseUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForWitherRoseUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(BlockItemIds.WITHER_ROSE.item());
     }
 

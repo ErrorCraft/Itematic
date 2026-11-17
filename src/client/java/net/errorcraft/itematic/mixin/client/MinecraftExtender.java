@@ -2,6 +2,7 @@ package net.errorcraft.itematic.mixin.client;
 
 import net.errorcraft.itematic.access.client.MinecraftAccess;
 import net.errorcraft.itematic.client.resources.item.bar.ItemBarStyleManager;
+import net.errorcraft.itematic.client.resources.item.smithing.SmithingTemplateDisplayManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
@@ -22,6 +23,9 @@ public class MinecraftExtender implements MinecraftAccess {
     @Unique
     private final ItemBarStyleManager itemBarStyles = new ItemBarStyleManager();
 
+    @Unique
+    private final SmithingTemplateDisplayManager smithingTemplateDisplays = new SmithingTemplateDisplayManager();
+
     @Inject(
         method = "<init>",
         at = @At(
@@ -31,10 +35,16 @@ public class MinecraftExtender implements MinecraftAccess {
     )
     private void addCustomLoaders(GameConfig gameConfig, CallbackInfo info) {
         this.resourceManager.registerReloadListener(this.itemBarStyles);
+        this.resourceManager.registerReloadListener(this.smithingTemplateDisplays);
     }
 
     @Override
     public ItemBarStyleManager itematic$itemBarStyles() {
         return this.itemBarStyles;
+    }
+
+    @Override
+    public SmithingTemplateDisplayManager itematic$smithingTemplateDisplays() {
+        return this.smithingTemplateDisplays;
     }
 }

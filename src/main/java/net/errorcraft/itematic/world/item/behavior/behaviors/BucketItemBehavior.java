@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.entity.spawn.EntitySpawner;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.Bucket;
 import net.errorcraft.itematic.world.item.placement.block.picker.pickers.SimpleBlockPicker;
 import net.errorcraft.itematic.world.level.modification.modifications.DrainFluid;
@@ -23,7 +22,7 @@ import net.minecraft.world.level.material.Fluid;
 
 import java.util.Optional;
 
-public record BucketItemBehavior(Bucket bucket) implements ItemBehavior<BucketItemBehavior> {
+public record BucketItemBehavior(Bucket bucket) implements ItemBehavior {
     public static final Codec<BucketItemBehavior> CODEC = Bucket.CODEC.xmap(
         BucketItemBehavior::new,
         BucketItemBehavior::bucket
@@ -72,11 +71,6 @@ public record BucketItemBehavior(Bucket bucket) implements ItemBehavior<BucketIt
                 Optional.empty()
             )
         );
-    }
-
-    @Override
-    public ItemBehaviorType<BucketItemBehavior> type() {
-        return ItemBehaviorType.BUCKET;
     }
 
     @Override

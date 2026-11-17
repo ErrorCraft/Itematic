@@ -3,7 +3,22 @@
     "minecraft:dispensable": {
       "behavior": "minecraft:shoot_firework_rocket"
     },
-    "minecraft:firework": {},
+    "minecraft:entity": {
+      "entity": {
+        "entity": "minecraft:firework_rocket",
+        "spawn_rules": "minecraft:firework_rocket"
+      }
+    },
+    "minecraft:firework": {
+      "default": {
+        "flight_duration": 1
+      }
+    },
+    "minecraft:glider_fuel": {
+      "constantly_added_speed": "minecraft:glider/firework_rocket_constantly_added_speed",
+      "target_speed": "minecraft:glider/firework_rocket_target_speed",
+      "target_speed_factor": "minecraft:glider/firework_rocket_target_speed_factor"
+    },
     "minecraft:projectile": {
       "entity": "minecraft:firework_rocket"
     },

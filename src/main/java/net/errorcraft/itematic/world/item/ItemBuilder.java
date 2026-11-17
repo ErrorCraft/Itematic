@@ -1,5 +1,6 @@
 package net.errorcraft.itematic.world.item;
 
+import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.world.action.ActionEntry;
 import net.errorcraft.itematic.world.action.ActionEventMap;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
@@ -54,8 +55,8 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder behavior(ItemBehavior<?> behavior) {
-        this.behavior.add(behavior);
+    public <T extends ItemBehavior> ItemBuilder behavior(Codec<T> codec, T behavior) {
+        this.behavior.set(codec, behavior);
         return this;
     }
 

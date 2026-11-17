@@ -144,10 +144,16 @@ public record WoodCollection<T>(CutoutCollection<T> planks, Strippable<T> log, @
         blockItems.leaves.forEach(bootstrapper::registerCompostableLeaves);
         bootstrapper.registerBurningBlock(blockItems.fenceGate, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);
         bootstrapper.builderForBlockAttachedToSide(blockItems.sign, wallSign, Direction.DOWN, 16)
-            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE))
+            .behavior(
+                CookingFuelItemBehavior.CODEC,
+                CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
+            )
             .register();
         bootstrapper.builderForBlockAttachedToSide(blockItems.hangingSign, hangingWallSign, Direction.UP, 16)
-            .behavior(CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_HANGING_SIGNS))
+            .behavior(
+                CookingFuelItemBehavior.CODEC,
+                CookingFuelItemBehavior.of(ContextIntProviders.COOKING_TIME_HANGING_SIGNS)
+            )
             .register();
         bootstrapper.registerBurningBlock(blockItems.door, ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE);
         bootstrapper.registerBurningBlock(blockItems.trapdoor, ContextIntProviders.COOKING_TIME_WOOD_BLOCKS);

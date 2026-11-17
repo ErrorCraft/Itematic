@@ -1,11 +1,13 @@
 package net.errorcraft.itematic.mixin.client.gui.screens.inventory;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.behavior.behaviors.SmithingTemplateProviderItemBehavior;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
+import net.errorcraft.itematic.client.resources.item.smithing.SmithingTemplateDisplay;
+import net.errorcraft.itematic.client.resources.item.smithing.SmithingTemplateDisplayManager;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.minecraft.client.gui.screens.inventory.ItemCombinerScreen;
 import net.minecraft.client.gui.screens.inventory.SmithingScreen;
 import net.minecraft.network.chat.Component;
@@ -17,12 +19,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SmithingTemplateItem;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -35,6 +37,17 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
         super(menu, inventory, title, menuResource);
     }
 
+    @Unique
+    private SmithingTemplateDisplayManager smithingTemplateDisplays;
+
+    @Inject(
+        method = "<init>",
+        at = @At("TAIL")
+    )
+    private void setSmithingTemplateDisplays(SmithingMenu menu, Inventory inventory, Component title, CallbackInfo info) {
+        this.smithingTemplateDisplays = this.minecraft.itematic$smithingTemplateDisplays();
+    }
+
     @Inject(
         method = "containerTick",
         at = @At(
@@ -42,15 +55,19 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
             target = "Lnet/minecraft/client/gui/screens/inventory/SmithingScreen;getTemplateItem()Ljava/util/Optional;"
         )
     )
-    private void storeSmithingTemplate(CallbackInfo info, @Share("smithingTemplate") LocalRef<Optional<SmithingTemplate>> smithingTemplate) {
-        smithingTemplate.set(this.menu.getSlot(0)
+    private void storeSmithingTemplate(CallbackInfo info, @Share("smithingTemplate") LocalRef<@Nullable SmithingTemplateDisplay> smithingTemplateReference) {
+        Identifier smithingTemplateId = this.menu.getSlot(0)
             .getItem()
-            .itematic$getBehavior(ItemBehaviorType.SMITHING_TEMPLATE_PROVIDER)
-            .map(SmithingTemplateProviderItemBehavior::template)
-        );
+            .get(ItematicDataComponents.SMITHING_TEMPLATE_DISPLAY);
+        if (smithingTemplateId == null) {
+            return;
+        }
+
+        SmithingTemplateDisplay smithingTemplateDisplay = this.smithingTemplateDisplays.get(smithingTemplateId);
+        smithingTemplateReference.set(smithingTemplateDisplay);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "containerTick",
         at = @At(
             value = "INVOKE",
@@ -58,11 +75,13 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
             ordinal = 0
         )
     )
-    private Optional<List<Identifier>> getEmptyBaseSlotTexturesFromSmithingTemplate(Optional<SmithingTemplateItem> instance, Function<SmithingTemplateItem, List<Identifier>> mapper, @Share("smithingTemplate") LocalRef<Optional<SmithingTemplate>> smithingTemplate) {
-        return smithingTemplate.get().map(SmithingTemplate::emptyBaseSlotTextures);
+    private Optional<List<Identifier>> getBaseSlotEmptyTexturesUseDataComponent(Optional<SmithingTemplateItem> instance, Function<SmithingTemplateItem, List<Identifier>> mapper, Operation<Optional<List<Identifier>>> original, @Share("smithingTemplate") LocalRef<@Nullable SmithingTemplateDisplay> smithingTemplateReference) {
+        return Optional.ofNullable(smithingTemplateReference.get())
+            .map(SmithingTemplateDisplay::baseSlot)
+            .map(SmithingTemplateDisplay.Slot::emptyTextures);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "containerTick",
         at = @At(
             value = "INVOKE",
@@ -70,8 +89,10 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
             ordinal = 1
         )
     )
-    private Optional<List<Identifier>> getEmptyAdditionsSlotTexturesFromSmithingTemplate(Optional<SmithingTemplateItem> instance, Function<SmithingTemplateItem, List<Identifier>> mapper, @Share("smithingTemplate") LocalRef<Optional<SmithingTemplate>> smithingTemplate) {
-        return smithingTemplate.get().map(SmithingTemplate::emptyAdditionsSlotTextures);
+    private Optional<List<Identifier>> getAdditionsSlotEmptyTexturesUseDataComponent(Optional<SmithingTemplateItem> instance, Function<SmithingTemplateItem, List<Identifier>> mapper, Operation<Optional<List<Identifier>>> original, @Share("smithingTemplate") LocalRef<@Nullable SmithingTemplateDisplay> smithingTemplateReference) {
+        return Optional.ofNullable(smithingTemplateReference.get())
+            .map(SmithingTemplateDisplay::additionsSlot)
+            .map(SmithingTemplateDisplay.Slot::emptyTextures);
     }
 
     @ModifyConstant(
@@ -81,11 +102,19 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
             ordinal = 0
         )
     )
-    private boolean instanceOfSmithingTemplateItemUseItemBehavior(Object reference, Class<SmithingTemplateItem> clazz, @Local(name = "template") ItemStack template, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplateReference) {
-        Optional<SmithingTemplate> smithingTemplate = template.itematic$getBehavior(ItemBehaviorType.SMITHING_TEMPLATE_PROVIDER)
-            .map(SmithingTemplateProviderItemBehavior::template);
-        smithingTemplate.ifPresent(smithingTemplateReference::set);
-        return smithingTemplate.isPresent();
+    private boolean instanceOfSmithingTemplateItemUseDataComponent(Object reference, Class<SmithingTemplateItem> clazz, @Local(name = "template") ItemStack template, @Share("smithingTemplate") LocalRef<SmithingTemplateDisplay> smithingTemplateReference) {
+        Identifier smithingTemplateId = template.get(ItematicDataComponents.SMITHING_TEMPLATE_DISPLAY);
+        if (smithingTemplateId == null) {
+            return false;
+        }
+
+        SmithingTemplateDisplay smithingTemplateDisplay = this.smithingTemplateDisplays.get(smithingTemplateId);
+        if (smithingTemplateDisplay == null) {
+            return false;
+        }
+
+        smithingTemplateReference.set(smithingTemplateDisplay);
+        return true;
     }
 
     @ModifyVariable(
@@ -98,25 +127,25 @@ public abstract class SmithingScreenExtender extends ItemCombinerScreen<Smithing
         return null;
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "extractOnboardingTooltips",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/SmithingTemplateItem;getBaseSlotDescription()Lnet/minecraft/network/chat/Component;"
         )
     )
-    private Component getBaseSlotDescriptionUseSmithingTemplate(SmithingTemplateItem instance, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplateReference) {
-        return smithingTemplateReference.get().baseSlotDescription();
+    private Component getBaseSlotDescriptionUseDataComponent(SmithingTemplateItem instance, Operation<Component> original, @Share("smithingTemplate") LocalRef<SmithingTemplateDisplay> smithingTemplateReference) {
+        return smithingTemplateReference.get().baseSlot().description();
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "extractOnboardingTooltips",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/SmithingTemplateItem;getAdditionSlotDescription()Lnet/minecraft/network/chat/Component;"
         )
     )
-    private Component getAdditionsSlotDescriptionUseSmithingTemplate(SmithingTemplateItem instance, @Share("smithingTemplate") LocalRef<SmithingTemplate> smithingTemplateReference) {
-        return smithingTemplateReference.get().additionsSlotDescription();
+    private Component getAdditionsSlotDescriptionUseDataComponent(SmithingTemplateItem instance, Operation<Component> original, @Share("smithingTemplate") LocalRef<SmithingTemplateDisplay> smithingTemplateReference) {
+        return smithingTemplateReference.get().additionsSlot().description();
     }
 }

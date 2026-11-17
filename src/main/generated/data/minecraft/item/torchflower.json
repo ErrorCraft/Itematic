@@ -7,14 +7,12 @@
       "layers": "minecraft:compostable/medium_high"
     },
     "minecraft:stackable": 64,
-    "minecraft:suspicious_effect_ingredient": {
-      "effects": [
-        {
-          "id": "minecraft:night_vision",
-          "duration": 100
-        }
-      ]
-    }
+    "minecraft:suspicious_effect_ingredient": [
+      {
+        "id": "minecraft:night_vision",
+        "duration": 100
+      }
+    ]
   },
   "display": {
     "model": "minecraft:torchflower",

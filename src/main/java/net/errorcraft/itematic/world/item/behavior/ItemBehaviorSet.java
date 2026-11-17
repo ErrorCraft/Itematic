@@ -1,22 +1,20 @@
 package net.errorcraft.itematic.world.item.behavior;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
-import net.errorcraft.itematic.world.item.Items;
-import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
+import net.minecraft.core.component.DataComponentMap;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Optional;
 
-public class ItemBehaviorSet implements Iterable<ItemBehavior<?>> {
+public class ItemBehaviorSet {
     public static final ItemBehaviorSet EMPTY = new ItemBehaviorSet(Map.of());
-    public static final Codec<ItemBehaviorSet> CODEC = ItemBehavior.MAP_CODEC.xmap(ItemBehaviorSet::new, itemBehavior -> itemBehavior.behavior)
-        .validate(ItemBehaviorSet::validate);
-    private final Map<ItemBehaviorType<?>, ItemBehavior<?>> behavior;
+    public static final Codec<ItemBehaviorSet> CODEC = ItemBehavior.CODEC.xmap(
+        ItemBehaviorSet::new,
+        itemBehaviorSet -> itemBehaviorSet.behavior
+    );
+    private final Map<Codec<? extends ItemBehavior>, ItemBehavior> behavior;
 
-    private ItemBehaviorSet(Map<ItemBehaviorType<?>, ItemBehavior<?>> behavior) {
+    private ItemBehaviorSet(Map<Codec<? extends ItemBehavior>, ItemBehavior> behavior) {
         this.behavior = behavior;
     }
 
@@ -24,30 +22,14 @@ public class ItemBehaviorSet implements Iterable<ItemBehavior<?>> {
         return new Builder();
     }
 
-    @Override
-    public Iterator<ItemBehavior<?>> iterator() {
-        return this.behavior.values().iterator();
-    }
-
-    public <T extends ItemBehavior<T>> boolean has(ItemBehaviorType<T> type) {
-        return this.behavior.containsKey(type);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends ItemBehavior<T>> Optional<T> get(ItemBehaviorType<T> type) {
-        return Optional.ofNullable((T) this.behavior.get(type));
-    }
-
-    private static DataResult<ItemBehaviorSet> validate(ItemBehaviorSet behavior) {
-        if (behavior.has(ItemBehaviorType.DAMAGEABLE) && behavior.get(ItemBehaviorType.STACKABLE).map(StackableItemBehavior::maxStackSize).orElse(Items.UNSTACKABLE_MAX_STACK_SIZE) > Items.UNSTACKABLE_MAX_STACK_SIZE) {
-            return DataResult.error(() -> "Item cannot be both damageable and stackable");
+    public void addComponents(DataComponentMap.Builder builder) {
+        for (ItemBehavior behavior : this.behavior.values()) {
+            behavior.addComponents(builder);
         }
-
-        return DataResult.success(behavior);
     }
 
     public static class Builder {
-        private final Map<ItemBehaviorType<?>, ItemBehavior<?>> behavior = new HashMap<>();
+        private final Map<Codec<? extends ItemBehavior>, ItemBehavior> behavior = new HashMap<>();
 
         private Builder() {}
 
@@ -59,8 +41,8 @@ public class ItemBehaviorSet implements Iterable<ItemBehavior<?>> {
             return new ItemBehaviorSet(this.behavior);
         }
 
-        public void add(ItemBehavior<?> behavior) {
-            this.behavior.put(behavior.type(), behavior);
+        public <T extends ItemBehavior> void set(Codec<T> codec, T behavior) {
+            this.behavior.put(codec, behavior);
         }
     }
 }

@@ -126,9 +126,9 @@ public record EntityPlacerComponent(EntitySpawner entity, Optional<HolderSet<Blo
     }
 
     @Nullable
-    public Entity place(ActionContext context, PositionTarget position, @Nullable Double exactY) {
+    public Entity place(ActionContext context, PositionTarget position, @Nullable Vec3 interactedPosition) {
         return EntityPlacer.of(this.entity, null)
-            .place(context, position, exactY, EntitySpawnReason.SPAWN_ITEM_USE);
+            .place(context, position, interactedPosition, EntitySpawnReason.SPAWN_ITEM_USE);
     }
 
     public Optional<Mob> trySpawnOffspring(Player user, Mob parent, EntityType<? extends Mob> parentType, ServerLevel level, Vec3 pos, ItemStack stack) {
@@ -182,7 +182,7 @@ public record EntityPlacerComponent(EntitySpawner entity, Optional<HolderSet<Blo
             .add(ItematicContextKeys.HAND, context.getHand())
             .add(ItematicContextKeys.SIDE, context.getClickedFace())
             .build();
-        return this.place(actionContext, PositionTarget.INTERACTED, context.getClickLocation().y()) != null;
+        return this.place(actionContext, PositionTarget.INTERACTED, context.getClickLocation()) != null;
     }
 
     private boolean modifySpawner(UseOnContext context) {

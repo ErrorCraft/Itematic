@@ -2,13 +2,12 @@ package net.errorcraft.itematic.world.item.behavior.behaviors;
 
 import com.mojang.serialization.Codec;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 
-public record TrimMaterialProviderItemBehavior(Holder<TrimMaterial> trimMaterial) implements ItemBehavior<TrimMaterialProviderItemBehavior> {
+public record TrimMaterialProviderItemBehavior(Holder<TrimMaterial> trimMaterial) implements ItemBehavior {
     public static final Codec<TrimMaterialProviderItemBehavior> CODEC = TrimMaterial.CODEC.xmap(
         TrimMaterialProviderItemBehavior::new,
         TrimMaterialProviderItemBehavior::trimMaterial
@@ -16,11 +15,6 @@ public record TrimMaterialProviderItemBehavior(Holder<TrimMaterial> trimMaterial
 
     public static TrimMaterialProviderItemBehavior of(Holder<TrimMaterial> trimMaterial) {
         return new TrimMaterialProviderItemBehavior(trimMaterial);
-    }
-
-    @Override
-    public ItemBehaviorType<TrimMaterialProviderItemBehavior> type() {
-        return ItemBehaviorType.TRIM_MATERIAL_PROVIDER;
     }
 
     @Override

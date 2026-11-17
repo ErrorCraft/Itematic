@@ -86,7 +86,7 @@ public record ProjectileComponent(EntitySpawner spawner) {
         return this.spawner.spawn(
             context,
             pos,
-            null,
+            pos,
             EntitySpawnReason.SPAWN_ITEM_USE,
             (projectile, stack) -> {
                 if (projectile instanceof ThrowableItemProjectile thrownItemEntity) {

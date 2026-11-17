@@ -5,13 +5,17 @@ import net.errorcraft.itematic.network.codec.ItematicStreamCodecs;
 import net.errorcraft.itematic.util.ItematicCodecs;
 import net.errorcraft.itematic.world.item.Items;
 import net.errorcraft.itematic.world.item.behavior.behaviors.ItemHolderItemBehavior;
+import net.errorcraft.itematic.world.item.component.BlockBrusher;
 import net.errorcraft.itematic.world.item.component.BlockPlacerComponent;
 import net.errorcraft.itematic.world.item.component.Bucket;
+import net.errorcraft.itematic.world.item.component.Castable;
 import net.errorcraft.itematic.world.item.component.ConsumableComponent;
 import net.errorcraft.itematic.world.item.component.EntityController;
 import net.errorcraft.itematic.world.item.component.EntityPlacerComponent;
+import net.errorcraft.itematic.world.item.component.GliderFuel;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.component.ProjectileComponent;
+import net.errorcraft.itematic.world.item.component.SuspiciousStewEffectProvider;
 import net.errorcraft.itematic.world.item.component.Throwable;
 import net.errorcraft.itematic.world.item.component.UseCooldownMoment;
 import net.errorcraft.itematic.world.item.component.ZoomFieldOfViewMultiplier;
@@ -25,6 +29,7 @@ import net.errorcraft.itematic.world.item.weapon.melee.WeaponAttackDamage;
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargedPowerRules;
 import net.errorcraft.itematic.world.item.weapon.shooter.ChargingSounds;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
+import net.errorcraft.itematic.world.level.block.entity.SignModifier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -36,6 +41,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.ItemUseAnimation;
@@ -113,6 +119,12 @@ public class ItematicDataComponents {
             .networkSynchronized(Identifier.STREAM_CODEC)
             .cacheEncoding()
     );
+    public static final DataComponentType<Identifier> SMITHING_TEMPLATE_DISPLAY = register(
+        "smithing_template_display",
+        builder -> builder.persistent(Identifier.CODEC)
+            .networkSynchronized(Identifier.STREAM_CODEC)
+            .cacheEncoding()
+    );
     public static final DataComponentType<Fraction> ITEM_HOLDER_CAPACITY = register(
         "item_holder_capacity",
         builder -> builder.persistent(ItemHolderItemBehavior.CAPACITY_CODEC)
@@ -175,6 +187,11 @@ public class ItematicDataComponents {
             .networkSynchronized(Glider.STREAM_CODEC)
             .cacheEncoding()
     );
+    public static final DataComponentType<GliderFuel> GLIDER_FUEL = register(
+        "glider_fuel",
+        builder -> builder.persistent(GliderFuel.CODEC)
+            .networkSynchronized(GliderFuel.STREAM_CODEC)
+    );
     public static final DataComponentType<SmashingWeapon> SMASHING_WEAPON = register(
         "smashing_weapon",
         builder -> builder.persistent(SmashingWeapon.CODEC)
@@ -201,6 +218,12 @@ public class ItematicDataComponents {
         "block_placer",
         builder -> builder.persistent(BlockPlacerComponent.CODEC)
             .networkSynchronized(BlockPlacerComponent.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<BlockBrusher> BLOCK_BRUSHER = register(
+        "block_brusher",
+        builder -> builder.persistent(BlockBrusher.CODEC)
+            .networkSynchronized(BlockBrusher.STREAM_CODEC)
             .cacheEncoding()
     );
     public static final DataComponentType<Bucket> BUCKET = register(
@@ -251,6 +274,34 @@ public class ItematicDataComponents {
         "sign_result_item",
         builder -> builder.persistent(Item.CODEC)
             .networkSynchronized(Item.STREAM_CODEC)
+    );
+    public static final DataComponentType<SuspiciousStewEffectProvider> PROVIDES_SUSPICIOUS_STEW_EFFECTS = register(
+        "provides_suspicious_stew_effects",
+        builder -> builder.persistent(SuspiciousStewEffectProvider.CODEC)
+            .networkSynchronized(SuspiciousStewEffectProvider.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<SignModifier> SIGN_MODIFIER = register(
+        "sign_modifier",
+        builder -> builder.persistent(SignModifier.CODEC)
+            .networkSynchronized(SignModifier.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<Castable> CASTABLE = register(
+        "castable",
+        builder -> builder.persistent(Castable.CODEC)
+            .networkSynchronized(Castable.STREAM_CODEC)
+            .cacheEncoding()
+    );
+    public static final DataComponentType<DyeColor> BANNER_BASE_COLOR = register(
+        "banner_base_color",
+        builder -> builder.persistent(DyeColor.CODEC)
+            .networkSynchronized(DyeColor.STREAM_CODEC)
+    );
+    public static final DataComponentType<Unit> PRESERVE_DAMAGED_ITEM = register(
+        "preserve_damaged_item",
+        builder -> builder.persistent(Unit.CODEC)
+            .networkSynchronized(Unit.STREAM_CODEC)
     );
 
     private ItematicDataComponents() {}

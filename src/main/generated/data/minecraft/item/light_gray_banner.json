@@ -1,7 +1,7 @@
 {
   "behavior": {
     "minecraft:banner_pattern_holder": {
-      "color": "light_gray"
+      "banner_base_color": "light_gray"
     },
     "minecraft:block": {
       "block": {

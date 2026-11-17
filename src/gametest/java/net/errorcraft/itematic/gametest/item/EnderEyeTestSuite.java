@@ -26,7 +26,7 @@ public class EnderEyeTestSuite {
             helper.getLevel().itematic$createStack(ItemIds.ENDER_EYE)
         );
         helper.succeedIf(() -> {
-            TestUtil.interactWithBlock(helper, END_PORTAL_FRAME_POSITION, player, Direction.UP);
+            TestUtil.interactWithBlock(helper, player, Direction.UP, END_PORTAL_FRAME_POSITION);
             Assert.blockState(helper, END_PORTAL_FRAME_POSITION)
                 .hasProperty(BlockStateProperties.EYE, true);
             Assert.livingEntity(helper, player)
@@ -42,7 +42,7 @@ public class EnderEyeTestSuite {
             helper.getLevel().itematic$createStack(ItemIds.ENDER_EYE)
         );
         helper.succeedIf(() -> {
-            TestUtil.interactWithBlock(helper, END_PORTAL_FRAME_POSITION, player, Direction.UP);
+            TestUtil.interactWithBlock(helper, player, Direction.UP, END_PORTAL_FRAME_POSITION);
             Assert.livingEntity(helper, player)
                 .hasStackInHand(InteractionHand.MAIN_HAND, ItemStackAssert::isNotEmpty);
         });
@@ -56,7 +56,7 @@ public class EnderEyeTestSuite {
             helper.getLevel().itematic$createStack(ItemIds.ENDER_EYE)
         );
         helper.succeedIf(() -> {
-            TestUtil.interactWithBlock(helper, END_PORTAL_FRAME_POSITION, player, Direction.UP);
+            TestUtil.interactWithBlock(helper, player, Direction.UP, END_PORTAL_FRAME_POSITION);
             Assert.blockState(helper, END_PORTAL_POSITION)
                 .is(Blocks.END_PORTAL);
         });

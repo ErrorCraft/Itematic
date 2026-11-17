@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.component.ItemDamageRules;
 import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
 import net.minecraft.core.HolderSet;
@@ -16,7 +15,7 @@ import net.minecraft.world.item.Item;
 
 import java.util.List;
 
-public record ShooterItemBehavior(ShooterMethod.Properties<?> method, HolderSet<Item> ammunition, HolderSet<Item> heldAmmunition, ItemDamageRules itemDamage, int range) implements ItemBehavior<ShooterItemBehavior> {
+public record ShooterItemBehavior(ShooterMethod.Properties<?> method, HolderSet<Item> ammunition, HolderSet<Item> heldAmmunition, ItemDamageRules itemDamage, int range) implements ItemBehavior {
     public static final Codec<ShooterItemBehavior> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ShooterMethod.Properties.CODEC.fieldOf("method").forGetter(ShooterItemBehavior::method),
         RegistryCodecs.holderSet(Registries.ITEM).fieldOf("ammunition").forGetter(ShooterItemBehavior::ammunition),
@@ -33,11 +32,6 @@ public record ShooterItemBehavior(ShooterMethod.Properties<?> method, HolderSet<
             new ItemDamageRules(List.of(rules), 1),
             range
         );
-    }
-
-    @Override
-    public ItemBehaviorType<ShooterItemBehavior> type() {
-        return ItemBehaviorType.SHOOTER;
     }
 
     @Override
