@@ -1,0 +1,25 @@
+{
+  "action": {
+    "type": "minecraft:sequence",
+    "handler": "minecraft:passing",
+    "entries": [
+      {
+        "action": {
+          "type": "minecraft:sequence",
+          "handler": "minecraft:first_to_succeed",
+          "entries": "#minecraft:wax_block"
+        }
+      },
+      {
+        "action": {
+          "type": "minecraft:play_sound",
+          "category": "block",
+          "pitch": 1.0,
+          "position": "interacted",
+          "sound": "minecraft:item.honeycomb.wax_on",
+          "volume": 1.0
+        }
+      }
+    ]
+  }
+}

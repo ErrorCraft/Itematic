@@ -1,8 +1,8 @@
 {
   "behavior": {
     "minecraft:enchantable": {
-      "enchantability": 1,
-      "transforms_into": "minecraft:enchanted_book"
+      "enchant_result_item": "minecraft:enchanted_book",
+      "enchantability": 1
     },
     "minecraft:stackable": 64
   },

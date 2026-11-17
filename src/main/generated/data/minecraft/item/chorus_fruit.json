@@ -2,17 +2,16 @@
   "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
-      "always_edible": true,
+      "can_always_eat": true,
       "nutrition": 4,
       "saturation": 2.4
     },
     "minecraft:stackable": 64,
     "minecraft:useable": {
       "animation": "eat",
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "has_use_particles": true,
+      "sound": "minecraft:entity.generic.eat",
+      "ticks": 32
     }
   },
   "display": {

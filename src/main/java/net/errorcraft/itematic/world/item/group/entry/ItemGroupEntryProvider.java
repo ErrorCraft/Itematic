@@ -2,10 +2,12 @@ package net.errorcraft.itematic.world.item.group.entry;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.errorcraft.itematic.world.item.group.entry.entries.ItemItemGroupEntry;
+import net.errorcraft.itematic.core.registries.ItematicRegistries;
+import net.errorcraft.itematic.world.item.group.entry.entries.ItemEntry;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
@@ -19,6 +21,7 @@ public record ItemGroupEntryProvider(List<ItemGroupEntry<?>> entries) {
     public static final Codec<ItemGroupEntryProvider> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ItemGroupEntry.CODEC.listOf().fieldOf("entries").forGetter(ItemGroupEntryProvider::entries)
     ).apply(instance, ItemGroupEntryProvider::new));
+    public static final Codec<HolderSet<ItemGroupEntryProvider>> LIST_CODEC = RegistryCodecs.holderSet(ItematicRegistries.ITEM_GROUP_ENTRY_PROVIDER);
 
     public static Builder builder(HolderGetter<Item> items) {
         return new Builder(items);
@@ -54,7 +57,7 @@ public record ItemGroupEntryProvider(List<ItemGroupEntry<?>> entries) {
 
         public Builder add(ResourceKey<Item> item) {
             return this.add(
-                new ItemItemGroupEntry(
+                new ItemEntry(
                     HolderSet.direct(this.items.getOrThrow(item))
                 )
             );
@@ -62,7 +65,7 @@ public record ItemGroupEntryProvider(List<ItemGroupEntry<?>> entries) {
 
         public Builder add(ResourceKey<Item> item, DataComponentPatch components) {
             return this.add(
-                new ItemItemGroupEntry(
+                new ItemEntry(
                     HolderSet.direct(this.items.getOrThrow(item)),
                     components
                 )
@@ -75,7 +78,7 @@ public record ItemGroupEntryProvider(List<ItemGroupEntry<?>> entries) {
 
         public Builder addRequiresPermissions(ResourceKey<Item> item, DataComponentPatch components) {
             return this.add(
-                new ItemItemGroupEntry(
+                new ItemEntry(
                     CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS,
                     true,
                     HolderSet.direct(this.items.getOrThrow(item)),
@@ -86,7 +89,7 @@ public record ItemGroupEntryProvider(List<ItemGroupEntry<?>> entries) {
 
         public Builder add(TagKey<Item> items) {
             return this.add(
-                new ItemItemGroupEntry(
+                new ItemEntry(
                     this.items.getOrThrow(items)
                 )
             );

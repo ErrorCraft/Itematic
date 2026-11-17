@@ -44,16 +44,6 @@ public record TransformBlockStateAction(PositionTarget position, Holder<BlockSta
         );
     }
 
-    public static TransformBlockStateAction ofPushingUpwards(PositionTarget position, BlockStateProvider provider) {
-        return new TransformBlockStateAction(
-            position,
-            Holder.direct(provider),
-            BlockTransformer.TransformType.SINGLE_BLOCK,
-            BlockTransformer.TransformParticle.NONE,
-            true
-        );
-    }
-
     @Override
     public ActionType<TransformBlockStateAction> type() {
         return ActionType.TRANSFORM_BLOCK_STATE;

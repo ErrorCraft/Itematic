@@ -51,8 +51,7 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .addTag(ItematicItemTags.BOW_AMMUNITION)
             .add(ItemIds.FIREWORK_ROCKET);
         this.builder(ItematicItemTags.PIG_TEMPT_ITEMS)
-            .forceAddTag(ItemTags.PIG_FOOD)
-            .add(ItemIds.CARROT_ON_A_STICK);
+            .forceAddTag(ItemTags.PIG_FOOD);
         this.builder(ItematicItemTags.VILLAGER_GATHERABLE_ITEMS)
             .add(ItemIds.BREAD)
             .add(BlockItemIds.POTATO_CROP.item())
@@ -1431,6 +1430,8 @@ public class ItemTagProvider extends FabricTagsProvider<Item> {
             .add(ItemIds.SUGAR)
             .add(BlockItemIds.COBWEB.item())
             .add(ItemIds.BREEZE_ROD);
+        this.builder(ItematicItemTags.ENCHANTING_TABLE_INGREDIENTS)
+            .add(ItemIds.LAPIS_LAZULI);
     }
 
     private static Stream<ResourceKey<Item>> orderColoredItems(ColorCollection<ResourceKey<Item>> itemIds) {

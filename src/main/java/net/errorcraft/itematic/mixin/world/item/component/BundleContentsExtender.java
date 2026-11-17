@@ -7,14 +7,20 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.access.world.item.component.BundleContentsAccess;
 import net.errorcraft.itematic.access.world.item.component.ContainerComponentAccess;
+import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.ItematicUtil;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRules;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.inventory.tooltip.BundleTooltip;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.SimpleMutableContainer;
+import net.minecraft.world.item.component.TooltipDisplay;
 import org.apache.commons.lang3.concurrent.Memoizer;
 import org.apache.commons.lang3.math.Fraction;
 import org.objectweb.asm.Opcodes;
@@ -27,13 +33,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Mixin(BundleContents.class)
-public class BundleContentsExtender implements BundleContentsAccess, ContainerComponentAccess<BundleContents> {
+public abstract class BundleContentsExtender implements BundleContentsAccess, ContainerComponentAccess<BundleContents> {
     @Shadow
     @Final
     private List<ItemStackTemplate> items;
+
+    @Shadow
+    public abstract Stream<ItemStack> itemCopies();
 
     @Unique
     private final Memoizer<ItemHolderRules, DataResult<Fraction>> occupancy = ItematicUtil.memoize(this::calculateOccupancy);
@@ -47,6 +57,35 @@ public class BundleContentsExtender implements BundleContentsAccess, ContainerCo
     )
     private Supplier<DataResult<Fraction>> doNotUseOriginalWeightForCachingWithItemHolderRules(Supplier<DataResult<Fraction>> delegate, Operation<Supplier<DataResult<Fraction>>> original) {
         return () -> DataResult.error(() -> "Cannot calculate item holder occupancy without item holder rules");
+    }
+
+    @Override
+    public Optional<TooltipComponent> itematic$tooltipImage(ItemStack stack) {
+        TooltipDisplay display = stack.getOrDefault(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT);
+        if (!display.shows(DataComponents.BUNDLE_CONTENTS)) {
+            return Optional.empty();
+        }
+
+        Fraction capacity = stack.get(ItematicDataComponents.ITEM_HOLDER_CAPACITY);
+        if (capacity == null) {
+            return Optional.empty();
+        }
+
+        ItemHolderRules rules = stack.get(ItematicDataComponents.ITEM_HOLDER_RULES);
+        if (rules == null) {
+            return Optional.empty();
+        }
+
+        BundleTooltip data = new BundleTooltip((BundleContents)(Object) this);
+        data.itematic$setCapacity(capacity);
+        data.itematic$setItemHolderRules(rules);
+        return Optional.of(data);
+    }
+
+    @Override
+    public void itematic$onDestroyed(ItemEntity item) {
+        item.getItem().set(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
+        ItemUtils.onContainerDestroyed(item, this.itemCopies());
     }
 
     @Override
@@ -67,15 +106,20 @@ public class BundleContentsExtender implements BundleContentsAccess, ContainerCo
 
     @Override
     public BundleContents itematic$copyWithContents(ItemStack stack, Stream<ItemStack> newContents) {
-        return stack.itematic$getBehavior(ItemBehaviorType.ITEM_HOLDER)
-            .map(itemHolder -> itemHolder.createBuilder(stack, (BundleContents)(Object) this))
-            .map(BundleContents.Mutable::clearItems)
-            .map(mutable -> {
-                newContents.forEach(mutable::tryInsert);
-                return mutable;
-            })
-            .map(BundleContents.Mutable::toImmutable)
-            .orElse((BundleContents)(Object) this);
+        BundleContents self = (BundleContents)(Object) this;
+        ItemHolderRules rules = stack.get(ItematicDataComponents.ITEM_HOLDER_RULES);
+        if (rules == null) {
+            return self;
+        }
+
+        BundleContents.Mutable mutable = rules.createBuilder(stack, self);
+        if (mutable == null) {
+            return self;
+        }
+
+        mutable.clearItems();
+        newContents.forEach(mutable::tryInsert);
+        return mutable.toImmutable();
     }
 
     @Unique

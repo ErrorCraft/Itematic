@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:redstone_blocks",
+  "icon": {
+    "id": "minecraft:redstone"
+  },
+  "name": {
+    "translate": "itemGroup.redstone"
+  }
+}

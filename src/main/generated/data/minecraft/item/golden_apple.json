@@ -2,17 +2,16 @@
   "behavior": {
     "minecraft:consumable": {},
     "minecraft:food": {
-      "always_edible": true,
+      "can_always_eat": true,
       "nutrition": 4,
       "saturation": 9.6
     },
     "minecraft:stackable": 64,
     "minecraft:useable": {
       "animation": "eat",
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "has_use_particles": true,
+      "sound": "minecraft:entity.generic.eat",
+      "ticks": 32
     }
   },
   "display": {
@@ -27,13 +26,11 @@
           {
             "id": "minecraft:regeneration",
             "amplifier": 1,
-            "duration": 100,
-            "show_icon": true
+            "duration": 100
           },
           {
             "id": "minecraft:absorption",
-            "duration": 2400,
-            "show_icon": true
+            "duration": 2400
           }
         ],
         "entity": "this"

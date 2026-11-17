@@ -9,7 +9,11 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MaceItem;
 import org.jspecify.annotations.Nullable;
 
 public record SmashingWeapon(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance, double knockbackPower) {
@@ -26,6 +30,7 @@ public record SmashingWeapon(HitSounds hitSounds, double smashAttackFallDistance
         ByteBufCodecs.DOUBLE, SmashingWeapon::knockbackPower,
         SmashingWeapon::new
     );
+    private static final MaceItem DUMMY = new MaceItem(new Item.Properties());
 
     public static SmashingWeapon of(HitSounds hitSounds, double smashAttackFallDistance, double heavySmashAttackFallDistance, double knockbackPower) {
         return new SmashingWeapon(hitSounds, smashAttackFallDistance, heavySmashAttackFallDistance, knockbackPower);
@@ -35,6 +40,14 @@ public record SmashingWeapon(HitSounds hitSounds, double smashAttackFallDistance
         return attacker.fallDistance > this.smashAttackFallDistance && !attacker.isFallFlying();
     }
 
+    public void hurtEnemy(ItemStack stack, LivingEntity victim, LivingEntity attacker) {
+        DUMMY.hurtEnemy(stack, victim, attacker);
+    }
+
+    public void postHurtEnemy(ItemStack stack, LivingEntity victim, LivingEntity attacker) {
+        DUMMY.postHurtEnemy(stack, victim, attacker);
+    }
+
     @Nullable
     public DamageSource damageSource(LivingEntity attacker) {
         if (this.canSmash(attacker)) {
@@ -42,6 +55,10 @@ public record SmashingWeapon(HitSounds hitSounds, double smashAttackFallDistance
         }
 
         return null;
+    }
+
+    public float attackDamageBonus(Entity victim, float damage, DamageSource damageSource) {
+        return DUMMY.getAttackDamageBonus(victim, damage, damageSource);
     }
 
     public record HitSounds(Holder<SoundEvent> inAir, Holder<SoundEvent> onGroundSmallFallDistance, Holder<SoundEvent> onGroundLargeFallDistance) {

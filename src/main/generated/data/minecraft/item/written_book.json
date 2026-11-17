@@ -1,7 +1,6 @@
 {
   "behavior": {
-    "minecraft:stackable": 16,
-    "minecraft:text_holder": {}
+    "minecraft:stackable": 16
   },
   "display": {
     "glint": true,

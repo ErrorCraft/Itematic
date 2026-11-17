@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.world.item.component;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.datafixers.util.Function3;
@@ -9,12 +10,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.world.item.component.ToolAccess;
 import net.errorcraft.itematic.advancements.predicates.ItemPredicates;
-import net.errorcraft.itematic.util.ItematicCodecs;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.block.Block;
@@ -30,6 +31,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -113,7 +115,7 @@ public class ToolExtender implements ToolAccess {
             )
         )
         private static Codec<Float> allowZeroForSpeedField(Operation<Codec<Float>> original) {
-            return ItematicCodecs.NON_NEGATIVE_FLOAT;
+            return ExtraCodecs.NON_NEGATIVE_FLOAT;
         }
 
         @ModifyArg(
@@ -189,6 +191,23 @@ public class ToolExtender implements ToolAccess {
                 ItemPredicates.STREAM_CODEC.apply(ByteBufCodecs::optional), Tool.Rule::itematic$item,
                 RuleExtender::setItem
             );
+        }
+
+        @ModifyReturnValue(
+            method = "equals",
+            at = @At("TAIL")
+        )
+        private boolean checkExtraFields(boolean original, Object o) {
+            RuleExtender that = ((RuleExtender) o);
+            return original && Objects.equals(this.item, that.item);
+        }
+
+        @ModifyReturnValue(
+            method = "hashCode",
+            at = @At("TAIL")
+        )
+        private int hashExtraFields(int original) {
+            return Objects.hash(original, this.item);
         }
 
         @Override

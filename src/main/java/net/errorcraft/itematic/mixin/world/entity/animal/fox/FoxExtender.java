@@ -1,5 +1,7 @@
 package net.errorcraft.itematic.mixin.world.entity.animal.fox;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.errorcraft.itematic.mixin.world.entity.MobExtender;
 import net.minecraft.references.BlockItemIds;
 import net.minecraft.references.ItemIds;
@@ -16,7 +18,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Fox.class)
@@ -25,7 +26,7 @@ public abstract class FoxExtender extends MobExtender {
         super(type, level);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
@@ -33,11 +34,11 @@ public abstract class FoxExtender extends MobExtender {
             ordinal = 0
         )
     )
-    private ItemStack newItemStackForEmeraldUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForEmeraldUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.EMERALD);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
@@ -45,11 +46,11 @@ public abstract class FoxExtender extends MobExtender {
             ordinal = 1
         )
     )
-    private ItemStack newItemStackForEggUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForEggUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.EGG);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
@@ -63,11 +64,11 @@ public abstract class FoxExtender extends MobExtender {
             )
         )
     )
-    private ItemStack newItemStackForRabbitFootUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForRabbitFootUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.RABBIT_FOOT);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
@@ -81,11 +82,11 @@ public abstract class FoxExtender extends MobExtender {
             )
         )
     )
-    private ItemStack newItemStackForRabbitHideUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForRabbitHideUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.RABBIT_HIDE);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
@@ -99,11 +100,11 @@ public abstract class FoxExtender extends MobExtender {
             )
         )
     )
-    private ItemStack newItemStackForWheatUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForWheatUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.WHEAT);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
@@ -117,11 +118,11 @@ public abstract class FoxExtender extends MobExtender {
             )
         )
     )
-    private ItemStack newItemStackForLeatherUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForLeatherUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.LEATHER);
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "populateDefaultEquipmentSlots",
         at = @At(
             value = "NEW",
@@ -135,7 +136,7 @@ public abstract class FoxExtender extends MobExtender {
             )
         )
     )
-    private ItemStack newItemStackForFeatherUseCreateStack(ItemLike item) {
+    private ItemStack newItemStackForFeatherUseCreateStack(ItemLike item, Operation<ItemStack> original) {
         return this.level().itematic$createStack(ItemIds.FEATHER);
     }
 
@@ -150,7 +151,7 @@ public abstract class FoxExtender extends MobExtender {
         @Final
         Fox this$0;
 
-        @Redirect(
+        @WrapOperation(
             method = "pickSweetBerries",
             at = @At(
                 value = "NEW",
@@ -158,11 +159,11 @@ public abstract class FoxExtender extends MobExtender {
                 ordinal = 0
             )
         )
-        private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item) {
+        private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item, Operation<ItemStack> original) {
             return this.this$0.level().itematic$createStack(BlockItemIds.SWEET_BERRY_CROP.item());
         }
 
-        @Redirect(
+        @WrapOperation(
             method = "pickSweetBerries",
             at = @At(
                 value = "NEW",
@@ -176,7 +177,7 @@ public abstract class FoxExtender extends MobExtender {
                 )
             )
         )
-        private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item, int count) {
+        private ItemStack newItemStackForSweetBerriesUseCreateStack(ItemLike item, int count, Operation<ItemStack> original) {
             return this.this$0.level().itematic$createStack(BlockItemIds.SWEET_BERRY_CROP.item(), count);
         }
     }

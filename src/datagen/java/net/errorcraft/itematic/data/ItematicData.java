@@ -1,12 +1,14 @@
 package net.errorcraft.itematic.data;
 
 import net.errorcraft.itematic.data.client.ItemBarStyleProvider;
+import net.errorcraft.itematic.data.client.SmithingTemplateDisplaysProvider;
 import net.errorcraft.itematic.data.server.ItematicDynamicRegistryProvider;
 import net.errorcraft.itematic.data.server.ModifiedRecipeProvider;
 import net.errorcraft.itematic.data.server.tag.ActionTagProvider;
 import net.errorcraft.itematic.data.server.tag.BlockTagProvider;
 import net.errorcraft.itematic.data.server.tag.EntityTypeTagProvider;
 import net.errorcraft.itematic.data.server.tag.ItemGroupEntryProviderTagProvider;
+import net.errorcraft.itematic.data.server.tag.ItemGroupTagProvider;
 import net.errorcraft.itematic.data.server.tag.ItemTagProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -31,5 +33,7 @@ public class ItematicData implements DataGeneratorEntrypoint {
         pack.addProvider(ModifiedRecipeProvider::new);
         pack.addProvider(ItemBarStyleProvider::new);
         pack.addProvider(EntityTypeTagProvider::new);
+        pack.addProvider(ItemGroupTagProvider::new);
+        pack.addProvider(SmithingTemplateDisplaysProvider::new);
     }
 }

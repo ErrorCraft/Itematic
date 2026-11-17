@@ -1,0 +1,37 @@
+{
+    DataVersion: 5023,
+    size: [5, 2, 5],
+    data: [
+        {pos: [0, 0, 0], state: "minecraft:bedrock"},
+        {pos: [0, 0, 1], state: "minecraft:bedrock"},
+        {pos: [0, 0, 2], state: "minecraft:bedrock"},
+        {pos: [0, 0, 3], state: "minecraft:bedrock"},
+        {pos: [0, 0, 4], state: "minecraft:bedrock"},
+        {pos: [1, 0, 0], state: "minecraft:bedrock"},
+        {pos: [1, 0, 1], state: "minecraft:bedrock"},
+        {pos: [1, 0, 2], state: "minecraft:bedrock"},
+        {pos: [1, 0, 3], state: "minecraft:bedrock"},
+        {pos: [1, 0, 4], state: "minecraft:bedrock"},
+        {pos: [2, 0, 0], state: "minecraft:bedrock"},
+        {pos: [2, 0, 1], state: "minecraft:bedrock"},
+        {pos: [2, 0, 2], state: "minecraft:bedrock"},
+        {pos: [2, 0, 3], state: "minecraft:bedrock"},
+        {pos: [2, 0, 4], state: "minecraft:bedrock"},
+        {pos: [3, 0, 0], state: "minecraft:bedrock"},
+        {pos: [3, 0, 1], state: "minecraft:bedrock"},
+        {pos: [3, 0, 2], state: "minecraft:bedrock"},
+        {pos: [3, 0, 3], state: "minecraft:bedrock"},
+        {pos: [3, 0, 4], state: "minecraft:bedrock"},
+        {pos: [4, 0, 0], state: "minecraft:bedrock"},
+        {pos: [4, 0, 1], state: "minecraft:bedrock"},
+        {pos: [4, 0, 2], state: "minecraft:bedrock"},
+        {pos: [4, 0, 3], state: "minecraft:bedrock"},
+        {pos: [4, 0, 4], state: "minecraft:bedrock"},
+        {pos: [1, 1, 0], state: "minecraft:end_portal_frame{eye:true,facing:south}"}
+    ],
+    entities: [],
+    palette: [
+        "minecraft:bedrock",
+        "minecraft:end_portal_frame{eye:true,facing:south}"
+    ]
+}

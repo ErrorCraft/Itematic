@@ -7,8 +7,6 @@ import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.errorcraft.itematic.world.item.ItemEvent;
 import net.errorcraft.itematic.world.item.ItemStackTemplates;
-import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.world.item.Item;
@@ -22,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Optional;
+import java.util.function.Function;
 
 @Mixin(ItemStackTemplate.class)
 public class ItemStackTemplateExtender implements ItemInstanceAccess {
@@ -33,6 +31,17 @@ public class ItemStackTemplateExtender implements ItemInstanceAccess {
     @Shadow
     @Final
     private Holder<Item> item;
+
+    @ModifyArg(
+        method = "<clinit>",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/mojang/serialization/Codec;withAlternative(Lcom/mojang/serialization/Codec;Lcom/mojang/serialization/Codec;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
+        )
+    )
+    private static Function<Holder<Item>, ItemStackTemplate> useHolderConstructor(Function<Holder<Item>, ItemStackTemplate> converter) {
+        return ItemStackTemplates::of;
+    }
 
     @WrapOperation(
         method = "lambda$static$1",
@@ -66,16 +75,6 @@ public class ItemStackTemplateExtender implements ItemInstanceAccess {
     )
     private DataComponentGetter useDataComponentsOnItemInstead(DataComponentGetter prototype) {
         return this.item.value().components();
-    }
-
-    @Override
-    public <T extends ItemBehavior<T>> boolean itematic$hasBehavior(ItemBehaviorType<T> type) {
-        return this.item.value().itematic$hasBehavior(type);
-    }
-
-    @Override
-    public <T extends ItemBehavior<T>> Optional<T> itematic$getBehavior(ItemBehaviorType<T> type) {
-        return this.item.value().itematic$getBehavior(type);
     }
 
     @Override

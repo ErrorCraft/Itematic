@@ -1,6 +1,8 @@
 {
   "behavior": {
-    "minecraft:brush": {},
+    "minecraft:brush": {
+      "sweep_count": 10
+    },
     "minecraft:damageable": {
       "durability": 64
     },
@@ -13,10 +15,7 @@
       "passes": [
         "block"
       ],
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 200
-      }
+      "ticks": 200
     }
   },
   "display": {

@@ -4,13 +4,11 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.authlib.GameProfile;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,17 +21,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class ServerPlayerExtender extends Player {
     public ServerPlayerExtender(Level level, GameProfile profile) {
         super(level, profile);
-    }
-
-    @WrapMethod(
-        method = "openItemGui"
-    )
-    private void alsoCheckTextHolderItemBehavior(ItemStack itemStack, InteractionHand hand, Operation<Void> original) {
-        if (!itemStack.itematic$hasBehavior(ItemBehaviorType.TEXT_HOLDER)) {
-            return;
-        }
-
-        original.call(itemStack, hand);
     }
 
     @WrapMethod(

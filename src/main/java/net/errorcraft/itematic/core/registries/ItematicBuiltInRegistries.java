@@ -1,31 +1,39 @@
 package net.errorcraft.itematic.core.registries;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import net.errorcraft.itematic.core.component.provider.number.floats.FloatProvider;
+import net.errorcraft.itematic.core.component.provider.number.floats.providers.FoodProvider;
+import net.errorcraft.itematic.core.component.provider.number.ints.IntProvider;
+import net.errorcraft.itematic.core.component.provider.number.ints.providers.MaxStackSizeProvider;
 import net.errorcraft.itematic.mixin.core.registries.BuiltInRegistriesAccessor;
 import net.errorcraft.itematic.world.action.ActionType;
 import net.errorcraft.itematic.world.action.sequence.handler.SequenceHandlerType;
 import net.errorcraft.itematic.world.entity.spawn.rule.EntitySpawnRule;
-import net.errorcraft.itematic.world.entity.spawn.rule.rules.DiscardEntitySpawnRule;
+import net.errorcraft.itematic.world.entity.spawn.rule.rules.Discard;
 import net.errorcraft.itematic.world.item.ItemEvent;
-import net.errorcraft.itematic.world.item.behavior.ItemBehaviorType;
-import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntryType;
+import net.errorcraft.itematic.world.item.behavior.ItemBehavior;
+import net.errorcraft.itematic.world.item.behavior.behaviors.StackableItemBehavior;
+import net.errorcraft.itematic.world.item.group.entry.ItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.ItemEntry;
 import net.errorcraft.itematic.world.item.holder.rule.ItemHolderRuleType;
 import net.errorcraft.itematic.world.item.placement.block.picker.BlockPickerType;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplate;
-import net.errorcraft.itematic.world.item.smithing.template.SmithingTemplates;
-import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProviderType;
+import net.errorcraft.itematic.world.item.use.duration.provider.UseDurationProvider;
+import net.errorcraft.itematic.world.item.use.duration.provider.providers.Constant;
 import net.errorcraft.itematic.world.item.weapon.melee.behavior.MeleeWeaponComponents;
-import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethodType;
-import net.errorcraft.itematic.world.level.modification.WorldModificationType;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.ShooterMethod;
+import net.errorcraft.itematic.world.item.weapon.shooter.method.methods.Direct;
+import net.errorcraft.itematic.world.level.modification.WorldModification;
+import net.errorcraft.itematic.world.level.modification.modifications.DrainFluid;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 
 public class ItematicBuiltInRegistries {
-    public static final Registry<ItemBehaviorType<?>> ITEM_BEHAVIOR_TYPE = register(
+    public static final Registry<Codec<? extends ItemBehavior>> ITEM_BEHAVIOR_TYPE = register(
         ItematicRegistries.ITEM_BEHAVIOR_TYPE,
-        _ -> ItemBehaviorType.USEABLE
+        _ -> StackableItemBehavior.CODEC
     );
     public static final Registry<ItemEvent> ITEM_EVENT = register(
         ItematicRegistries.ITEM_EVENT,
@@ -39,41 +47,45 @@ public class ItematicBuiltInRegistries {
         ItematicRegistries.SEQUENCE_HANDLER_TYPE,
         _ -> SequenceHandlerType.UNCHECKED
     );
-    public static final Registry<SmithingTemplate> SMITHING_TEMPLATE = register(
-        ItematicRegistries.SMITHING_TEMPLATE,
-        _ -> SmithingTemplates.TRIM_PATTERN
-    );
     public static final Registry<BlockPickerType<?>> BLOCK_PICKER_TYPE = register(
         ItematicRegistries.BLOCK_PICKER_TYPE,
         _ -> BlockPickerType.SIMPLE
     );
-    public static final Registry<UseDurationProviderType<?>> USE_DURATION_PROVIDER_TYPE = register(
+    public static final Registry<UseDurationProvider.Type<?>> USE_DURATION_PROVIDER_TYPE = register(
         ItematicRegistries.USE_DURATION_PROVIDER_TYPE,
-        _ -> UseDurationProviderType.CONSTANT
+        _ -> Constant.TYPE
     );
     public static final Registry<ItemHolderRuleType<?>> ITEM_HOLDER_RULE_TYPE = register(
         ItematicRegistries.ITEM_HOLDER_RULE_TYPE,
         _ -> ItemHolderRuleType.REJECT
     );
-    public static final Registry<ShooterMethodType<?>> SHOOTER_METHOD_TYPE = register(
-        ItematicRegistries.SHOOTER_METHOD_TYPE,
-        _ -> ShooterMethodType.DIRECT
+    public static final Registry<ShooterMethod<?>> SHOOTER_METHOD = register(
+        ItematicRegistries.SHOOTER_METHOD,
+        _ -> Direct.INSTANCE
     );
-    public static final Registry<WorldModificationType<?>> WORLD_MODIFICATION_TYPE = register(
+    public static final Registry<WorldModification.Type<?>> WORLD_MODIFICATION_TYPE = register(
         ItematicRegistries.WORLD_MODIFICATION_TYPE,
-        _ -> WorldModificationType.DRAIN_FLUID
+        _ -> DrainFluid.TYPE
     );
     public static final Registry<MapCodec<? extends EntitySpawnRule<?>>> ENTITY_SPAWN_RULE_TYPE = register(
         ItematicRegistries.ENTITY_SPAWN_RULE_TYPE,
-        _ -> DiscardEntitySpawnRule.CODEC
+        _ -> Discard.CODEC
     );
     public static final Registry<DataComponentType<?>> MELEE_WEAPON_COMPONENT_TYPE = register(
         ItematicRegistries.MELEE_WEAPON_COMPONENT_TYPE,
         _ -> MeleeWeaponComponents.SMASHING
     );
-    public static final Registry<ItemGroupEntryType<?>> ITEM_GROUP_ENTRY_TYPE = register(
+    public static final Registry<MapCodec<? extends ItemGroupEntry<?>>> ITEM_GROUP_ENTRY_TYPE = register(
         ItematicRegistries.ITEM_GROUP_ENTRY_TYPE,
-        _ -> ItemGroupEntryType.ITEM
+        _ -> ItemEntry.CODEC
+    );
+    public static final Registry<IntProvider.Type<?, ?>> DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE = register(
+        ItematicRegistries.DATA_COMPONENT_CONTEXT_INT_PROVIDER_TYPE,
+        _ -> MaxStackSizeProvider.TYPE
+    );
+    public static final Registry<FloatProvider.Type<?, ?>> DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE = register(
+        ItematicRegistries.DATA_COMPONENT_CONTEXT_FLOAT_PROVIDER_TYPE,
+        _ -> FoodProvider.TYPE
     );
 
     private ItematicBuiltInRegistries() {}

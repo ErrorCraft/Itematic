@@ -1,6 +1,7 @@
 package net.errorcraft.itematic.mixin.world.level.storage.loot.predicates;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.errorcraft.itematic.access.world.level.storage.loot.predicates.LocationCheckAccess;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 @Mixin(LocationCheck.class)
@@ -45,6 +47,23 @@ public class LocationCheckExtender implements LocationCheckAccess {
     )
     private ContextKey<? extends Vec3> usePositionTarget(ContextKey<Vec3> parameter) {
         return this.position.contextParam();
+    }
+
+    @ModifyReturnValue(
+        method = "equals",
+        at = @At("TAIL")
+    )
+    private boolean checkExtraFields(boolean original, Object o) {
+        LocationCheckExtender that = ((LocationCheckExtender) o);
+        return original && Objects.equals(this.position, that.position);
+    }
+
+    @ModifyReturnValue(
+        method = "hashCode",
+        at = @At("TAIL")
+    )
+    private int hashExtraFields(int original) {
+        return Objects.hash(original, this.position);
     }
 
     @Override

@@ -2,11 +2,11 @@ package net.errorcraft.itematic.world.item.group.entry;
 
 import net.errorcraft.itematic.core.registries.ItematicRegistries;
 import net.errorcraft.itematic.tags.ItemGroupItemTags;
-import net.errorcraft.itematic.world.item.group.entry.entries.EnchantmentItemGroupEntry;
-import net.errorcraft.itematic.world.item.group.entry.entries.InstrumentItemGroupEntry;
-import net.errorcraft.itematic.world.item.group.entry.entries.PaintingVariantItemGroupEntry;
-import net.errorcraft.itematic.world.item.group.entry.entries.PotionItemGroupEntry;
-import net.errorcraft.itematic.world.item.group.entry.entries.SuspiciousEffectIngredientItemGroupEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.EnchantmentEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.InstrumentEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.PaintingVariantEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.PotionEntry;
+import net.errorcraft.itematic.world.item.group.entry.entries.SuspiciousEffectIngredientEntry;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
@@ -176,7 +176,7 @@ public class ItemGroupEntryProviders {
             .add(ItemIds.GLOW_ITEM_FRAME)
             .add(ItemIds.PAINTING)
             .add(
-                PaintingVariantItemGroupEntry.expected(
+                PaintingVariantEntry.expected(
                     items.getOrThrow(ItemIds.PAINTING),
                     paintingVariants.getOrThrow(PaintingVariantTags.PLACEABLE)
                 )
@@ -300,7 +300,7 @@ public class ItemGroupEntryProviders {
             .add(ItemGroupItemTags.BOATS)
             .add(ItemGroupItemTags.RAILS)
             .add(ItemGroupItemTags.MINECARTS)
-            .add(InstrumentItemGroupEntry.of(items.getOrThrow(ItemIds.GOAT_HORN), instruments.getOrThrow(InstrumentTags.GOAT_HORNS)))
+            .add(InstrumentEntry.of(items.getOrThrow(ItemIds.GOAT_HORN), instruments.getOrThrow(InstrumentTags.GOAT_HORNS)))
             .add(ItemGroupItemTags.MUSIC_DISCS)
             .build()
         );
@@ -326,18 +326,18 @@ public class ItemGroupEntryProviders {
             .add(ItemGroupEntryProviders::flightDuration)
             .add(ItemIds.ARROW)
             .add(ItemIds.SPECTRAL_ARROW)
-            .add(PotionItemGroupEntry.of(items.getOrThrow(ItemIds.TIPPED_ARROW)))
+            .add(PotionEntry.of(items.getOrThrow(ItemIds.TIPPED_ARROW)))
             .build()
         );
         registerable.register(FOOD_AND_DRINKS, ItemGroupEntryProvider.builder(items)
             .add(ItemGroupItemTags.FOOD)
-            .add(SuspiciousEffectIngredientItemGroupEntry.of(items.getOrThrow(ItemIds.SUSPICIOUS_STEW)))
+            .add(SuspiciousEffectIngredientEntry.of(items.getOrThrow(ItemIds.SUSPICIOUS_STEW)))
             .add(ItemIds.MILK_BUCKET)
             .add(ItemIds.HONEY_BOTTLE)
             .add(ItemGroupEntryProviders::ominousBottles)
-            .add(PotionItemGroupEntry.of(items.getOrThrow(ItemIds.POTION)))
-            .add(PotionItemGroupEntry.of(items.getOrThrow(ItemIds.SPLASH_POTION)))
-            .add(PotionItemGroupEntry.of(items.getOrThrow(ItemIds.LINGERING_POTION)))
+            .add(PotionEntry.of(items.getOrThrow(ItemIds.POTION)))
+            .add(PotionEntry.of(items.getOrThrow(ItemIds.SPLASH_POTION)))
+            .add(PotionEntry.of(items.getOrThrow(ItemIds.LINGERING_POTION)))
             .build()
         );
         registerable.register(INGREDIENTS, ItemGroupEntryProvider.builder(items)
@@ -407,7 +407,7 @@ public class ItemGroupEntryProviders {
             .add(ItemIds.EXPERIENCE_BOTTLE)
             .add(ItemIds.TRIAL_KEY)
             .add(ItemIds.OMINOUS_TRIAL_KEY)
-            .add(EnchantmentItemGroupEntry.of(items.getOrThrow(ItemIds.ENCHANTED_BOOK)))
+            .add(EnchantmentEntry.of(items.getOrThrow(ItemIds.ENCHANTED_BOOK)))
             .build()
         );
         registerable.register(SPAWN_EGGS, ItemGroupEntryProvider.builder(items)
@@ -515,7 +515,7 @@ public class ItemGroupEntryProviders {
             .add(ItemGroupEntryProviders::testBlocks)
             .add(ItemGroupEntryProviders::lightBlocks)
             .add(
-                PaintingVariantItemGroupEntry.unexpected(
+                PaintingVariantEntry.unexpected(
                     items.getOrThrow(ItemIds.PAINTING),
                     paintingVariants.getOrThrow(PaintingVariantTags.PLACEABLE)
                 )

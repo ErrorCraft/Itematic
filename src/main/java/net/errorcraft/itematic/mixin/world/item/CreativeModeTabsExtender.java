@@ -1,307 +1,49 @@
 package net.errorcraft.itematic.mixin.world.item;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.errorcraft.itematic.references.ItematicBlockItemIds;
-import net.errorcraft.itematic.tags.ItemGroupEntryProviderTags;
-import net.minecraft.references.BlockItemIds;
-import net.minecraft.references.ItemIds;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.errorcraft.itematic.world.item.group.CreativeModeTabsCache;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Slice;
+
+import java.util.stream.Stream;
 
 @Mixin(CreativeModeTabs.class)
 public class CreativeModeTabsExtender {
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;BUILDING_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
+    @WrapMethod(
+        method = "streamAllTabs"
     )
-    private static CreativeModeTab buildingBlocksSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(BlockItemIds.BRICKS.item());
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.BUILDING_BLOCKS);
-        return original;
+    private static Stream<CreativeModeTab> streamCachedTabsFromDataDrivenRegistry(Operation<Stream<CreativeModeTab>> original) {
+        return CreativeModeTabsCache.streamTabs();
     }
 
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;COLORED_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
+    @WrapMethod(
+        method = "getDefaultTab"
     )
-    private static CreativeModeTab coloredBlocksSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(BlockItemIds.WOOL.cyan().item());
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.COLORED_BLOCKS);
-        return original;
+    private static CreativeModeTab useCachedTabFromDataDrivenRegistry(Operation<CreativeModeTab> original) {
+        return CreativeModeTabsCache.firstTab();
     }
 
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;NATURAL_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
+    @WrapMethod(
+        method = "searchTab"
     )
-    private static CreativeModeTab naturalSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(BlockItemIds.GRASS_BLOCK.item());
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.NATURAL_BLOCKS);
-        return original;
+    private static CreativeModeTab useCachedSearchTabFromDataDrivenRegistry(Operation<CreativeModeTab> original) {
+        return CreativeModeTabsCache.search();
     }
 
-    @ModifyExpressionValue(
-        method = "bootstrap",
+    @WrapOperation(
+        method = "tryRebuildTabContents",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;FUNCTIONAL_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
+            target = "Lnet/minecraft/world/item/CreativeModeTabs;buildAllTabContents(Lnet/minecraft/world/item/CreativeModeTab$ItemDisplayParameters;)V"
         )
     )
-    private static CreativeModeTab functionalSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItematicBlockItemIds.OAK.sign().item());
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.FUNCTIONAL_BLOCKS);
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;REDSTONE_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab redstoneSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(BlockItemIds.REDSTONE_DUST.item());
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.REDSTONE_BLOCKS);
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;HOTBAR:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab hotbarSetIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(BlockItemIds.BOOKSHELF.item());
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;SEARCH:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab searchSetIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemIds.COMPASS);
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;TOOLS_AND_UTILITIES:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab toolsSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemIds.DIAMOND_PICKAXE);
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.TOOLS_AND_UTILITIES);
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;COMBAT:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab combatSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemIds.NETHERITE_SWORD);
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.COMBAT);
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;FOOD_AND_DRINKS:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab foodAndDrinkSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemIds.GOLDEN_APPLE);
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.FOOD_AND_DRINKS);
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;INGREDIENTS:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab ingredientsSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemIds.IRON_INGOT);
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.INGREDIENTS);
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;SPAWN_EGGS:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab spawnEggsSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(ItemIds.PIG_SPAWN_EGG);
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.SPAWN_EGGS);
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;OP_BLOCKS:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab operatorSetEntryTagAndIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(BlockItemIds.COMMAND_BLOCK.item());
-        original.itematic$setEntryProviderTag(ItemGroupEntryProviderTags.OP_BLOCKS);
-        return original;
-    }
-
-    @ModifyExpressionValue(
-        method = "bootstrap",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/CreativeModeTab$Builder;build()Lnet/minecraft/world/item/CreativeModeTab;",
-            ordinal = 0
-        ),
-        slice = @Slice(
-            from = @At(
-                value = "FIELD",
-                target = "Lnet/minecraft/world/item/CreativeModeTabs;INVENTORY:Lnet/minecraft/resources/ResourceKey;",
-                opcode = Opcodes.GETSTATIC
-            )
-        )
-    )
-    private static CreativeModeTab inventorySetIcon(CreativeModeTab original) {
-        original.itematic$setIconKey(BlockItemIds.CHEST.item());
-        return original;
+    private static void cacheCreativeModeTabsFromDataDrivenRegistryAndDoNotTriggerFabricApiValidation(CreativeModeTab.ItemDisplayParameters parameters, Operation<Void> original, @Local(name = "lookup", argsOnly = true) HolderLookup.Provider lookup) {
+        CreativeModeTabsCache.refresh(lookup, parameters);
     }
 }

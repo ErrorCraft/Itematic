@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:functional_blocks",
+  "icon": {
+    "id": "minecraft:oak_sign"
+  },
+  "name": {
+    "translate": "itemGroup.functional"
+  }
+}

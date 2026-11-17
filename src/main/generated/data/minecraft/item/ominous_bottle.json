@@ -1,17 +1,11 @@
 {
   "behavior": {
-    "minecraft:consumable": {
-      "has_consume_particles": false,
-      "sound": "minecraft:entity.generic.drink"
-    },
-    "minecraft:ominous_effect_provider": {},
+    "minecraft:consumable": {},
     "minecraft:stackable": 64,
     "minecraft:useable": {
       "animation": "drink",
-      "ticks": {
-        "type": "minecraft:constant",
-        "amount": 32
-      }
+      "sound": "minecraft:entity.generic.drink",
+      "ticks": 32
     }
   },
   "display": {
@@ -22,11 +16,43 @@
   "events": {
     "minecraft:consume_item": {
       "action": {
-        "type": "minecraft:play_sound",
-        "pitch": 1.0,
-        "position": "origin",
-        "sound": "minecraft:item.ominous_bottle.dispose",
-        "volume": 1.0
+        "type": "minecraft:sequence",
+        "handler": "minecraft:passing",
+        "entries": [
+          {
+            "entry": {
+              "action": {
+                "type": "minecraft:add_status_effects",
+                "effects": [
+                  {
+                    "id": "minecraft:bad_omen",
+                    "amplifier": "minecraft:consumable/ominous_bottle_amplifier",
+                    "duration": 120000
+                  }
+                ],
+                "entity": "this"
+              },
+              "requirements": {
+                "type": "minecraft:match_tool",
+                "predicate": {
+                  "predicates": {
+                    "minecraft:ominous_bottle_amplifier": {}
+                  }
+                }
+              }
+            },
+            "optional": true
+          },
+          {
+            "action": {
+              "type": "minecraft:play_sound",
+              "pitch": 1.0,
+              "position": "origin",
+              "sound": "minecraft:item.ominous_bottle.dispose",
+              "volume": 1.0
+            }
+          }
+        ]
       }
     }
   }

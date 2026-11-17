@@ -1,0 +1,9 @@
+{
+  "entries": "#minecraft:combat",
+  "icon": {
+    "id": "minecraft:netherite_sword"
+  },
+  "name": {
+    "translate": "itemGroup.combat"
+  }
+}

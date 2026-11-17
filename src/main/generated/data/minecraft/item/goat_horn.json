@@ -6,6 +6,12 @@
     "minecraft:stackable": 1,
     "minecraft:useable": {
       "animation": "toot_horn",
+      "cooldown": {
+        "moment": "on_start",
+        "ticks": {
+          "type": "minecraft:playable"
+        }
+      },
       "ticks": {
         "type": "minecraft:playable"
       }

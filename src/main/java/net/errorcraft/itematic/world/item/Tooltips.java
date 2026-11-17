@@ -5,9 +5,7 @@ import net.errorcraft.itematic.util.ItematicUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.Util;
 import net.minecraft.world.item.Item;
 
 public class Tooltips {
@@ -18,20 +16,10 @@ public class Tooltips {
             .withStyle(ChatFormatting.GRAY);
     }
 
-    public static Component[] smithingUpgrade(Identifier upgradeName) {
+    public static Component[] netheriteUpgrade() {
         return smithing(
-            Component.translatable(
-                Util.makeDescriptionId(
-                    "item",
-                    upgradeName.withPath(path -> "smithing_template." + path + ".applies_to")
-                )
-            ),
-            Component.translatable(
-                Util.makeDescriptionId(
-                    "item",
-                    upgradeName.withPath(path -> "smithing_template." + path + ".ingredients")
-                )
-            )
+            SmithingTemplateItemAccessor.netheriteUpgradeAppliesToLabel(),
+            SmithingTemplateItemAccessor.netheriteUpgradeIngredients()
         );
     }
 

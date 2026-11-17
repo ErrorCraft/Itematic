@@ -32,7 +32,7 @@ public class GlowItemFrameTestSuite {
             level.itematic$createStack(ItemIds.GLOW_ITEM_FRAME)
         );
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, BLOCK_POSITION);
         helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.GLOW_ITEM_FRAME)
             .existsAt(GLOW_ITEM_FRAME_POSITION));
     }
@@ -59,7 +59,7 @@ public class GlowItemFrameTestSuite {
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, glowItemFrame);
         level.addFreshEntity(player);
-        TestUtil.interactWithBlock(helper, BLOCK_POSITION, player, Direction.UP);
+        TestUtil.interactWithBlock(helper, player, Direction.UP, BLOCK_POSITION);
         helper.succeedIf(() -> Assert.entityType(helper, EntityTypes.GLOW_ITEM_FRAME)
             .existsAt(GLOW_ITEM_FRAME_POSITION, glowItemFrameAssert -> glowItemFrameAssert.test(
                 ItemFrame::getItem,

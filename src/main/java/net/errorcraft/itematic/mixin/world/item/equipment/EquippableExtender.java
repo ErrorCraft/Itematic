@@ -1,7 +1,14 @@
 package net.errorcraft.itematic.mixin.world.item.equipment;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.errorcraft.itematic.world.action.context.ActionContext;
+import net.errorcraft.itematic.world.item.ItemEvent;
+import net.errorcraft.itematic.world.item.equipment.EquipmentUtil;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.Equippable;
@@ -11,7 +18,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Equippable.class)
 public class EquippableExtender {
@@ -20,7 +26,7 @@ public class EquippableExtender {
     @Mutable
     private boolean dispensable;
 
-    @Redirect(
+    @WrapOperation(
         method = "<init>",
         at = @At(
             value = "FIELD",
@@ -28,18 +34,31 @@ public class EquippableExtender {
             opcode = Opcodes.PUTFIELD
         )
     )
-    private void doNotUseDispensableField(Equippable instance, boolean value) {
+    private void doNotUseDispensableField(Equippable instance, boolean value, Operation<Void> original) {
         this.dispensable = true;
     }
 
-    @Redirect(
+    @ModifyReturnValue(
+        method = "swapWithEquipmentSlot",
+        at = @At("RETURN")
+    )
+    private InteractionResult invokeEquipItemEventAndExchangeResultStack(InteractionResult original, ItemStack inHand) {
+        ActionContext context = EquipmentUtil.ON_EQUIP_ACTION_CONTEXT.get();
+        if (original.consumesAction()) {
+            inHand.itematic$invokeEvent(ItemEvent.EQUIP_ITEM, context);
+        }
+
+        return original.itematic$exchanged(context::exchangeStack);
+    }
+
+    @WrapOperation(
         method = "swapWithEquipmentSlot",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/stats/StatType;get(Ljava/lang/Object;)Lnet/minecraft/stats/Stat;"
         )
     )
-    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, ItemStack inHand) {
+    private <T> Stat<Item> getStatUseHolder(StatType<Item> instance, T argument, Operation<Stat<T>> original, ItemStack inHand) {
         return instance.itematic$get(inHand.typeHolder());
     }
 }

@@ -16,6 +16,7 @@
       "net.errorcraft.itematic.gametest.block.GrindstoneTestSuite",
       "net.errorcraft.itematic.gametest.block.PickBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.ShulkerBoxBlockTestSuite",
+      "net.errorcraft.itematic.gametest.block.SignBlockTestSuite",
       "net.errorcraft.itematic.gametest.block.WaterCauldronBlockTestSuite",
       "net.errorcraft.itematic.gametest.entity.PickEntityTestSuite",
       "net.errorcraft.itematic.gametest.entity.animal.ArmadilloTestSuite",
@@ -36,6 +37,7 @@
       "net.errorcraft.itematic.gametest.item.CompassTestSuite",
       "net.errorcraft.itematic.gametest.item.CrossbowTestSuite",
       "net.errorcraft.itematic.gametest.item.EndCrystalTestSuite",
+      "net.errorcraft.itematic.gametest.item.EnderEyeTestSuite",
       "net.errorcraft.itematic.gametest.item.FishingRodTestSuite",
       "net.errorcraft.itematic.gametest.item.FlowerPotItemTestSuite",
       "net.errorcraft.itematic.gametest.item.GlowItemFrameTestSuite",
@@ -44,6 +46,7 @@
       "net.errorcraft.itematic.gametest.item.ItemFrameTestSuite",
       "net.errorcraft.itematic.gametest.item.LeadTestSuite",
       "net.errorcraft.itematic.gametest.item.MinecartTestSuite",
+      "net.errorcraft.itematic.gametest.item.OminousBottleTestSuite",
       "net.errorcraft.itematic.gametest.item.PaintingTestSuite",
       "net.errorcraft.itematic.gametest.item.ShearsTestSuite",
       "net.errorcraft.itematic.gametest.item.SignTestSuite",
@@ -62,7 +65,8 @@
       "net.errorcraft.itematic.gametest.item.component.ShooterItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.ThrowableItemComponentTestSuite",
       "net.errorcraft.itematic.gametest.item.component.UseableOnFluidItemComponentTestSuite",
-      "net.errorcraft.itematic.gametest.item.component.WeaponItemComponentTestSuite"
+      "net.errorcraft.itematic.gametest.item.component.WeaponItemComponentTestSuite",
+      "net.errorcraft.itematic.gametest.item.placement.EntityPlacementTestSuite"
     ]
   },
   "mixins": [

@@ -12,6 +12,7 @@ public class SoundEventIds {
     public static final ResourceKey<SoundEvent> ARMOR_UNEQUIP_WOLF = of("item.armor.unequip_wolf");
     public static final ResourceKey<SoundEvent> ARMOR_EQUIP_NAUTILUS = of("item.armor.equip_nautilus");
     public static final ResourceKey<SoundEvent> ARMOR_UNEQUIP_NAUTILUS = of("item.armor.unequip_nautilus");
+    public static final ResourceKey<SoundEvent> ARROW_SHOOT = of("entity.arrow.shoot");
     public static final ResourceKey<SoundEvent> AXE_SCRAPE = of("item.axe.scrape");
     public static final ResourceKey<SoundEvent> AXE_STRIP = of("item.axe.strip");
     public static final ResourceKey<SoundEvent> AXE_WAX_OFF = of("item.axe.wax_off");
@@ -27,18 +28,24 @@ public class SoundEventIds {
     public static final ResourceKey<SoundEvent> BUNDLE_INSERT = of("item.bundle.insert");
     public static final ResourceKey<SoundEvent> BUNDLE_INSERT_FAIL = of("item.bundle.insert_fail");
     public static final ResourceKey<SoundEvent> BUNDLE_REMOVE_ONE = of("item.bundle.remove_one");
+    public static final ResourceKey<SoundEvent> DYE_USE = of("item.dye.use");
     public static final ResourceKey<SoundEvent> ENDER_EYE_LAUNCH = of("entity.ender_eye.launch");
     public static final ResourceKey<SoundEvent> END_PORTAL_FRAME_FILL = of("block.end_portal_frame.fill");
     public static final ResourceKey<SoundEvent> FIRE_CHARGE_USE = of("item.firecharge.use");
     public static final ResourceKey<SoundEvent> FIRE_EXTINGUISH = of("block.fire.extinguish");
+    public static final ResourceKey<SoundEvent> FISHING_BOBBER_RETRIEVE = of("entity.fishing_bobber.retrieve");
+    public static final ResourceKey<SoundEvent> FISHING_BOBBER_THROW = of("entity.fishing_bobber.throw");
     public static final ResourceKey<SoundEvent> FLINT_AND_STEEL_USE = of("item.flintandsteel.use");
     public static final ResourceKey<SoundEvent> GENERIC_SPLASH = of("entity.generic.splash");
+    public static final ResourceKey<SoundEvent> GLOW_INK_SAC_USE = of("item.glow_ink_sac.use");
     public static final ResourceKey<SoundEvent> HAPPY_GHAST_EQUIP = of("entity.happy_ghast.equip");
     public static final ResourceKey<SoundEvent> HAPPY_GHAST_UNEQUIP = of("entity.happy_ghast.unequip");
     public static final ResourceKey<SoundEvent> HOE_TILL = of("item.hoe.till");
+    public static final ResourceKey<SoundEvent> HONEYCOMB_WAX_ON = of("item.honeycomb.wax_on");
     public static final ResourceKey<SoundEvent> HORSE_ARMOR = of("entity.horse.armor");
     public static final ResourceKey<SoundEvent> HORSE_ARMOR_UNEQUIP = of("item.horse_armor.unequip");
     public static final ResourceKey<SoundEvent> HORSE_SADDLE = of("entity.horse.saddle");
+    public static final ResourceKey<SoundEvent> INK_SAC_USE = of("item.ink_sac.use");
     public static final ResourceKey<SoundEvent> LODESTONE_COMPASS_LOCK = of("item.lodestone_compass.lock");
     public static final ResourceKey<SoundEvent> MACE_SMASH_AIR = of("item.mace.smash_air");
     public static final ResourceKey<SoundEvent> MACE_SMASH_GROUND = of("item.mace.smash_ground");
@@ -57,6 +64,7 @@ public class SoundEventIds {
     public static final ResourceKey<SoundEvent> SPYGLASS_USE = of("item.spyglass.use");
     public static final ResourceKey<SoundEvent> SPYGLASS_STOP_USING = of("item.spyglass.stop_using");
     public static final ResourceKey<SoundEvent> TNT_PRIMED = of("entity.tnt.primed");
+    public static final ResourceKey<SoundEvent> UI_CARTOGRAPHY_TABLE_TAKE_RESULT = of("ui.cartography_table.take_result");
     public static final ResourceKey<SoundEvent> WOLF_ARMOR_BREAK = of("item.wolf_armor.break");
 
     private SoundEventIds() {}

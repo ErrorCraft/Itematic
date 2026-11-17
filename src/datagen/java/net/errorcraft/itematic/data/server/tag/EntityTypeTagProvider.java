@@ -19,5 +19,9 @@ public class EntityTypeTagProvider extends FabricTagsProvider<EntityType<?>> {
     protected void addTags(HolderLookup.Provider registries) {
         this.builder(ItematicEntityTypeTags.CANNOT_INTERSECT_WITH_CUSHION)
             .add(EntityTypeIds.CUSHION);
+        this.builder(ItematicEntityTypeTags.CARROT_ON_A_STICK_CONTROL_TARGETS)
+            .add(EntityTypeIds.PIG);
+        this.builder(ItematicEntityTypeTags.WARPED_FUNGUS_ON_A_STICK_CONTROL_TARGETS)
+            .add(EntityTypeIds.STRIDER);
     }
 }

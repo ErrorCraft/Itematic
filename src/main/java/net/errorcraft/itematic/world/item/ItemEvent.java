@@ -17,6 +17,7 @@ public record ItemEvent() {
     public static final ItemEvent HIT_ENTITY = register("hit_entity");
     public static final ItemEvent EAT_ITEM = register("eat_item");
     public static final ItemEvent PLACED_BLOCK = register("placed_block");
+    public static final ItemEvent TRANSFORMED_BLOCK = register("transformed_block");
     public static final ItemEvent DAMAGE_ITEM = register("damage_item");
     public static final ItemEvent BREAK_ITEM = register("break_item");
     public static final ItemEvent USE_TOOL = register("use_tool");

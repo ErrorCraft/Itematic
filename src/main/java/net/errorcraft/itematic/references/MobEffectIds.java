@@ -7,6 +7,7 @@ import net.minecraft.world.effect.MobEffect;
 
 public class MobEffectIds {
     public static final ResourceKey<MobEffect> ABSORPTION = of("absorption");
+    public static final ResourceKey<MobEffect> BAD_OMEN = of("bad_omen");
     public static final ResourceKey<MobEffect> BLINDNESS = of("blindness");
     public static final ResourceKey<MobEffect> FIRE_RESISTANCE = of("fire_resistance");
     public static final ResourceKey<MobEffect> HUNGER = of("hunger");

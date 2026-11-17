@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(InstrumentItem.class)
 public interface InstrumentItemAccessor {
     @Invoker("play")
-    static void playSound(Level level, Player player, Instrument instrument) {
+    static void play(Level level, Player player, Instrument instrument) {
         throw new AssertionError();
     }
 }
