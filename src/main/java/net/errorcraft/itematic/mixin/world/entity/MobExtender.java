@@ -134,6 +134,10 @@ public abstract class MobExtender extends LivingEntity implements MobAccess {
             return false;
         }
 
+        if (!entityPlacer.allowSpawningOffspring()) {
+            return false;
+        }
+
         entityPlacerReference.set(entityPlacer);
         return true;
     }
