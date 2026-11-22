@@ -24,7 +24,10 @@ public abstract class CushionExtender extends BlockAttachedEntity {
     }
 
     @WrapOperation(
-        method = "getPickResult",
+        method = {
+            "getPickResult",
+            "getCushionItemStackWithData"
+        },
         at = @At(
             value = "NEW",
             target = "(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/item/ItemStack;"
