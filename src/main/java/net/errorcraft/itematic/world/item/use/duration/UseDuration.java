@@ -21,8 +21,10 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 import java.util.HashSet;
@@ -60,6 +62,15 @@ public record UseDuration(UseDurationProvider provider) {
     public boolean canUse(ItemStack stack, Pass pass) {
         return stack.getOrDefault(ItematicDataComponents.USE_PASSES, Pass.EMPTY)
             .contains(pass);
+    }
+
+    public InteractionResult tryStartUsing(UseOnContext context) {
+        Player player = context.getPlayer();
+        if (player == null) {
+            return InteractionResult.PASS;
+        }
+
+        return this.tryStartUsing(context.getLevel(), context.getItemInHand(), player, context.getHand());
     }
 
     public InteractionResult tryStartUsing(Level level, ItemStack stack, LivingEntity user, InteractionHand hand) {

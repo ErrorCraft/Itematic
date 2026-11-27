@@ -13,6 +13,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import net.errorcraft.itematic.access.world.item.ItemInstanceAccess;
 import net.errorcraft.itematic.access.world.item.ItemStackAccess;
+import net.errorcraft.itematic.core.component.ComponentRunner;
 import net.errorcraft.itematic.core.component.ItematicDataComponents;
 import net.errorcraft.itematic.util.ItematicUtil;
 import net.errorcraft.itematic.util.context.ItematicContextKeys;
@@ -91,6 +92,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -981,6 +983,16 @@ public abstract class ItemStackExtender implements DataComponentHolder, ItemInst
     @Unique
     private ItemStack transmuteCopyIgnoreEmpty(Holder<Item> item, int count) {
         return new ItemStack(item, count, this.components.asPatch());
+    }
+
+    @Override
+    public ComponentRunner<InteractionResult> itematic$runInteractionComponents() {
+        return this.runComponents(InteractionResult::itematic$merge, InteractionResult.PASS);
+    }
+
+    @Unique
+    private <T> ComponentRunner<T> runComponents(BinaryOperator<T> merger, T initialValue) {
+        return new ComponentRunner<>(this, this::isEmpty, merger, initialValue);
     }
 
     @Unique

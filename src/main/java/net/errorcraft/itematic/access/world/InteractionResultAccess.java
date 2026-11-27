@@ -9,4 +9,7 @@ public interface InteractionResultAccess {
     default InteractionResult itematic$exchanged(Consumer<ItemStack> stackExchanger) {
         return (InteractionResult) this;
     }
+    default InteractionResult itematic$merge(InteractionResult that) {
+        throw new AssertionError("Implemented via mixin");
+    }
 }

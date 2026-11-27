@@ -371,27 +371,32 @@ public abstract class ItemExtender implements ItemAccess, FabricItem {
     )
     private InteractionResult useDataComponents(UseOnContext context, Operation<InteractionResult> original, @Share("stackExchanger") LocalRef<ItemStackExchanger> stackExchangerReference) {
         ItemStack stack = context.getItemInHand();
-        UseDuration useDuration = stack.get(ItematicDataComponents.USE_DURATION);
-        if (useDuration != null && useDuration.canUse(stack, UseDuration.Pass.BLOCK) && context.getPlayer() != null) {
-            return useDuration.tryStartUsing(context.getLevel(), stack, context.getPlayer(), context.getHand());
-        }
-
-        BlockPlacerComponent blockPlacer = stack.get(ItematicDataComponents.BLOCK_PLACER);
-        if (blockPlacer != null && blockPlacer.canUse(BlockPlacerComponent.Pass.BLOCK)) {
-            return blockPlacer.useOn(context, stackExchangerReference.get());
-        }
-
-        EntityPlacerComponent entityPlacer = stack.get(ItematicDataComponents.ENTITY_PLACER);
-        if (entityPlacer != null && entityPlacer.canUse(EntityPlacerComponent.Pass.BLOCK)) {
-            return entityPlacer.useOn(context, stackExchangerReference.get());
-        }
-
-        DebugStickState debugStickState = stack.get(DataComponents.DEBUG_STICK_STATE);
-        if (debugStickState != null) {
-            return debugStickState.itematic$cycleSelectedPropertyValue(context);
-        }
-
-        return original.call(context);
+        return stack.itematic$runInteractionComponents()
+            .runFinishing(
+                ItematicDataComponents.USE_DURATION,
+                useDuration -> useDuration.canUse(stack, UseDuration.Pass.BLOCK) && context.getPlayer() != null,
+                useDuration -> useDuration.tryStartUsing(context)
+            )
+            .run(
+                DataComponents.BLOCK_TRANSFORMER,
+                blockTransformer -> blockTransformer.value().transformBlock(context),
+                InteractionResult::consumesAction
+            )
+            .runFinishing(
+                DataComponents.DEBUG_STICK_STATE,
+                debugStickState -> debugStickState.itematic$cycleSelectedPropertyValue(context)
+            )
+            .runFinishing(
+                ItematicDataComponents.BLOCK_PLACER,
+                blockPlacer -> blockPlacer.canUse(BlockPlacerComponent.Pass.BLOCK),
+                blockPlacer -> blockPlacer.useOn(context, stackExchangerReference.get())
+            )
+            .runFinishing(
+                ItematicDataComponents.ENTITY_PLACER,
+                entityPlacer -> entityPlacer.canUse(EntityPlacerComponent.Pass.BLOCK),
+                entityPlacer -> entityPlacer.useOn(context, stackExchangerReference.get())
+            )
+            .result();
     }
 
     @WrapMethod(

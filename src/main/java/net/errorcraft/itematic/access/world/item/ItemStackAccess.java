@@ -1,8 +1,10 @@
 package net.errorcraft.itematic.access.world.item;
 
+import net.errorcraft.itematic.core.component.ComponentRunner;
 import net.errorcraft.itematic.world.action.context.ActionContext;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -43,5 +45,8 @@ public interface ItemStackAccess {
     }
     default float itematic$attackDamageBonus(Entity victim, float damage, DamageSource damageSource) {
         return 0.0f;
+    }
+    default ComponentRunner<InteractionResult> itematic$runInteractionComponents() {
+        throw new AssertionError("Implemented via mixin");
     }
 }
